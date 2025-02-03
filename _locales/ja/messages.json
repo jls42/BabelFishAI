@@ -1,0 +1,222 @@
+{
+    "extensionName": {
+        "message": "BabelFishAI by jls42.org",
+        "description": "拡張機能の名前"
+    },
+    "extensionDescription": {
+        "message": "AI駆動の文字起こしと翻訳であなたの声をテキストに変換",
+        "description": "拡張機能の説明"
+    },
+    "optionsTitle": {
+        "message": "BabelFishAI 設定",
+        "description": "オプションページのタイトル"
+    },
+    "languageSettingsTitle": {
+        "message": "インターフェース言語",
+        "description": "言語セクションのタイトル"
+    },
+    "selectLanguageLabel": {
+        "message": "言語を選択:",
+        "description": "言語選択のラベル"
+    },
+    "languageChanged": {
+        "message": "言語が変更されました",
+        "description": "言語変更の確認メッセージ"
+    },
+    "savedMessage": {
+        "message": "設定を保存しました！",
+        "description": "保存確認メッセージ"
+    },
+    "apiConfigTitle": {
+        "message": "API設定",
+        "description": "APIセクションのタイトル"
+    },
+    "apiKeyPlaceholder": {
+        "message": "OpenAI APIキー (sk-...)",
+        "description": "APIキーのプレースホルダー"
+    },
+    "apiKeyInfo": {
+        "message": "APIキーの取得先:",
+        "description": "APIキーの情報"
+    },
+    "pricingInfo": {
+        "message": "価格の詳細はこちら:",
+        "description": "価格情報"
+    },
+    "supportProject": {
+        "message": "PayPalでプロジェクトを支援",
+        "description": "PayPalリンクのテキスト"
+    },
+    "whisperApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/audio/transcriptions",
+        "description": "Whisper APIのデフォルトURL"
+    },
+    "translationApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/chat/completions",
+        "description": "翻訳APIのデフォルトURL"
+    },
+    "displaySettingsTitle": {
+        "message": "表示設定",
+        "description": "表示設定のタイトル"
+    },
+    "activeDisplayLabel": {
+        "message": "アクティブエリア（キーボード入力）",
+        "description": "アクティブ表示のラベル"
+    },
+    "dialogDisplayLabel": {
+        "message": "ダイアログボックス",
+        "description": "ダイアログ表示のラベル"
+    },
+    "dialogDurationLabel": {
+        "message": "ダイアログ表示時間（秒）:",
+        "description": "ダイアログ時間のラベル"
+    },
+    "bannerColorsLabel": {
+        "message": "ステータスバナーの色:",
+        "description": "バナー色のラベル"
+    },
+    "startColorLabel": {
+        "message": "開始色:",
+        "description": "開始色のラベル"
+    },
+    "endColorLabel": {
+        "message": "終了色:",
+        "description": "終了色のラベル"
+    },
+    "opacityLabel": {
+        "message": "% 不透明度",
+        "description": "不透明度のラベル"
+    },
+    "translationTitle": {
+        "message": "AI翻訳機能",
+        "description": "翻訳セクションのタイトル"
+    },
+    "enableTranslationLabel": {
+        "message": "自動翻訳を有効にする",
+        "description": "翻訳有効化のラベル"
+    },
+    "sourceLanguageLabel": {
+        "message": "ソース言語:",
+        "description": "ソース言語のラベル"
+    },
+    "targetLanguageLabel": {
+        "message": "ターゲット言語:",
+        "description": "ターゲット言語のラベル"
+    },
+    "expertModeTitle": {
+        "message": "エキスパートモード",
+        "description": "エキスパートモードのタイトル"
+    },
+    "enableExpertModeLabel": {
+        "message": "エキスパートモードを有効にする",
+        "description": "エキスパートモード有効化のラベル"
+    },
+    "advancedConfigTitle": {
+        "message": "詳細設定",
+        "description": "詳細設定のタイトル"
+    },
+    "translationModelLabel": {
+        "message": "翻訳モデル:",
+        "description": "翻訳モデルのラベル"
+    },
+    "whisperApiUrlLabel": {
+        "message": "Whisper API URL:",
+        "description": "Whisper API URLのラベル"
+    },
+    "translationApiUrlLabel": {
+        "message": "翻訳API URL:",
+        "description": "翻訳API URLのラベル"
+    },
+    "forcedDialogDomainsLabel": {
+        "message": "強制ダイアログドメイン:",
+        "description": "強制ダイアログドメインのラベル"
+    },
+    "addDomainPlaceholder": {
+        "message": "例: chat.google.com",
+        "description": "ドメイン追加のプレースホルダー"
+    },
+    "addDomainButton": {
+        "message": "追加",
+        "description": "ドメイン追加ボタン"
+    },
+    "forcedDialogInfo": {
+        "message": "これらのドメインでは、文字起こしは常にダイアログボックスで表示されます",
+        "description": "強制ダイアログの情報"
+    },
+    "saveButton": {
+        "message": "保存",
+        "description": "保存ボタン"
+    },
+    "userGuideTitle": {
+        "message": "ユーザーガイド",
+        "description": "ユーザーガイドのタイトル"
+    },
+    "userGuideStep1": {
+        "message": "BabelFishAIアイコンをクリックするか、キーボードショートカットを使用して録音を開始",
+        "description": "ガイドのステップ1"
+    },
+    "userGuideStep2": {
+        "message": "マイクに向かってはっきりと話す",
+        "description": "ガイドのステップ2"
+    },
+    "userGuideStep3": {
+        "message": "もう一度クリックするか、ショートカットを使用して録音を停止",
+        "description": "ガイドのステップ3"
+    },
+    "userGuideStep4": {
+        "message": "設定した環境設定に従って文字起こしが表示されます",
+        "description": "ガイドのステップ4"
+    },
+    "userGuideStep5": {
+        "message": "「コピー」ボタンを使用してテキストをクリップボードにコピー",
+        "description": "ガイドのステップ5"
+    },
+    "shortcutsTitle": {
+        "message": "キーボードショートカット",
+        "description": "ショートカットのタイトル"
+    },
+    "shortcutStartStop": {
+        "message": "録音開始/停止:",
+        "description": "メインショートカットの説明"
+    },
+    "shortcutKeys": {
+        "message": "Ctrl+Shift+1（Macでは⌘+Shift+1）",
+        "description": "ショートカットキーの説明"
+    },
+    "aiTranscriptionTitle": {
+        "message": "AI支援文字起こし",
+        "description": "AI文字起こしのタイトル"
+    },
+    "aiTranscriptionDesc": {
+        "message": "BabelFishAIは最先端の人工知能を使用してあなたの声をテキストに変換します。文字起こしプロセスは2段階で行われます。",
+        "description": "文字起こしの説明"
+    },
+    "aiTranscriptionStep1": {
+        "message": "デバイスのマイクを通じて音声を録音",
+        "description": "文字起こしステップ1"
+    },
+    "aiTranscriptionStep2": {
+        "message": "Whisper AIが録音を分析して正確な文字起こしを生成",
+        "description": "文字起こしステップ2"
+    },
+    "aiTranslationTitle": {
+        "message": "AI支援翻訳",
+        "description": "AI翻訳のタイトル"
+    },
+    "aiTranslationDesc": {
+        "message": "BabelFishAIはOpenAIの高度なAIを使用して文字起こしを自動的に翻訳することもできます。文字起こしされたテキストは分析され、意味とコンテキストを保持したまま翻訳されます。",
+        "description": "翻訳の説明"
+    },
+    "authorSectionTitle": {
+        "message": "作者について",
+        "description": "作者セクションのタイトル"
+    },
+    "authorName": {
+        "message": "Julien LS",
+        "description": "作者の名前"
+    },
+    "authorRole": {
+        "message": "BabelFishAIの開発者および作成者",
+        "description": "作者の役割"
+    }
+}

@@ -1,0 +1,222 @@
+{
+    "extensionName": {
+        "message": "BabelFishAI by jls42.org",
+        "description": "扩展名称"
+    },
+    "extensionDescription": {
+        "message": "使用AI驱动的转录和翻译将语音转换为文本",
+        "description": "扩展描述"
+    },
+    "optionsTitle": {
+        "message": "BabelFishAI 设置",
+        "description": "选项页面标题"
+    },
+    "languageSettingsTitle": {
+        "message": "界面语言",
+        "description": "语言部分标题"
+    },
+    "selectLanguageLabel": {
+        "message": "选择语言：",
+        "description": "语言选择器标签"
+    },
+    "languageChanged": {
+        "message": "语言已更改",
+        "description": "语言更改确认消息"
+    },
+    "savedMessage": {
+        "message": "已保存！",
+        "description": "保存确认消息"
+    },
+    "apiConfigTitle": {
+        "message": "API 设置",
+        "description": "API部分标题"
+    },
+    "apiKeyPlaceholder": {
+        "message": "OpenAI API密钥 (sk-...)",
+        "description": "API密钥占位符"
+    },
+    "apiKeyInfo": {
+        "message": "获取API密钥：",
+        "description": "获取API密钥信息"
+    },
+    "pricingInfo": {
+        "message": "查看价格详情：",
+        "description": "价格信息"
+    },
+    "supportProject": {
+        "message": "通过PayPal支持项目",
+        "description": "PayPal支持链接"
+    },
+    "whisperApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/audio/transcriptions",
+        "description": "Whisper API URL"
+    },
+    "translationApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/chat/completions",
+        "description": "翻译API URL"
+    },
+    "displaySettingsTitle": {
+        "message": "显示设置",
+        "description": "显示设置标题"
+    },
+    "activeDisplayLabel": {
+        "message": "活动区域",
+        "description": "活动显示标签"
+    },
+    "dialogDisplayLabel": {
+        "message": "对话框",
+        "description": "对话框显示标签"
+    },
+    "dialogDurationLabel": {
+        "message": "显示时长（秒）：",
+        "description": "对话框时长标签"
+    },
+    "bannerColorsLabel": {
+        "message": "状态栏颜色：",
+        "description": "状态栏颜色标签"
+    },
+    "startColorLabel": {
+        "message": "开始颜色：",
+        "description": "开始颜色标签"
+    },
+    "endColorLabel": {
+        "message": "结束颜色：",
+        "description": "结束颜色标签"
+    },
+    "opacityLabel": {
+        "message": "不透明度 %",
+        "description": "不透明度标签"
+    },
+    "translationTitle": {
+        "message": "AI翻译",
+        "description": "翻译标题"
+    },
+    "enableTranslationLabel": {
+        "message": "启用自动翻译",
+        "description": "启用翻译标签"
+    },
+    "sourceLanguageLabel": {
+        "message": "源语言：",
+        "description": "源语言标签"
+    },
+    "targetLanguageLabel": {
+        "message": "目标语言：",
+        "description": "目标语言标签"
+    },
+    "expertModeTitle": {
+        "message": "专家模式",
+        "description": "专家模式标题"
+    },
+    "enableExpertModeLabel": {
+        "message": "启用专家模式",
+        "description": "启用专家模式标签"
+    },
+    "advancedConfigTitle": {
+        "message": "高级设置",
+        "description": "高级设置标题"
+    },
+    "translationModelLabel": {
+        "message": "翻译模型：",
+        "description": "翻译模型标签"
+    },
+    "whisperApiUrlLabel": {
+        "message": "Whisper API地址：",
+        "description": "Whisper API地址标签"
+    },
+    "translationApiUrlLabel": {
+        "message": "翻译API地址：",
+        "description": "翻译API地址标签"
+    },
+    "forcedDialogDomainsLabel": {
+        "message": "强制对话框域名：",
+        "description": "强制对话框域名标签"
+    },
+    "addDomainPlaceholder": {
+        "message": "示例：chat.google.com",
+        "description": "添加域名占位符"
+    },
+    "addDomainButton": {
+        "message": "添加",
+        "description": "添加按钮"
+    },
+    "forcedDialogInfo": {
+        "message": "在这些域名上将始终使用对话框显示",
+        "description": "强制对话框说明"
+    },
+    "saveButton": {
+        "message": "保存",
+        "description": "保存按钮"
+    },
+    "userGuideTitle": {
+        "message": "使用指南",
+        "description": "使用指南标题"
+    },
+    "userGuideStep1": {
+        "message": "点击图标或使用快捷键开始录音",
+        "description": "使用指南步骤1"
+    },
+    "userGuideStep2": {
+        "message": "对着麦克风说话",
+        "description": "使用指南步骤2"
+    },
+    "userGuideStep3": {
+        "message": "再次点击或使用快捷键停止录音",
+        "description": "使用指南步骤3"
+    },
+    "userGuideStep4": {
+        "message": "转录文本将按设置显示",
+        "description": "使用指南步骤4"
+    },
+    "userGuideStep5": {
+        "message": "点击复制按钮复制文本",
+        "description": "使用指南步骤5"
+    },
+    "shortcutsTitle": {
+        "message": "快捷键",
+        "description": "快捷键标题"
+    },
+    "shortcutStartStop": {
+        "message": "开始/停止录音：",
+        "description": "开始停止快捷键"
+    },
+    "shortcutKeys": {
+        "message": "Ctrl+Shift+1（Mac：⌘+Shift+1）",
+        "description": "快捷键说明"
+    },
+    "aiTranscriptionTitle": {
+        "message": "AI语音转写",
+        "description": "AI转写标题"
+    },
+    "aiTranscriptionDesc": {
+        "message": "BabelFishAI使用先进AI技术转写语音。过程分两步进行。",
+        "description": "AI转写说明"
+    },
+    "aiTranscriptionStep1": {
+        "message": "通过麦克风录制语音",
+        "description": "转写步骤1"
+    },
+    "aiTranscriptionStep2": {
+        "message": "使用Whisper AI分析并生成文本",
+        "description": "转写步骤2"
+    },
+    "aiTranslationTitle": {
+        "message": "AI翻译",
+        "description": "AI翻译标题"
+    },
+    "aiTranslationDesc": {
+        "message": "BabelFishAI可使用OpenAI翻译转写文本，保持原意和语境。",
+        "description": "AI翻译说明"
+    },
+    "authorSectionTitle": {
+        "message": "关于作者",
+        "description": "关于作者标题"
+    },
+    "authorName": {
+        "message": "Julien LS",
+        "description": "作者名字"
+    },
+    "authorRole": {
+        "message": "BabelFishAI开发者",
+        "description": "作者角色"
+    }
+}

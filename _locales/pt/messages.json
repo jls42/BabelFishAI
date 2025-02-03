@@ -1,0 +1,222 @@
+{
+    "extensionName": {
+        "message": "BabelFishAI by jls42.org",
+        "description": "Nome da extensão"
+    },
+    "extensionDescription": {
+        "message": "Transforme sua voz em texto com transcrição e tradução alimentada por IA",
+        "description": "Descrição da extensão"
+    },
+    "optionsTitle": {
+        "message": "Configuração do BabelFishAI",
+        "description": "Título da página de opções"
+    },
+    "languageSettingsTitle": {
+        "message": "Idioma da interface",
+        "description": "Título da seção de idioma"
+    },
+    "selectLanguageLabel": {
+        "message": "Selecione o idioma:",
+        "description": "Rótulo do seletor de idioma"
+    },
+    "languageChanged": {
+        "message": "Idioma alterado com sucesso",
+        "description": "Mensagem de confirmação de mudança de idioma"
+    },
+    "savedMessage": {
+        "message": "Opções salvas!",
+        "description": "Mensagem de confirmação de salvamento"
+    },
+    "apiConfigTitle": {
+        "message": "Configuração da API",
+        "description": "Título da seção API"
+    },
+    "apiKeyPlaceholder": {
+        "message": "Sua chave API OpenAI (sk-...)",
+        "description": "Placeholder para a chave API"
+    },
+    "apiKeyInfo": {
+        "message": "Obtenha sua chave API em",
+        "description": "Informação sobre obtenção da chave API"
+    },
+    "pricingInfo": {
+        "message": "Mais informações sobre preços disponíveis em",
+        "description": "Informação sobre preços"
+    },
+    "supportProject": {
+        "message": "Apoiar o projeto via PayPal",
+        "description": "Texto do link PayPal"
+    },
+    "whisperApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/audio/transcriptions",
+        "description": "URL padrão da API Whisper"
+    },
+    "translationApiUrlPlaceholder": {
+        "message": "https://api.openai.com/v1/chat/completions",
+        "description": "URL padrão da API de tradução"
+    },
+    "displaySettingsTitle": {
+        "message": "Configurações de exibição",
+        "description": "Título das configurações de exibição"
+    },
+    "activeDisplayLabel": {
+        "message": "Área ativa (entrada de teclado)",
+        "description": "Rótulo de exibição ativa"
+    },
+    "dialogDisplayLabel": {
+        "message": "Caixa de diálogo",
+        "description": "Rótulo de exibição de diálogo"
+    },
+    "dialogDurationLabel": {
+        "message": "Duração de exibição da caixa (segundos):",
+        "description": "Rótulo de duração do diálogo"
+    },
+    "bannerColorsLabel": {
+        "message": "Cores do banner de status:",
+        "description": "Rótulo de cores do banner"
+    },
+    "startColorLabel": {
+        "message": "Cor inicial:",
+        "description": "Rótulo de cor inicial"
+    },
+    "endColorLabel": {
+        "message": "Cor final:",
+        "description": "Rótulo de cor final"
+    },
+    "opacityLabel": {
+        "message": "% Opacidade",
+        "description": "Rótulo de opacidade"
+    },
+    "translationTitle": {
+        "message": "Tradução IA Integrada",
+        "description": "Título da seção de tradução"
+    },
+    "enableTranslationLabel": {
+        "message": "Ativar tradução automática",
+        "description": "Rótulo para ativar tradução"
+    },
+    "sourceLanguageLabel": {
+        "message": "Idioma de origem:",
+        "description": "Rótulo de idioma de origem"
+    },
+    "targetLanguageLabel": {
+        "message": "Idioma de destino:",
+        "description": "Rótulo de idioma de destino"
+    },
+    "expertModeTitle": {
+        "message": "Modo Especialista",
+        "description": "Título do modo especialista"
+    },
+    "enableExpertModeLabel": {
+        "message": "Ativar modo especialista",
+        "description": "Rótulo para ativar modo especialista"
+    },
+    "advancedConfigTitle": {
+        "message": "Configuração Avançada",
+        "description": "Título da configuração avançada"
+    },
+    "translationModelLabel": {
+        "message": "Modelo de tradução:",
+        "description": "Rótulo do modelo de tradução"
+    },
+    "whisperApiUrlLabel": {
+        "message": "URL da API Whisper:",
+        "description": "Rótulo da URL da API Whisper"
+    },
+    "translationApiUrlLabel": {
+        "message": "URL da API de tradução:",
+        "description": "Rótulo da URL da API de tradução"
+    },
+    "forcedDialogDomainsLabel": {
+        "message": "Domínios com diálogo forçado:",
+        "description": "Rótulo de domínios forçados"
+    },
+    "addDomainPlaceholder": {
+        "message": "Exemplo: chat.google.com",
+        "description": "Placeholder para adicionar domínio"
+    },
+    "addDomainButton": {
+        "message": "Adicionar",
+        "description": "Botão para adicionar domínio"
+    },
+    "forcedDialogInfo": {
+        "message": "Nestes domínios, a transcrição sempre aparecerá em uma caixa de diálogo",
+        "description": "Informação sobre domínios forçados"
+    },
+    "saveButton": {
+        "message": "Salvar",
+        "description": "Botão de salvar"
+    },
+    "userGuideTitle": {
+        "message": "Guia do Usuário",
+        "description": "Título do guia do usuário"
+    },
+    "userGuideStep1": {
+        "message": "Clique no ícone BabelFishAI ou use o atalho de teclado para iniciar a gravação",
+        "description": "Passo 1 do guia"
+    },
+    "userGuideStep2": {
+        "message": "Fale claramente em seu microfone",
+        "description": "Passo 2 do guia"
+    },
+    "userGuideStep3": {
+        "message": "Clique novamente ou use o atalho para parar a gravação",
+        "description": "Passo 3 do guia"
+    },
+    "userGuideStep4": {
+        "message": "A transcrição aparecerá de acordo com suas preferências configuradas",
+        "description": "Passo 4 do guia"
+    },
+    "userGuideStep5": {
+        "message": "Use o botão \"Copiar\" para copiar o texto para a área de transferência",
+        "description": "Passo 5 do guia"
+    },
+    "shortcutsTitle": {
+        "message": "Atalhos de Teclado",
+        "description": "Título dos atalhos"
+    },
+    "shortcutStartStop": {
+        "message": "Para iniciar/parar a gravação:",
+        "description": "Descrição do atalho principal"
+    },
+    "shortcutKeys": {
+        "message": "Ctrl+Shift+1 (⌘+Shift+1 no Mac)",
+        "description": "Descrição das teclas de atalho"
+    },
+    "aiTranscriptionTitle": {
+        "message": "Transcrição Assistida por IA",
+        "description": "Título da transcrição IA"
+    },
+    "aiTranscriptionDesc": {
+        "message": "BabelFishAI usa inteligência artificial de ponta para transcrever sua voz em texto. O processo de transcrição acontece em duas etapas.",
+        "description": "Descrição da transcrição"
+    },
+    "aiTranscriptionStep1": {
+        "message": "Sua voz é gravada através do microfone do seu dispositivo",
+        "description": "Passo 1 da transcrição"
+    },
+    "aiTranscriptionStep2": {
+        "message": "A gravação é analisada pela IA Whisper para produzir uma transcrição precisa",
+        "description": "Passo 2 da transcrição"
+    },
+    "aiTranslationTitle": {
+        "message": "Tradução Assistida por IA",
+        "description": "Título da tradução IA"
+    },
+    "aiTranslationDesc": {
+        "message": "BabelFishAI também pode traduzir automaticamente suas transcrições usando a IA avançada da OpenAI. O texto transcrito é analisado e traduzido preservando o significado e contexto da sua fala.",
+        "description": "Descrição da tradução"
+    },
+    "authorSectionTitle": {
+        "message": "Sobre o Autor",
+        "description": "Título da seção autor"
+    },
+    "authorName": {
+        "message": "Julien LS",
+        "description": "Nome do autor"
+    },
+    "authorRole": {
+        "message": "Desenvolvedor e criador do BabelFishAI",
+        "description": "Função do autor"
+    }
+}

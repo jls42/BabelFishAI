@@ -1,0 +1,102 @@
+/* Conteneur de transcription */
+.whisper-transcription-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    font-family: Arial, sans-serif;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Bannière d'état */
+.whisper-status-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(45deg, #684054, #4c7b8d);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 2147483647;
+    display: none;
+    box-shadow: 0 2px 8px rgba(104, 64, 84, 0.3);
+    transition: background 0.3s ease;
+}
+
+.whisper-status-banner.error {
+    background: linear-gradient(45deg, #dc3545, #b02a37);
+}
+
+/* Animation de pulsation pour l'enregistrement */
+@keyframes pulse {
+    0% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.whisper-status-banner.recording {
+    animation: pulse 2s infinite;
+}
+
+/* Bouton de fermeture */
+.whisper-close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+
+.whisper-close-button:hover {
+    color: #333;
+}
+
+/* Bouton de copie */
+.whisper-copy-button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: linear-gradient(45deg, #684054, #4c7b8d);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.whisper-copy-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(104, 64, 84, 0.3);
+}
+
+/* Élément de transcription */
+.whisper-transcription-element {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #684054;
+}
