@@ -69,16 +69,40 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 
 ## 🛠️ Fonctionnement Technique
 
-- **Architecture de l’Extension :**
-  - **Manifest V3 :** Le fichier `manifest.json` définit les scripts de contenu, le service worker (`background.js`) et les permissions nécessaires.
-  - **Scripts de Fond et de Contenu :** Le fichier `background.js` gère la logique en arrière-plan et la communication avec les API, tandis que `content.js` s’occupe de l’interaction avec la page web active.
-  - **Utilitaires et Internationalisation :** Le dossier `src/utils` contient des modules pour gérer l’API, l’interface utilisateur, la traduction et l’internationalisation via des fichiers de langue dans le dossier `_locales`.
+### Architecture de l'Extension
 
-- **Processus de Transcription et Traduction :**
-  1. **Démarrage de l’Enregistrement :** L’extension capte votre voix via le microphone lorsque vous cliquez sur l’icône ou utilisez le raccourci clavier.
-  2. **Transcription :** L’audio est envoyé à l’API Whisper d’OpenAI pour être converti en texte, avec prise en charge de plusieurs langues d’entrée.
-  3. **Traduction (Optionnelle) :** Si activée, la transcription est automatiquement traduite dans la langue cible sélectionnée, tout en conservant le sens et le contexte.
-  4. **Affichage :** Le texte transcrit (et éventuellement traduit) est inséré dans le champ actif ou affiché dans une fenêtre de dialogue personnalisée.
+L'extension est composée de plusieurs fichiers JavaScript qui interagissent entre eux :
+
+*   **`manifest.json`:** Le fichier de configuration principal de l'extension. Il définit les permissions, les scripts, les ressources accessibles, etc. Il utilise la version 3 du manifeste et déclare les permissions `activeTab`, `storage`, `commands` et `scripting`. Les `content_scripts` sont injectés dans toutes les URLs et s'exécutent à la fin du chargement du document.
+*   **`background.js`:** Le service worker qui s'exécute en arrière-plan. Il gère les événements (clic sur l'icône, raccourcis clavier), injecte le `content script` si nécessaire, et communique avec le `content script`.
+*   **`content.js`:** Le script qui est injecté dans les pages web. Il interagit directement avec le DOM, capture l'audio du microphone, appelle les API de transcription et de traduction, et affiche les résultats.
+*   **`src/utils/api.js`:** Contient la fonction `transcribeAudio` pour appeler l'API Whisper d'OpenAI (transcription).
+*   **`src/utils/translation.js`:** Contient la fonction `translateText` pour appeler l'API GPT d'OpenAI (traduction).
+*   **`src/utils/ui.js`:** Contient des fonctions utilitaires pour gérer l'interface utilisateur (bannière, boîte de dialogue, bouton de copie).
+*   **`src/constants.js`:** Définit des constantes pour la configuration, les états, les actions, etc.
+*   **`src/pages/options/`:** Contient les fichiers pour la page d'options de l'extension (HTML, CSS, JavaScript).
+
+### Processus de Transcription et Traduction
+
+1.  **Démarrage de l'Enregistrement :** L'utilisateur démarre l'enregistrement en cliquant sur l'icône de l'extension ou en utilisant le raccourci clavier. Le `background script` envoie un message au `content script` pour démarrer l'enregistrement.
+2.  **Capture Audio :** Le `content script` utilise l'API `navigator.mediaDevices.getUserMedia` pour accéder au microphone et enregistrer l'audio.
+3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api.js`) pour envoyer l'audio à l'API Whisper d'OpenAI. L'API renvoie le texte transcrit.
+4.  **Traduction (Optionnelle) :** Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/translation.js`) pour envoyer le texte transcrit à l'API GPT d'OpenAI. L'API renvoie le texte traduit.
+5.  **Affichage :** Le `content script` affiche le texte transcrit (et éventuellement traduit) soit dans l'élément actif de la page (si c'est un champ de texte ou un élément éditable), soit dans une boîte de dialogue.
+
+### Communication
+
+La communication entre le `background script` et le `content script` se fait via l'API de messagerie de Chrome (`chrome.runtime.sendMessage` et `chrome.runtime.onMessage`).
+
+### Stockage des Données
+
+L'extension utilise `chrome.storage.sync` pour stocker :
+
+*   La clé API OpenAI (`apiKey`).
+*   Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
+
+### Gestion des Erreurs
+Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont définies dans le fichier `constants.js`. Les fonctions `api.js` et `translation.js` gèrent les erreurs potentielles des appels API. Le `content.js` affiche les messages d'erreur à l'utilisateur via une bannière en haut de la page.
 
 ## 🛡️ Sécurité et Confidentialité
 
