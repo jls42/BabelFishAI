@@ -65,6 +65,10 @@ async function injectContentScript(tab) {
                 'src/content.js'
             ]
         });
+        await chrome.scripting.insertCSS({
+            target: { tabId: tab.id },
+            files: ['src/styles/content.css']
+        });
         debug("Content script injected successfully");
         return true;
     } catch (error) {
