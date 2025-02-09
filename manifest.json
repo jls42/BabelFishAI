@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "__MSG_extensionName__",
-    "version": "1.0",
+    "version": "1.1",
     "description": "__MSG_extensionDescription__",
     "author": "Julien LS",
     "default_locale": "fr",
@@ -11,50 +11,12 @@
         "commands",
         "scripting"
     ],
-    "host_permissions": [
-        "https://api.openai.com/*",
-        "https://*/*"
-    ],
-    "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://*;"
-    },
     "icons": {
         "16": "images/icon16.png",
         "32": "images/icon32.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "css": [
-                "src/styles/content.css"
-            ],
-            "js": [
-                "src/constants.js",
-                "src/utils/ui.js",
-                "src/utils/api.js",
-                "src/utils/translation.js",
-                "src/content.js"
-            ],
-            "run_at": "document_end"
-        }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "src/constants.js",
-                "src/utils/*.js",
-                "_locales/*/*.json",
-                "images/*"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
-    ],
     "background": {
         "service_worker": "src/background.js",
         "type": "module"
@@ -81,5 +43,19 @@
             "description": "Start/Stop Recording"
         }
     },
-    "homepage_url": "https://jls42.org/"
+    "homepage_url": "https://jls42.org/",
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "src/*.js",
+                "src/utils/*.js",
+                "_locales/*/*.json",
+                "images/*",
+                "src/styles/content.css"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
 }

@@ -608,15 +608,4 @@
     initBanner(); // Initialise le bandeau mais ne l'affiche pas immédiatement
     console.log("Content script injected!");
 
-    // Écouter les messages du background script
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        console.log("Message received:", request);
-        if (request.action === ACTIONS.TOGGLE) {
-            if (!isRecording) {
-                startRecording();
-            } else {
-                stopRecording();
-            }
-        }
-    });
 })();
