@@ -119,6 +119,10 @@
         "message": "Vertaalmodel:",
         "description": "Label voor vertaalmodel"
     },
+    "audioModelLabel": {
+        "message": "Audiomodel:",
+        "description": "Label voor audiomodel"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Label voor Whisper API URL"

@@ -119,6 +119,10 @@
         "message": "نموذج الترجمة:",
         "description": "تسمية نموذج الترجمة"
     },
+    "audioModelLabel": {
+        "message": "نموذج الصوت:",
+        "description": "تسمية لنموذج الصوت"
+    },
     "whisperApiUrlLabel": {
         "message": "عنوان Whisper API:",
         "description": "تسمية عنوان Whisper API"

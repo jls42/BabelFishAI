@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const expertModeCheckbox = document.getElementById('expertMode');
     const expertOptions = document.getElementById('expertOptions');
     const modelTypeSelect = document.getElementById('modelType');
+    const audioModelTypeSelect = document.getElementById('audioModelType'); // Ajout du sélecteur
     const apiUrlInput = document.getElementById('apiUrl');
     const translationApiUrlInput = document.getElementById('translationApiUrl');
     const newDomainInput = document.getElementById('newDomain');
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: 'en',
             expertMode: false,
             modelType: 'gpt-4o-mini',
+            audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, // Valeur par défaut
             apiUrl: 'https://api.openai.com/v1/audio/transcriptions',
             translationApiUrl: 'https://api.openai.com/v1/chat/completions',
             forcedDialogDomains: ['chat.google.com']
@@ -94,6 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: targetLanguageSelect.value,
             expertMode: expertModeCheckbox.checked,
             modelType: modelTypeSelect.value,
+            audioModelType: audioModelTypeSelect.value, // Ajout de la sauvegarde
             apiUrl: apiUrlInput.value,
             translationApiUrl: translationApiUrlInput.value,
             forcedDialogDomains: Array.from(domainsList.children).map(item =>
@@ -103,6 +106,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
+            audioModelTypeSelect.value = options.audioModelType;
+            apiUrlInput.value = options.apiUrl;
+            translationApiUrlInput.value = options.translationApiUrl;
+
+            // Mettre à jour les états dépendants
+            updateTranslationOptionsVisibility();
+            updateExpertOptionsVisibility();
+            updateColorPreview();
+            displayForcedDomains(options.forcedDialogDomains);
+            populateAudioModelOptions(); // Remplissage des options
+        });
+    }
+
+    // Fonction pour remplir les options du modèle audio
+    function populateAudioModelOptions() {
+        audioModelTypeSelect.innerHTML = ''; // Vider les options existantes
+        window.BabelFishAIConstants.API_CONFIG.AUDIO_MODELS.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            audioModelTypeSelect.appendChild(option);
         });
     }
 
@@ -215,4 +239,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser l'internationalisation et charger les options
     await i18n.init();
     loadOptions();
+    populateAudioModelOptions(); // Appel de la fonction après le chargement initial
 });

@@ -4,11 +4,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const TRANSLATION_CONFIG = {
-        GPT_MODEL: 'gpt-4o-mini',
-        DEFAULT_GPT_API_URL: 'https://api.openai.com/v1/chat/completions'
-    };
-
     const ERRORS = {
         MISSING_PARAMS: 'Paramètres de traduction manquants',
         API_KEY_NOT_FOUND: "Clé API non configurée",
@@ -25,7 +20,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} [apiUrl] - URL de l'API GPT (optionnel)
      * @returns {Promise<string>} Le texte traduit
      */
-    async function translateText(text, sourceLang, targetLang, apiKey, apiUrl = TRANSLATION_CONFIG.DEFAULT_GPT_API_URL) {
+    async function translateText(text, sourceLang, targetLang, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL) {
         if (!text || !sourceLang || !targetLang) {
             console.error('Missing translation parameters:', { text, sourceLang, targetLang });
             throw new Error(ERRORS.MISSING_PARAMS);
@@ -43,8 +38,21 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
 
         try {
+            // Récupérer le modèle et l'URL de l'API depuis le stockage
+            const { modelType, translationApiUrl } = await new Promise((resolve) => {
+                chrome.storage.sync.get({
+                    modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
+                    translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL
+                }, (result) => {
+                    resolve({
+                        modelType: result.modelType,
+                        translationApiUrl: result.translationApiUrl
+                    });
+                });
+            });
+
             const payload = {
-                model: TRANSLATION_CONFIG.GPT_MODEL,
+                model: modelType,
                 messages: [
                     {
                         role: "system",
@@ -56,7 +64,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             console.log('Translation request payload:', payload);
 
-            const response = await fetch(apiUrl, {
+            const response = await fetch(translationApiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,9 +106,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function getTranslationApiUrl() {
         return new Promise((resolve) => {
             chrome.storage.sync.get({
-                translationApiUrl: TRANSLATION_CONFIG.DEFAULT_GPT_API_URL
+                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL
             }, (result) => {
-                resolve(result.translationApiUrl || TRANSLATION_CONFIG.DEFAULT_GPT_API_URL);
+                resolve(result.translationApiUrl || window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL);
             });
         });
     }
@@ -109,7 +117,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     exports.translation = {
         translateText,
         getTranslationApiUrl,
-        TRANSLATION_CONFIG,
         ERRORS
     };
 

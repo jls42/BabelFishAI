@@ -119,6 +119,10 @@
         "message": "Übersetzungsmodell:",
         "description": "Beschriftung Übersetzungsmodell"
     },
+    "audioModelLabel": {
+        "message": "Audiomodell:",
+        "description": "Bezeichnung für das Audiomodell"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API-URL:",
         "description": "Beschriftung Whisper API-URL"

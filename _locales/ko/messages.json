@@ -119,6 +119,10 @@
         "message": "번역 모델:",
         "description": "번역 모델 라벨"
     },
+    "audioModelLabel": {
+        "message": "오디오 모델:",
+        "description": "오디오 모델 라벨"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Whisper API URL 라벨"

@@ -119,6 +119,10 @@
         "message": "Model de traducere:",
         "description": "Etichetă pentru modelul de traducere"
     },
+    "audioModelLabel": {
+        "message": "Model audio:",
+        "description": "Etichetă pentru modelul audio"
+    },
     "whisperApiUrlLabel": {
         "message": "URL API Whisper:",
         "description": "Etichetă pentru URL API Whisper"

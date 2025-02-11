@@ -119,6 +119,10 @@
         "message": "अनुवाद मॉडल:",
         "description": "अनुवाद मॉडल लेबल"
     },
+    "audioModelLabel": {
+        "message": "ऑडियो मॉडल:",
+        "description": "ऑडियो मॉडल लेबल"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Whisper API URL लेबल"

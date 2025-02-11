@@ -6,7 +6,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     const API_CONFIG = {
         DEFAULT_WHISPER_API_URL: 'https://api.openai.com/v1/audio/transcriptions',
-        WHISPER_MODEL: 'whisper-1'
+        // WHISPER_MODEL: 'whisper-1' // Redondant, utiliser la constante de constants.js
     };
 
     const ERRORS = {
@@ -30,7 +30,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             const formData = new FormData();
             formData.append('file', audioBlob, 'audio.webm');
-            formData.append('model', API_CONFIG.WHISPER_MODEL);
+            formData.append('model', window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',

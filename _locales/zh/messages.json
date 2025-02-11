@@ -119,6 +119,10 @@
         "message": "翻译模型：",
         "description": "翻译模型标签"
     },
+    "audioModelLabel": {
+        "message": "音频模型：",
+        "description": "音频模型标签"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API地址：",
         "description": "Whisper API地址标签"
