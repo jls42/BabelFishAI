@@ -7,8 +7,8 @@
     // Configuration
     const CONFIG = {
         DEBUG: false,
-        WHISPER_MODEL: "whisper-1",
-        GPT_MODEL: "gpt-4o-mini",
+        WHISPER_MODEL: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, // Utilisation de la constante depuis constants.js
+        GPT_MODEL: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
         DEFAULT_API_URL: "https://api.openai.com/v1/audio/transcriptions",
         GPT_API_URL: "https://api.openai.com/v1/chat/completions",
         COPY_FEEDBACK_DURATION: 2000,
@@ -211,16 +211,22 @@
         try {
             const formData = new FormData();
             formData.append('file', audioBlob, 'audio.webm');
-            formData.append('model', CONFIG.WHISPER_MODEL);
+            // formData.append('model', CONFIG.WHISPER_MODEL);
 
-            // Récupérer l'URL de l'API depuis le stockage
-            const apiUrl = await new Promise((resolve) => {
+            // Récupérer l'URL de l'API et le modèle depuis le stockage
+            const { apiUrl, audioModelType } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
-                    apiUrl: CONFIG.DEFAULT_API_URL
+                    apiUrl: CONFIG.DEFAULT_API_URL,
+                    audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL
                 }, (result) => {
-                    resolve(result.apiUrl || CONFIG.DEFAULT_API_URL);
+                    resolve({
+                        apiUrl: result.apiUrl || CONFIG.DEFAULT_API_URL,
+                        audioModelType: result.audioModelType
+                    });
                 });
             });
+
+            formData.append('model', audioModelType);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',

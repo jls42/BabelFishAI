@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const expertModeCheckbox = document.getElementById('expertMode');
     const expertOptions = document.getElementById('expertOptions');
     const modelTypeSelect = document.getElementById('modelType');
+    const audioModelTypeSelect = document.getElementById('audioModelType'); // Ajout du sélecteur
     const apiUrlInput = document.getElementById('apiUrl');
     const translationApiUrlInput = document.getElementById('translationApiUrl');
     const newDomainInput = document.getElementById('newDomain');
@@ -52,10 +53,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: 'en',
             expertMode: false,
             modelType: 'gpt-4o-mini',
+            audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, // Valeur par défaut
             apiUrl: 'https://api.openai.com/v1/audio/transcriptions',
             translationApiUrl: 'https://api.openai.com/v1/chat/completions',
             forcedDialogDomains: ['chat.google.com']
         }, (items) => {
+            console.log('loadOptions - audioModelType from storage:', items.audioModelType); // Ajout du log
             apiKeyInput.value = items.apiKey;
             activeDisplayCheckbox.checked = items.activeDisplay;
             dialogDisplayCheckbox.checked = items.dialogDisplay;
@@ -70,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             modelTypeSelect.value = items.modelType;
             apiUrlInput.value = items.apiUrl;
             translationApiUrlInput.value = items.translationApiUrl;
+            audioModelTypeSelect.value = items.audioModelType;
 
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
@@ -94,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: targetLanguageSelect.value,
             expertMode: expertModeCheckbox.checked,
             modelType: modelTypeSelect.value,
+            audioModelType: audioModelTypeSelect.value, // Ajout de la sauvegarde
             apiUrl: apiUrlInput.value,
             translationApiUrl: translationApiUrlInput.value,
             forcedDialogDomains: Array.from(domainsList.children).map(item =>
@@ -101,8 +106,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             )
         };
 
+        console.log('saveOptions - audioModelType before storage:', audioModelTypeSelect.value); // Ajout du log
+        audioModelTypeSelect.value = options.audioModelType;
+        apiUrlInput.value = options.apiUrl;
+        translationApiUrlInput.value = options.translationApiUrl;
         chrome.storage.sync.set(options, () => {
+            console.log('saveOptions - audioModelType after storage:', options.audioModelType); // Ajout du log
             showStatus(i18n.getMessage('savedMessage'), 'success');
+            populateAudioModelOptions(); // Remplissage des options
+
+            // Mettre à jour les états dépendants
+            updateTranslationOptionsVisibility();
+            updateExpertOptionsVisibility();
+            updateColorPreview();
+            displayForcedDomains(options.forcedDialogDomains);
+
+        });
+    }
+
+    // Fonction pour remplir les options du modèle audio
+    function populateAudioModelOptions() {
+        console.log('populateAudioModelOptions - before clearing:', audioModelTypeSelect.value); // Ajout du log
+        audioModelTypeSelect.innerHTML = ''; // Vider les options existantes
+        window.BabelFishAIConstants.API_CONFIG.AUDIO_MODELS.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            audioModelTypeSelect.appendChild(option);
+        });
+        // Définir la valeur sélectionnée après avoir ajouté les options
+        chrome.storage.sync.get({ audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL }, (items) => {
+            console.log('populateAudioModelOptions - setting value to:', items.audioModelType); // Ajout du log
+            audioModelTypeSelect.value = items.audioModelType;
         });
     }
 
@@ -215,4 +250,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser l'internationalisation et charger les options
     await i18n.init();
     loadOptions();
+    populateAudioModelOptions(); // Appel de la fonction après le chargement initial
 });

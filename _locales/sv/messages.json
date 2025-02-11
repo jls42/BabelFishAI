@@ -119,6 +119,10 @@
         "message": "Översättningsmodell:",
         "description": "Etikett för översättningsmodell"
     },
+    "audioModelLabel": {
+        "message": "Ljudmodell:",
+        "description": "Etikett för ljudmodell"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Etikett för Whisper API URL"

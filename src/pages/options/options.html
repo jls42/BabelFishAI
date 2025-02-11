@@ -159,6 +159,12 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="audioModelType" data-i18n="audioModelLabel">Modèle audio :</label>
+                <select id="audioModelType">
+                    <!-- Les options seront ajoutées dynamiquement -->
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="apiUrl" data-i18n="whisperApiUrlLabel">URL de l'API Whisper :</label>
                 <input type="text" id="apiUrl" data-i18n-placeholder="whisperApiUrlPlaceholder">
                 <div class="api-info">
@@ -194,7 +200,8 @@
         <div class="section-block">
             <h2 data-i18n="userGuideTitle">Guide d'Utilisation</h2>
             <ol>
-                <li data-i18n="userGuideStep1">Cliquez sur l'icône BabelFishAI ou utilisez le raccourci clavier pour démarrer
+                <li data-i18n="userGuideStep1">Cliquez sur l'icône BabelFishAI ou utilisez le raccourci clavier pour
+                    démarrer
                     l'enregistrement</li>
                 <li data-i18n="userGuideStep2">Parlez clairement dans votre microphone</li>
                 <li data-i18n="userGuideStep3">Cliquez à nouveau ou utilisez le raccourci pour arrêter l'enregistrement

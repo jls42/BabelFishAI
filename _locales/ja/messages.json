@@ -119,6 +119,10 @@
         "message": "翻訳モデル:",
         "description": "翻訳モデルのラベル"
     },
+    "audioModelLabel": {
+        "message": "オーディオモデル：",
+        "description": "オーディオモデルのラベル"
+    },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Whisper API URLのラベル"
