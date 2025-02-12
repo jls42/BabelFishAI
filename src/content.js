@@ -210,7 +210,8 @@
 
         try {
             const formData = new FormData();
-            formData.append('file', audioBlob, 'audio.webm');
+            const timestamp = Date.now();
+            formData.append('file', audioBlob, `audio-${timestamp}.webm`);
             // formData.append('model', CONFIG.WHISPER_MODEL);
 
             // Récupérer l'URL de l'API et le modèle depuis le stockage
