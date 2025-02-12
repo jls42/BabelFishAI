@@ -303,12 +303,23 @@
         });
 
         try {
+            // Récupérer le modèle de traduction depuis le stockage
+            const { modelType } = await new Promise((resolve) => {
+                chrome.storage.sync.get({
+                    modelType: CONFIG.GPT_MODEL,
+                }, (result) => {
+                    resolve({
+                        modelType: result.modelType
+                    });
+                });
+            });
+
             const payload = {
-                model: CONFIG.GPT_MODEL,
+                model: modelType,
                 messages: [
                     {
                         role: "system",
-                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
+                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text} Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
                     }
                 ],
                 store: true

@@ -1,15 +1,15 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
-        "description": "اسم الإضافة"
+        "message": "BabelFishAI من jls42.org",
+        "description": "اسم الامتداد"
     },
     "extensionDescription": {
-        "message": "حول صوتك إلى نص مع النسخ والترجمة المدعومة بالذكاء الاصطناعي",
-        "description": "وصف الإضافة"
+        "message": "حوّل صوتك إلى نص باستخدام النسخ والترجمة المدعومين بالذكاء الاصطناعي",
+        "description": "وصف الامتداد"
     },
     "optionsTitle": {
-        "message": "إعدادات BabelFishAI",
-        "description": "عنوان صفحة الإعدادات"
+        "message": "تكوين BabelFishAI",
+        "description": "عنوان صفحة الخيارات"
     },
     "languageSettingsTitle": {
         "message": "لغة الواجهة",
@@ -24,36 +24,36 @@
         "description": "رسالة تأكيد تغيير اللغة"
     },
     "savedMessage": {
-        "message": "تم حفظ الإعدادات!",
+        "message": "تم حفظ الخيارات!",
         "description": "رسالة تأكيد الحفظ"
     },
     "apiConfigTitle": {
-        "message": "إعدادات API",
-        "description": "عنوان قسم API"
+        "message": "تكوين واجهة برمجة التطبيقات",
+        "description": "عنوان قسم واجهة برمجة التطبيقات"
     },
     "apiKeyPlaceholder": {
-        "message": "مفتاح API الخاص بـ OpenAI (sk-...)",
-        "description": "نص توضيحي لمفتاح API"
+        "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
+        "description": "العنصر النائب لمفتاح API"
     },
     "apiKeyInfo": {
-        "message": "احصل على مفتاح API من",
-        "description": "معلومات الحصول على مفتاح API"
+        "message": "احصل على مفتاح API الخاص بك على",
+        "description": "معلومات حول الحصول على مفتاح API"
     },
     "pricingInfo": {
-        "message": "مزيد من المعلومات عن الأسعار متوفرة على",
+        "message": "مزيد من المعلومات حول الأسعار متوفرة على",
         "description": "معلومات التسعير"
     },
     "supportProject": {
-        "message": "دعم المشروع عبر PayPal",
-        "description": "نص رابط PayPal"
+        "message": "ادعم المشروع عبر PayPal",
+        "description": "نص لرابط دعم PayPal"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "عنوان URL الافتراضي لـ Whisper API"
+        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات Whisper"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "عنوان URL الافتراضي لـ API الترجمة"
+        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات الترجمة"
     },
     "displaySettingsTitle": {
         "message": "إعدادات العرض",
@@ -64,16 +64,16 @@
         "description": "تسمية العرض النشط"
     },
     "dialogDisplayLabel": {
-        "message": "مربع حوار",
+        "message": "مربع الحوار",
         "description": "تسمية عرض مربع الحوار"
     },
     "dialogDurationLabel": {
-        "message": "مدة عرض مربع الحوار (ثواني):",
+        "message": "مدة عرض مربع الحوار (بالثواني):",
         "description": "تسمية مدة مربع الحوار"
     },
     "bannerColorsLabel": {
-        "message": "ألوان شريط الحالة:",
-        "description": "تسمية ألوان الشريط"
+        "message": "ألوان شعار الحالة:",
+        "description": "تسمية ألوان الشعار"
     },
     "startColorLabel": {
         "message": "لون البداية:",
@@ -84,16 +84,16 @@
         "description": "تسمية لون النهاية"
     },
     "opacityLabel": {
-        "message": "% الشفافية",
-        "description": "تسمية الشفافية"
+        "message": "٪ عتامة",
+        "description": "تسمية التعتيم"
     },
     "translationTitle": {
-        "message": "الترجمة المدعومة بالذكاء الاصطناعي",
+        "message": "الترجمة المتكاملة بالذكاء الاصطناعي",
         "description": "عنوان قسم الترجمة"
     },
     "enableTranslationLabel": {
-        "message": "تفعيل الترجمة التلقائية",
-        "description": "تسمية تفعيل الترجمة"
+        "message": "تمكين الترجمة التلقائية",
+        "description": "تسمية لتمكين الترجمة"
     },
     "sourceLanguageLabel": {
         "message": "اللغة المصدر:",
@@ -104,16 +104,16 @@
         "description": "تسمية اللغة الهدف"
     },
     "expertModeTitle": {
-        "message": "الوضع المتقدم",
-        "description": "عنوان الوضع المتقدم"
+        "message": "وضع الخبير",
+        "description": "عنوان وضع الخبير"
     },
     "enableExpertModeLabel": {
-        "message": "تفعيل الوضع المتقدم",
-        "description": "تسمية تفعيل الوضع المتقدم"
+        "message": "تمكين وضع الخبير",
+        "description": "تسمية لتمكين وضع الخبير"
     },
     "advancedConfigTitle": {
-        "message": "الإعدادات المتقدمة",
-        "description": "عنوان الإعدادات المتقدمة"
+        "message": "التكوين المتقدم",
+        "description": "عنوان التكوين المتقدم"
     },
     "translationModelLabel": {
         "message": "نموذج الترجمة:",
@@ -121,31 +121,31 @@
     },
     "audioModelLabel": {
         "message": "نموذج الصوت:",
-        "description": "تسمية لنموذج الصوت"
+        "description": "تسمية نموذج الصوت"
     },
     "whisperApiUrlLabel": {
-        "message": "عنوان Whisper API:",
-        "description": "تسمية عنوان Whisper API"
+        "message": "عنوان URL لواجهة برمجة تطبيقات Whisper:",
+        "description": "تسمية عنوان URL لواجهة برمجة تطبيقات Whisper"
     },
     "translationApiUrlLabel": {
-        "message": "عنوان API الترجمة:",
-        "description": "تسمية عنوان API الترجمة"
+        "message": "عنوان URL لواجهة برمجة تطبيقات الترجمة:",
+        "description": "تسمية عنوان URL لواجهة برمجة تطبيقات الترجمة"
     },
     "forcedDialogDomainsLabel": {
-        "message": "النطاقات مع مربع حوار إجباري:",
-        "description": "تسمية النطاقات الإجبارية"
+        "message": "المجالات ذات مربع الحوار القسري:",
+        "description": "تسمية المجالات ذات مربع الحوار القسري"
     },
     "addDomainPlaceholder": {
         "message": "مثال: chat.google.com",
-        "description": "نص توضيحي لإضافة نطاق"
+        "description": "العنصر النائب لإضافة مجال"
     },
     "addDomainButton": {
         "message": "إضافة",
-        "description": "زر إضافة نطاق"
+        "description": "زر لإضافة مجال"
     },
     "forcedDialogInfo": {
-        "message": "في هذه النطاقات، سيظهر النص المنسوخ دائماً في مربع حوار",
-        "description": "معلومات النطاقات الإجبارية"
+        "message": "في هذه المجالات ، سيظهر النسخ دائمًا في مربع حوار",
+        "description": "معلومات حول المجالات ذات مربع الحوار القسري"
     },
     "saveButton": {
         "message": "حفظ",
@@ -160,7 +160,7 @@
         "description": "الخطوة 1 من الدليل"
     },
     "userGuideStep2": {
-        "message": "تحدث بوضوح في الميكروفون",
+        "message": "تحدث بوضوح في الميكروفون الخاص بك",
         "description": "الخطوة 2 من الدليل"
     },
     "userGuideStep3": {
@@ -168,7 +168,7 @@
         "description": "الخطوة 3 من الدليل"
     },
     "userGuideStep4": {
-        "message": "سيظهر النص المنسوخ حسب تفضيلاتك المكونة",
+        "message": "سيظهر النسخ وفقًا لتفضيلاتك التي تم تكوينها",
         "description": "الخطوة 4 من الدليل"
     },
     "userGuideStep5": {
@@ -184,15 +184,15 @@
         "description": "وصف الاختصار الرئيسي"
     },
     "shortcutKeys": {
-        "message": "Ctrl+Shift+1 (⌘+Shift+1 على Mac)",
+        "message": "Ctrl+Shift+1 (⌘+Shift+1 على نظام Mac)",
         "description": "وصف مفاتيح الاختصار"
     },
     "aiTranscriptionTitle": {
-        "message": "النسخ المدعوم بالذكاء الاصطناعي",
-        "description": "عنوان النسخ بالذكاء الاصطناعي"
+        "message": "النسخ بمساعدة الذكاء الاصطناعي",
+        "description": "عنوان قسم النسخ"
     },
     "aiTranscriptionDesc": {
-        "message": "يستخدم BabelFishAI الذكاء الاصطناعي المتطور لتحويل صوتك إلى نص. تتم عملية النسخ على خطوتين.",
+        "message": "يستخدم BabelFishAI أحدث تقنيات الذكاء الاصطناعي لنسخ صوتك إلى نص. تتم عملية النسخ على خطوتين.",
         "description": "وصف النسخ"
     },
     "aiTranscriptionStep1": {
@@ -200,15 +200,15 @@
         "description": "الخطوة 1 من النسخ"
     },
     "aiTranscriptionStep2": {
-        "message": "يتم تحليل التسجيل بواسطة Whisper AI لإنتاج نسخ دقيق",
+        "message": "يتم تحليل التسجيل بواسطة Whisper AI لإنتاج نسخة دقيقة",
         "description": "الخطوة 2 من النسخ"
     },
     "aiTranslationTitle": {
-        "message": "الترجمة المدعومة بالذكاء الاصطناعي",
-        "description": "عنوان الترجمة بالذكاء الاصطناعي"
+        "message": "الترجمة بمساعدة الذكاء الاصطناعي",
+        "description": "عنوان قسم الترجمة بالذكاء الاصطناعي"
     },
     "aiTranslationDesc": {
-        "message": "يمكن لـ BabelFishAI أيضاً ترجمة نصوصك المنسوخة تلقائياً باستخدام الذكاء الاصطناعي المتقدم من OpenAI. يتم تحليل النص المنسوخ وترجمته مع الحفاظ على المعنى والسياق.",
+        "message": "يمكن لـ BabelFishAI أيضًا ترجمة نصوصك تلقائيًا بفضل الذكاء الاصطناعي المتقدم من OpenAI. يتم تحليل النص المنسوخ وترجمته مع الحفاظ على معنى وسياق كلماتك.",
         "description": "وصف الترجمة"
     },
     "authorSectionTitle": {
@@ -216,11 +216,19 @@
         "description": "عنوان قسم المؤلف"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "جوليان ل.س",
         "description": "اسم المؤلف"
     },
     "authorRole": {
-        "message": "مطور ومنشئ BabelFishAI",
+        "message": "مطور ومبتكر BabelFishAI",
         "description": "دور المؤلف"
+    },
+    "addModelPlaceholder": {
+        "message": "إضافة نموذج",
+        "description": "العنصر النائب لإضافة نموذج"
+    },
+    "addModelButton": {
+        "message": "إضافة",
+        "description": "زر لإضافة نموذج"
     }
 }

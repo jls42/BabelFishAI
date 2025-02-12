@@ -4,8 +4,8 @@
         "description": "एक्सटेंशन का नाम"
     },
     "extensionDescription": {
-        "message": "AI द्वारा संचालित ट्रांसक्रिप्शन और अनुवाद के साथ अपनी आवाज को टेक्स्ट में बदलें",
-        "description": "एक्सटेंशन का विवरण"
+        "message": "एआई-संचालित ट्रांसक्रिप्शन और अनुवाद के साथ अपनी आवाज को टेक्स्ट में बदलें",
+        "description": "एक्सटेंशन विवरण"
     },
     "optionsTitle": {
         "message": "BabelFishAI कॉन्फ़िगरेशन",
@@ -13,47 +13,47 @@
     },
     "languageSettingsTitle": {
         "message": "इंटरफ़ेस भाषा",
-        "description": "भाषा खंड शीर्षक"
+        "description": "भाषा अनुभाग शीर्षक"
     },
     "selectLanguageLabel": {
         "message": "भाषा चुनें:",
-        "description": "भाषा चयनकर्ता लेबल"
+        "description": "भाषा चयनकर्ता के लिए लेबल"
     },
     "languageChanged": {
-        "message": "भाषा सफलतापूर्वक बदल गई",
-        "description": "भाषा परिवर्तन पुष्टि संदेश"
+        "message": "भाषा सफलतापूर्वक बदली गई",
+        "description": "भाषा परिवर्तन पुष्टिकरण संदेश"
     },
     "savedMessage": {
         "message": "विकल्प सहेजे गए!",
-        "description": "सहेजने की पुष्टि संदेश"
+        "description": "सहेजें पुष्टिकरण संदेश"
     },
     "apiConfigTitle": {
         "message": "API कॉन्फ़िगरेशन",
-        "description": "API खंड शीर्षक"
+        "description": "API अनुभाग शीर्षक"
     },
     "apiKeyPlaceholder": {
         "message": "आपकी OpenAI API कुंजी (sk-...)",
-        "description": "API कुंजी प्लेसहोल्डर"
+        "description": "API कुंजी के लिए प्लेसहोल्डर"
     },
     "apiKeyInfo": {
-        "message": "API कुंजी यहां प्राप्त करें",
-        "description": "API कुंजी जानकारी"
+        "message": "अपनी API कुंजी यहां प्राप्त करें",
+        "description": "API कुंजी प्राप्त करने की जानकारी"
     },
     "pricingInfo": {
         "message": "मूल्य निर्धारण के बारे में अधिक जानकारी यहां उपलब्ध है",
-        "description": "मूल्य निर्धारण जानकारी"
+        "description": "मूल्य निर्धारण की जानकारी"
     },
     "supportProject": {
         "message": "PayPal के माध्यम से परियोजना का समर्थन करें",
-        "description": "PayPal लिंक टेक्स्ट"
+        "description": "PayPal समर्थन लिंक के लिए पाठ"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API डिफ़ॉल्ट URL"
+        "description": "डिफ़ॉल्ट Whisper API URL"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "अनुवाद API डिफ़ॉल्ट URL"
+        "description": "डिफ़ॉल्ट अनुवाद API URL"
     },
     "displaySettingsTitle": {
         "message": "प्रदर्शन सेटिंग्स",
@@ -61,47 +61,47 @@
     },
     "activeDisplayLabel": {
         "message": "सक्रिय क्षेत्र (कीबोर्ड इनपुट)",
-        "description": "सक्रिय प्रदर्शन लेबल"
+        "description": "सक्रिय प्रदर्शन के लिए लेबल"
     },
     "dialogDisplayLabel": {
         "message": "संवाद बॉक्स",
-        "description": "संवाद प्रदर्शन लेबल"
+        "description": "संवाद बॉक्स प्रदर्शन के लिए लेबल"
     },
     "dialogDurationLabel": {
         "message": "संवाद प्रदर्शन अवधि (सेकंड):",
-        "description": "संवाद अवधि लेबल"
+        "description": "संवाद अवधि के लिए लेबल"
     },
     "bannerColorsLabel": {
         "message": "स्थिति बैनर रंग:",
-        "description": "बैनर रंग लेबल"
+        "description": "बैनर रंगों के लिए लेबल"
     },
     "startColorLabel": {
-        "message": "प्रारंभ रंग:",
-        "description": "प्रारंभ रंग लेबल"
+        "message": "आरंभ रंग:",
+        "description": "आरंभ रंग के लिए लेबल"
     },
     "endColorLabel": {
-        "message": "अंत रंग:",
-        "description": "अंत रंग लेबल"
+        "message": "अंतिम रंग:",
+        "description": "अंतिम रंग के लिए लेबल"
     },
     "opacityLabel": {
-        "message": "% अपारदर्शिता",
-        "description": "अपारदर्शिता लेबल"
+        "message": "% अस्पष्टता",
+        "description": "अस्पष्टता के लिए लेबल"
     },
     "translationTitle": {
-        "message": "एकीकृत AI अनुवाद",
-        "description": "अनुवाद खंड शीर्षक"
+        "message": "एकीकृत एआई अनुवाद",
+        "description": "अनुवाद अनुभाग शीर्षक"
     },
     "enableTranslationLabel": {
         "message": "स्वचालित अनुवाद सक्षम करें",
-        "description": "अनुवाद सक्षम लेबल"
+        "description": "अनुवाद सक्षम करने के लिए लेबल"
     },
     "sourceLanguageLabel": {
         "message": "स्रोत भाषा:",
-        "description": "स्रोत भाषा लेबल"
+        "description": "स्रोत भाषा के लिए लेबल"
     },
     "targetLanguageLabel": {
         "message": "लक्ष्य भाषा:",
-        "description": "लक्ष्य भाषा लेबल"
+        "description": "लक्ष्य भाषा के लिए लेबल"
     },
     "expertModeTitle": {
         "message": "विशेषज्ञ मोड",
@@ -109,118 +109,126 @@
     },
     "enableExpertModeLabel": {
         "message": "विशेषज्ञ मोड सक्षम करें",
-        "description": "विशेषज्ञ मोड सक्षम लेबल"
+        "description": "विशेषज्ञ मोड सक्षम करने के लिए लेबल"
     },
     "advancedConfigTitle": {
-        "message": "उन्नत कॉन्फ़िगरेशन",
-        "description": "उन्नत कॉन्फ़िगरेशन शीर्षक"
+        "message": "उन्नत विन्यास",
+        "description": "उन्नत विन्यास शीर्षक"
     },
     "translationModelLabel": {
         "message": "अनुवाद मॉडल:",
-        "description": "अनुवाद मॉडल लेबल"
+        "description": "अनुवाद मॉडल के लिए लेबल"
     },
     "audioModelLabel": {
         "message": "ऑडियो मॉडल:",
-        "description": "ऑडियो मॉडल लेबल"
+        "description": "ऑडियो मॉडल के लिए लेबल"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
-        "description": "Whisper API URL लेबल"
+        "description": "Whisper API URL के लिए लेबल"
     },
     "translationApiUrlLabel": {
         "message": "अनुवाद API URL:",
-        "description": "अनुवाद API URL लेबल"
+        "description": "अनुवाद API URL के लिए लेबल"
     },
     "forcedDialogDomainsLabel": {
-        "message": "बलपूर्वक संवाद डोमेन:",
-        "description": "बलपूर्वक संवाद डोमेन लेबल"
+        "message": "जबरन डायलॉग बॉक्स वाले डोमेन:",
+        "description": "जबरन डायलॉग डोमेन के लिए लेबल"
     },
     "addDomainPlaceholder": {
         "message": "उदाहरण: chat.google.com",
-        "description": "डोमेन जोड़ें प्लेसहोल्डर"
+        "description": "डोमेन जोड़ने के लिए प्लेसहोल्डर"
     },
     "addDomainButton": {
         "message": "जोड़ें",
-        "description": "डोमेन जोड़ें बटन"
+        "description": "डोमेन जोड़ने के लिए बटन"
     },
     "forcedDialogInfo": {
-        "message": "इन डोमेन पर, ट्रांसक्रिप्शन हमेशा एक संवाद बॉक्स में दिखाई देगा",
-        "description": "बलपूर्वक संवाद जानकारी"
+        "message": "इन डोमेन पर, ट्रांसक्रिप्शन हमेशा एक डायलॉग बॉक्स में दिखाई देगा",
+        "description": "जबरन डायलॉग डोमेन के बारे में जानकारी"
     },
     "saveButton": {
         "message": "सहेजें",
         "description": "सहेजें बटन"
     },
     "userGuideTitle": {
-        "message": "उपयोगकर्ता मार्गदर्शिका",
-        "description": "उपयोगकर्ता मार्गदर्शिका शीर्षक"
+        "message": "उपयोगकर्ता गाइड",
+        "description": "उपयोगकर्ता गाइड शीर्षक"
     },
     "userGuideStep1": {
         "message": "रिकॉर्डिंग शुरू करने के लिए BabelFishAI आइकन पर क्लिक करें या कीबोर्ड शॉर्टकट का उपयोग करें",
-        "description": "मार्गदर्शिका चरण 1"
+        "description": "गाइड का चरण 1"
     },
     "userGuideStep2": {
         "message": "अपने माइक्रोफ़ोन में स्पष्ट रूप से बोलें",
-        "description": "मार्गदर्शिका चरण 2"
+        "description": "गाइड का चरण 2"
     },
     "userGuideStep3": {
-        "message": "रिकॉर्डिंग रोकने के लिए फिर से क्लिक करें या शॉर्टकट का उपयोग करें",
-        "description": "मार्गदर्शिका चरण 3"
+        "message": "रिकॉर्डिंग बंद करने के लिए फिर से क्लिक करें या शॉर्टकट का उपयोग करें",
+        "description": "गाइड का चरण 3"
     },
     "userGuideStep4": {
         "message": "ट्रांसक्रिप्शन आपकी कॉन्फ़िगर की गई प्राथमिकताओं के अनुसार दिखाई देगा",
-        "description": "मार्गदर्शिका चरण 4"
+        "description": "गाइड का चरण 4"
     },
     "userGuideStep5": {
         "message": "टेक्स्ट को क्लिपबोर्ड पर कॉपी करने के लिए \"कॉपी\" बटन का उपयोग करें",
-        "description": "मार्गदर्शिका चरण 5"
+        "description": "गाइड का चरण 5"
     },
     "shortcutsTitle": {
         "message": "कीबोर्ड शॉर्टकट",
         "description": "शॉर्टकट शीर्षक"
     },
     "shortcutStartStop": {
-        "message": "रिकॉर्डिंग शुरू/रोकने के लिए:",
+        "message": "रिकॉर्डिंग शुरू/बंद करने के लिए:",
         "description": "मुख्य शॉर्टकट विवरण"
     },
     "shortcutKeys": {
         "message": "Ctrl+Shift+1 (Mac पर ⌘+Shift+1)",
-        "description": "शॉर्टकट कुंजी विवरण"
+        "description": "शॉर्टकट कुंजियों का विवरण"
     },
     "aiTranscriptionTitle": {
-        "message": "AI-सहायक ट्रांसक्रिप्शन",
-        "description": "AI ट्रांसक्रिप्शन शीर्षक"
+        "message": "एआई-सहायता प्राप्त ट्रांसक्रिप्शन",
+        "description": "ट्रांसक्रिप्शन अनुभाग शीर्षक"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI आपकी आवाज को टेक्स्ट में बदलने के लिए उन्नत AI का उपयोग करता है। ट्रांसक्रिप्शन प्रक्रिया दो चरणों में होती है।",
+        "message": "BabelFishAI आपकी आवाज को टेक्स्ट में ट्रांसक्रिप्ट करने के लिए अत्याधुनिक आर्टिफिशियल इंटेलिजेंस का उपयोग करता है। ट्रांसक्रिप्शन प्रक्रिया दो चरणों में होती है।",
         "description": "ट्रांसक्रिप्शन विवरण"
     },
     "aiTranscriptionStep1": {
-        "message": "आपकी आवाज आपके डिवाइस के माइक्रोफ़ोन के माध्यम से रिकॉर्ड की जाती है",
-        "description": "ट्रांसक्रिप्शन चरण 1"
+        "message": "आपकी आवाज आपके डिवाइस के माइक्रोफोन के माध्यम से रिकॉर्ड की जाती है",
+        "description": "ट्रांसक्रिप्शन का चरण 1"
     },
     "aiTranscriptionStep2": {
-        "message": "रिकॉर्डिंग का विश्लेषण Whisper AI द्वारा सटीक ट्रांसक्रिप्शन के लिए किया जाता है",
-        "description": "ट्रांसक्रिप्शन चरण 2"
+        "message": "एक सटीक ट्रांसक्रिप्शन उत्पन्न करने के लिए रिकॉर्डिंग का विश्लेषण व्हिस्पर एआई द्वारा किया जाता है",
+        "description": "ट्रांसक्रिप्शन का चरण 2"
     },
     "aiTranslationTitle": {
-        "message": "AI-सहायक अनुवाद",
-        "description": "AI अनुवाद शीर्षक"
+        "message": "एआई-सहायता प्राप्त अनुवाद",
+        "description": "एआई अनुवाद अनुभाग शीर्षक"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI OpenAI के उन्नत AI का उपयोग करके आपके ट्रांसक्रिप्शन का स्वचालित रूप से अनुवाद भी कर सकता है। ट्रांसक्राइब किए गए टेक्स्ट का विश्लेषण किया जाता है और आपके भाषण के अर्थ और संदर्भ को बनाए रखते हुए अनुवाद किया जाता है।",
+        "message": "BabelFishAI, OpenAI के उन्नत AI की बदौलत आपके ट्रांसक्रिप्शन का स्वचालित रूप से अनुवाद भी कर सकता है। ट्रांसक्रिप्ट किए गए टेक्स्ट का विश्लेषण किया जाता है और आपके शब्दों के अर्थ और संदर्भ को संरक्षित करते हुए अनुवाद किया जाता है।",
         "description": "अनुवाद विवरण"
     },
     "authorSectionTitle": {
         "message": "लेखक के बारे में",
-        "description": "लेखक खंड शीर्षक"
+        "description": "लेखक अनुभाग शीर्षक"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "जूलियन एलएस",
         "description": "लेखक का नाम"
     },
     "authorRole": {
         "message": "BabelFishAI के डेवलपर और निर्माता",
         "description": "लेखक की भूमिका"
+    },
+    "addModelPlaceholder": {
+        "message": "मॉडल जोड़ें",
+        "description": "मॉडल जोड़ने के लिए प्लेसहोल्डर"
+    },
+    "addModelButton": {
+        "message": "जोड़ें",
+        "description": "मॉडल जोड़ने के लिए बटन"
     }
 }

@@ -1,10 +1,10 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "BabelFishAI od jls42.org",
         "description": "Nazwa rozszerzenia"
     },
     "extensionDescription": {
-        "message": "Przekształć swój głos w tekst dzięki transkrypcji i tłumaczeniu wspomaganemu przez AI",
+        "message": "Zamień swój głos na tekst dzięki transkrypcji i tłumaczeniu opartym na sztucznej inteligencji",
         "description": "Opis rozszerzenia"
     },
     "optionsTitle": {
@@ -13,14 +13,14 @@
     },
     "languageSettingsTitle": {
         "message": "Język interfejsu",
-        "description": "Tytuł sekcji języka"
+        "description": "Tytuł sekcji językowej"
     },
     "selectLanguageLabel": {
         "message": "Wybierz język:",
-        "description": "Etykieta wyboru języka"
+        "description": "Etykieta selektora języka"
     },
     "languageChanged": {
-        "message": "Język został zmieniony",
+        "message": "Język został pomyślnie zmieniony",
         "description": "Komunikat potwierdzenia zmiany języka"
     },
     "savedMessage": {
@@ -33,46 +33,46 @@
     },
     "apiKeyPlaceholder": {
         "message": "Twój klucz API OpenAI (sk-...)",
-        "description": "Placeholder dla klucza API"
+        "description": "Symbol zastępczy klucza API"
     },
     "apiKeyInfo": {
-        "message": "Uzyskaj klucz API na",
-        "description": "Informacja o kluczu API"
+        "message": "Uzyskaj klucz API na stronie",
+        "description": "Informacje o uzyskiwaniu klucza API"
     },
     "pricingInfo": {
-        "message": "Więcej informacji o cenach dostępnych na",
+        "message": "Więcej informacji o cenach dostępnych na stronie",
         "description": "Informacje o cenach"
     },
     "supportProject": {
         "message": "Wesprzyj projekt przez PayPal",
-        "description": "Tekst linku PayPal"
+        "description": "Tekst linku do wsparcia PayPal"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Domyślny URL API Whisper"
+        "description": "Domyślny adres URL interfejsu API Whisper"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Domyślny URL API tłumaczenia"
+        "description": "Domyślny adres URL interfejsu API tłumaczenia"
     },
     "displaySettingsTitle": {
         "message": "Ustawienia wyświetlania",
         "description": "Tytuł ustawień wyświetlania"
     },
     "activeDisplayLabel": {
-        "message": "Obszar aktywny (wprowadzanie z klawiatury)",
-        "description": "Etykieta wyświetlania aktywnego"
+        "message": "Aktywny obszar (wprowadzanie z klawiatury)",
+        "description": "Etykieta aktywnego wyświetlania"
     },
     "dialogDisplayLabel": {
         "message": "Okno dialogowe",
         "description": "Etykieta wyświetlania okna dialogowego"
     },
     "dialogDurationLabel": {
-        "message": "Czas wyświetlania okna (sekundy):",
-        "description": "Etykieta czasu trwania okna"
+        "message": "Czas wyświetlania okna dialogowego (w sekundach):",
+        "description": "Etykieta czasu trwania okna dialogowego"
     },
     "bannerColorsLabel": {
-        "message": "Kolory banera statusu:",
+        "message": "Kolory banera stanu:",
         "description": "Etykieta kolorów banera"
     },
     "startColorLabel": {
@@ -84,8 +84,8 @@
         "description": "Etykieta koloru końcowego"
     },
     "opacityLabel": {
-        "message": "% Przezroczystości",
-        "description": "Etykieta przezroczystości"
+        "message": "% Krycie",
+        "description": "Etykieta krycia"
     },
     "translationTitle": {
         "message": "Zintegrowane tłumaczenie AI",
@@ -93,7 +93,7 @@
     },
     "enableTranslationLabel": {
         "message": "Włącz automatyczne tłumaczenie",
-        "description": "Etykieta włączenia tłumaczenia"
+        "description": "Etykieta włączania tłumaczenia"
     },
     "sourceLanguageLabel": {
         "message": "Język źródłowy:",
@@ -104,12 +104,12 @@
         "description": "Etykieta języka docelowego"
     },
     "expertModeTitle": {
-        "message": "Tryb eksperta",
-        "description": "Tytuł trybu eksperta"
+        "message": "Tryb ekspercki",
+        "description": "Tytuł trybu eksperckiego"
     },
     "enableExpertModeLabel": {
-        "message": "Włącz tryb eksperta",
-        "description": "Etykieta włączenia trybu eksperta"
+        "message": "Włącz tryb ekspercki",
+        "description": "Etykieta włączania trybu eksperckiego"
     },
     "advancedConfigTitle": {
         "message": "Konfiguracja zaawansowana",
@@ -124,28 +124,28 @@
         "description": "Etykieta modelu audio"
     },
     "whisperApiUrlLabel": {
-        "message": "URL API Whisper:",
-        "description": "Etykieta URL API Whisper"
+        "message": "Adres URL interfejsu API Whisper:",
+        "description": "Etykieta adresu URL interfejsu API Whisper"
     },
     "translationApiUrlLabel": {
-        "message": "URL API tłumaczenia:",
-        "description": "Etykieta URL API tłumaczenia"
+        "message": "Adres URL interfejsu API tłumaczenia:",
+        "description": "Etykieta adresu URL interfejsu API tłumaczenia"
     },
     "forcedDialogDomainsLabel": {
         "message": "Domeny z wymuszonym oknem dialogowym:",
-        "description": "Etykieta wymuszonych domen"
+        "description": "Etykieta domen z wymuszonym oknem dialogowym"
     },
     "addDomainPlaceholder": {
         "message": "Przykład: chat.google.com",
-        "description": "Placeholder dla dodawania domeny"
+        "description": "Symbol zastępczy dodawania domeny"
     },
     "addDomainButton": {
         "message": "Dodaj",
         "description": "Przycisk dodawania domeny"
     },
     "forcedDialogInfo": {
-        "message": "Na tych domenach transkrypcja zawsze pojawi się w oknie dialogowym",
-        "description": "Informacja o wymuszonych domenach"
+        "message": "W tych domenach transkrypcja zawsze będzie wyświetlana w oknie dialogowym",
+        "description": "Informacje o domenach z wymuszonym oknem dialogowym"
     },
     "saveButton": {
         "message": "Zapisz",
@@ -156,7 +156,7 @@
         "description": "Tytuł przewodnika użytkownika"
     },
     "userGuideStep1": {
-        "message": "Kliknij ikonę BabelFishAI lub użyj skrótu klawiszowego, aby rozpocząć nagrywanie",
+        "message": "Kliknij ikonę BabelFishAI lub użyj skrótu klawiaturowego, aby rozpocząć nagrywanie",
         "description": "Krok 1 przewodnika"
     },
     "userGuideStep2": {
@@ -168,7 +168,7 @@
         "description": "Krok 3 przewodnika"
     },
     "userGuideStep4": {
-        "message": "Transkrypcja pojawi się zgodnie z skonfigurowanymi preferencjami",
+        "message": "Transkrypcja pojawi się zgodnie z Twoimi skonfigurowanymi preferencjami",
         "description": "Krok 4 przewodnika"
     },
     "userGuideStep5": {
@@ -176,7 +176,7 @@
         "description": "Krok 5 przewodnika"
     },
     "shortcutsTitle": {
-        "message": "Skróty klawiszowe",
+        "message": "Skróty klawiaturowe",
         "description": "Tytuł skrótów"
     },
     "shortcutStartStop": {
@@ -184,31 +184,31 @@
         "description": "Opis głównego skrótu"
     },
     "shortcutKeys": {
-        "message": "Ctrl+Shift+1 (⌘+Shift+1 na Mac)",
+        "message": "Ctrl+Shift+1 (⌘+Shift+1 na Macu)",
         "description": "Opis klawiszy skrótu"
     },
     "aiTranscriptionTitle": {
-        "message": "Transkrypcja wspomagana AI",
-        "description": "Tytuł transkrypcji AI"
+        "message": "Transkrypcja wspomagana przez AI",
+        "description": "Tytuł sekcji transkrypcji"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI wykorzystuje najnowocześniejszą sztuczną inteligencję do przekształcania głosu w tekst. Proces transkrypcji odbywa się w dwóch krokach.",
+        "message": "BabelFishAI wykorzystuje najnowocześniejszą sztuczną inteligencję do transkrypcji Twojego głosu na tekst. Proces transkrypcji odbywa się w dwóch etapach.",
         "description": "Opis transkrypcji"
     },
     "aiTranscriptionStep1": {
-        "message": "Twój głos jest nagrywany przez mikrofon urządzenia",
+        "message": "Twój głos jest nagrywany przez mikrofon Twojego urządzenia",
         "description": "Krok 1 transkrypcji"
     },
     "aiTranscriptionStep2": {
-        "message": "Nagranie jest analizowane przez Whisper AI w celu utworzenia dokładnej transkrypcji",
+        "message": "Nagranie jest analizowane przez AI Whisper w celu uzyskania dokładnej transkrypcji",
         "description": "Krok 2 transkrypcji"
     },
     "aiTranslationTitle": {
-        "message": "Tłumaczenie wspomagane AI",
-        "description": "Tytuł tłumaczenia AI"
+        "message": "Tłumaczenie wspomagane przez AI",
+        "description": "Tytuł sekcji tłumaczenia AI"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI może również automatycznie tłumaczyć transkrypcje przy użyciu zaawansowanej AI OpenAI. Tekst transkrypcji jest analizowany i tłumaczony z zachowaniem znaczenia i kontekstu wypowiedzi.",
+        "message": "BabelFishAI może również automatycznie tłumaczyć Twoje transkrypcje dzięki zaawansowanej sztucznej inteligencji OpenAI. Transkrybowany tekst jest analizowany i tłumaczony z zachowaniem znaczenia i kontekstu Twoich słów.",
         "description": "Opis tłumaczenia"
     },
     "authorSectionTitle": {
@@ -220,7 +220,15 @@
         "description": "Imię autora"
     },
     "authorRole": {
-        "message": "Programista i twórca BabelFishAI",
+        "message": "Deweloper i twórca BabelFishAI",
         "description": "Rola autora"
+    },
+    "addModelPlaceholder": {
+        "message": "Dodaj model",
+        "description": "Symbol zastępczy dodawania modelu"
+    },
+    "addModelButton": {
+        "message": "Dodaj",
+        "description": "Przycisk dodawania modelu"
     }
 }

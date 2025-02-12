@@ -222,5 +222,13 @@
     "authorRole": {
         "message": "Développeur et créateur de BabelFishAI",
         "description": "Rôle de l'auteur"
+    },
+    "addModelPlaceholder": {
+        "message": "Ajouter un modèle",
+        "description": "Placeholder pour l'ajout de modèle"
+    },
+    "addModelButton": {
+        "message": "Ajouter",
+        "description": "Bouton pour ajouter un modèle"
     }
 }

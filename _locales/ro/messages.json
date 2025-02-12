@@ -1,10 +1,10 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "BabelFishAI de jls42.org",
         "description": "Numele extensiei"
     },
     "extensionDescription": {
-        "message": "Transformă vocea în text cu transcriere și traducere bazată pe AI",
+        "message": "Transformă-ți vocea în text cu transcriere și traducere bazate pe IA",
         "description": "Descrierea extensiei"
     },
     "optionsTitle": {
@@ -16,44 +16,44 @@
         "description": "Titlul secțiunii de limbă"
     },
     "selectLanguageLabel": {
-        "message": "Selectează limba:",
-        "description": "Eticheta selectorului de limbă"
+        "message": "Selectați limba:",
+        "description": "Etichetă pentru selectorul de limbă"
     },
     "languageChanged": {
         "message": "Limba a fost schimbată cu succes",
-        "description": "Mesaj de confirmare pentru schimbarea limbii"
+        "description": "Mesaj de confirmare a schimbării limbii"
     },
     "savedMessage": {
         "message": "Opțiuni salvate!",
-        "description": "Mesaj de confirmare pentru salvare"
+        "description": "Mesaj de confirmare a salvării"
     },
     "apiConfigTitle": {
         "message": "Configurare API",
         "description": "Titlul secțiunii API"
     },
     "apiKeyPlaceholder": {
-        "message": "Cheia ta API OpenAI (sk-...)",
+        "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"
     },
     "apiKeyInfo": {
-        "message": "Obține cheia API de la",
-        "description": "Informații despre cheia API"
+        "message": "Obțineți cheia API la",
+        "description": "Informații despre obținerea cheii API"
     },
     "pricingInfo": {
         "message": "Mai multe informații despre prețuri disponibile la",
         "description": "Informații despre prețuri"
     },
     "supportProject": {
-        "message": "Susține proiectul prin PayPal",
-        "description": "Text link PayPal"
+        "message": "Sprijiniți proiectul prin PayPal",
+        "description": "Text pentru linkul de suport PayPal"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "URL implicit API Whisper"
+        "description": "URL-ul implicit al API-ului Whisper"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "URL implicit API traducere"
+        "description": "URL-ul implicit al API-ului de traducere"
     },
     "displaySettingsTitle": {
         "message": "Setări de afișare",
@@ -61,15 +61,15 @@
     },
     "activeDisplayLabel": {
         "message": "Zonă activă (introducere de la tastatură)",
-        "description": "Etichetă pentru afișare activă"
+        "description": "Etichetă pentru afișarea activă"
     },
     "dialogDisplayLabel": {
-        "message": "Fereastră de dialog",
-        "description": "Etichetă pentru afișare dialog"
+        "message": "Casetă de dialog",
+        "description": "Etichetă pentru afișarea în caseta de dialog"
     },
     "dialogDurationLabel": {
-        "message": "Durata de afișare a ferestrei (secunde):",
-        "description": "Etichetă pentru durata dialogului"
+        "message": "Durata de afișare a casetei de dialog (secunde):",
+        "description": "Etichetă pentru durata casetei de dialog"
     },
     "bannerColorsLabel": {
         "message": "Culorile bannerului de stare:",
@@ -88,12 +88,12 @@
         "description": "Etichetă pentru opacitate"
     },
     "translationTitle": {
-        "message": "Traducere AI integrată",
+        "message": "Traducere integrată cu IA",
         "description": "Titlul secțiunii de traducere"
     },
     "enableTranslationLabel": {
-        "message": "Activează traducerea automată",
-        "description": "Etichetă pentru activare traducere"
+        "message": "Activați traducerea automată",
+        "description": "Etichetă pentru activarea traducerii"
     },
     "sourceLanguageLabel": {
         "message": "Limba sursă:",
@@ -104,16 +104,16 @@
         "description": "Etichetă pentru limba țintă"
     },
     "expertModeTitle": {
-        "message": "Mod expert",
+        "message": "Mod Expert",
         "description": "Titlul modului expert"
     },
     "enableExpertModeLabel": {
-        "message": "Activează modul expert",
-        "description": "Etichetă pentru activare mod expert"
+        "message": "Activați modul expert",
+        "description": "Etichetă pentru activarea modului expert"
     },
     "advancedConfigTitle": {
         "message": "Configurare avansată",
-        "description": "Titlul configurării avansate"
+        "description": "Titlul configurației avansate"
     },
     "translationModelLabel": {
         "message": "Model de traducere:",
@@ -124,103 +124,111 @@
         "description": "Etichetă pentru modelul audio"
     },
     "whisperApiUrlLabel": {
-        "message": "URL API Whisper:",
-        "description": "Etichetă pentru URL API Whisper"
+        "message": "URL-ul API-ului Whisper:",
+        "description": "Etichetă pentru URL-ul API-ului Whisper"
     },
     "translationApiUrlLabel": {
-        "message": "URL API traducere:",
-        "description": "Etichetă pentru URL API traducere"
+        "message": "URL-ul API-ului de traducere:",
+        "description": "Etichetă pentru URL-ul API-ului de traducere"
     },
     "forcedDialogDomainsLabel": {
-        "message": "Domenii cu dialog forțat:",
-        "description": "Etichetă pentru domenii forțate"
+        "message": "Domenii cu casetă de dialog forțată:",
+        "description": "Etichetă pentru domeniile cu casetă de dialog forțată"
     },
     "addDomainPlaceholder": {
         "message": "Exemplu: chat.google.com",
-        "description": "Placeholder pentru adăugare domeniu"
+        "description": "Placeholder pentru adăugarea unui domeniu"
     },
     "addDomainButton": {
-        "message": "Adaugă",
-        "description": "Buton pentru adăugare domeniu"
+        "message": "Adăugați",
+        "description": "Buton pentru adăugarea unui domeniu"
     },
     "forcedDialogInfo": {
-        "message": "Pe aceste domenii, transcrierea va apărea întotdeauna într-o fereastră de dialog",
-        "description": "Informații despre domeniile forțate"
+        "message": "Pe aceste domenii, transcrierea va apărea întotdeauna într-o casetă de dialog",
+        "description": "Informații despre domeniile cu casetă de dialog forțată"
     },
     "saveButton": {
-        "message": "Salvează",
-        "description": "Buton de salvare"
+        "message": "Salvați",
+        "description": "Butonul de salvare"
     },
     "userGuideTitle": {
         "message": "Ghid de utilizare",
         "description": "Titlul ghidului de utilizare"
     },
     "userGuideStep1": {
-        "message": "Click pe iconița BabelFishAI sau folosește scurtătura de la tastatură pentru a începe înregistrarea",
-        "description": "Pasul 1 din ghid"
+        "message": "Faceți clic pe pictograma BabelFishAI sau utilizați comanda rapidă de la tastatură pentru a începe înregistrarea",
+        "description": "Pasul 1 al ghidului"
     },
     "userGuideStep2": {
-        "message": "Vorbește clar în microfon",
-        "description": "Pasul 2 din ghid"
+        "message": "Vorbiți clar în microfon",
+        "description": "Pasul 2 al ghidului"
     },
     "userGuideStep3": {
-        "message": "Click din nou sau folosește scurtătura pentru a opri înregistrarea",
-        "description": "Pasul 3 din ghid"
+        "message": "Faceți clic din nou sau utilizați comanda rapidă pentru a opri înregistrarea",
+        "description": "Pasul 3 al ghidului"
     },
     "userGuideStep4": {
-        "message": "Transcrierea va apărea conform preferințelor configurate",
-        "description": "Pasul 4 din ghid"
+        "message": "Transcripția va apărea în funcție de preferințele dvs. configurate",
+        "description": "Pasul 4 al ghidului"
     },
     "userGuideStep5": {
-        "message": "Folosește butonul \"Copiază\" pentru a copia textul în clipboard",
-        "description": "Pasul 5 din ghid"
+        "message": "Utilizați butonul \"Copiați\" pentru a copia textul în clipboard",
+        "description": "Pasul 5 al ghidului"
     },
     "shortcutsTitle": {
-        "message": "Scurtături de tastatură",
-        "description": "Titlul scurtăturilor"
+        "message": "Comenzi rapide de la tastatură",
+        "description": "Titlul comenzilor rapide"
     },
     "shortcutStartStop": {
-        "message": "Pentru a începe/opri înregistrarea:",
-        "description": "Descriere scurtătură principală"
+        "message": "Pentru a porni/opri înregistrarea:",
+        "description": "Descrierea comenzii rapide principale"
     },
     "shortcutKeys": {
         "message": "Ctrl+Shift+1 (⌘+Shift+1 pe Mac)",
-        "description": "Descriere taste scurtătură"
+        "description": "Descrierea tastelor de comandă rapidă"
     },
     "aiTranscriptionTitle": {
-        "message": "Transcriere asistată de AI",
-        "description": "Titlul transcrierii AI"
+        "message": "Transcriere asistată de IA",
+        "description": "Titlul secțiunii de transcriere"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI folosește inteligență artificială de ultimă generație pentru a-ți transforma vocea în text. Procesul de transcriere are loc în doi pași.",
-        "description": "Descriere transcriere"
+        "message": "BabelFishAI utilizează inteligența artificială de ultimă generație pentru a transcrie vocea dvs. în text. Procesul de transcriere are loc în două etape.",
+        "description": "Descrierea transcrierii"
     },
     "aiTranscriptionStep1": {
-        "message": "Vocea ta este înregistrată prin microfonul dispozitivului",
-        "description": "Pasul 1 transcriere"
+        "message": "Vocea dvs. este înregistrată prin intermediul microfonului dispozitivului dvs.",
+        "description": "Pasul 1 al transcrierii"
     },
     "aiTranscriptionStep2": {
-        "message": "Înregistrarea este analizată de Whisper AI pentru a produce o transcriere precisă",
-        "description": "Pasul 2 transcriere"
+        "message": "Înregistrarea este analizată de IA Whisper pentru a produce o transcriere precisă",
+        "description": "Pasul 2 al transcrierii"
     },
     "aiTranslationTitle": {
-        "message": "Traducere asistată de AI",
-        "description": "Titlul traducerii AI"
+        "message": "Traducere asistată de IA",
+        "description": "Titlul secțiunii de traducere IA"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI poate traduce automat transcrierile tale folosind AI-ul avansat OpenAI. Textul transcris este analizat și tradus păstrând sensul și contextul vorbirii tale.",
-        "description": "Descriere traducere"
+        "message": "BabelFishAI poate, de asemenea, să traducă automat transcrierile dvs. datorită IA avansată de la OpenAI. Textul transcris este analizat și tradus păstrând sensul și contextul cuvintelor dvs.",
+        "description": "Descrierea traducerii"
     },
     "authorSectionTitle": {
         "message": "Despre autor",
-        "description": "Titlul secțiunii despre autor"
+        "description": "Titlul secțiunii autorului"
     },
     "authorName": {
         "message": "Julien LS",
         "description": "Numele autorului"
     },
     "authorRole": {
-        "message": "Dezvoltator și creator BabelFishAI",
+        "message": "Dezvoltator și creator al BabelFishAI",
         "description": "Rolul autorului"
+    },
+    "addModelPlaceholder": {
+        "message": "Adăugați un model",
+        "description": "Placeholder pentru adăugarea unui model"
+    },
+    "addModelButton": {
+        "message": "Adăugați",
+        "description": "Buton pentru adăugarea unui model"
     }
 }
