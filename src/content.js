@@ -307,7 +307,7 @@
                 messages: [
                     {
                         role: "system",
-                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: '${text}'. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
+                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
                     }
                 ],
                 store: true
@@ -315,7 +315,18 @@
 
             console.log('Translation request payload:', payload);
 
-            const response = await fetch(CONFIG.GPT_API_URL, {
+            // Récupérer l'URL de l'API de traduction depuis le stockage
+            const { translationApiUrl } = await new Promise((resolve) => {
+                chrome.storage.sync.get({
+                    translationApiUrl: CONFIG.GPT_API_URL,
+                }, (result) => {
+                    resolve({
+                        translationApiUrl: result.translationApiUrl || CONFIG.GPT_API_URL,
+                    });
+                });
+            });
+
+            const response = await fetch(translationApiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
