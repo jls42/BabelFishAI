@@ -19,7 +19,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const expertModeCheckbox = document.getElementById('expertMode');
     const expertOptions = document.getElementById('expertOptions');
     const modelTypeSelect = document.getElementById('modelType');
-    const audioModelTypeSelect = document.getElementById('audioModelType'); // Ajout du sélecteur
+    const newModelTypeInput = document.getElementById('newModelType'); // Nouveau champ
+    const addModelTypeButton = document.getElementById('addModelType'); // Nouveau bouton
+    const customModelsList = document.getElementById('customModelsList'); // Nouvelle liste
+    const audioModelTypeSelect = document.getElementById('audioModelType');
     const apiUrlInput = document.getElementById('apiUrl');
     const translationApiUrlInput = document.getElementById('translationApiUrl');
     const newDomainInput = document.getElementById('newDomain');
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     interfaceLanguageSelect.value = currentLang;
 
     // Charger les options sauvegardées
-    function loadOptions() {
+    async function loadOptions() {
         chrome.storage.sync.get({
             apiKey: '',
             activeDisplay: true,
@@ -53,12 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: 'en',
             expertMode: false,
             modelType: 'gpt-4o-mini',
-            audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, // Valeur par défaut
+            customModelTypes: [], // Charger les modèles personnalisés
+            audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
             apiUrl: 'https://api.openai.com/v1/audio/transcriptions',
             translationApiUrl: 'https://api.openai.com/v1/chat/completions',
             forcedDialogDomains: ['chat.google.com']
         }, (items) => {
-            console.log('loadOptions - audioModelType from storage:', items.audioModelType); // Ajout du log
             apiKeyInput.value = items.apiKey;
             activeDisplayCheckbox.checked = items.activeDisplay;
             dialogDisplayCheckbox.checked = items.dialogDisplay;
@@ -75,6 +78,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             translationApiUrlInput.value = items.translationApiUrl;
             audioModelTypeSelect.value = items.audioModelType;
 
+            // Charger et afficher les modèles personnalisés
+            displayCustomModels(items.customModelTypes);
+            populateModelTypeOptions(items.customModelTypes);
+
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
             updateExpertOptionsVisibility();
@@ -85,6 +92,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Sauvegarder les options
     function saveOptions() {
+        const customModelTypes = Array.from(customModelsList.children).map(item =>
+            item.textContent.replace('×', '').trim()
+        );
+
         const options = {
             apiKey: apiKeyInput.value,
             activeDisplay: activeDisplayCheckbox.checked,
@@ -98,7 +109,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: targetLanguageSelect.value,
             expertMode: expertModeCheckbox.checked,
             modelType: modelTypeSelect.value,
-            audioModelType: audioModelTypeSelect.value, // Ajout de la sauvegarde
+            customModelTypes: customModelTypes, // Sauvegarder les modèles personnalisés
+            audioModelType: audioModelTypeSelect.value,
             apiUrl: apiUrlInput.value,
             translationApiUrl: translationApiUrlInput.value,
             forcedDialogDomains: Array.from(domainsList.children).map(item =>
@@ -106,38 +118,102 @@ document.addEventListener('DOMContentLoaded', async () => {
             )
         };
 
-        console.log('saveOptions - audioModelType before storage:', audioModelTypeSelect.value); // Ajout du log
-        audioModelTypeSelect.value = options.audioModelType;
-        apiUrlInput.value = options.apiUrl;
-        translationApiUrlInput.value = options.translationApiUrl;
         chrome.storage.sync.set(options, () => {
-            console.log('saveOptions - audioModelType after storage:', options.audioModelType); // Ajout du log
             showStatus(i18n.getMessage('savedMessage'), 'success');
-            populateAudioModelOptions(); // Remplissage des options
+            populateAudioModelOptions();
+            populateModelTypeOptions(customModelTypes); // Mettre à jour les options
 
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
             updateExpertOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(options.forcedDialogDomains);
-
         });
     }
 
     // Fonction pour remplir les options du modèle audio
     function populateAudioModelOptions() {
-        console.log('populateAudioModelOptions - before clearing:', audioModelTypeSelect.value); // Ajout du log
-        audioModelTypeSelect.innerHTML = ''; // Vider les options existantes
+        audioModelTypeSelect.innerHTML = '';
         window.BabelFishAIConstants.API_CONFIG.AUDIO_MODELS.forEach(model => {
             const option = document.createElement('option');
             option.value = model;
             option.textContent = model;
             audioModelTypeSelect.appendChild(option);
         });
-        // Définir la valeur sélectionnée après avoir ajouté les options
+
         chrome.storage.sync.get({ audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL }, (items) => {
-            console.log('populateAudioModelOptions - setting value to:', items.audioModelType); // Ajout du log
             audioModelTypeSelect.value = items.audioModelType;
+        });
+    }
+
+    // Fonction pour remplir les options du modèle de traduction
+    function populateModelTypeOptions(customModels) {
+        modelTypeSelect.innerHTML = ''; // Vider les options existantes
+
+        // Ajouter les options par défaut
+        const defaultModels = ['gpt-4o-mini', 'gpt-4o'];
+        defaultModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model + (model === 'gpt-4o-mini' ? ' (par défaut)' : '');
+            modelTypeSelect.appendChild(option);
+        });
+
+        // Ajouter les modèles personnalisés
+        customModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            modelTypeSelect.appendChild(option);
+        });
+
+        // Restaurer la sélection
+        chrome.storage.sync.get({ modelType: 'gpt-4o-mini' }, (items) => {
+            modelTypeSelect.value = items.modelType;
+        });
+    }
+
+    // Ajouter un modèle personnalisé
+    function addModelType() {
+        const newModel = newModelTypeInput.value.trim();
+        if (newModel && !Array.from(modelTypeSelect.options).some(option => option.value === newModel)) {
+            const item = document.createElement('div');
+            item.className = 'custom-model-item';
+            item.textContent = newModel;
+
+            const removeButton = document.createElement('button');
+            removeButton.className = 'remove-model-button';
+            removeButton.textContent = '×';
+            removeButton.onclick = () => {
+                item.remove();
+                saveOptions(); // Sauvegarder après suppression
+            };
+
+            item.appendChild(removeButton);
+            customModelsList.appendChild(item);
+            newModelTypeInput.value = ''; // Vider le champ
+            saveOptions(); // Sauvegarder immédiatement
+        }
+    }
+
+    // Afficher les modèles personnalisés
+    function displayCustomModels(models) {
+        customModelsList.innerHTML = ''; // Vider la liste
+        models.forEach(model => {
+            const item = document.createElement('div');
+            item.className = 'custom-model-item';
+            item.textContent = model;
+
+            const removeButton = document.createElement('button');
+            removeButton.className = 'remove-model-button';
+            removeButton.textContent = '×';
+            removeButton.onclick = () => {
+                item.remove();
+                saveOptions(); // Sauvegarder après suppression
+            };
+
+            item.appendChild(removeButton);
+            customModelsList.appendChild(item);
         });
     }
 
@@ -241,6 +317,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     enableTranslationCheckbox.addEventListener('change', updateTranslationOptionsVisibility);
     expertModeCheckbox.addEventListener('change', updateExpertOptionsVisibility);
     addDomainButton.addEventListener('click', addDomain);
+    addModelTypeButton.addEventListener('click', addModelType); // Écouteur pour le nouveau bouton
 
     // Event listeners pour l'aperçu des couleurs
     bannerColorStartInput.addEventListener('input', updateColorPreview);
@@ -250,5 +327,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser l'internationalisation et charger les options
     await i18n.init();
     loadOptions();
-    populateAudioModelOptions(); // Appel de la fonction après le chargement initial
+    populateAudioModelOptions();
 });

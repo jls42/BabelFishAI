@@ -1,15 +1,15 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "BabelFishAI van jls42.org",
         "description": "Naam van de extensie"
     },
     "extensionDescription": {
-        "message": "Zet je stem om in tekst met AI-gestuurde transcriptie en vertaling",
+        "message": "Zet je stem om in tekst met AI-aangedreven transcriptie en vertaling",
         "description": "Beschrijving van de extensie"
     },
     "optionsTitle": {
         "message": "BabelFishAI Configuratie",
-        "description": "Titel van de optiespagina"
+        "description": "Titel van de optiepagina"
     },
     "languageSettingsTitle": {
         "message": "Interfacetaal",
@@ -17,7 +17,7 @@
     },
     "selectLanguageLabel": {
         "message": "Selecteer taal:",
-        "description": "Label voor taalselectie"
+        "description": "Label voor de taalkiezer"
     },
     "languageChanged": {
         "message": "Taal succesvol gewijzigd",
@@ -32,20 +32,20 @@
         "description": "Titel van de API-sectie"
     },
     "apiKeyPlaceholder": {
-        "message": "Je OpenAI API-sleutel (sk-...)",
+        "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Placeholder voor API-sleutel"
     },
     "apiKeyInfo": {
-        "message": "Verkrijg je API-sleutel op",
-        "description": "Informatie over API-sleutel"
+        "message": "Verkrijg uw API-sleutel op",
+        "description": "Informatie over het verkrijgen van de API-sleutel"
     },
     "pricingInfo": {
         "message": "Meer informatie over prijzen beschikbaar op",
-        "description": "Prijsinformatie"
+        "description": "Informatie over prijzen"
     },
     "supportProject": {
         "message": "Steun het project via PayPal",
-        "description": "PayPal link tekst"
+        "description": "Tekst voor de PayPal-ondersteuningslink"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
@@ -53,11 +53,11 @@
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Standaard Vertaling API URL"
+        "description": "Standaard vertaal-API URL"
     },
     "displaySettingsTitle": {
         "message": "Weergave-instellingen",
-        "description": "Titel weergave-instellingen"
+        "description": "Titel van de weergave-instellingen"
     },
     "activeDisplayLabel": {
         "message": "Actief gebied (toetsenbordinvoer)",
@@ -65,14 +65,14 @@
     },
     "dialogDisplayLabel": {
         "message": "Dialoogvenster",
-        "description": "Label voor dialoogweergave"
+        "description": "Label voor weergave in dialoogvenster"
     },
     "dialogDurationLabel": {
-        "message": "Weergaveduur dialoog (seconden):",
-        "description": "Label voor dialoogduur"
+        "message": "Weergaveduur dialoogvenster (seconden):",
+        "description": "Label voor duur van dialoogvenster"
     },
     "bannerColorsLabel": {
-        "message": "Statusbannerkleuren:",
+        "message": "Kleuren van de statusbalk:",
         "description": "Label voor bannerkleuren"
     },
     "startColorLabel": {
@@ -84,8 +84,8 @@
         "description": "Label voor eindkleur"
     },
     "opacityLabel": {
-        "message": "% Doorzichtigheid",
-        "description": "Label voor doorzichtigheid"
+        "message": "% Ondoorzichtigheid",
+        "description": "Label voor ondoorzichtigheid"
     },
     "translationTitle": {
         "message": "Geïntegreerde AI-vertaling",
@@ -93,27 +93,27 @@
     },
     "enableTranslationLabel": {
         "message": "Automatische vertaling inschakelen",
-        "description": "Label voor vertaling inschakelen"
+        "description": "Label voor het inschakelen van vertaling"
     },
     "sourceLanguageLabel": {
-        "message": "Brontaal:",
+        "message": "Bron taal:",
         "description": "Label voor brontaal"
     },
     "targetLanguageLabel": {
-        "message": "Doeltaal:",
+        "message": "Doel taal:",
         "description": "Label voor doeltaal"
     },
     "expertModeTitle": {
         "message": "Expertmodus",
-        "description": "Titel expertmodus"
+        "description": "Titel van de expertmodus"
     },
     "enableExpertModeLabel": {
         "message": "Expertmodus inschakelen",
-        "description": "Label voor expertmodus inschakelen"
+        "description": "Label voor het inschakelen van de expertmodus"
     },
     "advancedConfigTitle": {
         "message": "Geavanceerde configuratie",
-        "description": "Titel geavanceerde configuratie"
+        "description": "Titel van de geavanceerde configuratie"
     },
     "translationModelLabel": {
         "message": "Vertaalmodel:",
@@ -128,39 +128,39 @@
         "description": "Label voor Whisper API URL"
     },
     "translationApiUrlLabel": {
-        "message": "Vertaling API URL:",
-        "description": "Label voor Vertaling API URL"
+        "message": "Vertaal-API URL:",
+        "description": "Label voor vertaal-API URL"
     },
     "forcedDialogDomainsLabel": {
-        "message": "Domeinen met geforceerde dialoog:",
-        "description": "Label voor geforceerde domeinen"
+        "message": "Domeinen met geforceerd dialoogvenster:",
+        "description": "Label voor geforceerde dialoogdomeinen"
     },
     "addDomainPlaceholder": {
         "message": "Voorbeeld: chat.google.com",
-        "description": "Placeholder voor domein toevoegen"
+        "description": "Placeholder voor het toevoegen van een domein"
     },
     "addDomainButton": {
         "message": "Toevoegen",
-        "description": "Knop voor domein toevoegen"
+        "description": "Knop om een domein toe te voegen"
     },
     "forcedDialogInfo": {
-        "message": "Op deze domeinen zal de transcriptie altijd in een dialoogvenster verschijnen",
-        "description": "Informatie over geforceerde domeinen"
+        "message": "Op deze domeinen verschijnt de transcriptie altijd in een dialoogvenster",
+        "description": "Informatie over geforceerde dialoogdomeinen"
     },
     "saveButton": {
         "message": "Opslaan",
-        "description": "Opslaan knop"
+        "description": "Knop Opslaan"
     },
     "userGuideTitle": {
         "message": "Gebruikershandleiding",
-        "description": "Titel gebruikershandleiding"
+        "description": "Titel van de gebruikershandleiding"
     },
     "userGuideStep1": {
         "message": "Klik op het BabelFishAI-pictogram of gebruik de sneltoets om de opname te starten",
         "description": "Stap 1 van de handleiding"
     },
     "userGuideStep2": {
-        "message": "Spreek duidelijk in je microfoon",
+        "message": "Spreek duidelijk in uw microfoon",
         "description": "Stap 2 van de handleiding"
     },
     "userGuideStep3": {
@@ -168,52 +168,52 @@
         "description": "Stap 3 van de handleiding"
     },
     "userGuideStep4": {
-        "message": "De transcriptie verschijnt volgens je geconfigureerde voorkeuren",
+        "message": "De transcriptie verschijnt volgens uw geconfigureerde voorkeuren",
         "description": "Stap 4 van de handleiding"
     },
     "userGuideStep5": {
-        "message": "Gebruik de \"Kopiëren\"-knop om de tekst naar het klembord te kopiëren",
+        "message": "Gebruik de knop \"Kopiëren\" om de tekst naar het klembord te kopiëren",
         "description": "Stap 5 van de handleiding"
     },
     "shortcutsTitle": {
         "message": "Sneltoetsen",
-        "description": "Titel sneltoetsen"
+        "description": "Titel van de sneltoetsen"
     },
     "shortcutStartStop": {
-        "message": "Om opname te starten/stoppen:",
-        "description": "Beschrijving hoofdsneltoets"
+        "message": "Om de opname te starten/stoppen:",
+        "description": "Beschrijving van de hoofdsneltoets"
     },
     "shortcutKeys": {
         "message": "Ctrl+Shift+1 (⌘+Shift+1 op Mac)",
-        "description": "Beschrijving sneltoetsen"
+        "description": "Beschrijving van de sneltoetsen"
     },
     "aiTranscriptionTitle": {
         "message": "AI-ondersteunde transcriptie",
-        "description": "Titel AI-transcriptie"
+        "description": "Titel van de transcriptiesectie"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI gebruikt geavanceerde kunstmatige intelligentie om je stem om te zetten in tekst. Het transcriptieproces gebeurt in twee stappen.",
-        "description": "Beschrijving transcriptie"
+        "message": "BabelFishAI maakt gebruik van geavanceerde kunstmatige intelligentie om uw stem om te zetten in tekst. Het transcriptieproces vindt plaats in twee stappen.",
+        "description": "Beschrijving van de transcriptie"
     },
     "aiTranscriptionStep1": {
-        "message": "Je stem wordt opgenomen via de microfoon van je apparaat",
-        "description": "Transcriptiestap 1"
+        "message": "Uw stem wordt opgenomen via de microfoon van uw apparaat",
+        "description": "Stap 1 van de transcriptie"
     },
     "aiTranscriptionStep2": {
-        "message": "De opname wordt geanalyseerd door Whisper AI om een nauwkeurige transcriptie te produceren",
-        "description": "Transcriptiestap 2"
+        "message": "De opname wordt geanalyseerd door de Whisper AI om een nauwkeurige transcriptie te produceren",
+        "description": "Stap 2 van de transcriptie"
     },
     "aiTranslationTitle": {
         "message": "AI-ondersteunde vertaling",
-        "description": "Titel AI-vertaling"
+        "description": "Titel van de AI-vertaalsectie"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI kan je transcripties ook automatisch vertalen met behulp van OpenAI's geavanceerde AI. De getranscribeerde tekst wordt geanalyseerd en vertaald met behoud van betekenis en context.",
-        "description": "Beschrijving vertaling"
+        "message": "BabelFishAI kan uw transcripties ook automatisch vertalen dankzij de geavanceerde AI van OpenAI. De getranscribeerde tekst wordt geanalyseerd en vertaald met behoud van de betekenis en context van uw woorden.",
+        "description": "Beschrijving van de vertaling"
     },
     "authorSectionTitle": {
         "message": "Over de auteur",
-        "description": "Titel auteursectie"
+        "description": "Titel van de auteurssectie"
     },
     "authorName": {
         "message": "Julien LS",
@@ -222,5 +222,13 @@
     "authorRole": {
         "message": "Ontwikkelaar en maker van BabelFishAI",
         "description": "Rol van de auteur"
+    },
+    "addModelPlaceholder": {
+        "message": "Model toevoegen",
+        "description": "Placeholder voor het toevoegen van een model"
+    },
+    "addModelButton": {
+        "message": "Toevoegen",
+        "description": "Knop om een model toe te voegen"
     }
 }

@@ -1,10 +1,10 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "BabelFishAI por jls42.org",
         "description": "Nombre de la extensión"
     },
     "extensionDescription": {
-        "message": "Transforma tu voz en texto con transcripción y traducción impulsada por IA",
+        "message": "Convierte tu voz en texto con transcripción y traducción impulsadas por IA",
         "description": "Descripción de la extensión"
     },
     "optionsTitle": {
@@ -16,11 +16,11 @@
         "description": "Título de la sección de idioma"
     },
     "selectLanguageLabel": {
-        "message": "Seleccionar idioma:",
-        "description": "Etiqueta del selector de idioma"
+        "message": "Selecciona el idioma:",
+        "description": "Etiqueta para el selector de idioma"
     },
     "languageChanged": {
-        "message": "Idioma cambiado con éxito",
+        "message": "Idioma cambiado correctamente",
         "description": "Mensaje de confirmación de cambio de idioma"
     },
     "savedMessage": {
@@ -29,123 +29,123 @@
     },
     "apiConfigTitle": {
         "message": "Configuración de la API",
-        "description": "Título de la sección API"
+        "description": "Título de la sección de la API"
     },
     "apiKeyPlaceholder": {
-        "message": "Tu clave API de OpenAI (sk-...)",
-        "description": "Marcador de posición para la clave API"
+        "message": "Tu clave de API de OpenAI (sk-...)",
+        "description": "Marcador de posición para la clave de API"
     },
     "apiKeyInfo": {
-        "message": "Obtén tu clave API en",
-        "description": "Información sobre la obtención de la clave API"
+        "message": "Obtén tu clave de API en",
+        "description": "Información sobre la obtención de la clave de API"
     },
     "pricingInfo": {
         "message": "Más información sobre precios disponible en",
         "description": "Información sobre precios"
     },
     "supportProject": {
-        "message": "Apoyar el proyecto vía PayPal",
-        "description": "Texto del enlace de PayPal"
+        "message": "Apoya el proyecto a través de PayPal",
+        "description": "Texto para el enlace de soporte de PayPal"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "URL predeterminada de la API Whisper"
+        "description": "URL predeterminada de la API de Whisper"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
         "description": "URL predeterminada de la API de traducción"
     },
     "displaySettingsTitle": {
-        "message": "Ajustes de visualización",
-        "description": "Título de ajustes de visualización"
+        "message": "Configuración de visualización",
+        "description": "Título de la configuración de visualización"
     },
     "activeDisplayLabel": {
         "message": "Área activa (entrada de teclado)",
-        "description": "Etiqueta de visualización activa"
+        "description": "Etiqueta para la visualización activa"
     },
     "dialogDisplayLabel": {
         "message": "Cuadro de diálogo",
-        "description": "Etiqueta de visualización de diálogo"
+        "description": "Etiqueta para la visualización en cuadro de diálogo"
     },
     "dialogDurationLabel": {
-        "message": "Duración de visualización del cuadro (segundos):",
-        "description": "Etiqueta de duración del diálogo"
+        "message": "Duración de la visualización del cuadro de diálogo (segundos):",
+        "description": "Etiqueta para la duración del diálogo"
     },
     "bannerColorsLabel": {
         "message": "Colores del banner de estado:",
-        "description": "Etiqueta de colores del banner"
+        "description": "Etiqueta para los colores del banner"
     },
     "startColorLabel": {
-        "message": "Color inicial:",
-        "description": "Etiqueta de color inicial"
+        "message": "Color de inicio:",
+        "description": "Etiqueta para el color de inicio"
     },
     "endColorLabel": {
-        "message": "Color final:",
-        "description": "Etiqueta de color final"
+        "message": "Color de fin:",
+        "description": "Etiqueta para el color de fin"
     },
     "opacityLabel": {
-        "message": "% Opacidad",
-        "description": "Etiqueta de opacidad"
+        "message": "% de opacidad",
+        "description": "Etiqueta para la opacidad"
     },
     "translationTitle": {
-        "message": "Traducción IA integrada",
+        "message": "Traducción integrada con IA",
         "description": "Título de la sección de traducción"
     },
     "enableTranslationLabel": {
-        "message": "Activar traducción automática",
-        "description": "Etiqueta para activar traducción"
+        "message": "Habilitar la traducción automática",
+        "description": "Etiqueta para habilitar la traducción"
     },
     "sourceLanguageLabel": {
-        "message": "Idioma origen:",
-        "description": "Etiqueta de idioma origen"
+        "message": "Idioma de origen:",
+        "description": "Etiqueta para el idioma de origen"
     },
     "targetLanguageLabel": {
-        "message": "Idioma destino:",
-        "description": "Etiqueta de idioma destino"
+        "message": "Idioma de destino:",
+        "description": "Etiqueta para el idioma de destino"
     },
     "expertModeTitle": {
         "message": "Modo Experto",
         "description": "Título del modo experto"
     },
     "enableExpertModeLabel": {
-        "message": "Activar modo experto",
-        "description": "Etiqueta para activar modo experto"
+        "message": "Habilitar el modo experto",
+        "description": "Etiqueta para habilitar el modo experto"
     },
     "advancedConfigTitle": {
         "message": "Configuración Avanzada",
-        "description": "Título de configuración avanzada"
+        "description": "Título de la configuración avanzada"
     },
     "translationModelLabel": {
         "message": "Modelo de traducción:",
-        "description": "Etiqueta del modelo de traducción"
+        "description": "Etiqueta para el modelo de traducción"
     },
     "audioModelLabel": {
         "message": "Modelo de audio:",
         "description": "Etiqueta para el modelo de audio"
     },
     "whisperApiUrlLabel": {
-        "message": "URL de la API Whisper:",
-        "description": "Etiqueta de URL de la API Whisper"
+        "message": "URL de la API de Whisper:",
+        "description": "Etiqueta para la URL de la API de Whisper"
     },
     "translationApiUrlLabel": {
         "message": "URL de la API de traducción:",
-        "description": "Etiqueta de URL de la API de traducción"
+        "description": "Etiqueta para la URL de la API de traducción"
     },
     "forcedDialogDomainsLabel": {
-        "message": "Dominios con diálogo forzado:",
-        "description": "Etiqueta de dominios forzados"
+        "message": "Dominios con cuadro de diálogo forzado:",
+        "description": "Etiqueta para los dominios forzados"
     },
     "addDomainPlaceholder": {
         "message": "Ejemplo: chat.google.com",
-        "description": "Marcador de posición para añadir dominio"
+        "description": "Marcador de posición para agregar dominio"
     },
     "addDomainButton": {
         "message": "Añadir",
-        "description": "Botón para añadir dominio"
+        "description": "Botón para agregar un dominio"
     },
     "forcedDialogInfo": {
         "message": "En estos dominios, la transcripción siempre aparecerá en un cuadro de diálogo",
-        "description": "Información sobre dominios forzados"
+        "description": "Información sobre los dominios forzados"
     },
     "saveButton": {
         "message": "Guardar",
@@ -156,7 +156,7 @@
         "description": "Título de la guía de usuario"
     },
     "userGuideStep1": {
-        "message": "Haz clic en el icono de BabelFishAI o usa el atajo de teclado para iniciar la grabación",
+        "message": "Haz clic en el icono de BabelFishAI o usa el atajo de teclado para comenzar a grabar",
         "description": "Paso 1 de la guía"
     },
     "userGuideStep2": {
@@ -177,7 +177,7 @@
     },
     "shortcutsTitle": {
         "message": "Atajos de Teclado",
-        "description": "Título de atajos"
+        "description": "Título de los atajos"
     },
     "shortcutStartStop": {
         "message": "Para iniciar/detener la grabación:",
@@ -189,31 +189,31 @@
     },
     "aiTranscriptionTitle": {
         "message": "Transcripción Asistida por IA",
-        "description": "Título de transcripción IA"
+        "description": "Título de la sección de transcripción"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI utiliza inteligencia artificial de vanguardia para transcribir tu voz en texto. El proceso de transcripción ocurre en dos pasos.",
-        "description": "Descripción de transcripción"
+        "message": "BabelFishAI utiliza inteligencia artificial de vanguardia para transcribir tu voz en texto. El proceso de transcripción se lleva a cabo en dos pasos.",
+        "description": "Descripción de la transcripción"
     },
     "aiTranscriptionStep1": {
         "message": "Tu voz se graba a través del micrófono de tu dispositivo",
-        "description": "Paso 1 de transcripción"
+        "description": "Paso 1 de la transcripción"
     },
     "aiTranscriptionStep2": {
-        "message": "La grabación es analizada por IA Whisper para producir una transcripción precisa",
-        "description": "Paso 2 de transcripción"
+        "message": "La grabación es analizada por la IA Whisper para producir una transcripción precisa",
+        "description": "Paso 2 de la transcripción"
     },
     "aiTranslationTitle": {
         "message": "Traducción Asistida por IA",
-        "description": "Título de traducción IA"
+        "description": "Título de la sección de traducción IA"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI también puede traducir automáticamente tus transcripciones usando la IA avanzada de OpenAI. El texto transcrito se analiza y traduce preservando el significado y contexto de tu discurso.",
-        "description": "Descripción de traducción"
+        "message": "BabelFishAI también puede traducir automáticamente tus transcripciones gracias a la IA avanzada de OpenAI. El texto transcrito se analiza y se traduce preservando el significado y el contexto de tus palabras.",
+        "description": "Descripción de la traducción"
     },
     "authorSectionTitle": {
         "message": "Acerca del Autor",
-        "description": "Título de la sección autor"
+        "description": "Título de la sección del autor"
     },
     "authorName": {
         "message": "Julien LS",
@@ -222,5 +222,13 @@
     "authorRole": {
         "message": "Desarrollador y creador de BabelFishAI",
         "description": "Rol del autor"
+    },
+    "addModelPlaceholder": {
+        "message": "Añadir un modelo",
+        "description": "Marcador de posición para añadir un modelo"
+    },
+    "addModelButton": {
+        "message": "Añadir",
+        "description": "Botón para añadir un modelo"
     }
 }

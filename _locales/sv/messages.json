@@ -1,19 +1,19 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "BabelFishAI av jls42.org",
         "description": "Tilläggets namn"
     },
     "extensionDescription": {
-        "message": "Omvandla din röst till text med AI-driven transkription och översättning",
+        "message": "Förvandla din röst till text med AI-driven transkription och översättning",
         "description": "Tilläggets beskrivning"
     },
     "optionsTitle": {
-        "message": "BabelFishAI Konfiguration",
-        "description": "Titel för inställningssidan"
+        "message": "BabelFishAI-konfiguration",
+        "description": "Titel på alternativsidan"
     },
     "languageSettingsTitle": {
         "message": "Gränssnittsspråk",
-        "description": "Titel för språkavsnittet"
+        "description": "Titel på språksektionen"
     },
     "selectLanguageLabel": {
         "message": "Välj språk:",
@@ -24,28 +24,28 @@
         "description": "Bekräftelsemeddelande för språkändring"
     },
     "savedMessage": {
-        "message": "Inställningar sparade!",
+        "message": "Alternativen har sparats!",
         "description": "Bekräftelsemeddelande för sparande"
     },
     "apiConfigTitle": {
         "message": "API-konfiguration",
-        "description": "Titel för API-avsnittet"
+        "description": "Titel på API-sektionen"
     },
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckel"
     },
     "apiKeyInfo": {
-        "message": "Få din API-nyckel på",
-        "description": "Information om API-nyckel"
+        "message": "Hämta din API-nyckel på",
+        "description": "Information om att hämta API-nyckeln"
     },
     "pricingInfo": {
-        "message": "Mer prisinformation finns på",
-        "description": "Prisinformation"
+        "message": "Mer information om prissättning finns på",
+        "description": "Information om prissättning"
     },
     "supportProject": {
         "message": "Stöd projektet via PayPal",
-        "description": "PayPal-länktext"
+        "description": "Text för PayPal-supportlänk"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
@@ -57,7 +57,7 @@
     },
     "displaySettingsTitle": {
         "message": "Visningsinställningar",
-        "description": "Titel för visningsinställningar"
+        "description": "Titel på visningsinställningar"
     },
     "activeDisplayLabel": {
         "message": "Aktivt område (tangentbordsinmatning)",
@@ -65,14 +65,14 @@
     },
     "dialogDisplayLabel": {
         "message": "Dialogruta",
-        "description": "Etikett för dialogvisning"
+        "description": "Etikett för dialogrutavisning"
     },
     "dialogDurationLabel": {
-        "message": "Visningstid för dialog (sekunder):",
-        "description": "Etikett för dialogtid"
+        "message": "Visningstid för dialogrutan (sekunder):",
+        "description": "Etikett för dialogrutans varaktighet"
     },
     "bannerColorsLabel": {
-        "message": "Statusbannerfärger:",
+        "message": "Färger på statusfältet:",
         "description": "Etikett för bannerfärger"
     },
     "startColorLabel": {
@@ -89,7 +89,7 @@
     },
     "translationTitle": {
         "message": "Integrerad AI-översättning",
-        "description": "Titel för översättningsavsnittet"
+        "description": "Titel på översättningssektionen"
     },
     "enableTranslationLabel": {
         "message": "Aktivera automatisk översättning",
@@ -105,7 +105,7 @@
     },
     "expertModeTitle": {
         "message": "Expertläge",
-        "description": "Titel för expertläge"
+        "description": "Titel på expertläge"
     },
     "enableExpertModeLabel": {
         "message": "Aktivera expertläge",
@@ -113,7 +113,7 @@
     },
     "advancedConfigTitle": {
         "message": "Avancerad konfiguration",
-        "description": "Titel för avancerad konfiguration"
+        "description": "Titel på avancerad konfiguration"
     },
     "translationModelLabel": {
         "message": "Översättningsmodell:",
@@ -132,8 +132,8 @@
         "description": "Etikett för översättnings-API URL"
     },
     "forcedDialogDomainsLabel": {
-        "message": "Domäner med tvingad dialog:",
-        "description": "Etikett för tvingade domäner"
+        "message": "Domäner med tvingad dialogruta:",
+        "description": "Etikett för tvingade dialogdomäner"
     },
     "addDomainPlaceholder": {
         "message": "Exempel: chat.google.com",
@@ -141,22 +141,22 @@
     },
     "addDomainButton": {
         "message": "Lägg till",
-        "description": "Knapp för att lägga till domän"
+        "description": "Knapp för att lägga till en domän"
     },
     "forcedDialogInfo": {
         "message": "På dessa domäner kommer transkriptionen alltid att visas i en dialogruta",
-        "description": "Information om tvingade domäner"
+        "description": "Information om tvingade dialogdomäner"
     },
     "saveButton": {
         "message": "Spara",
         "description": "Spara-knapp"
     },
     "userGuideTitle": {
-        "message": "Användarguide",
-        "description": "Titel för användarguide"
+        "message": "Användarhandbok",
+        "description": "Titel på användarhandboken"
     },
     "userGuideStep1": {
-        "message": "Klicka på BabelFishAI-ikonen eller använd tangentbordsgenvägen för att starta inspelning",
+        "message": "Klicka på BabelFishAI-ikonen eller använd kortkommandot för att starta inspelningen",
         "description": "Steg 1 i guiden"
     },
     "userGuideStep2": {
@@ -164,7 +164,7 @@
         "description": "Steg 2 i guiden"
     },
     "userGuideStep3": {
-        "message": "Klicka igen eller använd genvägen för att stoppa inspelningen",
+        "message": "Klicka igen eller använd kortkommandot för att stoppa inspelningen",
         "description": "Steg 3 i guiden"
     },
     "userGuideStep4": {
@@ -176,44 +176,44 @@
         "description": "Steg 5 i guiden"
     },
     "shortcutsTitle": {
-        "message": "Tangentbordsgenvägar",
-        "description": "Titel för genvägar"
+        "message": "Kortkommandon",
+        "description": "Titel på kortkommandon"
     },
     "shortcutStartStop": {
-        "message": "För att starta/stoppa inspelning:",
-        "description": "Beskrivning av huvudgenväg"
+        "message": "För att starta/stoppa inspelningen:",
+        "description": "Beskrivning av huvudkortkommandot"
     },
     "shortcutKeys": {
         "message": "Ctrl+Shift+1 (⌘+Shift+1 på Mac)",
-        "description": "Beskrivning av genvägstangenter"
+        "description": "Beskrivning av kortkommandotangenterna"
     },
     "aiTranscriptionTitle": {
         "message": "AI-assisterad transkription",
-        "description": "Titel för AI-transkription"
+        "description": "Titel på transkriptionssektionen"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI använder toppmodern artificiell intelligens för att omvandla din röst till text. Transkriptionsprocessen sker i två steg.",
+        "message": "BabelFishAI använder banbrytande artificiell intelligens för att transkribera din röst till text. Transkriptionsprocessen sker i två steg.",
         "description": "Beskrivning av transkription"
     },
     "aiTranscriptionStep1": {
         "message": "Din röst spelas in via enhetens mikrofon",
-        "description": "Transkriptionssteg 1"
+        "description": "Steg 1 av transkriptionen"
     },
     "aiTranscriptionStep2": {
-        "message": "Inspelningen analyseras av Whisper AI för att producera en exakt transkription",
-        "description": "Transkriptionssteg 2"
+        "message": "Inspelningen analyseras av Whisper AI för att producera en korrekt transkription",
+        "description": "Steg 2 av transkriptionen"
     },
     "aiTranslationTitle": {
         "message": "AI-assisterad översättning",
-        "description": "Titel för AI-översättning"
+        "description": "Titel på AI-översättningssektionen"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI kan också automatiskt översätta dina transkriptioner med OpenAIs avancerade AI. Den transkriberade texten analyseras och översätts samtidigt som betydelse och sammanhang bevaras.",
+        "message": "BabelFishAI kan också automatiskt översätta dina transkriptioner tack vare OpenAIs avancerade AI. Den transkriberade texten analyseras och översätts samtidigt som betydelsen och sammanhanget i dina ord bevaras.",
         "description": "Beskrivning av översättning"
     },
     "authorSectionTitle": {
         "message": "Om författaren",
-        "description": "Titel för författaravsnittet"
+        "description": "Titel på författarsektionen"
     },
     "authorName": {
         "message": "Julien LS",
@@ -222,5 +222,13 @@
     "authorRole": {
         "message": "Utvecklare och skapare av BabelFishAI",
         "description": "Författarens roll"
+    },
+    "addModelPlaceholder": {
+        "message": "Lägg till en modell",
+        "description": "Platshållare för att lägga till en modell"
+    },
+    "addModelButton": {
+        "message": "Lägg till",
+        "description": "Knapp för att lägga till en modell"
     }
 }

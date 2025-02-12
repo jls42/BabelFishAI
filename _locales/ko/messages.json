@@ -1,14 +1,14 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
+        "message": "jls42.org의 BabelFishAI",
         "description": "확장 프로그램 이름"
     },
     "extensionDescription": {
-        "message": "AI 기반 음성 인식과 번역으로 음성을 텍스트로 변환",
+        "message": "AI 기반 음성 텍스트 변환 및 번역으로 음성을 텍스트로 변환",
         "description": "확장 프로그램 설명"
     },
     "optionsTitle": {
-        "message": "BabelFishAI 설정",
+        "message": "BabelFishAI 구성",
         "description": "옵션 페이지 제목"
     },
     "languageSettingsTitle": {
@@ -17,91 +17,91 @@
     },
     "selectLanguageLabel": {
         "message": "언어 선택:",
-        "description": "언어 선택기 라벨"
+        "description": "언어 선택기 레이블"
     },
     "languageChanged": {
-        "message": "언어가 변경되었습니다",
+        "message": "언어가 성공적으로 변경되었습니다.",
         "description": "언어 변경 확인 메시지"
     },
     "savedMessage": {
-        "message": "설정이 저장되었습니다!",
+        "message": "옵션이 저장되었습니다!",
         "description": "저장 확인 메시지"
     },
     "apiConfigTitle": {
-        "message": "API 설정",
+        "message": "API 구성",
         "description": "API 섹션 제목"
     },
     "apiKeyPlaceholder": {
         "message": "OpenAI API 키 (sk-...)",
-        "description": "API 키 플레이스홀더"
+        "description": "API 키 자리 표시자"
     },
     "apiKeyInfo": {
-        "message": "API 키 받기:",
-        "description": "API 키 정보"
+        "message": "API 키 받기",
+        "description": "API 키 얻기에 대한 정보"
     },
     "pricingInfo": {
-        "message": "가격 정보 자세히 보기:",
+        "message": "가격에 대한 자세한 내용은 다음을 참조하십시오.",
         "description": "가격 정보"
     },
     "supportProject": {
-        "message": "PayPal로 프로젝트 지원하기",
-        "description": "PayPal 링크 텍스트"
+        "message": "PayPal을 통해 프로젝트 지원",
+        "description": "PayPal 지원 링크 텍스트"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API 기본 URL"
+        "description": "기본 Whisper API URL"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "번역 API 기본 URL"
+        "description": "기본 번역 API URL"
     },
     "displaySettingsTitle": {
-        "message": "화면 설정",
-        "description": "화면 설정 제목"
+        "message": "디스플레이 설정",
+        "description": "디스플레이 설정 제목"
     },
     "activeDisplayLabel": {
         "message": "활성 영역 (키보드 입력)",
-        "description": "활성 표시 라벨"
+        "description": "활성 디스플레이 레이블"
     },
     "dialogDisplayLabel": {
         "message": "대화 상자",
-        "description": "대화 상자 표시 라벨"
+        "description": "대화 상자 표시 레이블"
     },
     "dialogDurationLabel": {
         "message": "대화 상자 표시 시간 (초):",
-        "description": "대화 상자 시간 라벨"
+        "description": "대화 상자 지속 시간 레이블"
     },
     "bannerColorsLabel": {
         "message": "상태 배너 색상:",
-        "description": "배너 색상 라벨"
+        "description": "배너 색상 레이블"
     },
     "startColorLabel": {
         "message": "시작 색상:",
-        "description": "시작 색상 라벨"
+        "description": "시작 색상 레이블"
     },
     "endColorLabel": {
         "message": "종료 색상:",
-        "description": "종료 색상 라벨"
+        "description": "종료 색상 레이블"
     },
     "opacityLabel": {
         "message": "% 불투명도",
-        "description": "불투명도 라벨"
+        "description": "불투명도 레이블"
     },
     "translationTitle": {
-        "message": "AI 번역 통합",
+        "message": "통합 AI 번역",
         "description": "번역 섹션 제목"
     },
     "enableTranslationLabel": {
         "message": "자동 번역 활성화",
-        "description": "번역 활성화 라벨"
+        "description": "번역 활성화 레이블"
     },
     "sourceLanguageLabel": {
-        "message": "원본 언어:",
-        "description": "원본 언어 라벨"
+        "message": "소스 언어:",
+        "description": "소스 언어 레이블"
     },
     "targetLanguageLabel": {
         "message": "대상 언어:",
-        "description": "대상 언어 라벨"
+        "description": "대상 언어 레이블"
     },
     "expertModeTitle": {
         "message": "전문가 모드",
@@ -109,43 +109,43 @@
     },
     "enableExpertModeLabel": {
         "message": "전문가 모드 활성화",
-        "description": "전문가 모드 활성화 라벨"
+        "description": "전문가 모드 활성화 레이블"
     },
     "advancedConfigTitle": {
-        "message": "고급 설정",
-        "description": "고급 설정 제목"
+        "message": "고급 구성",
+        "description": "고급 구성 제목"
     },
     "translationModelLabel": {
         "message": "번역 모델:",
-        "description": "번역 모델 라벨"
+        "description": "번역 모델 레이블"
     },
     "audioModelLabel": {
         "message": "오디오 모델:",
-        "description": "오디오 모델 라벨"
+        "description": "오디오 모델 레이블"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
-        "description": "Whisper API URL 라벨"
+        "description": "Whisper API URL 레이블"
     },
     "translationApiUrlLabel": {
         "message": "번역 API URL:",
-        "description": "번역 API URL 라벨"
+        "description": "번역 API URL 레이블"
     },
     "forcedDialogDomainsLabel": {
         "message": "강제 대화 상자 도메인:",
-        "description": "강제 도메인 라벨"
+        "description": "강제 대화 상자 도메인 레이블"
     },
     "addDomainPlaceholder": {
         "message": "예: chat.google.com",
-        "description": "도메인 추가 플레이스홀더"
+        "description": "도메인 추가 자리 표시자"
     },
     "addDomainButton": {
         "message": "추가",
         "description": "도메인 추가 버튼"
     },
     "forcedDialogInfo": {
-        "message": "이 도메인에서는 음성 인식 결과가 항상 대화 상자로 표시됩니다",
-        "description": "강제 도메인 정보"
+        "message": "이 도메인에서는 음성 텍스트 변환이 항상 대화 상자에 나타납니다.",
+        "description": "강제 대화 상자 도메인 정보"
     },
     "saveButton": {
         "message": "저장",
@@ -156,24 +156,24 @@
         "description": "사용자 가이드 제목"
     },
     "userGuideStep1": {
-        "message": "BabelFishAI 아이콘을 클릭하거나 키보드 단축키를 사용하여 녹음 시작",
-        "description": "가이드 단계 1"
+        "message": "BabelFishAI 아이콘을 클릭하거나 키보드 단축키를 사용하여 녹음을 시작합니다.",
+        "description": "가이드 1단계"
     },
     "userGuideStep2": {
-        "message": "마이크에 대고 명확하게 말하기",
-        "description": "가이드 단계 2"
+        "message": "마이크에 대고 또렷하게 말하세요.",
+        "description": "가이드 2단계"
     },
     "userGuideStep3": {
-        "message": "다시 클릭하거나 단축키를 사용하여 녹음 중지",
-        "description": "가이드 단계 3"
+        "message": "다시 클릭하거나 바로 가기를 사용하여 녹음을 중지합니다.",
+        "description": "가이드 3단계"
     },
     "userGuideStep4": {
-        "message": "설정된 환경 설정에 따라 음성 인식 결과가 표시됩니다",
-        "description": "가이드 단계 4"
+        "message": "구성된 기본 설정에 따라 음성 텍스트 변환이 나타납니다.",
+        "description": "가이드 4단계"
     },
     "userGuideStep5": {
-        "message": "\"복사\" 버튼을 사용하여 텍스트를 클립보드에 복사",
-        "description": "가이드 단계 5"
+        "message": "\"복사\" 버튼을 사용하여 텍스트를 클립보드에 복사합니다.",
+        "description": "가이드 5단계"
     },
     "shortcutsTitle": {
         "message": "키보드 단축키",
@@ -181,46 +181,54 @@
     },
     "shortcutStartStop": {
         "message": "녹음 시작/중지:",
-        "description": "주요 단축키 설명"
+        "description": "기본 단축키 설명"
     },
     "shortcutKeys": {
         "message": "Ctrl+Shift+1 (Mac에서는 ⌘+Shift+1)",
         "description": "단축키 설명"
     },
     "aiTranscriptionTitle": {
-        "message": "AI 음성 인식",
-        "description": "AI 음성 인식 제목"
+        "message": "AI 지원 음성 텍스트 변환",
+        "description": "음성 텍스트 변환 섹션 제목"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI는 최첨단 인공지능을 사용하여 음성을 텍스트로 변환합니다. 음성 인식 과정은 두 단계로 진행됩니다.",
-        "description": "음성 인식 설명"
+        "message": "BabelFishAI는 최첨단 인공 지능을 사용하여 음성을 텍스트로 변환합니다. 음성 텍스트 변환 프로세스는 두 단계로 진행됩니다.",
+        "description": "음성 텍스트 변환 설명"
     },
     "aiTranscriptionStep1": {
-        "message": "기기의 마이크를 통해 음성이 녹음됩니다",
-        "description": "음성 인식 단계 1"
+        "message": "장치의 마이크를 통해 음성이 녹음됩니다.",
+        "description": "음성 텍스트 변환 1단계"
     },
     "aiTranscriptionStep2": {
-        "message": "Whisper AI가 녹음을 분석하여 정확한 음성 인식을 생성합니다",
-        "description": "음성 인식 단계 2"
+        "message": "Whisper AI가 녹음을 분석하여 정확한 음성 텍스트 변환을 생성합니다.",
+        "description": "음성 텍스트 변환 2단계"
     },
     "aiTranslationTitle": {
-        "message": "AI 번역",
-        "description": "AI 번역 제목"
+        "message": "AI 지원 번역",
+        "description": "AI 번역 섹션 제목"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI는 OpenAI의 고급 AI를 사용하여 음성 인식 결과를 자동으로 번역할 수 있습니다. 인식된 텍스트는 의미와 맥락을 유지하면서 분석되고 번역됩니다.",
+        "message": "BabelFishAI는 OpenAI의 고급 AI 덕분에 음성 텍스트 변환을 자동으로 번역할 수도 있습니다. 음성 텍스트 변환된 텍스트는 분석되고 번역되어 단어의 의미와 문맥을 보존합니다.",
         "description": "번역 설명"
     },
     "authorSectionTitle": {
-        "message": "제작자 소개",
-        "description": "제작자 섹션 제목"
+        "message": "저자 정보",
+        "description": "저자 섹션 제목"
     },
     "authorName": {
         "message": "Julien LS",
-        "description": "제작자 이름"
+        "description": "저자 이름"
     },
     "authorRole": {
         "message": "BabelFishAI 개발자 및 제작자",
-        "description": "제작자 역할"
+        "description": "저자 역할"
+    },
+    "addModelPlaceholder": {
+        "message": "모델 추가",
+        "description": "모델 추가 자리 표시자"
+    },
+    "addModelButton": {
+        "message": "추가",
+        "description": "모델 추가 버튼"
     }
 }

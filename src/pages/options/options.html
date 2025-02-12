@@ -153,15 +153,21 @@
             <h2 data-i18n="advancedConfigTitle">Configuration Avancée</h2>
             <div class="form-group">
                 <label for="modelType" data-i18n="translationModelLabel">Modèle de traduction :</label>
-                <select id="modelType">
-                    <option value="gpt-4o-mini">gpt-4o-mini (par défaut)</option>
-                    <option value="gpt-4o">gpt-4o</option>
-                </select>
+                <div id="modelTypeContainer">
+                    <select id="modelType">
+                        <option value="gpt-4o-mini">gpt-4o-mini (par défaut)</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                    </select>
+                    <input type="text" id="newModelType" placeholder="Ajouter un modèle"
+                        data-i18n-placeholder="addModelPlaceholder">
+                    <button type="button" id="addModelType" data-i18n="addModelButton">Ajouter</button>
+                    <div id="customModelsList">
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label for="audioModelType" data-i18n="audioModelLabel">Modèle audio :</label>
                 <select id="audioModelType">
-                    <!-- Les options seront ajoutées dynamiquement -->
                 </select>
             </div>
             <div class="form-group">
@@ -181,7 +187,6 @@
             <div class="form-group">
                 <label data-i18n="forcedDialogDomainsLabel">Domaines avec boîte de dialogue forcée :</label>
                 <div class="domains-list" id="domainsList">
-                    <!-- Les domaines seront ajoutés ici dynamiquement -->
                 </div>
                 <div class="domain-input-container">
                     <input type="text" id="newDomain" data-i18n-placeholder="addDomainPlaceholder">
