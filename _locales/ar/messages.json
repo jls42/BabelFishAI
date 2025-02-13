@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "إضافة",
         "description": "زر لإضافة نموذج"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "يعطل تسجيل الطلبات لتعزيز الخصوصية.",
+        "description": "Description of the NoLog option"
     }
 }

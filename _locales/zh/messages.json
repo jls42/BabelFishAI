@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "BabelFishAI 由 jls42.org 开发",
+        "message": "BabelFishAI by jls42.org",
         "description": "扩展名称"
     },
     "extensionDescription": {
@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "添加",
         "description": "添加模型按钮"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "禁用请求日志记录以增强隐私性。",
+        "description": "Description of the NoLog option"
     }
 }

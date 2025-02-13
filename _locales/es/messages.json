@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "Añadir",
         "description": "Botón para añadir un modelo"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "Desactiva el registro de solicitudes para una mayor privacidad.",
+        "description": "Description of the NoLog option"
     }
 }

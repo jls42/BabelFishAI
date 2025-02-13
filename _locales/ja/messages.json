@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "追加",
         "description": "モデル追加ボタン"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "プライバシー強化のため、リクエストのログ記録を無効にします。",
+        "description": "Description of the NoLog option"
     }
 }

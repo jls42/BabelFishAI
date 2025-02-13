@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "Hinzufügen",
         "description": "Schaltfläche zum Hinzufügen eines Modells"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "Deaktiviert die Protokollierung von Anfragen für mehr Datenschutz.",
+        "description": "Description of the NoLog option"
     }
 }

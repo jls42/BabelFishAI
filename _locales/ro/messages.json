@@ -230,5 +230,13 @@
     "addModelButton": {
         "message": "Adăugați",
         "description": "Buton pentru adăugarea unui model"
+    },
+    "noLogLabel": {
+        "message": "NoLog",
+        "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "Dezactivează înregistrarea cererilor pentru o confidențialitate sporită.",
+        "description": "Description of the NoLog option"
     }
 }
