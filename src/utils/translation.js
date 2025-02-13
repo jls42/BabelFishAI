@@ -60,7 +60,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 },
                 {
                     role: "user",
-                    content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
+                    content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}`
                 }
             ];
 
