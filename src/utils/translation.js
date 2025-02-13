@@ -110,24 +110,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    /**
-     * Récupère l'URL de l'API de traduction depuis le stockage
-     * @returns {Promise<string>} L'URL de l'API de traduction
-     */
-    async function getTranslationApiUrl() {
-        return new Promise((resolve) => {
-            chrome.storage.sync.get({
-                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL
-            }, (result) => {
-                resolve(result.translationApiUrl || window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL);
-            });
-        });
-    }
-
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.translation = {
         translateText,
-        getTranslationApiUrl,
         ERRORS
     };
 
