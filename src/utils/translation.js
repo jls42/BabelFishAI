@@ -55,8 +55,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 model: modelType,
                 messages: [
                     {
-                        role: "system",
+                        role: "user",
                         content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
+                    },
+                    {
+                        role: "system",
+                        content: "You are a translation expert. Provide accurate and natural-sounding translations."
                     }
                 ],
                 store: true
