@@ -230,5 +230,9 @@
     "addModelButton": {
         "message": "إضافة",
         "description": "زر لإضافة نموذج"
+    },
+    "noLogLabel": {
+        "message": "NoLog (LiteLLM فقط)",
+        "description": "Label for the NoLog option"
     }
 }

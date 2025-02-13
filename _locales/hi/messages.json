@@ -230,5 +230,9 @@
     "addModelButton": {
         "message": "जोड़ें",
         "description": "मॉडल जोड़ने के लिए बटन"
+    },
+    "noLogLabel": {
+        "message": "NoLog (केवल LiteLLM)",
+        "description": "Label for the NoLog option"
     }
 }

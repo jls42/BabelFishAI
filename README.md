@@ -22,9 +22,10 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
   - Icône personnalisée, intégrant un microphone et le chiffre “42”, pour une reconnaissance immédiate.
 
 - **Options Avancées**
-  - Mode expert pour des configurations détaillées (URLs des API, configuration par domaine, etc.).
-  - Possibilité de personnaliser les modèles de transcription et de traduction.
-  - Gestion complète de l’internationalisation grâce aux fichiers de langue (_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
+    - Mode expert pour des configurations détaillées (URLs des API, configuration par domaine, etc.).
+    - Possibilité de personnaliser les modèles de transcription et de traduction.
+    - **Compatibilité avec LiteLLM Proxy pour utiliser des modèles de langage alternatifs et désactiver la journalisation des requêtes.**
+    - Gestion complète de l’internationalisation grâce aux fichiers de langue (_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
 
 ## 🌐 Langues Supportées
 
@@ -46,26 +47,45 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 
 ## 🚀 Installation
 
-1. **Téléchargement et Installation :**
-   - Clonez ce dépôt depuis GitHub ou téléchargez manuellement le dossier de l’extension.
-   - Ouvrez Chrome et accédez à `chrome://extensions/`.
-   - Activez le « Mode développeur » en haut à droite.
-   - Cliquez sur « Charger l’extension non empaquetée » et sélectionnez le dossier de Babel Fish AI.
+1.  **Téléchargement et Installation :**
+    - Clonez ce dépôt depuis GitHub ou téléchargez manuellement le dossier de l’extension.
+    - Ouvrez Chrome et accédez à `chrome://extensions/`.
+    - Activez le « Mode développeur » en haut à droite.
+    - Cliquez sur « Charger l’extension non empaquetée » et sélectionnez le dossier de Babel Fish AI.
 
-2. **Vérification :**
-   - Assurez-vous que l’extension apparaît dans la barre d’outils de Chrome avec l’icône personnalisée.
+2.  **Vérification :**
+    - Assurez-vous que l’extension apparaît dans la barre d’outils de Chrome avec l’icône personnalisée.
 
 ## ⚙️ Configuration
 
-1. **Clé API OpenAI :**
-   - Cliquez sur l’icône de l’extension pour accéder aux options.
-   - Entrez votre clé API OpenAI (disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
+1.  **Clé API OpenAI :**
+    *   Cliquez sur l’icône de l’extension pour accéder aux options.
+    *   Entrez votre clé API OpenAI (disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
 
-2. **Personnalisation des Options :**
-   - Choisissez le mode d’affichage (zone active ou boîte de dialogue).
-   - Configurez la couleur, l’opacité et la durée d’affichage du bandeau de statut.
-   - Sélectionnez les langues pour la transcription (entrée vocale) et pour l’affichage du texte.
-   - Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
+2.  **Personnalisation des Options :**
+    *   Choisissez le mode d’affichage (zone active ou boîte de dialogue).
+    *   Configurez la couleur, l’opacité et la durée d’affichage du bandeau de statut.
+    *   Sélectionnez les langues pour la transcription (entrée vocale) et pour l’affichage du texte.
+    *   Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
+
+3.  **(Optionnel) Utilisation avec LiteLLM Proxy :**
+    *   Activez le "Mode Expert" dans les options.
+    *   Dans la section "Configuration Avancée", modifiez **les deux URLs** des API (Whisper et Traduction) pour pointer vers votre instance LiteLLM Proxy. **Utilisez la même URL de base pour les deux.**
+    *   Cochez l'option "NoLog (LiteLLM uniquement)" si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
+
+## 🚀 Utilisation avec LiteLLM Proxy
+
+Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/), qui permet d'utiliser des modèles de langage alternatifs avec une API compatible avec celle d'OpenAI.
+
+### Configuration
+
+1.  **Installez et configurez LiteLLM Proxy :** Suivez les instructions sur le site de LiteLLM.
+2.  **Configurez l'extension Babel Fish AI :**
+    *   Dans les options de l'extension (clic droit sur l'icône > Options), activez le "Mode Expert".
+    *   Dans la section "Configuration Avancée", modifiez **les deux URLs** des API (Whisper et Traduction) pour pointer vers votre instance LiteLLM Proxy (par exemple, `http://localhost:4000/v1/audio/transcriptions` et `http://localhost:4000/v1/chat/completions`). **Utilisez la même URL de base pour les deux.**
+    *   Cochez l'option "NoLog (LiteLLM uniquement)" si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
+
+**Important :** L'option "NoLog" est conçue **exclusivement** pour être utilisée avec LiteLLM Proxy. **Ne l'activez pas** si vous utilisez l'API OpenAI officielle, car cela entraînera une erreur et empêchera la traduction de fonctionner.
 
 ## 🛠️ Fonctionnement Technique
 

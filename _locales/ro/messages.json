@@ -230,5 +230,9 @@
     "addModelButton": {
         "message": "Adăugați",
         "description": "Buton pentru adăugarea unui model"
+    },
+    "noLogLabel": {
+        "message": "NoLog (doar LiteLLM)",
+        "description": "Label for the NoLog option"
     }
 }

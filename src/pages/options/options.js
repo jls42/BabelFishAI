@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const expertModeCheckbox = document.getElementById('expertMode');
     const expertOptions = document.getElementById('expertOptions');
     const modelTypeSelect = document.getElementById('modelType');
+    const disableLoggingCheckbox = document.getElementById('disableLogging');
     const newModelTypeInput = document.getElementById('newModelType'); // Nouveau champ
     const addModelTypeButton = document.getElementById('addModelType'); // Nouveau bouton
     const customModelsList = document.getElementById('customModelsList'); // Nouvelle liste
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             activeDisplay: true,
             dialogDisplay: false,
             dialogDuration: 15,
+            disableLogging: false,
             bannerColorStart: '#684054',
             bannerColorEnd: '#4c7b8d',
             bannerOpacity: 80,
@@ -74,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguageSelect.value = items.targetLanguage;
             expertModeCheckbox.checked = items.expertMode;
             modelTypeSelect.value = items.modelType;
+            disableLoggingCheckbox.checked = items.disableLogging;
             apiUrlInput.value = items.apiUrl;
             translationApiUrlInput.value = items.translationApiUrl;
             audioModelTypeSelect.value = items.audioModelType;
@@ -109,6 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: targetLanguageSelect.value,
             expertMode: expertModeCheckbox.checked,
             modelType: modelTypeSelect.value,
+            disableLogging: disableLoggingCheckbox.checked,
             customModelTypes: customModelTypes, // Sauvegarder les modèles personnalisés
             audioModelType: audioModelTypeSelect.value,
             apiUrl: apiUrlInput.value,

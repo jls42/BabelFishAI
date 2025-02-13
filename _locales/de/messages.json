@@ -230,5 +230,9 @@
     "addModelButton": {
         "message": "Hinzufügen",
         "description": "Schaltfläche zum Hinzufügen eines Modells"
+    },
+    "noLogLabel": {
+        "message": "NoLog (nur LiteLLM)",
+        "description": "Label for the NoLog option"
     }
 }

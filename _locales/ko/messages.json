@@ -230,5 +230,9 @@
     "addModelButton": {
         "message": "추가",
         "description": "모델 추가 버튼"
+    },
+    "noLogLabel": {
+        "message": "NoLog (LiteLLM 전용)",
+        "description": "Label for the NoLog option"
     }
 }
