@@ -39,32 +39,39 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Récupérer le modèle et l'URL de l'API depuis le stockage
-            const { modelType, translationApiUrl } = await new Promise((resolve) => {
+            const { modelType, translationApiUrl, disableLogging } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
                     modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                    translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL
+                    translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
+                    disableLogging: false
                 }, (result) => {
                     resolve({
                         modelType: result.modelType,
-                        translationApiUrl: result.translationApiUrl
+                        translationApiUrl: result.translationApiUrl,
+                        disableLogging: result.disableLogging
                     });
                 });
             });
 
+            const messages = [
+                {
+                    role: "system",
+                    content: "You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language."
+                },
+                {
+                    role: "user",
+                    content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
+                }
+            ];
+
             const payload = {
                 model: modelType,
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language."
-                    },
-                    {
-                        role: "user",
-                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
-                    }
-                ],
-                store: true
+                messages
             };
+
+            if (disableLogging) {
+                payload["no-log"] = true;
+            }
 
             console.log('Translation request payload:', payload);
 
