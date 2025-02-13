@@ -1,30 +1,31 @@
-# Babel Fish AI - Rozszerzenie do Transkrypcji Mowy i Tłumaczenia z SI
+# Babel Fish AI - Rozszerzenie do Transkrypcji Głosowej i Tłumaczenia z AI
 
-Babel Fish AI to innowacyjne rozszerzenie do Chrome, pierwotnie stworzone, aby oferować potężną transkrypcję mowy. Przekształć swój głos w tekst z niezwykłą precyzją dzięki API Whisper od OpenAI i opcjonalnie korzystaj z automatycznego tłumaczenia w czasie rzeczywistym. Możesz używać Babel Fish AI wyłącznie do transkrypcji lub włączyć tłumaczenie "w locie" według swoich potrzeb.
+Babel Fish AI to innowacyjne rozszerzenie do Chrome, pierwotnie zaprojektowane, aby zapewnić potężną transkrypcję głosową. Przekształć swój głos na tekst z niezwykłą precyzją dzięki API Whisper OpenAI i, opcjonalnie, skorzystaj z automatycznego tłumaczenia w czasie rzeczywistym. Możesz używać Babel Fish AI wyłącznie do transkrypcji lub włączać tłumaczenie "w locie" w zależności od potrzeb.
 
 ## 🌟 Funkcje
 
-- **Zaawansowana Transkrypcja Mowy**
-  - Nagrywanie dźwięku w wysokiej jakości za pomocą mikrofonu twojego urządzenia.
-  - Precyzyjna transkrypcja wykonana przez API Whisper od OpenAI.
-  - Obsługa wielu języków w przetwarzaniu mowy i wyświetlaniu tekstu, umożliwiając transkrypcję wypowiedzi w różnych językach oraz wyświetlanie wyników w wybranym języku.
+- **Zaawansowana Transkrypcja Głosowa**
+  - Nagrywanie dźwięku wysokiej jakości za pośrednictwem mikrofonu twojego urządzenia.
+  - Dokładna transkrypcja realizowana przez API Whisper OpenAI.
+  - Wielojęzyczne wsparcie dla przetwarzania głosu i wyświetlania tekstu, umożliwiające transkrypcję nagrań głosowych w różnych językach i prezentowanie wyników w wybranym języku.
   - Automatyczne wstawianie tekstu do aktywnego pola lub wyświetlanie w dedykowanym oknie dialogowym.
 
-- **Wbudowane Automatyczne Tłumaczenie (Opcjonalnie)**
-  - Natychmiastowe tłumaczenie transkrypcji na różne języki, które można włączyć w razie potrzeby.
-  - Użycie zaawansowanego modelu SI, aby zapewnić tłumaczenie wierne oryginalnemu sensowi.
-  - Wolny wybór: korzystanie wyłącznie z transkrypcji lub łączenie transkrypcji z tłumaczeniem.
+- **Wbudowane Automatyczne Tłumaczenie (Opcjonalne)**
+  - Natychmiastowe tłumaczenie transkrypcji na różne języki, do włączenia w razie potrzeby.
+  - Wykorzystanie zaawansowanego modelu AI, aby zagwarantować wierne oddanie oryginalnego sensu.
+  - Swobodny wybór – korzystaj wyłącznie z transkrypcji lub łącz transkrypcję z tłumaczeniem.
 
-- **Intuicyjny i Personalizowalny Interfejs Użytkownika**
-  - Elastyczny tryb wyświetlania: aktywne pole do wpisywania lub unoszące się okno dialogowe.
-  - Konfigurowalny pasek statusu z wyborem kolorów, przezroczystości oraz czasu wyświetlania.
-  - Skrót klawiaturowy (Ctrl+Shift+1 lub ⌘+Shift+1 na Mac) do rozpoczęcia/zatrzymania nagrywania.
-  - Personalizowana ikona, zawierająca mikrofon i cyfrę „42”, dla natychmiastowego rozpoznania.
+- **Intuicyjny i Personalizowany Interfejs Użytkownika**
+  - Elastyczny tryb wyświetlania: aktywna strefa wprowadzania lub pływające okno dialogowe.
+  - Konfigurowalny pasek statusu z możliwością wyboru kolorów, przezroczystości i czasu wyświetlania.
+  - Skrót klawiszowy (Ctrl+Shift+1 lub ⌘+Shift+1 na Mac) do rozpoczęcia/zatrzymania nagrywania.
+  - Spersonalizowana ikona, zawierająca mikrofon oraz cyfrę „42”, dla natychmiastowego rozpoznania.
 
-- **Opcje Zaawansowane**
-  - Tryb ekspercki dla szczegółowej konfiguracji (adresy URL API, konfiguracja według domeny, itp.).
-  - Możliwość personalizacji modeli transkrypcji i tłumaczenia.
-  - Pełne zarządzanie internacjonalizacją dzięki plikom językowym (_locales), oferując interfejs i obsługę mowy w wielu językach.
+- **Zaawansowane Opcje**
+    - Tryb ekspercki umożliwiający szczegółową konfigurację (adresy URL API, konfiguracja według domeny itp.).
+    - Możliwość personalizacji modeli transkrypcji i tłumaczenia.
+    - **Kompatybilność z LiteLLM Proxy, umożliwiająca korzystanie z alternatywnych modeli językowych oraz wyłączenie rejestrowania zapytań.**
+    - Kompleksowe zarządzanie internacjonalizacją dzięki plikom językowym (_locales), oferując interfejs i wsparcie głosowe w wielu językach.
 
 ## 🌐 Obsługiwane Języki
 
@@ -37,7 +38,7 @@ Babel Fish AI to innowacyjne rozszerzenie do Chrome, pierwotnie stworzone, aby o
 - Włoski
 - Japoński
 - Koreański
-- Niderlandzki
+- Holenderski
 - Polski
 - Portugalski
 - Rumuński
@@ -46,71 +47,90 @@ Babel Fish AI to innowacyjne rozszerzenie do Chrome, pierwotnie stworzone, aby o
 
 ## 🚀 Instalacja
 
-1. **Pobieranie i Instalacja:**
-   - Sklonuj to repozytorium z GitHub lub pobierz ręcznie folder rozszerzenia.
-   - Otwórz Chrome i przejdź pod adres `chrome://extensions/`.
-   - Włącz „Tryb dewelopera” w prawym górnym rogu.
-   - Kliknij „Załaduj rozszerzenie bez pakowania” i wybierz folder Babel Fish AI.
+1.  **Pobieranie i Instalacja:**
+    - Sklonuj to repozytorium z GitHub lub pobierz ręcznie folder rozszerzenia.
+    - Otwórz Chrome i przejdź do `chrome://extensions/`.
+    - Włącz „Tryb dewelopera” w prawym górnym rogu.
+    - Kliknij „Wczytaj rozszerzenie bez pakietu” i wybierz folder Babel Fish AI.
 
-2. **Weryfikacja:**
-   - Upewnij się, że rozszerzenie pojawia się na pasku narzędzi Chrome z personalizowaną ikoną.
+2.  **Weryfikacja:**
+    - Upewnij się, że rozszerzenie pojawia się na pasku narzędzi Chrome z spersonalizowaną ikoną.
 
 ## ⚙️ Konfiguracja
 
-1. **Klucz API OpenAI:**
-   - Kliknij ikonę rozszerzenia, aby uzyskać dostęp do opcji.
-   - Wprowadź swój klucz API OpenAI (dostępny pod adresem [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
+1.  **Klucz API OpenAI:**
+    *   Kliknij na ikonę rozszerzenia, aby uzyskać dostęp do opcji.
+    *   Wprowadź swój klucz API OpenAI (dostępny na [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
 
-2. **Personalizacja Opcji:**
-   - Wybierz tryb wyświetlania (aktywne pole lub okno dialogowe).
-   - Skonfiguruj kolor, przezroczystość oraz czas wyświetlania paska statusu.
-   - Wybierz języki dla transkrypcji (wejście mowy) oraz dla wyświetlania tekstu.
-   - Włącz lub wyłącz funkcję tłumaczenia według swoich potrzeb.
+2.  **Personalizacja Opcji:**
+    *   Wybierz tryb wyświetlania (aktywna strefa lub okno dialogowe).
+    *   Skonfiguruj kolor, przezroczystość oraz czas wyświetlania paska statusu.
+    *   Wybierz języki dla transkrypcji (wejście głosowe) oraz dla wyświetlania tekstu.
+    *   Włącz lub wyłącz funkcję tłumaczenia według potrzeb.
 
-## 🛠️ Techniczne Funkcjonowanie
+3.  **(Opcjonalnie) Użycie z LiteLLM Proxy:**
+    *   Włącz „Tryb Ekspercki” w opcjach.
+    *   W sekcji „Zaawansowana Konfiguracja” zmień **oba adresy URL** API (Whisper i Tłumaczenie), aby wskazywały na Twoją instancję LiteLLM Proxy. **Użyj tego samego adresu URL bazowego dla obu.**
+    *   Zaznacz opcję „NoLog (tylko LiteLLM)”, jeśli chcesz wyłączyć rejestrowanie zapytań przez LiteLLM.
+
+## 🚀 Użycie z LiteLLM Proxy
+
+Babel Fish AI jest kompatybilny z [LiteLLM Proxy](https://litellm.ai/), który umożliwia korzystanie z alternatywnych modeli językowych z API kompatybilnym z OpenAI.
+
+### Konfiguracja
+
+1.  **Zainstaluj i skonfiguruj LiteLLM Proxy:** Postępuj zgodnie z instrukcjami podanymi na stronie LiteLLM.
+2.  **Skonfiguruj rozszerzenie Babel Fish AI:**
+    *   W opcjach rozszerzenia (prawy przycisk myszy na ikonie > Opcje) włącz „Tryb Ekspercki”.
+    *   W sekcji „Zaawansowana Konfiguracja” zmień **oba adresy URL** API (Whisper i Tłumaczenie), aby wskazywały na Twoją instancję LiteLLM Proxy (na przykład, `http://localhost:4000/v1/audio/transcriptions` oraz `http://localhost:4000/v1/chat/completions`). **Użyj tego samego adresu URL bazowego dla obu.**
+    *   Zaznacz opcję „NoLog (tylko LiteLLM)”, jeśli chcesz wyłączyć rejestrowanie zapytań przez LiteLLM.
+
+**Ważne:** Opcja „NoLog” jest przeznaczona **wyłącznie** do użycia z LiteLLM Proxy. **Nie włączaj jej**, jeśli korzystasz z oficjalnego API OpenAI, ponieważ spowoduje to błąd i uniemożliwi działanie tłumaczenia.
+
+## 🛠️ Techniczne Działanie
 
 ### Architektura Rozszerzenia
 
 Rozszerzenie składa się z kilku plików JavaScript, które współdziałają ze sobą:
 
-*   **`manifest.json`:** Główny plik konfiguracyjny rozszerzenia. Definiuje uprawnienia, skrypty, dostępne zasoby, itp. Używa wersji 3 manifestu i deklaruje uprawnienia `activeTab`, `storage`, `commands` oraz `scripting`. Skrypty `content_scripts` są wstrzykiwane na wszystkie adresy URL i uruchamiane pod koniec ładowania dokumentu.
-*   **`background.js`:** Service worker, który działa w tle. Obsługuje zdarzenia (kliknięcie ikony, skróty klawiaturowe), wstrzykuje `content script` w razie potrzeby oraz komunikuje się z `content script`.
-*   **`content.js`:** Skrypt, który jest wstrzykiwany do stron internetowych. Bezpośrednio współdziała z DOM, nagrywa dźwięk z mikrofonu, wywołuje API transkrypcji i tłumaczenia oraz wyświetla wyniki.
-*   **`src/utils/api.js`:** Zawiera funkcję `transcribeAudio` do wywoływania API Whisper od OpenAI (transkrypcja).
-*   **`src/utils/translation.js`:** Zawiera funkcję `translateText` do wywoływania API GPT od OpenAI (tłumaczenie).
-*   **`src/utils/ui.js`:** Zawiera funkcje użytkowe do zarządzania interfejsem użytkownika (baner, okno dialogowe, przycisk kopiowania).
-*   **`src/constants.js`:** Definiuje stałe dla konfiguracji, stanów, akcji, itp.
-*   **`src/pages/options/`:** Zawiera pliki dla strony opcji rozszerzenia (HTML, CSS, JavaScript).
+*   **`manifest.json`:** Główny plik konfiguracyjny rozszerzenia. Definiuje uprawnienia, skrypty, dostępne zasoby itp. Używa wersji 3 manifestu i deklaruje uprawnienia `activeTab`, `storage`, `commands` oraz `scripting`. Skrypty `content_scripts` są wstrzykiwane do wszystkich stron i wykonują się na końcu ładowania dokumentu.
+*   **`background.js`:** Service worker działający w tle. Obsługuje zdarzenia (kliknięcie na ikonę, skróty klawiszowe), wstrzykuje `content script` w razie potrzeby oraz komunikuje się z `content script`.
+*   **`content.js`:** Skrypt wstrzykiwany do stron internetowych. Bezpośrednio współdziała z DOM, rejestruje dźwięk z mikrofonu, wywołuje API transkrypcji i tłumaczenia oraz wyświetla wyniki.
+*   **`src/utils/api.js`:** Zawiera funkcję `transcribeAudio`, która wywołuje API Whisper OpenAI (transkrypcja).
+*   **`src/utils/translation.js`:** Zawiera funkcję `translateText`, która wywołuje API GPT OpenAI (tłumaczenie).
+*   **`src/utils/ui.js`:** Zawiera funkcje pomocnicze do zarządzania interfejsem użytkownika (baner, okno dialogowe, przycisk kopiowania).
+*   **`src/constants.js`:** Definiuje stałe dla konfiguracji, stanów, akcji itp.
+*   **`src/pages/options/`:** Zawiera pliki do strony opcji rozszerzenia (HTML, CSS, JavaScript).
 
 ### Proces Transkrypcji i Tłumaczenia
 
-1.  **Rozpoczęcie Nagrywania:** Użytkownik zaczyna nagrywanie poprzez kliknięcie na ikonę rozszerzenia lub używając skrótu klawiaturowego. Skrypt tła wysyła wiadomość do `content script`, aby rozpocząć nagrywanie.
-2.  **Nagrywanie Dźwięku:** `Content script` używa API `navigator.mediaDevices.getUserMedia`, aby uzyskać dostęp do mikrofonu i nagrać dźwięk.
-3.  **Transkrypcja:** `Content script` używa funkcji `transcribeAudio` (`src/utils/api.js`) do wysłania dźwięku do API Whisper od OpenAI. API zwraca przetranskrybowany tekst.
-4.  **Tłumaczenie (Opcjonalnie):** Jeśli opcja tłumaczenia jest włączona, `content script` używa funkcji `translateText` (`src/utils/translation.js`) do wysłania przetranskrybowanego tekstu do API GPT od OpenAI. API zwraca przetłumaczony tekst.
-5.  **Wyświetlanie:** `Content script` wyświetla przetranskrybowany (i ewentualnie przetłumaczony) tekst albo w aktywnym elemencie strony (jeśli jest to pole tekstowe lub edytowalny element), albo w oknie dialogowym.
+1.  **Rozpoczęcie Nagrywania:** Użytkownik rozpoczyna nagrywanie, klikając ikonę rozszerzenia lub używając skrótu klawiszowego. Skrypt tła wysyła wiadomość do skryptu zawartości, aby rozpocząć nagrywanie.
+2.  **Nagrywanie Dźwięku:** Skrypt zawartości wykorzystuje API `navigator.mediaDevices.getUserMedia`, aby uzyskać dostęp do mikrofonu i nagrać dźwięk.
+3.  **Transkrypcja:** Skrypt zawartości wykorzystuje funkcję `transcribeAudio` (`src/utils/api.js`), aby wysłać dźwięk do API Whisper OpenAI. API zwraca przetranskrybowany tekst.
+4.  **Tłumaczenie (Opcjonalne):** Jeśli opcja tłumaczenia jest włączona, skrypt zawartości używa funkcji `translateText` (`src/utils/translation.js`), aby wysłać przetranskrybowany tekst do API GPT OpenAI. API zwraca przetłumaczony tekst.
+5.  **Wyświetlanie:** Skrypt zawartości wyświetla przetranskrybowany (oraz ewentualnie przetłumaczony) tekst w aktywnym elemencie strony (jeśli jest to pole tekstowe lub element możliwy do edycji) lub w oknie dialogowym.
 
 ### Komunikacja
 
-Komunikacja między `background script` a `content script` odbywa się za pomocą API komunikatów Chrome (`chrome.runtime.sendMessage` oraz `chrome.runtime.onMessage`).
+Komunikacja między skryptem tła a skryptem zawartości odbywa się za pomocą API komunikacji Chrome (`chrome.runtime.sendMessage` oraz `chrome.runtime.onMessage`).
 
 ### Przechowywanie Danych
 
-Rozszerzenie używa `chrome.storage.sync` do przechowywania:
+Rozszerzenie korzysta z `chrome.storage.sync` do przechowywania:
 
 *   Klucza API OpenAI (`apiKey`).
-*   Opcji rozszerzenia (wyświetlanie, tłumaczenie, kolory paska, itp.).
+*   Opcji rozszerzenia (wyświetlanie, tłumaczenie, kolory paska itp.).
 
 ### Obsługa Błędów
 
-Możliwe błędy (brak klucza API, błąd transkrypcji, itp.) są definiowane w pliku `constants.js`. Funkcje w `api.js` oraz `translation.js` obsługują potencjalne błędy wywołań API. `Content.js` wyświetla komunikaty o błędach użytkownikowi za pomocą banera u góry strony.
+Możliwe błędy (np. brak klucza API, błąd transkrypcji) są zdefiniowane w pliku `constants.js`. Funkcje `api.js` oraz `translation.js` obsługują potencjalne błędy wywołań API. Skrypt zawartości wyświetla komunikaty o błędach użytkownikowi za pomocą banera na górze strony.
 
 ## 🛡️ Bezpieczeństwo i Prywatność
 
 - **Ochrona Danych:**
   - Klucz API jest przechowywany w sposób bezpieczny w Chrome.
-  - Rozszerzenie nie przechowuje twoich danych audio; wszystkie przetwarzania odbywają się w czasie rzeczywistym.
-  - Komunikacja z API odbywa się przez bezpieczne połączenia HTTPS.
+  - Rozszerzenie nie przechowuje danych audio; wszystkie przetwarzania odbywają się w czasie rzeczywistym.
+  - Komunikacja z API odbywa się za pośrednictwem bezpiecznych połączeń HTTPS.
 
 ## 🔧 Rozwiązywanie Problemów
 
@@ -119,27 +139,27 @@ Możliwe błędy (brak klucza API, błąd transkrypcji, itp.) są definiowane w 
   - Upewnij się, że żadne inne aplikacje nie korzystają jednocześnie z mikrofonu.
 
 - **Błędy Transkrypcji/Tłumaczenia:**
-  - Sprawdź, czy klucz API jest prawidłowy i aktywny.
-  - Upewnij się, że masz stabilne połączenie internetowe.
-  - Sprawdź konsolę Chrome, aby uzyskać szczegółowe logi w przypadku błędu.
+  - Sprawdź, czy klucz API jest ważny i aktywny.
+  - Upewnij się, że masz stabilne połączenie z internetem.
+  - Sprawdź konsolę Chrome, aby uzyskać szczegółowe logi w przypadku błędów.
 
 ## 🤝 Wkład
 
-Wkład i sugestie są mile widziane. Aby przyczynić się do rozwoju:
-- Zgłaszaj błędy w sekcji Issues na GitHub.
+Wkład i sugestie są mile widziane. Aby przyczynić się:
+- Zgłaszaj błędy poprzez sekcję Issues na GitHub.
 - Proponuj ulepszenia lub nowe funkcje.
-- Składaj swoje pull requesty.
+- Przesyłaj swoje pull requesty.
 
 ## 📄 Licencja
 
-To rozszerzenie jest dystrybuowane na licencji GNU Affero General Public License v3.0 (AGPL-3.0). Zapoznaj się z plikiem LICENSE, aby uzyskać więcej szczegółów.
+Rozszerzenie jest rozpowszechniane na licencji GNU Affero General Public License v3.0 (AGPL-3.0). Zapoznaj się z plikiem LICENSE, aby uzyskać więcej szczegółów.
 
 ## 💝 Wsparcie
 
-Jeśli doceniasz to rozszerzenie, możesz wesprzeć jego rozwój, przekazując darowiznę przez [PayPal](https://paypal.me/jls).
+Jeśli podoba Ci się to rozszerzenie, możesz wesprzeć jego rozwój, dokonując darowizny za pośrednictwem [PayPal](https://paypal.me/jls).
 
 ---
-Stworzone z pasją i innowacją przez jls42.org, Babel Fish AI wynosi transkrypcję i tłumaczenie na zupełnie nowe wyżyny dzięki najnowocześniejszej sztucznej inteligencji.
+Stworzone przez jls42.org z pasją i innowacją, Babel Fish AI wynosi transkrypcję i tłumaczenie na nowe horyzonty dzięki zaawansowanej sztucznej inteligencji.
 
-**Ten dokument został przetłumaczony z wersji fr na język pl przy użyciu modelu o3-mini. Aby uzyskać więcej informacji o procesie tłumaczenia, odwiedź https://gitlab.com/jls42/ai-powered-markdown-translator**
+**Ten dokument został przetłumaczony z wersji fr do języka pl przy użyciu modelu o3-mini. Aby uzyskać więcej informacji o procesie tłumaczenia, zobacz https://gitlab.com/jls42/ai-powered-markdown-translator**
 
