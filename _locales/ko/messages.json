@@ -232,11 +232,7 @@
         "description": "모델 추가 버튼"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (LiteLLM 전용)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "개인 정보 보호 강화를 위해 요청 로깅을 비활성화합니다.",
-        "description": "Description of the NoLog option"
     }
 }

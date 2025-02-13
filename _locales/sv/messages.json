@@ -232,11 +232,7 @@
         "description": "Knapp för att lägga till en modell"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (endast LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "Inaktiverar loggning av förfrågningar för ökad integritet.",
-        "description": "Description of the NoLog option"
     }
 }

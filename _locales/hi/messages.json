@@ -232,11 +232,7 @@
         "description": "मॉडल जोड़ने के लिए बटन"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (केवल LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "बढ़ी हुई गोपनीयता के लिए अनुरोध लॉगिंग अक्षम करता है।",
-        "description": "Description of the NoLog option"
     }
 }

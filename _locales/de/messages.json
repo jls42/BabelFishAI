@@ -232,11 +232,7 @@
         "description": "Schaltfläche zum Hinzufügen eines Modells"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (nur LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "Deaktiviert die Protokollierung von Anfragen für mehr Datenschutz.",
-        "description": "Description of the NoLog option"
     }
 }

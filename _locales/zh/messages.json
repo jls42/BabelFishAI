@@ -232,11 +232,7 @@
         "description": "添加模型按钮"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (仅限 LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "禁用请求日志记录以增强隐私性。",
-        "description": "Description of the NoLog option"
     }
 }

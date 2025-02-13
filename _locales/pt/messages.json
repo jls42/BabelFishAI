@@ -232,11 +232,7 @@
         "description": "Botão para adicionar um modelo"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (somente LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "Desativa o registro de solicitações para maior privacidade.",
-        "description": "Description of the NoLog option"
     }
 }

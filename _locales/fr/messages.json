@@ -232,11 +232,7 @@
         "description": "Bouton pour ajouter un modèle"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (LiteLLM uniquement)",
         "description": "Label pour l'option NoLog"
-    },
-    "noLogDescription": {
-        "message": "Désactive la journalisation des requêtes pour plus de confidentialité.",
-        "description": "Description de l'option NoLog"
     }
 }

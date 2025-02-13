@@ -232,11 +232,7 @@
         "description": "Przycisk dodawania modelu"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (tylko LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "Wyłącza logowanie żądań dla zwiększenia prywatności.",
-        "description": "Description of the NoLog option"
     }
 }

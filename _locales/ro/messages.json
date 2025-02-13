@@ -232,11 +232,7 @@
         "description": "Buton pentru adăugarea unui model"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (doar LiteLLM)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "Dezactivează înregistrarea cererilor pentru o confidențialitate sporită.",
-        "description": "Description of the NoLog option"
     }
 }

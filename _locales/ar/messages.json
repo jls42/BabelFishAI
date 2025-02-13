@@ -232,11 +232,7 @@
         "description": "زر لإضافة نموذج"
     },
     "noLogLabel": {
-        "message": "NoLog",
+        "message": "NoLog (LiteLLM فقط)",
         "description": "Label for the NoLog option"
-    },
-    "noLogDescription": {
-        "message": "يعطل تسجيل الطلبات لتعزيز الخصوصية.",
-        "description": "Description of the NoLog option"
     }
 }
