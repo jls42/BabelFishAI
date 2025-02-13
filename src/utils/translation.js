@@ -56,7 +56,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 messages: [
                     {
                         role: "system",
-                        content: "You are a translation expert. Provide accurate and natural-sounding translations."
+                        content: "You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language."
                     },
                     {
                         role: "user",

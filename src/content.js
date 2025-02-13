@@ -279,99 +279,7 @@
         }
     }
 
-    /**
-     * Traduit le texte avec GPT-4o
-     * @param {string} text - Le texte à traduire
-     * @param {string} targetLanguage - La langue cible (zh, es, en)
-     * @returns {Promise<string>} Le texte traduit
-     */
-    async function translateText(text, sourceLang, targetLang) {
-        if (!text || !sourceLang || !targetLang) {
-            console.error('Missing translation parameters:', { text, sourceLang, targetLang });
-            throw new Error('Missing translation parameters');
-        }
-
-        if (!apiKey) {
-            console.error('API key not found for translation');
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
-        }
-
-        console.log('Starting translation:', {
-            sourceLang,
-            targetLang,
-            textLength: text.length
-        });
-
-        try {
-            // Récupérer le modèle de traduction depuis le stockage
-            const { modelType } = await new Promise((resolve) => {
-                chrome.storage.sync.get({
-                    modelType: CONFIG.GPT_MODEL,
-                }, (result) => {
-                    resolve({
-                        modelType: result.modelType
-                    });
-                });
-            });
-
-            const payload = {
-                model: modelType,
-                messages: [
-                    {
-                        role: "system",
-                        content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text} Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present.`
-                    }
-                ],
-                store: true
-            };
-
-            console.log('Translation request payload:', payload);
-
-            // Récupérer l'URL de l'API de traduction depuis le stockage
-            const { translationApiUrl } = await new Promise((resolve) => {
-                chrome.storage.sync.get({
-                    translationApiUrl: CONFIG.GPT_API_URL,
-                }, (result) => {
-                    resolve({
-                        translationApiUrl: result.translationApiUrl || CONFIG.GPT_API_URL,
-                    });
-                });
-            });
-
-            const response = await fetch(translationApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            console.log('Translation API response status:', response.status);
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Translation API error:', errorData);
-                throw new Error(errorData.error?.message || "Erreur de traduction");
-            }
-
-            const data = await response.json();
-            console.log('Translation API response:', data);
-
-            if (!data.choices?.[0]?.message?.content) {
-                console.error('Invalid translation response format:', data);
-                throw new Error('Format de réponse de traduction invalide');
-            }
-
-            const translatedText = data.choices[0].message.content.trim();
-            console.log('Final translated text:', translatedText);
-
-            return translatedText;
-        } catch (error) {
-            console.error('Translation error:', error);
-            throw new Error(`Erreur de traduction: ${error.message}`);
-        }
-    }
+    // Utilisation de la fonction translateText de translation.js
 
     /**
      * Affiche la transcription selon les options configurées
@@ -400,7 +308,12 @@
                         sourceLang: options.sourceLanguage,
                         targetLang: options.targetLanguage
                     });
-                    const translatedText = await translateText(text, options.sourceLanguage, options.targetLanguage);
+                    const translatedText = await window.BabelFishAIUtils.translation.translateText(
+                        text,
+                        options.sourceLanguage,
+                        options.targetLanguage,
+                        apiKey
+                    );
                     if (translatedText && translatedText.trim()) {
                         displayText = translatedText;
                         console.log('Translation successful:', translatedText);
