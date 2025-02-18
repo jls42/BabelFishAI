@@ -234,5 +234,9 @@
     "noLogLabel": {
         "message": "NoLog (केवल LiteLLM)",
         "description": "Label for the NoLog option"
+    },
+    "githubLink": {
+        "message": "GitHub",
+        "description": "GitHub link text"
     }
 }

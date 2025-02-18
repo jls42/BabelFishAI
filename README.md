@@ -1,5 +1,7 @@
 # Babel Fish AI - Extension de Transcription Vocale et Traduction avec IA
 
+**Pour utiliser l'extension, vous aurez besoin d'une clé API OpenAI (ou d'un fournisseur tiers si vous utilisez LiteLLM Proxy). Vous pouvez générer une clé API OpenAI ici : [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)**
+
 Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offrir une transcription vocale puissante. Transformez votre voix en texte avec une précision remarquable grâce à l’API Whisper d’OpenAI, et bénéficiez en option d’une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
 
 ## 🌟 Fonctionnalités
@@ -7,7 +9,7 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 - **Transcription Vocale Avancée**
   - Capture audio de haute qualité via le microphone de votre appareil.
   - Transcription précise réalisée par l’API Whisper d’OpenAI.
-  - Prise en charge multi-langue pour le traitement de la voix et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d’afficher les résultats dans la langue de votre choix.
+  - Prise en charge multilingue pour la reconnaissance vocale et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d'afficher les résultats (transcription et traduction, si activée) dans la langue de votre choix.
   - Insertion automatique du texte dans le champ actif ou affichage dans une boîte de dialogue dédiée.
 
 - **Traduction Automatique Intégrée (Optionnelle)**
@@ -24,7 +26,7 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 - **Options Avancées**
     - Mode expert pour des configurations détaillées (URLs des API, configuration par domaine, etc.).
     - Possibilité de personnaliser les modèles de transcription et de traduction.
-    - **Compatibilité avec LiteLLM Proxy pour utiliser des modèles de langage alternatifs et désactiver la journalisation des requêtes.**
+    - Compatibilité avec LiteLLM Proxy pour vous connecter à des modèles de langage alternatifs et désactiver la journalisation des requêtes.
     - Gestion complète de l’internationalisation grâce aux fichiers de langue (_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
 
 ## 🌐 Langues Supportées
@@ -75,6 +77,8 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 
 ## 🚀 Utilisation avec LiteLLM Proxy
 
+Si vous souhaitez utiliser des modèles de langage autres qu'OpenAI, vous pouvez utiliser LiteLLM Proxy. Voici comment le configurer :
+
 Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/), qui permet d'utiliser des modèles de langage alternatifs avec une API compatible avec celle d'OpenAI.
 
 ### Configuration
@@ -121,6 +125,8 @@ L'extension utilise `chrome.storage.sync` pour stocker :
 *   La clé API OpenAI (`apiKey`).
 *   Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
 
+Ces données sont stockées localement sur votre ordinateur, dans le stockage de l'extension Chrome.
+
 ### Gestion des Erreurs
 Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont définies dans le fichier `constants.js`. Les fonctions `api.js` et `translation.js` gèrent les erreurs potentielles des appels API. Le `content.js` affiche les messages d'erreur à l'utilisateur via une bannière en haut de la page.
 
@@ -130,6 +136,8 @@ Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont d
   - La clé API est stockée de manière sécurisée dans Chrome.
   - L’extension ne conserve pas vos données audio ; tous les traitements s’effectuent en temps réel.
   - La communication avec les API se fait via des connexions HTTPS sécurisées.
+
+Pour des informations complètes sur la manière dont BabelFishAI gère vos données, veuillez consulter notre [Politique de Confidentialité](PRIVACY.md).
 
 ## 🔧 Dépannage
 
@@ -156,6 +164,5 @@ Cette extension est distribuée sous licence GNU Affero General Public License v
 ## 💝 Soutien
 
 Si vous appréciez cette extension, vous pouvez soutenir son développement en faisant un don via [PayPal](https://paypal.me/jls).
-
 ---
 Développé par jls42.org avec passion et innovation, Babel Fish AI propulse la transcription et la traduction vers de nouveaux horizons grâce à l’intelligence artificielle de pointe.
