@@ -1,31 +1,33 @@
-# Babel Fish AI – Erweiterung für Spracherkennung und Übersetzung mit KI
+# Babel Fish AI - Erweiterung für Sprachtranskription und Übersetzung mit KI
 
-Babel Fish AI ist eine innovative Chrome-Erweiterung, die ursprünglich entwickelt wurde, um eine leistungsstarke Spracherkennung bereitzustellen. Verwandeln Sie Ihre Stimme in Text mit bemerkenswerter Präzision dank der Whisper-API von OpenAI und profitieren Sie optional von einer automatischen Echtzeitübersetzung. Sie können Babel Fish AI ausschließlich für die Transkription verwenden oder die Übersetzung nach Bedarf aktivieren.
+**Um die Erweiterung zu nutzen, benötigen Sie einen OpenAI-API-Schlüssel (oder einen Drittanbieter, falls Sie LiteLLM Proxy verwenden). Sie können hier einen OpenAI-API-Schlüssel generieren: [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)**
+
+Babel Fish AI ist eine innovative Chrome-Erweiterung, die ursprünglich entwickelt wurde, um eine leistungsstarke Sprachtranskription anzubieten. Verwandeln Sie Ihre Stimme in Text mit bemerkenswerter Genauigkeit dank der OpenAI-Whisper-API und profitieren Sie optional von einer automatischen Echtzeitübersetzung. Sie können Babel Fish AI ausschließlich zur Transkription verwenden oder die Übersetzung on-the-fly nach Bedarf aktivieren.
 
 ## 🌟 Funktionen
 
-- **Fortschrittliche Spracherkennung**
-  - Hochwertige Audioaufnahme über das Mikrofon Ihres Geräts.
-  - Präzise Transkription, realisiert durch die Whisper-API von OpenAI.
-  - Mehrsprachige Unterstützung für die Spracherkennung und Textanzeige, die es ermöglicht, Sprachaufnahmen in verschiedenen Sprachen zu transkribieren und die Ergebnisse in der von Ihnen gewählten Sprache anzuzeigen.
-  - Automatisches Einfügen des Textes in das aktive Feld oder Anzeige in einem dedizierten Dialogfeld.
+- **Fortschrittliche Sprachtranskription**
+  - Aufzeichnung von hochwertigem Audio über das Mikrofon Ihres Geräts.
+  - Präzise Transkription, durchgeführt von der OpenAI-Whisper-API.
+  - Mehrsprachige Unterstützung für Spracherkennung und Texteinblendung, die es ermöglicht, gesprochene Eingaben in verschiedenen Sprachen zu transkribieren und die Ergebnisse (Transkription und Übersetzung, falls aktiviert) in der von Ihnen gewählten Sprache anzuzeigen.
+  - Automatisches Einfügen des Textes in das aktive Feld oder Anzeige in einem eigenen Dialogfenster.
 
-- **Integrierte Automatische Übersetzung (Optional)**
+- **Integrierte automatische Übersetzung (optional)**
   - Sofortige Übersetzung der Transkriptionen in verschiedene Sprachen, bei Bedarf aktivierbar.
-  - Einsatz eines fortschrittlichen KI-Modells, um eine dem ursprünglichen Sinn getreue Übersetzung zu gewährleisten.
-  - Freie Wahl, ausschließlich die Transkription zu nutzen oder Transkription und Übersetzung zu kombinieren.
+  - Verwendung eines fortschrittlichen KI-Modells, um eine getreue Übersetzung des ursprünglichen Sinns zu gewährleisten.
+  - Freie Wahl, entweder ausschließlich die Transkription zu nutzen oder Transkription und Übersetzung zu kombinieren.
 
 - **Intuitive und anpassbare Benutzeroberfläche**
-  - Flexibler Anzeigemodus: aktives Eingabefeld oder schwebendes Dialogfenster.
-  - Konfigurierbare Statusleiste mit Auswahl von Farben, Transparenz und Anzeigedauer.
-  - Tastenkombination (Strg+Shift+1 oder ⌘+Shift+1 auf Mac) zum Starten/Stoppen der Aufnahme.
-  - Benutzerdefiniertes Symbol, das ein Mikrofon und die Zahl „42“ integriert, für eine sofortige Erkennung.
+  - Flexibler Anzeigemodus: aktiver Eingabebereich oder schwebendes Dialogfenster.
+  - Konfigurierbares Statusband mit Auswahl von Farben, Opazität und Anzeigedauer.
+  - Tastenkombination (Ctrl+Shift+1 oder ⌘+Shift+1 auf Mac) um die Aufnahme zu starten/stoppen.
+  - Benutzerdefiniertes Icon, das ein Mikrofon und die Zahl „42“ integriert, für eine sofortige Erkennung.
 
 - **Erweiterte Optionen**
-  - Expertenmodus für detaillierte Einstellungen (API-URLs, domänenspezifische Konfiguration usw.).
-  - Möglichkeit der Anpassung der Transkriptions- und Übersetzungsmodelle.
-  - **Kompatibilität mit LiteLLM Proxy zur Nutzung alternativer Sprachmodelle und zum Deaktivieren der Anfrageprotokollierung.**
-  - Umfassende Verwaltung der Internationalisierung dank Sprachdateien (_locales), die eine mehrsprachige Benutzeroberfläche und Spracherkennung bieten.
+  - Expertenmodus für detaillierte Konfigurationen (API-URLs, domänenspezifische Konfiguration, etc.).
+  - Möglichkeit, die Transkriptions- und Übersetzungsmodelle anzupassen.
+  - Kompatibilität mit LiteLLM Proxy, um sich mit alternativen Sprachmodellen zu verbinden und die Protokollierung der Anfragen zu deaktivieren.
+  - Vollständige Verwaltung der Internationalisierung dank der Sprachdateien (_locales), die eine mehrsprachige Benutzeroberfläche und Sprachausgabe bieten.
 
 ## 🌐 Unterstützte Sprachen
 
@@ -47,83 +49,87 @@ Babel Fish AI ist eine innovative Chrome-Erweiterung, die ursprünglich entwicke
 
 ## 🚀 Installation
 
-1.  **Herunterladen und Installieren:**
+1.  **Download und Installation:**
     - Klonen Sie dieses Repository von GitHub oder laden Sie den Erweiterungsordner manuell herunter.
     - Öffnen Sie Chrome und gehen Sie zu `chrome://extensions/`.
     - Aktivieren Sie den „Entwicklermodus“ oben rechts.
     - Klicken Sie auf „Entpackte Erweiterung laden“ und wählen Sie den Babel Fish AI-Ordner aus.
 
 2.  **Überprüfung:**
-    - Vergewissern Sie sich, dass die Erweiterung in der Chrome-Symbolleiste mit dem benutzerdefinierten Symbol erscheint.
+    - Stellen Sie sicher, dass die Erweiterung in der Chrome-Symbolleiste mit dem benutzerdefinierten Icon angezeigt wird.
 
 ## ⚙️ Konfiguration
 
 1.  **OpenAI API-Schlüssel:**
     *   Klicken Sie auf das Erweiterungssymbol, um auf die Optionen zuzugreifen.
-    *   Geben Sie Ihren OpenAI API-Schlüssel ein (verfügbar unter [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
+    *   Geben Sie Ihren OpenAI-API-Schlüssel ein (verfügbar unter [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
 
 2.  **Anpassung der Optionen:**
-    *   Wählen Sie den Anzeigemodus (aktives Feld oder Dialogfenster).
-    *   Konfigurieren Sie die Farbe, Transparenz und Anzeigedauer der Statusleiste.
-    *   Wählen Sie die Sprachen für die Transkription (Spracheingabe) und für die Textanzeige.
-    *   Aktivieren oder deaktivieren Sie die Übersetzungsfunktion je nach Bedarf.
+    *   Wählen Sie den Anzeigemodus (aktiver Bereich oder Dialogfenster).
+    *   Konfigurieren Sie die Farbe, Opazität und Anzeigedauer des Statusbands.
+    *   Wählen Sie die Sprachen für die Transkription (stimmliche Eingabe) und für die Textanzeige.
+    *   Aktivieren oder deaktivieren Sie die Übersetzungsfunktion nach Bedarf.
 
 3.  **(Optional) Nutzung mit LiteLLM Proxy:**
-    *   Aktivieren Sie im Einstellungsmenü den „Expertenmodus“.
-    *   Ändern Sie im Abschnitt „Erweiterte Konfiguration“ **die beiden API-URLs** (Whisper und Übersetzung), damit sie auf Ihre LiteLLM Proxy-Instanz verweisen. **Verwenden Sie dieselbe Basis-URL für beide.**
+    *   Aktivieren Sie in den Optionen den „Expertenmodus“.
+    *   Ändern Sie im Bereich „Erweiterte Konfiguration“ **die beiden URLs** der APIs (Whisper und Übersetzung), damit sie auf Ihre LiteLLM Proxy-Instanz verweisen. **Verwenden Sie für beide dieselbe Basis-URL.**
     *   Aktivieren Sie die Option „NoLog (nur LiteLLM)“, wenn Sie die Protokollierung der Anfragen durch LiteLLM deaktivieren möchten.
 
 ## 🚀 Nutzung mit LiteLLM Proxy
 
-Babel Fish AI ist kompatibel mit [LiteLLM Proxy](https://litellm.ai/), welches die Verwendung alternativer Sprachmodelle mit einer API, die mit der von OpenAI kompatibel ist, ermöglicht.
+Wenn Sie Sprachmodelle verwenden möchten, die nicht von OpenAI stammen, können Sie LiteLLM Proxy nutzen. So konfigurieren Sie es:
+
+Babel Fish AI ist kompatibel mit [LiteLLM Proxy](https://litellm.ai/), das die Nutzung alternativer Sprachmodelle mit einer API ermöglicht, die mit der von OpenAI kompatibel ist.
 
 ### Konfiguration
 
 1.  **Installieren und konfigurieren Sie LiteLLM Proxy:** Folgen Sie den Anweisungen auf der LiteLLM-Website.
 2.  **Konfigurieren Sie die Babel Fish AI-Erweiterung:**
-    *   Aktivieren Sie im Erweiterungsmenü (Rechtsklick auf das Symbol > Optionen) den „Expertenmodus“.
-    *   Ändern Sie im Abschnitt „Erweiterte Konfiguration“ **die beiden API-URLs** (Whisper und Übersetzung), damit sie auf Ihre LiteLLM Proxy-Instanz verweisen (zum Beispiel `http://localhost:4000/v1/audio/transcriptions` und `http://localhost:4000/v1/chat/completions`). **Verwenden Sie dieselbe Basis-URL für beide.**
+    *   Aktivieren Sie in den Optionen der Erweiterung (Rechtsklick auf das Symbol > Optionen) den „Expertenmodus“.
+    *   Ändern Sie im Bereich „Erweiterte Konfiguration“ **die beiden URLs** der APIs (Whisper und Übersetzung), damit sie auf Ihre LiteLLM Proxy-Instanz verweisen (zum Beispiel `http://localhost:4000/v1/audio/transcriptions` und `http://localhost:4000/v1/chat/completions`). **Verwenden Sie für beide dieselbe Basis-URL.**
     *   Aktivieren Sie die Option „NoLog (nur LiteLLM)“, wenn Sie die Protokollierung der Anfragen durch LiteLLM deaktivieren möchten.
 
-**Wichtig:** Die Option „NoLog“ ist **ausschließlich** für die Verwendung mit LiteLLM Proxy konzipiert. **Aktivieren Sie sie nicht**, wenn Sie die offizielle OpenAI-API verwenden, da dies zu einem Fehler führt und die Übersetzung beeinträchtigt.
+**Wichtig:** Die Option „NoLog“ ist **ausschließlich** für die Nutzung mit LiteLLM Proxy vorgesehen. **Aktivieren Sie sie nicht**, wenn Sie die offizielle OpenAI-API verwenden, da dies zu einem Fehler führt und die Übersetzung nicht funktioniert.
 
-## 🛠️ Technischer Betrieb
+## 🛠️ Technischer Ablauf
 
 ### Architektur der Erweiterung
 
 Die Erweiterung besteht aus mehreren JavaScript-Dateien, die miteinander interagieren:
 
-*   **`manifest.json`:** Die Hauptkonfigurationsdatei der Erweiterung. Sie definiert die Berechtigungen, Skripte, zugängliche Ressourcen usw. Sie verwendet Version 3 des Manifests und deklariert die Berechtigungen `activeTab`, `storage`, `commands` und `scripting`. Die `content_scripts` werden in alle URLs eingebunden und am Ende des Laden des Dokuments ausgeführt.
-*   **`background.js`:** Der Service Worker, der im Hintergrund läuft. Er verwaltet Ereignisse (Klick auf das Symbol, Tastenkombinationen), injiziert bei Bedarf das `content script` und kommuniziert mit diesem.
-*   **`content.js`:** Das Skript, das in Webseiten eingebunden wird. Es interagiert direkt mit dem DOM, nimmt Audio vom Mikrofon auf, ruft die Transkriptions- und Übersetzungs-APIs auf und zeigt die Ergebnisse an.
-*   **`src/utils/api.js`:** Enthält die Funktion `transcribeAudio`, um die Whisper-API von OpenAI (Transkription) aufzurufen.
-*   **`src/utils/translation.js`:** Enthält die Funktion `translateText`, um die GPT-API von OpenAI (Übersetzung) aufzurufen.
-*   **`src/utils/ui.js`:** Enthält Hilfsfunktionen zur Verwaltung der Benutzeroberfläche (Banner, Dialogfeld, Kopierschaltfläche).
-*   **`src/constants.js`:** Definiert Konstanten für die Konfiguration, Zustände, Aktionen usw.
+*   **`manifest.json`:** Die Hauptkonfigurationsdatei der Erweiterung. Sie definiert die Berechtigungen, Skripte, zugänglichen Ressourcen usw. Sie verwendet die Manifest-Version 3 und deklariert die Berechtigungen `activeTab`, `storage`, `commands` und `scripting`. Die `content_scripts` werden in allen URLs eingebettet und am Ende des Dokumentenladens ausgeführt.
+*   **`background.js`:** Der Service Worker, der im Hintergrund ausgeführt wird. Er verwaltet Ereignisse (Klick auf das Symbol, Tastenkombinationen), bettet das `content script` bei Bedarf ein und kommuniziert mit diesem.
+*   **`content.js`:** Das Skript, das in Webseiten eingebettet wird. Es interagiert direkt mit dem DOM, nimmt Audio vom Mikrofon auf, ruft die Transkriptions- und Übersetzungs-APIs auf und zeigt die Ergebnisse an.
+*   **`src/utils/api.js`:** Enthält die Funktion `transcribeAudio`, um die OpenAI-Whisper-API (Transkription) aufzurufen.
+*   **`src/utils/translation.js`:** Enthält die Funktion `translateText`, um die OpenAI-GPT-API (Übersetzung) aufzurufen.
+*   **`src/utils/ui.js`:** Enthält Hilfsfunktionen für die Verwaltung der Benutzeroberfläche (Banner, Dialogfenster, Kopierbutton).
+*   **`src/constants.js`:** Definiert Konstanten für Konfiguration, Zustände, Aktionen usw.
 *   **`src/pages/options/`:** Enthält die Dateien für die Optionsseite der Erweiterung (HTML, CSS, JavaScript).
 
-### Ablauf der Transkription und Übersetzung
+### Prozess der Transkription und Übersetzung
 
-1.  **Aufnahmestart:** Der Benutzer startet die Aufnahme, indem er auf das Erweiterungssymbol klickt oder die Tastenkombination verwendet. Das `background script` sendet eine Nachricht an das `content script`, um die Aufnahme zu starten.
-2.  **Audioaufnahme:** Das `content script` verwendet die API `navigator.mediaDevices.getUserMedia`, um auf das Mikrofon zuzugreifen und Audio aufzuzeichnen.
-3.  **Transkription:** Das `content script` verwendet die Funktion `transcribeAudio` (`src/utils/api.js`), um das Audio an die Whisper-API von OpenAI zu senden. Die API liefert den transkribierten Text zurück.
-4.  **Übersetzung (Optional):** Falls die Übersetzungsoption aktiviert ist, verwendet das `content script` die Funktion `translateText` (`src/utils/translation.js`), um den transkribierten Text an die GPT-API von OpenAI zu senden. Die API liefert den übersetzten Text zurück.
-5.  **Anzeige:** Das `content script` zeigt den transkribierten (und gegebenenfalls übersetzten) Text entweder im aktiven Element der Seite (wenn es sich um ein Texteingabefeld oder ein bearbeitbares Element handelt) oder in einem Dialogfeld an.
+1.  **Start der Aufnahme:** Der Benutzer startet die Aufnahme, indem er auf das Erweiterungssymbol klickt oder die Tastenkombination verwendet. Das `background script` sendet eine Nachricht an das `content script`, um die Aufnahme zu starten.
+2.  **Audioaufzeichnung:** Das `content script` verwendet die API `navigator.mediaDevices.getUserMedia`, um auf das Mikrofon zuzugreifen und das Audio aufzuzeichnen.
+3.  **Transkription:** Das `content script` nutzt die Funktion `transcribeAudio` (`src/utils/api.js`), um das Audio an die OpenAI-Whisper-API zu senden. Die API liefert den transkribierten Text zurück.
+4.  **Übersetzung (optional):** Falls die Übersetzungsoption aktiviert ist, verwendet das `content script` die Funktion `translateText` (`src/utils/translation.js`), um den transkribierten Text an die OpenAI-GPT-API zu senden. Die API liefert den übersetzten Text zurück.
+5.  **Anzeige:** Das `content script` zeigt den transkribierten (und gegebenenfalls übersetzten) Text entweder im aktiven Element der Seite (falls es sich um ein Texteingabefeld oder ein editierbares Element handelt) oder in einem Dialogfenster an.
 
 ### Kommunikation
 
-Die Kommunikation zwischen dem `background script` und dem `content script` erfolgt über die Chrome-Messaging-API (`chrome.runtime.sendMessage` und `chrome.runtime.onMessage`).
+Die Kommunikation zwischen dem `background script` und dem `content script` erfolgt über die Chrome-Nachrichten-API (`chrome.runtime.sendMessage` und `chrome.runtime.onMessage`).
 
 ### Datenspeicherung
 
 Die Erweiterung verwendet `chrome.storage.sync`, um zu speichern:
 
 *   Den OpenAI API-Schlüssel (`apiKey`).
-*   Die Optionen der Erweiterung (Anzeige, Übersetzung, Farben der Statusleiste usw.).
+*   Die Optionen der Erweiterung (Anzeige, Übersetzung, Farben des Statusbands usw.).
+
+Diese Daten werden lokal auf Ihrem Computer, im Chrome-Erweiterungsspeicher, abgelegt.
 
 ### Fehlerbehandlung
 
-Mögliche Fehler (fehlender API-Schlüssel, Transkriptionsfehler usw.) sind in der Datei `constants.js` definiert. Die Funktionen in `api.js` und `translation.js` behandeln eventuelle Fehler bei den API-Aufrufen. Das `content.js` zeigt Fehlermeldungen über ein Banner oben auf der Seite an.
+Mögliche Fehler (fehlender API-Schlüssel, Transkriptionsfehler usw.) sind in der Datei `constants.js` definiert. Die Funktionen in `api.js` und `translation.js` behandeln potenzielle Fehler bei den API-Aufrufen. Das `content.js` zeigt Fehlermeldungen über ein Banner oben auf der Seite an.
 
 ## 🛡️ Sicherheit und Datenschutz
 
@@ -132,34 +138,35 @@ Mögliche Fehler (fehlender API-Schlüssel, Transkriptionsfehler usw.) sind in d
   - Die Erweiterung speichert Ihre Audiodaten nicht; alle Verarbeitungen erfolgen in Echtzeit.
   - Die Kommunikation mit den APIs erfolgt über sichere HTTPS-Verbindungen.
 
+Für vollständige Informationen darüber, wie BabelFishAI Ihre Daten verwaltet, lesen Sie bitte unsere [Datenschutzerklärung](PRIVACY.md).
+
 ## 🔧 Fehlerbehebung
 
 - **Mikrofonprobleme:**
-  - Überprüfen Sie die Mikrofonzugriffsrechte in Chrome.
+  - Überprüfen Sie die Berechtigungen für den Mikrofonzugriff in Chrome.
   - Stellen Sie sicher, dass keine andere Anwendung das Mikrofon gleichzeitig verwendet.
 
-- **Transkriptions-/Übersetzungsfehler:**
-  - Überprüfen Sie, ob der API-Schlüssel gültig und aktiv ist.
-  - Stellen Sie sicher, dass eine stabile Internetverbindung besteht.
-  - Sehen Sie in der Chrome-Konsole nach, um detaillierte Logs im Fehlerfall zu erhalten.
+- **Fehler bei Transkription/Übersetzung:**
+  - Stellen Sie sicher, dass der API-Schlüssel gültig und aktiv ist.
+  - Vergewissern Sie sich, dass Sie eine stabile Internetverbindung haben.
+  - Konsultieren Sie die Chrome-Konsole, um detaillierte Protokolle im Fehlerfall zu erhalten.
 
 ## 🤝 Mitwirken
 
-Beiträge und Vorschläge sind willkommen. Um mitzuwirken:
-- Melden Sie Bugs über den Bereich Issues auf GitHub.
+Beiträge und Verbesserungsvorschläge sind willkommen. Um beizutragen:
+- Melden Sie Fehler über den Bereich „Issues“ auf GitHub.
 - Schlagen Sie Verbesserungen oder neue Funktionen vor.
 - Reichen Sie Ihre Pull Requests ein.
 
 ## 📄 Lizenz
 
-Diese Erweiterung wird unter der GNU Affero General Public License v3.0 (AGPL-3.0) vertrieben. Weitere Informationen finden Sie in der LICENSE-Datei.
+Diese Erweiterung wird unter der GNU Affero General Public License v3.0 (AGPL-3.0) vertrieben. Lesen Sie die Datei LICENSE für weitere Details.
 
 ## 💝 Unterstützung
 
-Wenn Sie diese Erweiterung schätzen, können Sie ihre Weiterentwicklung unterstützen, indem Sie über [PayPal](https://paypal.me/jls) spenden.
-
+Wenn Sie diese Erweiterung schätzen, können Sie ihre Entwicklung durch eine Spende über [PayPal](https://paypal.me/jls) unterstützen.
 ---
-Entwickelt von jls42.org mit Leidenschaft und Innovation, treibt Babel Fish AI die Transkription und Übersetzung mit modernster künstlicher Intelligenz in neue Dimensionen.
+Entwickelt von jls42.org mit Leidenschaft und Innovation, katapultiert Babel Fish AI die Transkription und Übersetzung dank modernster künstlicher Intelligenz in neue Dimensionen.
 
-**Dieses Dokument wurde von der fr-Version in die Sprache en mithilfe des Modells o3-mini übersetzt. Für weitere Informationen zum Übersetzungsprozess besuchen Sie https://gitlab.com/jls42/ai-powered-markdown-translator.**
+**Dieses Dokument wurde von der Version fr in die Sprache en mithilfe des o3-mini Modells übersetzt. Für weitere Informationen zum Übersetzungsprozess besuchen Sie https://gitlab.com/jls42/ai-powered-markdown-translator**
 

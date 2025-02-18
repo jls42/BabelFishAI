@@ -33,6 +33,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statusElement = document.getElementById('status');
     const interfaceLanguageSelect = document.getElementById('interfaceLanguage');
 
+    // Fonction pour valider une URL HTTPS
+    function isValidHttpsUrl(string) {
+        try {
+            const url = new URL(string);
+            return url.protocol === 'https:';
+        } catch (_) {
+            return false;
+        }
+    }
+
     // Initialiser la langue de l'interface
     const currentLang = await new Promise(resolve => {
         chrome.storage.sync.get({
@@ -122,6 +132,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             )
         };
 
+        // Validation des URL avant la sauvegarde
+        if ((apiUrlInput.value && !isValidHttpsUrl(apiUrlInput.value)) ||
+            (translationApiUrlInput.value && !isValidHttpsUrl(translationApiUrlInput.value))) {
+            showStatus('Erreur : Les URL des API personnalisées doivent utiliser HTTPS.', 'error');
+            return; // Empêche la sauvegarde
+        }
+
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
             populateAudioModelOptions();
@@ -134,6 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayForcedDomains(options.forcedDialogDomains);
         });
     }
+
 
     // Fonction pour remplir les options du modèle audio
     function populateAudioModelOptions() {

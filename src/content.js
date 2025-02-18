@@ -248,6 +248,9 @@
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
+        } finally {
+            audioChunks = [];
+            audioBlob = null;
         }
     }
 
@@ -362,6 +365,7 @@
      * @returns {boolean} Indique si l'insertion a réussi
      */
     function handleActiveElementInsertion(text) {
+        // IMPORTANT: Ne pas stocker le contenu de l'élément actif.
         const activeElement = document.activeElement;
         if (!activeElement || activeElement.tagName === 'IFRAME') {
             return false;
