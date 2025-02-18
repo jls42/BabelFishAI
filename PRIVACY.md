@@ -62,11 +62,11 @@ BabelFishAI ne stocke *aucune* donnée personnelle. Par conséquent, nous ne pou
 
 ## 9. Durée de Conservation
 
-**BabelFishAI ne conserve aucune donnée.** Les enregistrements audio sont transmis directement au service de transcription et ne sont pas conservés par l'extension. Bien que nous prenions toutes les mesures raisonnables pour supprimer immédiatement les données de la mémoire vive de l'extension, nous ne pouvons pas garantir l'absence totale de traces résiduelles dans la mémoire du navigateur Chrome, en raison du fonctionnement interne de Chrome. Votre clé API OpenAI est stockée localement sur votre ordinateur et n'est conservée que tant que vous utilisez l'extension et ne la supprimez pas manuellement.
+**BabelFishAI ne conserve aucune donnée.** Les enregistrements audio sont transmis directement au service de transcription et ne sont pas conservés par l'extension. Bien que nous prenions toutes les mesures raisonnables pour supprimer immédiatement les données de la mémoire vive de l'extension, nous ne pouvons pas garantir l'absence totale de traces résiduelles dans la mémoire du navigateur Chrome, en raison du fonctionnement interne de Chrome et de votre système d'exploitation. Votre clé API OpenAI est stockée localement sur votre ordinateur et n'est conservée que tant que vous utilisez l'extension et ne la supprimez pas manuellement.
 
 ## 10. Transferts Internationaux de Données
 
-Vos données (enregistrements vocaux et transcriptions) sont transférées aux États-Unis pour être traitées par OpenAI, si vous utilisez les paramètres par défaut. Ce transfert est encadré par les Clauses Contractuelles Types approuvées par la Commission européenne. Pour plus d'informations sur la manière dont OpenAI gère les données, y compris la conservation et la protection, veuillez consulter leur politique de confidentialité : [https://openai.com/policies/privacy-policy/](https://openai.com/policies/privacy-policy/) . Si vous utilisez un autre fournisseur, consultez sa politique de confidentialité.
+Vos données (enregistrements vocaux et transcriptions) sont transférées aux États-Unis pour être traitées par OpenAI, si vous utilisez les paramètres par défaut. Ce transfert est encadré par les Clauses Contractuelles Types approuvées par la Commission européenne. **Nous vous encourageons à consulter régulièrement la politique de confidentialité d'OpenAI** ([https://openai.com/policies/privacy-policy/](https://openai.com/policies/privacy-policy/)) pour vous tenir informé de leurs pratiques en matière de conservation et de protection des données. Si vous utilisez un autre fournisseur, consultez sa politique de confidentialité.
 
 ## 11. Responsable de Traitement et Contact
 
@@ -79,6 +79,18 @@ contact@jls42.org
 
 Vous avez le droit de déposer une plainte auprès de la CNIL si vous estimez que le traitement de vos données personnelles n'est pas conforme au RGPD.
 
-## 13. Modifications de cette Politique
+## 13. Conseils pour la Gestion de la Mémoire
+
+Bien que BabelFishAI ne conserve aucune donnée, voici quelques conseils généraux pour vider la mémoire de votre navigateur et de votre système :
+
+*   **Redémarrez Chrome:** Fermer et rouvrir Chrome efface la mémoire vive utilisée par le navigateur.
+*   **Redémarrez votre ordinateur:** Un redémarrage complet efface la mémoire vive de l'ensemble du système.
+*   **Utilisez les outils de Chrome:** Chrome dispose d'outils intégrés pour gérer la mémoire (chrome://memory-internals/ , mais leur utilisation est *très* technique).  En général, le redémarrage est plus simple et suffisant.
+* **Evitez d'utiliser des versions de Chrome qui ne sont plus maintenus et qui pourraient contenir des failles de sécurité**
+* **Utilisez un système d'exploitation récent**
+
+**Note:** Ces actions n'ont *pas* d'impact sur les données traitées par OpenAI (ou un autre fournisseur). Elles concernent uniquement la mémoire *locale* de votre ordinateur.
+
+## 14. Modifications de cette Politique
 
 Nous pouvons mettre à jour cette Politique de Confidentialité. Si nous apportons des modifications importantes, nous vous en informerons via les options de l'extension ou sur la page de l'extension dans le Chrome Web Store.
