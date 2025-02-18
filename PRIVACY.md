@@ -86,7 +86,7 @@ Bien que BabelFishAI ne conserve aucune donnée, voici quelques conseils génér
 *   **Redémarrez Chrome:** Fermer et rouvrir Chrome efface la mémoire vive utilisée par le navigateur.
 *   **Redémarrez votre ordinateur:** Un redémarrage complet efface la mémoire vive de l'ensemble du système.
 *   **Utilisez les outils de Chrome:** Chrome dispose d'outils intégrés pour gérer la mémoire (chrome://memory-internals/ , mais leur utilisation est *très* technique).  En général, le redémarrage est plus simple et suffisant.
-* **Evitez d'utiliser des versions de Chrome qui ne sont plus maintenus et qui pourraient contenir des failles de sécurité**
+* **Evitez d'utiliser des versions de Chrome qui ne sont plus maintenues et qui pourraient contenir des failles de sécurité**
 * **Utilisez un système d'exploitation récent**
 
 **Note:** Ces actions n'ont *pas* d'impact sur les données traitées par OpenAI (ou un autre fournisseur). Elles concernent uniquement la mémoire *locale* de votre ordinateur.
