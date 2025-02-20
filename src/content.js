@@ -1,6 +1,16 @@
-(function () {
+(async function () {
     if (window.__whisperContentScriptHasRun) return;
     window.__whisperContentScriptHasRun = true;
+
+    // Importer i18n.js dynamiquement
+    try {
+        await import(chrome.runtime.getURL('src/utils/i18n.js'));
+        // Initialisation après l'importation
+        window.BabelFishAIUtils.i18n.init();
+        console.log("Content script and i18n.js injected!");
+    } catch (error) {
+        console.error("Failed to import i18n.js:", error);
+    }
 
     // Content script de l'extension de transcription vocale
 
@@ -127,16 +137,24 @@
             setupMediaRecorderEvents(stream);
             mediaRecorder.start();
             isRecording = true;
-            showBanner("Enregistrement en cours...");
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRecording"));
             chrome.runtime.sendMessage({ action: ACTIONS.STARTED });
         } catch (error) {
             console.error("Error accessing microphone or API key:", error);
             if (error.message === ERRORS.API_KEY_NOT_FOUND) {
                 showBanner(ERRORS.API_KEY_NOT_FOUND, MESSAGE_TYPES.ERROR);
-            } else {
+            } else if (error.name === 'NotAllowedError') {
+                showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"), MESSAGE_TYPES.ERROR);
+            }
+            else {
                 showBanner(ERRORS.MIC_ACCESS_ERROR, MESSAGE_TYPES.ERROR);
             }
             chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: error.message });
+            isRecording = false;
+            if (typeof stream !== 'undefined') {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
         }
     }
 
@@ -151,7 +169,7 @@
 
         mediaRecorder.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            showBanner("Transcription en cours...");
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing"));
             try {
                 const transcription = await transcribeAudio(audioBlob);
                 showTranscription(transcription);
@@ -305,7 +323,7 @@
             let displayText = text;
             if (options.enableTranslation) {
                 try {
-                    showBanner("Traduction en cours...");
+                    showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
                     console.log('Translation params:', {
                         text,
                         sourceLang: options.sourceLanguage,
@@ -327,7 +345,7 @@
                     hideBanner();
                 } catch (error) {
                     console.error('Translation failed:', error);
-                    showBanner("Erreur de traduction", MESSAGE_TYPES.ERROR);
+                    showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), MESSAGE_TYPES.ERROR);
                     setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
                     // En cas d'erreur de traduction, on utilise le texte original
                     displayText = text;
@@ -482,6 +500,7 @@
     }
 
     /**
+    /**
      * Initialise la bannière d'état
      */
     function initBanner() {
@@ -491,10 +510,11 @@
         document.body.insertBefore(recordingBanner, document.body.firstChild);
         updateBannerColor();
     }
+    initBanner();
 
     /**
-     * Affiche la bannière avec un message
-     * @param {string} text - Le message à afficher
+    * Affiche la bannière avec un message
+    * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
@@ -550,8 +570,4 @@
             }
         }
     });
-    // Initialisation
-    initBanner(); // Initialise le bandeau mais ne l'affiche pas immédiatement
-    console.log("Content script injected!");
-
 })();

@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "녹음 중...",
+        "description": "녹음 중의 배너 메시지"
+    },
+    "bannerTranscribing": {
+        "message": "전사 중...",
+        "description": "전사 중의 배너 메시지"
+    },
+    "bannerTranslating": {
+        "message": "번역 중...",
+        "description": "번역 중의 배너 메시지"
+    },
+    "bannerMicAccessError": {
+        "message": "마이크에 접근할 수 없습니다: 이 사이트는 마이크 접근을 허용하지 않습니다.",
+        "description": "마이크 접근 오류에 대한 배너 메시지"
+    },
+    "bannerTranslationError": {
+        "message": "번역 오류",
+        "description": "번역 오류에 대한 배너 메시지"
+    },
+    "apiKeyNotFound": {
+        "message": "API 키가 설정되어 있지 않습니다. 확장 프로그램 옵션에서 설정하세요.",
+        "description": "API 키 미설정에 대한 배너 메시지"
+    },
+    "micAccessError": {
+        "message": "오류: 마이크를 사용할 수 없습니다.",
+        "description": "마이크 접근 오류 메시지"
     }
 }

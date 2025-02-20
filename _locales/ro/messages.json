@@ -235,6 +235,34 @@
         "message": "NoLog (doar LiteLLM)",
         "description": "Label for the NoLog option"
     },
+    "bannerRecording": {
+        "message": "Înregistrare în curs...",
+        "description": "Mesaj afișat în banner în timpul înregistrării"
+    },
+    "bannerTranscribing": {
+        "message": "Transcriere în curs...",
+        "description": "Mesaj afișat în banner în timpul transcrierii"
+    },
+    "bannerTranslating": {
+        "message": "Traducere în curs...",
+        "description": "Mesaj afișat în banner în timpul traducerii"
+    },
+    "bannerMicAccessError": {
+        "message": "Microfon indisponibil: acest site nu permite accesul la microfon.",
+        "description": "Mesaj de eroare pentru accesul la microfon"
+    },
+    "bannerTranslationError": {
+        "message": "Eroare de traducere",
+        "description": "Mesaj de eroare pentru traducere"
+    },
+    "apiKeyNotFound": {
+        "message": "Cheie API neconfigurată. Vă rugăm să o configurați în opțiunile extensiei.",
+        "description": "Mesaj de eroare pentru lipsa cheii API"
+    },
+    "micAccessError": {
+        "message": "Eroare: microfon indisponibil.",
+        "description": "Mesaj de eroare pentru microfon"
+    },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"

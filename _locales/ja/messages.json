@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "録音中...",
+        "description": "録音中のバナー表示メッセージ"
+    },
+    "bannerTranscribing": {
+        "message": "文字起こし中...",
+        "description": "文字起こし中のバナー表示メッセージ"
+    },
+    "bannerTranslating": {
+        "message": "翻訳中...",
+        "description": "翻訳中のバナー表示メッセージ"
+    },
+    "bannerMicAccessError": {
+        "message": "マイクが利用できません: このサイトはマイクアクセスを許可していません。",
+        "description": "マイクアクセスエラーのバナー表示メッセージ"
+    },
+    "bannerTranslationError": {
+        "message": "翻訳エラー",
+        "description": "翻訳エラーのバナー表示メッセージ"
+    },
+    "apiKeyNotFound": {
+        "message": "APIキーが設定されていません。拡張機能オプションで設定してください。",
+        "description": "APIキー未設定のバナー表示メッセージ"
+    },
+    "micAccessError": {
+        "message": "エラー: マイクが利用できません。",
+        "description": "マイクアクセスエラーのバナー表示メッセージ"
     }
 }
