@@ -235,6 +235,34 @@
         "message": "NoLog (tylko LiteLLM)",
         "description": "Label for the NoLog option"
     },
+    "bannerRecording": {
+        "message": "Trwa nagrywanie...",
+        "description": "Komunikat podczas nagrywania"
+    },
+    "bannerTranscribing": {
+        "message": "Trwa transkrypcja...",
+        "description": "Komunikat podczas transkrypcji"
+    },
+    "bannerTranslating": {
+        "message": "Trwa tłumaczenie...",
+        "description": "Komunikat podczas tłumaczenia"
+    },
+    "bannerMicAccessError": {
+        "message": "Mikrofon niedostępny: ta strona nie pozwala na dostęp do mikrofonu.",
+        "description": "Komunikat o błędzie dostępu do mikrofonu"
+    },
+    "bannerTranslationError": {
+        "message": "Błąd tłumaczenia",
+        "description": "Komunikat o błędzie tłumaczenia"
+    },
+    "apiKeyNotFound": {
+        "message": "Nie skonfigurowano klucza API. Skonfiguruj go w opcjach rozszerzenia.",
+        "description": "Komunikat o braku klucza API"
+    },
+    "micAccessError": {
+        "message": "Błąd: mikrofon niedostępny.",
+        "description": "Komunikat o błędzie mikrofonu"
+    },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"

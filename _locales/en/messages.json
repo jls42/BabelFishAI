@@ -8,7 +8,7 @@
         "description": "Extension description"
     },
     "optionsTitle": {
-        "message": "BabelFishAI Configuration",
+        "message": "BabelFishAI Settings",
         "description": "Options page title"
     },
     "languageSettingsTitle": {
@@ -37,11 +37,11 @@
     },
     "apiKeyInfo": {
         "message": "Get your API key at",
-        "description": "Information on obtaining API key"
+        "description": "Information about getting the API key"
     },
     "pricingInfo": {
         "message": "More information on pricing available at",
-        "description": "Pricing information"
+        "description": "Information about pricing"
     },
     "supportProject": {
         "message": "Support the project via PayPal",
@@ -133,11 +133,11 @@
     },
     "forcedDialogDomainsLabel": {
         "message": "Domains with forced dialog box:",
-        "description": "Label for forced dialog domains"
+        "description": "Label for forced domains"
     },
     "addDomainPlaceholder": {
         "message": "Example: chat.google.com",
-        "description": "Placeholder for adding domain"
+        "description": "Placeholder for adding a domain"
     },
     "addDomainButton": {
         "message": "Add",
@@ -145,7 +145,7 @@
     },
     "forcedDialogInfo": {
         "message": "On these domains, the transcription will always appear in a dialog box",
-        "description": "Information on forced dialog domains"
+        "description": "Information about forced domains"
     },
     "saveButton": {
         "message": "Save",
@@ -192,7 +192,7 @@
         "description": "Transcription section title"
     },
     "aiTranscriptionDesc": {
-        "message": "BabelFishAI uses cutting-edge artificial intelligence to transcribe your voice into text. The transcription process takes place in two steps.",
+        "message": "BabelFishAI uses state-of-the-art artificial intelligence to transcribe your voice into text. The transcription process takes place in two steps.",
         "description": "Transcription description"
     },
     "aiTranscriptionStep1": {
@@ -208,7 +208,7 @@
         "description": "AI translation section title"
     },
     "aiTranslationDesc": {
-        "message": "BabelFishAI can also automatically translate your transcriptions thanks to OpenAI's advanced AI. The transcribed text is analyzed and translated while preserving the meaning and context of your words.",
+        "message": "BabelFishAI can also automatically translate your transcriptions using OpenAI's advanced AI. The transcribed text is analyzed and translated while preserving the meaning and context of your words.",
         "description": "Translation description"
     },
     "authorSectionTitle": {
@@ -224,12 +224,12 @@
         "description": "Author's role"
     },
     "addModelPlaceholder": {
-        "message": "Add a model",
-        "description": "Placeholder for adding a model"
+        "message": "Add model",
+        "description": "Placeholder for model addition"
     },
     "addModelButton": {
         "message": "Add",
-        "description": "Button to add a model"
+        "description": "Button for adding a model"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM only)",
@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "Recording in progress...",
+        "description": "Banner message when recording"
+    },
+    "bannerTranscribing": {
+        "message": "Transcription in progress...",
+        "description": "Banner message when transcribing"
+    },
+    "bannerTranslating": {
+        "message": "Translation in progress...",
+        "description": "Banner message when translating"
+    },
+    "bannerMicAccessError": {
+        "message": "Microphone unavailable: this site does not allow access to the microphone.",
+        "description": "Banner message for microphone access error"
+    },
+    "bannerTranslationError": {
+        "message": "Translation error",
+        "description": "Banner message for translation error"
+    },
+    "apiKeyNotFound": {
+        "message": "API key not configured. Please configure it in the extension options.",
+        "description": "Banner message for API key not found"
+    },
+    "micAccessError": {
+        "message": "Error: microphone unavailable.",
+        "description": "Banner message for microphone access error"
     }
 }

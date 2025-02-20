@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "रिकॉर्डिंग चल रही है...",
+        "description": "रिकॉर्डिंग के दौरान दिखाया गया संदेश"
+    },
+    "bannerTranscribing": {
+        "message": "लिप्यंतरण चल रही है...",
+        "description": "लिप्यंतरण के दौरान दिखाया गया संदेश"
+    },
+    "bannerTranslating": {
+        "message": "अनुवाद चल रहा है...",
+        "description": "अनुवाद के दौरान दिखाया गया संदेश"
+    },
+    "bannerMicAccessError": {
+        "message": "माइक्रोफोन उपलब्ध नहीं: इस साइट को माइक्रोफोन तक पहुँच की अनुमति नहीं है।",
+        "description": "माइक्रोफोन त्रुटि संदेश"
+    },
+    "bannerTranslationError": {
+        "message": "अनुवाद त्रुटि",
+        "description": "अनुवाद त्रुटि संदेश"
+    },
+    "apiKeyNotFound": {
+        "message": "API कुंजी कॉन्फ़िगर नहीं की गई। कृपया इसे एक्सटेंशन विकल्पों में सेट करें।",
+        "description": "API कुंजी त्रुटि संदेश"
+    },
+    "micAccessError": {
+        "message": "त्रुटि: माइक्रोफोन उपलब्ध नहीं।",
+        "description": "माइक्रोफोन त्रुटि संदेश"
     }
 }

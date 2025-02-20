@@ -235,6 +235,34 @@
         "message": "NoLog (endast LiteLLM)",
         "description": "Label for the NoLog option"
     },
+    "bannerRecording": {
+        "message": "Inspelning pågår...",
+        "description": "Meddelande under inspelning"
+    },
+    "bannerTranscribing": {
+        "message": "Transkription pågår...",
+        "description": "Meddelande under transkription"
+    },
+    "bannerTranslating": {
+        "message": "Översättning pågår...",
+        "description": "Meddelande under översättning"
+    },
+    "bannerMicAccessError": {
+        "message": "Mikrofon ej tillgänglig: denna sida tillåter inte mikrofonåtkomst.",
+        "description": "Felmeddelande för mikrofonåtkomst"
+    },
+    "bannerTranslationError": {
+        "message": "Översättningsfel",
+        "description": "Felmeddelande för översättning"
+    },
+    "apiKeyNotFound": {
+        "message": "API-nyckel inte konfigurerad. Vänligen konfigurera den i tilläggsalternativen.",
+        "description": "Felmeddelande för saknad API-nyckel"
+    },
+    "micAccessError": {
+        "message": "Fel: Mikrofon ej tillgänglig.",
+        "description": "Felmeddelande för mikrofon"
+    },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"

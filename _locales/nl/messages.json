@@ -235,6 +235,34 @@
         "message": "NoLog (alleen LiteLLM)",
         "description": "Label for the NoLog option"
     },
+    "bannerRecording": {
+        "message": "Opname bezig...",
+        "description": "Bericht tijdens opname"
+    },
+    "bannerTranscribing": {
+        "message": "Transcriptie bezig...",
+        "description": "Bericht tijdens transcriptie"
+    },
+    "bannerTranslating": {
+        "message": "Vertaling bezig...",
+        "description": "Bericht tijdens vertaling"
+    },
+    "bannerMicAccessError": {
+        "message": "Microfoon niet beschikbaar: deze site staat geen toegang tot de microfoon toe.",
+        "description": "Foutmelding voor microfoon toegang"
+    },
+    "bannerTranslationError": {
+        "message": "Vertalingsfout",
+        "description": "Foutmelding voor vertaling"
+    },
+    "apiKeyNotFound": {
+        "message": "API-sleutel niet geconfigureerd. Configureer deze in de extensie-opties.",
+        "description": "Foutmelding voor ontbrekende API-sleutel"
+    },
+    "micAccessError": {
+        "message": "Fout: microfoon niet beschikbaar.",
+        "description": "Foutmelding voor microfoon toegang"
+    },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"

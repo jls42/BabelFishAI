@@ -14,7 +14,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function loadTranslations(lang) {
         try {
-            const response = await fetch(`/_locales/${lang}/messages.json`);
+            const response = await fetch(chrome.runtime.getURL(`_locales/${lang}/messages.json`));
             const data = await response.json();
             translations = data;
         } catch (error) {
@@ -160,14 +160,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Initialise l'internationalisation
      */
     async function init() {
-        // Charger la langue préférée depuis le stockage
-        const result = await chrome.storage.sync.get({
-            interfaceLanguage: chrome.i18n.getUILanguage() || 'fr'
-        });
+        // Charger la langue préférée depuis le stockage, utiliser getUILanguage comme fallback
+        const result = await chrome.storage.sync.get(['interfaceLanguage']);
+        const userLanguage = result.interfaceLanguage || chrome.i18n.getUILanguage();
 
         // Charger les traductions
-        await loadTranslations(result.interfaceLanguage);
-        currentLanguage = result.interfaceLanguage;
+        await loadTranslations(userLanguage);
+        currentLanguage = userLanguage;
 
         // Définir la langue sur l'élément HTML
         document.documentElement.lang = currentLanguage;

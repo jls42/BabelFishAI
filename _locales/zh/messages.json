@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "录音进行中...",
+        "description": "录音时横幅消息"
+    },
+    "bannerTranscribing": {
+        "message": "转录进行中...",
+        "description": "转录时横幅消息"
+    },
+    "bannerTranslating": {
+        "message": "翻译进行中...",
+        "description": "翻译时横幅消息"
+    },
+    "bannerMicAccessError": {
+        "message": "麦克风不可用：此网站不允许访问麦克风。",
+        "description": "麦克风访问错误的横幅消息"
+    },
+    "bannerTranslationError": {
+        "message": "翻译错误",
+        "description": "翻译错误的横幅消息"
+    },
+    "apiKeyNotFound": {
+        "message": "未配置 API 密钥。请在扩展选项中进行配置。",
+        "description": "缺少 API 密钥的横幅错误消息"
+    },
+    "micAccessError": {
+        "message": "错误：麦克风不可用。",
+        "description": "麦克风错误的横幅消息"
     }
 }

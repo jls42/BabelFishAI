@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "يتم التسجيل...",
+        "description": "رسالة الشعار أثناء التسجيل"
+    },
+    "bannerTranscribing": {
+        "message": "يتم النسخ...",
+        "description": "رسالة الشعار أثناء النسخ"
+    },
+    "bannerTranslating": {
+        "message": "يتم الترجمة...",
+        "description": "رسالة الشعار أثناء الترجمة"
+    },
+    "bannerMicAccessError": {
+        "message": "الميكروفون غير متاح: لا يسمح هذا الموقع بالوصول إلى الميكروفون.",
+        "description": "رسالة الشعار لخطأ الوصول إلى الميكروفون"
+    },
+    "bannerTranslationError": {
+        "message": "خطأ في الترجمة",
+        "description": "رسالة الشعار لخطأ الترجمة"
+    },
+    "apiKeyNotFound": {
+        "message": "لم يتم تكوين مفتاح API. الرجاء تكوينه في خيارات الامتداد.",
+        "description": "رسالة الشعار لعدم وجود مفتاح API"
+    },
+    "micAccessError": {
+        "message": "خطأ: الميكروفون غير متاح.",
+        "description": "رسالة الشعار لخطأ الميكروفون"
     }
 }

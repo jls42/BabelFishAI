@@ -238,5 +238,33 @@
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
+    },
+    "bannerRecording": {
+        "message": "Gravação em andamento...",
+        "description": "Mensagem do banner durante a gravação"
+    },
+    "bannerTranscribing": {
+        "message": "Transcrição em andamento...",
+        "description": "Mensagem do banner durante a transcrição"
+    },
+    "bannerTranslating": {
+        "message": "Tradução em andamento...",
+        "description": "Mensagem do banner durante a tradução"
+    },
+    "bannerMicAccessError": {
+        "message": "Microfone indisponível: este site não permite acesso ao microfone.",
+        "description": "Mensagem de erro de acesso ao microfone"
+    },
+    "bannerTranslationError": {
+        "message": "Erro de tradução",
+        "description": "Mensagem de erro de tradução"
+    },
+    "apiKeyNotFound": {
+        "message": "Chave API não configurada. Configure-a nas opções da extensão.",
+        "description": "Mensagem de falta de chave API"
+    },
+    "micAccessError": {
+        "message": "Erro: microfone indisponível.",
+        "description": "Mensagem de erro de microfone"
     }
 }

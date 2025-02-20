@@ -235,6 +235,34 @@
         "message": "NoLog (solo LiteLLM)",
         "description": "Label for the NoLog option"
     },
+    "bannerRecording": {
+        "message": "Grabación en curso...",
+        "description": "Mensaje del banner durante la grabación"
+    },
+    "bannerTranscribing": {
+        "message": "Transcripción en curso...",
+        "description": "Mensaje del banner durante la transcripción"
+    },
+    "bannerTranslating": {
+        "message": "Traducción en curso...",
+        "description": "Mensaje del banner durante la traducción"
+    },
+    "bannerMicAccessError": {
+        "message": "Micrófono no disponible: este sitio no permite el acceso al micrófono.",
+        "description": "Mensaje de error para acceso al micrófono"
+    },
+    "bannerTranslationError": {
+        "message": "Error de traducción",
+        "description": "Mensaje de error para traducción"
+    },
+    "apiKeyNotFound": {
+        "message": "Clave API no configurada. Por favor, configúrala en las opciones de la extensión.",
+        "description": "Mensaje de error por falta de clave API"
+    },
+    "micAccessError": {
+        "message": "Error: micrófono no disponible.",
+        "description": "Mensaje de error para el micrófono"
+    },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
