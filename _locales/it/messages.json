@@ -4,8 +4,40 @@
         "description": "Nome dell'estensione"
     },
     "extensionDescription": {
-        "message": "Trasforma la tua voce in testo con la trascrizione e la traduzione basate sull'IA",
+        "message": "Trasforma la tua voce in testo con trascrizione e traduzione basate sull'intelligenza artificiale",
         "description": "Descrizione dell'estensione"
+    },
+    "welcomeMessage": {
+        "message": "Grazie per aver installato BabelFishAI, l'estensione che trasforma la tua voce in testo con una precisione eccezionale grazie all'API Whisper di OpenAI, l'attuale leader nella trascrizione vocale.",
+        "description": "Messaggio di benvenuto"
+    },
+    "essentialSettingsTitle": {
+        "message": "Impostazioni Essenziali",
+        "description": "Titolo della sezione delle impostazioni essenziali"
+    },
+    "advancedSettingsTitle": {
+        "message": "Impostazioni Avanzate",
+        "description": "Titolo della sezione delle impostazioni avanzate"
+    },
+    "apiKeyConfigTitle": {
+        "message": "Chiave API OpenAI",
+        "description": "Titolo della sezione di configurazione della chiave API"
+    },
+    "shortcutInstructions": {
+        "message": "Per cambiare la scorciatoia, puoi:",
+        "description": "Istruzioni per le scorciatoie"
+    },
+    "shortcutOption1": {
+        "message": "Aprire le impostazioni delle estensioni di Chrome:",
+        "description": "Opzione 1 per cambiare la scorciatoia"
+    },
+    "shortcutOption2": {
+        "message": "Oppure digitare nella barra degli indirizzi:",
+        "description": "Opzione 2 per cambiare la scorciatoia"
+    },
+    "shortcutSteps": {
+        "message": "Quindi:<br>1. Trova BabelFishAI nell'elenco<br>2. Clicca sul campo della scorciatoia corrente<br>3. Premi la nuova combinazione di tasti",
+        "description": "Passaggi per cambiare la scorciatoia"
     },
     "optionsTitle": {
         "message": "Configurazione di BabelFishAI",
@@ -27,10 +59,6 @@
         "message": "Opzioni salvate!",
         "description": "Messaggio di conferma del salvataggio"
     },
-    "apiConfigTitle": {
-        "message": "Configurazione dell'API",
-        "description": "Titolo della sezione API"
-    },
     "apiKeyPlaceholder": {
         "message": "La tua chiave API OpenAI (sk-...)",
         "description": "Segnaposto per la chiave API"
@@ -39,8 +67,12 @@
         "message": "Ottieni la tua chiave API su",
         "description": "Informazioni sull'ottenimento della chiave API"
     },
+    "apiKeyHelp": {
+        "message": "Per utilizzare BabelFishAI, devi inserire la tua chiave API OpenAI. Questa chiave è necessaria per accedere ai servizi di trascrizione e traduzione.",
+        "description": "Aiuto per la chiave API"
+    },
     "pricingInfo": {
-        "message": "Maggiori informazioni sui prezzi disponibili su",
+        "message": "Maggiori informazioni sui prezzi (modelli predefiniti: {defaultAudioModel} per l'audio e {defaultTranslationModel} per la traduzione) disponibili su",
         "description": "Informazioni sui prezzi"
     },
     "supportProject": {
@@ -56,39 +88,67 @@
         "description": "URL predefinito dell'API di traduzione"
     },
     "displaySettingsTitle": {
-        "message": "Impostazioni di visualizzazione",
+        "message": "Impostazioni di Visualizzazione",
         "description": "Titolo delle impostazioni di visualizzazione"
     },
     "activeDisplayLabel": {
         "message": "Area attiva (input da tastiera)",
         "description": "Etichetta per la visualizzazione attiva"
     },
+    "activeDisplayDescription": {
+        "message": "Se abilitato, il testo trascritto/tradotto verrà inserito direttamente nel campo di testo in cui stai digitando.",
+        "description": "Descrizione dell'opzione di visualizzazione attiva"
+    },
     "dialogDisplayLabel": {
         "message": "Finestra di dialogo",
-        "description": "Etichetta per la visualizzazione nella finestra di dialogo"
+        "description": "Etichetta per la visualizzazione in finestra di dialogo"
+    },
+    "dialogDisplayDescription": {
+        "message": "Se abilitato, il testo trascritto/tradotto apparirà in una finestra di dialogo mobile.",
+        "description": "Descrizione dell'opzione di visualizzazione in finestra di dialogo"
     },
     "dialogDurationLabel": {
         "message": "Durata di visualizzazione della finestra di dialogo (secondi):",
         "description": "Etichetta per la durata della finestra di dialogo"
     },
+    "dialogDurationDescription": {
+        "message": "Imposta per quanto tempo la finestra di dialogo rimane visibile prima di scomparire automaticamente.",
+        "description": "Descrizione della durata della finestra di dialogo"
+    },
     "bannerColorsLabel": {
         "message": "Colori del banner di stato:",
         "description": "Etichetta per i colori del banner"
+    },
+    "bannerColorsDescription": {
+        "message": "Colori del banner che appare nella parte inferiore dello schermo durante la registrazione, la trascrizione e la traduzione.",
+        "description": "Descrizione dei colori del banner"
     },
     "startColorLabel": {
         "message": "Colore iniziale:",
         "description": "Etichetta per il colore iniziale"
     },
+    "startColorDescription": {
+        "message": "Colore iniziale del gradiente del banner.",
+        "description": "Descrizione del colore iniziale"
+    },
     "endColorLabel": {
         "message": "Colore finale:",
         "description": "Etichetta per il colore finale"
+    },
+    "endColorDescription": {
+        "message": "Colore finale del gradiente del banner.",
+        "description": "Descrizione del colore finale"
     },
     "opacityLabel": {
         "message": "% Opacità",
         "description": "Etichetta per l'opacità"
     },
+    "opacityDescription": {
+        "message": "Imposta la trasparenza del banner (0% = invisibile, 100% = opaco).",
+        "description": "Descrizione dell'opacità"
+    },
     "translationTitle": {
-        "message": "Traduzione integrata con IA",
+        "message": "Traduzione IA Integrata",
         "description": "Titolo della sezione di traduzione"
     },
     "enableTranslationLabel": {
@@ -103,6 +163,10 @@
         "message": "Lingua di destinazione:",
         "description": "Etichetta per la lingua di destinazione"
     },
+    "translationExplanation": {
+        "message": "La funzione di traduzione IA integrata ti consente di ottenere una traduzione automatica del tuo testo trascritto.<br>Per fare ciò:<br><ul><li>Lingua di origine: seleziona la lingua che parli nel microfono.</li><li>Lingua di destinazione: scegli la lingua in cui desideri che il tuo testo sia tradotto.</li></ul>Queste impostazioni influiscono solo sulla traduzione, non sulla trascrizione. Se disabiliti la traduzione automatica, il tuo testo trascritto sarà nella lingua parlata nel microfono.",
+        "description": "Spiegazione della sezione di traduzione"
+    },
     "expertModeTitle": {
         "message": "Modalità Esperto",
         "description": "Titolo della modalità esperto"
@@ -111,29 +175,49 @@
         "message": "Abilita la modalità esperto",
         "description": "Etichetta per abilitare la modalità esperto"
     },
-    "advancedConfigTitle": {
-        "message": "Configurazione Avanzata",
-        "description": "Titolo della configurazione avanzata"
+    "enableExpertModeDescription": {
+        "message": "Sblocca opzioni di configurazione avanzate per utenti esperti.",
+        "description": "Descrizione dell'opzione della modalità esperto"
     },
     "translationModelLabel": {
         "message": "Modello di traduzione:",
         "description": "Etichetta per il modello di traduzione"
     },
+    "translationModelDescription": {
+        "message": "Scegli il modello di IA utilizzato per la traduzione. `gpt-4o-mini` è il modello predefinito (miglior rapporto qualità/prezzo). `gpt-4o` offre una qualità superiore ma è più costoso.",
+        "description": "Descrizione del modello di traduzione"
+    },
     "audioModelLabel": {
         "message": "Modello audio:",
         "description": "Etichetta per il modello audio"
+    },
+    "audioModelDescription": {
+        "message": "Scegli il modello di IA utilizzato per la trascrizione audio. `whisper-1` è il modello predefinito.",
+        "description": "Descrizione del modello audio"
     },
     "whisperApiUrlLabel": {
         "message": "URL dell'API Whisper:",
         "description": "Etichetta per l'URL dell'API Whisper"
     },
+    "whisperApiUrlDescription": {
+        "message": "Consente di specificare un URL personalizzato per l'API di trascrizione Whisper (per utenti avanzati).",
+        "description": "Descrizione dell'URL dell'API Whisper"
+    },
     "translationApiUrlLabel": {
         "message": "URL dell'API di traduzione:",
         "description": "Etichetta per l'URL dell'API di traduzione"
     },
+    "translationApiUrlDescription": {
+        "message": "Consente di specificare un URL personalizzato per l'API di traduzione (per utenti avanzati).",
+        "description": "Descrizione dell'URL dell'API di traduzione"
+    },
     "forcedDialogDomainsLabel": {
         "message": "Domini con finestra di dialogo forzata:",
         "description": "Etichetta per i domini forzati"
+    },
+    "forcedDialogDomainsDescription": {
+        "message": "Elenco dei siti web in cui la trascrizione apparirà *sempre* in una finestra di dialogo, anche se l'opzione 'Area attiva' è selezionata.",
+        "description": "Descrizione dei domini forzati"
     },
     "addDomainPlaceholder": {
         "message": "Esempio: chat.google.com",
@@ -143,6 +227,10 @@
         "message": "Aggiungi",
         "description": "Pulsante per aggiungere un dominio"
     },
+    "addDomainDescription": {
+        "message": "Aggiunge un dominio all'elenco.",
+        "description": "Descrizione dell'aggiunta di un dominio"
+    },
     "forcedDialogInfo": {
         "message": "Su questi domini, la trascrizione apparirà sempre in una finestra di dialogo",
         "description": "Informazioni sui domini forzati"
@@ -151,65 +239,9 @@
         "message": "Salva",
         "description": "Pulsante di salvataggio"
     },
-    "userGuideTitle": {
-        "message": "Guida per l'Utente",
-        "description": "Titolo della guida per l'utente"
-    },
-    "userGuideStep1": {
-        "message": "Fai clic sull'icona di BabelFishAI o utilizza la scorciatoia da tastiera per avviare la registrazione",
-        "description": "Passaggio 1 della guida"
-    },
-    "userGuideStep2": {
-        "message": "Parla chiaramente nel tuo microfono",
-        "description": "Passaggio 2 della guida"
-    },
-    "userGuideStep3": {
-        "message": "Fai di nuovo clic o utilizza la scorciatoia per interrompere la registrazione",
-        "description": "Passaggio 3 della guida"
-    },
-    "userGuideStep4": {
-        "message": "La trascrizione apparirà in base alle tue preferenze configurate",
-        "description": "Passaggio 4 della guida"
-    },
-    "userGuideStep5": {
-        "message": "Utilizza il pulsante \"Copia\" per copiare il testo negli appunti",
-        "description": "Passaggio 5 della guida"
-    },
     "shortcutsTitle": {
-        "message": "Scorciatoie da Tastiera",
+        "message": "Istruzioni per l'uso",
         "description": "Titolo delle scorciatoie"
-    },
-    "shortcutStartStop": {
-        "message": "Per avviare/interrompere la registrazione:",
-        "description": "Descrizione della scorciatoia principale"
-    },
-    "shortcutKeys": {
-        "message": "Ctrl+Shift+1 (⌘+Shift+1 su Mac)",
-        "description": "Descrizione dei tasti di scelta rapida"
-    },
-    "aiTranscriptionTitle": {
-        "message": "Trascrizione Assistita dall'IA",
-        "description": "Titolo della sezione di trascrizione"
-    },
-    "aiTranscriptionDesc": {
-        "message": "BabelFishAI utilizza l'intelligenza artificiale all'avanguardia per trascrivere la tua voce in testo. Il processo di trascrizione si svolge in due passaggi.",
-        "description": "Descrizione della trascrizione"
-    },
-    "aiTranscriptionStep1": {
-        "message": "La tua voce viene registrata tramite il microfono del tuo dispositivo",
-        "description": "Passaggio 1 della trascrizione"
-    },
-    "aiTranscriptionStep2": {
-        "message": "La registrazione viene analizzata dall'IA Whisper per produrre una trascrizione accurata",
-        "description": "Passaggio 2 della trascrizione"
-    },
-    "aiTranslationTitle": {
-        "message": "Traduzione Assistita dall'IA",
-        "description": "Titolo della sezione di traduzione IA"
-    },
-    "aiTranslationDesc": {
-        "message": "BabelFishAI può anche tradurre automaticamente le tue trascrizioni grazie all'IA avanzata di OpenAI. Il testo trascritto viene analizzato e tradotto preservando il significato e il contesto delle tue parole.",
-        "description": "Descrizione della traduzione"
     },
     "authorSectionTitle": {
         "message": "Informazioni sull'Autore",
@@ -224,47 +256,115 @@
         "description": "Ruolo dell'autore"
     },
     "addModelPlaceholder": {
-        "message": "Aggiungi un modello",
+        "message": "Aggiungi modello",
         "description": "Segnaposto per l'aggiunta di un modello"
     },
     "addModelButton": {
         "message": "Aggiungi",
         "description": "Pulsante per aggiungere un modello"
     },
+    "addModelDescription": {
+        "message": "Consente di aggiungere un modello personalizzato (per utenti avanzati).",
+        "description": "Descrizione dell'aggiunta di un modello"
+    },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
         "description": "Label for the NoLog option"
+    },
+    "noLogDescription": {
+        "message": "Se selezionato, nessun dato verrà conservato dal servizio LiteLLM.",
+        "description": "Description of the NoLog option"
     },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
     },
     "bannerRecording": {
-        "message": "Registrazione in corso...",
-        "description": "Messaggio nel banner durante la registrazione"
+        "message": "Registrazione in corso... (Fai clic sull'icona o usa la scorciatoia per interrompere)",
+        "description": "Messaggio del banner durante la registrazione"
     },
     "bannerTranscribing": {
         "message": "Trascrizione in corso...",
-        "description": "Messaggio nel banner durante la trascrizione"
+        "description": "Messaggio del banner durante la trascrizione"
     },
     "bannerTranslating": {
         "message": "Traduzione in corso...",
-        "description": "Messaggio nel banner durante la traduzione"
+        "description": "Messaggio del banner durante la traduzione"
     },
     "bannerMicAccessError": {
-        "message": "Microfono non disponibile: questo sito non consente l'accesso al microfono.",
-        "description": "Messaggio di errore per accesso al microfono"
+        "message": "Errore: accesso al microfono negato.",
+        "description": "Messaggio di errore per l'accesso al microfono"
     },
     "bannerTranslationError": {
-        "message": "Errore di traduzione",
+        "message": "Errore durante la traduzione.",
         "description": "Messaggio di errore per la traduzione"
     },
-    "apiKeyNotFound": {
-        "message": "Chiave API non configurata. Configurala nelle opzioni dell'estensione.",
-        "description": "Messaggio per chiave API mancante"
+    "useBabelFishInstructions": {
+        "message": "Per utilizzare BabelFish AI:<br><br>1. Vai a un sito web (ad esempio, la tua webmail o un sito di chat della tua IA preferita, come <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat di Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Aggiungi l'icona dell'estensione per un facile accesso.<br>3. Avvia/arresta la registrazione:<br>    * Fai clic sull'icona dell'estensione <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br>    * Parla nel tuo microfono.<br>    * Fai di nuovo clic sull'icona <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br>    * La trascrizione apparirà nell'area di testo attiva o in una finestra di dialogo.<br><br>Scorciatoie da tastiera:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "Istruzioni per l'utilizzo dell'estensione"
     },
-    "micAccessError": {
-        "message": "Errore: microfono non disponibile.",
-        "description": "Messaggio di errore per il microfono"
+    "defaultWhisperApiUrl": {
+        "message": "URL predefinito: https://api.openai.com/v1/audio/transcriptions",
+        "description": "URL predefinito per l'API Whisper"
+    },
+    "defaultTranslationApiUrl": {
+        "message": "URL predefinito: https://api.openai.com/v1/chat/completions",
+        "description": "URL predefinito per l'API di traduzione"
+    },
+    "API_KEY_NOT_FOUND": {
+        "message": "Chiave API non configurata. Si prega di configurarla nelle opzioni dell'estensione.",
+        "description": "Messaggio di errore: chiave API mancante"
+    },
+    "CHROME_STORAGE_ERROR": {
+        "message": "Errore di archiviazione di Chrome",
+        "description": "Messaggio di errore: problema di archiviazione"
+    },
+    "MIC_ACCESS_ERROR": {
+        "message": "Errore: microfono non accessibile.",
+        "description": "Messaggio di errore: accesso al microfono"
+    },
+    "TRANSCRIPTION_ERROR": {
+        "message": "Errore durante la trascrizione",
+        "description": "Messaggio di errore: trascrizione"
+    },
+    "TRANSLATION_ERROR": {
+        "message": "Errore durante la traduzione",
+        "description": "Messaggio di errore: traduzione"
+    },
+    "NO_EDITABLE_ELEMENT": {
+        "message": "Nessun elemento modificabile trovato",
+        "description": "Messaggio di errore: nessun elemento modificabile"
+    },
+    "CONTENT_SCRIPT_INJECTION_ERROR": {
+        "message": "Errore durante l'iniezione dello script di contenuto",
+        "description": "Messaggio di errore: iniezione dello script"
+    },
+    "NO_ACTIVE_TAB": {
+        "message": "Nessuna scheda attiva trovata",
+        "description": "Messaggio di errore: nessuna scheda attiva"
+    },
+    "MISSING_TRANSLATION_PARAMS": {
+        "message": "Parametri di traduzione mancanti",
+        "description": "Messaggio di errore: parametri di traduzione"
+    },
+    "INVALID_TRANSLATION_RESPONSE": {
+        "message": "Formato della risposta di traduzione non valido",
+        "description": "Messaggio di errore: risposta di traduzione"
+    },
+    "shortcutChangeInstructions": {
+        "message": "⚙️ Estensioni > ⌨️ Scorciatoie da tastiera",
+        "description": "Istruzioni per cambiare la scorciatoia da tastiera"
+    },
+    "defaultModel": {
+        "message": "predefinito",
+        "description": "Indica il modello predefinito"
+    },
+    "defaultAudioModel": {
+        "message": "whisper-1",
+        "description": "Modello audio predefinito"
+    },
+    "defaultTranslationModel": {
+        "message": "gpt-4o-mini",
+        "description": "Modello di traduzione predefinito"
     }
 }
