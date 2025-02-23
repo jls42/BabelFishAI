@@ -1,19 +1,51 @@
 {
     "extensionName": {
-        "message": "BabelFishAI by jls42.org",
-        "description": "扩展名称"
+        "message": "jls42.org 出品的 BabelFishAI",
+        "description": "扩展程序名称"
     },
     "extensionDescription": {
-        "message": "通过人工智能驱动的转录和翻译将您的声音转换为文本",
-        "description": "扩展描述"
+        "message": "通过 AI 驱动的转录和翻译将您的语音转换为文本",
+        "description": "扩展程序描述"
+    },
+    "welcomeMessage": {
+        "message": "感谢您安装 BabelFishAI，这款扩展程序借助 OpenAI 的 Whisper API（当前语音转录领域的领导者）将您的语音以极高的准确度转换为文本。",
+        "description": "欢迎消息"
+    },
+    "essentialSettingsTitle": {
+        "message": "基本设置",
+        "description": "基本设置部分的标题"
+    },
+    "advancedSettingsTitle": {
+        "message": "高级设置",
+        "description": "高级设置部分的标题"
+    },
+    "apiKeyConfigTitle": {
+        "message": "OpenAI API 密钥",
+        "description": "API 密钥配置部分的标题"
+    },
+    "shortcutInstructions": {
+        "message": "要更改快捷方式，您可以：",
+        "description": "快捷方式说明"
+    },
+    "shortcutOption1": {
+        "message": "打开 Chrome 扩展程序设置：",
+        "description": "更改快捷方式的选项 1"
+    },
+    "shortcutOption2": {
+        "message": "或在地址栏中输入：",
+        "description": "更改快捷方式的选项 2"
+    },
+    "shortcutSteps": {
+        "message": "然后：<br>1. 在列表中找到 BabelFishAI<br>2. 单击当前快捷方式字段<br>3. 按下新的组合键",
+        "description": "更改快捷方式的步骤"
     },
     "optionsTitle": {
         "message": "BabelFishAI 配置",
-        "description": "选项页面标题"
+        "description": "选项页面的标题"
     },
     "languageSettingsTitle": {
         "message": "界面语言",
-        "description": "语言部分标题"
+        "description": "语言部分的标题"
     },
     "selectLanguageLabel": {
         "message": "选择语言：",
@@ -27,20 +59,20 @@
         "message": "选项已保存！",
         "description": "保存确认消息"
     },
-    "apiConfigTitle": {
-        "message": "API 配置",
-        "description": "API 部分标题"
-    },
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥 (sk-...)",
         "description": "API 密钥占位符"
     },
     "apiKeyInfo": {
-        "message": "获取您的 API 密钥：",
+        "message": "获取您的 API 密钥",
         "description": "获取 API 密钥的信息"
     },
+    "apiKeyHelp": {
+        "message": "要使用 BabelFishAI，您必须输入您的 OpenAI API 密钥。此密钥是访问转录和翻译服务所必需的。",
+        "description": "API 密钥帮助"
+    },
     "pricingInfo": {
-        "message": "有关定价的更多信息，请访问",
+        "message": "有关定价的更多信息（默认模型：音频为 {defaultAudioModel}，翻译为 {defaultTranslationModel}）可在以下位置找到",
         "description": "定价信息"
     },
     "supportProject": {
@@ -49,11 +81,11 @@
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "默认 Whisper API URL"
+        "description": "Whisper API 的默认 URL"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "默认翻译 API URL"
+        "description": "翻译 API 的默认 URL"
     },
     "displaySettingsTitle": {
         "message": "显示设置",
@@ -63,32 +95,60 @@
         "message": "活动区域（键盘输入）",
         "description": "活动显示标签"
     },
+    "activeDisplayDescription": {
+        "message": "如果启用，转录/翻译的文本将直接插入到您正在键入的文本字段中。",
+        "description": "活动显示选项说明"
+    },
     "dialogDisplayLabel": {
         "message": "对话框",
         "description": "对话框显示标签"
+    },
+    "dialogDisplayDescription": {
+        "message": "如果启用，转录/翻译的文本将出现在浮动对话框中。",
+        "description": "对话框显示选项说明"
     },
     "dialogDurationLabel": {
         "message": "对话框显示持续时间（秒）：",
         "description": "对话框持续时间标签"
     },
+    "dialogDurationDescription": {
+        "message": "设置对话框在自动消失之前保持可见的时间。",
+        "description": "对话框持续时间说明"
+    },
     "bannerColorsLabel": {
-        "message": "状态横幅颜色：",
+        "message": "状态栏颜色：",
         "description": "横幅颜色标签"
+    },
+    "bannerColorsDescription": {
+        "message": "录制、转录和翻译期间出现在屏幕底部的横幅颜色。",
+        "description": "横幅颜色说明"
     },
     "startColorLabel": {
         "message": "开始颜色：",
         "description": "开始颜色标签"
     },
+    "startColorDescription": {
+        "message": "横幅渐变的起始颜色。",
+        "description": "开始颜色说明"
+    },
     "endColorLabel": {
         "message": "结束颜色：",
         "description": "结束颜色标签"
+    },
+    "endColorDescription": {
+        "message": "横幅渐变的结束颜色。",
+        "description": "结束颜色说明"
     },
     "opacityLabel": {
         "message": "% 不透明度",
         "description": "不透明度标签"
     },
+    "opacityDescription": {
+        "message": "设置横幅的透明度（0% = 不可见，100% = 不透明）。",
+        "description": "不透明度说明"
+    },
     "translationTitle": {
-        "message": "集成人工智能翻译",
+        "message": "集成 AI 翻译",
         "description": "翻译部分标题"
     },
     "enableTranslationLabel": {
@@ -103,6 +163,10 @@
         "message": "目标语言：",
         "description": "目标语言标签"
     },
+    "translationExplanation": {
+        "message": "集成的 AI 翻译功能允许您获取转录文本的自动翻译。<br>为此：<br><ul><li>源语言：选择您对着麦克风说话的语言。</li><li>目标语言：选择您希望将文本翻译成的语言。</li></ul>这些设置仅影响翻译，不影响转录。如果您禁用自动翻译，您的转录文本将使用对着麦克风说话的语言。",
+        "description": "翻译部分说明"
+    },
     "expertModeTitle": {
         "message": "专家模式",
         "description": "专家模式标题"
@@ -111,29 +175,49 @@
         "message": "启用专家模式",
         "description": "启用专家模式标签"
     },
-    "advancedConfigTitle": {
-        "message": "高级配置",
-        "description": "高级配置标题"
+    "enableExpertModeDescription": {
+        "message": "为有经验的用户解锁高级配置选项。",
+        "description": "专家模式选项说明"
     },
     "translationModelLabel": {
         "message": "翻译模型：",
         "description": "翻译模型标签"
     },
+    "translationModelDescription": {
+        "message": "选择用于翻译的 AI 模型。`gpt-4o-mini` 是默认模型（最佳性价比）。`gpt-4o` 提供更高的质量，但更昂贵。",
+        "description": "翻译模型说明"
+    },
     "audioModelLabel": {
         "message": "音频模型：",
         "description": "音频模型标签"
+    },
+    "audioModelDescription": {
+        "message": "选择用于音频转录的 AI 模型。`whisper-1` 是默认模型。",
+        "description": "音频模型说明"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL：",
         "description": "Whisper API URL 标签"
     },
+    "whisperApiUrlDescription": {
+        "message": "允许为 Whisper 转录 API 指定自定义 URL（适用于高级用户）。",
+        "description": "Whisper API URL 说明"
+    },
     "translationApiUrlLabel": {
         "message": "翻译 API URL：",
         "description": "翻译 API URL 标签"
     },
+    "translationApiUrlDescription": {
+        "message": "允许为翻译 API 指定自定义 URL（适用于高级用户）。",
+        "description": "翻译 API URL 说明"
+    },
     "forcedDialogDomainsLabel": {
         "message": "强制对话框域：",
-        "description": "强制对话框域标签"
+        "description": "强制域标签"
+    },
+    "forcedDialogDomainsDescription": {
+        "message": "即使选择了“活动区域”选项，转录也*始终*在对话框中显示的网站列表。",
+        "description": "强制域说明"
     },
     "addDomainPlaceholder": {
         "message": "示例：chat.google.com",
@@ -143,80 +227,28 @@
         "message": "添加",
         "description": "添加域按钮"
     },
+    "addDomainDescription": {
+        "message": "将域添加到列表。",
+        "description": "添加域说明"
+    },
     "forcedDialogInfo": {
         "message": "在这些域上，转录将始终显示在对话框中",
-        "description": "强制对话框域信息"
+        "description": "强制域信息"
     },
     "saveButton": {
         "message": "保存",
         "description": "保存按钮"
     },
-    "userGuideTitle": {
-        "message": "用户指南",
-        "description": "用户指南标题"
-    },
-    "userGuideStep1": {
-        "message": "单击 BabelFishAI 图标或使用键盘快捷键开始录制",
-        "description": "指南的第 1 步"
-    },
-    "userGuideStep2": {
-        "message": "清晰地对着麦克风讲话",
-        "description": "指南的第 2 步"
-    },
-    "userGuideStep3": {
-        "message": "再次单击或使用快捷方式停止录制",
-        "description": "指南的第 3 步"
-    },
-    "userGuideStep4": {
-        "message": "转录将根据您配置的首选项显示",
-        "description": "指南的第 4 步"
-    },
-    "userGuideStep5": {
-        "message": "使用“复制”按钮将文本复制到剪贴板",
-        "description": "指南的第 5 步"
-    },
     "shortcutsTitle": {
-        "message": "键盘快捷键",
+        "message": "使用说明",
         "description": "快捷方式标题"
-    },
-    "shortcutStartStop": {
-        "message": "开始/停止录制：",
-        "description": "主要快捷方式描述"
-    },
-    "shortcutKeys": {
-        "message": "Ctrl+Shift+1 (Mac 上为 ⌘+Shift+1)",
-        "description": "快捷键描述"
-    },
-    "aiTranscriptionTitle": {
-        "message": "人工智能辅助转录",
-        "description": "转录部分标题"
-    },
-    "aiTranscriptionDesc": {
-        "message": "BabelFishAI 使用尖端人工智能将您的声音转录为文本。转录过程分两步进行。",
-        "description": "转录描述"
-    },
-    "aiTranscriptionStep1": {
-        "message": "您的声音通过设备的麦克风录制",
-        "description": "转录的第 1 步"
-    },
-    "aiTranscriptionStep2": {
-        "message": "录音由 Whisper AI 分析以生成准确的转录",
-        "description": "转录的第 2 步"
-    },
-    "aiTranslationTitle": {
-        "message": "人工智能辅助翻译",
-        "description": "人工智能翻译部分标题"
-    },
-    "aiTranslationDesc": {
-        "message": "BabelFishAI 还可以借助 OpenAI 的高级人工智能自动翻译您的转录。转录的文本会被分析和翻译，同时保留您话语的含义和上下文。",
-        "description": "翻译描述"
     },
     "authorSectionTitle": {
         "message": "关于作者",
         "description": "作者部分标题"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "朱利安·LS",
         "description": "作者姓名"
     },
     "authorRole": {
@@ -231,40 +263,108 @@
         "message": "添加",
         "description": "添加模型按钮"
     },
+    "addModelDescription": {
+        "message": "允许添加自定义模型（适用于高级用户）。",
+        "description": "添加模型说明"
+    },
     "noLogLabel": {
-        "message": "NoLog (仅限 LiteLLM)",
-        "description": "Label for the NoLog option"
+        "message": "NoLog（仅限 LiteLLM）",
+        "description": "NoLog 选项标签"
+    },
+    "noLogDescription": {
+        "message": "如果选中，LiteLLM 服务将不会保留任何数据。",
+        "description": "NoLog 选项说明"
     },
     "githubLink": {
         "message": "GitHub",
         "description": "GitHub link text"
     },
     "bannerRecording": {
-        "message": "录音进行中...",
-        "description": "录音时横幅消息"
+        "message": "录制中...（单击图标或使用快捷方式停止）",
+        "description": "录制期间的横幅消息"
     },
     "bannerTranscribing": {
-        "message": "转录进行中...",
-        "description": "转录时横幅消息"
+        "message": "转录中...",
+        "description": "转录期间的横幅消息"
     },
     "bannerTranslating": {
-        "message": "翻译进行中...",
-        "description": "翻译时横幅消息"
+        "message": "翻译中...",
+        "description": "翻译期间的横幅消息"
     },
     "bannerMicAccessError": {
-        "message": "麦克风不可用：此网站不允许访问麦克风。",
-        "description": "麦克风访问错误的横幅消息"
+        "message": "错误：麦克风访问被拒绝。",
+        "description": "麦克风访问错误消息"
     },
     "bannerTranslationError": {
-        "message": "翻译错误",
-        "description": "翻译错误的横幅消息"
+        "message": "翻译期间出错。",
+        "description": "翻译错误消息"
     },
-    "apiKeyNotFound": {
-        "message": "未配置 API 密钥。请在扩展选项中进行配置。",
-        "description": "缺少 API 密钥的横幅错误消息"
+    "useBabelFishInstructions": {
+        "message": "要使用 BabelFish AI：<br><br>1. 访问一个网站（例如，您的网络邮件或您最喜欢的 AI 的聊天网站，如 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Mistral AI 的 Le Chat</a> 或 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>）。<br>2. 固定扩展程序图标以便于访问。<br>3. 开始/停止录制：<br>    * 单击扩展程序图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br>    * 对着麦克风说话。<br>    * 再次单击图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br>    * 转录将出现在活动文本区域或对话框中。<br><br>键盘快捷键：<br><ul><li>Windows：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "使用扩展程序的说明"
     },
-    "micAccessError": {
-        "message": "错误：麦克风不可用。",
-        "description": "麦克风错误的横幅消息"
+    "defaultWhisperApiUrl": {
+        "message": "默认 URL：https://api.openai.com/v1/audio/transcriptions",
+        "description": "Whisper API 的默认 URL"
+    },
+    "defaultTranslationApiUrl": {
+        "message": "默认 URL：https://api.openai.com/v1/chat/completions",
+        "description": "翻译 API 的默认 URL"
+    },
+    "API_KEY_NOT_FOUND": {
+        "message": "API 密钥未配置。请在扩展程序选项中进行配置。",
+        "description": "错误消息：缺少 API 密钥"
+    },
+    "CHROME_STORAGE_ERROR": {
+        "message": "Chrome 存储错误",
+        "description": "错误消息：存储问题"
+    },
+    "MIC_ACCESS_ERROR": {
+        "message": "错误：麦克风无法访问。",
+        "description": "错误消息：麦克风访问"
+    },
+    "TRANSCRIPTION_ERROR": {
+        "message": "转录期间出错",
+        "description": "错误消息：转录"
+    },
+    "TRANSLATION_ERROR": {
+        "message": "翻译期间出错",
+        "description": "错误消息：翻译"
+    },
+    "NO_EDITABLE_ELEMENT": {
+        "message": "找不到可编辑元素",
+        "description": "错误消息：无可编辑元素"
+    },
+    "CONTENT_SCRIPT_INJECTION_ERROR": {
+        "message": "注入内容脚本时出错",
+        "description": "错误消息：脚本注入"
+    },
+    "NO_ACTIVE_TAB": {
+        "message": "找不到活动标签页",
+        "description": "错误消息：无活动标签页"
+    },
+    "MISSING_TRANSLATION_PARAMS": {
+        "message": "缺少翻译参数",
+        "description": "错误消息：翻译参数"
+    },
+    "INVALID_TRANSLATION_RESPONSE": {
+        "message": "无效的翻译响应格式",
+        "description": "错误消息：翻译响应"
+    },
+    "shortcutChangeInstructions": {
+        "message": "⚙️ 扩展程序 > ⌨️ 键盘快捷键",
+        "description": "更改键盘快捷键的说明"
+    },
+    "defaultModel": {
+        "message": "默认",
+        "description": "指示默认模型"
+    },
+    "defaultAudioModel": {
+        "message": "whisper-1",
+        "description": "默认音频模型"
+    },
+    "defaultTranslationModel": {
+        "message": "gpt-4o-mini",
+        "description": "默认翻译模型"
     }
 }

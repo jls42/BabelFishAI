@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const expertOptions = document.getElementById('expertOptions');
     const modelTypeSelect = document.getElementById('modelType');
     const disableLoggingCheckbox = document.getElementById('disableLogging');
-    const newModelTypeInput = document.getElementById('newModelType'); // Nouveau champ
-    const addModelTypeButton = document.getElementById('addModelType'); // Nouveau bouton
-    const customModelsList = document.getElementById('customModelsList'); // Nouvelle liste
+    const newModelTypeInput = document.getElementById('newModelType');
+    const addModelTypeButton = document.getElementById('addModelType');
+    const customModelsList = document.getElementById('customModelsList');
     const audioModelTypeSelect = document.getElementById('audioModelType');
     const apiUrlInput = document.getElementById('apiUrl');
     const translationApiUrlInput = document.getElementById('translationApiUrl');
@@ -30,8 +30,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addDomainButton = document.getElementById('addDomain');
     const domainsList = document.getElementById('domainsList');
     const saveButton = document.getElementById('save');
+    const saveAdvancedButton = document.getElementById('saveAdvanced');
     const statusElement = document.getElementById('status');
     const interfaceLanguageSelect = document.getElementById('interfaceLanguage');
+    const advancedHeader = document.getElementById('advancedHeader');
+    const toggleAdvancedButton = document.getElementById('toggleAdvanced');
+    const advancedOptions = document.getElementById('advancedOptions');
+
+    // État du mode avancé
+    let isAdvancedVisible = false;
 
     // Fonction pour valider une URL HTTPS
     function isValidHttpsUrl(string) {
@@ -43,11 +50,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Gestion du mode avancé
+    function toggleAdvancedSection() {
+        isAdvancedVisible = !isAdvancedVisible;
+        toggleAdvancedButton.textContent = isAdvancedVisible ? '▲' : '▼';
+        toggleAdvancedButton.classList.toggle('active', isAdvancedVisible);
+        advancedOptions.classList.toggle('visible', isAdvancedVisible);
+
+        // Faire défiler jusqu'au bouton de sauvegarde si la section est ouverte
+        if (isAdvancedVisible) {
+            setTimeout(() => {
+                saveAdvancedButton.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+    }
+
     // Initialiser la langue de l'interface
     const currentLang = await new Promise(resolve => {
         chrome.storage.sync.get({
-            interfaceLanguage: chrome.i18n.getUILanguage() || 'fr'
-        }, result => resolve(result.interfaceLanguage));
+            interfaceLanguage: null // On initialise à null pour vérifier si une valeur existe
+        }, result => {
+            // Si interfaceLanguage est null, on utilise la langue du navigateur
+            resolve(result.interfaceLanguage || chrome.i18n.getUILanguage());
+        });
     });
 
     interfaceLanguageSelect.value = currentLang;
@@ -68,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetLanguage: 'en',
             expertMode: false,
             modelType: 'gpt-4o-mini',
-            customModelTypes: [], // Charger les modèles personnalisés
+            customModelTypes: [],
             audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
             apiUrl: 'https://api.openai.com/v1/audio/transcriptions',
             translationApiUrl: 'https://api.openai.com/v1/chat/completions',
@@ -104,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Sauvegarder les options
-    function saveOptions() {
+    function saveOptions(scrollToStatus = true) {
         const customModelTypes = Array.from(customModelsList.children).map(item =>
             item.textContent.replace('×', '').trim()
         );
@@ -123,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             expertMode: expertModeCheckbox.checked,
             modelType: modelTypeSelect.value,
             disableLogging: disableLoggingCheckbox.checked,
-            customModelTypes: customModelTypes, // Sauvegarder les modèles personnalisés
+            customModelTypes: customModelTypes,
             audioModelType: audioModelTypeSelect.value,
             apiUrl: apiUrlInput.value,
             translationApiUrl: translationApiUrlInput.value,
@@ -136,13 +161,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         if ((apiUrlInput.value && !isValidHttpsUrl(apiUrlInput.value)) ||
             (translationApiUrlInput.value && !isValidHttpsUrl(translationApiUrlInput.value))) {
             showStatus('Erreur : Les URL des API personnalisées doivent utiliser HTTPS.', 'error');
-            return; // Empêche la sauvegarde
+            return;
         }
 
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
+            if (scrollToStatus) {
+                statusElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
             populateAudioModelOptions();
-            populateModelTypeOptions(customModelTypes); // Mettre à jour les options
+            populateModelTypeOptions(customModelTypes);
 
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
@@ -151,7 +179,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayForcedDomains(options.forcedDialogDomains);
         });
     }
-
 
     // Fonction pour remplir les options du modèle audio
     function populateAudioModelOptions() {
@@ -170,14 +197,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Fonction pour remplir les options du modèle de traduction
     function populateModelTypeOptions(customModels) {
-        modelTypeSelect.innerHTML = ''; // Vider les options existantes
+        modelTypeSelect.innerHTML = '';
 
         // Ajouter les options par défaut
         const defaultModels = ['gpt-4o-mini', 'gpt-4o'];
         defaultModels.forEach(model => {
             const option = document.createElement('option');
             option.value = model;
-            option.textContent = model + (model === 'gpt-4o-mini' ? ' (par défaut)' : '');
+            option.textContent = model + (model === 'gpt-4o-mini' ? ` (${i18n.getMessage("defaultModel")})` : '');
             modelTypeSelect.appendChild(option);
         });
 
@@ -208,19 +235,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             removeButton.textContent = '×';
             removeButton.onclick = () => {
                 item.remove();
-                saveOptions(); // Sauvegarder après suppression
+                saveOptions(false);
             };
 
             item.appendChild(removeButton);
             customModelsList.appendChild(item);
-            newModelTypeInput.value = ''; // Vider le champ
-            saveOptions(); // Sauvegarder immédiatement
+            newModelTypeInput.value = '';
+            saveOptions(false);
         }
     }
 
     // Afficher les modèles personnalisés
     function displayCustomModels(models) {
-        customModelsList.innerHTML = ''; // Vider la liste
+        customModelsList.innerHTML = '';
         models.forEach(model => {
             const item = document.createElement('div');
             item.className = 'custom-model-item';
@@ -231,7 +258,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             removeButton.textContent = '×';
             removeButton.onclick = () => {
                 item.remove();
-                saveOptions(); // Sauvegarder après suppression
+                saveOptions(false);
             };
 
             item.appendChild(removeButton);
@@ -251,19 +278,52 @@ document.addEventListener('DOMContentLoaded', async () => {
         statusElement.textContent = message;
         statusElement.className = `status ${type}`;
         statusElement.style.display = 'block';
+
+        // Animation de fade in
+        statusElement.style.opacity = '0';
+        requestAnimationFrame(() => {
+            statusElement.style.opacity = '1';
+        });
+
         setTimeout(() => {
-            statusElement.style.display = 'none';
+            // Animation de fade out
+            statusElement.style.opacity = '0';
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 300);
         }, 2000);
     }
 
     // Mettre à jour la visibilité des options de traduction
     function updateTranslationOptionsVisibility() {
-        translationOptions.style.display = enableTranslationCheckbox.checked ? 'block' : 'none';
+        if (enableTranslationCheckbox.checked) {
+            translationOptions.style.display = 'block';
+            translationOptions.style.opacity = '0';
+            requestAnimationFrame(() => {
+                translationOptions.style.opacity = '1';
+            });
+        } else {
+            translationOptions.style.opacity = '0';
+            setTimeout(() => {
+                translationOptions.style.display = 'none';
+            }, 300);
+        }
     }
 
     // Mettre à jour la visibilité des options expert
     function updateExpertOptionsVisibility() {
-        expertOptions.style.display = expertModeCheckbox.checked ? 'block' : 'none';
+        if (expertModeCheckbox.checked) {
+            expertOptions.style.display = 'block';
+            expertOptions.style.opacity = '0';
+            requestAnimationFrame(() => {
+                expertOptions.style.opacity = '1';
+            });
+        } else {
+            expertOptions.style.opacity = '0';
+            setTimeout(() => {
+                expertOptions.style.display = 'none';
+            }, 300);
+        }
     }
 
     // Mettre à jour l'aperçu des couleurs
@@ -334,17 +394,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Event listeners
     interfaceLanguageSelect.addEventListener('change', handleLanguageChange);
-    saveButton.addEventListener('click', saveOptions);
+    apiKeyInput.addEventListener('input', () => saveOptions(false));
+    activeDisplayCheckbox.addEventListener('change', () => saveOptions(false));
+    dialogDisplayCheckbox.addEventListener('change', () => saveOptions(false));
+    dialogDurationInput.addEventListener('input', () => saveOptions(false));
+    bannerColorStartInput.addEventListener('input', () => saveOptions(false));
+    bannerColorEndInput.addEventListener('input', () => saveOptions(false));
+    bannerOpacityInput.addEventListener('input', () => saveOptions(false));
+    enableTranslationCheckbox.addEventListener('change', () => saveOptions(false));
+    sourceLanguageSelect.addEventListener('change', () => saveOptions(false));
+    targetLanguageSelect.addEventListener('change', () => saveOptions(false));
+    expertModeCheckbox.addEventListener('change', () => saveOptions(false));
+    modelTypeSelect.addEventListener('change', () => saveOptions(false));
+    disableLoggingCheckbox.addEventListener('change', () => saveOptions(false));
+    audioModelTypeSelect.addEventListener('change', () => saveOptions(false));
+    apiUrlInput.addEventListener('input', () => saveOptions(false));
+    translationApiUrlInput.addEventListener('input', () => saveOptions(false));
+    saveButton.addEventListener('click', () => saveOptions(true));
+    saveAdvancedButton.addEventListener('click', () => saveOptions(true));
     toggleApiKeyButton.addEventListener('click', toggleApiKeyVisibility);
     enableTranslationCheckbox.addEventListener('change', updateTranslationOptionsVisibility);
     expertModeCheckbox.addEventListener('change', updateExpertOptionsVisibility);
     addDomainButton.addEventListener('click', addDomain);
-    addModelTypeButton.addEventListener('click', addModelType); // Écouteur pour le nouveau bouton
-
-    // Event listeners pour l'aperçu des couleurs
-    bannerColorStartInput.addEventListener('input', updateColorPreview);
-    bannerColorEndInput.addEventListener('input', updateColorPreview);
-    bannerOpacityInput.addEventListener('input', updateColorPreview);
+    addModelTypeButton.addEventListener('click', addModelType);
+    advancedHeader.addEventListener('click', toggleAdvancedSection);
 
     // Initialiser l'internationalisation et charger les options
     await i18n.init();

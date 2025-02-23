@@ -9,281 +9,321 @@
 
 <body>
     <div class="container">
-        <h1 data-i18n="optionsTitle">Configuration de BabelFishAI</h1>
-
-        <!-- Sélecteur de langue -->
-        <div class="section-block language-section">
-            <h2 data-i18n="languageSettingsTitle">Langue de l'interface</h2>
-            <div class="language-selector">
-                <label for="interfaceLanguage" data-i18n="selectLanguageLabel">Sélectionnez la langue :</label>
-                <select id="interfaceLanguage">
-                    <option value="fr">Français</option>
-                    <option value="en">English</option>
-                    <option value="es">Español Traducida por IA</option>
-                    <option value="pt">Português Traduzido por IA</option>
-                    <option value="zh">人工智能翻译</option>
-                    <option value="hi">एआई अनुवादित हिंदी</option>
-                    <option value="ar">ترجمة الذكاء الاصطناعي</option>
-                    <option value="it">Tradotto da IA in Italiano</option>
-                    <option value="de">KI-Übersetzung auf Deutsch</option>
-                    <option value="sv">AI-översatt svenska</option>
-                    <option value="pl">Tłumaczenie AI na język polski</option>
-                    <option value="nl">AI-vertaald Nederlands</option>
-                    <option value="ro">Tradus de IA în Română</option>
-                    <option value="ja">AI翻訳日本語</option>
-                    <option value="ko">AI 번역 한국어</option>
-                </select>
-            </div>
+        <!-- Message de bienvenue -->
+        <div class="welcome-section">
+            <h1 data-i18n="optionsTitle">Configuration de BabelFishAI</h1>
+            <p class="welcome-message" data-i18n="welcomeMessage"></p>
         </div>
 
-        <div class="section-block">
-            <h2 data-i18n="apiConfigTitle">Configuration de l'API</h2>
-            <div class="api-key-container">
-                <input type="password" id="apiKey" data-i18n-placeholder="apiKeyPlaceholder">
-                <button type="button" id="toggleApiKey" class="toggle-password">👁️</button>
-            </div>
-            <div class="api-info">
-                <span data-i18n="apiKeyInfo">Obtenez votre clé API sur</span>
-                <a href="https://platform.openai.com/account/api-keys" target="_blank" class="api-link">
-                    platform.openai.com/account/api-keys
-                </a>
-            </div>
-        </div>
 
-        <div class="section-block">
-            <h2 data-i18n="displaySettingsTitle">Paramètres d'Affichage</h2>
-            <div>
-                <label>
-                    <input type="checkbox" id="activeDisplay" checked>
-                    <span data-i18n="activeDisplayLabel">Zone active (saisie clavier)</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" id="dialogDisplay">
-                    <span data-i18n="dialogDisplayLabel">Boîte de dialogue</span>
-                </label>
-            </div>
-            <div id="dialogDurationGroup">
-                <label for="dialogDuration" data-i18n="dialogDurationLabel">Durée d'affichage de la boîte (secondes)
-                    :</label>
-                <input type="number" id="dialogDuration" min="5" max="60" value="15">
-            </div>
-            <div class="color-picker-container">
-                <label data-i18n="bannerColorsLabel">Couleurs du bandeau de statut :</label>
-                <div class="gradient-colors-container">
-                    <div class="color-input-group">
-                        <label for="bannerColorStart" data-i18n="startColorLabel">Couleur début :</label>
-                        <input type="color" id="bannerColorStart" value="#684054">
+
+        <!-- Paramètres Essentiels -->
+        <div class="section-block essential-section">
+            <h2 data-i18n="essentialSettingsTitle">Paramètres Essentiels</h2>
+            <!-- Configuration API -->
+            <div class="subsection api-section">
+                <h3 data-i18n="apiKeyConfigTitle">Clé API OpenAI</h3>
+                <div class="api-help">
+                    <p data-i18n="apiKeyHelp"></p>
+                    <div class="api-info">
+                        <span data-i18n="apiKeyInfo">Obtenez votre clé API sur</span>
+                        <a href="https://platform.openai.com/account/api-keys" target="_blank" class="api-link">
+                            platform.openai.com/account/api-keys
+                        </a>
                     </div>
-                    <div class="color-input-group">
-                        <label for="bannerColorEnd" data-i18n="endColorLabel">Couleur fin :</label>
-                        <input type="color" id="bannerColorEnd" value="#4c7b8d">
-                    </div>
-                    <div class="opacity-group">
-                        <input type="number" id="bannerOpacity" min="0" max="100" value="80" class="opacity-input">
-                        <span class="opacity-label" data-i18n="opacityLabel">% Opacité</span>
+                    <div class="api-info">
+                        <span data-i18n="pricingInfo">Plus d'informations sur la tarification disponibles sur</span>
+                        <a href="https://platform.openai.com/docs/pricing" target="_blank" class="api-link">
+                            platform.openai.com/docs/pricing
+                        </a>
                     </div>
                 </div>
-                <div class="color-preview" id="colorPreview"></div>
+                <div class="api-key-container">
+                    <input type="password" id="apiKey" data-i18n-placeholder="apiKeyPlaceholder">
+                    <button type="button" id="toggleApiKey" class="toggle-password">👁️</button>
+                </div>
+            </div>
+            <!-- Instructions d'utilisation -->
+            <div class="subsection usage-section">
+                <h3 data-i18n="shortcutsTitle">Utilisation et Raccourcis</h3>
+                <p>
+                    <span data-i18n="useBabelFishInstructions"></span>
+                </p>
+                <div class="shortcut-info">
+                    <p data-i18n="shortcutInstructions"></p>
+                    <p>
+                        <span data-i18n="shortcutOption1"></span>
+                        <br>
+                        <span data-i18n="shortcutChangeInstructions"></span>
+                    </p>
+                    <p>
+                        <span data-i18n="shortcutOption2"></span>
+                        <br>
+                        <span class="keyboard-shortcut">chrome://extensions/shortcuts</span>
+                    </p>
+                    <div class="shortcut-steps">
+                        <p data-i18n="shortcutSteps"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Langue de l'interface -->
+            <div class="subsection language-section">
+                <h3 data-i18n="languageSettingsTitle">Langue de l'interface</h3>
+                <div class="language-selector">
+                    <label for="interfaceLanguage" data-i18n="selectLanguageLabel">Sélectionnez la langue :</label>
+                    <select id="interfaceLanguage">
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                        <option value="es">Español Traducida por IA</option>
+                        <option value="pt">Português Traduzido por IA</option>
+                        <option value="zh">人工智能翻译</option>
+                        <option value="hi">एआई अनुवादित हिंदी</option>
+                        <option value="ar">ترجمة الذكاء الاصطनाعي</option>
+                        <option value="it">Tradotto da IA in Italiano</option>
+                        <option value="de">KI-Übersetzung auf Deutsch</option>
+                        <option value="sv">AI-översatt svenska</option>
+                        <option value="pl">Tłumaczenie AI na język polski</option>
+                        <option value="nl">AI-vertaald Nederlands</option>
+                        <option value="ro">Tradus de IA în Română</option>
+                        <option value="ja">AI翻訳日本語</option>
+                        <option value="ko">AI 번역 한국어</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="section-block">
+
+        <!-- Section Traduction -->
+        <div class="section-block translation-section">
             <h2 data-i18n="translationTitle">Traduction IA Intégrée</h2>
             <div>
-                <label>
+                <label class="feature-toggle">
                     <input type="checkbox" id="enableTranslation">
                     <span data-i18n="enableTranslationLabel">Activer la traduction automatique</span>
                 </label>
             </div>
             <div id="translationOptions" style="display: none;">
-                <div>
-                    <label for="sourceLanguage" data-i18n="sourceLanguageLabel">Langue source :</label>
-                    <select id="sourceLanguage">
-                        <option value="fr">Français (fr)</option>
-                        <option value="en">English (en)</option>
-                        <option value="es">Español (es)</option>
-                        <option value="pt">Português (pt)</option>
-                        <option value="zh">中文 (zh)</option>
-                        <option value="hi">हिंदी (hi)</option>
-                        <option value="ar">العربية (ar)</option>
-                        <option value="it">Italiano (it)</option>
-                        <option value="de">Deutsch (de)</option>
-                        <option value="sv">Svenska (sv)</option>
-                        <option value="pl">Polski (pl)</option>
-                        <option value="nl">Nederlands (nl)</option>
-                        <option value="ro">Română (ro)</option>
-                        <option value="ja">日本語 (ja)</option>
-                        <option value="ko">한국어 (ko)</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="targetLanguage" data-i18n="targetLanguageLabel">Langue cible :</label>
-                    <select id="targetLanguage">
-                        <option value="en">English (en)</option>
-                        <option value="fr">Français (fr)</option>
-                        <option value="es">Español (es)</option>
-                        <option value="pt">Português (pt)</option>
-                        <option value="zh">中文 (zh)</option>
-                        <option value="hi">हिंदी (hi)</option>
-                        <option value="ar">العربية (ar)</option>
-                        <option value="it">Italiano (it)</option>
-                        <option value="de">Deutsch (de)</option>
-                        <option value="sv">Svenska (sv)</option>
-                        <option value="pl">Polski (pl)</option>
-                        <option value="nl">Nederlands (nl)</option>
-                        <option value="ro">Română (ro)</option>
-                        <option value="ja">日本語 (ja)</option>
-                        <option value="ko">한국어 (ko)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-block">
-            <h2 data-i18n="expertModeTitle">Mode Expert</h2>
-            <label>
-                <input type="checkbox" id="expertMode">
-                <span data-i18n="enableExpertModeLabel">Activer le mode expert</span>
-            </label>
-        </div>
-
-        <div id="expertOptions" class="section-block" style="display: none;">
-            <h2 data-i18n="advancedConfigTitle">Configuration Avancée</h2>
-            <div class="form-group">
-                <label for="modelType" data-i18n="translationModelLabel">Modèle de traduction :</label>
-                <div id="modelTypeContainer">
-                    <select id="modelType">
-                        <option value="gpt-4o-mini">gpt-4o-mini (par défaut)</option>
-                        <option value="gpt-4o">gpt-4o</option>
-                    </select>
-                    <input type="text" id="newModelType" placeholder="Ajouter un modèle"
-                        data-i18n-placeholder="addModelPlaceholder">
-                    <button type="button" id="addModelType" data-i18n="addModelButton">Ajouter</button>
-                    <div id="customModelsList">
+                <p data-i18n="translationExplanation"></p>
+                <div class="language-pair">
+                    <div class="language-select">
+                        <label for="sourceLanguage" data-i18n="sourceLanguageLabel">Langue source :</label>
+                        <select id="sourceLanguage">
+                            <option value="fr">Français (fr)</option>
+                            <option value="en">English (en)</option>
+                            <option value="es">Español (es)</option>
+                            <option value="pt">Português (pt)</option>
+                            <option value="zh">中文 (zh)</option>
+                            <option value="hi">हिंदी (hi)</option>
+                            <option value="ar">العربية (ar)</option>
+                            <option value="it">Italiano (it)</option>
+                            <option value="de">Deutsch (de)</option>
+                            <option value="sv">Svenska (sv)</option>
+                            <option value="pl">Polski (pl)</option>
+                            <option value="nl">Nederlands (nl)</option>
+                            <option value="ro">Română (ro)</option>
+                            <option value="ja">日本語 (ja)</option>
+                            <option value="ko">한국어 (ko)</option>
+                        </select>
+                    </div>
+                    <div class="language-select">
+                        <label for="targetLanguage" data-i18n="targetLanguageLabel">Langue cible :</label>
+                        <select id="targetLanguage">
+                            <option value="en">English (en)</option>
+                            <option value="fr">Français (fr)</option>
+                            <option value="es">Español (es)</option>
+                            <option value="pt">Português (pt)</option>
+                            <option value="zh">中文 (zh)</option>
+                            <option value="hi">हिंदी (hi)</option>
+                            <option value="ar">العربية (ar)</option>
+                            <option value="it">Italiano (it)</option>
+                            <option value="de">Deutsch (de)</option>
+                            <option value="sv">Svenska (sv)</option>
+                            <option value="pl">Polski (pl)</option>
+                            <option value="nl">Nederlands (nl)</option>
+                            <option value="ro">Română (ro)</option>
+                            <option value="ja">日本語 (ja)</option>
+                            <option value="ko">한국어 (ko)</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="disableLogging">
-                        <span data-i18n="noLogLabel">NoLog (LiteLLM uniquement)</span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="audioModelType" data-i18n="audioModelLabel">Modèle audio :</label>
-                <select id="audioModelType">
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="apiUrl" data-i18n="whisperApiUrlLabel">URL de l'API Whisper :</label>
-                <input type="text" id="apiUrl" data-i18n-placeholder="whisperApiUrlPlaceholder">
-                <div class="api-info">
-                    URL par défaut : https://api.openai.com/v1/audio/transcriptions
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="translationApiUrl" data-i18n="translationApiUrlLabel">URL de l'API de traduction :</label>
-                <input type="text" id="translationApiUrl" data-i18n-placeholder="translationApiUrlPlaceholder">
-                <div class="api-info">
-                    URL par défaut : https://api.openai.com/v1/chat/completions
-                </div>
-            </div>
-            <div class="form-group">
-                <label data-i18n="forcedDialogDomainsLabel">Domaines avec boîte de dialogue forcée :</label>
-                <div class="domains-list" id="domainsList">
-                </div>
-                <div class="domain-input-container">
-                    <input type="text" id="newDomain" data-i18n-placeholder="addDomainPlaceholder">
-                    <button type="button" id="addDomain" class="add-domain-button"
-                        data-i18n="addDomainButton">Ajouter</button>
-                </div>
-                <div class="api-info" data-i18n="forcedDialogInfo">
-                    Sur ces domaines, la transcription apparaîtra toujours dans une boîte de dialogue
-                </div>
             </div>
         </div>
 
+        <!-- Bouton de sauvegarde principal -->
         <button id="save" class="save-button" data-i18n="saveButton">Sauvegarder</button>
         <div id="status" class="status"></div>
 
-        <div class="section-block">
-            <h2 data-i18n="userGuideTitle">Guide d'Utilisation</h2>
-            <ol>
-                <li data-i18n="userGuideStep1">Cliquez sur l'icône BabelFishAI ou utilisez le raccourci clavier pour
-                    démarrer
-                    l'enregistrement</li>
-                <li data-i18n="userGuideStep2">Parlez clairement dans votre microphone</li>
-                <li data-i18n="userGuideStep3">Cliquez à nouveau ou utilisez le raccourci pour arrêter l'enregistrement
-                </li>
-                <li data-i18n="userGuideStep4">La transcription apparaîtra selon vos préférences configurées</li>
-                <li data-i18n="userGuideStep5">Utilisez le bouton "Copier" pour copier le texte dans le presse-papiers
-                </li>
-            </ol>
-        </div>
-
-        <div class="section-block">
-            <h2 data-i18n="shortcutsTitle">Raccourcis Clavier</h2>
-            <p>
-                <span data-i18n="shortcutStartStop">Pour démarrer/arrêter l'enregistrement :</span>
-                <span data-i18n="shortcutKeys" class="shortcut-key"></span>
-            </p>
-        </div>
-
-        <div class="section-block">
-            <h2 data-i18n="aiTranscriptionTitle">Transcription Assistée par IA</h2>
-            <p data-i18n="aiTranscriptionDesc"></p>
-            <ol>
-                <li data-i18n="aiTranscriptionStep1">Votre voix est enregistrée via le microphone de votre appareil</li>
-                <li data-i18n="aiTranscriptionStep2">L'enregistrement est analysé par l'IA Whisper pour produire une
-                    transcription précise</li>
-            </ol>
-            <div class="api-info">
-                <span data-i18n="pricingInfo">Plus d'informations sur la tarification disponibles sur</span>
-                <a href="https://platform.openai.com/docs/pricing" target="_blank" class="api-link">
-                    platform.openai.com/docs/pricing
-                </a>
+        <!-- Mode Avancé (repliable) -->
+        <div class="section-block advanced-section">
+            <div class="advanced-header" id="advancedHeader">
+                <h2 data-i18n="advancedSettingsTitle">Paramètres Avancés</h2>
+                <button class="toggle-advanced" id="toggleAdvanced">▼</button>
             </div>
-        </div>
 
-        <div class="section-block">
-            <h2 data-i18n="aiTranslationTitle">Traduction Assistée par IA</h2>
-            <p data-i18n="aiTranslationDesc"></p>
-            <div class="api-info">
-                <span data-i18n="pricingInfo">Plus d'informations sur la tarification disponibles sur</span>
-                <a href="https://platform.openai.com/docs/pricing" target="_blank" class="api-link">
-                    platform.openai.com/docs/pricing
-                </a>
+            <div id="advancedOptions">
+                <!-- Paramètres d'Affichage -->
+                <div class="subsection display-section">
+                    <h3 data-i18n="displaySettingsTitle">Paramètres d'Affichage</h3>
+                    <div>
+                        <label class="feature-toggle">
+                            <input type="checkbox" id="activeDisplay" checked>
+                            <span data-i18n="activeDisplayLabel">Zone active (saisie clavier)</span>
+                        </label>
+                        <p class="option-description" data-i18n="activeDisplayDescription"></p>
+                    </div>
+                    <div>
+                        <label class="feature-toggle">
+                            <input type="checkbox" id="dialogDisplay">
+                            <span data-i18n="dialogDisplayLabel">Boîte de dialogue</span>
+                        </label>
+                        <p class="option-description" data-i18n="dialogDisplayDescription"></p>
+                    </div>
+                    <div id="dialogDurationGroup">
+                        <label for="dialogDuration" data-i18n="dialogDurationLabel">Durée d'affichage de la boîte
+                            (secondes) :</label>
+                        <input type="number" id="dialogDuration" min="5" max="60" value="15">
+                        <p class="option-description" data-i18n="dialogDurationDescription"></p>
+                    </div>
+                    <div class="color-picker-container">
+                        <label data-i18n="bannerColorsLabel">Couleurs du bandeau de statut :</label>
+                        <p class="option-description" data-i18n="bannerColorsDescription"></p>
+                        <div class="gradient-colors-container">
+                            <div class="color-input-group">
+                                <label for="bannerColorStart" data-i18n="startColorLabel">Couleur début :</label>
+                                <input type="color" id="bannerColorStart" value="#684054">
+                                <p class="option-description" data-i18n="startColorDescription"></p>
+                            </div>
+                            <div class="color-input-group">
+                                <label for="bannerColorEnd" data-i18n="endColorLabel">Couleur fin :</label>
+                                <input type="color" id="bannerColorEnd" value="#4c7b8d">
+                                <p class="option-description" data-i18n="endColorDescription"></p>
+                            </div>
+                            <div class="opacity-group">
+                                <input type="number" id="bannerOpacity" min="0" max="100" value="80"
+                                    class="opacity-input">
+                                <span class="opacity-label" data-i18n="opacityLabel">% Opacité</span>
+                                <p class="option-description" data-i18n="opacityDescription"></p>
+                            </div>
+                        </div>
+                        <div class="color-preview" id="colorPreview"></div>
+                    </div>
+                </div>
+
+                <!-- Mode Expert -->
+                <div class="subsection expert-section">
+                    <h3 data-i18n="expertModeTitle">Mode Expert</h3>
+                    <label class="feature-toggle">
+                        <input type="checkbox" id="expertMode">
+                        <span data-i18n="enableExpertModeLabel">Activer le mode expert</span>
+                    </label>
+                    <p class="option-description" data-i18n="enableExpertModeDescription"></p>
+
+                    <div id="expertOptions" style="display: none;">
+                        <div class="form-group">
+                            <label for="modelType" data-i18n="translationModelLabel" class="highlighted-label">Modèle de
+                                traduction :</label>
+                            <p class="option-description" data-i18n="translationModelDescription"></p>
+                            <div id="modelTypeContainer">
+                                <select id="modelType">
+                                    <option value="gpt-4o-mini">gpt-4o-mini</option>
+                                    <option value="gpt-4o">gpt-4o</option>
+                                </select>
+                                <input type="text" id="newModelType" data-i18n-placeholder="addModelPlaceholder"
+                                    placeholder="Ajouter un modèle">
+                                <button type="button" id="addModelType" data-i18n="addModelButton">Ajouter</button>
+                                <p class="option-description" data-i18n="addModelDescription"></p>
+                                <div id="customModelsList"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="feature-toggle">
+                                    <input type="checkbox" id="disableLogging">
+                                    <span data-i18n="noLogLabel">NoLog (LiteLLM uniquement)</span>
+                                </label>
+                                <p class="option-description" data-i18n="noLogDescription"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="audioModelType" data-i18n="audioModelLabel" class="highlighted-label">Modèle
+                                audio :</label>
+                            <p class="option-description" data-i18n="audioModelDescription"></p>
+                            <select id="audioModelType"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiUrl" data-i18n="whisperApiUrlLabel" class="highlighted-label">URL de l'API
+                                Whisper :</label>
+                            <input type="text" id="apiUrl" data-i18n-placeholder="whisperApiUrlPlaceholder"
+                                placeholder="https://api.openai.com/v1/audio/transcriptions">
+                            <p class="option-description" data-i18n="whisperApiUrlDescription"></p>
+                            <div class="api-info">
+                                <span data-i18n="defaultWhisperApiUrl">URL par défaut :
+                                    https://api.openai.com/v1/audio/transcriptions</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="translationApiUrl" data-i18n="translationApiUrlLabel"
+                                class="highlighted-label">URL de l'API de traduction :</label>
+                            <input type="text" id="translationApiUrl"
+                                data-i18n-placeholder="translationApiUrlPlaceholder"
+                                placeholder="https://api.openai.com/v1/chat/completions">
+                            <p class="option-description" data-i18n="translationApiUrlDescription"></p>
+                            <div class="api-info">
+                                <span data-i18n="defaultTranslationApiUrl">URL par défaut :
+                                    https://api.openai.com/v1/chat/completions</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="forcedDialogDomainsLabel" class="highlighted-label">Domaines avec boîte de
+                                dialogue forcée :</label>
+                            <p class="option-description" data-i18n="forcedDialogDomainsDescription"></p>
+                            <div class="domains-list" id="domainsList"></div>
+                            <div class="domain-input-container">
+                                <input type="text" id="newDomain" data-i18n-placeholder="addDomainPlaceholder"
+                                    placeholder="Exemple: chat.google.com">
+                                <button type="button" id="addDomain" class="add-domain-button"
+                                    data-i18n="addDomainButton">Ajouter</button>
+                                <p class="option-description" data-i18n="addDomainDescription"></p>
+                            </div>
+                            <div class="api-info" data-i18n="forcedDialogInfo">Sur ces domaines, la transcription
+                                apparaîtra toujours dans une boîte de dialogue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton de sauvegarde pour les options avancées -->
+                <button id="saveAdvanced" class="save-button" data-i18n="saveButton">Sauvegarder</button>
             </div>
-        </div>
 
-        <div class="section-block author-section">
-            <h2 data-i18n="authorSectionTitle">À Propos de l'Auteur</h2>
-            <div class="author-content">
-                <img src="../../../../images/logo_jls42.png" alt="Logo JLS42" class="author-logo">
-                <div class="author-info">
-                    <h3 data-i18n="authorName">Julien LS</h3>
-                    <p data-i18n="authorRole">Développeur et créateur de BabelFishAI</p>
-                    <div class="author-links">
-                        <a href="https://jls42.org/" target="_blank" class="api-link">
-                            <span class="author-icon">🌐</span> jls42.org
-                        </a>
-                        <a href="mailto:contact@jls42.org" class="api-link">
-                            <span class="author-icon">✉️</span> contact@jls42.org
-                        </a>
-                        <a href="https://github.com/jls42/BabelFishAI" target="_blank" class="api-link">
-                            <span class="author-icon">🐙</span> <span data-i18n="githubLink">GitHub</span>
-                        </a>
-                        <a href="https://paypal.me/jls" target="_blank" class="api-link">
-                            <span class="author-icon">💝</span> <span data-i18n="supportProject">Soutenir le projet via
-                                PayPal</span>
-                        </a>
+            <!-- Section Auteur -->
+            <div class="section-block author-section">
+                <h2 data-i18n="authorSectionTitle">À Propos de l'Auteur</h2>
+                <div class="author-content">
+                    <img src="../../../../images/logo_jls42.png" alt="Logo JLS42" class="author-logo">
+                    <div class="author-info">
+                        <h3 data-i18n="authorName">Julien LS</h3>
+                        <p data-i18n="authorRole">Développeur et créateur de BabelFishAI</p>
+                        <div class="author-links">
+                            <a href="https://jls42.org/" target="_blank" class="api-link">
+                                <span class="author-icon">🌐</span> jls42.org
+                            </a>
+                            <a href="mailto:contact@jls42.org" class="api-link">
+                                <span class="author-icon">✉️</span> contact@jls42.org
+                            </a>
+                            <a href="https://github.com/jls42/BabelFishAI" target="_blank" class="api-link">
+                                <span class="author-icon">🐙</span> <span data-i18n="githubLink">GitHub</span>
+                            </a>
+                            <a href="https://paypal.me/jls" target="_blank" class="api-link">
+                                <span class="author-icon">💝</span> <span data-i18n="supportProject">Soutenir le projet
+                                    via
+                                    PayPal</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Chargement des scripts dans le bon ordre -->
     <script src="../../constants.js"></script>

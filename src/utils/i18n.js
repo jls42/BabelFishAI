@@ -56,6 +56,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function changeLanguage(lang) {
         await loadTranslations(lang);
         currentLanguage = lang;
+        // Remplacer les placeholders dans les messages de traduction
+        for (const key in translations) {
+            if (translations.hasOwnProperty(key)) {
+                const placeholders = {
+                    defaultAudioModel: getMessage('defaultAudioModel'),
+                    defaultTranslationModel: getMessage('defaultTranslationModel')
+                };
+                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
+            }
+        }
         await chrome.storage.sync.set({ interfaceLanguage: lang });
         translatePage();
     }
@@ -79,7 +89,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const key = element.getAttribute('data-i18n');
             const translated = getMessage(key);
             if (translated) {
-                element.textContent = translated;
+                element.innerHTML = translated;
             }
         });
 
@@ -155,7 +165,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
         return element;
     }
-
+    /**
+         * Remplace les placeholders dans un message
+         * @param {string} message - Le message original
+         * @param {Object} placeholders - Un objet contenant les placeholders et leurs valeurs
+         * @returns {string} Le message avec les placeholders remplacés
+         */
+    function replacePlaceholders(message, placeholders) {
+        let newMessage = message;
+        for (const key in placeholders) {
+            if (placeholders.hasOwnProperty(key)) {
+                const regex = new RegExp(`{${key}}`, 'g');
+                newMessage = newMessage.replace(regex, placeholders[key]);
+            }
+        }
+        return newMessage;
+    }
     /**
      * Initialise l'internationalisation
      */
@@ -170,7 +195,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Définir la langue sur l'élément HTML
         document.documentElement.lang = currentLanguage;
-
+        // Remplacer les placeholders dans les messages de traduction
+        for (const key in translations) {
+            if (translations.hasOwnProperty(key)) {
+                const placeholders = {
+                    defaultAudioModel: getMessage('defaultAudioModel'),
+                    defaultTranslationModel: getMessage('defaultTranslationModel')
+                };
+                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
+            }
+        }
         // Traduire la page
         translatePage();
 
