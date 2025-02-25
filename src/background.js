@@ -1,19 +1,19 @@
 // Service worker de l'extension BabelFishAI
 
-// Configuration
-const CONFIG = {
+// Configuration spécifique au service worker
+const SERVICE_WORKER_CONFIG = {
     DEBUG: false,
     INIT_DELAY: 500
 };
 
-// États
+// Définition des constantes nécessaires pour le service worker
+// Note: Le service worker n'a pas accès à window.BabelFishAIConstants
 const STATES = {
     RECORDING: 'recording',
     STOPPED: 'stopped',
     ERROR: 'error'
 };
 
-// Actions
 const ACTIONS = {
     TOGGLE: 'toggleRecording',
     STARTED: 'recordingStarted',
@@ -21,14 +21,12 @@ const ACTIONS = {
     ERROR: 'recordingError'
 };
 
-// Badges
 const BADGES = {
     RECORDING: '⏺',
     STOPPED: '',
     ERROR: '!'
 };
 
-// Erreurs
 const ERRORS = {
     CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",
     NO_ACTIVE_TAB: "Aucun onglet actif trouvé"
@@ -42,7 +40,7 @@ let isRecording = false;
  * @param {...any} args - Arguments à logger
  */
 function debug(...args) {
-    if (CONFIG.DEBUG) {
+    if (SERVICE_WORKER_CONFIG.DEBUG) {
         console.log('[Background]', ...args);
     }
 }
@@ -91,7 +89,7 @@ async function sendMessageToContentScript(tab, message) {
         try {
             const injected = await injectContentScript(tab);
             if (injected) {
-                await new Promise(resolve => setTimeout(resolve, CONFIG.INIT_DELAY));
+                await new Promise(resolve => setTimeout(resolve, SERVICE_WORKER_CONFIG.INIT_DELAY));
                 await chrome.tabs.sendMessage(tab.id, message);
             }
         } catch (injectError) {

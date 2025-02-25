@@ -14,47 +14,34 @@
 
     // Content script de l'extension de transcription vocale
 
-    // Configuration
+    // Utilisation des constantes globales depuis constants.js
     const CONFIG = {
-        DEBUG: false,
-        WHISPER_MODEL: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, // Utilisation de la constante depuis constants.js
+        DEBUG: window.BabelFishAIConstants.CONFIG.DEBUG,
+        WHISPER_MODEL: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
         GPT_MODEL: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-        DEFAULT_API_URL: "https://api.openai.com/v1/audio/transcriptions",
-        GPT_API_URL: "https://api.openai.com/v1/chat/completions",
-        COPY_FEEDBACK_DURATION: 2000,
-        ERROR_BANNER_DURATION: 5000,
-        DEFAULT_DIALOG_DURATION: 15,
-        DEFAULT_BANNER_COLOR_START: '#684054',
-        DEFAULT_BANNER_COLOR_END: '#4c7b8d',
-        DEFAULT_BANNER_OPACITY: 80,
-        DEFAULT_FORCED_DIALOG_DOMAINS: ['chat.google.com']
+        DEFAULT_API_URL: window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
+        GPT_API_URL: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
+        COPY_FEEDBACK_DURATION: window.BabelFishAIConstants.CONFIG.COPY_FEEDBACK_DURATION,
+        ERROR_BANNER_DURATION: window.BabelFishAIConstants.CONFIG.ERROR_BANNER_DURATION,
+        DEFAULT_DIALOG_DURATION: window.BabelFishAIConstants.CONFIG.DEFAULT_DIALOG_DURATION,
+        DEFAULT_BANNER_COLOR_START: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_COLOR_START,
+        DEFAULT_BANNER_COLOR_END: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_COLOR_END,
+        DEFAULT_BANNER_OPACITY: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_OPACITY,
+        DEFAULT_FORCED_DIALOG_DOMAINS: window.BabelFishAIConstants.CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
     };
 
-    // États et actions
-    const STATES = {
-        RECORDING: 'recording',
-        STOPPED: 'stopped',
-        ERROR: 'error'
-    };
+    // Utilisation des constantes globales pour les états et actions
+    const STATES = window.BabelFishAIConstants.STATES;
+    const ACTIONS = window.BabelFishAIConstants.ACTIONS;
+    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
 
-    const ACTIONS = {
-        TOGGLE: 'toggleRecording',
-        STARTED: 'recordingStarted',
-        STOPPED: 'recordingStopped',
-        ERROR: 'recordingError'
-    };
-
-    const MESSAGE_TYPES = {
-        INFO: 'info',
-        ERROR: 'error'
-    };
-
+    // Erreurs spécifiques au content script
     const ERRORS = {
-        API_KEY_NOT_FOUND: "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-        CHROME_STORAGE_ERROR: "Erreur de stockage Chrome",
-        MIC_ACCESS_ERROR: "Erreur : microphone inaccessible.",
-        TRANSCRIPTION_ERROR: "Erreur lors de la transcription",
-        NO_EDITABLE_ELEMENT: "Aucun élément éditable trouvé"
+        API_KEY_NOT_FOUND: window.BabelFishAIConstants.ERRORS.API_KEY_NOT_FOUND,
+        CHROME_STORAGE_ERROR: window.BabelFishAIConstants.ERRORS.CHROME_STORAGE_ERROR,
+        MIC_ACCESS_ERROR: window.BabelFishAIConstants.ERRORS.MIC_ACCESS_ERROR,
+        TRANSCRIPTION_ERROR: window.BabelFishAIConstants.ERRORS.TRANSCRIPTION_ERROR,
+        NO_EDITABLE_ELEMENT: window.BabelFishAIConstants.ERRORS.NO_EDITABLE_ELEMENT
     };
 
     // État global
@@ -92,35 +79,12 @@
      * Met à jour la couleur du bandeau
      */
     function updateBannerColor() {
-        if (recordingBanner.classList.contains('error')) {
-            return; // Ne pas modifier le style si c'est une erreur
-        }
-
-        const opacity = bannerOpacity / 100;
-        const start = bannerColorStart || CONFIG.DEFAULT_BANNER_COLOR_START;
-        const end = bannerColorEnd || CONFIG.DEFAULT_BANNER_COLOR_END;
-
-        try {
-            // Convertir les couleurs hex en RGB
-            const startR = parseInt(start.substr(1, 2), 16);
-            const startG = parseInt(start.substr(3, 2), 16);
-            const startB = parseInt(start.substr(5, 2), 16);
-            const endR = parseInt(end.substr(1, 2), 16);
-            const endG = parseInt(end.substr(3, 2), 16);
-            const endB = parseInt(end.substr(5, 2), 16);
-
-            const gradient = `linear-gradient(45deg,
-                rgba(${startR}, ${startG}, ${startB}, ${opacity}),
-                rgba(${endR}, ${endG}, ${endB}, ${opacity}))`;
-
-            recordingBanner.style.background = gradient;
-        } catch (error) {
-            console.error('Error updating banner color:', error);
-            // Utiliser le dégradé par défaut en cas d'erreur
-            recordingBanner.style.background = `linear-gradient(45deg,
-                ${CONFIG.DEFAULT_BANNER_COLOR_START},
-                ${CONFIG.DEFAULT_BANNER_COLOR_END})`;
-        }
+        window.BabelFishAIUtils.ui.updateBannerColor(
+            recordingBanner,
+            bannerColorStart || CONFIG.DEFAULT_BANNER_COLOR_START,
+            bannerColorEnd || CONFIG.DEFAULT_BANNER_COLOR_END,
+            bannerOpacity
+        );
     }
 
     /**
@@ -200,19 +164,12 @@
      * @returns {Promise<string>} La clé API
      */
     async function getApiKey() {
-        return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(['apiKey'], (result) => {
-                if (chrome.runtime.lastError) {
-                    console.error("Chrome storage error:", chrome.runtime.lastError);
-                    reject(chrome.runtime.lastError);
-                } else if (!result.apiKey) {
-                    console.error("API key not found");
-                    resolve(null); // Renvoyer null au lieu de rejeter
-                } else {
-                    resolve(result.apiKey);
-                }
-            });
-        });
+        try {
+            return await window.BabelFishAIUtils.api.getApiKey();
+        } catch (error) {
+            console.error("API key not found or storage error:", error);
+            return null; // Conserver le comportement original qui renvoie null en cas d'erreur
+        }
     }
 
     /**
@@ -227,11 +184,6 @@
         }
 
         try {
-            const formData = new FormData();
-            const timestamp = Date.now();
-            formData.append('file', audioBlob, `audio-${timestamp}.webm`);
-            // formData.append('model', CONFIG.WHISPER_MODEL);
-
             // Récupérer l'URL de l'API et le modèle depuis le stockage
             const { apiUrl, audioModelType } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
@@ -245,6 +197,15 @@
                 });
             });
 
+            // Créer un blob avec un nom de fichier incluant un timestamp
+            const timestamp = Date.now();
+            const namedBlob = new Blob([audioBlob], { type: audioBlob.type });
+
+            // Utiliser la fonction de l'API pour la transcription
+            // Note: window.BabelFishAIUtils.api.transcribeAudio n'accepte pas directement un nom de fichier
+            // Nous devons donc créer un FormData nous-mêmes
+            const formData = new FormData();
+            formData.append('file', namedBlob, `audio-${timestamp}.webm`);
             formData.append('model', audioModelType);
 
             const response = await fetch(apiUrl, {
@@ -481,25 +442,12 @@
      * @returns {HTMLElement} Le bouton créé
      */
     function createCopyButton(text) {
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copier';
-        copyButton.className = 'whisper-copy-button';
-        copyButton.onclick = async () => {
-            try {
-                await navigator.clipboard.writeText(text);
-                copyButton.textContent = 'Copié !';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copier';
-                }, CONFIG.COPY_FEEDBACK_DURATION);
-            } catch (error) {
-                console.error('Failed to copy text:', error);
-                showBanner('Erreur lors de la copie du texte', MESSAGE_TYPES.ERROR);
-            }
-        };
-        return copyButton;
+        return window.BabelFishAIUtils.ui.createCopyButton(
+            text,
+            (errorMessage) => showBanner(errorMessage, MESSAGE_TYPES.ERROR)
+        );
     }
 
-    /**
     /**
      * Initialise la bannière d'état
      */
@@ -518,27 +466,23 @@
      * @param {string} type - Le type de message ('info' ou 'error')
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
-        recordingBanner.textContent = text;
-        recordingBanner.className = 'whisper-status-banner';
-
-        // Réinitialiser les classes
-        recordingBanner.classList.remove('error', 'recording');
-
-        if (type === MESSAGE_TYPES.ERROR) {
-            recordingBanner.classList.add('error');
-        } else if (isRecording) {
-            recordingBanner.classList.add('recording');
-        }
-
+        window.BabelFishAIUtils.ui.showBanner(
+            recordingBanner,
+            text,
+            type,
+            isRecording
+        );
+        // Assurer que la couleur est correctement mise à jour
         updateBannerColor();
-        recordingBanner.style.display = 'block';
     }
 
     /**
      * Cache la bannière
      */
     function hideBanner() {
-        recordingBanner.style.display = 'none';
+        if (recordingBanner) {
+            recordingBanner.style.display = 'none';
+        }
     }
 
     // Écouter les messages du background script

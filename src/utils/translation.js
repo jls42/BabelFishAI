@@ -4,12 +4,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const ERRORS = {
-        MISSING_PARAMS: 'Paramètres de traduction manquants',
-        API_KEY_NOT_FOUND: "Clé API non configurée",
-        INVALID_RESPONSE: 'Format de réponse de traduction invalide',
-        TRANSLATION_ERROR: 'Erreur de traduction'
-    };
+    // Utilisation des constantes globales depuis constants.js
+    const ERRORS = window.BabelFishAIConstants.ERRORS;
+    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
 
     /**
      * Traduit le texte avec GPT
@@ -23,7 +20,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function translateText(text, sourceLang, targetLang, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL) {
         if (!text || !sourceLang || !targetLang) {
             console.error('Missing translation parameters:', { text, sourceLang, targetLang });
-            throw new Error(ERRORS.MISSING_PARAMS);
+            throw new Error(ERRORS.MISSING_TRANSLATION_PARAMS);
         }
 
         if (!apiKey) {
@@ -97,7 +94,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             if (!data.choices?.[0]?.message?.content) {
                 console.error('Invalid translation response format:', data);
-                throw new Error(ERRORS.INVALID_RESPONSE);
+                throw new Error(ERRORS.INVALID_TRANSLATION_RESPONSE);
             }
 
             const translatedText = data.choices[0].message.content.trim();
@@ -112,8 +109,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.translation = {
-        translateText,
-        ERRORS
+        translateText
     };
 
 })(window.BabelFishAIUtils);

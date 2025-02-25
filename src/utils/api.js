@@ -4,16 +4,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const API_CONFIG = {
-        DEFAULT_WHISPER_API_URL: 'https://api.openai.com/v1/audio/transcriptions',
-        // WHISPER_MODEL: 'whisper-1' // Redondant, utiliser la constante de constants.js
-    };
-
-    const ERRORS = {
-        API_KEY_NOT_FOUND: "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-        CHROME_STORAGE_ERROR: "Erreur de stockage Chrome",
-        TRANSCRIPTION_ERROR: "Erreur lors de la transcription"
-    };
+    // Utilisation des constantes globales depuis constants.js
+    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**
      * Transcrit l'audio en texte via l'API Whisper
@@ -93,9 +86,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     exports.api = {
         transcribeAudio,
         getApiKey,
-        getApiUrl,
-        API_CONFIG,
-        ERRORS
+        getApiUrl
     };
 
 })(window.BabelFishAIUtils);

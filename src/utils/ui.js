@@ -4,16 +4,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const UI_CONFIG = {
-        DEFAULT_BANNER_COLOR_START: '#684054',
-        DEFAULT_BANNER_COLOR_END: '#4c7b8d',
-        COPY_FEEDBACK_DURATION: 2000
-    };
-
-    const MESSAGE_TYPES = {
-        INFO: 'info',
-        ERROR: 'error'
-    };
+    // Utilisation des constantes globales depuis constants.js
+    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
+    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
+    const CONFIG = window.BabelFishAIConstants.CONFIG;
 
     /**
      * Met à jour la couleur du bandeau avec un dégradé
@@ -69,7 +63,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             setTimeout(() => {
                 statusElement.style.display = 'none';
                 statusElement.className = 'status';
-            }, UI_CONFIG.COPY_FEEDBACK_DURATION);
+            }, CONFIG.COPY_FEEDBACK_DURATION);
         }
     }
 
@@ -112,7 +106,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 copyButton.textContent = 'Copié !';
                 setTimeout(() => {
                     copyButton.textContent = 'Copier';
-                }, UI_CONFIG.COPY_FEEDBACK_DURATION);
+                }, CONFIG.COPY_FEEDBACK_DURATION);
             } catch (error) {
                 console.error('Failed to copy text:', error);
                 if (onError) onError('Erreur lors de la copie du texte');
@@ -126,9 +120,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         updateBannerColor,
         showStatus,
         showBanner,
-        createCopyButton,
-        UI_CONFIG,
-        MESSAGE_TYPES
+        createCopyButton
     };
 
 })(window.BabelFishAIUtils);
