@@ -67,13 +67,14 @@
     /**
      * Met à jour la couleur du bandeau
      * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
+     * @returns {boolean} - Indique si la mise à jour a réussi
      */
     function updateBannerColor(force = false) {
         // Éviter de mettre à jour la couleur si la bannière n'existe pas
-        if (!recordingBanner) return;
+        if (!recordingBanner) return false;
 
         // Éviter de mettre à jour la couleur si la bannière est en mode erreur, sauf si force=true
-        if (!force && recordingBanner.classList.contains('error')) return;
+        if (!force && recordingBanner.classList.contains('error')) return false;
 
         window.BabelFishAIUtils.ui.updateBannerColor(
             recordingBanner,
@@ -81,6 +82,8 @@
             bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
             bannerOpacity
         );
+
+        return true;
     }
 
     /**
@@ -122,16 +125,17 @@
             console.error("Error accessing microphone or API key:", error);
 
             // Gérer les différents types d'erreurs
+            let errorMessage;
             if (error.message === ERRORS.API_KEY_NOT_FOUND) {
-                showBanner(ERRORS.API_KEY_NOT_FOUND, MESSAGE_TYPES.ERROR);
+                errorMessage = ERRORS.API_KEY_NOT_FOUND;
             } else if (error.name === 'NotAllowedError') {
-                showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"), MESSAGE_TYPES.ERROR);
+                errorMessage = window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError");
             } else {
-                showBanner(ERRORS.MIC_ACCESS_ERROR, MESSAGE_TYPES.ERROR);
+                errorMessage = ERRORS.MIC_ACCESS_ERROR;
             }
 
-            // Informer le background script de l'erreur
-            chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: error.message });
+            // Afficher l'erreur et informer le background script
+            handleError(errorMessage, error.message);
 
             // Réinitialiser l'état et nettoyer les ressources
             isRecording = false;
@@ -140,9 +144,6 @@
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
-
-            // Cacher la bannière après un délai
-            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
 
             return false;
         }
@@ -179,9 +180,7 @@
                 hideBanner();
             } catch (error) {
                 console.error("Error during transcription:", error);
-                showBanner(error.message, MESSAGE_TYPES.ERROR);
-                setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
-                chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: error.message });
+                handleError(error.message, error.message);
             } finally {
                 // Nettoyer les ressources, quelle que soit l'issue
                 isRecording = false;
@@ -218,8 +217,7 @@
             }
         } catch (error) {
             console.error("Error stopping recording:", error);
-            showBanner("Erreur lors de l'arrêt de l'enregistrement", MESSAGE_TYPES.ERROR);
-            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            handleError("Erreur lors de l'arrêt de l'enregistrement", error.message);
             return false;
         }
     }
@@ -235,11 +233,17 @@
      */
     async function transcribeAudio(audioBlob) {
         if (!apiKey) {
-            showBanner(ERRORS.API_KEY_NOT_FOUND, MESSAGE_TYPES.ERROR);
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+            handleError(errorMsg, errorMsg);
+            throw new Error(errorMsg);
         }
 
         try {
+            // Générer un nom de fichier avec timestamp et élément aléatoire pour une meilleure protection anti-cache
+            const timestamp = Date.now();
+            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
+            const filename = `audio-${timestamp}-${randomPart}.webm`;
+
             // Récupérer l'URL de l'API et le modèle depuis le stockage
             const { apiUrl, audioModelType } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
@@ -253,22 +257,14 @@
                 });
             });
 
-            // Générer un nom de fichier avec timestamp et élément aléatoire pour une meilleure protection anti-cache
-            const timestamp = Date.now();
-            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
-            const filename = `audio-${timestamp}-${randomPart}.webm`;
-
-            // Utiliser la fonction améliorée de l'API pour la transcription
-            // Passer directement le blob audio sans créer de copie inutile
-            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
+            // Utiliser la fonction de l'API pour la transcription
+            return await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 apiKey,
                 apiUrl,
                 audioModelType,
                 filename
             );
-
-            return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
@@ -288,8 +284,7 @@
     async function showTranscription(text) {
         if (!text || typeof text !== 'string') {
             console.error('Invalid transcription text:', text);
-            showBanner("Texte de transcription invalide", MESSAGE_TYPES.ERROR);
-            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            handleError("Texte de transcription invalide", "Invalid transcription text");
             return false;
         }
 
@@ -335,8 +330,7 @@
                     hideBanner();
                 } catch (error) {
                     console.error('Translation failed:', error);
-                    showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), MESSAGE_TYPES.ERROR);
-                    setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+                    handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), error.message);
                     // En cas d'erreur de traduction, on utilise le texte original
                     displayText = text;
                 }
@@ -369,8 +363,7 @@
             return true;
         } catch (error) {
             console.error('Error displaying transcription:', error);
-            showBanner("Erreur d'affichage", MESSAGE_TYPES.ERROR);
-            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            handleError("Erreur d'affichage", error.message);
             return false;
         }
     }
@@ -566,8 +559,15 @@
      * Affiche la bannière avec un message
      * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
+     * @returns {boolean} - Indique si l'affichage a réussi
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
+        // Vérifier si la bannière existe
+        if (!recordingBanner) {
+            console.warn('Banner element is null or undefined');
+            return false;
+        }
+
         window.BabelFishAIUtils.ui.showBanner(
             recordingBanner,
             text,
@@ -580,6 +580,8 @@
         if (type !== MESSAGE_TYPES.ERROR) {
             updateBannerColor();
         }
+
+        return true;
     }
 
     /**
@@ -600,6 +602,22 @@
             console.error("Error hiding banner:", error);
             return false;
         }
+    }
+
+    /**
+     * Gère les erreurs de manière centralisée
+     * @param {string} displayMessage - Le message à afficher à l'utilisateur
+     * @param {string} errorMessage - Le message d'erreur technique à envoyer au background script
+     */
+    function handleError(displayMessage, errorMessage) {
+        // Afficher le message d'erreur
+        showBanner(displayMessage, MESSAGE_TYPES.ERROR);
+
+        // Informer le background script de l'erreur
+        chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: errorMessage });
+
+        // Cacher la bannière après un délai
+        setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
     }
 
     // Écouter les messages du background script

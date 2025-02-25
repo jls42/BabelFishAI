@@ -78,13 +78,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} L'URL de l'API
      */
     async function getApiUrl(key = 'apiUrl', defaultUrl = API_CONFIG.DEFAULT_WHISPER_API_URL) {
-        return new Promise((resolve) => {
-            chrome.storage.sync.get({
-                [key]: defaultUrl
-            }, (result) => {
-                resolve(result[key] || defaultUrl);
+        try {
+            return new Promise((resolve, reject) => {
+                chrome.storage.sync.get({
+                    [key]: defaultUrl
+                }, (result) => {
+                    if (chrome.runtime.lastError) {
+                        console.error("Chrome storage error:", chrome.runtime.lastError);
+                        reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
+                    } else {
+                        resolve(result[key] || defaultUrl);
+                    }
+                });
             });
-        });
+        } catch (error) {
+            console.error("Error getting API URL:", error);
+            return defaultUrl; // Fallback to default URL in case of error
+        }
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
