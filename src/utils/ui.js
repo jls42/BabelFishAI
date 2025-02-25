@@ -4,16 +4,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const UI_CONFIG = {
-        DEFAULT_BANNER_COLOR_START: '#684054',
-        DEFAULT_BANNER_COLOR_END: '#4c7b8d',
-        COPY_FEEDBACK_DURATION: 2000
-    };
-
-    const MESSAGE_TYPES = {
-        INFO: 'info',
-        ERROR: 'error'
-    };
+    // Utilisation des constantes globales depuis constants.js
+    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
+    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
+    const CONFIG = window.BabelFishAIConstants.CONFIG;
 
     /**
      * Met à jour la couleur du bandeau avec un dégradé
@@ -21,10 +15,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} startColor - Couleur de début du dégradé
      * @param {string} endColor - Couleur de fin du dégradé
      * @param {number} opacity - Opacité (0-100)
+     * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
      */
-    function updateBannerColor(banner, startColor, endColor, opacity) {
-        if (banner.classList.contains('error')) {
-            return; // Ne pas modifier le style si c'est une erreur
+    function updateBannerColor(banner, startColor, endColor, opacity, force = false) {
+        // Vérifications de sécurité
+        if (!banner) {
+            console.warn('Banner element is null or undefined');
+            return;
+        }
+
+        // Ne pas modifier le style si c'est une erreur, sauf si force=true
+        if (!force && banner.classList.contains('error')) {
+            return;
         }
 
         const opacityValue = opacity / 100;
@@ -69,7 +71,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             setTimeout(() => {
                 statusElement.style.display = 'none';
                 statusElement.className = 'status';
-            }, UI_CONFIG.COPY_FEEDBACK_DURATION);
+            }, CONFIG.COPY_FEEDBACK_DURATION);
         }
     }
 
@@ -112,7 +114,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 copyButton.textContent = 'Copié !';
                 setTimeout(() => {
                     copyButton.textContent = 'Copier';
-                }, UI_CONFIG.COPY_FEEDBACK_DURATION);
+                }, CONFIG.COPY_FEEDBACK_DURATION);
             } catch (error) {
                 console.error('Failed to copy text:', error);
                 if (onError) onError('Erreur lors de la copie du texte');
@@ -126,9 +128,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         updateBannerColor,
         showStatus,
         showBanner,
-        createCopyButton,
-        UI_CONFIG,
-        MESSAGE_TYPES
+        createCopyButton
     };
 
 })(window.BabelFishAIUtils);

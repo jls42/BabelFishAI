@@ -4,33 +4,41 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 (function (exports) {
     'use strict';
 
-    const API_CONFIG = {
-        DEFAULT_WHISPER_API_URL: 'https://api.openai.com/v1/audio/transcriptions',
-        // WHISPER_MODEL: 'whisper-1' // Redondant, utiliser la constante de constants.js
-    };
-
-    const ERRORS = {
-        API_KEY_NOT_FOUND: "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-        CHROME_STORAGE_ERROR: "Erreur de stockage Chrome",
-        TRANSCRIPTION_ERROR: "Erreur lors de la transcription"
-    };
+    // Utilisation des constantes globales depuis constants.js
+    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**
      * Transcrit l'audio en texte via l'API Whisper
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @param {string} apiKey - La clé API OpenAI
      * @param {string} apiUrl - L'URL de l'API Whisper
+     * @param {string} [modelType] - Le modèle Whisper à utiliser
+     * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
+     * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL) {
+    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         if (!apiKey) {
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
 
         try {
             const formData = new FormData();
-            formData.append('file', audioBlob, 'audio.webm');
-            formData.append('model', window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL);
+
+            // Déterminer le nom de fichier final
+            let finalFilename;
+            if (generateUniqueFilename) {
+                // Générer un nom de fichier avec timestamp et élément aléatoire
+                const timestamp = Date.now();
+                const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
+                finalFilename = `audio-${timestamp}-${randomPart}.webm`;
+            } else {
+                finalFilename = filename || 'audio.webm';
+            }
+
+            formData.append('file', audioBlob, finalFilename);
+            formData.append('model', modelType);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -73,29 +81,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
     }
 
-    /**
-     * Récupère l'URL de l'API depuis le stockage
-     * @param {string} key - La clé de stockage ('apiUrl' ou 'translationApiUrl')
-     * @param {string} defaultUrl - L'URL par défaut
-     * @returns {Promise<string>} L'URL de l'API
-     */
-    async function getApiUrl(key = 'apiUrl', defaultUrl = API_CONFIG.DEFAULT_WHISPER_API_URL) {
-        return new Promise((resolve) => {
-            chrome.storage.sync.get({
-                [key]: defaultUrl
-            }, (result) => {
-                resolve(result[key] || defaultUrl);
-            });
-        });
-    }
-
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.api = {
         transcribeAudio,
-        getApiKey,
-        getApiUrl,
-        API_CONFIG,
-        ERRORS
+        getApiKey
     };
 
 })(window.BabelFishAIUtils);

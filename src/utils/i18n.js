@@ -57,15 +57,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         await loadTranslations(lang);
         currentLanguage = lang;
         // Remplacer les placeholders dans les messages de traduction
-        for (const key in translations) {
-            if (translations.hasOwnProperty(key)) {
-                const placeholders = {
-                    defaultAudioModel: getMessage('defaultAudioModel'),
-                    defaultTranslationModel: getMessage('defaultTranslationModel')
-                };
-                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
-            }
-        }
+        processTranslationPlaceholders();
         await chrome.storage.sync.set({ interfaceLanguage: lang });
         translatePage();
     }
@@ -182,6 +174,21 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return newMessage;
     }
     /**
+     * Traite les placeholders dans les messages de traduction
+     */
+    function processTranslationPlaceholders() {
+        for (const key in translations) {
+            if (translations.hasOwnProperty(key)) {
+                const placeholders = {
+                    defaultAudioModel: getMessage('defaultAudioModel'),
+                    defaultTranslationModel: getMessage('defaultTranslationModel')
+                };
+                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
+            }
+        }
+    }
+
+    /**
      * Initialise l'internationalisation
      */
     async function init() {
@@ -195,16 +202,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Définir la langue sur l'élément HTML
         document.documentElement.lang = currentLanguage;
+
         // Remplacer les placeholders dans les messages de traduction
-        for (const key in translations) {
-            if (translations.hasOwnProperty(key)) {
-                const placeholders = {
-                    defaultAudioModel: getMessage('defaultAudioModel'),
-                    defaultTranslationModel: getMessage('defaultTranslationModel')
-                };
-                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
-            }
-        }
+        processTranslationPlaceholders();
+
         // Traduire la page
         translatePage();
 
