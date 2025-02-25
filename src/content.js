@@ -186,11 +186,13 @@
                 });
             });
 
-            // Générer un nom de fichier avec timestamp
+            // Générer un nom de fichier avec timestamp et élément aléatoire pour une meilleure protection anti-cache
             const timestamp = Date.now();
-            const filename = `audio-${timestamp}.webm`;
+            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
+            const filename = `audio-${timestamp}-${randomPart}.webm`;
 
             // Utiliser la fonction améliorée de l'API pour la transcription
+            // Passer directement le blob audio sans créer de copie inutile
             const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 apiKey,

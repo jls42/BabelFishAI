@@ -25,13 +25,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             const formData = new FormData();
 
-            // Utiliser le nom de fichier fourni ou un nom par défaut
-            const fileToAppend = filename
-                ? new Blob([audioBlob], { type: audioBlob.type })
-                : audioBlob;
-
+            // Utiliser directement le blob audio sans créer de copie inutile
             const finalFilename = filename || 'audio.webm';
-            formData.append('file', fileToAppend, finalFilename);
+            formData.append('file', audioBlob, finalFilename);
             formData.append('model', modelType);
 
             const response = await fetch(apiUrl, {
