@@ -71,37 +71,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
     }
 
-    /**
-     * Récupère l'URL de l'API depuis le stockage
-     * @param {string} key - La clé de stockage ('apiUrl' ou 'translationApiUrl')
-     * @param {string} defaultUrl - L'URL par défaut
-     * @returns {Promise<string>} L'URL de l'API
-     */
-    async function getApiUrl(key = 'apiUrl', defaultUrl = API_CONFIG.DEFAULT_WHISPER_API_URL) {
-        try {
-            return new Promise((resolve, reject) => {
-                chrome.storage.sync.get({
-                    [key]: defaultUrl
-                }, (result) => {
-                    if (chrome.runtime.lastError) {
-                        console.error("Chrome storage error:", chrome.runtime.lastError);
-                        reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
-                    } else {
-                        resolve(result[key] || defaultUrl);
-                    }
-                });
-            });
-        } catch (error) {
-            console.error("Error getting API URL:", error);
-            return defaultUrl; // Fallback to default URL in case of error
-        }
-    }
-
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.api = {
         transcribeAudio,
-        getApiKey,
-        getApiUrl
+        getApiKey
     };
 
 })(window.BabelFishAIUtils);
