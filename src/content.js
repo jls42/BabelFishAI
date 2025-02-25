@@ -197,67 +197,26 @@
                 });
             });
 
-            // Créer un blob avec un nom de fichier incluant un timestamp
+            // Générer un nom de fichier avec timestamp
             const timestamp = Date.now();
-            const namedBlob = new Blob([audioBlob], { type: audioBlob.type });
+            const filename = `audio-${timestamp}.webm`;
 
-            // Utiliser la fonction de l'API pour la transcription
-            // Note: window.BabelFishAIUtils.api.transcribeAudio n'accepte pas directement un nom de fichier
-            // Nous devons donc créer un FormData nous-mêmes
-            const formData = new FormData();
-            formData.append('file', namedBlob, `audio-${timestamp}.webm`);
-            formData.append('model', audioModelType);
+            // Utiliser la fonction améliorée de l'API pour la transcription
+            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
+                audioBlob,
+                apiKey,
+                apiUrl,
+                audioModelType,
+                filename
+            );
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('API Error:', errorData);
-                throw new Error(errorData.error?.message || ERRORS.TRANSCRIPTION_ERROR);
-            }
-
-            const data = await response.json();
-            return data.text;
+            return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
         } finally {
             audioChunks = [];
             audioBlob = null;
-        }
-    }
-
-    /**
-     * Tente d'insérer du texte dans une iframe ciblée
-     * @param {HTMLIFrameElement} iframe - L'iframe cible
-     * @param {string} text - Le texte à insérer
-     * @param {number} retries - Nombre de tentatives restantes
-     * @returns {boolean} Indique si l'insertion a réussi
-     */
-    function insertTextInIframe(iframe, text, retries = 3) {
-        try {
-            const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-            const editable = innerDoc.querySelector('[contenteditable="true"]');
-            if (editable) {
-                editable.innerHTML += text;
-                return true;
-            }
-            throw new Error(ERRORS.NO_EDITABLE_ELEMENT);
-        } catch (e) {
-            if (retries > 0) {
-                setTimeout(() => {
-                    insertTextInIframe(iframe, text, retries - 1);
-                }, 500);
-            } else {
-                console.error("Failed to insert text in iframe:", e);
-            }
-            return false;
         }
     }
 

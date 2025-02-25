@@ -13,17 +13,26 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @param {string} apiKey - La clé API OpenAI
      * @param {string} apiUrl - L'URL de l'API Whisper
+     * @param {string} [modelType] - Le modèle Whisper à utiliser
+     * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL) {
+    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null) {
         if (!apiKey) {
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
 
         try {
             const formData = new FormData();
-            formData.append('file', audioBlob, 'audio.webm');
-            formData.append('model', window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL);
+
+            // Utiliser le nom de fichier fourni ou un nom par défaut
+            const fileToAppend = filename
+                ? new Blob([audioBlob], { type: audioBlob.type })
+                : audioBlob;
+
+            const finalFilename = filename || 'audio.webm';
+            formData.append('file', fileToAppend, finalFilename);
+            formData.append('model', modelType);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
