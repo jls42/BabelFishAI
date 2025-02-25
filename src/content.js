@@ -85,36 +85,66 @@
 
     /**
      * Démarre l'enregistrement audio
+     * @returns {Promise<boolean>} - Indique si l'enregistrement a démarré avec succès
      */
     async function startRecording() {
+        // Réinitialiser les chunks audio
         audioChunks = [];
+
+        // Variable pour stocker le flux audio
+        let stream = null;
+
         try {
             // Vérifier si la clé API est configurée
             apiKey = await window.BabelFishAIUtils.api.getApiKey();
             // La vérification de la clé API est déjà effectuée dans la fonction getApiKey
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            // Demander l'accès au microphone
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: false // Explicitement refuser l'accès vidéo
+            });
+
+            // Créer et configurer le MediaRecorder
             mediaRecorder = new MediaRecorder(stream);
             setupMediaRecorderEvents(stream);
+
+            // Démarrer l'enregistrement
             mediaRecorder.start();
             isRecording = true;
+
+            // Informer l'utilisateur et le background script
             showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRecording"));
             chrome.runtime.sendMessage({ action: ACTIONS.STARTED });
+
+            return true;
         } catch (error) {
             console.error("Error accessing microphone or API key:", error);
+
+            // Gérer les différents types d'erreurs
             if (error.message === ERRORS.API_KEY_NOT_FOUND) {
                 showBanner(ERRORS.API_KEY_NOT_FOUND, MESSAGE_TYPES.ERROR);
             } else if (error.name === 'NotAllowedError') {
                 showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"), MESSAGE_TYPES.ERROR);
-            }
-            else {
+            } else {
                 showBanner(ERRORS.MIC_ACCESS_ERROR, MESSAGE_TYPES.ERROR);
             }
+
+            // Informer le background script de l'erreur
             chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: error.message });
+
+            // Réinitialiser l'état et nettoyer les ressources
             isRecording = false;
-            if (typeof stream !== 'undefined') {
+
+            // Libérer le flux audio si disponible
+            if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
+
+            // Cacher la bannière après un délai
             setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+
+            return false;
         }
     }
 
@@ -123,35 +153,74 @@
      * @param {MediaStream} stream - Le flux audio
      */
     function setupMediaRecorderEvents(stream) {
+        // Événement déclenché lorsque des données audio sont disponibles
         mediaRecorder.ondataavailable = event => {
-            audioChunks.push(event.data);
+            if (event.data && event.data.size > 0) {
+                audioChunks.push(event.data);
+            }
         };
 
+        // Événement déclenché lorsque l'enregistrement est arrêté
         mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing"));
             try {
+                // Créer le blob audio à partir des chunks collectés
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+
+                // Informer l'utilisateur que la transcription est en cours
+                showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing"));
+
+                // Transcrire l'audio
                 const transcription = await transcribeAudio(audioBlob);
-                showTranscription(transcription);
+
+                // Afficher la transcription
+                await showTranscription(transcription);
+
+                // Cacher la bannière une fois terminé
                 hideBanner();
             } catch (error) {
                 console.error("Error during transcription:", error);
                 showBanner(error.message, MESSAGE_TYPES.ERROR);
                 setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
                 chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: error.message });
+            } finally {
+                // Nettoyer les ressources, quelle que soit l'issue
+                isRecording = false;
+                chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
+
+                // Arrêter toutes les pistes du stream pour libérer les ressources
+                if (stream && stream.getTracks) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
+                // Réinitialiser les chunks audio pour libérer la mémoire
+                // Note: audioChunks est déjà réinitialisé dans transcribeAudio,
+                // mais nous le faisons ici aussi au cas où transcribeAudio ne serait pas appelé
+                if (audioChunks.length > 0) {
+                    audioChunks = [];
+                }
             }
-            isRecording = false;
-            chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
-            stream.getTracks().forEach(track => track.stop());
         };
     }
 
     /**
      * Arrête l'enregistrement en cours
+     * @returns {boolean} - Indique si l'arrêt a été effectué
      */
     function stopRecording() {
-        if (mediaRecorder?.state === 'recording') {
-            mediaRecorder.stop();
+        try {
+            // Vérifier si le mediaRecorder existe et est en cours d'enregistrement
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                return true;
+            } else {
+                console.warn("No active recording to stop");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error stopping recording:", error);
+            showBanner("Erreur lors de l'arrêt de l'enregistrement", MESSAGE_TYPES.ERROR);
+            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            return false;
         }
     }
 
@@ -214,9 +283,18 @@
     /**
      * Affiche la transcription selon les options configurées
      * @param {string} text - Le texte à afficher
+     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
      */
     async function showTranscription(text) {
+        if (!text || typeof text !== 'string') {
+            console.error('Invalid transcription text:', text);
+            showBanner("Texte de transcription invalide", MESSAGE_TYPES.ERROR);
+            setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            return false;
+        }
+
         try {
+            // Récupérer les options de configuration
             const options = await new Promise(resolve => {
                 chrome.storage.sync.get({
                     activeDisplay: true,
@@ -229,28 +307,31 @@
                 }, resolve);
             });
 
+            // Texte à afficher (original ou traduit)
             let displayText = text;
+
+            // Traduire le texte si l'option est activée
             if (options.enableTranslation) {
                 try {
+                    // Informer l'utilisateur que la traduction est en cours
                     showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
-                    console.log('Translation params:', {
-                        text,
-                        sourceLang: options.sourceLanguage,
-                        targetLang: options.targetLanguage
-                    });
+
+                    // Traduire le texte
                     const translatedText = await window.BabelFishAIUtils.translation.translateText(
                         text,
                         options.sourceLanguage,
                         options.targetLanguage,
                         apiKey
                     );
+
+                    // Vérifier que la traduction est valide
                     if (translatedText && translatedText.trim()) {
                         displayText = translatedText;
-                        console.log('Translation successful:', translatedText);
                     } else {
-                        console.error('Empty translation result');
                         throw new Error('Empty translation result');
                     }
+
+                    // Cacher la bannière une fois la traduction terminée
                     hideBanner();
                 } catch (error) {
                     console.error('Translation failed:', error);
@@ -261,28 +342,36 @@
                 }
             }
 
+            // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
             const currentDomain = window.location.hostname;
             const isDialogForced = options.forcedDialogDomains.some(domain =>
                 currentDomain.includes(domain)
             );
 
+            // Tenter d'insérer le texte dans l'élément actif si l'option est activée
             let displayed = false;
             if (options.activeDisplay && !isDialogForced) {
                 displayed = handleActiveElementInsertion(displayText);
             }
 
+            // Afficher dans une boîte de dialogue si nécessaire
             if (options.dialogDisplay || isDialogForced || !displayed) {
                 showTranscriptionDialog(displayText, options.dialogDuration);
                 displayed = true;
             }
 
+            // Avertir si aucune méthode d'affichage n'est activée
             if (!displayed) {
-                console.log("No display method enabled");
+                console.warn("No display method enabled");
+                return false;
             }
+
+            return true;
         } catch (error) {
             console.error('Error displaying transcription:', error);
             showBanner("Erreur d'affichage", MESSAGE_TYPES.ERROR);
             setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+            return false;
         }
     }
 
@@ -292,44 +381,99 @@
      * @returns {boolean} Indique si l'insertion a réussi
      */
     function handleActiveElementInsertion(text) {
-        // IMPORTANT: Ne pas stocker le contenu de l'élément actif.
-        const activeElement = document.activeElement;
-        if (!activeElement || activeElement.tagName === 'IFRAME') {
+        try {
+            // Validation des paramètres
+            if (!text) {
+                console.warn("Empty text provided for insertion");
+                return false;
+            }
+
+            // IMPORTANT: Ne pas stocker le contenu de l'élément actif.
+            const activeElement = document.activeElement;
+
+            // Vérifier si l'élément actif est valide
+            if (!activeElement || activeElement.tagName === 'IFRAME') {
+                return false;
+            }
+
+            // Nettoyer le texte
+            const cleanText = text.trimStart();
+
+            // Vérifier si l'élément actif est éditable
+            const isTextarea = activeElement.tagName === 'TEXTAREA';
+            const isTextInput = activeElement.tagName === 'INPUT' && activeElement.type === 'text';
+            const isContentEditable = activeElement.isContentEditable;
+
+            if (isTextarea || isTextInput || isContentEditable) {
+                // Insérer le texte selon le type d'élément
+                if (isTextarea || isTextInput) {
+                    insertTextIntoInput(activeElement, cleanText);
+                } else if (isContentEditable) {
+                    // Insérer dans un élément contentEditable
+                    activeElement.focus();
+
+                    // Normaliser les sauts de ligne et espaces
+                    let finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
+
+                    // Utiliser execCommand pour l'insertion (compatible avec la plupart des navigateurs)
+                    document.execCommand('insertHTML', false, finalText);
+
+                    // Déclencher un événement input pour notifier les listeners
+                    activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                return true;
+            }
+
+            return false;
+        } catch (error) {
+            console.error("Error inserting text into active element:", error);
             return false;
         }
-        const cleanText = text.trimStart();
-        if (activeElement.tagName === 'TEXTAREA' ||
-            (activeElement.tagName === 'INPUT' && activeElement.type === 'text') ||
-            activeElement.isContentEditable) {
-
-            if (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') {
-                insertTextIntoInput(activeElement, cleanText);
-            } else if (activeElement.isContentEditable) {
-                activeElement.focus();
-                let finalText = cleanText.replace(/[\r\n]+/g, ' ');
-                finalText = finalText.trim();
-                document.execCommand('insertHTML', false, finalText);
-                activeElement.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-            return true;
-        }
-        return false;
     }
 
     /**
      * Insère du texte dans un élément input ou textarea
      * @param {HTMLInputElement|HTMLTextAreaElement} element - L'élément de saisie
      * @param {string} text - Le texte à insérer
+     * @returns {boolean} - Indique si l'insertion a réussi
      */
     function insertTextIntoInput(element, text) {
-        const currentValue = element.value;
-        const selectionStart = element.selectionStart;
-        const selectionEnd = element.selectionEnd;
-        element.value = currentValue.substring(0, selectionStart) +
-            text +
-            currentValue.substring(selectionEnd);
-        element.selectionStart = element.selectionEnd = selectionStart + text.length;
-        element.dispatchEvent(new Event('input', { bubbles: true }));
+        try {
+            // Validation des paramètres
+            if (!element || !text) {
+                console.warn("Invalid element or text for insertion");
+                return false;
+            }
+
+            // Vérifier si l'élément a les propriétés nécessaires
+            if (typeof element.value !== 'string' ||
+                typeof element.selectionStart !== 'number' ||
+                typeof element.selectionEnd !== 'number') {
+                console.warn("Element is not a valid input or textarea");
+                return false;
+            }
+
+            // Récupérer la valeur actuelle et les positions de sélection
+            const currentValue = element.value;
+            const selectionStart = element.selectionStart;
+            const selectionEnd = element.selectionEnd;
+
+            // Insérer le texte à la position du curseur ou remplacer la sélection
+            element.value = currentValue.substring(0, selectionStart) +
+                text +
+                currentValue.substring(selectionEnd);
+
+            // Positionner le curseur après le texte inséré
+            element.selectionStart = element.selectionEnd = selectionStart + text.length;
+
+            // Déclencher un événement input pour notifier les listeners
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+
+            return true;
+        } catch (error) {
+            console.error("Error inserting text into input:", error);
+            return false;
+        }
     }
 
     /**
@@ -440,10 +584,21 @@
 
     /**
      * Cache la bannière
+     * @returns {boolean} - Indique si l'opération a réussi
      */
     function hideBanner() {
-        if (recordingBanner) {
+        try {
+            // Vérifier si la bannière existe
+            if (!recordingBanner) {
+                return false;
+            }
+
+            // Cacher la bannière
             recordingBanner.style.display = 'none';
+            return true;
+        } catch (error) {
+            console.error("Error hiding banner:", error);
+            return false;
         }
     }
 

@@ -8,6 +8,19 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const ERRORS = window.BabelFishAIConstants.ERRORS;
     const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
 
+    // Configuration du débogage pour la traduction
+    const TRANSLATION_DEBUG = false;
+
+    /**
+     * Log conditionnel pour le débogage de la traduction
+     * @param {...any} args - Arguments à logger
+     */
+    function debugTranslation(...args) {
+        if (TRANSLATION_DEBUG) {
+            console.log('[Translation]', ...args);
+        }
+    }
+
     /**
      * Traduit le texte avec GPT
      * @param {string} text - Le texte à traduire
@@ -18,6 +31,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} Le texte traduit
      */
     async function translateText(text, sourceLang, targetLang, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL) {
+        // Validation des paramètres
         if (!text || !sourceLang || !targetLang) {
             console.error('Missing translation parameters:', { text, sourceLang, targetLang });
             throw new Error(ERRORS.MISSING_TRANSLATION_PARAMS);
@@ -28,7 +42,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
 
-        console.log('Starting translation:', {
+        debugTranslation('Starting translation:', {
             sourceLang,
             targetLang,
             textLength: text.length
@@ -50,6 +64,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 });
             });
 
+            // Préparer les messages pour l'API
             const messages = [
                 {
                     role: "system",
@@ -61,17 +76,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }
             ];
 
+            // Préparer la charge utile pour l'API
             const payload = {
                 model: modelType,
                 messages
             };
 
+            // Ajouter l'option no-log si demandé
             if (disableLogging) {
                 payload["no-log"] = true;
             }
 
-            console.log('Translation request payload:', payload);
+            debugTranslation('Translation request payload:', payload);
 
+            // Appeler l'API de traduction
             const response = await fetch(translationApiUrl, {
                 method: 'POST',
                 headers: {
@@ -81,24 +99,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 body: JSON.stringify(payload)
             });
 
-            console.log('Translation API response status:', response.status);
+            debugTranslation('Translation API response status:', response.status);
 
+            // Gérer les erreurs de l'API
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Translation API error:', errorData);
                 throw new Error(errorData.error?.message || ERRORS.TRANSLATION_ERROR);
             }
 
+            // Traiter la réponse
             const data = await response.json();
-            console.log('Translation API response:', data);
+            debugTranslation('Translation API response received');
 
+            // Vérifier la validité de la réponse
             if (!data.choices?.[0]?.message?.content) {
                 console.error('Invalid translation response format:', data);
                 throw new Error(ERRORS.INVALID_TRANSLATION_RESPONSE);
             }
 
+            // Extraire et retourner le texte traduit
             const translatedText = data.choices[0].message.content.trim();
-            console.log('Final translated text:', translatedText);
+            debugTranslation('Translation successful, length:', translatedText.length);
 
             return translatedText;
         } catch (error) {
