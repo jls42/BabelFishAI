@@ -4,6 +4,8 @@
 
 Babel Fish AIは、元々強力な音声転写を提供するために設計された革新的なChrome拡張機能です。OpenAIのWhisper APIを使用して、あなたの声を驚異的な精度でテキストに変換し、オプションでリアルタイム自動翻訳も利用できます。Babel Fish AIは、転写専用として使用するか、必要に応じてその場で翻訳を有効にするかを選択できます。
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai)
+
 ## 🌟 機能
 
 - **高度な音声転写**

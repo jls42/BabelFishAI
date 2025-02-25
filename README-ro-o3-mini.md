@@ -4,6 +4,8 @@
 
 Babel Fish AI este o extensie Chrome inovatoare, concepută inițial pentru a oferi o transcriere vocală puternică. Transformă-ți vocea în text cu o precizie remarcabilă datorită API-ului Whisper de la OpenAI și beneficiază, opțional, de o traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de nevoile dvs.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai)
+
 ## 🌟 Funcționalități
 
 - **Transcriere Vocală Avansată**

@@ -4,6 +4,8 @@
 
 Babel Fish AI är ett innovativt Chrome-tillägg som ursprungligen designades för att erbjuda kraftfull rösttranskription. Förvandla din röst till text med anmärkningsvärd noggrannhet tack vare OpenAI:s Whisper API, och dra tillvalet av en automatisk översättning i realtid. Du kan använda Babel Fish AI enbart för transkription eller aktivera översättning på språng beroende på dina behov.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai)
+
 ## 🌟 Funktioner
 
 - **Avancerad rösttranskription**

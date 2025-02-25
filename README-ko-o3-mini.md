@@ -4,6 +4,8 @@
 
 Babel Fish AI는 원래 강력한 음성 전사를 제공하기 위해 설계된 혁신적인 Chrome 확장 프로그램입니다. OpenAI의 Whisper API를 통해 놀라운 정밀도로 음성을 텍스트로 변환하고, 선택적으로 실시간 자동 번역 기능을 제공합니다. 필요에 따라 Babel Fish AI를 오직 전사에만 사용하거나, 실시간 번역 기능을 활성화할 수 있습니다.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai)
+
 ## 🌟 주요 기능
 
 - **고급 음성 전사**
