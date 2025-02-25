@@ -274,7 +274,103 @@
         }
     }
 
+    /**
+     * Récupère les options de configuration depuis le stockage
+     * @returns {Promise<Object>} Les options de configuration
+     */
+    async function getDisplayOptions() {
+        return new Promise(resolve => {
+            chrome.storage.sync.get({
+                activeDisplay: true,
+                dialogDisplay: false,
+                dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
+                enableTranslation: false,
+                sourceLanguage: 'fr',
+                targetLanguage: 'en',
+                forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
+            }, resolve);
+        });
+    }
+
+    /**
+     * Traduit le texte si l'option est activée
+     * @param {string} text - Le texte à traduire
+     * @param {Object} options - Les options de traduction
+     * @returns {Promise<string>} Le texte traduit ou le texte original en cas d'erreur
+     */
+    async function translateTextIfEnabled(text, options) {
+        if (!options.enableTranslation) {
+            return text;
+        }
+
+        try {
+            // Informer l'utilisateur que la traduction est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
+
+            // Traduire le texte
+            const translatedText = await window.BabelFishAIUtils.translation.translateText(
+                text,
+                options.sourceLanguage,
+                options.targetLanguage,
+                apiKey
+            );
+
+            // Vérifier que la traduction est valide
+            if (translatedText && translatedText.trim()) {
+                // Cacher la bannière une fois la traduction terminée
+                hideBanner();
+                return translatedText;
+            } else {
+                throw new Error('Empty translation result');
+            }
+        } catch (error) {
+            console.error('Translation failed:', error);
+            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), error.message);
+            // En cas d'erreur de traduction, on utilise le texte original
+            return text;
+        }
+    }
+
     // Utilisation de la fonction translateText de translation.js
+
+    /**
+     * Affiche la transcription selon les options configurées
+     * @param {string} text - Le texte à afficher
+     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
+     */
+    /**
+     * Détermine le mode d'affichage et affiche le texte
+     * @param {string} text - Le texte à afficher
+     * @param {Object} options - Les options d'affichage
+     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
+     */
+    async function displayTranscriptionText(text, options) {
+        // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
+        const currentDomain = window.location.hostname;
+        const isDialogForced = options.forcedDialogDomains.some(domain =>
+            currentDomain.includes(domain)
+        );
+
+        // Tenter d'insérer le texte dans l'élément actif si l'option est activée
+        let displayed = false;
+        if (options.activeDisplay && !isDialogForced) {
+            displayed = handleActiveElementInsertion(text);
+        }
+
+        // Afficher dans une boîte de dialogue si nécessaire
+        if (options.dialogDisplay || isDialogForced || !displayed) {
+            showTranscriptionDialog(text, options.dialogDuration);
+            displayed = true;
+        }
+
+        // Avertir si aucune méthode d'affichage n'est activée
+        if (!displayed) {
+            console.warn("No display method enabled");
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Affiche la transcription selon les options configurées
@@ -290,77 +386,13 @@
 
         try {
             // Récupérer les options de configuration
-            const options = await new Promise(resolve => {
-                chrome.storage.sync.get({
-                    activeDisplay: true,
-                    dialogDisplay: false,
-                    dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
-                    enableTranslation: false,
-                    sourceLanguage: 'fr',
-                    targetLanguage: 'en',
-                    forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
-                }, resolve);
-            });
-
-            // Texte à afficher (original ou traduit)
-            let displayText = text;
+            const options = await getDisplayOptions();
 
             // Traduire le texte si l'option est activée
-            if (options.enableTranslation) {
-                try {
-                    // Informer l'utilisateur que la traduction est en cours
-                    showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
+            const displayText = await translateTextIfEnabled(text, options);
 
-                    // Traduire le texte
-                    const translatedText = await window.BabelFishAIUtils.translation.translateText(
-                        text,
-                        options.sourceLanguage,
-                        options.targetLanguage,
-                        apiKey
-                    );
-
-                    // Vérifier que la traduction est valide
-                    if (translatedText && translatedText.trim()) {
-                        displayText = translatedText;
-                    } else {
-                        throw new Error('Empty translation result');
-                    }
-
-                    // Cacher la bannière une fois la traduction terminée
-                    hideBanner();
-                } catch (error) {
-                    console.error('Translation failed:', error);
-                    handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), error.message);
-                    // En cas d'erreur de traduction, on utilise le texte original
-                    displayText = text;
-                }
-            }
-
-            // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
-            const currentDomain = window.location.hostname;
-            const isDialogForced = options.forcedDialogDomains.some(domain =>
-                currentDomain.includes(domain)
-            );
-
-            // Tenter d'insérer le texte dans l'élément actif si l'option est activée
-            let displayed = false;
-            if (options.activeDisplay && !isDialogForced) {
-                displayed = handleActiveElementInsertion(displayText);
-            }
-
-            // Afficher dans une boîte de dialogue si nécessaire
-            if (options.dialogDisplay || isDialogForced || !displayed) {
-                showTranscriptionDialog(displayText, options.dialogDuration);
-                displayed = true;
-            }
-
-            // Avertir si aucune méthode d'affichage n'est activée
-            if (!displayed) {
-                console.warn("No display method enabled");
-                return false;
-            }
-
-            return true;
+            // Afficher le texte selon les options configurées
+            return await displayTranscriptionText(displayText, options);
         } catch (error) {
             console.error('Error displaying transcription:', error);
             handleError("Erreur d'affichage", error.message);
