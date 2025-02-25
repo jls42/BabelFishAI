@@ -15,10 +15,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} startColor - Couleur de début du dégradé
      * @param {string} endColor - Couleur de fin du dégradé
      * @param {number} opacity - Opacité (0-100)
+     * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
      */
-    function updateBannerColor(banner, startColor, endColor, opacity) {
-        if (banner.classList.contains('error')) {
-            return; // Ne pas modifier le style si c'est une erreur
+    function updateBannerColor(banner, startColor, endColor, opacity, force = false) {
+        // Vérifications de sécurité
+        if (!banner) {
+            console.warn('Banner element is null or undefined');
+            return;
+        }
+
+        // Ne pas modifier le style si c'est une erreur, sauf si force=true
+        if (!force && banner.classList.contains('error')) {
+            return;
         }
 
         const opacityValue = opacity / 100;

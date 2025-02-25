@@ -66,8 +66,15 @@
 
     /**
      * Met à jour la couleur du bandeau
+     * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
      */
-    function updateBannerColor() {
+    function updateBannerColor(force = false) {
+        // Éviter de mettre à jour la couleur si la bannière n'existe pas
+        if (!recordingBanner) return;
+
+        // Éviter de mettre à jour la couleur si la bannière est en mode erreur, sauf si force=true
+        if (!force && recordingBanner.classList.contains('error')) return;
+
         window.BabelFishAIUtils.ui.updateBannerColor(
             recordingBanner,
             bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
@@ -331,28 +338,37 @@
      * @param {number} duration - Durée d'affichage en secondes
      */
     function showTranscriptionDialog(text, duration) {
+        // Récupérer ou créer le conteneur
         let container = document.getElementById('whisper-transcription-container');
         if (!container) {
             container = createTranscriptionContainer();
         }
 
+        // Créer l'élément de transcription
         const transcriptionElement = document.createElement('div');
         transcriptionElement.className = 'whisper-transcription-element';
         transcriptionElement.textContent = text;
 
+        // Ajouter le bouton de copie
         const copyButton = createCopyButton(text);
         transcriptionElement.appendChild(document.createElement('br'));
         transcriptionElement.appendChild(copyButton);
 
+        // Ajouter l'élément au conteneur
         container.appendChild(transcriptionElement);
 
+        // Configurer la suppression automatique après la durée spécifiée
         setTimeout(() => {
+            // Vérifier si l'élément existe toujours avant de le supprimer
             if (transcriptionElement.parentNode) {
                 transcriptionElement.parentNode.removeChild(transcriptionElement);
+
+                // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+                const currentContainer = document.getElementById('whisper-transcription-container');
+
                 // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-                const container = document.getElementById('whisper-transcription-container');
-                if (container && container.children.length === 1) {
-                    document.body.removeChild(container);
+                if (currentContainer && currentContainer.children.length === 1) {
+                    document.body.removeChild(currentContainer);
                 }
             }
         }, duration * 1000);
@@ -397,13 +413,14 @@
         recordingBanner.className = 'whisper-status-banner';
         recordingBanner.style.display = 'none'; // Cacher le bandeau par défaut
         document.body.insertBefore(recordingBanner, document.body.firstChild);
-        updateBannerColor();
+        // Forcer la mise à jour de la couleur lors de l'initialisation
+        updateBannerColor(true);
     }
     initBanner();
 
     /**
-    * Affiche la bannière avec un message
-    * @param {string} text - Le message à afficher
+     * Affiche la bannière avec un message
+     * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
@@ -413,8 +430,12 @@
             type,
             isRecording
         );
-        // Assurer que la couleur est correctement mise à jour
-        updateBannerColor();
+
+        // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
+        // car les messages d'erreur ont leur propre style
+        if (type !== MESSAGE_TYPES.ERROR) {
+            updateBannerColor();
+        }
     }
 
     /**
