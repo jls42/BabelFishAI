@@ -7,29 +7,38 @@ const SERVICE_WORKER_CONFIG = {
 };
 
 // Définition des constantes nécessaires pour le service worker
-// Note: Le service worker n'a pas accès à window.BabelFishAIConstants
+// IMPORTANT: Ces constantes sont dupliquées intentionnellement car le service worker
+// n'a pas accès à window.BabelFishAIConstants. Assurez-vous que ces valeurs
+// correspondent à celles définies dans constants.js.
+//
+// Voir constants.js pour les définitions originales:
+// - STATES correspond à window.BabelFishAIConstants.STATES
+// - ACTIONS correspond à window.BabelFishAIConstants.ACTIONS
+// - BADGES correspond à window.BabelFishAIConstants.BADGES
+// - ERRORS est un sous-ensemble de window.BabelFishAIConstants.ERRORS
+
 const STATES = {
-    RECORDING: 'recording',
-    STOPPED: 'stopped',
-    ERROR: 'error'
+    RECORDING: 'recording',  // Doit correspondre à window.BabelFishAIConstants.STATES.RECORDING
+    STOPPED: 'stopped',      // Doit correspondre à window.BabelFishAIConstants.STATES.STOPPED
+    ERROR: 'error'           // Doit correspondre à window.BabelFishAIConstants.STATES.ERROR
 };
 
 const ACTIONS = {
-    TOGGLE: 'toggleRecording',
-    STARTED: 'recordingStarted',
-    STOPPED: 'recordingStopped',
-    ERROR: 'recordingError'
+    TOGGLE: 'toggleRecording',    // Doit correspondre à window.BabelFishAIConstants.ACTIONS.TOGGLE
+    STARTED: 'recordingStarted',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STARTED
+    STOPPED: 'recordingStopped',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STOPPED
+    ERROR: 'recordingError'       // Doit correspondre à window.BabelFishAIConstants.ACTIONS.ERROR
 };
 
 const BADGES = {
-    RECORDING: '⏺',
-    STOPPED: '',
-    ERROR: '!'
+    RECORDING: '⏺',  // Doit correspondre à window.BabelFishAIConstants.BADGES.RECORDING
+    STOPPED: '',      // Doit correspondre à window.BabelFishAIConstants.BADGES.STOPPED
+    ERROR: '!'        // Doit correspondre à window.BabelFishAIConstants.BADGES.ERROR
 };
 
 const ERRORS = {
-    CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",
-    NO_ACTIVE_TAB: "Aucun onglet actif trouvé"
+    CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",  // Spécifique au service worker
+    NO_ACTIVE_TAB: "Aucun onglet actif trouvé"                                       // Spécifique au service worker
 };
 
 // État global

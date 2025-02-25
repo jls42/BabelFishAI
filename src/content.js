@@ -44,7 +44,7 @@
     let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
 
     // Initialisation de la clé API
-    getApiKey().then(key => {
+    window.BabelFishAIUtils.api.getApiKey().then(key => {
         apiKey = key;
     }).catch(error => {
         console.error("Failed to load API key:", error);
@@ -83,7 +83,7 @@
         audioChunks = [];
         try {
             // Vérifier si la clé API est configurée
-            apiKey = await getApiKey();
+            apiKey = await window.BabelFishAIUtils.api.getApiKey();
             // La vérification de la clé API est déjà effectuée dans la fonction getApiKey
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
@@ -148,18 +148,9 @@
         }
     }
 
-    /**
-     * Récupère la clé API depuis chrome.storage.sync
-     * @returns {Promise<string>} La clé API
-     */
-    async function getApiKey() {
-        try {
-            return await window.BabelFishAIUtils.api.getApiKey();
-        } catch (error) {
-            console.error("API key not found or storage error:", error);
-            return null; // Conserver le comportement original qui renvoie null en cas d'erreur
-        }
-    }
+    // Note: La fonction getApiKey a été supprimée car elle était un simple wrapper
+    // autour de window.BabelFishAIUtils.api.getApiKey(). Nous utilisons maintenant
+    // directement cette fonction.
 
     /**
      * Transcrit l'audio en texte via l'API Whisper
