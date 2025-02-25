@@ -43,26 +43,34 @@
     let bannerColorEnd = UI_CONFIG.DEFAULT_BANNER_COLOR_END;
     let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
 
-    // Initialisation de la clé API
-    window.BabelFishAIUtils.api.getApiKey().then(key => {
-        apiKey = key;
-    }).catch(error => {
-        console.error("Failed to load API key:", error);
-    });
-
-    // Initialisation des options de couleur du bandeau
-    chrome.storage.sync.get({
-        bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
-        bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
-        bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
-    }, (result) => {
-        bannerColorStart = result.bannerColorStart;
-        bannerColorEnd = result.bannerColorEnd;
-        bannerOpacity = result.bannerOpacity;
-        if (recordingBanner) {
-            updateBannerColor();
+    /**
+     * Initialise les options de l'extension
+     */
+    async function initializeExtensionOptions() {
+        try {
+            // Initialisation de la clé API
+            apiKey = await window.BabelFishAIUtils.api.getApiKey();
+        } catch (error) {
+            console.error("Failed to load API key:", error);
         }
-    });
+
+        // Initialisation des options de couleur du bandeau
+        chrome.storage.sync.get({
+            bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
+            bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
+            bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
+        }, (result) => {
+            bannerColorStart = result.bannerColorStart;
+            bannerColorEnd = result.bannerColorEnd;
+            bannerOpacity = result.bannerOpacity;
+            if (recordingBanner) {
+                updateBannerColor();
+            }
+        });
+    }
+
+    // Initialiser les options de l'extension
+    initializeExtensionOptions();
 
     /**
      * Met à jour la couleur du bandeau
@@ -150,6 +158,52 @@
     }
 
     /**
+     * Traite l'audio enregistré
+     * @param {Blob} audioBlob - Le blob audio à traiter
+     * @returns {Promise<void>}
+     */
+    async function processRecordedAudio(audioBlob) {
+        try {
+            // Informer l'utilisateur que la transcription est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing"));
+
+            // Transcrire l'audio
+            const transcription = await transcribeAudio(audioBlob);
+
+            // Afficher la transcription
+            await showTranscription(transcription);
+
+            // Cacher la bannière une fois terminé
+            hideBanner();
+        } catch (error) {
+            console.error("Error during transcription:", error);
+            handleError(error.message, error.message);
+        }
+    }
+
+    /**
+     * Nettoie les ressources après l'enregistrement
+     * @param {MediaStream} stream - Le flux audio à nettoyer
+     */
+    function cleanupRecordingResources(stream) {
+        // Réinitialiser l'état d'enregistrement
+        isRecording = false;
+
+        // Informer le background script
+        chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
+
+        // Arrêter toutes les pistes du stream pour libérer les ressources
+        if (stream && stream.getTracks) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+
+        // Réinitialiser les chunks audio pour libérer la mémoire
+        if (audioChunks.length > 0) {
+            audioChunks = [];
+        }
+    }
+
+    /**
      * Configure les événements du MediaRecorder
      * @param {MediaStream} stream - Le flux audio
      */
@@ -163,41 +217,14 @@
 
         // Événement déclenché lorsque l'enregistrement est arrêté
         mediaRecorder.onstop = async () => {
-            try {
-                // Créer le blob audio à partir des chunks collectés
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            // Créer le blob audio à partir des chunks collectés
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 
-                // Informer l'utilisateur que la transcription est en cours
-                showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing"));
+            // Traiter l'audio enregistré
+            await processRecordedAudio(audioBlob);
 
-                // Transcrire l'audio
-                const transcription = await transcribeAudio(audioBlob);
-
-                // Afficher la transcription
-                await showTranscription(transcription);
-
-                // Cacher la bannière une fois terminé
-                hideBanner();
-            } catch (error) {
-                console.error("Error during transcription:", error);
-                handleError(error.message, error.message);
-            } finally {
-                // Nettoyer les ressources, quelle que soit l'issue
-                isRecording = false;
-                chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
-
-                // Arrêter toutes les pistes du stream pour libérer les ressources
-                if (stream && stream.getTracks) {
-                    stream.getTracks().forEach(track => track.stop());
-                }
-
-                // Réinitialiser les chunks audio pour libérer la mémoire
-                // Note: audioChunks est déjà réinitialisé dans transcribeAudio,
-                // mais nous le faisons ici aussi au cas où transcribeAudio ne serait pas appelé
-                if (audioChunks.length > 0) {
-                    audioChunks = [];
-                }
-            }
+            // Nettoyer les ressources
+            cleanupRecordingResources(stream);
         };
     }
 
@@ -664,21 +691,36 @@
         }
     });
 
+    /**
+     * Met à jour les options de couleur du bandeau
+     * @param {Object} changes - Les changements dans les options
+     */
+    function updateBannerColorOptions(changes) {
+        let colorUpdated = false;
+
+        if (changes.bannerColorStart) {
+            bannerColorStart = changes.bannerColorStart.newValue;
+            colorUpdated = true;
+        }
+        if (changes.bannerColorEnd) {
+            bannerColorEnd = changes.bannerColorEnd.newValue;
+            colorUpdated = true;
+        }
+        if (changes.bannerOpacity) {
+            bannerOpacity = changes.bannerOpacity.newValue;
+            colorUpdated = true;
+        }
+
+        // Mettre à jour la couleur du bandeau une seule fois si nécessaire
+        if (colorUpdated) {
+            updateBannerColor();
+        }
+    }
+
     // Écouter les changements dans les options
     chrome.storage.onChanged.addListener((changes, namespace) => {
         if (namespace === 'sync') {
-            if (changes.bannerColorStart) {
-                bannerColorStart = changes.bannerColorStart.newValue;
-                updateBannerColor();
-            }
-            if (changes.bannerColorEnd) {
-                bannerColorEnd = changes.bannerColorEnd.newValue;
-                updateBannerColor();
-            }
-            if (changes.bannerOpacity) {
-                bannerOpacity = changes.bannerOpacity.newValue;
-                updateBannerColor();
-            }
+            updateBannerColorOptions(changes);
         }
     });
 })();
