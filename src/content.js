@@ -14,21 +14,10 @@
 
     // Content script de l'extension de transcription vocale
 
-    // Utilisation des constantes globales depuis constants.js
-    const CONFIG = {
-        DEBUG: window.BabelFishAIConstants.CONFIG.DEBUG,
-        WHISPER_MODEL: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
-        GPT_MODEL: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-        DEFAULT_API_URL: window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
-        GPT_API_URL: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-        COPY_FEEDBACK_DURATION: window.BabelFishAIConstants.CONFIG.COPY_FEEDBACK_DURATION,
-        ERROR_BANNER_DURATION: window.BabelFishAIConstants.CONFIG.ERROR_BANNER_DURATION,
-        DEFAULT_DIALOG_DURATION: window.BabelFishAIConstants.CONFIG.DEFAULT_DIALOG_DURATION,
-        DEFAULT_BANNER_COLOR_START: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_COLOR_START,
-        DEFAULT_BANNER_COLOR_END: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_COLOR_END,
-        DEFAULT_BANNER_OPACITY: window.BabelFishAIConstants.UI_CONFIG.DEFAULT_BANNER_OPACITY,
-        DEFAULT_FORCED_DIALOG_DOMAINS: window.BabelFishAIConstants.CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
-    };
+    // Utilisation directe des constantes globales depuis constants.js
+    const CONFIG = window.BabelFishAIConstants.CONFIG;
+    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
 
     // Utilisation des constantes globales pour les états et actions
     const STATES = window.BabelFishAIConstants.STATES;
@@ -50,9 +39,9 @@
     let isRecording = false;
     let recordingBanner = null;
     let apiKey = null;
-    let bannerColorStart = CONFIG.DEFAULT_BANNER_COLOR_START;
-    let bannerColorEnd = CONFIG.DEFAULT_BANNER_COLOR_END;
-    let bannerOpacity = CONFIG.DEFAULT_BANNER_OPACITY;
+    let bannerColorStart = UI_CONFIG.DEFAULT_BANNER_COLOR_START;
+    let bannerColorEnd = UI_CONFIG.DEFAULT_BANNER_COLOR_END;
+    let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
 
     // Initialisation de la clé API
     getApiKey().then(key => {
@@ -63,9 +52,9 @@
 
     // Initialisation des options de couleur du bandeau
     chrome.storage.sync.get({
-        bannerColorStart: CONFIG.DEFAULT_BANNER_COLOR_START,
-        bannerColorEnd: CONFIG.DEFAULT_BANNER_COLOR_END,
-        bannerOpacity: CONFIG.DEFAULT_BANNER_OPACITY
+        bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
+        bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
+        bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
     }, (result) => {
         bannerColorStart = result.bannerColorStart;
         bannerColorEnd = result.bannerColorEnd;
@@ -81,8 +70,8 @@
     function updateBannerColor() {
         window.BabelFishAIUtils.ui.updateBannerColor(
             recordingBanner,
-            bannerColorStart || CONFIG.DEFAULT_BANNER_COLOR_START,
-            bannerColorEnd || CONFIG.DEFAULT_BANNER_COLOR_END,
+            bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
+            bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
             bannerOpacity
         );
     }
@@ -187,11 +176,11 @@
             // Récupérer l'URL de l'API et le modèle depuis le stockage
             const { apiUrl, audioModelType } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
-                    apiUrl: CONFIG.DEFAULT_API_URL,
-                    audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL
+                    apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
+                    audioModelType: API_CONFIG.WHISPER_MODEL
                 }, (result) => {
                     resolve({
-                        apiUrl: result.apiUrl || CONFIG.DEFAULT_API_URL,
+                        apiUrl: result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL,
                         audioModelType: result.audioModelType
                     });
                 });
