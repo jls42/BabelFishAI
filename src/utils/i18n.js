@@ -81,7 +81,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const key = element.getAttribute('data-i18n');
             const translated = getMessage(key);
             if (translated) {
-                element.innerHTML = translated;
+                element.innerHTML = sanitizeHTML(translated);
             }
         });
 
@@ -166,7 +166,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function replacePlaceholders(message, placeholders) {
         let newMessage = message;
         for (const key in placeholders) {
-            if (placeholders.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(placeholders, key)) {
                 const regex = new RegExp(`{${key}}`, 'g');
                 newMessage = newMessage.replace(regex, placeholders[key]);
             }
@@ -178,7 +178,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function processTranslationPlaceholders() {
         for (const key in translations) {
-            if (translations.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(translations, key)) {
                 const placeholders = {
                     defaultAudioModel: getMessage('defaultAudioModel'),
                     defaultTranslationModel: getMessage('defaultTranslationModel')
@@ -186,6 +186,104 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 translations[key].message = replacePlaceholders(translations[key].message, placeholders);
             }
         }
+    }
+
+    /**
+     * Sanitize HTML content to prevent XSS attacks while preserving legitimate HTML and attributes
+     * @param {string} html - The HTML content to sanitize
+     * @returns {string} - Sanitized HTML
+     */
+    function sanitizeHTML(html) {
+        if (!html) return '';
+
+        // Use a more comprehensive approach that preserves attributes
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
+        const container = doc.body.firstChild;
+
+        // Define allowed tags and attributes
+        const allowedTags = ['a', 'b', 'i', 'strong', 'em', 'br', 'span', 'p', 'ul', 'ol', 'li', 'img', 'div'];
+        const allowedAttributes = {
+            // Global attributes allowed on any element
+            all: ['class', 'id', 'style', 'title'],
+            // Element-specific attributes
+            a: ['href', 'target', 'rel'],
+            img: ['src', 'alt', 'width', 'height'],
+        };
+
+        // Function to sanitize a DOM node and its children
+        function sanitizeNode(node) {
+            // If this is a text node, it's safe
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node.cloneNode(true);
+            }
+
+            // If not an element node, skip it
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+                return document.createDocumentFragment();
+            }
+
+            const tagName = node.tagName.toLowerCase();
+
+            // If the tag is not in our allowed list, just take its text content
+            if (!allowedTags.includes(tagName)) {
+                const text = document.createTextNode(node.textContent);
+                return text;
+            }
+
+            // Create a new element that we'll build up with allowed attributes
+            const newElement = document.createElement(tagName);
+
+            // Add allowed global attributes
+            allowedAttributes.all.forEach(attr => {
+                if (node.hasAttribute(attr)) {
+                    newElement.setAttribute(attr, node.getAttribute(attr));
+                }
+            });
+
+            // Add element-specific attributes
+            if (allowedAttributes[tagName]) {
+                allowedAttributes[tagName].forEach(attr => {
+                    if (node.hasAttribute(attr)) {
+                        // Special handling for links
+                        if (tagName === 'a' && attr === 'href') {
+                            const href = node.getAttribute(attr);
+                            // Only allow http, https, and mailto protocols
+                            if (href.startsWith('http:') || href.startsWith('https:') || href.startsWith('mailto:')) {
+                                newElement.setAttribute(attr, href);
+                            }
+                        } else {
+                            newElement.setAttribute(attr, node.getAttribute(attr));
+                        }
+                    }
+                });
+            }
+
+            // If it's an anchor, ensure it has noopener
+            if (tagName === 'a' && newElement.hasAttribute('target') && newElement.getAttribute('target') === '_blank') {
+                newElement.setAttribute('rel', 'noopener noreferrer');
+            }
+
+            // Recursively sanitize child nodes
+            Array.from(node.childNodes).forEach(child => {
+                const sanitizedChild = sanitizeNode(child);
+                newElement.appendChild(sanitizedChild);
+            });
+
+            return newElement;
+        }
+
+        // Process all nodes in the container
+        const fragment = document.createDocumentFragment();
+        Array.from(container.childNodes).forEach(child => {
+            fragment.appendChild(sanitizeNode(child));
+        });
+
+        // Create a temporary div to get the HTML string
+        const output = document.createElement('div');
+        output.appendChild(fragment);
+
+        return output.innerHTML;
     }
 
     /**

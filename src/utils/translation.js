@@ -6,7 +6,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Utilisation des constantes globales depuis constants.js
     const ERRORS = window.BabelFishAIConstants.ERRORS;
-    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    // API_CONFIG est directement accessible via window.BabelFishAIConstants.API_CONFIG
 
     // Configuration du débogage pour la traduction
     const TRANSLATION_DEBUG = false;
@@ -30,7 +30,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} [apiUrl] - URL de l'API GPT (optionnel)
      * @returns {Promise<string>} Le texte traduit
      */
-    async function translateText(text, sourceLang, targetLang, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL) {
+    async function translateText(text, sourceLang, targetLang, apiKey) {
         // Validation des paramètres
         if (!text || !sourceLang || !targetLang) {
             console.error('Missing translation parameters:', { text, sourceLang, targetLang });
