@@ -73,7 +73,7 @@
     initializeExtensionOptions();
 
     /**
-     * Met à jour la couleur du bandeau
+     * Met à jour la couleur du bandeau en utilisant la fonction de l'utilitaire UI
      * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
      * @returns {boolean} - Indique si la mise à jour a réussi
      */
@@ -84,11 +84,13 @@
         // Éviter de mettre à jour la couleur si la bannière est en mode erreur, sauf si force=true
         if (!force && recordingBanner.classList.contains('error')) return false;
 
+        // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur du bandeau
         window.BabelFishAIUtils.ui.updateBannerColor(
             recordingBanner,
             bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
             bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
-            bannerOpacity
+            bannerOpacity,
+            force
         );
 
         return true;
@@ -249,9 +251,7 @@
         }
     }
 
-    // Note: La fonction getApiKey a été supprimée car elle était un simple wrapper
-    // autour de window.BabelFishAIUtils.api.getApiKey(). Nous utilisons maintenant
-    // directement cette fonction.
+    // La fonction getApiKey a été remplacée par un appel direct à window.BabelFishAIUtils.api.getApiKey()
 
     /**
      * Transcrit l'audio en texte via l'API Whisper
@@ -266,11 +266,6 @@
         }
 
         try {
-            // Générer un nom de fichier avec timestamp et élément aléatoire pour une meilleure protection anti-cache
-            const timestamp = Date.now();
-            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
-            const filename = `audio-${timestamp}-${randomPart}.webm`;
-
             // Récupérer l'URL de l'API et le modèle depuis le stockage
             const { apiUrl, audioModelType } = await new Promise((resolve) => {
                 chrome.storage.sync.get({
@@ -284,13 +279,14 @@
                 });
             });
 
-            // Utiliser la fonction de l'API pour la transcription
+            // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
             return await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 apiKey,
                 apiUrl,
                 audioModelType,
-                filename
+                null, // Pas de nom de fichier spécifique
+                true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
         } catch (error) {
             console.error('Transcription error:', error);
@@ -440,7 +436,7 @@
                 return false;
             }
 
-            // IMPORTANT: Ne pas stocker le contenu de l'élément actif.
+            // Récupérer l'élément actif (sans stocker son contenu pour des raisons de sécurité)
             const activeElement = document.activeElement;
 
             // Vérifier si l'élément actif est valide
@@ -448,31 +444,37 @@
                 return false;
             }
 
-            // Nettoyer le texte
+            // Nettoyer le texte en supprimant les espaces au début
             const cleanText = text.trimStart();
 
-            // Vérifier si l'élément actif est éditable
+            // Déterminer le type d'élément actif
             const isTextarea = activeElement.tagName === 'TEXTAREA';
             const isTextInput = activeElement.tagName === 'INPUT' && activeElement.type === 'text';
             const isContentEditable = activeElement.isContentEditable;
+            const isEditableElement = isTextarea || isTextInput || isContentEditable;
 
-            if (isTextarea || isTextInput || isContentEditable) {
-                // Insérer le texte selon le type d'élément
-                if (isTextarea || isTextInput) {
-                    insertTextIntoInput(activeElement, cleanText);
-                } else if (isContentEditable) {
-                    // Insérer dans un élément contentEditable
-                    activeElement.focus();
+            // Si l'élément n'est pas éditable, abandonner l'insertion
+            if (!isEditableElement) {
+                return false;
+            }
 
-                    // Normaliser les sauts de ligne et espaces
-                    let finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
+            // Insérer le texte selon le type d'élément
+            if (isTextarea || isTextInput) {
+                // Utiliser la fonction spécialisée pour les éléments input/textarea
+                return insertTextIntoInput(activeElement, cleanText);
+            } else if (isContentEditable) {
+                // Insérer dans un élément contentEditable
+                activeElement.focus();
 
-                    // Utiliser execCommand pour l'insertion (compatible avec la plupart des navigateurs)
-                    document.execCommand('insertHTML', false, finalText);
+                // Normaliser les sauts de ligne et espaces
+                let finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
 
-                    // Déclencher un événement input pour notifier les listeners
-                    activeElement.dispatchEvent(new Event('input', { bubbles: true }));
-                }
+                // Utiliser execCommand pour l'insertion (compatible avec la plupart des navigateurs)
+                document.execCommand('insertHTML', false, finalText);
+
+                // Déclencher un événement input pour notifier les listeners
+                activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+
                 return true;
             }
 
@@ -497,10 +499,13 @@
                 return false;
             }
 
-            // Vérifier si l'élément a les propriétés nécessaires
-            if (typeof element.value !== 'string' ||
-                typeof element.selectionStart !== 'number' ||
-                typeof element.selectionEnd !== 'number') {
+            // Vérifier si l'élément a les propriétés nécessaires pour être un input/textarea valide
+            const hasRequiredProperties =
+                typeof element.value === 'string' &&
+                typeof element.selectionStart === 'number' &&
+                typeof element.selectionEnd === 'number';
+
+            if (!hasRequiredProperties) {
                 console.warn("Element is not a valid input or textarea");
                 return false;
             }
@@ -510,13 +515,19 @@
             const selectionStart = element.selectionStart;
             const selectionEnd = element.selectionEnd;
 
-            // Insérer le texte à la position du curseur ou remplacer la sélection
-            element.value = currentValue.substring(0, selectionStart) +
+            // Construire la nouvelle valeur en insérant le texte à la position du curseur
+            // ou en remplaçant la sélection actuelle
+            const newValue =
+                currentValue.substring(0, selectionStart) +
                 text +
                 currentValue.substring(selectionEnd);
 
+            // Mettre à jour la valeur de l'élément
+            element.value = newValue;
+
             // Positionner le curseur après le texte inséré
-            element.selectionStart = element.selectionEnd = selectionStart + text.length;
+            const newCursorPosition = selectionStart + text.length;
+            element.selectionStart = element.selectionEnd = newCursorPosition;
 
             // Déclencher un événement input pour notifier les listeners
             element.dispatchEvent(new Event('input', { bubbles: true }));
@@ -529,63 +540,83 @@
     }
 
     /**
-     * Affiche la transcription dans une boîte de dialogue
+     * Affiche la transcription dans une boîte de dialogue flottante
      * @param {string} text - Le texte à afficher
      * @param {number} duration - Durée d'affichage en secondes
      */
     function showTranscriptionDialog(text, duration) {
-        // Récupérer ou créer le conteneur
+        // Récupérer ou créer le conteneur de la boîte de dialogue
         let container = document.getElementById('whisper-transcription-container');
         if (!container) {
             container = createTranscriptionContainer();
         }
 
-        // Créer l'élément de transcription
+        // Créer l'élément qui contiendra le texte de transcription
         const transcriptionElement = document.createElement('div');
         transcriptionElement.className = 'whisper-transcription-element';
         transcriptionElement.textContent = text;
 
-        // Ajouter le bouton de copie
+        // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
         const copyButton = createCopyButton(text);
         transcriptionElement.appendChild(document.createElement('br'));
         transcriptionElement.appendChild(copyButton);
 
-        // Ajouter l'élément au conteneur
+        // Ajouter l'élément de transcription au conteneur
         container.appendChild(transcriptionElement);
 
         // Configurer la suppression automatique après la durée spécifiée
+        const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
         setTimeout(() => {
-            // Vérifier si l'élément existe toujours avant de le supprimer
-            if (transcriptionElement.parentNode) {
-                transcriptionElement.parentNode.removeChild(transcriptionElement);
-
-                // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
-                const currentContainer = document.getElementById('whisper-transcription-container');
-
-                // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-                if (currentContainer && currentContainer.children.length === 1) {
-                    document.body.removeChild(currentContainer);
-                }
-            }
-        }, duration * 1000);
+            removeTranscriptionElement(transcriptionElement);
+        }, autoRemoveTimeout);
     }
 
     /**
-     * Crée le conteneur pour les transcriptions
-     * @returns {HTMLElement} Le conteneur créé
+     * Supprime un élément de transcription et nettoie le conteneur si nécessaire
+     * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
+     */
+    function removeTranscriptionElement(transcriptionElement) {
+        // Vérifier si l'élément existe toujours avant de le supprimer
+        if (transcriptionElement.parentNode) {
+            transcriptionElement.parentNode.removeChild(transcriptionElement);
+
+            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+            const currentContainer = document.getElementById('whisper-transcription-container');
+
+            // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
+            if (currentContainer && currentContainer.children.length === 1) {
+                document.body.removeChild(currentContainer);
+            }
+        }
+    }
+
+    /**
+     * Crée le conteneur pour les transcriptions avec un bouton de fermeture
+     * @returns {HTMLElement} Le conteneur créé et ajouté au document
      */
     function createTranscriptionContainer() {
+        // Créer le conteneur principal
         const container = document.createElement('div');
         container.id = 'whisper-transcription-container';
         container.className = 'whisper-transcription-container';
 
+        // Créer le bouton de fermeture
         const closeButton = document.createElement('button');
         closeButton.textContent = '×';
         closeButton.className = 'whisper-close-button';
-        closeButton.onclick = () => document.body.removeChild(container);
+        closeButton.title = 'Fermer';
 
+        // Ajouter un gestionnaire d'événements pour fermer le conteneur
+        closeButton.onclick = () => {
+            if (container.parentNode) {
+                document.body.removeChild(container);
+            }
+        };
+
+        // Ajouter le bouton au conteneur et le conteneur au document
         container.appendChild(closeButton);
         document.body.appendChild(container);
+
         return container;
     }
 
@@ -615,7 +646,7 @@
     initBanner();
 
     /**
-     * Affiche la bannière avec un message
+     * Affiche la bannière avec un message en utilisant la fonction de l'utilitaire UI
      * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
      * @returns {boolean} - Indique si l'affichage a réussi
@@ -627,6 +658,7 @@
             return false;
         }
 
+        // Utiliser la fonction de l'utilitaire UI pour afficher la bannière
         window.BabelFishAIUtils.ui.showBanner(
             recordingBanner,
             text,
@@ -644,7 +676,7 @@
     }
 
     /**
-     * Cache la bannière
+     * Cache la bannière en modifiant son style d'affichage
      * @returns {boolean} - Indique si l'opération a réussi
      */
     function hideBanner() {
@@ -654,7 +686,7 @@
                 return false;
             }
 
-            // Cacher la bannière
+            // Cacher la bannière en modifiant son style d'affichage
             recordingBanner.style.display = 'none';
             return true;
         } catch (error) {
@@ -664,18 +696,22 @@
     }
 
     /**
-     * Gère les erreurs de manière centralisée
+     * Gère les erreurs de manière centralisée en affichant un message à l'utilisateur
+     * et en informant le background script
      * @param {string} displayMessage - Le message à afficher à l'utilisateur
      * @param {string} errorMessage - Le message d'erreur technique à envoyer au background script
      */
     function handleError(displayMessage, errorMessage) {
-        // Afficher le message d'erreur
+        // Afficher le message d'erreur à l'utilisateur via la bannière
         showBanner(displayMessage, MESSAGE_TYPES.ERROR);
 
-        // Informer le background script de l'erreur
-        chrome.runtime.sendMessage({ action: ACTIONS.ERROR, error: errorMessage });
+        // Informer le background script de l'erreur pour mise à jour du badge
+        chrome.runtime.sendMessage({
+            action: ACTIONS.ERROR,
+            error: errorMessage
+        });
 
-        // Cacher la bannière après un délai
+        // Cacher automatiquement la bannière après un délai défini
         setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
     }
 

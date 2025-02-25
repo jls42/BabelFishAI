@@ -15,9 +15,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} apiUrl - L'URL de l'API Whisper
      * @param {string} [modelType] - Le modèle Whisper à utiliser
      * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
+     * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null) {
+    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         if (!apiKey) {
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
@@ -25,8 +26,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             const formData = new FormData();
 
-            // Utiliser directement le blob audio sans créer de copie inutile
-            const finalFilename = filename || 'audio.webm';
+            // Déterminer le nom de fichier final
+            let finalFilename;
+            if (generateUniqueFilename) {
+                // Générer un nom de fichier avec timestamp et élément aléatoire
+                const timestamp = Date.now();
+                const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
+                finalFilename = `audio-${timestamp}-${randomPart}.webm`;
+            } else {
+                finalFilename = filename || 'audio.webm';
+            }
+
             formData.append('file', audioBlob, finalFilename);
             formData.append('model', modelType);
 

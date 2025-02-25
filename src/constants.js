@@ -35,7 +35,7 @@ window.BabelFishAIConstants = {
         DEFAULT_BANNER_COLOR_START: '#684054',
         DEFAULT_BANNER_COLOR_END: '#4c7b8d',
         DEFAULT_BANNER_OPACITY: 80
-        // COPY_FEEDBACK_DURATION déjà défini dans CONFIG
+        // Note: COPY_FEEDBACK_DURATION est défini dans CONFIG.COPY_FEEDBACK_DURATION
     },
 
     // Configuration de l'API
