@@ -19,8 +19,7 @@
     const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
     const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
 
-    // Utilisation des constantes globales pour les états et actions
-    const STATES = window.BabelFishAIConstants.STATES;
+    // Utilisation des constantes globales pour les actions et types de messages
     const ACTIONS = window.BabelFishAIConstants.ACTIONS;
     const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
 
@@ -716,7 +715,7 @@
     }
 
     // Écouter les messages du background script
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    chrome.runtime.onMessage.addListener((request) => {
         console.log("Message received:", request);
         if (request.action === ACTIONS.TOGGLE) {
             if (!isRecording) {

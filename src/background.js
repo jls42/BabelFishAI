@@ -208,7 +208,7 @@ async function handleCommand(command) {
  * @param {Object} sender - L'expéditeur du message
  * @param {Function} sendResponse - Fonction pour envoyer une réponse
  */
-function handleContentScriptMessage(message, sender, sendResponse) {
+function handleContentScriptMessage(message) {
     debug("Message received:", message);
 
     // Mapping des actions aux états correspondants

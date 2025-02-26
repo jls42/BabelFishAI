@@ -4,6 +4,8 @@
 
 Babel Fish AI 是一个创新的 Chrome 扩展，最初设计用于提供强大的语音转录功能。借助 OpenAI 的 Whisper API，您可以将语音精确转换为文本，并可选择获得实时自动翻译。您可以仅使用 Babel Fish AI 进行转录，或根据需要启用即时翻译功能。
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai)
+
 ## 🌟 功能
 
 - **高级语音转录**
