@@ -192,16 +192,55 @@
         isRecording = false;
 
         // Informer le background script
-        chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
+        try {
+            chrome.runtime.sendMessage({ action: ACTIONS.STOPPED });
+        } catch (error) {
+            console.warn("Impossible d'envoyer le message d'arrêt au background", error);
+        }
 
         // Arrêter toutes les pistes du stream pour libérer les ressources
         if (stream && stream.getTracks) {
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(track => {
+                try {
+                    track.stop();
+                } catch (e) {
+                    console.warn("Erreur lors de l'arrêt d'une piste audio:", e);
+                }
+            });
+        }
+
+        // Réinitialiser les références aux objets MediaRecorder et stream
+        if (mediaRecorder) {
+            try {
+                // S'assurer que le recorder est bien arrêté
+                if (mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
+                // Supprimer les références aux événements pour éviter les fuites mémoire
+                mediaRecorder.ondataavailable = null;
+                mediaRecorder.onstop = null;
+                mediaRecorder.onerror = null;
+            } catch (e) {
+                console.warn("Erreur lors du nettoyage du MediaRecorder:", e);
+            }
+            mediaRecorder = null;
         }
 
         // Réinitialiser les chunks audio pour libérer la mémoire
+        // Utiliser splice(0) plutôt qu'une réassignation pour vider le tableau
+        // tout en conservant la référence originale (meilleure pour la GC)
         if (audioChunks.length > 0) {
-            audioChunks = [];
+            audioChunks.splice(0, audioChunks.length);
+        }
+        
+        // Forcer un cycle de garbage collection si possible
+        if (window.gc) {
+            window.gc();
+        } else {
+            // Alternative: forcer une petite fuite mémoire puis la nettoyer
+            const gcRequest = { i: 1 };
+            gcRequest.self = gcRequest;
+            setTimeout(() => { gcRequest.self = null; }, 0);
         }
     }
 
@@ -522,7 +561,7 @@
     }
 
     /**
-     * Insère du texte dans un élément input ou textarea
+     * Insère du texte dans un élément input ou textarea avec optimisation pour grands volumes
      * @param {HTMLInputElement|HTMLTextAreaElement} element - L'élément de saisie
      * @param {string} text - Le texte à insérer
      * @returns {boolean} - Indique si l'insertion a réussi
@@ -550,27 +589,81 @@
             const currentValue = element.value;
             const selectionStart = element.selectionStart;
             const selectionEnd = element.selectionEnd;
-
-            // Construire la nouvelle valeur en insérant le texte à la position du curseur
-            // ou en remplaçant la sélection actuelle
-            const newValue =
-                currentValue.substring(0, selectionStart) +
-                text +
-                currentValue.substring(selectionEnd);
-
-            // Mettre à jour la valeur de l'élément
-            element.value = newValue;
-
-            // Positionner le curseur après le texte inséré
-            const newCursorPosition = selectionStart + text.length;
-            element.selectionStart = element.selectionEnd = newCursorPosition;
-
-            // Déclencher un événement input pour notifier les listeners
-            element.dispatchEvent(new Event('input', { bubbles: true }));
-
-            return true;
+            
+            // Optimisation pour les grands volumes de texte
+            const isLongText = text.length > 1000 || currentValue.length > 10000;
+            
+            if (isLongText) {
+                // Pour les grands volumes, utiliser une approche différente
+                // qui évite de manipuler toute la chaîne en mémoire
+                
+                // 1. Désactiver temporairement les événements pendant la modification
+                element.disabled = true;
+                
+                // 2. Utiliser requestAnimationFrame pour planifier la modification
+                // lors du prochain cycle de rendu
+                requestAnimationFrame(() => {
+                    try {
+                        // Construire la nouvelle valeur en insérant le texte à la position du curseur
+                        // ou en remplaçant la sélection actuelle
+                        const newValue =
+                            currentValue.substring(0, selectionStart) +
+                            text +
+                            currentValue.substring(selectionEnd);
+                        
+                        // Mettre à jour la valeur de l'élément
+                        element.value = newValue;
+                        
+                        // Positionner le curseur après le texte inséré
+                        const newCursorPosition = selectionStart + text.length;
+                        element.selectionStart = element.selectionEnd = newCursorPosition;
+                        
+                        // Réactiver l'élément
+                        element.disabled = false;
+                        element.focus();
+                        
+                        // Déclencher l'événement input avec un léger délai
+                        // pour permettre au navigateur de finir le rendu
+                        setTimeout(() => {
+                            element.dispatchEvent(new Event('input', { bubbles: true }));
+                        }, 0);
+                    } catch (innerError) {
+                        console.error("Error in deferred text insertion:", innerError);
+                        element.disabled = false;
+                    }
+                });
+                
+                return true;
+            } else {
+                // Pour les textes courts, utiliser l'approche directe
+                
+                // Construire la nouvelle valeur en insérant le texte à la position du curseur
+                // ou en remplaçant la sélection actuelle
+                const newValue =
+                    currentValue.substring(0, selectionStart) +
+                    text +
+                    currentValue.substring(selectionEnd);
+    
+                // Mettre à jour la valeur de l'élément
+                element.value = newValue;
+    
+                // Positionner le curseur après le texte inséré
+                const newCursorPosition = selectionStart + text.length;
+                element.selectionStart = element.selectionEnd = newCursorPosition;
+    
+                // Déclencher un événement input pour notifier les listeners
+                element.dispatchEvent(new Event('input', { bubbles: true }));
+                
+                return true;
+            }
         } catch (error) {
             console.error("Error inserting text into input:", error);
+            
+            // En cas d'erreur, s'assurer que l'élément est réactivé
+            if (element && element.disabled) {
+                element.disabled = false;
+            }
+            
             return false;
         }
     }

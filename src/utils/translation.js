@@ -78,13 +78,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             debugTranslation('Translation request payload:', payload);
 
-            // Utiliser la fonction callApi pour effectuer la requête
+            // Utiliser la fonction callApi pour effectuer la requête avec optimisations
             const translationResponse = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
                 apiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: ERRORS.TRANSLATION_ERROR,
+                // Activer les tentatives de réessai pour les traductions
+                retryOnFail: true,
+                // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
+                timeout: 20000,
+                // Définir un processeur de réponse personnalisé
                 responseProcessor: (data) => {
                     // Vérifier la validité de la réponse
                     if (!data.choices?.[0]?.message?.content) {

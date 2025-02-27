@@ -178,8 +178,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
+    // Création unique d'un fragment de document pour optimiser les manipulations DOM
+    const documentFragment = document.createDocumentFragment();
+    
     /**
-     * Affiche un texte dans une boîte de dialogue flottante
+     * Affiche un texte dans une boîte de dialogue flottante avec optimisation DOM
      * @param {string} text - Le texte à afficher
      * @param {number} duration - Durée d'affichage en secondes
      * @param {Function} onError - Fonction de callback en cas d'erreur
@@ -190,23 +193,54 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const container = createTranscriptionContainer();
 
         // Créer l'élément qui contiendra le texte
+        // Utilisation d'un fragment pour regrouper les manipulations DOM
         const textElement = document.createElement('div');
         textElement.className = 'whisper-transcription-element';
+        
+        // Création unique du fragment de document avec tous les éléments
+        // pour éviter les multiples reflows et repaints
+        documentFragment.appendChild(textElement);
         textElement.textContent = text;
-
+        
+        const lineBreak = document.createElement('br');
+        textElement.appendChild(lineBreak);
+        
         // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
         const copyButton = createCopyButton(text, onError);
-        textElement.appendChild(document.createElement('br'));
         textElement.appendChild(copyButton);
+        
+        // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
+        // et minimiser les reflows/repaints
+        requestAnimationFrame(() => {
+            // Ajouter l'élément au conteneur en une seule opération
+            container.appendChild(documentFragment);
+        });
 
-        // Ajouter l'élément au conteneur
-        container.appendChild(textElement);
-
+        // Utiliser un numéro d'ID unique pour éviter les conflits de timers
+        const timerId = `dialog_${Date.now()}`;
+        
+        // Utiliser requestIdleCallback si disponible pour la suppression automatique
+        const scheduleRemoval = () => {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(() => {
+                    removeTranscriptionElement(textElement);
+                }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
+            } else {
+                removeTranscriptionElement(textElement);
+            }
+        };
+        
         // Configurer la suppression automatique après la durée spécifiée
         const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
-        setTimeout(() => {
-            removeTranscriptionElement(textElement);
-        }, autoRemoveTimeout);
+        const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
+        
+        // Supprimer les anciens timers pour éviter les fuites mémoire
+        if (timers[timerId]) {
+            clearTimeout(timers[timerId]);
+        }
+        
+        // Stocker le timer pour pouvoir le nettoyer plus tard si nécessaire
+        timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
 
         return textElement;
     }

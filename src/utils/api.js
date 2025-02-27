@@ -19,6 +19,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {Object} [options.headers={}] - En-têtes HTTP additionnels à inclure dans la requête
      * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur à utiliser en cas d'échec
      * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse avant de la renvoyer
+     * @param {boolean} [options.retryOnFail=false] - Si true, réessaiera une fois en cas d'échec
+     * @param {number} [options.timeout=10000] - Délai d'expiration en ms
      * @returns {Promise<any>} Résultat traité de l'appel API
      * @throws {Error} Une erreur avec le message approprié en cas d'échec de l'appel
      */
@@ -30,7 +32,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             body,
             headers = {},
             errorType = ERRORS.API_ERROR,
-            responseProcessor = (data) => data
+            responseProcessor = (data) => data,
+            retryOnFail = false,
+            timeout = 10000
         } = options;
 
         if (!apiKey) {
@@ -41,51 +45,66 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error('URL API manquante');
         }
 
-        try {
-            // Préparer les en-têtes avec l'authentification
-            const requestHeaders = {
-                'Authorization': `Bearer ${apiKey}`,
-                ...headers
-            };
-
-            // Configuration de la requête
-            const requestOptions = {
-                method,
-                headers: requestHeaders,
-                body
-            };
-
-            // Effectuer l'appel API avec gestion des erreurs réseau
-            let response;
+        const attemptFetch = async (isRetry = false) => {
             try {
-                response = await fetch(url, requestOptions);
-            } catch (networkError) {
-                // Gérer spécifiquement les erreurs réseau (pas de connexion, CORS, etc.)
-                console.error(`Erreur réseau lors de l'appel à ${url}:`, networkError);
-                throw new Error(`${errorType}: Erreur réseau - ${networkError.message}`);
-            }
-
-            // Gérer les erreurs HTTP
-            if (!response.ok) {
-                let errorMessage;
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.error?.message || errorType;
-                    console.error('API Error:', errorData);
-                } catch (parseError) {
-                    errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
-                    console.error('API Error (could not parse response):', response.status, response.statusText);
+                // Préparer les en-têtes avec l'authentification
+                const requestHeaders = {
+                    'Authorization': `Bearer ${apiKey}`,
+                    ...headers
+                };
+    
+                // Configuration de la requête
+                const requestOptions = {
+                    method,
+                    headers: requestHeaders,
+                    body
+                };
+    
+                // Créer une promesse qui se résout avec la réponse ou rejette après timeout
+                const fetchPromise = fetch(url, requestOptions);
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error(`${errorType}: Timeout - Request exceeded ${timeout}ms`)), timeout);
+                });
+    
+                // Effectuer l'appel API avec gestion des erreurs réseau et timeout
+                const response = await Promise.race([fetchPromise, timeoutPromise]);
+    
+                // Gérer les erreurs HTTP
+                if (!response.ok) {
+                    let errorMessage;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.error?.message || errorType;
+                        console.error('API Error:', errorData);
+                    } catch (parseError) {
+                        errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
+                        console.error('API Error (could not parse response):', response.status, response.statusText);
+                    }
+                    throw new Error(errorMessage);
                 }
-                throw new Error(errorMessage);
+    
+                // Traiter la réponse JSON
+                const data = await response.json();
+                
+                // Appliquer le processeur de réponse personnalisé
+                return responseProcessor(data);
+            } catch (error) {
+                // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
+                if ((error.name === 'TypeError' || error.message.includes('Timeout')) && 
+                    retryOnFail && !isRetry) {
+                    console.warn(`Retry API call to ${url} after error:`, error.message);
+                    // Attendre 500ms avant de réessayer
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    return await attemptFetch(true);
+                }
+                throw error;
             }
+        };
 
-            // Traiter la réponse JSON
-            const data = await response.json();
-            
-            // Appliquer le processeur de réponse personnalisé
-            return responseProcessor(data);
+        try {
+            return await attemptFetch();
         } catch (error) {
-            // Préserver le message d'erreur original
+            // Enrichir le message d'erreur pour le débogage
             console.error(`API call failed (${url}):`, error);
             throw error;
         }
