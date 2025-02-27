@@ -52,6 +52,7 @@ window.BabelFishAIConstants = {
         API_KEY_NOT_FOUND: "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
         CHROME_STORAGE_ERROR: "Erreur de stockage Chrome",
         MIC_ACCESS_ERROR: "Erreur : microphone inaccessible.",
+        API_ERROR: "Erreur lors de l'appel à l'API",
         TRANSCRIPTION_ERROR: "Erreur lors de la transcription",
         TRANSLATION_ERROR: "Erreur lors de la traduction",
         NO_EDITABLE_ELEMENT: "Aucun élément éditable trouvé",

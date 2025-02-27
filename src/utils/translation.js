@@ -37,11 +37,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error(ERRORS.MISSING_TRANSLATION_PARAMS);
         }
 
-        if (!apiKey) {
-            console.error('API key not found for translation');
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
-        }
-
         debugTranslation('Starting translation:', {
             sourceLang,
             targetLang,
@@ -83,42 +78,33 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             debugTranslation('Translation request payload:', payload);
 
-            // Appeler l'API de traduction
-            const response = await fetch(translationApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify(payload)
+            // Utiliser la fonction callApi pour effectuer la requête
+            const translationResponse = await window.BabelFishAIUtils.api.callApi({
+                url: translationApiUrl,
+                apiKey,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                errorType: ERRORS.TRANSLATION_ERROR,
+                responseProcessor: (data) => {
+                    // Vérifier la validité de la réponse
+                    if (!data.choices?.[0]?.message?.content) {
+                        console.error('Invalid translation response format:', data);
+                        throw new Error(ERRORS.INVALID_TRANSLATION_RESPONSE);
+                    }
+                    return data.choices[0].message.content.trim();
+                }
             });
 
-            debugTranslation('Translation API response status:', response.status);
-
-            // Gérer les erreurs de l'API
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Translation API error:', errorData);
-                throw new Error(errorData.error?.message || ERRORS.TRANSLATION_ERROR);
-            }
-
-            // Traiter la réponse
-            const data = await response.json();
-            debugTranslation('Translation API response received');
-
-            // Vérifier la validité de la réponse
-            if (!data.choices?.[0]?.message?.content) {
-                console.error('Invalid translation response format:', data);
-                throw new Error(ERRORS.INVALID_TRANSLATION_RESPONSE);
-            }
-
-            // Extraire et retourner le texte traduit
-            const translatedText = data.choices[0].message.content.trim();
-            debugTranslation('Translation successful, length:', translatedText.length);
-
-            return translatedText;
+            debugTranslation('Translation successful, length:', translationResponse.length);
+            return translationResponse;
+            
         } catch (error) {
             console.error('Translation error:', error);
+            // Si l'erreur est déjà formatée, la propager directement
+            if (error.message.includes(ERRORS.TRANSLATION_ERROR)) {
+                throw error;
+            }
+            // Sinon, la formater avec le préfixe TRANSLATION_ERROR
             throw new Error(`${ERRORS.TRANSLATION_ERROR}: ${error.message}`);
         }
     }

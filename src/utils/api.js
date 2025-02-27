@@ -9,6 +9,80 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**
+     * Effectue un appel API générique avec gestion d'erreur standardisée
+     * @param {Object} options - Options pour l'appel API
+     * @param {string} options.url - URL de l'API à appeler
+     * @param {string} options.apiKey - Clé API pour l'authentification
+     * @param {string} [options.method='POST'] - Méthode HTTP à utiliser
+     * @param {Object|FormData} options.body - Corps de la requête
+     * @param {Object} [options.headers={}] - En-têtes HTTP additionnels
+     * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur en cas d'échec
+     * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse
+     * @returns {Promise<any>} Résultat traité de l'appel API
+     */
+    async function callApi(options) {
+        const {
+            url,
+            apiKey,
+            method = 'POST',
+            body,
+            headers = {},
+            errorType = ERRORS.API_ERROR,
+            responseProcessor = (data) => data
+        } = options;
+
+        if (!apiKey) {
+            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+        }
+
+        if (!url) {
+            throw new Error('URL API manquante');
+        }
+
+        try {
+            // Préparer les en-têtes avec l'authentification
+            const requestHeaders = {
+                'Authorization': `Bearer ${apiKey}`,
+                ...headers
+            };
+
+            // Configuration de la requête
+            const requestOptions = {
+                method,
+                headers: requestHeaders,
+                body
+            };
+
+            // Effectuer l'appel API
+            const response = await fetch(url, requestOptions);
+
+            // Gérer les erreurs HTTP
+            if (!response.ok) {
+                let errorMessage;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error?.message || errorType;
+                    console.error('API Error:', errorData);
+                } catch (parseError) {
+                    errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
+                    console.error('API Error (could not parse response):', response.status, response.statusText);
+                }
+                throw new Error(errorMessage);
+            }
+
+            // Traiter la réponse JSON
+            const data = await response.json();
+            
+            // Appliquer le processeur de réponse personnalisé
+            return responseProcessor(data);
+        } catch (error) {
+            // Préserver le message d'erreur original
+            console.error(`API call failed (${url}):`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Transcrit l'audio en texte via l'API Whisper
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @param {string} apiKey - La clé API OpenAI
@@ -19,47 +93,30 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} Le texte transcrit
      */
     async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
-        if (!apiKey) {
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+        // Déterminer le nom de fichier final
+        let finalFilename;
+        if (generateUniqueFilename) {
+            // Générer un nom de fichier avec timestamp et élément aléatoire
+            const timestamp = Date.now();
+            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
+            finalFilename = `audio-${timestamp}-${randomPart}.webm`;
+        } else {
+            finalFilename = filename || 'audio.webm';
         }
 
-        try {
-            const formData = new FormData();
+        // Préparer le FormData pour l'envoi du fichier audio
+        const formData = new FormData();
+        formData.append('file', audioBlob, finalFilename);
+        formData.append('model', modelType);
 
-            // Déterminer le nom de fichier final
-            let finalFilename;
-            if (generateUniqueFilename) {
-                // Générer un nom de fichier avec timestamp et élément aléatoire
-                const timestamp = Date.now();
-                const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
-                finalFilename = `audio-${timestamp}-${randomPart}.webm`;
-            } else {
-                finalFilename = filename || 'audio.webm';
-            }
-
-            formData.append('file', audioBlob, finalFilename);
-            formData.append('model', modelType);
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('API Error:', errorData);
-                throw new Error(errorData.error?.message || ERRORS.TRANSCRIPTION_ERROR);
-            }
-
-            const data = await response.json();
-            return data.text;
-        } catch (error) {
-            console.error('Transcription error:', error);
-            throw error;
-        }
+        // Utiliser la fonction callApi pour effectuer la requête
+        return await callApi({
+            url: apiUrl,
+            apiKey,
+            body: formData,
+            errorType: ERRORS.TRANSCRIPTION_ERROR,
+            responseProcessor: (data) => data.text
+        });
     }
 
     /**
@@ -82,6 +139,24 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Sauvegarde des données dans le stockage Chrome
+     * @param {Object} data - Les données à sauvegarder
+     * @returns {Promise<void>}
+     */
+    async function saveToStorage(data) {
+        return new Promise((resolve, reject) => {
+            chrome.storage.sync.set(data, () => {
+                if (chrome.runtime.lastError) {
+                    console.error("Chrome storage save error:", chrome.runtime.lastError);
+                    reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
+    /**
      * Récupère la clé API depuis le stockage Chrome
      * @returns {Promise<string>} La clé API
      */
@@ -97,7 +172,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     exports.api = {
         transcribeAudio,
         getApiKey,
-        getFromStorage
+        getFromStorage,
+        saveToStorage,
+        callApi
     };
 
 })(window.BabelFishAIUtils);

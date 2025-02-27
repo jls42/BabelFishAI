@@ -210,6 +210,11 @@
      * @param {MediaStream} stream - Le flux audio
      */
     function setupMediaRecorderEvents(stream) {
+        if (!mediaRecorder) {
+            console.error('MediaRecorder non initialisé');
+            return;
+        }
+        
         // Événement déclenché lorsque des données audio sont disponibles
         mediaRecorder.ondataavailable = event => {
             if (event.data && event.data.size > 0) {
@@ -219,13 +224,35 @@
 
         // Événement déclenché lorsque l'enregistrement est arrêté
         mediaRecorder.onstop = async () => {
-            // Créer le blob audio à partir des chunks collectés
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            try {
+                // Vérifier que des données audio ont été capturées
+                if (audioChunks.length === 0) {
+                    throw new Error("Aucune donnée audio capturée");
+                }
+                
+                // Créer le blob audio à partir des chunks collectés
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                
+                // Vérifier la taille du blob
+                if (audioBlob.size === 0) {
+                    throw new Error("Blob audio vide");
+                }
 
-            // Traiter l'audio enregistré
-            await processRecordedAudio(audioBlob);
-
-            // Nettoyer les ressources
+                // Traiter l'audio enregistré
+                await processRecordedAudio(audioBlob);
+            } catch (error) {
+                console.error('Erreur lors du traitement de l\'enregistrement:', error);
+                handleError(error);
+            } finally {
+                // Nettoyer les ressources dans tous les cas
+                cleanupRecordingResources(stream);
+            }
+        };
+        
+        // Gérer les erreurs du MediaRecorder
+        mediaRecorder.onerror = error => {
+            console.error('Erreur MediaRecorder:', error);
+            handleError('Erreur d\'enregistrement', error.name || 'MediaRecorder error');
             cleanupRecordingResources(stream);
         };
     }
@@ -351,42 +378,47 @@
     // Utilisation de la fonction translateText de translation.js
 
     /**
-     * Affiche la transcription selon les options configurées
-     * @param {string} text - Le texte à afficher
-     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
-     */
-    /**
-     * Détermine le mode d'affichage et affiche le texte
+     * Détermine le mode d'affichage et affiche le texte selon les options configurées
      * @param {string} text - Le texte à afficher
      * @param {Object} options - Les options d'affichage
      * @returns {Promise<boolean>} - Indique si l'affichage a réussi
      */
     async function displayTranscriptionText(text, options) {
-        // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
-        const currentDomain = window.location.hostname;
-        const isDialogForced = options.forcedDialogDomains.some(domain =>
-            currentDomain.includes(domain)
-        );
-
-        // Tenter d'insérer le texte dans l'élément actif si l'option est activée
-        let displayed = false;
-        if (options.activeDisplay && !isDialogForced) {
-            displayed = handleActiveElementInsertion(text);
-        }
-
-        // Afficher dans une boîte de dialogue si nécessaire
-        if (options.dialogDisplay || isDialogForced || !displayed) {
-            showTranscriptionDialog(text, options.dialogDuration);
-            displayed = true;
-        }
-
-        // Avertir si aucune méthode d'affichage n'est activée
-        if (!displayed) {
-            console.warn("No display method enabled");
+        if (!text) {
+            console.warn("Tentative d'affichage de texte vide");
             return false;
         }
-
-        return true;
+        
+        try {
+            // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
+            const currentDomain = window.location.hostname;
+            const isDialogForced = Array.isArray(options.forcedDialogDomains) && 
+                options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
+    
+            // Tenter d'insérer le texte dans l'élément actif si l'option est activée
+            let displayed = false;
+            if (options.activeDisplay && !isDialogForced) {
+                displayed = handleActiveElementInsertion(text);
+            }
+    
+            // Afficher dans une boîte de dialogue si nécessaire ou si l'insertion a échoué
+            if (options.dialogDisplay || isDialogForced || !displayed) {
+                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+                displayed = true;
+            }
+    
+            // Avertir si aucune méthode d'affichage n'est activée
+            if (!displayed) {
+                console.warn("Aucune méthode d'affichage n'est activée");
+                return false;
+            }
+    
+            return true;
+        } catch (error) {
+            console.error("Erreur lors de l'affichage du texte:", error);
+            handleError(error);
+            return false;
+        }
     }
 
     /**
@@ -395,13 +427,18 @@
      * @returns {Promise<boolean>} - Indique si l'affichage a réussi
      */
     async function showTranscription(text) {
+        // Valider le texte d'entrée
         if (!text || typeof text !== 'string') {
-            console.error('Invalid transcription text:', text);
-            handleError("Texte de transcription invalide", "Invalid transcription text");
+            const errorMsg = "Texte de transcription invalide";
+            console.error(errorMsg + ':', text);
+            handleError(errorMsg, "Invalid transcription text");
             return false;
         }
 
         try {
+            // Informer l'utilisateur que le traitement est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
+            
             // Récupérer les options de configuration
             const options = await getDisplayOptions();
 
@@ -412,8 +449,13 @@
             return await displayTranscriptionText(displayText, options);
         } catch (error) {
             console.error('Error displaying transcription:', error);
-            handleError("Erreur d'affichage", error.message);
+            handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
             return false;
+        } finally {
+            // Si une erreur se produit ailleurs, s'assurer que la bannière de traitement disparaît
+            if (recordingBanner && recordingBanner.textContent === window.BabelFishAIUtils.i18n.getMessage("bannerProcessing")) {
+                hideBanner();
+            }
         }
     }
 
@@ -628,15 +670,40 @@
 
     /**
      * Initialise la bannière d'état
+     * @returns {HTMLElement} La bannière créée
      */
     function initBanner() {
+        // Vérifier si la bannière existe déjà
+        if (recordingBanner && document.body.contains(recordingBanner)) {
+            return recordingBanner;
+        }
+        
+        // Créer la bannière
         recordingBanner = document.createElement('div');
+        recordingBanner.id = 'babelfishai-status-banner'; // Ajouter un ID pour faciliter les références
         recordingBanner.className = 'whisper-status-banner';
         recordingBanner.style.display = 'none'; // Cacher le bandeau par défaut
-        document.body.insertBefore(recordingBanner, document.body.firstChild);
-        // Forcer la mise à jour de la couleur lors de l'initialisation
-        updateBannerColor(true);
+        
+        // Ajouter un attribut pour l'internationalisation
+        recordingBanner.setAttribute('data-extension', 'babelfishai');
+        
+        // Ajouter la bannière au document
+        if (document.body) {
+            document.body.insertBefore(recordingBanner, document.body.firstChild);
+            // Forcer la mise à jour de la couleur lors de l'initialisation
+            updateBannerColor(true);
+        } else {
+            // Si le document.body n'est pas encore disponible, attendre qu'il le soit
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.insertBefore(recordingBanner, document.body.firstChild);
+                updateBannerColor(true);
+            });
+        }
+        
+        return recordingBanner;
     }
+    
+    // Initialiser la bannière
     initBanner();
 
     /**
@@ -652,21 +719,25 @@
             return false;
         }
 
-        // Utiliser la fonction de l'utilitaire UI pour afficher la bannière
-        window.BabelFishAIUtils.ui.showBanner(
-            recordingBanner,
-            text,
-            type,
-            isRecording
-        );
+        try {
+            // Utiliser la fonction de l'utilitaire UI pour afficher la bannière
+            window.BabelFishAIUtils.ui.showBanner(
+                recordingBanner,
+                text,
+                type,
+                isRecording
+            );
 
-        // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
-        // car les messages d'erreur ont leur propre style
-        if (type !== MESSAGE_TYPES.ERROR) {
-            updateBannerColor();
+            // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
+            // car les messages d'erreur ont leur propre style
+            if (type !== MESSAGE_TYPES.ERROR) {
+                updateBannerColor();
+            }
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage de la bannière:', error);
+            return false;
         }
-
-        return true;
     }
 
     /**
@@ -692,34 +763,74 @@
     /**
      * Gère les erreurs de manière centralisée en affichant un message à l'utilisateur
      * et en informant le background script
-     * @param {string} displayMessage - Le message à afficher à l'utilisateur
-     * @param {string} errorMessage - Le message d'erreur technique à envoyer au background script
+     * @param {string|Error} displayMessage - Le message à afficher à l'utilisateur ou l'erreur complète
+     * @param {string} [errorMessage] - Le message d'erreur technique à envoyer au background script
      */
     function handleError(displayMessage, errorMessage) {
+        // Normaliser les paramètres pour gérer différents types d'entrées
+        let userMessage = '';
+        let technicalMessage = '';
+        
+        // Si l'erreur est fournie comme objet Error
+        if (displayMessage instanceof Error) {
+            userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
+            technicalMessage = displayMessage.stack || displayMessage.message;
+        } 
+        // Si l'erreur est fournie comme chaîne de caractères
+        else {
+            userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
+            technicalMessage = errorMessage || displayMessage;
+        }
+
+        // Logger l'erreur technique pour le débogage
+        console.error("Erreur technique:", technicalMessage);
+        
         // Afficher le message d'erreur à l'utilisateur via la bannière
-        showBanner(displayMessage, MESSAGE_TYPES.ERROR);
+        showBanner(userMessage, MESSAGE_TYPES.ERROR);
 
         // Informer le background script de l'erreur pour mise à jour du badge
-        chrome.runtime.sendMessage({
-            action: ACTIONS.ERROR,
-            error: errorMessage
-        });
+        try {
+            chrome.runtime.sendMessage({
+                action: ACTIONS.ERROR,
+                error: technicalMessage
+            });
+        } catch (e) {
+            console.error("Impossible d'envoyer l'erreur au script d'arrière-plan:", e);
+        }
 
         // Cacher automatiquement la bannière après un délai défini
         setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
     }
 
-    // Écouter les messages du background script
-    chrome.runtime.onMessage.addListener((request) => {
+    /**
+     * Gère les messages provenant du script d'arrière-plan
+     * @param {Object} request - Le message reçu
+     * @param {Object} sender - L'expéditeur du message
+     * @param {Function} sendResponse - Fonction pour répondre au message
+     */
+    function handleBackgroundMessages(request, sender, sendResponse) {
         console.log("Message received:", request);
-        if (request.action === ACTIONS.TOGGLE) {
-            if (!isRecording) {
-                startRecording();
-            } else {
-                stopRecording();
+        
+        // Mapper les actions aux fonctions correspondantes
+        const actionHandlers = {
+            [ACTIONS.TOGGLE]: () => {
+                if (!isRecording) {
+                    startRecording();
+                } else {
+                    stopRecording();
+                }
             }
+            // Possibilité d'ajouter d'autres gestionnaires d'actions ici
+        };
+        
+        // Exécuter le gestionnaire correspondant à l'action
+        if (request.action && actionHandlers[request.action]) {
+            actionHandlers[request.action]();
         }
-    });
+    }
+    
+    // Écouter les messages du background script
+    chrome.runtime.onMessage.addListener(handleBackgroundMessages);
 
     /**
      * Met à jour les options de couleur du bandeau
@@ -728,29 +839,41 @@
     function updateBannerColorOptions(changes) {
         let colorUpdated = false;
 
-        if (changes.bannerColorStart) {
-            bannerColorStart = changes.bannerColorStart.newValue;
-            colorUpdated = true;
-        }
-        if (changes.bannerColorEnd) {
-            bannerColorEnd = changes.bannerColorEnd.newValue;
-            colorUpdated = true;
-        }
-        if (changes.bannerOpacity) {
-            bannerOpacity = changes.bannerOpacity.newValue;
-            colorUpdated = true;
-        }
+        // Objets à surveiller pour les changements
+        const colorOptions = {
+            bannerColorStart: value => { bannerColorStart = value; return true; },
+            bannerColorEnd: value => { bannerColorEnd = value; return true; },
+            bannerOpacity: value => { bannerOpacity = value; return true; }
+        };
+
+        // Parcourir tous les changements
+        Object.keys(changes).forEach(key => {
+            // Si le changement concerne une option de couleur, mettre à jour la variable correspondante
+            if (colorOptions[key]) {
+                colorUpdated = colorOptions[key](changes[key].newValue) || colorUpdated;
+            }
+        });
 
         // Mettre à jour la couleur du bandeau une seule fois si nécessaire
-        if (colorUpdated) {
+        if (colorUpdated && recordingBanner) {
             updateBannerColor();
         }
     }
 
+    /**
+     * Gestionnaire centralisé pour les modifications du stockage
+     * @param {Object} changes - Les changements détectés
+     * @param {string} namespace - L'espace de noms du stockage
+     */
+    function handleStorageChanges(changes, namespace) {
+        if (namespace !== 'sync') return;
+        
+        // Traiter les changements de couleur du bandeau
+        updateBannerColorOptions(changes);
+        
+        // Possibilité d'ajouter d'autres gestionnaires de changements ici
+    }
+
     // Écouter les changements dans les options
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-        if (namespace === 'sync') {
-            updateBannerColorOptions(changes);
-        }
-    });
+    chrome.storage.onChanged.addListener(handleStorageChanges);
 })();

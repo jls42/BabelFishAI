@@ -291,6 +291,10 @@
         "message": "Traduction en cours...",
         "description": "Message du bandeau pendant la traduction"
     },
+    "bannerProcessing": {
+        "message": "Traitement en cours...",
+        "description": "Message du bandeau pendant le traitement du texte"
+    },
     "bannerMicAccessError": {
         "message": "Erreur : accès au microphone refusé.",
         "description": "Message d'erreur pour l'accès au microphone"
@@ -323,6 +327,10 @@
         "message": "Erreur : microphone inaccessible.",
         "description": "Message d'erreur : accès micro"
     },
+    "API_ERROR": {
+        "message": "Erreur lors de l'appel à l'API",
+        "description": "Message d'erreur : appel API général"
+    },
     "TRANSCRIPTION_ERROR": {
         "message": "Erreur lors de la transcription",
         "description": "Message d'erreur : transcription"
@@ -350,6 +358,10 @@
     "INVALID_TRANSLATION_RESPONSE": {
         "message": "Format de réponse de traduction invalide",
         "description": "Message d'erreur : réponse de traduction"
+    },
+    "bannerErrorGeneric": {
+        "message": "Une erreur s'est produite",
+        "description": "Message d'erreur générique"
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensions > ⌨️ Raccourcis clavier",
