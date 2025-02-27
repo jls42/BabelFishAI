@@ -49,20 +49,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
 
         try {
-            // Récupérer le modèle et l'URL de l'API depuis le stockage
-            const { modelType, translationApiUrl, disableLogging } = await new Promise((resolve) => {
-                chrome.storage.sync.get({
-                    modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                    translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-                    disableLogging: false
-                }, (result) => {
-                    resolve({
-                        modelType: result.modelType,
-                        translationApiUrl: result.translationApiUrl,
-                        disableLogging: result.disableLogging
-                    });
-                });
+            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
+                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
+                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
+                disableLogging: false
             });
+            
+            const { modelType, translationApiUrl, disableLogging } = result;
 
             // Préparer les messages pour l'API
             const messages = [

@@ -63,28 +63,41 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Récupère la clé API depuis le stockage Chrome
-     * @returns {Promise<string>} La clé API
+     * Récupère des données depuis le stockage Chrome
+     * @param {Array|string|Object} keys - Les clés à récupérer
+     * @param {Object} [defaults={}] - Les valeurs par défaut
+     * @returns {Promise<Object>} Les données récupérées
      */
-    async function getApiKey() {
+    async function getFromStorage(keys, defaults = {}) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(['apiKey'], (result) => {
+            chrome.storage.sync.get(keys, (result) => {
                 if (chrome.runtime.lastError) {
                     console.error("Chrome storage error:", chrome.runtime.lastError);
                     reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
-                } else if (!result.apiKey) {
-                    reject(new Error(ERRORS.API_KEY_NOT_FOUND));
                 } else {
-                    resolve(result.apiKey);
+                    resolve(result);
                 }
             });
         });
     }
 
+    /**
+     * Récupère la clé API depuis le stockage Chrome
+     * @returns {Promise<string>} La clé API
+     */
+    async function getApiKey() {
+        const result = await getFromStorage(['apiKey']);
+        if (!result.apiKey) {
+            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+        }
+        return result.apiKey;
+    }
+
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.api = {
         transcribeAudio,
-        getApiKey
+        getApiKey,
+        getFromStorage
     };
 
 })(window.BabelFishAIUtils);

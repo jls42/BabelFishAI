@@ -53,19 +53,23 @@
             console.error("Failed to load API key:", error);
         }
 
-        // Initialisation des options de couleur du bandeau
-        chrome.storage.sync.get({
-            bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
-            bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
-            bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
-        }, (result) => {
-            bannerColorStart = result.bannerColorStart;
-            bannerColorEnd = result.bannerColorEnd;
-            bannerOpacity = result.bannerOpacity;
-            if (recordingBanner) {
-                updateBannerColor();
-            }
-        });
+        // Initialisation des options de couleur du bandeau en utilisant l'utilitaire
+        try {
+            window.BabelFishAIUtils.api.getFromStorage({
+                bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
+                bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
+                bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
+            }).then(result => {
+                bannerColorStart = result.bannerColorStart;
+                bannerColorEnd = result.bannerColorEnd;
+                bannerOpacity = result.bannerOpacity;
+                if (recordingBanner) {
+                    updateBannerColor();
+                }
+            });
+        } catch (error) {
+            console.error("Failed to load banner colors:", error);
+        }
     }
 
     // Initialiser les options de l'extension
@@ -79,9 +83,6 @@
     function updateBannerColor(force = false) {
         // Éviter de mettre à jour la couleur si la bannière n'existe pas
         if (!recordingBanner) return false;
-
-        // Éviter de mettre à jour la couleur si la bannière est en mode erreur, sauf si force=true
-        if (!force && recordingBanner.classList.contains('error')) return false;
 
         // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur du bandeau
         window.BabelFishAIUtils.ui.updateBannerColor(
@@ -253,7 +254,7 @@
     // La fonction getApiKey a été remplacée par un appel direct à window.BabelFishAIUtils.api.getApiKey()
 
     /**
-     * Transcrit l'audio en texte via l'API Whisper
+     * Transcrit l'audio en texte via l'API Whisper en utilisant la fonction de l'API
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @returns {Promise<string>} Le texte transcrit
      */
@@ -265,18 +266,14 @@
         }
 
         try {
-            // Récupérer l'URL de l'API et le modèle depuis le stockage
-            const { apiUrl, audioModelType } = await new Promise((resolve) => {
-                chrome.storage.sync.get({
-                    apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-                    audioModelType: API_CONFIG.WHISPER_MODEL
-                }, (result) => {
-                    resolve({
-                        apiUrl: result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL,
-                        audioModelType: result.audioModelType
-                    });
-                });
+            // Récupérer l'URL de l'API et le modèle depuis le stockage en utilisant l'utilitaire
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
+                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
+                audioModelType: API_CONFIG.WHISPER_MODEL
             });
+            
+            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
+            const audioModelType = result.audioModelType;
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
             return await window.BabelFishAIUtils.api.transcribeAudio(
@@ -301,16 +298,14 @@
      * @returns {Promise<Object>} Les options de configuration
      */
     async function getDisplayOptions() {
-        return new Promise(resolve => {
-            chrome.storage.sync.get({
-                activeDisplay: true,
-                dialogDisplay: false,
-                dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
-                enableTranslation: false,
-                sourceLanguage: 'fr',
-                targetLanguage: 'en',
-                forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
-            }, resolve);
+        return await window.BabelFishAIUtils.api.getFromStorage({
+            activeDisplay: true,
+            dialogDisplay: false,
+            dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
+            enableTranslation: false,
+            sourceLanguage: 'fr',
+            targetLanguage: 'en',
+            forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
         });
     }
 
@@ -620,7 +615,7 @@
     }
 
     /**
-     * Crée un bouton de copie pour le texte
+     * Crée un bouton de copie pour le texte en utilisant l'utilitaire UI
      * @param {string} text - Le texte à copier
      * @returns {HTMLElement} Le bouton créé
      */
