@@ -321,8 +321,8 @@
     }
 
     /**
-     * Récupère les options de configuration depuis le stockage
-     * @returns {Promise<Object>} Les options de configuration
+     * Récupère les options d'affichage depuis le stockage
+     * @returns {Promise<Object>} Les options d'affichage et de traduction
      */
     async function getDisplayOptions() {
         return await window.BabelFishAIUtils.api.getFromStorage({
@@ -581,89 +581,10 @@
      * @param {number} duration - Durée d'affichage en secondes
      */
     function showTranscriptionDialog(text, duration) {
-        // Récupérer ou créer le conteneur de la boîte de dialogue
-        let container = document.getElementById('whisper-transcription-container');
-        if (!container) {
-            container = createTranscriptionContainer();
-        }
-
-        // Créer l'élément qui contiendra le texte de transcription
-        const transcriptionElement = document.createElement('div');
-        transcriptionElement.className = 'whisper-transcription-element';
-        transcriptionElement.textContent = text;
-
-        // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
-        const copyButton = createCopyButton(text);
-        transcriptionElement.appendChild(document.createElement('br'));
-        transcriptionElement.appendChild(copyButton);
-
-        // Ajouter l'élément de transcription au conteneur
-        container.appendChild(transcriptionElement);
-
-        // Configurer la suppression automatique après la durée spécifiée
-        const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
-        setTimeout(() => {
-            removeTranscriptionElement(transcriptionElement);
-        }, autoRemoveTimeout);
-    }
-
-    /**
-     * Supprime un élément de transcription et nettoie le conteneur si nécessaire
-     * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
-     */
-    function removeTranscriptionElement(transcriptionElement) {
-        // Vérifier si l'élément existe toujours avant de le supprimer
-        if (transcriptionElement.parentNode) {
-            transcriptionElement.parentNode.removeChild(transcriptionElement);
-
-            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
-            const currentContainer = document.getElementById('whisper-transcription-container');
-
-            // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-            if (currentContainer && currentContainer.children.length === 1) {
-                document.body.removeChild(currentContainer);
-            }
-        }
-    }
-
-    /**
-     * Crée le conteneur pour les transcriptions avec un bouton de fermeture
-     * @returns {HTMLElement} Le conteneur créé et ajouté au document
-     */
-    function createTranscriptionContainer() {
-        // Créer le conteneur principal
-        const container = document.createElement('div');
-        container.id = 'whisper-transcription-container';
-        container.className = 'whisper-transcription-container';
-
-        // Créer le bouton de fermeture
-        const closeButton = document.createElement('button');
-        closeButton.textContent = '×';
-        closeButton.className = 'whisper-close-button';
-        closeButton.title = 'Fermer';
-
-        // Ajouter un gestionnaire d'événements pour fermer le conteneur
-        closeButton.onclick = () => {
-            if (container.parentNode) {
-                document.body.removeChild(container);
-            }
-        };
-
-        // Ajouter le bouton au conteneur et le conteneur au document
-        container.appendChild(closeButton);
-        document.body.appendChild(container);
-
-        return container;
-    }
-
-    /**
-     * Crée un bouton de copie pour le texte en utilisant l'utilitaire UI
-     * @param {string} text - Le texte à copier
-     * @returns {HTMLElement} Le bouton créé
-     */
-    function createCopyButton(text) {
-        return window.BabelFishAIUtils.ui.createCopyButton(
+        // Utiliser la fonction utilitaire pour afficher le texte dans une boîte de dialogue
+        window.BabelFishAIUtils.ui.showTextInDialog(
             text,
+            duration,
             (errorMessage) => showBanner(errorMessage, MESSAGE_TYPES.ERROR)
         );
     }
@@ -804,12 +725,12 @@
 
     /**
      * Gère les messages provenant du script d'arrière-plan
-     * @param {Object} request - Le message reçu
+     * @param {Object} message - Le message reçu
      * @param {Object} sender - L'expéditeur du message
-     * @param {Function} sendResponse - Fonction pour répondre au message
+     * @param {Function} callback - Fonction de callback pour répondre au message
      */
-    function handleBackgroundMessages(request, sender, sendResponse) {
-        console.log("Message received:", request);
+    function handleBackgroundMessages(message, sender, callback) {
+        console.log("Message received:", message);
         
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
@@ -824,8 +745,8 @@
         };
         
         // Exécuter le gestionnaire correspondant à l'action
-        if (request.action && actionHandlers[request.action]) {
-            actionHandlers[request.action]();
+        if (message.action && actionHandlers[message.action]) {
+            actionHandlers[message.action]();
         }
     }
     

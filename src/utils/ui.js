@@ -123,12 +123,103 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return copyButton;
     }
 
+    /**
+     * Crée le conteneur pour les transcriptions avec un bouton de fermeture
+     * @returns {HTMLElement} Le conteneur créé et ajouté au document
+     */
+    function createTranscriptionContainer() {
+        // Vérifier si le conteneur existe déjà
+        let container = document.getElementById('whisper-transcription-container');
+        if (container) {
+            return container;
+        }
+        
+        // Créer le conteneur principal
+        container = document.createElement('div');
+        container.id = 'whisper-transcription-container';
+        container.className = 'whisper-transcription-container';
+
+        // Créer le bouton de fermeture
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '×';
+        closeButton.className = 'whisper-close-button';
+        closeButton.title = 'Fermer';
+
+        // Ajouter un gestionnaire d'événements pour fermer le conteneur
+        closeButton.onclick = () => {
+            if (container.parentNode) {
+                document.body.removeChild(container);
+            }
+        };
+
+        // Ajouter le bouton au conteneur et le conteneur au document
+        container.appendChild(closeButton);
+        document.body.appendChild(container);
+
+        return container;
+    }
+
+    /**
+     * Supprime un élément de transcription et nettoie le conteneur si nécessaire
+     * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
+     */
+    function removeTranscriptionElement(transcriptionElement) {
+        // Vérifier si l'élément existe toujours avant de le supprimer
+        if (transcriptionElement && transcriptionElement.parentNode) {
+            transcriptionElement.parentNode.removeChild(transcriptionElement);
+
+            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+            const currentContainer = document.getElementById('whisper-transcription-container');
+
+            // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
+            if (currentContainer && currentContainer.children.length === 1) {
+                document.body.removeChild(currentContainer);
+            }
+        }
+    }
+
+    /**
+     * Affiche un texte dans une boîte de dialogue flottante
+     * @param {string} text - Le texte à afficher
+     * @param {number} duration - Durée d'affichage en secondes
+     * @param {Function} onError - Fonction de callback en cas d'erreur
+     * @returns {HTMLElement} L'élément créé
+     */
+    function showTextInDialog(text, duration, onError) {
+        // Récupérer ou créer le conteneur de la boîte de dialogue
+        const container = createTranscriptionContainer();
+
+        // Créer l'élément qui contiendra le texte
+        const textElement = document.createElement('div');
+        textElement.className = 'whisper-transcription-element';
+        textElement.textContent = text;
+
+        // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
+        const copyButton = createCopyButton(text, onError);
+        textElement.appendChild(document.createElement('br'));
+        textElement.appendChild(copyButton);
+
+        // Ajouter l'élément au conteneur
+        container.appendChild(textElement);
+
+        // Configurer la suppression automatique après la durée spécifiée
+        const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
+        setTimeout(() => {
+            removeTranscriptionElement(textElement);
+        }, autoRemoveTimeout);
+
+        return textElement;
+    }
+
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.ui = {
         updateBannerColor,
         showStatus,
         showBanner,
-        createCopyButton
+        createCopyButton,
+        showTextInDialog,
+        createTranscriptionContainer,
+        removeTranscriptionElement
     };
 
 })(window.BabelFishAIUtils);

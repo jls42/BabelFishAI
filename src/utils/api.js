@@ -9,16 +9,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**
-     * Effectue un appel API générique avec gestion d'erreur standardisée
+     * Effectue un appel API générique avec gestion d'erreur standardisée.
+     * Cette fonction centralise tous les appels API et uniformise la gestion des erreurs.
      * @param {Object} options - Options pour l'appel API
      * @param {string} options.url - URL de l'API à appeler
      * @param {string} options.apiKey - Clé API pour l'authentification
-     * @param {string} [options.method='POST'] - Méthode HTTP à utiliser
-     * @param {Object|FormData} options.body - Corps de la requête
-     * @param {Object} [options.headers={}] - En-têtes HTTP additionnels
-     * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur en cas d'échec
-     * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse
+     * @param {string} [options.method='POST'] - Méthode HTTP à utiliser (GET, POST, PUT, DELETE, etc.)
+     * @param {Object|FormData} options.body - Corps de la requête (JSON ou FormData)
+     * @param {Object} [options.headers={}] - En-têtes HTTP additionnels à inclure dans la requête
+     * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur à utiliser en cas d'échec
+     * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse avant de la renvoyer
      * @returns {Promise<any>} Résultat traité de l'appel API
+     * @throws {Error} Une erreur avec le message approprié en cas d'échec de l'appel
      */
     async function callApi(options) {
         const {
@@ -53,8 +55,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 body
             };
 
-            // Effectuer l'appel API
-            const response = await fetch(url, requestOptions);
+            // Effectuer l'appel API avec gestion des erreurs réseau
+            let response;
+            try {
+                response = await fetch(url, requestOptions);
+            } catch (networkError) {
+                // Gérer spécifiquement les erreurs réseau (pas de connexion, CORS, etc.)
+                console.error(`Erreur réseau lors de l'appel à ${url}:`, networkError);
+                throw new Error(`${errorType}: Erreur réseau - ${networkError.message}`);
+            }
 
             // Gérer les erreurs HTTP
             if (!response.ok) {
@@ -120,10 +129,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Récupère des données depuis le stockage Chrome
-     * @param {Array|string|Object} keys - Les clés à récupérer
-     * @param {Object} [defaults={}] - Les valeurs par défaut
-     * @returns {Promise<Object>} Les données récupérées
+     * Récupère des données depuis le stockage synchronisé de Chrome.
+     * Transforme l'API callback-based de Chrome en Promise pour faciliter l'utilisation avec async/await.
+     * @param {Array|string|Object} keys - Les clés à récupérer ou un objet avec les valeurs par défaut
+     * @param {Object} [defaults={}] - Les valeurs par défaut si keys est un tableau ou une chaîne
+     * @returns {Promise<Object>} Les données récupérées avec les valeurs par défaut appliquées
+     * @throws {Error} Une erreur CHROME_STORAGE_ERROR si la récupération échoue
      */
     async function getFromStorage(keys, defaults = {}) {
         return new Promise((resolve, reject) => {
@@ -139,9 +150,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Sauvegarde des données dans le stockage Chrome
-     * @param {Object} data - Les données à sauvegarder
-     * @returns {Promise<void>}
+     * Sauvegarde des données dans le stockage synchronisé de Chrome.
+     * Transforme l'API callback-based de Chrome en Promise pour faciliter l'utilisation avec async/await.
+     * @param {Object} data - Les données à sauvegarder (paires clé-valeur)
+     * @returns {Promise<void>} Une promesse résolue lorsque les données sont sauvegardées
+     * @throws {Error} Une erreur CHROME_STORAGE_ERROR si la sauvegarde échoue
      */
     async function saveToStorage(data) {
         return new Promise((resolve, reject) => {
