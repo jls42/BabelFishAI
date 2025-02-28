@@ -378,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "Modèle de traduction par défaut"
+    },
+    "dialogTitle": {
+        "message": "Transcription BabelFishAI",
+        "description": "Titre de la boîte de dialogue"
+    },
+    "closeButton": {
+        "message": "Fermer",
+        "description": "Texte du bouton de fermeture"
+    },
+    "copyButton": {
+        "message": "Copier",
+        "description": "Texte du bouton de copie"
+    },
+    "copySuccess": {
+        "message": "Texte copié !",
+        "description": "Message de succès de la copie"
+    },
+    "copyError": {
+        "message": "Erreur lors de la copie",
+        "description": "Message d'erreur de la copie"
     }
 }

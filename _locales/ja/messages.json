@@ -4,7 +4,7 @@
         "description": "拡張機能名"
     },
     "extensionDescription": {
-        "message": "AI を活用した文字起こしと翻訳であなたの声をテキストに変換",
+        "message": "AI を活用した文字起こしと翻訳で、あなたの声をテキストに変換します",
         "description": "拡張機能の説明"
     },
     "welcomeMessage": {
@@ -24,15 +24,15 @@
         "description": "API キー設定セクションのタイトル"
     },
     "shortcutInstructions": {
-        "message": "ショートカットを変更するには、次のことができます。",
+        "message": "ショートカットを変更するには、次のことができます:",
         "description": "ショートカットの説明"
     },
     "shortcutOption1": {
-        "message": "Chrome 拡張機能の設定を開きます。",
+        "message": "Chrome 拡張機能の設定を開きます:",
         "description": "ショートカットを変更するオプション 1"
     },
     "shortcutOption2": {
-        "message": "またはアドレスバーに入力します。",
+        "message": "またはアドレスバーに入力します:",
         "description": "ショートカットを変更するオプション 2"
     },
     "shortcutSteps": {
@@ -53,11 +53,11 @@
     },
     "languageChanged": {
         "message": "言語が正常に変更されました",
-        "description": "言語変更の確認メッセージ"
+        "description": "言語変更確認メッセージ"
     },
     "savedMessage": {
         "message": "オプションが保存されました!",
-        "description": "保存の確認メッセージ"
+        "description": "保存確認メッセージ"
     },
     "apiKeyPlaceholder": {
         "message": "あなたの OpenAI API キー (sk-...)",
@@ -72,8 +72,8 @@
         "description": "API キーのヘルプ"
     },
     "pricingInfo": {
-        "message": "価格設定の詳細 (デフォルトモデル: 音声の場合は {defaultAudioModel}、翻訳の場合は {defaultTranslationModel}) は、こちらで入手できます。",
-        "description": "価格設定に関する情報"
+        "message": "価格に関する詳細情報 (デフォルトモデル: 音声の場合は {defaultAudioModel}、翻訳の場合は {defaultTranslationModel}) は、こちらで入手できます。",
+        "description": "価格情報"
     },
     "supportProject": {
         "message": "PayPal 経由でプロジェクトをサポートする",
@@ -117,11 +117,11 @@
     },
     "bannerColorsLabel": {
         "message": "ステータスバナーの色:",
-        "description": "バナー色のラベル"
+        "description": "バナーの色のラベル"
     },
     "bannerColorsDescription": {
         "message": "録音、文字起こし、翻訳中に画面下部に表示されるバナーの色。",
-        "description": "バナー色の説明"
+        "description": "バナーの色の説明"
     },
     "startColorLabel": {
         "message": "開始色:",
@@ -277,10 +277,10 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "GitHub リンクテキスト"
     },
     "bannerRecording": {
-        "message": "録音中... (アイコンをクリックするか、ショートカットを使用して停止)",
+        "message": "録音中... (アイコンをクリックするか、ショートカットを使用して停止します)",
         "description": "録音中のバナーメッセージ"
     },
     "bannerTranscribing": {
@@ -291,6 +291,10 @@
         "message": "翻訳中...",
         "description": "翻訳中のバナーメッセージ"
     },
+    "bannerProcessing": {
+        "message": "処理中...",
+        "description": "テキスト処理中のバナーメッセージ"
+    },
     "bannerMicAccessError": {
         "message": "エラー: マイクへのアクセスが拒否されました。",
         "description": "マイクアクセスのエラーメッセージ"
@@ -300,7 +304,7 @@
         "description": "翻訳のエラーメッセージ"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AI を使用するには:<br><br>1. ウェブサイトにアクセスします (たとえば、ウェブメールやお気に入りの AI のチャットサイトなど、<a href=\"https://chat.mistral.ai/\" target=\"_blank\">Mistral AI の Le Chat</a> や <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>)。<br>2. 簡単にアクセスできるように、拡張機能アイコンをピン留めします。<br>3. 録音の開始/停止:<br>    * 拡張機能アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br>    * マイクに向かって話します。<br>    * もう一度アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br>    * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "BabelFish AI の使用方法:<br><br>1. ウェブサイトにアクセスします (たとえば、ウェブメールやお気に入りの AI のチャットサイトなど。<a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> や <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a> など)。<br>2. 簡単にアクセスできるように、拡張機能アイコンをピン留めします。<br>3. 録音の開始/停止:<br> * 拡張機能アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br> * マイクに向かって話します。<br> * もう一度アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br> * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "拡張機能の使用方法"
     },
     "defaultWhisperApiUrl": {
@@ -313,7 +317,7 @@
     },
     "API_KEY_NOT_FOUND": {
         "message": "API キーが設定されていません。拡張機能のオプションで設定してください。",
-        "description": "エラーメッセージ: API キーがありません"
+        "description": "エラーメッセージ: API キーが見つかりません"
     },
     "CHROME_STORAGE_ERROR": {
         "message": "Chrome ストレージエラー",
@@ -322,6 +326,10 @@
     "MIC_ACCESS_ERROR": {
         "message": "エラー: マイクにアクセスできません。",
         "description": "エラーメッセージ: マイクアクセス"
+    },
+    "API_ERROR": {
+        "message": "API の呼び出し中にエラーが発生しました",
+        "description": "エラーメッセージ: 一般的な API 呼び出し"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "文字起こし中にエラーが発生しました",
@@ -351,6 +359,10 @@
         "message": "無効な翻訳応答形式",
         "description": "エラーメッセージ: 翻訳応答"
     },
+    "bannerErrorGeneric": {
+        "message": "エラーが発生しました",
+        "description": "一般的なエラーメッセージ"
+    },
     "shortcutChangeInstructions": {
         "message": "⚙️ 拡張機能 > ⌨️ キーボードショートカット",
         "description": "キーボードショートカットの変更手順"
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "デフォルトの翻訳モデル"
+    },
+    "dialogTitle": {
+        "message": "BabelFishAI 文字起こし",
+        "description": "ダイアログボックスのタイトル"
+    },
+    "closeButton": {
+        "message": "閉じる",
+        "description": "閉じるボタンのテキスト"
+    },
+    "copyButton": {
+        "message": "コピー",
+        "description": "コピーボタンのテキスト"
+    },
+    "copySuccess": {
+        "message": "テキストがコピーされました！",
+        "description": "コピー成功メッセージ"
+    },
+    "copyError": {
+        "message": "コピー中にエラーが発生しました",
+        "description": "コピーエラーメッセージ"
     }
 }

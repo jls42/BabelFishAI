@@ -45,7 +45,7 @@
     },
     "languageSettingsTitle": {
         "message": "Język interfejsu",
-        "description": "Tytuł sekcji językowej"
+        "description": "Tytuł sekcji języka"
     },
     "selectLanguageLabel": {
         "message": "Wybierz język:",
@@ -144,7 +144,7 @@
         "description": "Etykieta krycia"
     },
     "opacityDescription": {
-        "message": "Ustawia przezroczystość banera (0% = niewidoczny, 100% = nieprzezroczysty).",
+        "message": "Określa przezroczystość banera (0% = niewidoczny, 100% = nieprzezroczysty).",
         "description": "Opis krycia"
     },
     "translationTitle": {
@@ -164,20 +164,20 @@
         "description": "Etykieta języka docelowego"
     },
     "translationExplanation": {
-        "message": "Funkcja zintegrowanego tłumaczenia AI umożliwia uzyskanie automatycznego tłumaczenia transkrybowanego tekstu.<br>Aby to zrobić:<br><ul><li>Język źródłowy: wybierz język, w którym mówisz do mikrofonu.</li><li>Język docelowy: wybierz język, na który chcesz przetłumaczyć tekst.</li></ul>Te ustawienia wpływają tylko na tłumaczenie, a nie na transkrypcję. Jeśli wyłączysz automatyczne tłumaczenie, transkrybowany tekst będzie w języku mówionym do mikrofonu.",
+        "message": "Zintegrowana funkcja tłumaczenia AI umożliwia uzyskanie automatycznego tłumaczenia transkrybowanego tekstu.<br>Aby to zrobić:<br><ul><li>Język źródłowy: wybierz język, którym mówisz do mikrofonu.</li><li>Język docelowy: wybierz język, na który chcesz przetłumaczyć tekst.</li></ul>Te ustawienia wpływają tylko na tłumaczenie, a nie na transkrypcję. Jeśli wyłączysz automatyczne tłumaczenie, transkrybowany tekst będzie w języku mówionym do mikrofonu.",
         "description": "Wyjaśnienie sekcji tłumaczenia"
     },
     "expertModeTitle": {
-        "message": "Tryb Ekspercki",
-        "description": "Tytuł trybu eksperckiego"
+        "message": "Tryb Eksperta",
+        "description": "Tytuł trybu eksperta"
     },
     "enableExpertModeLabel": {
-        "message": "Włącz tryb ekspercki",
-        "description": "Etykieta włączania trybu eksperckiego"
+        "message": "Włącz tryb eksperta",
+        "description": "Etykieta włączania trybu eksperta"
     },
     "enableExpertModeDescription": {
         "message": "Odblokowuje zaawansowane opcje konfiguracji dla doświadczonych użytkowników.",
-        "description": "Opis opcji trybu eksperckiego"
+        "description": "Opis opcji trybu eksperta"
     },
     "translationModelLabel": {
         "message": "Model tłumaczenia:",
@@ -269,15 +269,15 @@
     },
     "noLogLabel": {
         "message": "NoLog (tylko LiteLLM)",
-        "description": "Label for the NoLog option"
+        "description": "Etykieta opcji NoLog"
     },
     "noLogDescription": {
         "message": "Jeśli zaznaczone, żadne dane nie będą przechowywane przez usługę LiteLLM.",
-        "description": "Description of the NoLog option"
+        "description": "Opis opcji NoLog"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Tekst linku GitHub"
     },
     "bannerRecording": {
         "message": "Nagrywanie w toku... (Kliknij ikonę lub użyj skrótu, aby zatrzymać)",
@@ -291,6 +291,10 @@
         "message": "Tłumaczenie w toku...",
         "description": "Komunikat banera podczas tłumaczenia"
     },
+    "bannerProcessing": {
+        "message": "Przetwarzanie w toku...",
+        "description": "Komunikat banera podczas przetwarzania tekstu"
+    },
     "bannerMicAccessError": {
         "message": "Błąd: odmowa dostępu do mikrofonu.",
         "description": "Komunikat o błędzie dostępu do mikrofonu"
@@ -300,7 +304,7 @@
         "description": "Komunikat o błędzie tłumaczenia"
     },
     "useBabelFishInstructions": {
-        "message": "Aby korzystać z BabelFish AI:<br><br>1. Przejdź do strony internetowej (na przykład swojej poczty internetowej lub strony czatu swojego ulubionego AI, takiej jak <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat od Mistral AI</a> lub <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Przypnij ikonę rozszerzenia, aby uzyskać łatwy dostęp.<br>3. Rozpocznij/zatrzymaj nagrywanie:<br>    * Kliknij ikonę rozszerzenia <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Mów do mikrofonu.<br>    * Kliknij ponownie ikonę <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Transkrypcja pojawi się w aktywnym obszarze tekstowym lub w oknie dialogowym.<br><br>Skróty klawiaturowe:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "Aby korzystać z BabelFish AI:<br><br>1. Przejdź do strony internetowej (na przykład swojej poczty internetowej lub strony czatu swojego ulubionego AI, takiej jak <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> lub <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Przypnij ikonę rozszerzenia, aby uzyskać łatwy dostęp.<br>3. Rozpocznij/zatrzymaj nagrywanie:<br> * Kliknij ikonę rozszerzenia <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br> * Mów do mikrofonu.<br> * Kliknij ponownie ikonę <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br> * Transkrypcja pojawi się w aktywnym polu tekstowym lub w oknie dialogowym.<br><br>Skróty klawiaturowe:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrukcje korzystania z rozszerzenia"
     },
     "defaultWhisperApiUrl": {
@@ -322,6 +326,10 @@
     "MIC_ACCESS_ERROR": {
         "message": "Błąd: mikrofon niedostępny.",
         "description": "Komunikat o błędzie: dostęp do mikrofonu"
+    },
+    "API_ERROR": {
+        "message": "Błąd podczas wywoływania interfejsu API",
+        "description": "Komunikat o błędzie: ogólne wywołanie interfejsu API"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Błąd podczas transkrypcji",
@@ -351,9 +359,13 @@
         "message": "Nieprawidłowy format odpowiedzi tłumaczenia",
         "description": "Komunikat o błędzie: odpowiedź tłumaczenia"
     },
+    "bannerErrorGeneric": {
+        "message": "Wystąpił błąd",
+        "description": "Ogólny komunikat o błędzie"
+    },
     "shortcutChangeInstructions": {
-        "message": "⚙️ Rozszerzenia > ⌨️ Skróty klawiaturowe",
-        "description": "Instrukcje zmiany skrótu klawiaturowego"
+        "message": "⚙️ Rozszerzenia > ⌨️ Skróty klawiszowe",
+        "description": "Instrukcje dotyczące zmiany skrótu klawiaturowego"
     },
     "defaultModel": {
         "message": "domyślny",
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "Domyślny model tłumaczenia"
+    },
+    "dialogTitle": {
+        "message": "Transkrypcja BabelFishAI",
+        "description": "Tytuł okna dialogowego"
+    },
+    "closeButton": {
+        "message": "Zamknij",
+        "description": "Tekst przycisku zamykania"
+    },
+    "copyButton": {
+        "message": "Kopiuj",
+        "description": "Tekst przycisku kopiowania"
+    },
+    "copySuccess": {
+        "message": "Tekst skopiowany!",
+        "description": "Komunikat o sukcesie kopiowania"
+    },
+    "copyError": {
+        "message": "Błąd podczas kopiowania",
+        "description": "Komunikat o błędzie kopiowania"
     }
 }

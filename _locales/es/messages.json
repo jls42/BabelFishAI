@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "BabelFishAI de jls42.org",
+        "message": "BabelFishAI por jls42.org",
         "description": "Nombre de la extensión"
     },
     "extensionDescription": {
@@ -52,7 +52,7 @@
         "description": "Etiqueta para el selector de idioma"
     },
     "languageChanged": {
-        "message": "Idioma cambiado correctamente",
+        "message": "Idioma cambiado con éxito",
         "description": "Mensaje de confirmación del cambio de idioma"
     },
     "savedMessage": {
@@ -152,8 +152,8 @@
         "description": "Título de la sección de traducción"
     },
     "enableTranslationLabel": {
-        "message": "Activar la traducción automática",
-        "description": "Etiqueta para activar la traducción"
+        "message": "Habilitar la traducción automática",
+        "description": "Etiqueta para habilitar la traducción"
     },
     "sourceLanguageLabel": {
         "message": "Idioma de origen:",
@@ -172,8 +172,8 @@
         "description": "Título del modo experto"
     },
     "enableExpertModeLabel": {
-        "message": "Activar el modo experto",
-        "description": "Etiqueta para activar el modo experto"
+        "message": "Habilitar el modo experto",
+        "description": "Etiqueta para habilitar el modo experto"
     },
     "enableExpertModeDescription": {
         "message": "Desbloquea opciones de configuración avanzadas para usuarios experimentados.",
@@ -256,28 +256,28 @@
         "description": "Rol del autor"
     },
     "addModelPlaceholder": {
-        "message": "Añadir modelo",
-        "description": "Marcador de posición para añadir un modelo"
+        "message": "Agregar un modelo",
+        "description": "Marcador de posición para agregar un modelo"
     },
     "addModelButton": {
-        "message": "Añadir",
-        "description": "Botón para añadir un modelo"
+        "message": "Agregar",
+        "description": "Botón para agregar un modelo"
     },
     "addModelDescription": {
-        "message": "Permite añadir un modelo personalizado (para usuarios avanzados).",
-        "description": "Descripción de añadir un modelo"
+        "message": "Permite agregar un modelo personalizado (para usuarios avanzados).",
+        "description": "Descripción de agregar un modelo"
     },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
-        "description": "Label for the NoLog option"
+        "description": "Etiqueta para la opción NoLog"
     },
     "noLogDescription": {
         "message": "Si está marcado, el servicio LiteLLM no conservará ningún dato.",
-        "description": "Description of the NoLog option"
+        "description": "Descripción de la opción NoLog"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Texto del enlace de GitHub"
     },
     "bannerRecording": {
         "message": "Grabación en curso... (Haz clic en el icono o usa el atajo para detener)",
@@ -291,6 +291,10 @@
         "message": "Traduciendo...",
         "description": "Mensaje del banner durante la traducción"
     },
+    "bannerProcessing": {
+        "message": "Procesando...",
+        "description": "Mensaje del banner durante el procesamiento del texto"
+    },
     "bannerMicAccessError": {
         "message": "Error: acceso al micrófono denegado.",
         "description": "Mensaje de error para el acceso al micrófono"
@@ -300,7 +304,7 @@
         "description": "Mensaje de error para la traducción"
     },
     "useBabelFishInstructions": {
-        "message": "Para usar BabelFish AI:<br><br>1. Ve a un sitio web (por ejemplo, tu correo web o un sitio de chat de tu IA favorita, como <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Fija el icono de la extensión para acceder fácilmente.<br>3. Iniciar/detener la grabación:<br>    * Haz clic en el icono de la extensión <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> o usa el atajo de teclado.<br>    * Habla en tu micrófono.<br>    * Haz clic de nuevo en el icono <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> o usa el atajo de teclado.<br>    * La transcripción aparecerá en el área de texto activa o en un cuadro de diálogo.<br><br>Atajos de teclado:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "Para usar BabelFish AI:<br><br>1. Ve a un sitio web (por ejemplo, tu correo web o un sitio de chat de tu IA favorita, como <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Ancla el icono de la extensión para acceder fácilmente.<br>3. Iniciar/detener la grabación:<br> * Haz clic en el icono de la extensión <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> o usa el atajo de teclado.<br> * Habla en tu micrófono.<br> * Haz clic en el icono de nuevo <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> o usa el atajo de teclado.<br> * La transcripción aparecerá en el área de texto activa o en un cuadro de diálogo.<br><br>Atajos de teclado:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrucciones para usar la extensión"
     },
     "defaultWhisperApiUrl": {
@@ -320,8 +324,12 @@
         "description": "Mensaje de error: problema de almacenamiento"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "Error: micrófono no accesible.",
+        "message": "Error: micrófono inaccesible.",
         "description": "Mensaje de error: acceso al micrófono"
+    },
+    "API_ERROR": {
+        "message": "Error al llamar a la API",
+        "description": "Mensaje de error: llamada a la API general"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Error durante la transcripción",
@@ -337,7 +345,7 @@
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
         "message": "Error al inyectar el script de contenido",
-        "description": "Mensaje de error: inyección del script"
+        "description": "Mensaje de error: inyección de script"
     },
     "NO_ACTIVE_TAB": {
         "message": "No se encontró ninguna pestaña activa",
@@ -350,6 +358,10 @@
     "INVALID_TRANSLATION_RESPONSE": {
         "message": "Formato de respuesta de traducción no válido",
         "description": "Mensaje de error: respuesta de traducción"
+    },
+    "bannerErrorGeneric": {
+        "message": "Se ha producido un error",
+        "description": "Mensaje de error genérico"
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensiones > ⌨️ Atajos de teclado",
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "Modelo de traducción predeterminado"
+    },
+    "dialogTitle": {
+        "message": "Transcripción de BabelFishAI",
+        "description": "Título del cuadro de diálogo"
+    },
+    "closeButton": {
+        "message": "Cerrar",
+        "description": "Texto del botón cerrar"
+    },
+    "copyButton": {
+        "message": "Copiar",
+        "description": "Texto del botón copiar"
+    },
+    "copySuccess": {
+        "message": "¡Texto copiado!",
+        "description": "Mensaje de éxito de la copia"
+    },
+    "copyError": {
+        "message": "Error al copiar",
+        "description": "Mensaje de error de la copia"
     }
 }

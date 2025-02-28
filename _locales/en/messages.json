@@ -25,7 +25,7 @@
     },
     "shortcutInstructions": {
         "message": "To change the shortcut, you can:",
-        "description": "Instructions for shortcuts"
+        "description": "Shortcut instructions"
     },
     "shortcutOption1": {
         "message": "Open Chrome extensions settings:",
@@ -40,7 +40,7 @@
         "description": "Steps to change the shortcut"
     },
     "optionsTitle": {
-        "message": "Configuration of BabelFishAI",
+        "message": "BabelFishAI Configuration",
         "description": "Title of the options page"
     },
     "languageSettingsTitle": {
@@ -53,11 +53,11 @@
     },
     "languageChanged": {
         "message": "Language changed successfully",
-        "description": "Confirmation message for language change"
+        "description": "Language change confirmation message"
     },
     "savedMessage": {
         "message": "Options saved!",
-        "description": "Confirmation message for saving"
+        "description": "Save confirmation message"
     },
     "apiKeyPlaceholder": {
         "message": "Your OpenAI API key (sk-...)",
@@ -73,7 +73,7 @@
     },
     "pricingInfo": {
         "message": "More information on pricing (default models: {defaultAudioModel} for audio and {defaultTranslationModel} for translation) available at",
-        "description": "Information on pricing"
+        "description": "Pricing information"
     },
     "supportProject": {
         "message": "Support the project via PayPal",
@@ -109,7 +109,7 @@
     },
     "dialogDurationLabel": {
         "message": "Dialog display duration (seconds):",
-        "description": "Label for dialog duration"
+        "description": "Label for the dialog duration"
     },
     "dialogDurationDescription": {
         "message": "Sets how long the dialog box remains visible before automatically disappearing.",
@@ -117,7 +117,7 @@
     },
     "bannerColorsLabel": {
         "message": "Status banner colors:",
-        "description": "Label for banner colors"
+        "description": "Label for the banner colors"
     },
     "bannerColorsDescription": {
         "message": "Colors of the banner that appears at the bottom of the screen during recording, transcription, and translation.",
@@ -128,7 +128,7 @@
         "description": "Label for the start color"
     },
     "startColorDescription": {
-        "message": "Starting color of the banner gradient.",
+        "message": "Start color of the banner gradient.",
         "description": "Description of the start color"
     },
     "endColorLabel": {
@@ -136,7 +136,7 @@
         "description": "Label for the end color"
     },
     "endColorDescription": {
-        "message": "Ending color of the banner gradient.",
+        "message": "End color of the banner gradient.",
         "description": "Description of the end color"
     },
     "opacityLabel": {
@@ -233,7 +233,7 @@
     },
     "forcedDialogInfo": {
         "message": "On these domains, the transcription will always appear in a dialog box",
-        "description": "Information on forced domains"
+        "description": "Information about forced domains"
     },
     "saveButton": {
         "message": "Save",
@@ -256,7 +256,7 @@
         "description": "Author's role"
     },
     "addModelPlaceholder": {
-        "message": "Add model",
+        "message": "Add a model",
         "description": "Placeholder for adding a model"
     },
     "addModelButton": {
@@ -291,6 +291,10 @@
         "message": "Translating...",
         "description": "Banner message during translation"
     },
+    "bannerProcessing": {
+        "message": "Processing...",
+        "description": "Banner message during text processing"
+    },
     "bannerMicAccessError": {
         "message": "Error: microphone access denied.",
         "description": "Error message for microphone access"
@@ -300,7 +304,7 @@
         "description": "Error message for translation"
     },
     "useBabelFishInstructions": {
-        "message": "To use BabelFish AI:<br><br>1. Go to a website (for example, your webmail or a chat site of your favorite AI, like <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat by Mistral AI</a> or <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Pin the extension icon for easy access.<br>3. Start/stop recording:<br>    * Click the extension icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br>    * Speak into your microphone.<br>    * Click the icon again <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br>    * The transcription will appear in the active text area or in a dialog box.<br><br>Keyboard shortcuts:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "To use BabelFish AI:<br><br>1. Go to a website (for example, your webmail or a chat site of your favorite AI, such as <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> or <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Pin the extension icon for easy access.<br>3. Start/stop recording:<br> * Click the extension icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br> * Speak into your microphone.<br> * Click the icon again <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br> * The transcription will appear in the active text area or in a dialog box.<br><br>Keyboard shortcuts:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instructions for using the extension"
     },
     "defaultWhisperApiUrl": {
@@ -309,7 +313,7 @@
     },
     "defaultTranslationApiUrl": {
         "message": "Default URL: https://api.openai.com/v1/chat/completions",
-        "description": "Default URL for the Translation API"
+        "description": "Default URL for the translation API"
     },
     "API_KEY_NOT_FOUND": {
         "message": "API key not configured. Please configure it in the extension options.",
@@ -320,8 +324,12 @@
         "description": "Error message: Storage problem"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "Error: microphone not accessible.",
+        "message": "Error: microphone inaccessible.",
         "description": "Error message: Microphone access"
+    },
+    "API_ERROR": {
+        "message": "Error calling the API",
+        "description": "Error message: General API call"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Error during transcription",
@@ -336,7 +344,7 @@
         "description": "Error message: No editable element"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Error injecting content script",
+        "message": "Error injecting the content script",
         "description": "Error message: Script injection"
     },
     "NO_ACTIVE_TAB": {
@@ -351,9 +359,13 @@
         "message": "Invalid translation response format",
         "description": "Error message: Translation response"
     },
+    "bannerErrorGeneric": {
+        "message": "An error occurred",
+        "description": "Generic error message"
+    },
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensions > ⌨️ Keyboard shortcuts",
-        "description": "Instructions to change keyboard shortcut"
+        "description": "Instructions for changing the keyboard shortcut"
     },
     "defaultModel": {
         "message": "default",
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "Default translation model"
+    },
+    "dialogTitle": {
+        "message": "BabelFishAI Transcription",
+        "description": "Title of the dialog box"
+    },
+    "closeButton": {
+        "message": "Close",
+        "description": "Close button text"
+    },
+    "copyButton": {
+        "message": "Copy",
+        "description": "Copy button text"
+    },
+    "copySuccess": {
+        "message": "Text copied!",
+        "description": "Copy success message"
+    },
+    "copyError": {
+        "message": "Error while copying",
+        "description": "Copy error message"
     }
 }

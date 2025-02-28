@@ -45,8 +45,33 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error('URL API manquante');
         }
 
+        // Vérification simple de la connectivité réseau sans appels externes
+        const checkNetworkConnection = () => {
+            return new Promise((resolve) => {
+                // Utiliser uniquement la propriété navigator.onLine, sans ping externe
+                if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+                    resolve({
+                        online: false,
+                        message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
+                    });
+                } else {
+                    // Considérer l'appareil comme en ligne si navigator.onLine le dit
+                    // sans faire de ping externe supplémentaire
+                    resolve({ online: true });
+                }
+            });
+        };
+
         const attemptFetch = async (isRetry = false) => {
             try {
+                // Vérifier la connexion réseau si ce n'est pas une tentative de réessai
+                if (!isRetry) {
+                    const networkStatus = await checkNetworkConnection();
+                    if (!networkStatus.online) {
+                        throw new Error(`${errorType}: ${networkStatus.message}`);
+                    }
+                }
+                
                 // Préparer les en-têtes avec l'authentification
                 const requestHeaders = {
                     'Authorization': `Bearer ${apiKey}`,
@@ -80,7 +105,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
                         console.error('API Error (could not parse response):', response.status, response.statusText);
                     }
-                    throw new Error(errorMessage);
+                    
+                    // Message d'erreur amélioré avec suggestion de résolution
+                    const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
+                    throw new Error(userFriendlyMessage);
                 }
     
                 // Traiter la réponse JSON
@@ -89,17 +117,53 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 // Appliquer le processeur de réponse personnalisé
                 return responseProcessor(data);
             } catch (error) {
+                // Erreurs de réseau spécifiques avec messages utilisateur améliorés
+                if (error.name === 'TypeError') {
+                    if (error.message.includes('Failed to fetch')) {
+                        throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+                    }
+                }
+                
                 // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-                if ((error.name === 'TypeError' || error.message.includes('Timeout')) && 
+                if ((error.name === 'TypeError' || error.message.includes('Timeout') || error.message.includes('connexion')) && 
                     retryOnFail && !isRetry) {
                     console.warn(`Retry API call to ${url} after error:`, error.message);
-                    // Attendre 500ms avant de réessayer
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Log simple pour informer des réessais
+                    console.log("Nouvelle tentative d'appel API après erreur");
+                    
+                    // Attendre 1500ms avant de réessayer (plus long pour donner une chance à la connexion)
+                    await new Promise(resolve => setTimeout(resolve, 1500));
                     return await attemptFetch(true);
                 }
                 throw error;
             }
         };
+        
+        /**
+         * Améliore les messages d'erreur pour qu'ils soient plus compréhensibles par l'utilisateur final
+         * @param {number} statusCode - Code de statut HTTP
+         * @param {string} originalMessage - Message d'erreur original
+         * @returns {string} Message d'erreur amélioré avec suggestion
+         */
+        function getImprovedErrorMessage(statusCode, originalMessage) {
+            const defaultMessage = `${errorType}: ${originalMessage}`;
+            
+            // Messages personnalisés selon le code d'erreur
+            const errorMessages = {
+                400: `${errorType}: Requête invalide. Vérifiez vos paramètres et réessayez.`,
+                401: `${errorType}: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.`,
+                403: `${errorType}: Accès refusé. Votre clé API ne dispose pas des autorisations nécessaires.`,
+                404: `${errorType}: API ou ressource non trouvée. Vérifiez l'URL dans les paramètres avancés.`,
+                429: `${errorType}: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer.`,
+                500: `${errorType}: Erreur serveur. Le service est peut-être temporairement indisponible.`,
+                502: `${errorType}: Service indisponible. Réessayez plus tard.`,
+                503: `${errorType}: Service surchargé. Réessayez plus tard.`,
+                504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`
+            };
+            
+            return errorMessages[statusCode] || defaultMessage;
+        }
 
         try {
             return await attemptFetch();

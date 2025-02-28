@@ -8,7 +8,7 @@
         "description": "확장 프로그램 설명"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 현재 음성 텍스트 변환 분야의 선두 주자인 OpenAI의 Whisper API 덕분에 음성을 매우 정확하게 텍스트로 변환합니다.",
+        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 OpenAI의 Whisper API 덕분에 음성을 매우 정확한 텍스트로 변환합니다. Whisper API는 현재 음성 텍스트 변환 분야의 선두 주자입니다.",
         "description": "환영 메시지"
     },
     "essentialSettingsTitle": {
@@ -28,15 +28,15 @@
         "description": "단축키 지침"
     },
     "shortcutOption1": {
-        "message": "Chrome 확장 프로그램 설정을 엽니다.",
+        "message": "Chrome 확장 프로그램 설정 열기:",
         "description": "단축키를 변경하는 옵션 1"
     },
     "shortcutOption2": {
-        "message": "또는 주소 표시줄에 입력합니다.",
+        "message": "또는 주소 표시줄에 입력:",
         "description": "단축키를 변경하는 옵션 2"
     },
     "shortcutSteps": {
-        "message": "그런 다음:<br>1. 목록에서 BabelFishAI를 찾습니다<br>2. 현재 단축키 필드를 클릭합니다<br>3. 새 키 조합을 누릅니다",
+        "message": "그런 다음:<br>1. 목록에서 BabelFishAI 찾기<br>2. 현재 단축키 필드 클릭<br>3. 새 키 조합 누르기",
         "description": "단축키를 변경하는 단계"
     },
     "optionsTitle": {
@@ -52,7 +52,7 @@
         "description": "언어 선택기 레이블"
     },
     "languageChanged": {
-        "message": "언어가 성공적으로 변경되었습니다",
+        "message": "언어가 성공적으로 변경되었습니다.",
         "description": "언어 변경 확인 메시지"
     },
     "savedMessage": {
@@ -72,7 +72,7 @@
         "description": "API 키 도움말"
     },
     "pricingInfo": {
-        "message": "가격 정보 (기본 모델: 오디오의 경우 {defaultAudioModel}, 번역의 경우 {defaultTranslationModel})는 여기에서 확인할 수 있습니다.",
+        "message": "가격에 대한 자세한 정보 (기본 모델: 오디오의 경우 {defaultAudioModel}, 번역의 경우 {defaultTranslationModel})는 여기에서 확인할 수 있습니다.",
         "description": "가격 정보"
     },
     "supportProject": {
@@ -104,7 +104,7 @@
         "description": "대화 상자 표시 레이블"
     },
     "dialogDisplayDescription": {
-        "message": "활성화하면 음성 텍스트 변환/번역된 텍스트가 부동 대화 상자에 나타납니다.",
+        "message": "활성화하면 음성 텍스트 변환/번역된 텍스트가 플로팅 대화 상자에 나타납니다.",
         "description": "대화 상자 표시 옵션 설명"
     },
     "dialogDurationLabel": {
@@ -120,7 +120,7 @@
         "description": "배너 색상 레이블"
     },
     "bannerColorsDescription": {
-        "message": "녹음, 음성 텍스트 변환 및 번역 중에 화면 하단에 나타나는 배너의 색상입니다.",
+        "message": "녹음, 음성 텍스트 변환 및 번역 중에 화면 하단에 나타나는 배너 색상입니다.",
         "description": "배너 색상 설명"
     },
     "startColorLabel": {
@@ -164,7 +164,7 @@
         "description": "대상 언어 레이블"
     },
     "translationExplanation": {
-        "message": "통합 AI 번역 기능을 사용하면 음성 텍스트 변환된 텍스트의 자동 번역을 얻을 수 있습니다.<br>이렇게 하려면:<br><ul><li>소스 언어: 마이크에 대고 말하는 언어를 선택합니다.</li><li>대상 언어: 텍스트를 번역할 언어를 선택합니다.</li></ul>이 설정은 번역에만 영향을 미치며 음성 텍스트 변환에는 영향을 미치지 않습니다. 자동 번역을 비활성화하면 음성 텍스트 변환된 텍스트는 마이크에 대고 말한 언어로 됩니다.",
+        "message": "통합 AI 번역 기능을 사용하면 음성 텍스트 변환된 텍스트의 자동 번역을 얻을 수 있습니다.<br>이렇게 하려면:<br><ul><li>소스 언어: 마이크에 대고 말하는 언어를 선택합니다.</li><li>대상 언어: 텍스트를 번역할 언어를 선택합니다.</li></ul>이 설정은 번역에만 영향을 미치며 음성 텍스트 변환에는 영향을 미치지 않습니다. 자동 번역을 비활성화하면 음성 텍스트 변환된 텍스트는 마이크에 대고 말한 언어로 표시됩니다.",
         "description": "번역 섹션 설명"
     },
     "expertModeTitle": {
@@ -232,7 +232,7 @@
         "description": "도메인 추가 설명"
     },
     "forcedDialogInfo": {
-        "message": "이러한 도메인에서는 음성 텍스트 변환이 항상 대화 상자에 나타납니다",
+        "message": "이러한 도메인에서는 음성 텍스트 변환이 항상 대화 상자에 나타납니다.",
         "description": "강제 도메인 정보"
     },
     "saveButton": {
@@ -268,7 +268,7 @@
         "description": "모델 추가 설명"
     },
     "noLogLabel": {
-        "message": "NoLog (LiteLLM 전용)",
+        "message": "NoLog (LiteLLM만 해당)",
         "description": "NoLog 옵션 레이블"
     },
     "noLogDescription": {
@@ -277,7 +277,7 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "GitHub 링크 텍스트"
     },
     "bannerRecording": {
         "message": "녹음 중... (중지하려면 아이콘을 클릭하거나 단축키를 사용하세요)",
@@ -291,6 +291,10 @@
         "message": "번역 중...",
         "description": "번역 중 배너 메시지"
     },
+    "bannerProcessing": {
+        "message": "처리 중...",
+        "description": "텍스트 처리 중 배너 메시지"
+    },
     "bannerMicAccessError": {
         "message": "오류: 마이크 액세스가 거부되었습니다.",
         "description": "마이크 액세스 오류 메시지"
@@ -300,8 +304,8 @@
         "description": "번역 오류 메시지"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AI를 사용하려면:<br><br>1. 웹사이트로 이동합니다(예: 웹메일 또는 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Mistral AI의 Le Chat</a> 또는 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>와 같은 즐겨찾는 AI의 채팅 사이트).<br>2. 쉽게 액세스할 수 있도록 확장 프로그램 아이콘을 고정합니다.<br>3. 녹음 시작/중지:<br>    * 확장 프로그램 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 클릭하거나 키보드 단축키를 사용합니다.<br>    * 마이크에 대고 말합니다.<br>    * 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 다시 클릭하거나 키보드 단축키를 사용합니다.<br>    * 음성 텍스트 변환은 활성 텍스트 영역 또는 대화 상자에 나타납니다.<br><br>키보드 단축키:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
-        "description": "확장 프로그램 사용 방법"
+        "message": "BabelFish AI 사용 방법:<br><br>1. 웹사이트로 이동합니다(예: 웹메일 또는 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> 또는 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>와 같은 즐겨찾는 AI의 채팅 사이트).<br>2. 쉽게 액세스할 수 있도록 확장 프로그램 아이콘을 고정합니다.<br>3. 녹음 시작/중지:<br> * 확장 프로그램 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 클릭하거나 키보드 단축키를 사용합니다.<br> * 마이크에 대고 말합니다.<br> * 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 다시 클릭하거나 키보드 단축키를 사용합니다.<br> * 음성 텍스트 변환은 활성 텍스트 영역 또는 대화 상자에 나타납니다.<br><br>키보드 단축키:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "확장 프로그램 사용 지침"
     },
     "defaultWhisperApiUrl": {
         "message": "기본 URL: https://api.openai.com/v1/audio/transcriptions",
@@ -323,6 +327,10 @@
         "message": "오류: 마이크에 액세스할 수 없습니다.",
         "description": "오류 메시지: 마이크 액세스"
     },
+    "API_ERROR": {
+        "message": "API 호출 중 오류",
+        "description": "오류 메시지: 일반 API 호출"
+    },
     "TRANSCRIPTION_ERROR": {
         "message": "음성 텍스트 변환 중 오류",
         "description": "오류 메시지: 음성 텍스트 변환"
@@ -332,7 +340,7 @@
         "description": "오류 메시지: 번역"
     },
     "NO_EDITABLE_ELEMENT": {
-        "message": "편집 가능한 요소를 찾을 수 없음",
+        "message": "편집 가능한 요소를 찾을 수 없습니다.",
         "description": "오류 메시지: 편집 가능한 요소 없음"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
@@ -340,7 +348,7 @@
         "description": "오류 메시지: 스크립트 삽입"
     },
     "NO_ACTIVE_TAB": {
-        "message": "활성 탭을 찾을 수 없음",
+        "message": "활성 탭을 찾을 수 없습니다.",
         "description": "오류 메시지: 활성 탭 없음"
     },
     "MISSING_TRANSLATION_PARAMS": {
@@ -350,6 +358,10 @@
     "INVALID_TRANSLATION_RESPONSE": {
         "message": "잘못된 번역 응답 형식",
         "description": "오류 메시지: 번역 응답"
+    },
+    "bannerErrorGeneric": {
+        "message": "오류가 발생했습니다",
+        "description": "일반 오류 메시지"
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ 확장 프로그램 > ⌨️ 단축키",
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "기본 번역 모델"
+    },
+    "dialogTitle": {
+        "message": "BabelFishAI 음성 텍스트 변환",
+        "description": "대화 상자 제목"
+    },
+    "closeButton": {
+        "message": "닫기",
+        "description": "닫기 버튼 텍스트"
+    },
+    "copyButton": {
+        "message": "복사",
+        "description": "복사 버튼 텍스트"
+    },
+    "copySuccess": {
+        "message": "텍스트 복사됨!",
+        "description": "복사 성공 메시지"
+    },
+    "copyError": {
+        "message": "복사 중 오류 발생",
+        "description": "복사 오류 메시지"
     }
 }
