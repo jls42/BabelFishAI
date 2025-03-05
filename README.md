@@ -1,5 +1,7 @@
 # Babel Fish AI - Extension de Transcription Vocale et Traduction avec IA
 
+<img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
+
 **Pour utiliser l'extension, vous aurez besoin d'une clé API OpenAI (ou d'un fournisseur tiers si vous utilisez LiteLLM Proxy). Vous pouvez générer une clé API OpenAI ici : [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)**
 
 Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offrir une transcription vocale puissante. Transformez votre voix en texte avec une précision remarquable grâce à l’API Whisper d’OpenAI, et bénéficiez en option d’une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
@@ -33,26 +35,29 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 
 ## 🌐 Langues Supportées
 
-- Arabe
-- Allemand
-- Anglais
-- Espagnol
-- Français
-- Hindi
-- Italien
-- Japonais
-- Coréen
-- Néerlandais
-- Polonais
-- Portugais
-- Roumain
-- Suédois
-- Chinois
+Voici la liste des langues supportées par Babel Fish AI, avec des liens vers des vidéos de démonstration :
+
+- [Arabe](https://www.youtube.com/watch?v=onzOGx7nbUE)
+- [Allemand](https://www.youtube.com/watch?v=G1QVF1NTQYE)
+- [Anglais](https://www.youtube.com/watch?v=QC8WiIszn3Q)
+- [Espagnol](https://www.youtube.com/watch?v=nA93pis4vDQ)
+- [Français](https://www.youtube.com/watch?v=ITNFjx7Mgo4)
+- [Hindi](https://www.youtube.com/watch?v=FMEYdwCqoPg)
+- [Italien](https://www.youtube.com/watch?v=QgYZt8myods)
+- [Japonais](https://www.youtube.com/watch?v=noHEJCnocH8)
+- [Coréen](https://www.youtube.com/watch?v=YrYN75YSH3w)
+- [Néerlandais](https://www.youtube.com/watch?v=OnAZHzbd2NQ)
+- [Polonais](https://www.youtube.com/watch?v=E5AVNjZYOxM)
+- [Portugais](https://www.youtube.com/watch?v=st0XwCV1tvo)
+- [Roumain](https://www.youtube.com/watch?v=H2IMpU5_Hew)
+- [Suédois](https://www.youtube.com/watch?v=HMMzGyW8000)
+- [Chinois](https://www.youtube.com/watch?v=OJe6oVA_Y0s)
 
 ## 🚀 Installation
 
 1.  **Téléchargement et Installation :**
     - Clonez ce dépôt depuis GitHub ou téléchargez manuellement le dossier de l’extension.
+    - **Ou installez directement l'extension depuis le [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
     - Ouvrez Chrome et accédez à `chrome://extensions/`.
     - Activez le « Mode développeur » en haut à droite.
     - Cliquez sur « Charger l’extension non empaquetée » et sélectionnez le dossier de Babel Fish AI.
