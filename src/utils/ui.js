@@ -95,7 +95,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Définir les attributs ARIA pour l'accessibilité
         banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
         banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
-        
+
         // Appliquer les classes et attributs appropriés
         if (type === MESSAGE_TYPES.ERROR) {
             banner.classList.add('error');
@@ -104,15 +104,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             banner.classList.add('recording');
             banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
         }
-        
+
         // Ajouter une animation pour attirer l'attention
         banner.style.animation = 'none';
         // Forcer un reflow pour réinitialiser l'animation
-        void banner.offsetWidth;
-        banner.style.animation = type === MESSAGE_TYPES.ERROR ? 
-            'bannerPulse 0.5s ease-in-out' : 
+        void banner.offsetWidth; // skipcq: JS-0098
+        banner.style.animation = type === MESSAGE_TYPES.ERROR ?
+            'bannerPulse 0.5s ease-in-out' :
             'bannerFadeIn 0.3s ease-in-out';
-            
+
         // Rendre la bannière visible
         banner.style.display = 'block';
     }
@@ -128,20 +128,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const buttonText = window.BabelFishAIUtils.i18n?.getMessage("copyButton") || 'Copier';
         const successText = window.BabelFishAIUtils.i18n?.getMessage("copySuccess") || 'Copié !';
         const errorText = window.BabelFishAIUtils.i18n?.getMessage("copyError") || 'Erreur lors de la copie du texte';
-        
+
         copyButton.textContent = buttonText;
         copyButton.className = 'whisper-copy-button';
-        
+
         // Améliorer l'accessibilité
         copyButton.setAttribute('aria-label', buttonText);
         copyButton.setAttribute('title', buttonText);
-        
+
         // Ajouter un icône de copie (optionnel, pour amélioration visuelle)
         const iconSpan = document.createElement('span');
         iconSpan.innerHTML = '📋';
         iconSpan.style.marginRight = '5px';
         copyButton.prepend(iconSpan);
-        
+
         // Gestion des événements clavier pour l'accessibilité
         copyButton.onkeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -149,18 +149,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 copyButton.click();
             }
         };
-        
+
         // Fonctionnalité de copie
         copyButton.onclick = async () => {
             try {
                 await navigator.clipboard.writeText(text);
-                
+
                 // Feedback visuel
                 copyButton.classList.add('success');
                 copyButton.setAttribute('aria-label', successText);
                 copyButton.setAttribute('title', successText);
                 copyButton.textContent = successText;
-                
+
                 // Restaurer après un délai
                 setTimeout(() => {
                     copyButton.classList.remove('success');
@@ -171,15 +171,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }, CONFIG.COPY_FEEDBACK_DURATION);
             } catch (error) {
                 console.error('Failed to copy text:', error);
-                
+
                 // Feedback visuel en cas d'erreur
                 copyButton.classList.add('error');
                 copyButton.setAttribute('aria-label', errorText);
                 copyButton.setAttribute('title', errorText);
-                
+
                 // Informer l'utilisateur
                 if (onError) onError(errorText);
-                
+
                 // Restaurer après un délai
                 setTimeout(() => {
                     copyButton.classList.remove('error');
@@ -188,7 +188,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }, CONFIG.COPY_FEEDBACK_DURATION);
             }
         };
-        
+
         // Ajouter le style pour le bouton si nécessaire
         if (!document.getElementById('whisper-copy-button-styles')) {
             const style = document.createElement('style');
@@ -225,7 +225,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             `;
             document.head.appendChild(style);
         }
-        
+
         return copyButton;
     }
 
@@ -239,17 +239,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (container) {
             return container;
         }
-        
+
         // Créer le conteneur principal
         container = document.createElement('div');
         container.id = 'whisper-transcription-container';
         container.className = 'whisper-transcription-container';
-        
+
         // Ajouter les attributs ARIA pour l'accessibilité
         container.setAttribute('role', 'dialog');
         container.setAttribute('aria-labelledby', 'whisper-dialog-title');
         container.setAttribute('aria-describedby', 'whisper-dialog-content');
-        
+
         // Ajouter un titre pour l'accessibilité
         const title = document.createElement('div');
         title.id = 'whisper-dialog-title';
@@ -257,14 +257,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         title.textContent = window.BabelFishAIUtils.i18n?.getMessage("dialogTitle") || 'Transcription';
         title.setAttribute('role', 'heading');
         title.setAttribute('aria-level', '2');
-        
+
         // Créer le bouton de fermeture
         const closeButton = document.createElement('button');
         closeButton.textContent = '×';
         closeButton.className = 'whisper-close-button';
         closeButton.title = window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer';
         closeButton.setAttribute('aria-label', window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer la boîte de dialogue');
-        
+
         // Améliorer l'expérience de fermeture
         closeButton.onkeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -272,7 +272,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 closeButton.click();
             }
         };
-        
+
         // Ajouter un gestionnaire d'événements pour fermer le conteneur
         closeButton.onclick = () => {
             if (container.parentNode) {
@@ -285,7 +285,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }, 300); // Correspond à la durée de l'animation
             }
         };
-        
+
         // Permettre la fermeture avec la touche Echap
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') {
@@ -293,7 +293,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         };
         document.addEventListener('keydown', handleKeyDown);
-        
+
         // Nettoyer l'écouteur lorsque le conteneur est retiré
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -308,14 +308,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Assembler le conteneur
         title.appendChild(closeButton);
         container.appendChild(title);
-        
+
         // Ajouter le conteneur avec une animation d'entrée
         document.body.appendChild(container);
-        
+
         // Forcer un reflow avant d'ajouter la classe d'animation
-        void container.offsetWidth;
+        void container.offsetWidth; // skipcq: JS-0098
         container.classList.add('visible');
-        
+
         // Ajouter du CSS dynamiquement pour les animations si nécessaire
         if (!document.getElementById('whisper-dialog-styles')) {
             const style = document.createElement('style');
@@ -370,22 +370,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function removeTranscriptionElement(transcriptionElement) {
         // Vérifier si l'élément existe toujours avant de le supprimer
-        if (transcriptionElement && transcriptionElement.parentNode) {
-            transcriptionElement.parentNode.removeChild(transcriptionElement);
+        transcriptionElement?.parentNode?.removeChild(transcriptionElement);
 
-            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
-            const currentContainer = document.getElementById('whisper-transcription-container');
+        // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+        const currentContainer = document.getElementById('whisper-transcription-container');
 
-            // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-            if (currentContainer && currentContainer.children.length === 1) {
-                document.body.removeChild(currentContainer);
-            }
+        // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
+        if (currentContainer && currentContainer.children.length === 1) {
+            document.body.removeChild(currentContainer);
         }
     }
 
     // Création unique d'un fragment de document pour optimiser les manipulations DOM
     const documentFragment = document.createDocumentFragment();
-    
+
     /**
      * Affiche un texte dans une boîte de dialogue flottante avec optimisation DOM
      * @param {string} text - Le texte à afficher
@@ -401,19 +399,19 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Utilisation d'un fragment pour regrouper les manipulations DOM
         const textElement = document.createElement('div');
         textElement.className = 'whisper-transcription-element';
-        
+
         // Création unique du fragment de document avec tous les éléments
         // pour éviter les multiples reflows et repaints
         documentFragment.appendChild(textElement);
         textElement.textContent = text;
-        
+
         const lineBreak = document.createElement('br');
         textElement.appendChild(lineBreak);
-        
+
         // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
         const copyButton = createCopyButton(text, onError);
         textElement.appendChild(copyButton);
-        
+
         // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
         // et minimiser les reflows/repaints
         requestAnimationFrame(() => {
@@ -423,7 +421,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Utiliser un numéro d'ID unique pour éviter les conflits de timers
         const timerId = `dialog_${Date.now()}`;
-        
+
         // Utiliser requestIdleCallback si disponible pour la suppression automatique
         const scheduleRemoval = () => {
             if ('requestIdleCallback' in window) {
@@ -434,16 +432,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 removeTranscriptionElement(textElement);
             }
         };
-        
+
         // Configurer la suppression automatique après la durée spécifiée
         const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
         const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
-        
+
         // Supprimer les anciens timers pour éviter les fuites mémoire
         if (timers[timerId]) {
             clearTimeout(timers[timerId]);
         }
-        
+
         // Stocker le timer pour pouvoir le nettoyer plus tard si nécessaire
         timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
 

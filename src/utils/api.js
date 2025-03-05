@@ -96,7 +96,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
                 // Gérer les erreurs HTTP
                 if (!response.ok) {
-                    let errorMessage;
+                    let errorMessage; // skipcq: JS-0119
                     try {
                         const errorData = await response.json();
                         errorMessage = errorData.error?.message || errorType;
@@ -190,7 +190,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         // Déterminer le nom de fichier final
-        let finalFilename;
+        let finalFilename; // skipcq: JS-0119
         if (generateUniqueFilename) {
             // Générer un nom de fichier avec timestamp et élément aléatoire
             const timestamp = Date.now();
@@ -223,7 +223,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<Object>} Les données récupérées avec les valeurs par défaut appliquées
      * @throws {Error} Une erreur CHROME_STORAGE_ERROR si la récupération échoue
      */
-    async function getFromStorage(keys) {
+    async function getFromStorage(keys) { // skipcq: JS-0116
         return new Promise((resolve, reject) => {
             window.chrome.storage.sync.get(keys, (result) => {
                 if (window.chrome.runtime.lastError) {
@@ -243,7 +243,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<void>} Une promesse résolue lorsque les données sont sauvegardées
      * @throws {Error} Une erreur CHROME_STORAGE_ERROR si la sauvegarde échoue
      */
-    async function saveToStorage(data) {
+    async function saveToStorage(data) { // skipcq: JS-0116
         return new Promise((resolve, reject) => {
             window.chrome.storage.sync.set(data, () => {
                 if (window.chrome.runtime.lastError) {

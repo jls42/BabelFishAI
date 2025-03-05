@@ -422,7 +422,7 @@
      * @param {Object} options - Les options d'affichage
      * @returns {Promise<boolean>} - Indique si l'affichage a réussi
      */
-    async function displayTranscriptionText(text, options) {
+    function displayTranscriptionText(text, options) {
         if (!text) {
             console.warn("Tentative d'affichage de texte vide");
             return false;
@@ -469,7 +469,7 @@
         // Valider le texte d'entrée
         if (!text || typeof text !== 'string') {
             const errorMsg = "Texte de transcription invalide";
-            console.error(errorMsg + ':', text);
+            console.error(`${errorMsg}:`, text);
             handleError(errorMsg, "Invalid transcription text");
             return false;
         }
@@ -660,9 +660,7 @@
             console.error("Error inserting text into input:", error);
 
             // En cas d'erreur, s'assurer que l'élément est réactivé
-            if (element && element.disabled) {
-                element.disabled = false;
-            }
+            element?.disabled && (element.disabled = false);
 
             return false;
         }
