@@ -162,7 +162,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`
             };
 
-            if (errorMessages.hasOwnProperty(statusCode)) {
+            if (Object.prototype.hasOwnProperty.call(errorMessages, statusCode)) {
                 return errorMessages[statusCode];
             } else {
                 return defaultMessage;
@@ -225,9 +225,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function getFromStorage(keys) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(keys, (result) => {
-                if (chrome.runtime.lastError) {
-                    console.error("Chrome storage error:", chrome.runtime.lastError);
+            window.chrome.storage.sync.get(keys, (result) => {
+                if (window.chrome.runtime.lastError) {
+                    console.error("Chrome storage error:", window.chrome.runtime.lastError);
                     reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
                 } else {
                     resolve(result);
@@ -245,9 +245,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function saveToStorage(data) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.set(data, () => {
-                if (chrome.runtime.lastError) {
-                    console.error("Chrome storage save error:", chrome.runtime.lastError);
+            window.chrome.storage.sync.set(data, () => {
+                if (window.chrome.runtime.lastError) {
+                    console.error("Chrome storage save error:", window.chrome.runtime.lastError);
                     reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
                 } else {
                     resolve();
