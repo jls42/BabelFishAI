@@ -232,7 +232,7 @@
         if (audioChunks.length > 0) {
             audioChunks.splice(0, audioChunks.length);
         }
-        
+
         // Forcer un cycle de garbage collection si possible
         if (window.gc) {
             window.gc();
@@ -253,7 +253,7 @@
             console.error('MediaRecorder non initialisé');
             return;
         }
-        
+
         // Événement déclenché lorsque des données audio sont disponibles
         mediaRecorder.ondataavailable = event => {
             if (event.data && event.data.size > 0) {
@@ -268,10 +268,10 @@
                 if (audioChunks.length === 0) {
                     throw new Error("Aucune donnée audio capturée");
                 }
-                
+
                 // Créer le blob audio à partir des chunks collectés
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                
+
                 // Vérifier la taille du blob
                 if (audioBlob.size === 0) {
                     throw new Error("Blob audio vide");
@@ -287,7 +287,7 @@
                 cleanupRecordingResources(stream);
             }
         };
-        
+
         // Gérer les erreurs du MediaRecorder
         mediaRecorder.onerror = error => {
             console.error('Erreur MediaRecorder:', error);
@@ -337,7 +337,7 @@
                 apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
                 audioModelType: API_CONFIG.WHISPER_MODEL
             });
-            
+
             const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
             const audioModelType = result.audioModelType;
 
@@ -364,7 +364,7 @@
      * @returns {Promise<Object>} Les options d'affichage et de traduction
      */
     async function getDisplayOptions() {
-        return await window.BabelFishAIUtils.api.getFromStorage({
+        return window.BabelFishAIUtils.api.getFromStorage({
             activeDisplay: true,
             dialogDisplay: false,
             dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
@@ -427,31 +427,31 @@
             console.warn("Tentative d'affichage de texte vide");
             return false;
         }
-        
+
         try {
             // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
             const currentDomain = window.location.hostname;
-            const isDialogForced = Array.isArray(options.forcedDialogDomains) && 
+            const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
                 options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
-    
+
             // Tenter d'insérer le texte dans l'élément actif si l'option est activée
             let displayed = false;
             if (options.activeDisplay && !isDialogForced) {
                 displayed = handleActiveElementInsertion(text);
             }
-    
+
             // Afficher dans une boîte de dialogue si nécessaire ou si l'insertion a échoué
             if (options.dialogDisplay || isDialogForced || !displayed) {
                 showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
                 displayed = true;
             }
-    
+
             // Avertir si aucune méthode d'affichage n'est activée
             if (!displayed) {
                 console.warn("Aucune méthode d'affichage n'est activée");
                 return false;
             }
-    
+
             return true;
         } catch (error) {
             console.error("Erreur lors de l'affichage du texte:", error);
@@ -477,7 +477,7 @@
         try {
             // Informer l'utilisateur que le traitement est en cours
             showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
-            
+
             // Récupérer les options de configuration
             const options = await getDisplayOptions();
 
@@ -589,17 +589,17 @@
             const currentValue = element.value;
             const selectionStart = element.selectionStart;
             const selectionEnd = element.selectionEnd;
-            
+
             // Optimisation pour les grands volumes de texte
             const isLongText = text.length > 1000 || currentValue.length > 10000;
-            
+
             if (isLongText) {
                 // Pour les grands volumes, utiliser une approche différente
                 // qui évite de manipuler toute la chaîne en mémoire
-                
+
                 // 1. Désactiver temporairement les événements pendant la modification
                 element.disabled = true;
-                
+
                 // 2. Utiliser requestAnimationFrame pour planifier la modification
                 // lors du prochain cycle de rendu
                 requestAnimationFrame(() => {
@@ -610,18 +610,18 @@
                             currentValue.substring(0, selectionStart) +
                             text +
                             currentValue.substring(selectionEnd);
-                        
+
                         // Mettre à jour la valeur de l'élément
                         element.value = newValue;
-                        
+
                         // Positionner le curseur après le texte inséré
                         const newCursorPosition = selectionStart + text.length;
                         element.selectionStart = element.selectionEnd = newCursorPosition;
-                        
+
                         // Réactiver l'élément
                         element.disabled = false;
                         element.focus();
-                        
+
                         // Déclencher l'événement input avec un léger délai
                         // pour permettre au navigateur de finir le rendu
                         setTimeout(() => {
@@ -632,38 +632,38 @@
                         element.disabled = false;
                     }
                 });
-                
+
                 return true;
             } else {
                 // Pour les textes courts, utiliser l'approche directe
-                
+
                 // Construire la nouvelle valeur en insérant le texte à la position du curseur
                 // ou en remplaçant la sélection actuelle
                 const newValue =
                     currentValue.substring(0, selectionStart) +
                     text +
                     currentValue.substring(selectionEnd);
-    
+
                 // Mettre à jour la valeur de l'élément
                 element.value = newValue;
-    
+
                 // Positionner le curseur après le texte inséré
                 const newCursorPosition = selectionStart + text.length;
                 element.selectionStart = element.selectionEnd = newCursorPosition;
-    
+
                 // Déclencher un événement input pour notifier les listeners
                 element.dispatchEvent(new Event('input', { bubbles: true }));
-                
+
                 return true;
             }
         } catch (error) {
             console.error("Error inserting text into input:", error);
-            
+
             // En cas d'erreur, s'assurer que l'élément est réactivé
             if (element && element.disabled) {
                 element.disabled = false;
             }
-            
+
             return false;
         }
     }
@@ -691,16 +691,16 @@
         if (recordingBanner && document.body.contains(recordingBanner)) {
             return recordingBanner;
         }
-        
+
         // Créer la bannière
         recordingBanner = document.createElement('div');
         recordingBanner.id = 'babelfishai-status-banner'; // Ajouter un ID pour faciliter les références
         recordingBanner.className = 'whisper-status-banner';
         recordingBanner.style.display = 'none'; // Cacher le bandeau par défaut
-        
+
         // Ajouter un attribut pour l'internationalisation
         recordingBanner.setAttribute('data-extension', 'babelfishai');
-        
+
         // Ajouter la bannière au document
         if (document.body) {
             document.body.insertBefore(recordingBanner, document.body.firstChild);
@@ -713,10 +713,10 @@
                 updateBannerColor(true);
             });
         }
-        
+
         return recordingBanner;
     }
-    
+
     // Initialiser la bannière
     initBanner();
 
@@ -784,12 +784,12 @@
         // Normaliser les paramètres pour gérer différents types d'entrées
         let userMessage = '';
         let technicalMessage = '';
-        
+
         // Si l'erreur est fournie comme objet Error
         if (displayMessage instanceof Error) {
             userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
             technicalMessage = displayMessage.stack || displayMessage.message;
-        } 
+        }
         // Si l'erreur est fournie comme chaîne de caractères
         else {
             userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
@@ -798,7 +798,7 @@
 
         // Logger l'erreur technique pour le débogage
         console.error("Erreur technique:", technicalMessage);
-        
+
         // Afficher le message d'erreur à l'utilisateur via la bannière
         showBanner(userMessage, MESSAGE_TYPES.ERROR);
 
@@ -822,9 +822,8 @@
      * @param {Object} sender - L'expéditeur du message
      * @param {Function} callback - Fonction de callback pour répondre au message
      */
-    function handleBackgroundMessages(message, sender, callback) {
-        console.log("Message received:", message);
-        
+    function handleBackgroundMessages(message) {
+
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
@@ -836,13 +835,13 @@
             }
             // Possibilité d'ajouter d'autres gestionnaires d'actions ici
         };
-        
+
         // Exécuter le gestionnaire correspondant à l'action
         if (message.action && actionHandlers[message.action]) {
             actionHandlers[message.action]();
         }
     }
-    
+
     // Écouter les messages du background script
     chrome.runtime.onMessage.addListener(handleBackgroundMessages);
 
@@ -881,10 +880,10 @@
      */
     function handleStorageChanges(changes, namespace) {
         if (namespace !== 'sync') return;
-        
+
         // Traiter les changements de couleur du bandeau
         updateBannerColorOptions(changes);
-        
+
         // Possibilité d'ajouter d'autres gestionnaires de changements ici
     }
 

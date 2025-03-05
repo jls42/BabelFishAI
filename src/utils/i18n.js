@@ -175,8 +175,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         for (const key in placeholders) {
             if (Object.prototype.hasOwnProperty.call(placeholders, key)) {
                 const escapedKey = escapeRegExp(key);
-                const regex = new RegExp(`{${escapedKey}}`, 'g');
-                newMessage = newMessage.replace(regex, placeholders[key]);
+                newMessage = newMessage.replaceAll(`{${escapedKey}}`, placeholders[key]);
             }
         }
         return newMessage;

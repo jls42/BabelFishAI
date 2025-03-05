@@ -71,29 +71,29 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         throw new Error(`${errorType}: ${networkStatus.message}`);
                     }
                 }
-                
+
                 // Préparer les en-têtes avec l'authentification
                 const requestHeaders = {
                     'Authorization': `Bearer ${apiKey}`,
                     ...headers
                 };
-    
+
                 // Configuration de la requête
                 const requestOptions = {
                     method,
                     headers: requestHeaders,
                     body
                 };
-    
+
                 // Créer une promesse qui se résout avec la réponse ou rejette après timeout
                 const fetchPromise = fetch(url, requestOptions);
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error(`${errorType}: Timeout - Request exceeded ${timeout}ms`)), timeout);
                 });
-    
+
                 // Effectuer l'appel API avec gestion des erreurs réseau et timeout
                 const response = await Promise.race([fetchPromise, timeoutPromise]);
-    
+
                 // Gérer les erreurs HTTP
                 if (!response.ok) {
                     let errorMessage;
@@ -105,15 +105,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
                         console.error('API Error (could not parse response):', response.status, response.statusText);
                     }
-                    
+
                     // Message d'erreur amélioré avec suggestion de résolution
                     const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
                     throw new Error(userFriendlyMessage);
                 }
-    
+
                 // Traiter la réponse JSON
                 const data = await response.json();
-                
+
                 // Appliquer le processeur de réponse personnalisé
                 return responseProcessor(data);
             } catch (error) {
@@ -123,23 +123,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
                     }
                 }
-                
+
                 // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-                if ((error.name === 'TypeError' || error.message.includes('Timeout') || error.message.includes('connexion')) && 
+                if ((error.name === 'TypeError' || error.message.includes('Timeout') || error.message.includes('connexion')) &&
                     retryOnFail && !isRetry) {
                     console.warn(`Retry API call to ${url} after error:`, error.message);
-                    
+
                     // Log simple pour informer des réessais
                     console.log("Nouvelle tentative d'appel API après erreur");
-                    
+
                     // Attendre 1500ms avant de réessayer (plus long pour donner une chance à la connexion)
                     await new Promise(resolve => setTimeout(resolve, 1500));
-                    return await attemptFetch(true);
+                    return attemptFetch(true);
                 }
                 throw error;
             }
         };
-        
+
         /**
          * Améliore les messages d'erreur pour qu'ils soient plus compréhensibles par l'utilisateur final
          * @param {number} statusCode - Code de statut HTTP
@@ -148,7 +148,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          */
         function getImprovedErrorMessage(statusCode, originalMessage) {
             const defaultMessage = `${errorType}: ${originalMessage}`;
-            
+
             // Messages personnalisés selon le code d'erreur
             const errorMessages = {
                 400: `${errorType}: Requête invalide. Vérifiez vos paramètres et réessayez.`,
@@ -161,8 +161,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 503: `${errorType}: Service surchargé. Réessayez plus tard.`,
                 504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`
             };
-            
-            return errorMessages[statusCode] || defaultMessage;
+
+            if (errorMessages.hasOwnProperty(statusCode)) {
+                return errorMessages[statusCode];
+            } else {
+                return defaultMessage;
+            }
         }
 
         try {
@@ -202,7 +206,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         formData.append('model', modelType);
 
         // Utiliser la fonction callApi pour effectuer la requête
-        return await callApi({
+        return callApi({
             url: apiUrl,
             apiKey,
             body: formData,
@@ -219,7 +223,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<Object>} Les données récupérées avec les valeurs par défaut appliquées
      * @throws {Error} Une erreur CHROME_STORAGE_ERROR si la récupération échoue
      */
-    async function getFromStorage(keys, defaults = {}) {
+    async function getFromStorage(keys) {
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get(keys, (result) => {
                 if (chrome.runtime.lastError) {
