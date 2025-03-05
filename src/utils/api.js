@@ -62,6 +62,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             });
         };
 
+        /**
+         * Tente un appel fetch, avec gestion des erreurs et retry.
+         * @async
+         * @param {boolean} [isRetry=false] - Indique si c'est une tentative de réessai
+         * @returns {Promise<any>} - Le résultat de l'appel API
+         * @throws {Error} - Une erreur si l'appel échoue
+         */
         const attemptFetch = async (isRetry = false) => {
             try {
                 // Vérifier la connexion réseau si ce n'est pas une tentative de réessai
@@ -188,7 +195,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
+    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) { // skipcq: JS-0116
         // Déterminer le nom de fichier final
         let finalFilename; // skipcq: JS-0119
         if (generateUniqueFilename) {

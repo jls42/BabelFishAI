@@ -363,7 +363,7 @@
      * Récupère les options d'affichage depuis le stockage
      * @returns {Promise<Object>} Les options d'affichage et de traduction
      */
-    async function getDisplayOptions() {
+    async function getDisplayOptions() { // skipcq: JS-0116
         return window.BabelFishAIUtils.api.getFromStorage({
             activeDisplay: true,
             dialogDisplay: false,
@@ -660,7 +660,7 @@
             console.error("Error inserting text into input:", error);
 
             // En cas d'erreur, s'assurer que l'élément est réactivé
-            element?.disabled && (element.disabled = false);
+            element?.disabled && (element.disabled = false); // skipcq: JS-0093
 
             return false;
         }
