@@ -81,7 +81,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const key = element.getAttribute('data-i18n');
             const translated = getMessage(key);
             if (translated) {
-                element.innerHTML = sanitizeHTML(translated);
+                const sanitized = sanitizeHTML(translated);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(sanitized, 'text/html');
+                const fragment = document.createDocumentFragment();
+                doc.body.childNodes.forEach(node => {
+                    fragment.appendChild(node.cloneNode(true));
+                });
+                element.replaceChildren(fragment);
             }
         });
 
@@ -167,12 +174,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         let newMessage = message;
         for (const key in placeholders) {
             if (Object.prototype.hasOwnProperty.call(placeholders, key)) {
-                const regex = new RegExp(`{${key}}`, 'g');
-                newMessage = newMessage.replace(regex, placeholders[key]);
+                const escapedKey = escapeRegExp(key);
+                newMessage = newMessage.replaceAll(`{${escapedKey}}`, placeholders[key]);
             }
         }
         return newMessage;
     }
+
+    /**
+     * Escapes special characters in a string for use in a regular expression.
+     * @param {string} string - The string to escape.
+     * @returns {string} The escaped string.
+     */
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
     /**
      * Traite les placeholders dans les messages de traduction
      */

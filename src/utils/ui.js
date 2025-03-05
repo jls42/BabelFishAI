@@ -75,52 +75,377 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
+    // Suppression complète des notifications sonores
+
     /**
-     * Affiche la bannière avec un message
+     * Affiche la bannière avec un message et accessibilité améliorée
      * @param {HTMLElement} banner - L'élément bannière
      * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
      * @param {boolean} isRecording - Indique si l'enregistrement est en cours
      */
     function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false) {
+        // Mise à jour du contenu et de l'apparence
         banner.textContent = text;
         banner.className = 'whisper-status-banner';
 
         // Réinitialiser les classes
         banner.classList.remove('error', 'recording');
 
+        // Définir les attributs ARIA pour l'accessibilité
+        banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
+        banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
+
+        // Appliquer les classes et attributs appropriés
         if (type === MESSAGE_TYPES.ERROR) {
             banner.classList.add('error');
+            banner.setAttribute('aria-atomic', 'true');
         } else if (isRecording) {
             banner.classList.add('recording');
+            banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
         }
 
+        // Ajouter une animation pour attirer l'attention
+        banner.style.animation = 'none';
+        // Forcer un reflow pour réinitialiser l'animation
+        void banner.offsetWidth; // skipcq: JS-0098
+        banner.style.animation = type === MESSAGE_TYPES.ERROR ?
+            'bannerPulse 0.5s ease-in-out' :
+            'bannerFadeIn 0.3s ease-in-out';
+
+        // Rendre la bannière visible
         banner.style.display = 'block';
     }
 
     /**
-     * Crée un bouton de copie pour le texte
+     * Crée un bouton de copie pour le texte avec accessibilité améliorée
      * @param {string} text - Le texte à copier
      * @param {Function} onError - Fonction de callback en cas d'erreur
      * @returns {HTMLElement} Le bouton créé
      */
     function createCopyButton(text, onError) {
         const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copier';
+        const buttonText = window.BabelFishAIUtils.i18n?.getMessage("copyButton") || 'Copier';
+        const successText = window.BabelFishAIUtils.i18n?.getMessage("copySuccess") || 'Copié !';
+        const errorText = window.BabelFishAIUtils.i18n?.getMessage("copyError") || 'Erreur lors de la copie du texte';
+
+        copyButton.textContent = buttonText;
         copyButton.className = 'whisper-copy-button';
+
+        // Améliorer l'accessibilité
+        copyButton.setAttribute('aria-label', buttonText);
+        copyButton.setAttribute('title', buttonText);
+
+        // Ajouter un icône de copie (optionnel, pour amélioration visuelle)
+        const iconSpan = document.createElement('span');
+        iconSpan.innerHTML = '📋';
+        iconSpan.style.marginRight = '5px';
+        copyButton.prepend(iconSpan);
+
+        // Gestion des événements clavier pour l'accessibilité
+        copyButton.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                copyButton.click();
+            }
+        };
+
+        // Fonctionnalité de copie
         copyButton.onclick = async () => {
             try {
                 await navigator.clipboard.writeText(text);
-                copyButton.textContent = 'Copié !';
+
+                // Feedback visuel
+                copyButton.classList.add('success');
+                copyButton.setAttribute('aria-label', successText);
+                copyButton.setAttribute('title', successText);
+                copyButton.textContent = successText;
+
+                // Restaurer après un délai
                 setTimeout(() => {
-                    copyButton.textContent = 'Copier';
+                    copyButton.classList.remove('success');
+                    copyButton.setAttribute('aria-label', buttonText);
+                    copyButton.setAttribute('title', buttonText);
+                    copyButton.textContent = buttonText;
+                    copyButton.prepend(iconSpan);
                 }, CONFIG.COPY_FEEDBACK_DURATION);
             } catch (error) {
                 console.error('Failed to copy text:', error);
-                if (onError) onError('Erreur lors de la copie du texte');
+
+                // Feedback visuel en cas d'erreur
+                copyButton.classList.add('error');
+                copyButton.setAttribute('aria-label', errorText);
+                copyButton.setAttribute('title', errorText);
+
+                // Informer l'utilisateur
+                if (onError) onError(errorText);
+
+                // Restaurer après un délai
+                setTimeout(() => {
+                    copyButton.classList.remove('error');
+                    copyButton.setAttribute('aria-label', buttonText);
+                    copyButton.setAttribute('title', buttonText);
+                }, CONFIG.COPY_FEEDBACK_DURATION);
             }
         };
+
+        // Ajouter le style pour le bouton si nécessaire
+        if (!document.getElementById('whisper-copy-button-styles')) {
+            const style = document.createElement('style');
+            style.id = 'whisper-copy-button-styles';
+            style.textContent = `
+                .whisper-copy-button {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: 10px;
+                    padding: 5px 10px;
+                    background-color: #f0f0f0;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .whisper-copy-button:hover {
+                    background-color: #e0e0e0;
+                }
+                .whisper-copy-button:active {
+                    transform: translateY(1px);
+                }
+                .whisper-copy-button.success {
+                    background-color: #d4edda;
+                    border-color: #c3e6cb;
+                    color: #155724;
+                }
+                .whisper-copy-button.error {
+                    background-color: #f8d7da;
+                    border-color: #f5c6cb;
+                    color: #721c24;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         return copyButton;
+    }
+
+    /**
+     * Crée le conteneur pour les transcriptions avec un bouton de fermeture et accessibilité améliorée
+     * @returns {HTMLElement} Le conteneur créé et ajouté au document
+     */
+    function createTranscriptionContainer() {
+        // Vérifier si le conteneur existe déjà
+        let container = document.getElementById('whisper-transcription-container');
+        if (container) {
+            return container;
+        }
+
+        // Créer le conteneur principal
+        container = document.createElement('div');
+        container.id = 'whisper-transcription-container';
+        container.className = 'whisper-transcription-container';
+
+        // Ajouter les attributs ARIA pour l'accessibilité
+        container.setAttribute('role', 'dialog');
+        container.setAttribute('aria-labelledby', 'whisper-dialog-title');
+        container.setAttribute('aria-describedby', 'whisper-dialog-content');
+
+        // Ajouter un titre pour l'accessibilité
+        const title = document.createElement('div');
+        title.id = 'whisper-dialog-title';
+        title.className = 'whisper-dialog-title';
+        title.textContent = window.BabelFishAIUtils.i18n?.getMessage("dialogTitle") || 'Transcription';
+        title.setAttribute('role', 'heading');
+        title.setAttribute('aria-level', '2');
+
+        // Créer le bouton de fermeture
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '×';
+        closeButton.className = 'whisper-close-button';
+        closeButton.title = window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer';
+        closeButton.setAttribute('aria-label', window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer la boîte de dialogue');
+
+        // Améliorer l'expérience de fermeture
+        closeButton.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                closeButton.click();
+            }
+        };
+
+        // Ajouter un gestionnaire d'événements pour fermer le conteneur
+        closeButton.onclick = () => {
+            if (container.parentNode) {
+                // Ajouter une animation de fermeture
+                container.classList.add('closing');
+                setTimeout(() => {
+                    if (container.parentNode) {
+                        document.body.removeChild(container);
+                    }
+                }, 300); // Correspond à la durée de l'animation
+            }
+        };
+
+        // Permettre la fermeture avec la touche Echap
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                closeButton.click();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Nettoyer l'écouteur lorsque le conteneur est retiré
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if ([...mutation.removedNodes].includes(container)) {
+                    document.removeEventListener('keydown', handleKeyDown);
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(document.body, { childList: true });
+
+        // Assembler le conteneur
+        title.appendChild(closeButton);
+        container.appendChild(title);
+
+        // Ajouter le conteneur avec une animation d'entrée
+        document.body.appendChild(container);
+
+        // Forcer un reflow avant d'ajouter la classe d'animation
+        void container.offsetWidth; // skipcq: JS-0098
+        container.classList.add('visible');
+
+        // Ajouter du CSS dynamiquement pour les animations si nécessaire
+        if (!document.getElementById('whisper-dialog-styles')) {
+            const style = document.createElement('style');
+            style.id = 'whisper-dialog-styles';
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(20px); }
+                }
+                @keyframes bannerPulse {
+                    0% { opacity: 0.7; }
+                    50% { opacity: 1; }
+                    100% { opacity: 0.7; }
+                }
+                @keyframes bannerFadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .whisper-transcription-container {
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+                }
+                .whisper-transcription-container.visible {
+                    animation: fadeIn 0.3s ease-in-out forwards;
+                }
+                .whisper-transcription-container.closing {
+                    animation: fadeOut 0.3s ease-in-out forwards;
+                }
+                .whisper-dialog-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 5px 10px;
+                    background-color: #f5f5f5;
+                    border-bottom: 1px solid #ddd;
+                    font-weight: bold;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        return container;
+    }
+
+    /**
+     * Supprime un élément de transcription et nettoie le conteneur si nécessaire
+     * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
+     */
+    function removeTranscriptionElement(transcriptionElement) {
+        // Vérifier si l'élément existe toujours avant de le supprimer
+        transcriptionElement?.parentNode?.removeChild(transcriptionElement);
+
+        // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+        const currentContainer = document.getElementById('whisper-transcription-container');
+
+        // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
+        if (currentContainer && currentContainer.children.length === 1) {
+            document.body.removeChild(currentContainer);
+        }
+    }
+
+    // Création unique d'un fragment de document pour optimiser les manipulations DOM
+    const documentFragment = document.createDocumentFragment();
+
+    /**
+     * Affiche un texte dans une boîte de dialogue flottante avec optimisation DOM
+     * @param {string} text - Le texte à afficher
+     * @param {number} duration - Durée d'affichage en secondes
+     * @param {Function} onError - Fonction de callback en cas d'erreur
+     * @returns {HTMLElement} L'élément créé
+     */
+    function showTextInDialog(text, duration, onError) {
+        // Récupérer ou créer le conteneur de la boîte de dialogue
+        const container = createTranscriptionContainer();
+
+        // Créer l'élément qui contiendra le texte
+        // Utilisation d'un fragment pour regrouper les manipulations DOM
+        const textElement = document.createElement('div');
+        textElement.className = 'whisper-transcription-element';
+
+        // Création unique du fragment de document avec tous les éléments
+        // pour éviter les multiples reflows et repaints
+        documentFragment.appendChild(textElement);
+        textElement.textContent = text;
+
+        const lineBreak = document.createElement('br');
+        textElement.appendChild(lineBreak);
+
+        // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
+        const copyButton = createCopyButton(text, onError);
+        textElement.appendChild(copyButton);
+
+        // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
+        // et minimiser les reflows/repaints
+        requestAnimationFrame(() => {
+            // Ajouter l'élément au conteneur en une seule opération
+            container.appendChild(documentFragment);
+        });
+
+        // Utiliser un numéro d'ID unique pour éviter les conflits de timers
+        const timerId = `dialog_${Date.now()}`;
+
+        // Utiliser requestIdleCallback si disponible pour la suppression automatique
+        const scheduleRemoval = () => {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(() => {
+                    removeTranscriptionElement(textElement);
+                }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
+            } else {
+                removeTranscriptionElement(textElement);
+            }
+        };
+
+        // Configurer la suppression automatique après la durée spécifiée
+        const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
+        const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
+
+        // Supprimer les anciens timers pour éviter les fuites mémoire
+        if (timers[timerId]) {
+            clearTimeout(timers[timerId]);
+        }
+
+        // Stocker le timer pour pouvoir le nettoyer plus tard si nécessaire
+        timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
+
+        return textElement;
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
@@ -128,7 +453,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         updateBannerColor,
         showStatus,
         showBanner,
-        createCopyButton
+        createCopyButton,
+        showTextInDialog,
+        createTranscriptionContainer,
+        removeTranscriptionElement
     };
 
 })(window.BabelFishAIUtils);

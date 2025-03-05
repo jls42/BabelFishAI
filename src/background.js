@@ -8,10 +8,10 @@ const SERVICE_WORKER_CONFIG = {
 
 // Définition des constantes nécessaires pour le service worker
 // IMPORTANT: Ces constantes sont dupliquées intentionnellement car le service worker
-// n'a pas accès à window.BabelFishAIConstants. Assurez-vous que ces valeurs
-// correspondent à celles définies dans constants.js.
+// n'a pas accès à window.BabelFishAIConstants en raison des limitations des service workers
+// de Chrome. Assurez-vous que ces valeurs correspondent à celles définies dans constants.js.
 //
-// Voir constants.js pour les définitions originales:
+// Si vous modifiez ces constantes, vous DEVEZ également mettre à jour leurs équivalents dans constants.js:
 // - STATES correspond à window.BabelFishAIConstants.STATES
 // - ACTIONS correspond à window.BabelFishAIConstants.ACTIONS
 // - BADGES correspond à window.BabelFishAIConstants.BADGES

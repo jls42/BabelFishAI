@@ -68,7 +68,7 @@
         "description": "Informazioni sull'ottenimento della chiave API"
     },
     "apiKeyHelp": {
-        "message": "Per utilizzare BabelFishAI, devi inserire la tua chiave API OpenAI. Questa chiave è necessaria per accedere ai servizi di trascrizione e traduzione.",
+        "message": "Per utilizzare BabelFishAI, è necessario inserire la chiave API OpenAI. Questa chiave è necessaria per accedere ai servizi di trascrizione e traduzione.",
         "description": "Aiuto per la chiave API"
     },
     "pricingInfo": {
@@ -101,11 +101,11 @@
     },
     "dialogDisplayLabel": {
         "message": "Finestra di dialogo",
-        "description": "Etichetta per la visualizzazione in finestra di dialogo"
+        "description": "Etichetta per la visualizzazione nella finestra di dialogo"
     },
     "dialogDisplayDescription": {
         "message": "Se abilitato, il testo trascritto/tradotto apparirà in una finestra di dialogo mobile.",
-        "description": "Descrizione dell'opzione di visualizzazione in finestra di dialogo"
+        "description": "Descrizione dell'opzione di visualizzazione nella finestra di dialogo"
     },
     "dialogDurationLabel": {
         "message": "Durata di visualizzazione della finestra di dialogo (secondi):",
@@ -256,7 +256,7 @@
         "description": "Ruolo dell'autore"
     },
     "addModelPlaceholder": {
-        "message": "Aggiungi modello",
+        "message": "Aggiungi un modello",
         "description": "Segnaposto per l'aggiunta di un modello"
     },
     "addModelButton": {
@@ -269,15 +269,15 @@
     },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
-        "description": "Label for the NoLog option"
+        "description": "Etichetta per l'opzione NoLog"
     },
     "noLogDescription": {
         "message": "Se selezionato, nessun dato verrà conservato dal servizio LiteLLM.",
-        "description": "Description of the NoLog option"
+        "description": "Descrizione dell'opzione NoLog"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Testo del link GitHub"
     },
     "bannerRecording": {
         "message": "Registrazione in corso... (Fai clic sull'icona o usa la scorciatoia per interrompere)",
@@ -291,6 +291,10 @@
         "message": "Traduzione in corso...",
         "description": "Messaggio del banner durante la traduzione"
     },
+    "bannerProcessing": {
+        "message": "Elaborazione in corso...",
+        "description": "Messaggio del banner durante l'elaborazione del testo"
+    },
     "bannerMicAccessError": {
         "message": "Errore: accesso al microfono negato.",
         "description": "Messaggio di errore per l'accesso al microfono"
@@ -300,7 +304,7 @@
         "description": "Messaggio di errore per la traduzione"
     },
     "useBabelFishInstructions": {
-        "message": "Per utilizzare BabelFish AI:<br><br>1. Vai a un sito web (ad esempio, la tua webmail o un sito di chat della tua IA preferita, come <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat di Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Aggiungi l'icona dell'estensione per un facile accesso.<br>3. Avvia/arresta la registrazione:<br>    * Fai clic sull'icona dell'estensione <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br>    * Parla nel tuo microfono.<br>    * Fai di nuovo clic sull'icona <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br>    * La trascrizione apparirà nell'area di testo attiva o in una finestra di dialogo.<br><br>Scorciatoie da tastiera:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "Per utilizzare BabelFish AI:<br><br>1. Vai a un sito web (ad esempio, la tua webmail o un sito di chat della tua IA preferita, come <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Aggiungi l'icona dell'estensione per un facile accesso.<br>3. Avvia/arresta la registrazione:<br> * Fai clic sull'icona dell'estensione <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br> * Parla nel tuo microfono.<br> * Fai di nuovo clic sull'icona <img src=\"../../../../images/icon32.png\" alt=\"Icona dell'estensione\" width=\"32\" height=\"32\"> o usa la scorciatoia da tastiera.<br> * La trascrizione apparirà nell'area di testo attiva o in una finestra di dialogo.<br><br>Scorciatoie da tastiera:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Istruzioni per l'utilizzo dell'estensione"
     },
     "defaultWhisperApiUrl": {
@@ -320,8 +324,12 @@
         "description": "Messaggio di errore: problema di archiviazione"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "Errore: microfono non accessibile.",
+        "message": "Errore: microfono inaccessibile.",
         "description": "Messaggio di errore: accesso al microfono"
+    },
+    "API_ERROR": {
+        "message": "Errore durante la chiamata all'API",
+        "description": "Messaggio di errore: chiamata API generale"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Errore durante la trascrizione",
@@ -348,8 +356,12 @@
         "description": "Messaggio di errore: parametri di traduzione"
     },
     "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Formato della risposta di traduzione non valido",
-        "description": "Messaggio di errore: risposta di traduzione"
+        "message": "Formato di risposta della traduzione non valido",
+        "description": "Messaggio di errore: risposta della traduzione"
+    },
+    "bannerErrorGeneric": {
+        "message": "Si è verificato un errore",
+        "description": "Messaggio di errore generico"
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ Estensioni > ⌨️ Scorciatoie da tastiera",
@@ -366,5 +378,25 @@
     "defaultTranslationModel": {
         "message": "gpt-4o-mini",
         "description": "Modello di traduzione predefinito"
+    },
+    "dialogTitle": {
+        "message": "Trascrizione BabelFishAI",
+        "description": "Titolo della finestra di dialogo"
+    },
+    "closeButton": {
+        "message": "Chiudi",
+        "description": "Testo del pulsante di chiusura"
+    },
+    "copyButton": {
+        "message": "Copia",
+        "description": "Testo del pulsante di copia"
+    },
+    "copySuccess": {
+        "message": "Testo copiato!",
+        "description": "Messaggio di successo della copia"
+    },
+    "copyError": {
+        "message": "Errore durante la copia",
+        "description": "Messaggio di errore della copia"
     }
 }
