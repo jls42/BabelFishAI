@@ -151,6 +151,10 @@
         "message": "集成 AI 翻译",
         "description": "翻译部分的标题"
     },
+    "automaticLanguage": {
+        "message": "自动",
+        "description": "自动语言选项"
+    },
     "enableTranslationLabel": {
         "message": "启用自动翻译",
         "description": "启用翻译的标签"

@@ -151,6 +151,10 @@
         "message": "الترجمة المتكاملة بالذكاء الاصطناعي",
         "description": "عنوان قسم الترجمة"
     },
+    "automaticLanguage": {
+        "message": "تلقائي",
+        "description": "خيار اللغة التلقائية"
+    },
     "enableTranslationLabel": {
         "message": "تمكين الترجمة التلقائية",
         "description": "تسمية لتمكين الترجمة"

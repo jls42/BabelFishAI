@@ -151,6 +151,10 @@
         "message": "統合 AI 翻訳",
         "description": "翻訳セクションのタイトル"
     },
+    "automaticLanguage": {
+        "message": "自動",
+        "description": "自動言語オプション"
+    },
     "enableTranslationLabel": {
         "message": "自動翻訳を有効にする",
         "description": "翻訳を有効にするためのラベル"

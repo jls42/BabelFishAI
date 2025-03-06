@@ -151,6 +151,10 @@
         "message": "통합 AI 번역",
         "description": "번역 섹션 제목"
     },
+    "automaticLanguage": {
+        "message": "자동",
+        "description": "자동 언어 옵션"
+    },
     "enableTranslationLabel": {
         "message": "자동 번역 활성화",
         "description": "번역 활성화 레이블"

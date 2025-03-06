@@ -151,6 +151,10 @@
         "message": "Traducere AI Integrată",
         "description": "Titlul secțiunii de traducere"
     },
+    "automaticLanguage": {
+        "message": "Automată",
+        "description": "Opțiune pentru limba automată"
+    },
     "enableTranslationLabel": {
         "message": "Activați traducerea automată",
         "description": "Etichetă pentru activarea traducerii"
