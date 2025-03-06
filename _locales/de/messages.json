@@ -151,6 +151,10 @@
         "message": "Integrierte KI-Übersetzung",
         "description": "Titel des Übersetzungsabschnitts"
     },
+    "automaticLanguage": {
+        "message": "Automatisch",
+        "description": "Option für automatische Sprache"
+    },
     "enableTranslationLabel": {
         "message": "Automatische Übersetzung aktivieren",
         "description": "Label zum Aktivieren der Übersetzung"

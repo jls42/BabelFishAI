@@ -151,6 +151,10 @@
         "message": "Tradução IA Integrada",
         "description": "Título da seção de tradução"
     },
+    "automaticLanguage": {
+        "message": "Automático",
+        "description": "Opção de idioma automático"
+    },
     "enableTranslationLabel": {
         "message": "Ativar tradução automática",
         "description": "Rótulo para ativar a tradução"

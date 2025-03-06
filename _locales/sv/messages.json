@@ -151,6 +151,10 @@
         "message": "Integrerad AI-översättning",
         "description": "Titel för översättningsavsnittet"
     },
+    "automaticLanguage": {
+        "message": "Automatisk",
+        "description": "Alternativ för automatiskt språk"
+    },
     "enableTranslationLabel": {
         "message": "Aktivera automatisk översättning",
         "description": "Etikett för att aktivera översättning"

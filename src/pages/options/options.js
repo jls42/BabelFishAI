@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bannerColorEnd: '#4c7b8d',
             bannerOpacity: 80,
             enableTranslation: false,
-            sourceLanguage: 'fr',
+            sourceLanguage: 'auto',
             targetLanguage: 'en',
             expertMode: false,
             modelType: 'gpt-4o-mini',
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bannerColorEndInput.value = items.bannerColorEnd;
             bannerOpacityInput.value = items.bannerOpacity;
             enableTranslationCheckbox.checked = items.enableTranslation;
-            sourceLanguageSelect.value = items.sourceLanguage;
+            sourceLanguageSelect.value = items.sourceLanguage || 'auto';
             targetLanguageSelect.value = items.targetLanguage;
             expertModeCheckbox.checked = items.expertMode;
             modelTypeSelect.value = items.modelType;

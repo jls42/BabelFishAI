@@ -151,6 +151,10 @@
         "message": "एकीकृत एआई अनुवाद",
         "description": "अनुवाद अनुभाग का शीर्षक"
     },
+    "automaticLanguage": {
+        "message": "स्वचालित",
+        "description": "स्वचालित भाषा विकल्प"
+    },
     "enableTranslationLabel": {
         "message": "स्वचालित अनुवाद सक्षम करें",
         "description": "अनुवाद सक्षम करने के लिए लेबल"

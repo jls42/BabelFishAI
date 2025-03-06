@@ -151,6 +151,10 @@
         "message": "Geïntegreerde AI-vertaling",
         "description": "Titel van de vertaalsectie"
     },
+    "automaticLanguage": {
+        "message": "Automatisch",
+        "description": "Optie voor automatische taal"
+    },
     "enableTranslationLabel": {
         "message": "Automatische vertaling inschakelen",
         "description": "Label om vertaling in te schakelen"

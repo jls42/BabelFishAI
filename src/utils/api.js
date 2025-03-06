@@ -20,7 +20,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur à utiliser en cas d'échec
      * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse avant de la renvoyer
      * @param {boolean} [options.retryOnFail=false] - Si true, réessaiera une fois en cas d'échec
-     * @param {number} [options.timeout=10000] - Délai d'expiration en ms
      * @returns {Promise<any>} Résultat traité de l'appel API
      * @throws {Error} Une erreur avec le message approprié en cas d'échec de l'appel
      */
@@ -34,7 +33,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             errorType = ERRORS.API_ERROR,
             responseProcessor = (data) => data,
             retryOnFail = false,
-            timeout = 10000
         } = options;
 
         if (!apiKey) {
@@ -92,14 +90,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     body
                 };
 
-                // Créer une promesse qui se résout avec la réponse ou rejette après timeout
+                // Effectuer l'appel API avec gestion des erreurs réseau et timeout
                 const fetchPromise = fetch(url, requestOptions);
-                const timeoutPromise = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error(`${errorType}: Timeout - Request exceeded ${timeout}ms`)), timeout);
-                });
 
                 // Effectuer l'appel API avec gestion des erreurs réseau et timeout
-                const response = await Promise.race([fetchPromise, timeoutPromise]);
+                const response = await fetchPromise;
 
                 // Gérer les erreurs HTTP
                 if (!response.ok) {

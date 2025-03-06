@@ -50,7 +50,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
                 disableLogging: false
             });
-            
+
             const { modelType, translationApiUrl, disableLogging } = result;
 
             // Préparer les messages pour l'API
@@ -61,7 +61,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 },
                 {
                     role: "user",
-                    content: `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}`
+                    content: sourceLang === 'auto'
+                        ? `Translate the following text to ${targetLang}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}`
+                        : `Perform a direct translation from ${sourceLang} to ${targetLang}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${text}`
                 }
             ];
 
@@ -102,7 +104,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             debugTranslation('Translation successful, length:', translationResponse.length);
             return translationResponse;
-            
+
         } catch (error) {
             console.error('Translation error:', error);
             // Si l'erreur est déjà formatée, la propager directement
