@@ -1,14 +1,18 @@
 {
+    "recordingCanceled": {
+        "message": "录音已取消（Esc 键）。",
+        "description": "录音取消时显示的消息"
+    },
     "extensionName": {
-        "message": "jls42.org 出品的 BabelFishAI",
+        "message": "jls42.org 的 BabelFishAI",
         "description": "扩展程序名称"
     },
     "extensionDescription": {
-        "message": "通过 AI 驱动的转录和翻译将您的语音转换为文本",
+        "message": "通过 AI 驱动的转录和翻译将您的声音转换为文本",
         "description": "扩展程序描述"
     },
     "welcomeMessage": {
-        "message": "感谢您安装 BabelFishAI，这款扩展程序借助 OpenAI 的 Whisper API 将您的语音转换为文本，具有卓越的准确性，Whisper API 是当前语音转录领域的领导者。",
+        "message": "感谢您安装 BabelFishAI，该扩展程序借助 OpenAI 的 Whisper API（当前语音转录领域的领导者）以卓越的精度将您的声音转换为文本。",
         "description": "欢迎消息"
     },
     "essentialSettingsTitle": {
@@ -32,47 +36,47 @@
         "description": "更改快捷方式的选项 1"
     },
     "shortcutOption2": {
-        "message": "或在地址栏中输入：",
+        "message": "或在地址栏中键入：",
         "description": "更改快捷方式的选项 2"
     },
     "shortcutSteps": {
-        "message": "然后：<br>1. 在列表中找到 BabelFishAI<br>2. 单击当前快捷方式字段<br>3. 按下新的键组合",
+        "message": "然后：<br>1. 在列表中找到 BabelFishAI<br>2. 单击当前快捷方式字段<br>3. 按下新的按键组合",
         "description": "更改快捷方式的步骤"
     },
     "optionsTitle": {
         "message": "BabelFishAI 配置",
-        "description": "选项页面的标题"
+        "description": "选项页面标题"
     },
     "languageSettingsTitle": {
         "message": "界面语言",
-        "description": "语言部分的标题"
+        "description": "语言部分标题"
     },
     "selectLanguageLabel": {
         "message": "选择语言：",
-        "description": "语言选择器的标签"
+        "description": "语言选择器标签"
     },
     "languageChanged": {
-        "message": "语言更改成功",
-        "description": "语言更改确认消息"
+        "message": "语言已成功更改",
+        "description": "语言更改的确认消息"
     },
     "savedMessage": {
         "message": "选项已保存！",
-        "description": "保存确认消息"
+        "description": "保存的确认消息"
     },
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥 (sk-...)",
         "description": "API 密钥的占位符"
     },
     "apiKeyInfo": {
-        "message": "获取您的 API 密钥",
+        "message": "在以下位置获取您的 API 密钥",
         "description": "有关获取 API 密钥的信息"
     },
     "apiKeyHelp": {
-        "message": "要使用 BabelFishAI，您必须输入您的 OpenAI API 密钥。此密钥是访问转录和翻译服务所必需的。",
-        "description": "API 密钥的帮助"
+        "message": "要使用 BabelFishAI，您需要输入您的 OpenAI API 密钥。此密钥是访问转录和翻译服务所必需的。",
+        "description": "API 密钥帮助"
     },
     "pricingInfo": {
-        "message": "有关定价的更多信息（默认模型：音频为 {defaultAudioModel}，翻译为 {defaultTranslationModel}）可在以下位置获取",
+        "message": "有关定价的更多信息（默认模型：音频为 {defaultAudioModel}，翻译为 {defaultTranslationModel}）请访问",
         "description": "定价信息"
     },
     "supportProject": {
@@ -81,11 +85,11 @@
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API 的默认 URL"
+        "description": "默认 Whisper API URL"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "翻译 API 的默认 URL"
+        "description": "默认翻译 API URL"
     },
     "displaySettingsTitle": {
         "message": "显示设置",
@@ -93,47 +97,47 @@
     },
     "activeDisplayLabel": {
         "message": "活动区域（键盘输入）",
-        "description": "活动显示的标签"
+        "description": "活动显示标签"
     },
     "activeDisplayDescription": {
-        "message": "如果启用，转录/翻译的文本将直接插入到您正在键入的文本字段中。",
+        "message": "如果启用，转录/翻译后的文本将直接插入到您正在键入的文本字段中。",
         "description": "活动显示选项的描述"
     },
     "dialogDisplayLabel": {
         "message": "对话框",
-        "description": "对话框显示的标签"
+        "description": "对话显示标签"
     },
     "dialogDisplayDescription": {
-        "message": "如果启用，转录/翻译的文本将出现在浮动对话框中。",
-        "description": "对话框显示选项的描述"
+        "message": "如果启用，转录/翻译后的文本将显示在浮动对话框中。",
+        "description": "对话显示选项的描述"
     },
     "dialogDurationLabel": {
         "message": "对话框显示持续时间（秒）：",
-        "description": "对话框持续时间的标签"
+        "description": "对话框持续时间标签"
     },
     "dialogDurationDescription": {
-        "message": "设置对话框在自动消失之前保持可见的时间。",
+        "message": "定义对话框在自动消失之前保持可见的时间。",
         "description": "对话框持续时间的描述"
     },
     "bannerColorsLabel": {
-        "message": "状态栏颜色：",
-        "description": "横幅颜色的标签"
+        "message": "状态横幅颜色：",
+        "description": "横幅颜色标签"
     },
     "bannerColorsDescription": {
-        "message": "录制、转录和翻译期间出现在屏幕底部的横幅的颜色。",
+        "message": "在录音、转录和翻译期间显示在屏幕底部的横幅颜色。",
         "description": "横幅颜色的描述"
     },
     "startColorLabel": {
-        "message": "开始颜色：",
-        "description": "开始颜色的标签"
+        "message": "起始颜色：",
+        "description": "起始颜色标签"
     },
     "startColorDescription": {
-        "message": "横幅渐变的开始颜色。",
-        "description": "开始颜色的描述"
+        "message": "横幅渐变的起始颜色。",
+        "description": "起始颜色的描述"
     },
     "endColorLabel": {
         "message": "结束颜色：",
-        "description": "结束颜色的标签"
+        "description": "结束颜色标签"
     },
     "endColorDescription": {
         "message": "横幅渐变的结束颜色。",
@@ -141,10 +145,10 @@
     },
     "opacityLabel": {
         "message": "% 不透明度",
-        "description": "不透明度的标签"
+        "description": "不透明度标签"
     },
     "opacityDescription": {
-        "message": "设置横幅的透明度（0% = 不可见，100% = 不透明）。",
+        "message": "定义横幅的透明度（0% = 不可见，100% = 不透明）。",
         "description": "不透明度的描述"
     },
     "translationTitle": {
@@ -161,15 +165,35 @@
     },
     "sourceLanguageLabel": {
         "message": "源语言：",
-        "description": "源语言的标签"
+        "description": "源语言标签"
     },
     "targetLanguageLabel": {
         "message": "目标语言：",
-        "description": "目标语言的标签"
+        "description": "目标语言标签"
+    },
+    "enhancementTitle": {
+        "message": "AI 文本增强",
+        "description": "文本增强部分的标题"
+    },
+    "rephraseLabel": {
+        "message": "启用自动改述",
+        "description": "改述选项标签"
+    },
+    "rephraseDescription": {
+        "message": "如果启用，转录后的文本将被改述，以提高其清晰度和流畅度。",
+        "description": "改述选项的描述"
+    },
+    "bannerRephrasing": {
+        "message": "正在改述...",
+        "description": "改述期间的横幅消息"
+    },
+    "bannerRephrasingError": {
+        "message": "改述时出错",
+        "description": "改述的错误消息"
     },
     "translationExplanation": {
-        "message": "集成的 AI 翻译功能允许您获取转录文本的自动翻译。<br>为此：<br><ul><li>源语言：选择您对着麦克风说话的语言。</li><li>目标语言：选择您希望将文本翻译成的语言。</li></ul>这些设置仅影响翻译，不影响转录。如果禁用自动翻译，您的转录文本将使用对着麦克风说话的语言。",
-        "description": "翻译部分的解释"
+        "message": "集成的 AI 翻译功能使您能够获得转录文本的自动翻译。<br>为此：<br><ul><li>源语言：选择您对着麦克风说的语言。</li><li>目标语言：选择您希望将文本翻译成的语言。</li></ul>这些设置仅影响翻译，不影响转录。如果您禁用自动翻译，您的文本将以对着麦克风说的语言进行转录。",
+        "description": "翻译部分的说明"
     },
     "expertModeTitle": {
         "message": "专家模式",
@@ -185,42 +209,42 @@
     },
     "translationModelLabel": {
         "message": "翻译模型：",
-        "description": "翻译模型的标签"
+        "description": "翻译模型标签"
     },
     "translationModelDescription": {
-        "message": "选择用于翻译的 AI 模型。`gpt-4o-mini` 是默认模型（最佳质量/价格比）。`gpt-4o` 提供更高的质量，但更昂贵。",
+        "message": "选择用于翻译的 AI 模型。 `gpt-4o-mini` 是默认模型（性价比最高）。 `gpt-4o` 提供卓越的质量，但价格更高。",
         "description": "翻译模型的描述"
     },
     "audioModelLabel": {
         "message": "音频模型：",
-        "description": "音频模型的标签"
+        "description": "音频模型标签"
     },
     "audioModelDescription": {
-        "message": "选择用于音频转录的 AI 模型。`whisper-1` 是默认模型。",
+        "message": "选择用于音频转录的 AI 模型。 `whisper-1` 是默认模型。",
         "description": "音频模型的描述"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL：",
-        "description": "Whisper API URL 的标签"
+        "description": "Whisper API URL 标签"
     },
     "whisperApiUrlDescription": {
-        "message": "允许为 Whisper 转录 API 指定自定义 URL（适用于高级用户）。",
+        "message": "允许为 Whisper 转录 API 指定自定义 URL（供高级用户使用）。",
         "description": "Whisper API URL 的描述"
     },
     "translationApiUrlLabel": {
         "message": "翻译 API URL：",
-        "description": "翻译 API URL 的标签"
+        "description": "翻译 API URL 标签"
     },
     "translationApiUrlDescription": {
-        "message": "允许为翻译 API 指定自定义 URL（适用于高级用户）。",
+        "message": "允许为翻译 API 指定自定义 URL（供高级用户使用）。",
         "description": "翻译 API URL 的描述"
     },
     "forcedDialogDomainsLabel": {
-        "message": "强制对话框的域：",
-        "description": "强制域的标签"
+        "message": "强制对话框域：",
+        "description": "强制域标签"
     },
     "forcedDialogDomainsDescription": {
-        "message": "即使选择了“活动区域”选项，转录也*始终*在对话框中显示的网站列表。",
+        "message": "网站列表，即使选择了“活动区域”选项，转录也*始终*会显示在对话框中。",
         "description": "强制域的描述"
     },
     "addDomainPlaceholder": {
@@ -245,31 +269,31 @@
     },
     "shortcutsTitle": {
         "message": "使用说明",
-        "description": "快捷方式的标题"
+        "description": "快捷方式标题"
     },
     "authorSectionTitle": {
         "message": "关于作者",
         "description": "作者部分的标题"
     },
     "authorName": {
-        "message": "朱利安·LS",
+        "message": "Julien LS",
         "description": "作者姓名"
     },
     "authorRole": {
         "message": "BabelFishAI 的开发者和创建者",
-        "description": "作者的角色"
+        "description": "作者角色"
     },
     "addModelPlaceholder": {
         "message": "添加模型",
-        "description": "添加模型的占位符"
+        "description": "模型添加的占位符"
     },
     "addModelButton": {
         "message": "添加",
         "description": "添加模型的按钮"
     },
     "addModelDescription": {
-        "message": "允许添加自定义模型（适用于高级用户）。",
-        "description": "添加模型的描述"
+        "message": "允许添加自定义模型（供高级用户使用）。",
+        "description": "模型添加的描述"
     },
     "noLogLabel": {
         "message": "NoLog（仅限 LiteLLM）",
@@ -284,19 +308,19 @@
         "description": "GitHub 链接文本"
     },
     "bannerRecording": {
-        "message": "录制中...（单击图标或使用快捷方式停止）",
-        "description": "录制期间的横幅消息"
+        "message": "正在录音...（单击图标或使用快捷方式停止）",
+        "description": "录音期间的横幅消息"
     },
     "bannerTranscribing": {
-        "message": "转录中...",
+        "message": "正在转录...",
         "description": "转录期间的横幅消息"
     },
     "bannerTranslating": {
-        "message": "翻译中...",
+        "message": "正在翻译...",
         "description": "翻译期间的横幅消息"
     },
     "bannerProcessing": {
-        "message": "处理中...",
+        "message": "正在处理...",
         "description": "文本处理期间的横幅消息"
     },
     "bannerMicAccessError": {
@@ -304,11 +328,11 @@
         "description": "麦克风访问的错误消息"
     },
     "bannerTranslationError": {
-        "message": "翻译期间出错。",
+        "message": "翻译时出错。",
         "description": "翻译的错误消息"
     },
     "useBabelFishInstructions": {
-        "message": "使用 BabelFish AI：<br><br>1. 转到网站（例如，您的网络邮件或您最喜欢的 AI 的聊天网站，例如 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> 或 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>）。<br>2. 固定扩展程序图标以便于访问。<br>3. 开始/停止录制：<br> * 单击扩展程序图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br> * 对着麦克风说话。<br> * 再次单击图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br> * 转录将出现在活动文本区域或对话框中。<br><br>键盘快捷键:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "要使用 BabelFish AI：<br><br>1. 转到网站（例如，您的网络邮件或您最喜欢的 AI 的聊天站点，例如 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> 或 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>）。<br>2. 📌 钉住扩展程序图标以便于访问。<br>3. 启动/停止录音：<br>    * 单击扩展程序图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用快捷方式。<br>    * 对着麦克风讲话。<br>    * 再次单击图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展程序图标\" width=\"32\" height=\"32\"> 或使用快捷方式。<br>    * 转录将显示在活动文本区域或对话框中。<br><br>键盘快捷键：<br><ul><li>Windows：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "使用扩展程序的说明"
     },
     "defaultWhisperApiUrl": {
@@ -320,15 +344,15 @@
         "description": "翻译 API 的默认 URL"
     },
     "API_KEY_NOT_FOUND": {
-        "message": "未配置 API 密钥。请在扩展程序选项中进行配置。",
-        "description": "错误消息：缺少 API 密钥"
+        "message": "API 密钥未配置。请在扩展程序选项中配置它。",
+        "description": "错误消息：API 密钥丢失"
     },
     "CHROME_STORAGE_ERROR": {
         "message": "Chrome 存储错误",
         "description": "错误消息：存储问题"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "错误：麦克风无法访问。",
+        "message": "错误：麦克风不可用。",
         "description": "错误消息：麦克风访问"
     },
     "API_ERROR": {
@@ -336,31 +360,31 @@
         "description": "错误消息：常规 API 调用"
     },
     "TRANSCRIPTION_ERROR": {
-        "message": "转录期间出错",
+        "message": "转录时出错",
         "description": "错误消息：转录"
     },
     "TRANSLATION_ERROR": {
-        "message": "翻译期间出错",
+        "message": "翻译时出错",
         "description": "错误消息：翻译"
     },
     "NO_EDITABLE_ELEMENT": {
-        "message": "找不到可编辑元素",
-        "description": "错误消息：没有可编辑元素"
+        "message": "未找到可编辑元素",
+        "description": "错误消息：无编辑元素"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "注入内容脚本时出错",
+        "message": "内容脚本注入时出错",
         "description": "错误消息：脚本注入"
     },
     "NO_ACTIVE_TAB": {
-        "message": "找不到活动标签页",
-        "description": "错误消息：没有活动标签页"
+        "message": "未找到活动选项卡",
+        "description": "错误消息：无活动选项卡"
     },
     "MISSING_TRANSLATION_PARAMS": {
         "message": "缺少翻译参数",
         "description": "错误消息：翻译参数"
     },
     "INVALID_TRANSLATION_RESPONSE": {
-        "message": "无效的翻译响应格式",
+        "message": "翻译响应格式无效",
         "description": "错误消息：翻译响应"
     },
     "bannerErrorGeneric": {

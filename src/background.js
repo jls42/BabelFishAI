@@ -69,6 +69,8 @@ async function injectContentScript(tab) {
                 'src/utils/ui.js',
                 'src/utils/api.js',
                 'src/utils/translation.js',
+                'src/utils/languages.js',
+                'src/utils/i18n.js',
                 'src/content.js'
             ]
         });
@@ -273,5 +275,48 @@ function handleExtensionInstalled(details) {
 
 // Enregistrer le gestionnaire d'événements pour l'installation
 chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
+
+/**
+ * Gère les messages du content script
+ * @param {Object} message - Le message reçu
+ * @param {Object} sender - L'expéditeur du message
+ * @param {Function} sendResponse - Fonction de réponse
+ * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
+ */
+function handleMessage(message, sender, sendResponse) {
+    debug("Message received from content script:", message);
+
+    // Gestion des demandes d'options de langues
+    if (message.action === 'getTargetLanguageOptions') {
+        // Récupérer les options de langues cibles disponibles
+        // Note: Dans le service worker, nous devons maintenir cette liste ici
+        // car nous n'avons pas accès à window.BabelFishAIUtils.languages
+        const targetLanguageOptions = [
+            { value: 'en', text: 'English (en)' },
+            { value: 'fr', text: 'Français (fr)' },
+            { value: 'es', text: 'Español (es)' },
+            { value: 'pt', text: 'Português (pt)' },
+            { value: 'zh', text: '中文 (zh)' },
+            { value: 'hi', text: 'हिंदी (hi)' },
+            { value: 'ar', text: 'العربية (ar)' },
+            { value: 'it', text: 'Italiano (it)' },
+            { value: 'de', text: 'Deutsch (de)' },
+            { value: 'sv', text: 'Svenska (sv)' },
+            { value: 'pl', text: 'Polski (pl)' },
+            { value: 'nl', text: 'Nederlands (nl)' },
+            { value: 'ro', text: 'Română (ro)' },
+            { value: 'ja', text: '日本語 (ja)' },
+            { value: 'ko', text: '한국어 (ko)' }
+        ];
+        
+        sendResponse({ options: targetLanguageOptions });
+        return false; // La réponse est envoyée de manière synchrone
+    }
+
+    return false; // La réponse est envoyée de manière synchrone
+}
+
+// Enregistrer le gestionnaire d'événements pour la réception de messages
+chrome.runtime.onMessage.addListener(handleMessage);
 
 debug("Background script started");

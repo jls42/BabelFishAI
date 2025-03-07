@@ -83,38 +83,92 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} text - Le message à afficher
      * @param {string} type - Le type de message ('info' ou 'error')
      * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     * @param {Function} [updateColorCallback] - Callback pour mettre à jour la couleur du bandeau
+     * @returns {boolean} - Indique si l'affichage a réussi
      */
-    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false) {
-        // Mise à jour du contenu et de l'apparence
-        banner.textContent = text;
-        banner.className = 'whisper-status-banner';
-
-        // Réinitialiser les classes
-        banner.classList.remove('error', 'recording');
-
-        // Définir les attributs ARIA pour l'accessibilité
-        banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
-        banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
-
-        // Appliquer les classes et attributs appropriés
-        if (type === MESSAGE_TYPES.ERROR) {
-            banner.classList.add('error');
-            banner.setAttribute('aria-atomic', 'true');
-        } else if (isRecording) {
-            banner.classList.add('recording');
-            banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
+    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) {
+        // Vérifier si la bannière existe
+        if (!banner) {
+            console.warn('Banner element is null or undefined');
+            return false;
         }
 
-        // Ajouter une animation pour attirer l'attention
-        banner.style.animation = 'none';
-        // Forcer un reflow pour réinitialiser l'animation
-        void banner.offsetWidth; // skipcq: JS-0098
-        banner.style.animation = type === MESSAGE_TYPES.ERROR ?
-            'bannerPulse 0.5s ease-in-out' :
-            'bannerFadeIn 0.3s ease-in-out';
+        try {
+            // Mettre à jour le texte dans le conteneur dédié
+            const statusTextContainer = banner.querySelector('.whisper-status-text');
+            if (statusTextContainer) {
+                statusTextContainer.textContent = text;
+            } else {
+                // Si le conteneur n'existe pas (ancien format de bannière), utiliser la bannière directement
+                banner.textContent = text;
+            }
+            
+            // S'assurer que le texte reste visible avec les contrôles en ajustant sa largeur max
+            if (statusTextContainer) {
+                // Adapter le style du texte en fonction du contenu et des contrôles
+                const controlsContainer = banner.querySelector('.whisper-controls-container');
+                if (controlsContainer && controlsContainer.offsetWidth > 0) {
+                    // Si les contrôles sont visibles, limiter la largeur du texte
+                    statusTextContainer.style.maxWidth = `${Math.max(200, window.innerWidth - controlsContainer.offsetWidth - 80)}px`;
+                    
+                    // Gérer l'overflow du texte s'il est trop long
+                    if (text.length > 50) {
+                        statusTextContainer.style.textOverflow = 'ellipsis';
+                        statusTextContainer.style.overflow = 'hidden';
+                        statusTextContainer.style.whiteSpace = 'nowrap';
+                    }
+                } else {
+                    // Si les contrôles ne sont pas visibles, pas de limite de largeur
+                    statusTextContainer.style.maxWidth = 'none';
+                }
+            }
 
-        // Rendre la bannière visible
-        banner.style.display = 'block';
+            // Mettre à jour les classes de la bannière
+            banner.className = 'whisper-status-banner';
+            
+            // Réinitialiser les classes
+            banner.classList.remove('error', 'recording');
+
+            // Définir les attributs ARIA pour l'accessibilité
+            banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
+            banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
+
+            // Appliquer les classes et attributs appropriés
+            if (type === MESSAGE_TYPES.ERROR) {
+                banner.classList.add('error');
+                banner.setAttribute('aria-atomic', 'true');
+            } else if (isRecording) {
+                banner.classList.add('recording');
+                banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
+            }
+
+            // Ajouter une animation pour attirer l'attention
+            banner.style.animation = 'none';
+            // Forcer un reflow pour réinitialiser l'animation
+            void banner.offsetWidth; // skipcq: JS-0098
+            banner.style.animation = type === MESSAGE_TYPES.ERROR ?
+                'bannerPulse 0.5s ease-in-out' :
+                'bannerFadeIn 0.3s ease-in-out';
+
+            // Rendre la bannière visible (utiliser flex au lieu de block pour la compatibilité)
+            banner.style.display = 'flex';
+            
+            // Ajouter le padding au body quand la bannière est affichée
+            if (document.body) {
+                document.body.style.paddingTop = '35px';
+            }
+
+            // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
+            // et si un callback de mise à jour est fourni
+            if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
+                updateColorCallback();
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage de la bannière:', error);
+            return false;
+        }
     }
 
     /**
@@ -369,15 +423,31 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
      */
     function removeTranscriptionElement(transcriptionElement) {
-        // Vérifier si l'élément existe toujours avant de le supprimer
-        transcriptionElement?.parentNode?.removeChild(transcriptionElement);
-
-        // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
-        const currentContainer = document.getElementById('whisper-transcription-container');
-
-        // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-        if (currentContainer && currentContainer.children.length === 1) {
-            document.body.removeChild(currentContainer);
+        try {
+            // Vérifier si l'élément existe toujours et est valide avant de le supprimer
+            if (transcriptionElement && transcriptionElement.parentNode) {
+                try {
+                    transcriptionElement.parentNode.removeChild(transcriptionElement);
+                } catch (e) {
+                    console.warn("Erreur lors de la suppression de l'élément:", e);
+                }
+            }
+    
+            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+            try {
+                const currentContainer = document.getElementById('whisper-transcription-container');
+        
+                // Si le conteneur est vide (ne contient que le bouton de fermeture) ou n'a plus d'enfants, on le supprime
+                if (currentContainer && (currentContainer.children.length <= 1 || currentContainer.children.length === 0)) {
+                    if (document.body.contains(currentContainer)) {
+                        document.body.removeChild(currentContainer);
+                    }
+                }
+            } catch (e) {
+                console.warn("Erreur lors du nettoyage du conteneur:", e);
+            }
+        } catch (e) {
+            console.warn("Erreur globale lors de la suppression de l'élément:", e);
         }
     }
 
@@ -424,12 +494,27 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Utiliser requestIdleCallback si disponible pour la suppression automatique
         const scheduleRemoval = () => {
-            if ('requestIdleCallback' in window) {
-                window.requestIdleCallback(() => {
-                    removeTranscriptionElement(textElement);
-                }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
-            } else {
-                removeTranscriptionElement(textElement);
+            try {
+                if ('requestIdleCallback' in window) {
+                    window.requestIdleCallback(() => {
+                        try {
+                            removeTranscriptionElement(textElement);
+                        } catch (e) {
+                            console.warn("Erreur lors de la suppression de l'élément:", e);
+                        }
+                    }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
+                } else {
+                    // Fallback à setTimeout
+                    setTimeout(() => {
+                        try {
+                            removeTranscriptionElement(textElement);
+                        } catch (e) {
+                            console.warn("Erreur lors de la suppression de l'élément:", e);
+                        }
+                    }, 0);
+                }
+            } catch (e) {
+                console.warn("Erreur lors de la planification de la suppression:", e);
             }
         };
 

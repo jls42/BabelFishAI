@@ -1,46 +1,50 @@
 {
+    "recordingCanceled": {
+        "message": "録音をキャンセルしました（Escキー）。",
+        "description": "録音がキャンセルされたときに表示されるメッセージ"
+    },
     "extensionName": {
-        "message": "jls42.org による BabelFishAI",
+        "message": "jls42.orgによるBabelFishAI",
         "description": "拡張機能名"
     },
     "extensionDescription": {
-        "message": "AI を活用した文字起こしと翻訳で、あなたの声をテキストに変換します",
+        "message": "AIパワードの文字起こしと翻訳であなたの声をテキストに変換",
         "description": "拡張機能の説明"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI をインストールしていただきありがとうございます。この拡張機能は、OpenAI の Whisper API のおかげで、あなたの声を非常に正確なテキストに変換します。Whisper API は、現在の音声文字起こしのリーダーです。",
+        "message": "音声文字変換の現在のリーダーであるOpenAIのWhisper APIのおかげで、あなたの声を非常に正確にテキストに変換する拡張機能であるBabelFishAIをインストールしていただきありがとうございます。",
         "description": "ウェルカムメッセージ"
     },
     "essentialSettingsTitle": {
-        "message": "基本設定",
-        "description": "基本設定セクションのタイトル"
+        "message": "必須設定",
+        "description": "必須設定セクションのタイトル"
     },
     "advancedSettingsTitle": {
-        "message": "詳細設定",
-        "description": "詳細設定セクションのタイトル"
+        "message": "高度な設定",
+        "description": "高度な設定セクションのタイトル"
     },
     "apiKeyConfigTitle": {
-        "message": "OpenAI API キー",
-        "description": "API キー設定セクションのタイトル"
+        "message": "OpenAI APIキー",
+        "description": "APIキー設定セクションのタイトル"
     },
     "shortcutInstructions": {
-        "message": "ショートカットを変更するには、次のことができます:",
-        "description": "ショートカットの説明"
+        "message": "ショートカットを変更するには、次の手順に従ってください。",
+        "description": "ショートカットの手順"
     },
     "shortcutOption1": {
-        "message": "Chrome 拡張機能の設定を開きます:",
-        "description": "ショートカットを変更するオプション 1"
+        "message": "Chrome拡張機能の設定を開く：",
+        "description": "ショートカットを変更するオプション1"
     },
     "shortcutOption2": {
-        "message": "またはアドレスバーに入力します:",
-        "description": "ショートカットを変更するオプション 2"
+        "message": "または、アドレスバーに入力します：",
+        "description": "ショートカットを変更するオプション2"
     },
     "shortcutSteps": {
-        "message": "次に:<br>1. リストで BabelFishAI を見つけます<br>2. 現在のショートカットフィールドをクリックします<br>3. 新しいキーの組み合わせを押します",
+        "message": "次に：<br>1. リストからBabelFishAIを見つける<br>2. 現在のショートカットフィールドをクリックする<br>3. 新しいキーの組み合わせを押す",
         "description": "ショートカットを変更する手順"
     },
     "optionsTitle": {
-        "message": "BabelFishAI の設定",
+        "message": "BabelFishAIの設定",
         "description": "オプションページのタイトル"
     },
     "languageSettingsTitle": {
@@ -48,75 +52,75 @@
         "description": "言語セクションのタイトル"
     },
     "selectLanguageLabel": {
-        "message": "言語を選択:",
+        "message": "言語を選択してください：",
         "description": "言語セレクターのラベル"
     },
     "languageChanged": {
         "message": "言語が正常に変更されました",
-        "description": "言語変更確認メッセージ"
+        "description": "言語変更の確認メッセージ"
     },
     "savedMessage": {
-        "message": "オプションが保存されました!",
-        "description": "保存確認メッセージ"
+        "message": "オプションを保存しました！",
+        "description": "保存の確認メッセージ"
     },
     "apiKeyPlaceholder": {
-        "message": "あなたの OpenAI API キー (sk-...)",
-        "description": "API キーのプレースホルダー"
+        "message": "OpenAI APIキー（sk- ...）",
+        "description": "APIキーのプレースホルダー"
     },
     "apiKeyInfo": {
-        "message": "API キーを取得する",
-        "description": "API キーの取得に関する情報"
+        "message": "APIキーを取得するには",
+        "description": "APIキーの取得に関する情報"
     },
     "apiKeyHelp": {
-        "message": "BabelFishAI を使用するには、OpenAI API キーを入力する必要があります。このキーは、文字起こしおよび翻訳サービスにアクセスするために必要です。",
-        "description": "API キーのヘルプ"
+        "message": "BabelFishAIを使用するには、OpenAI APIキーを入力する必要があります。このキーは、文字起こしおよび翻訳サービスにアクセスするために必要です。",
+        "description": "APIキーのヘルプ"
     },
     "pricingInfo": {
-        "message": "価格に関する詳細情報 (デフォルトモデル: 音声の場合は {defaultAudioModel}、翻訳の場合は {defaultTranslationModel}) は、こちらで入手できます。",
+        "message": "価格設定の詳細（デフォルトモデル：オーディオの場合は{defaultAudioModel}、翻訳の場合は{defaultTranslationModel}）については、こちらをご覧ください。",
         "description": "価格情報"
     },
     "supportProject": {
-        "message": "PayPal 経由でプロジェクトをサポートする",
-        "description": "PayPal サポートリンクのテキスト"
+        "message": "PayPal経由でプロジェクトをサポート",
+        "description": "PayPalサポートリンクのテキスト"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API のデフォルト URL"
+        "description": "デフォルトのWhisper API URL"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "翻訳 API のデフォルト URL"
+        "description": "デフォルトの翻訳API URL"
     },
     "displaySettingsTitle": {
         "message": "表示設定",
         "description": "表示設定のタイトル"
     },
     "activeDisplayLabel": {
-        "message": "アクティブエリア (キーボード入力)",
+        "message": "アクティブゾーン（キーボード入力）",
         "description": "アクティブ表示のラベル"
     },
     "activeDisplayDescription": {
-        "message": "有効にすると、文字起こし/翻訳されたテキストは、入力中のテキストフィールドに直接挿入されます。",
+        "message": "有効にすると、文字起こし/翻訳されたテキストが、入力中のテキストフィールドに直接挿入されます。",
         "description": "アクティブ表示オプションの説明"
     },
     "dialogDisplayLabel": {
         "message": "ダイアログボックス",
-        "description": "ダイアログボックス表示のラベル"
+        "description": "ダイアログ表示のラベル"
     },
     "dialogDisplayDescription": {
         "message": "有効にすると、文字起こし/翻訳されたテキストがフローティングダイアログボックスに表示されます。",
-        "description": "ダイアログボックス表示オプションの説明"
+        "description": "ダイアログ表示オプションの説明"
     },
     "dialogDurationLabel": {
-        "message": "ダイアログ表示時間 (秒):",
-        "description": "ダイアログ期間のラベル"
+        "message": "ダイアログ表示時間（秒）：",
+        "description": "ダイアログ時間のラベル"
     },
     "dialogDurationDescription": {
-        "message": "ダイアログボックスが自動的に消えるまでの表示時間を設定します。",
-        "description": "ダイアログ期間の説明"
+        "message": "ダイアログボックスが自動的に消えるまで表示される時間を定義します。",
+        "description": "ダイアログ時間の説明"
     },
     "bannerColorsLabel": {
-        "message": "ステータスバナーの色:",
+        "message": "ステータスバナーの色：",
         "description": "バナーの色のラベル"
     },
     "bannerColorsDescription": {
@@ -124,7 +128,7 @@
         "description": "バナーの色の説明"
     },
     "startColorLabel": {
-        "message": "開始色:",
+        "message": "開始色：",
         "description": "開始色のラベル"
     },
     "startColorDescription": {
@@ -132,7 +136,7 @@
         "description": "開始色の説明"
     },
     "endColorLabel": {
-        "message": "終了色:",
+        "message": "終了色：",
         "description": "終了色のラベル"
     },
     "endColorDescription": {
@@ -140,15 +144,15 @@
         "description": "終了色の説明"
     },
     "opacityLabel": {
-        "message": "% 不透明度",
+        "message": "％不透明度",
         "description": "不透明度のラベル"
     },
     "opacityDescription": {
-        "message": "バナーの透明度を設定します (0% = 非表示、100% = 不透明)。",
+        "message": "バナーの透明度を定義します（0％=非表示、100％=不透明）。",
         "description": "不透明度の説明"
     },
     "translationTitle": {
-        "message": "統合 AI 翻訳",
+        "message": "統合AI翻訳",
         "description": "翻訳セクションのタイトル"
     },
     "automaticLanguage": {
@@ -157,18 +161,38 @@
     },
     "enableTranslationLabel": {
         "message": "自動翻訳を有効にする",
-        "description": "翻訳を有効にするためのラベル"
+        "description": "翻訳を有効にするラベル"
     },
     "sourceLanguageLabel": {
-        "message": "ソース言語:",
+        "message": "ソース言語：",
         "description": "ソース言語のラベル"
     },
     "targetLanguageLabel": {
-        "message": "ターゲット言語:",
+        "message": "ターゲット言語：",
         "description": "ターゲット言語のラベル"
     },
+    "enhancementTitle": {
+        "message": "AIテキストエンハンスメント",
+        "description": "テキストエンハンスメントセクションのタイトル"
+    },
+    "rephraseLabel": {
+        "message": "自動言い換えを有効にする",
+        "description": "言い換えオプションのラベル"
+    },
+    "rephraseDescription": {
+        "message": "有効にすると、文字起こしされたテキストは、その明瞭さと流暢さを向上させるために言い換えられます。",
+        "description": "言い換えオプションの説明"
+    },
+    "bannerRephrasing": {
+        "message": "言い換え処理中...",
+        "description": "言い換え中のバナーメッセージ"
+    },
+    "bannerRephrasingError": {
+        "message": "言い換え中にエラーが発生しました",
+        "description": "言い換えのエラーメッセージ"
+    },
     "translationExplanation": {
-        "message": "統合 AI 翻訳機能を使用すると、文字起こしされたテキストの自動翻訳を取得できます。<br>これを行うには:<br><ul><li>ソース言語: マイクに向かって話す言語を選択します。</li><li>ターゲット言語: テキストを翻訳する言語を選択します。</li></ul>これらの設定は翻訳にのみ影響し、文字起こしには影響しません。自動翻訳を無効にすると、文字起こしされたテキストはマイクに向かって話された言語になります。",
+        "message": "統合されたAI翻訳機能を使用すると、文字起こしされたテキストの自動翻訳を取得できます。<br>これを行うには：<br><ul><li>ソース言語：マイクに向かって話す言語を選択します。</li><li>ターゲット言語：テキストを翻訳する言語を選択します。</li></ul>これらの設定は翻訳のみに影響し、文字起こしには影響しません。自動翻訳を無効にすると、テキストはマイクに向かって話された言語で文字起こしされます。",
         "description": "翻訳セクションの説明"
     },
     "expertModeTitle": {
@@ -177,54 +201,54 @@
     },
     "enableExpertModeLabel": {
         "message": "エキスパートモードを有効にする",
-        "description": "エキスパートモードを有効にするためのラベル"
+        "description": "エキスパートモードを有効にするラベル"
     },
     "enableExpertModeDescription": {
-        "message": "経験豊富なユーザー向けの詳細設定オプションのロックを解除します。",
+        "message": "経験豊富なユーザー向けに高度な構成オプションをアンロックします。",
         "description": "エキスパートモードオプションの説明"
     },
     "translationModelLabel": {
-        "message": "翻訳モデル:",
+        "message": "翻訳モデル：",
         "description": "翻訳モデルのラベル"
     },
     "translationModelDescription": {
-        "message": "翻訳に使用する AI モデルを選択します。`gpt-4o-mini` がデフォルトモデルです (最高の品質/価格比)。`gpt-4o` はより高品質ですが、より高価です。",
+        "message": "翻訳に使用するAIモデルを選択してください。 `gpt-4o-mini`はデフォルトモデルです（コストパフォーマンスに優れています）。 `gpt-4o`は優れた品質を提供しますが、より高価です。",
         "description": "翻訳モデルの説明"
     },
     "audioModelLabel": {
-        "message": "オーディオモデル:",
+        "message": "オーディオモデル：",
         "description": "オーディオモデルのラベル"
     },
     "audioModelDescription": {
-        "message": "音声文字起こしに使用する AI モデルを選択します。`whisper-1` がデフォルトモデルです。",
+        "message": "音声文字変換に使用するAIモデルを選択してください。 `whisper-1`はデフォルトモデルです。",
         "description": "オーディオモデルの説明"
     },
     "whisperApiUrlLabel": {
-        "message": "Whisper API URL:",
-        "description": "Whisper API URL のラベル"
+        "message": "Whisper API URL：",
+        "description": "Whisper API URLのラベル"
     },
     "whisperApiUrlDescription": {
-        "message": "Whisper 文字起こし API のカスタム URL を指定できます (上級者向け)。",
-        "description": "Whisper API URL の説明"
+        "message": "Whisper文字起こしAPIのカスタムURLを指定できます（高度なユーザー向け）。",
+        "description": "Whisper API URLの説明"
     },
     "translationApiUrlLabel": {
-        "message": "翻訳 API URL:",
-        "description": "翻訳 API URL のラベル"
+        "message": "翻訳API URL：",
+        "description": "翻訳API URLのラベル"
     },
     "translationApiUrlDescription": {
-        "message": "翻訳 API のカスタム URL を指定できます (上級者向け)。",
-        "description": "翻訳 API URL の説明"
+        "message": "翻訳APIのカスタムURLを指定できます（高度なユーザー向け）。",
+        "description": "翻訳API URLの説明"
     },
     "forcedDialogDomainsLabel": {
-        "message": "強制ダイアログボックス付きドメイン:",
+        "message": "強制ダイアログボックス付きドメイン：",
         "description": "強制ドメインのラベル"
     },
     "forcedDialogDomainsDescription": {
-        "message": "「アクティブエリア」オプションが選択されている場合でも、文字起こしが *常に* ダイアログボックスに表示される Web サイトのリスト。",
+        "message": "'アクティブゾーン'オプションが選択されている場合でも、文字起こしが*常に*ダイアログボックスに表示されるWebサイトのリスト。",
         "description": "強制ドメインの説明"
     },
     "addDomainPlaceholder": {
-        "message": "例: chat.google.com",
+        "message": "例：chat.google.com",
         "description": "ドメイン追加のプレースホルダー"
     },
     "addDomainButton": {
@@ -244,7 +268,7 @@
         "description": "保存ボタン"
     },
     "shortcutsTitle": {
-        "message": "使用説明書",
+        "message": "使用方法",
         "description": "ショートカットのタイトル"
     },
     "authorSectionTitle": {
@@ -252,11 +276,11 @@
         "description": "著者セクションのタイトル"
     },
     "authorName": {
-        "message": "ジュリアン LS",
-        "description": "著者の名前"
+        "message": "Julien LS",
+        "description": "著者名"
     },
     "authorRole": {
-        "message": "BabelFishAI の開発者および作成者",
+        "message": "BabelFishAIの開発者および作成者",
         "description": "著者の役割"
     },
     "addModelPlaceholder": {
@@ -268,31 +292,31 @@
         "description": "モデルを追加するボタン"
     },
     "addModelDescription": {
-        "message": "カスタムモデルを追加できます (上級者向け)。",
+        "message": "カスタムモデルを追加できます（高度なユーザー向け）。",
         "description": "モデル追加の説明"
     },
     "noLogLabel": {
-        "message": "NoLog (LiteLLM のみ)",
-        "description": "NoLog オプションのラベル"
+        "message": "NoLog（LiteLLMのみ）",
+        "description": "NoLogオプションのラベル"
     },
     "noLogDescription": {
-        "message": "オンにすると、LiteLLM サービスによってデータは保持されません。",
-        "description": "NoLog オプションの説明"
+        "message": "チェックすると、LiteLLMサービスによってデータが保持されなくなります。",
+        "description": "NoLogオプションの説明"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub リンクテキスト"
+        "description": "GitHubリンクテキスト"
     },
     "bannerRecording": {
-        "message": "録音中... (アイコンをクリックするか、ショートカットを使用して停止します)",
+        "message": "録音中...（停止するにはアイコンをクリックするか、ショートカットを使用してください）",
         "description": "録音中のバナーメッセージ"
     },
     "bannerTranscribing": {
-        "message": "文字起こし中...",
+        "message": "文字起こし処理中...",
         "description": "文字起こし中のバナーメッセージ"
     },
     "bannerTranslating": {
-        "message": "翻訳中...",
+        "message": "翻訳処理中...",
         "description": "翻訳中のバナーメッセージ"
     },
     "bannerProcessing": {
@@ -300,68 +324,68 @@
         "description": "テキスト処理中のバナーメッセージ"
     },
     "bannerMicAccessError": {
-        "message": "エラー: マイクへのアクセスが拒否されました。",
-        "description": "マイクアクセスのエラーメッセージ"
+        "message": "エラー：マイクへのアクセスが拒否されました。",
+        "description": "マイクアクセスに関するエラーメッセージ"
     },
     "bannerTranslationError": {
         "message": "翻訳中にエラーが発生しました。",
         "description": "翻訳のエラーメッセージ"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AI の使用方法:<br><br>1. ウェブサイトにアクセスします (たとえば、ウェブメールやお気に入りの AI のチャットサイトなど。<a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> や <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a> など)。<br>2. 簡単にアクセスできるように、拡張機能アイコンをピン留めします。<br>3. 録音の開始/停止:<br> * 拡張機能アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br> * マイクに向かって話します。<br> * もう一度アイコン <img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\"> をクリックするか、キーボードショートカットを使用します。<br> * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "BabelFish AIを使用するには：<br><br>1. Webサイトにアクセスします（例：Webメール、または<a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a>や<a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>など、お気に入りのAIのチャットサイト）。<br>2. 簡単なアクセスができるように、拡張機能アイコンをピン留めします。<br>3. 録音の開始/停止：<br>    * 拡張機能アイコン<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">をクリックするか、ショートカットを使用します。<br>    * マイクに向かって話します。<br>    * アイコンをもう一度クリックするか<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">、ショートカットを使用します。<br>    * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット：<br><ul><li>Windows：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl + Shift + 1</span></li><li>Mac：<span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+ Shift + 1</span></li></ul>",
         "description": "拡張機能の使用方法"
     },
     "defaultWhisperApiUrl": {
-        "message": "デフォルト URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API のデフォルト URL"
+        "message": "デフォルトURL：https://api.openai.com/v1/audio/transcriptions",
+        "description": "Whisper APIのデフォルトURL"
     },
     "defaultTranslationApiUrl": {
-        "message": "デフォルト URL: https://api.openai.com/v1/chat/completions",
-        "description": "翻訳 API のデフォルト URL"
+        "message": "デフォルトURL：https://api.openai.com/v1/chat/completions",
+        "description": "翻訳APIのデフォルトURL"
     },
     "API_KEY_NOT_FOUND": {
-        "message": "API キーが設定されていません。拡張機能のオプションで設定してください。",
-        "description": "エラーメッセージ: API キーが見つかりません"
+        "message": "APIキーが設定されていません。拡張機能オプションで設定してください。",
+        "description": "エラーメッセージ：APIキーが見つかりません"
     },
     "CHROME_STORAGE_ERROR": {
-        "message": "Chrome ストレージエラー",
-        "description": "エラーメッセージ: ストレージの問題"
+        "message": "Chromeストレージエラー",
+        "description": "エラーメッセージ：ストレージの問題"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "エラー: マイクにアクセスできません。",
-        "description": "エラーメッセージ: マイクアクセス"
+        "message": "エラー：マイクが利用できません。",
+        "description": "エラーメッセージ：マイクアクセス"
     },
     "API_ERROR": {
-        "message": "API の呼び出し中にエラーが発生しました",
-        "description": "エラーメッセージ: 一般的な API 呼び出し"
+        "message": "APIの呼び出し中にエラーが発生しました",
+        "description": "エラーメッセージ：一般的なAPI呼び出し"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "文字起こし中にエラーが発生しました",
-        "description": "エラーメッセージ: 文字起こし"
+        "description": "エラーメッセージ：文字起こし"
     },
     "TRANSLATION_ERROR": {
         "message": "翻訳中にエラーが発生しました",
-        "description": "エラーメッセージ: 翻訳"
+        "description": "エラーメッセージ：翻訳"
     },
     "NO_EDITABLE_ELEMENT": {
         "message": "編集可能な要素が見つかりません",
-        "description": "エラーメッセージ: 編集可能な要素がありません"
+        "description": "エラーメッセージ：編集可能な要素がありません"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
         "message": "コンテンツスクリプトの挿入中にエラーが発生しました",
-        "description": "エラーメッセージ: スクリプトの挿入"
+        "description": "エラーメッセージ：スクリプト挿入"
     },
     "NO_ACTIVE_TAB": {
         "message": "アクティブなタブが見つかりません",
-        "description": "エラーメッセージ: アクティブなタブがありません"
+        "description": "エラーメッセージ：アクティブなタブがありません"
     },
     "MISSING_TRANSLATION_PARAMS": {
         "message": "翻訳パラメータがありません",
-        "description": "エラーメッセージ: 翻訳パラメータ"
+        "description": "エラーメッセージ：翻訳パラメータ"
     },
     "INVALID_TRANSLATION_RESPONSE": {
-        "message": "無効な翻訳応答形式",
-        "description": "エラーメッセージ: 翻訳応答"
+        "message": "翻訳応答形式が無効です",
+        "description": "エラーメッセージ：翻訳応答"
     },
     "bannerErrorGeneric": {
         "message": "エラーが発生しました",
@@ -369,11 +393,11 @@
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ 拡張機能 > ⌨️ キーボードショートカット",
-        "description": "キーボードショートカットの変更手順"
+        "description": "キーボードショートカットを変更する手順"
     },
     "defaultModel": {
         "message": "デフォルト",
-        "description": "デフォルトモデルを示します"
+        "description": "デフォルトモデルを示す"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -384,7 +408,7 @@
         "description": "デフォルトの翻訳モデル"
     },
     "dialogTitle": {
-        "message": "BabelFishAI 文字起こし",
+        "message": "BabelFishAI文字起こし",
         "description": "ダイアログボックスのタイトル"
     },
     "closeButton": {
@@ -396,7 +420,7 @@
         "description": "コピーボタンのテキスト"
     },
     "copySuccess": {
-        "message": "テキストがコピーされました！",
+        "message": "テキストをコピーしました！",
         "description": "コピー成功メッセージ"
     },
     "copyError": {

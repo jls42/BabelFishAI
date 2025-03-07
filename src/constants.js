@@ -55,11 +55,13 @@ window.BabelFishAIConstants = {
         API_ERROR: "Erreur lors de l'appel à l'API",
         TRANSCRIPTION_ERROR: "Erreur lors de la transcription",
         TRANSLATION_ERROR: "Erreur lors de la traduction",
+        REPHRASE_ERROR: "Erreur lors de la reformulation",
         NO_EDITABLE_ELEMENT: "Aucun élément éditable trouvé",
         CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",
         NO_ACTIVE_TAB: "Aucun onglet actif trouvé",
         MISSING_TRANSLATION_PARAMS: "Paramètres de traduction manquants",
-        INVALID_TRANSLATION_RESPONSE: "Format de réponse de traduction invalide"
+        INVALID_TRANSLATION_RESPONSE: "Format de réponse de traduction invalide",
+        MISSING_REPHRASE_PARAMS: "Paramètres de reformulation manquants"
     },
 
     // Configuration des badges
