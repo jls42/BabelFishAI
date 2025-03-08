@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bannerColorEndInput = document.getElementById('bannerColorEnd');
     const bannerOpacityInput = document.getElementById('bannerOpacity');
     const colorPreview = document.getElementById('colorPreview');
+    const enableRephraseCheckbox = document.getElementById('enableRephrase');
     const enableTranslationCheckbox = document.getElementById('enableTranslation');
     const translationOptions = document.getElementById('translationOptions');
     const sourceLanguageSelect = document.getElementById('sourceLanguage');
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     interfaceLanguageSelect.value = currentLang;
 
     // Charger les options sauvegardées
-    async function loadOptions() {
+    function loadOptions() {
         chrome.storage.sync.get({
             apiKey: '',
             activeDisplay: true,
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bannerColorStart: '#684054',
             bannerColorEnd: '#4c7b8d',
             bannerOpacity: 80,
+            enableRephrase: false,
             enableTranslation: false,
             sourceLanguage: 'auto',
             targetLanguage: 'en',
@@ -106,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bannerColorStartInput.value = items.bannerColorStart;
             bannerColorEndInput.value = items.bannerColorEnd;
             bannerOpacityInput.value = items.bannerOpacity;
+            enableRephraseCheckbox.checked = items.enableRephrase;
             enableTranslationCheckbox.checked = items.enableTranslation;
             sourceLanguageSelect.value = items.sourceLanguage || 'auto';
             targetLanguageSelect.value = items.targetLanguage;
@@ -142,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             bannerColorStart: bannerColorStartInput.value,
             bannerColorEnd: bannerColorEndInput.value,
             bannerOpacity: parseInt(bannerOpacityInput.value),
+            enableRephrase: enableRephraseCheckbox.checked,
             enableTranslation: enableTranslationCheckbox.checked,
             sourceLanguage: sourceLanguageSelect.value,
             targetLanguage: targetLanguageSelect.value,
@@ -401,6 +405,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     bannerColorStartInput.addEventListener('input', () => saveOptions(false));
     bannerColorEndInput.addEventListener('input', () => saveOptions(false));
     bannerOpacityInput.addEventListener('input', () => saveOptions(false));
+    enableRephraseCheckbox.addEventListener('change', () => saveOptions(false));
     enableTranslationCheckbox.addEventListener('change', () => saveOptions(false));
     sourceLanguageSelect.addEventListener('change', () => saveOptions(false));
     targetLanguageSelect.addEventListener('change', () => saveOptions(false));

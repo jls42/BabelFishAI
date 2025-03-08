@@ -78,43 +78,158 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     // Suppression complète des notifications sonores
 
     /**
-     * Affiche la bannière avec un message et accessibilité améliorée
+     * Configure le contenu textuel de la bannière
      * @param {HTMLElement} banner - L'élément bannière
      * @param {string} text - Le message à afficher
+     * @returns {HTMLElement|null} - Le conteneur de texte mis à jour ou null
+     */
+    function updateBannerText(banner, text) {
+        // Trouver le conteneur de texte
+        const statusTextContainer = banner.querySelector('.whisper-status-text');
+        if (statusTextContainer) {
+            statusTextContainer.textContent = text;
+            
+            // Adapter le style du texte en fonction du contenu et des contrôles
+            const controlsContainer = banner.querySelector('.whisper-controls-container');
+            if (controlsContainer && controlsContainer.offsetWidth > 0) {
+                // Si les contrôles sont visibles, limiter la largeur du texte
+                statusTextContainer.style.maxWidth = `${Math.max(200, window.innerWidth - controlsContainer.offsetWidth - 80)}px`;
+                
+                // Gérer l'overflow du texte s'il est trop long
+                if (text.length > 50) {
+                    statusTextContainer.style.textOverflow = 'ellipsis';
+                    statusTextContainer.style.overflow = 'hidden';
+                    statusTextContainer.style.whiteSpace = 'nowrap';
+                }
+            } else {
+                // Si les contrôles ne sont pas visibles, pas de limite de largeur
+                statusTextContainer.style.maxWidth = 'none';
+            }
+            return statusTextContainer;
+        } else {
+            // Si le conteneur n'existe pas (ancien format de bannière), utiliser la bannière directement
+            banner.textContent = text;
+            return null;
+        }
+    }
+    
+    /**
+     * Configure les attributs d'accessibilité de la bannière
+     * @param {HTMLElement} banner - L'élément bannière
      * @param {string} type - Le type de message ('info' ou 'error')
      * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     * @param {string} text - Le message affiché
      */
-    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false) {
-        // Mise à jour du contenu et de l'apparence
-        banner.textContent = text;
-        banner.className = 'whisper-status-banner';
-
-        // Réinitialiser les classes
-        banner.classList.remove('error', 'recording');
-
+    function setupBannerAccessibility(banner, type, isRecording, text) {
         // Définir les attributs ARIA pour l'accessibilité
         banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
         banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
 
-        // Appliquer les classes et attributs appropriés
+        // Appliquer les attributs spécifiques au type
         if (type === MESSAGE_TYPES.ERROR) {
-            banner.classList.add('error');
             banner.setAttribute('aria-atomic', 'true');
         } else if (isRecording) {
-            banner.classList.add('recording');
             banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
         }
+    }
 
-        // Ajouter une animation pour attirer l'attention
+    /**
+     * Configure les classes CSS de la bannière en fonction du type
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de message ('info' ou 'error')
+     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     */
+    function setBannerClasses(banner, type, isRecording) {
+        // Réinitialiser les classes
+        banner.className = 'whisper-status-banner';
+        
+        // Appliquer les classes spécifiques
+        if (type === MESSAGE_TYPES.ERROR) {
+            banner.classList.add('error');
+        } else if (isRecording) {
+            banner.classList.add('recording');
+        }
+    }
+    
+    /**
+     * Configure l'animation de la bannière
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de message
+     */
+    function setupBannerAnimation(banner, type) {
         banner.style.animation = 'none';
         // Forcer un reflow pour réinitialiser l'animation
         void banner.offsetWidth; // skipcq: JS-0098
         banner.style.animation = type === MESSAGE_TYPES.ERROR ?
             'bannerPulse 0.5s ease-in-out' :
             'bannerFadeIn 0.3s ease-in-out';
-
+    }
+    
+    /**
+     * Rend la bannière visible et ajuste le layout de la page
+     * @param {HTMLElement} banner - L'élément bannière
+     */
+    function showBannerElement(banner) {
         // Rendre la bannière visible
-        banner.style.display = 'block';
+        banner.style.display = 'flex';
+        
+        // Ajouter le padding au body pour éviter le chevauchement
+        if (document.body) {
+            document.body.style.paddingTop = '35px';
+        }
+    }
+    
+    /**
+     * Met à jour la couleur de la bannière si nécessaire
+     * @param {string} type - Le type de message
+     * @param {Function} [updateColorCallback] - Callback pour la mise à jour
+     */
+    function updateBannerColorIfNeeded(type, updateColorCallback) {
+        if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
+            updateColorCallback();
+        }
+    }
+
+    /**
+     * Affiche la bannière avec un message et accessibilité améliorée
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} text - Le message à afficher
+     * @param {string} type - Le type de message ('info' ou 'error')
+     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     * @param {Function} [updateColorCallback] - Callback pour mettre à jour la couleur du bandeau
+     * @returns {boolean} - Indique si l'affichage a réussi
+     */
+    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) {
+        // Vérifier si la bannière existe
+        if (!banner) {
+            console.warn('Banner element is null or undefined');
+            return false;
+        }
+
+        try {
+            // 1. Mettre à jour le texte
+            updateBannerText(banner, text);
+
+            // 2. Configurer les classes CSS
+            setBannerClasses(banner, type, isRecording);
+
+            // 3. Configurer l'accessibilité
+            setupBannerAccessibility(banner, type, isRecording, text);
+
+            // 4. Configurer l'animation
+            setupBannerAnimation(banner, type);
+
+            // 5. Rendre la bannière visible
+            showBannerElement(banner);
+
+            // 6. Mettre à jour la couleur si nécessaire
+            updateBannerColorIfNeeded(type, updateColorCallback);
+            
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage de la bannière:', error);
+            return false;
+        }
     }
 
     /**
@@ -369,15 +484,29 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {HTMLElement} transcriptionElement - L'élément de transcription à supprimer
      */
     function removeTranscriptionElement(transcriptionElement) {
-        // Vérifier si l'élément existe toujours avant de le supprimer
-        transcriptionElement?.parentNode?.removeChild(transcriptionElement);
-
-        // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
-        const currentContainer = document.getElementById('whisper-transcription-container');
-
-        // Si le conteneur est vide (ne contient que le bouton de fermeture), on le supprime
-        if (currentContainer && currentContainer.children.length === 1) {
-            document.body.removeChild(currentContainer);
+        try {
+            // Vérifier si l'élément existe toujours et est valide avant de le supprimer
+            try {
+                transcriptionElement?.parentNode?.removeChild(transcriptionElement);
+            } catch (e) {
+                console.warn("Erreur lors de la suppression de l'élément:", e);
+            }
+    
+            // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
+            try {
+                const currentContainer = document.getElementById('whisper-transcription-container');
+        
+                // Si le conteneur est vide (ne contient que le bouton de fermeture) ou n'a plus d'enfants, on le supprime
+                if (currentContainer && (currentContainer.children.length <= 1 || currentContainer.children.length === 0)) {
+                    if (document.body.contains(currentContainer)) {
+                        document.body.removeChild(currentContainer);
+                    }
+                }
+            } catch (e) {
+                console.warn("Erreur lors du nettoyage du conteneur:", e);
+            }
+        } catch (e) {
+            console.warn("Erreur globale lors de la suppression de l'élément:", e);
         }
     }
 
@@ -424,12 +553,27 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Utiliser requestIdleCallback si disponible pour la suppression automatique
         const scheduleRemoval = () => {
-            if ('requestIdleCallback' in window) {
-                window.requestIdleCallback(() => {
-                    removeTranscriptionElement(textElement);
-                }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
-            } else {
-                removeTranscriptionElement(textElement);
+            try {
+                if ('requestIdleCallback' in window) {
+                    window.requestIdleCallback(() => {
+                        try {
+                            removeTranscriptionElement(textElement);
+                        } catch (e) {
+                            console.warn("Erreur lors de la suppression de l'élément:", e);
+                        }
+                    }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
+                } else {
+                    // Fallback à setTimeout
+                    setTimeout(() => {
+                        try {
+                            removeTranscriptionElement(textElement);
+                        } catch (e) {
+                            console.warn("Erreur lors de la suppression de l'élément:", e);
+                        }
+                    }, 0);
+                }
+            } catch (e) {
+                console.warn("Erreur lors de la planification de la suppression:", e);
             }
         };
 

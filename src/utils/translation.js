@@ -116,9 +116,99 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
+    /**
+     * Reformule le texte avec GPT pour l'améliorer
+     * @param {string} text - Le texte à reformuler
+     * @param {string} apiKey - La clé API OpenAI
+     * @param {string} [apiUrl] - URL de l'API GPT (optionnel)
+     * @returns {Promise<string>} Le texte reformulé
+     */
+    async function rephraseText(text, apiKey) {
+        // Validation des paramètres
+        if (!text) {
+            console.error('Missing rephrase parameter:', { text });
+            throw new Error(ERRORS.MISSING_REPHRASE_PARAMS);
+        }
+
+        debugTranslation('Starting rephrasing:', {
+            textLength: text.length
+        });
+
+        try {
+            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
+                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
+                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
+                disableLogging: false
+            });
+
+            const { modelType, translationApiUrl, disableLogging } = result;
+
+            // Préparer les messages pour l'API
+            const messages = [
+                {
+                    role: "system",
+                    content: "You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent."
+                },
+                {
+                    role: "user",
+                    content: `Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Return only the improved text without any introduction, notes, or explanation: ${text}`
+                }
+            ];
+
+            // Préparer la charge utile pour l'API
+            const payload = {
+                model: modelType,
+                messages
+            };
+
+            // Ajouter l'option no-log si demandé
+            if (disableLogging) {
+                payload["no-log"] = true;
+            }
+
+            debugTranslation('Rephrasing request payload:', payload);
+
+            // Utiliser la fonction callApi pour effectuer la requête avec optimisations
+            const rephrasedResponse = await window.BabelFishAIUtils.api.callApi({
+                url: translationApiUrl,
+                apiKey,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                errorType: ERRORS.REPHRASE_ERROR,
+                // Activer les tentatives de réessai
+                retryOnFail: true,
+                // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
+                timeout: 20000,
+                // Définir un processeur de réponse personnalisé
+                responseProcessor: (data) => {
+                    // Vérifier la validité de la réponse
+                    if (!data.choices?.[0]?.message?.content) {
+                        console.error('Invalid rephrasing response format:', data);
+                        throw new Error(ERRORS.INVALID_TRANSLATION_RESPONSE);
+                    }
+                    return data.choices[0].message.content.trim();
+                }
+            });
+
+            debugTranslation('Rephrasing successful, length:', rephrasedResponse.length);
+            return rephrasedResponse;
+
+        } catch (error) {
+            console.error('Rephrasing error:', error);
+            // Si l'erreur est déjà formatée, la propager directement
+            if (error.message.includes(ERRORS.REPHRASE_ERROR)) {
+                throw error;
+            }
+            // Sinon, la formater avec le préfixe REPHRASE_ERROR
+            throw new Error(`${ERRORS.REPHRASE_ERROR}: ${error.message}`);
+        }
+    }
+
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.translation = {
-        translateText
+        translateText,
+        rephraseText
     };
 
 })(window.BabelFishAIUtils);

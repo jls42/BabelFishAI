@@ -1,4 +1,8 @@
 {
+    "recordingCanceled": {
+        "message": "Enregistrement annulé (touche Échap).",
+        "description": "Message affiché lors de l'annulation de l'enregistrement"
+    },
     "extensionName": {
         "message": "BabelFishAI by jls42.org",
         "description": "Nom de l'extension"
@@ -166,6 +170,26 @@
     "targetLanguageLabel": {
         "message": "Langue cible :",
         "description": "Label pour la langue cible"
+    },
+    "enhancementTitle": {
+        "message": "Amélioration de texte IA",
+        "description": "Titre de la section d'amélioration de texte"
+    },
+    "rephraseLabel": {
+        "message": "Activer la reformulation automatique",
+        "description": "Label pour l'option de reformulation"
+    },
+    "rephraseDescription": {
+        "message": "Si activé, le texte transcrit sera reformulé pour améliorer sa clarté et sa fluidité.",
+        "description": "Description de l'option de reformulation"
+    },
+    "bannerRephrasing": {
+        "message": "Reformulation en cours...",
+        "description": "Message du bandeau pendant la reformulation"
+    },
+    "bannerRephrasingError": {
+        "message": "Erreur lors de la reformulation",
+        "description": "Message d'erreur pour la reformulation"
     },
     "translationExplanation": {
         "message": "La fonctionnalité de traduction IA intégrée vous permet d'obtenir une traduction automatique de votre texte transcrit.<br>Pour cela :<br><ul><li>Langue source : sélectionnez la langue que vous parlez dans le micro.</li><li>Langue cible : choisissez la langue dans laquelle vous souhaitez que votre texte soit traduit.</li></ul>Ces paramètres n'affectent que la traduction, pas la transcription. Si vous désactivez la traduction automatique, votre texte transcrit le sera dans la langue parlée au micro.",

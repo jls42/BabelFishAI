@@ -18,20 +18,23 @@
 
 /* Bannière d'état */
 .whisper-status-banner {
-    position: fixed;
-    top: 0;
+    display: none; /* Par défaut caché, sera modifié en 'flex' par JS */
+    padding: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(104, 64, 84, 0.3);
+    overflow: hidden; /* Pour les animations */
+    position: fixed; /* Pour le garder visible */
     left: 0;
-    width: 100%;
+    right: 0;
+    top: 0; /* Positionné en haut de l'écran */
+    z-index: 999999;
+    height: auto; /* Laisser la hauteur s'adapter au contenu */
+    max-height: 40px; /* Limiter la hauteur maximale */
     background: linear-gradient(45deg, #684054, #4c7b8d);
     color: white;
     text-align: center;
-    padding: 10px;
     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
-    z-index: 2147483647;
-    display: none;
-    box-shadow: 0 2px 8px rgba(104, 64, 84, 0.3);
     transition: background 0.3s ease;
 }
 
@@ -56,6 +59,236 @@
 
 .whisper-status-banner.recording {
     animation: pulse 2s infinite;
+}
+
+.whisper-banner-content {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row; /* Disposition horizontale */
+    align-items: center;
+    justify-content: center; /* Centrer le contenu */
+    padding: 5px 10px; /* Padding réduit */
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.whisper-status-text {
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    margin-right: 15px;
+    display: inline-block;
+}
+
+.whisper-controls-container {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+    transition: all 0.3s ease;
+}
+
+/* Style pour les boutons modernes */
+.whisper-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    min-width: 100px;
+    position: relative;
+    outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    margin: 0 2px;
+}
+
+/* Effet de survol */
+.whisper-toggle-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
+}
+
+/* Effet d'appui */
+.whisper-toggle-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* État désactivé (par défaut) - foncé avec bordure légère pour tous les fonds */
+.whisper-toggle-button[data-active="false"] {
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0.85;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* État activé - clair avec halo brillant */
+.whisper-toggle-button[data-active="true"] {
+    background: rgba(0, 150, 136, 0.7); /* Vert turquoise qui se démarque bien */
+    box-shadow: 0 0 10px rgba(0, 150, 136, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    opacity: 1;
+    transform: scale(1.03);
+}
+
+/* Icône du bouton */
+.whisper-button-icon {
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+/* Texte du bouton */
+.whisper-button-text {
+    font-size: 12px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.whisper-language-container {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 150, 136, 0.7); /* Même couleur que les boutons activés */
+    padding: 3px 8px;
+    border-radius: 14px;
+    box-shadow: 0 0 10px rgba(0, 150, 136, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-left: 2px;
+    animation: slideInFade 0.3s ease-in-out;
+    flex-shrink: 0;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Bordure plus visible */
+}
+
+.whisper-language-container[style*="display: flex"] {
+    opacity: 1;
+    max-height: 30px;
+    overflow: visible;
+}
+
+@keyframes slideInFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.whisper-language-container:hover {
+    background: rgba(0, 150, 136, 0.85);
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(0, 150, 136, 0.6), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.whisper-language-label {
+    font-size: 11px;
+    color: white;
+    font-weight: bold;
+    margin-right: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.whisper-language-select {
+    font-size: 11px;
+    padding: 2px 10px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    min-width: 90px;
+    max-width: 130px;
+    max-height: 300px;
+    
+    /* Personnaliser l'apparence du sélecteur pour supprimer l'icône par défaut */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    overflow-y: auto;
+    text-align: center;
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    
+    /* Ajouter notre propre flèche personnalisée */
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 12px;
+    padding-right: 24px;
+}
+
+.whisper-language-select:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.whisper-language-select:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 8px rgba(0, 150, 136, 0.4);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.whisper-language-select option {
+    background: #009688; /* Vert turquoise assorti aux boutons activés */
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+}
+
+/* Amélioration pour les systèmes qui supportent le style des options */
+@supports ((-webkit-appearance: none) or (appearance: none)) {
+    .whisper-language-select option:hover,
+    .whisper-language-select option:focus,
+    .whisper-language-select option:active,
+    .whisper-language-select option:checked {
+        background: #00BFA5 !important; /* Vert turquoise plus clair pour l'état survolé/sélectionné */
+        box-shadow: 0 0 10px #009688;
+    }
+}
+
+/* Suppression de l'icône déroulante pour Firefox */
+.whisper-language-select::-moz-focus-inner {
+    border: 0;
+}
+
+/* Suppression de l'icône déroulante pour IE et Edge */
+.whisper-language-select::-ms-expand {
+    display: none;
+}
+
+/* Style pour les petits écrans */
+@media (max-width: 600px) {
+    .whisper-banner-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    .whisper-status-text {
+        margin-bottom: 5px;
+        margin-right: 0;
+        width: 100%;
+        text-align: center;
+    }
+    .whisper-controls-container {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* Bouton de fermeture */
@@ -93,6 +326,28 @@
     box-shadow: 0 2px 5px rgba(104, 64, 84, 0.3);
 }
 
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+@keyframes bannerPulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+@keyframes bannerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* Élément de transcription */
 .whisper-transcription-element {
     margin-bottom: 10px;
@@ -100,4 +355,15 @@
     background-color: #f8f9fa;
     border-radius: 4px;
     border-left: 3px solid #684054;
+}
+
+/* Dialogue title */
+.whisper-dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
 }
