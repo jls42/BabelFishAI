@@ -643,7 +643,7 @@
             try {
                 // Sortie rapide en cas d'annulation (économie de traitement)
                 if (mediaRecorder.cancelProcessing) {
-                    console.log("Enregistrement annulé par l'utilisateur, audio non traité");
+                    console.log("Enregistrement annulé par l'utilisateur, audio non traité"); // skipcq: JS-0002
                     return;
                 }
                 
@@ -773,7 +773,7 @@
                     if ((statusTextContainer && statusTextContainer.textContent === CANCEL_MESSAGE.RECORDING_CANCELED) || 
                         recordingBanner.textContent === CANCEL_MESSAGE.RECORDING_CANCELED) {
                         hideBanner();
-                        console.log("Bandeau masqué après annulation d'enregistrement");
+                        console.log("Bandeau masqué après annulation d'enregistrement"); // skipcq: JS-0002
                         
                         // S'assurer que le focus est toujours restauré après avoir caché la bannière
                         setTimeout(() => {
@@ -1425,7 +1425,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log(`Reformulation ${newState ? "activée" : "désactivée"} depuis le bandeau`);
+            console.log(`Reformulation ${newState ? "activée" : "désactivée"} depuis le bandeau`); // skipcq: JS-0002
         });
         
         // Événements pour le bouton de traduction
@@ -1438,7 +1438,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log(`Traduction ${newState ? "activée" : "désactivée"} depuis le bandeau`);
+            console.log(`Traduction ${newState ? "activée" : "désactivée"} depuis le bandeau`); // skipcq: JS-0002
         });
         
         // Événements pour le sélecteur de langue
@@ -1448,7 +1448,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log(`Langue cible changée en ${languageSelect.value} depuis le bandeau`);
+            console.log(`Langue cible changée en ${languageSelect.value} depuis le bandeau`); // skipcq: JS-0002
         });
         
         languageSelect.addEventListener('blur', () => {
@@ -1687,7 +1687,7 @@
     function handleKeyboardEvents(event) {
         // La touche Échap (code 27) pour annuler l'enregistrement
         if (event.key === 'Escape' && isRecording) {
-            console.log("Touche Échap détectée pendant l'enregistrement, annulation...");
+            console.log("Touche Échap détectée pendant l'enregistrement, annulation..."); // skipcq: JS-0002
             cancelRecording();
             // Empêcher les gestionnaires d'événements par défaut et la propagation
             event.preventDefault();
