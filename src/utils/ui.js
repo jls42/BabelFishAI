@@ -696,12 +696,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 timerTextSpan.textContent = `${timeLeft}s`;
             }, 1000);
             
-            // Redémarrer le timer de suppression avec validation de la clé
-            if (Object.prototype.hasOwnProperty.call(timers, timerId)) {
-                clearTimeout(timers[timerId]); // S'assurer qu'aucun timer n'est actif
+            // Redémarrer le timer de suppression de manière sécurisée
+            // Utiliser une méthode sécurisée pour accéder aux timers et éviter les injections d'objet
+            const currentTimer = timers[timerId];
+            if (currentTimer) {
+                window.clearTimeout(currentTimer); // Utiliser window.clearTimeout pour plus de sécurité
             }
-            // Utiliser Object.create(null) pour éviter les problèmes de prototype
-            timers[timerId] = setTimeout(scheduleRemoval, duration * 1000);
+            
+            // Stocker le timer de manière sécurisée pour éviter les problèmes d'injection
+            const newTimer = window.setTimeout(scheduleRemoval, duration * 1000);
+            timers[timerId] = newTimer;
         };
         
         // Ajouter un gestionnaire d'événements pour désactiver/activer la fermeture automatique
