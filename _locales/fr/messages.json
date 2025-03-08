@@ -1,4 +1,12 @@
 {
+    "contextMenuRephrase": {
+        "message": "Reformuler la sélection",
+        "description": "Option du menu contextuel pour reformuler le texte sélectionné"
+    },
+    "contextMenuTranslate": {
+        "message": "Traduire la sélection",
+        "description": "Option du menu contextuel pour traduire le texte sélectionné"
+    },
     "recordingCanceled": {
         "message": "Enregistrement annulé (touche Échap).",
         "description": "Message affiché lors de l'annulation de l'enregistrement"
@@ -426,5 +434,9 @@
     "copyError": {
         "message": "Erreur lors de la copie",
         "description": "Message d'erreur de la copie"
+    },
+    "keepOpen": {
+        "message": "Garder ouvert",
+        "description": "Texte pour le toggle qui désactive la fermeture automatique"
     }
 }

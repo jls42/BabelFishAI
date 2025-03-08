@@ -1652,13 +1652,224 @@
     }
 
     /**
+     * Reformule un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à reformuler
+     * @returns {Promise<void>}
+     */
+    async function handleTextRephrasing(text) {
+        if (!text || typeof text !== 'string' || text.trim() === '') {
+            console.warn("Texte vide ou invalide pour la reformulation");
+            return;
+        }
+
+        try {
+            // Vérifier si l'API Key est disponible
+            if (!apiKey) {
+                apiKey = await window.BabelFishAIUtils.api.getApiKey();
+                if (!apiKey) {
+                    throw new Error(ERRORS.API_KEY_NOT_FOUND);
+                }
+            }
+
+            // Stocker l'élément actif avant de commencer le traitement
+            storeFocusAndSelection();
+
+            // Informer l'utilisateur que la reformulation est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasing") || "Reformulation en cours...");
+
+            // Reformuler le texte en utilisant la fonction existante
+            const rephrasedText = await window.BabelFishAIUtils.translation.rephraseText(
+                text,
+                apiKey
+            );
+
+            // Vérifier que la reformulation est valide
+            if (!rephrasedText || typeof rephrasedText !== 'string' || rephrasedText.trim() === '') {
+                throw new Error('Résultat de reformulation vide ou invalide');
+            }
+
+            // Obtenir les options d'affichage
+            const options = await getDisplayOptions();
+
+            // Vérifier si l'élément actif est une zone de texte éditable
+            const activeElement = document.activeElement;
+            let replacedInEditable = false;
+
+            if (isValidElementForInsertion(activeElement)) {
+                // Tenter d'insérer le texte directement si nous sommes dans une zone éditable
+                try {
+                    // Restaurer le focus sur l'élément actif
+                    restoreFocus();
+
+                    if ((activeElement.tagName === 'TEXTAREA') || 
+                        (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
+                        // Pour les éléments input/textarea, remplacer la sélection
+                        const start = activeElement.selectionStart;
+                        const end = activeElement.selectionEnd;
+                        if (start !== undefined && end !== undefined && start !== end) {
+                            const newValue = activeElement.value.substring(0, start) + 
+                                            rephrasedText + 
+                                            activeElement.value.substring(end);
+                            activeElement.value = newValue;
+                            activeElement.selectionStart = start;
+                            activeElement.selectionEnd = start + rephrasedText.length;
+                            activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+                            replacedInEditable = true;
+                        }
+                    } else if (activeElement.isContentEditable) {
+                        // Pour les éléments contentEditable
+                        const selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            const range = selection.getRangeAt(0);
+                            range.deleteContents();
+                            const textNode = document.createTextNode(rephrasedText);
+                            range.insertNode(textNode);
+                            range.setStartAfter(textNode);
+                            range.collapse(true);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                            activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+                            replacedInEditable = true;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Erreur lors du remplacement du texte dans l'élément éditable:", e);
+                    replacedInEditable = false;
+                }
+            }
+
+            // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
+            if (!replacedInEditable) {
+                showTranscriptionDialog(rephrasedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            }
+
+            // Cacher la bannière une fois l'opération terminée
+            hideBanner();
+
+        } catch (error) {
+            console.error('Erreur lors de la reformulation:', error);
+            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation", error.message);
+        }
+    }
+
+    /**
+     * Gère la traduction d'un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à traduire
+     * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
+     * @returns {Promise<void>}
+     */
+    async function handleTextTranslation(text, specifiedTargetLanguage) {
+        if (!text || typeof text !== 'string' || text.trim() === '') {
+            console.warn("Texte vide ou invalide pour la traduction");
+            return;
+        }
+
+        try {
+            // Vérifier si l'API Key est disponible
+            if (!apiKey) {
+                apiKey = await window.BabelFishAIUtils.api.getApiKey();
+                if (!apiKey) {
+                    throw new Error(ERRORS.API_KEY_NOT_FOUND);
+                }
+            }
+
+            // Stocker l'élément actif avant de commencer le traitement
+            storeFocusAndSelection();
+
+            // Informer l'utilisateur que la traduction est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating") || "Traduction en cours...");
+
+            // Obtenir les options de traduction
+            const options = await getDisplayOptions();
+            
+            // Utiliser la langue source des options
+            const sourceLanguage = options.enableTranslation ? options.sourceLanguage : 'auto';
+            
+            // Pour la langue cible, priorité à celle spécifiée dans le menu contextuel
+            const targetLanguage = specifiedTargetLanguage || 
+                                (options.enableTranslation ? options.targetLanguage : 'en');
+
+            // Traduire le texte en utilisant la fonction existante
+            const translatedText = await window.BabelFishAIUtils.translation.translateText(
+                text,
+                sourceLanguage,
+                targetLanguage,
+                apiKey
+            );
+
+            // Vérifier que la traduction est valide
+            if (!translatedText || typeof translatedText !== 'string' || translatedText.trim() === '') {
+                throw new Error('Résultat de traduction vide ou invalide');
+            }
+
+            // Vérifier si l'élément actif est une zone de texte éditable
+            const activeElement = document.activeElement;
+            let replacedInEditable = false;
+
+            if (isValidElementForInsertion(activeElement)) {
+                // Tenter d'insérer le texte directement si nous sommes dans une zone éditable
+                try {
+                    // Restaurer le focus sur l'élément actif
+                    restoreFocus();
+
+                    if ((activeElement.tagName === 'TEXTAREA') || 
+                        (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
+                        // Pour les éléments input/textarea, remplacer la sélection
+                        const start = activeElement.selectionStart;
+                        const end = activeElement.selectionEnd;
+                        if (start !== undefined && end !== undefined && start !== end) {
+                            const newValue = activeElement.value.substring(0, start) + 
+                                            translatedText + 
+                                            activeElement.value.substring(end);
+                            activeElement.value = newValue;
+                            activeElement.selectionStart = start;
+                            activeElement.selectionEnd = start + translatedText.length;
+                            activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+                            replacedInEditable = true;
+                        }
+                    } else if (activeElement.isContentEditable) {
+                        // Pour les éléments contentEditable
+                        const selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            const range = selection.getRangeAt(0);
+                            range.deleteContents();
+                            const textNode = document.createTextNode(translatedText);
+                            range.insertNode(textNode);
+                            range.setStartAfter(textNode);
+                            range.collapse(true);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                            activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+                            replacedInEditable = true;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Erreur lors du remplacement du texte dans l'élément éditable:", e);
+                    replacedInEditable = false;
+                }
+            }
+
+            // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
+            if (!replacedInEditable) {
+                showTranscriptionDialog(translatedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            }
+
+            // Cacher la bannière une fois l'opération terminée
+            hideBanner();
+
+        } catch (error) {
+            console.error('Erreur lors de la traduction:', error);
+            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError") || "Erreur lors de la traduction", error.message);
+        }
+    }
+
+    /**
      * Gère les messages provenant du script d'arrière-plan
      * @param {Object} message - Le message reçu
      * @param {Object} sender - L'expéditeur du message
      * @param {Function} callback - Fonction de callback pour répondre au message
      */
     function handleBackgroundMessages(message) {
-
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
@@ -1666,6 +1877,19 @@
                     startRecording();
                 } else {
                     stopRecording();
+                }
+            },
+            // Action pour la reformulation de texte sélectionné
+            ['rephraseSelection']: () => {
+                if (message.text) {
+                    handleTextRephrasing(message.text);
+                }
+            },
+            // Action pour la traduction de texte sélectionné
+            ['translateSelection']: () => {
+                if (message.text) {
+                    // Passer la langue cible spécifiée, si disponible
+                    handleTextTranslation(message.text, message.targetLanguage);
                 }
             }
             // Possibilité d'ajouter d'autres gestionnaires d'actions ici

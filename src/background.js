@@ -7,6 +7,12 @@ const SERVICE_WORKER_CONFIG = {
     INIT_DELAY: 500
 };
 
+// Actions spécifiques au menu contextuel
+const CONTEXT_MENU_ACTIONS = {
+    REPHRASE_SELECTION: 'rephraseSelection',
+    TRANSLATE_SELECTION: 'translateSelection'
+};
+
 // Définition des constantes nécessaires pour le service worker
 // IMPORTANT: Ces constantes sont dupliquées intentionnellement car le service worker
 // n'a pas accès à window.BabelFishAIConstants en raison des limitations des service workers
@@ -276,6 +282,117 @@ function handleExtensionInstalled(details) {
 
 // Enregistrer le gestionnaire d'événements pour l'installation
 chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
+
+/**
+ * Récupère la liste des langues disponibles pour la traduction
+ * @returns {Array} Liste des langues disponibles
+ */
+function getTargetLanguageOptions() {
+    // On utilise la même liste que celle définie dans le service worker
+    return [
+        { value: 'en', text: 'English (en)' },
+        { value: 'fr', text: 'Français (fr)' },
+        { value: 'es', text: 'Español (es)' },
+        { value: 'pt', text: 'Português (pt)' },
+        { value: 'zh', text: '中文 (zh)' },
+        { value: 'hi', text: 'हिंदी (hi)' },
+        { value: 'ar', text: 'العربية (ar)' },
+        { value: 'it', text: 'Italiano (it)' },
+        { value: 'de', text: 'Deutsch (de)' },
+        { value: 'sv', text: 'Svenska (sv)' },
+        { value: 'pl', text: 'Polski (pl)' },
+        { value: 'nl', text: 'Nederlands (nl)' },
+        { value: 'ro', text: 'Română (ro)' },
+        { value: 'ja', text: '日本語 (ja)' },
+        { value: 'ko', text: '한국어 (ko)' }
+    ];
+}
+
+/**
+ * Crée les menus contextuels de l'extension
+ */
+function createContextMenus() {
+    // Vérifier si les menus contextuels existent déjà et les supprimer
+    chrome.contextMenus.removeAll(() => {
+        // Créer le menu contextuel pour la reformulation
+        chrome.contextMenus.create({
+            id: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
+            title: chrome.i18n.getMessage("contextMenuRephrase") || "Rephrase selection",
+            contexts: ["selection"],
+        });
+        
+        // Créer le menu parent pour la traduction
+        chrome.contextMenus.create({
+            id: 'translateMenu',
+            title: chrome.i18n.getMessage("contextMenuTranslate") || "Translate selection",
+            contexts: ["selection"],
+        });
+        
+        // Ajouter les langues comme sous-menus
+        const languages = getTargetLanguageOptions();
+        languages.forEach(lang => {
+            chrome.contextMenus.create({
+                id: `${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_${lang.value}`,
+                parentId: 'translateMenu',
+                title: lang.text,
+                contexts: ["selection"],
+            });
+        });
+    });
+}
+
+/**
+ * Gère les clics sur les menus contextuels
+ * @param {Object} info - Informations sur le clic
+ * @param {Object} tab - L'onglet actif
+ */
+async function handleContextMenuClick(info, tab) {
+    debug("Context menu clicked:", info.menuItemId);
+
+    // Récupérer le texte sélectionné
+    const selectedText = info.selectionText;
+    
+    if (!selectedText) {
+        return; // Sortir si aucun texte n'est sélectionné
+    }
+    
+    try {
+        // Cas 1: Option de reformulation
+        if (info.menuItemId === CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION) {
+            // Envoyer le texte sélectionné au content script pour reformulation
+            await sendMessageToContentScript(tab, { 
+                action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION, 
+                text: selectedText 
+            });
+        } 
+        // Cas 2: Option de traduction avec langue spécifique
+        else if (typeof info.menuItemId === 'string' && info.menuItemId.startsWith(`${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_`)) {
+            // Extraire le code de langue du menuItemId (format: translateSelection_fr)
+            const targetLanguage = info.menuItemId.split('_').pop();
+            
+            if (targetLanguage) {
+                // Envoyer le texte sélectionné au content script pour traduction avec langue cible spécifique
+                await sendMessageToContentScript(tab, { 
+                    action: CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION, 
+                    text: selectedText,
+                    targetLanguage: targetLanguage 
+                });
+            }
+        }
+    } catch (error) {
+        console.error("Error handling context menu click:", error);
+        
+        // Mettre à jour l'état pour indiquer une erreur
+        updateRecordingState(STATES.ERROR, error.message);
+    }
+}
+
+// Créer les menus contextuels lors de l'installation ou du démarrage
+chrome.runtime.onInstalled.addListener(createContextMenus);
+chrome.runtime.onStartup.addListener(createContextMenus);
+
+// Écouter les clics sur les menus contextuels
+chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
  * Gère les messages du content script

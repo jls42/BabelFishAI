@@ -532,14 +532,64 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Création unique du fragment de document avec tous les éléments
         // pour éviter les multiples reflows et repaints
         documentFragment.appendChild(textElement);
-        textElement.textContent = text;
+        
+        // Ajouter le contenu principal
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'whisper-content';
+        contentDiv.textContent = text;
+        textElement.appendChild(contentDiv);
 
-        const lineBreak = document.createElement('br');
-        textElement.appendChild(lineBreak);
-
-        // Ajouter un bouton de copie pour permettre à l'utilisateur de copier le texte
+        // Créer le conteneur de contrôles
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'whisper-dialog-controls';
+        
+        // Ajouter le bouton de copie
         const copyButton = createCopyButton(text, onError);
-        textElement.appendChild(copyButton);
+        
+        // Créer le timer visuel
+        const timerDiv = document.createElement('div');
+        timerDiv.className = 'whisper-timer';
+        
+        const timerBarDiv = document.createElement('div');
+        timerBarDiv.className = 'whisper-timer-bar';
+        
+        const timerProgressDiv = document.createElement('div');
+        timerProgressDiv.className = 'whisper-timer-progress';
+        timerBarDiv.appendChild(timerProgressDiv);
+        
+        const timerTextSpan = document.createElement('span');
+        timerTextSpan.className = 'whisper-timer-text';
+        timerTextSpan.textContent = `${duration}s`;
+        
+        timerDiv.appendChild(timerBarDiv);
+        timerDiv.appendChild(timerTextSpan);
+        
+        // Créer le toggle pour désactiver l'auto-fermeture
+        const toggleLabel = document.createElement('label');
+        toggleLabel.className = 'whisper-autoclose-toggle';
+        
+        const toggleInput = document.createElement('input');
+        toggleInput.type = 'checkbox';
+        toggleInput.className = 'whisper-autoclose-input';
+        
+        const toggleSwitch = document.createElement('span');
+        toggleSwitch.className = 'whisper-toggle-switch';
+        
+        const toggleText = document.createElement('span');
+        toggleText.className = 'whisper-autoclose-label';
+        toggleText.textContent = window.BabelFishAIUtils.i18n?.getMessage("keepOpen") || 'Keep open';
+        
+        toggleLabel.appendChild(toggleInput);
+        toggleLabel.appendChild(toggleSwitch);
+        toggleLabel.appendChild(toggleText);
+        
+        // Assembler les contrôles
+        controlsDiv.appendChild(copyButton);
+        controlsDiv.appendChild(timerDiv);
+        controlsDiv.appendChild(toggleLabel);
+        
+        // Ajouter les contrôles à l'élément principal
+        textElement.appendChild(controlsDiv);
 
         // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
         // et minimiser les reflows/repaints
@@ -550,6 +600,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Utiliser un numéro d'ID unique pour éviter les conflits de timers
         const timerId = `dialog_${Date.now()}`;
+        const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
+
+        // Supprimer les anciens timers pour éviter les fuites mémoire
+        if (timers[timerId]) {
+            clearTimeout(timers[timerId]);
+        }
 
         // Utiliser requestIdleCallback si disponible pour la suppression automatique
         const scheduleRemoval = () => {
@@ -579,15 +635,85 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Configurer la suppression automatique après la durée spécifiée
         const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
-        const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
-
-        // Supprimer les anciens timers pour éviter les fuites mémoire
-        if (timers[timerId]) {
-            clearTimeout(timers[timerId]);
-        }
-
-        // Stocker le timer pour pouvoir le nettoyer plus tard si nécessaire
+        
+        // Mettre à jour le timer visuellement
+        let timeLeft = duration;
+        const intervalId = setInterval(() => {
+            if (timeLeft <= 0 || !document.body.contains(textElement)) {
+                clearInterval(intervalId);
+                return;
+            }
+            
+            timeLeft--;
+            const percentage = (timeLeft / duration) * 100;
+            timerProgressDiv.style.width = `${percentage}%`;
+            timerTextSpan.textContent = `${timeLeft}s`;
+        }, 1000);
+        
+        // Stocker le timer pour la suppression automatique
         timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
+        
+        // Variable pour stocker l'ID d'intervalle actif
+        let activeIntervalId = intervalId;
+        
+        // Fonction pour définir l'état "garder ouvert" (pour éviter la duplication de code)
+        const setKeepOpenState = () => {
+            // Annuler tous les timers actifs
+            clearTimeout(timers[timerId]);
+            clearInterval(activeIntervalId);
+            
+            // Arrêter complètement l'affichage du timer et montrer que c'est permanent
+            timerTextSpan.textContent = "∞";
+            timerProgressDiv.style.width = "100%";
+            timerProgressDiv.style.background = "#009688"; // Couleur verte pour montrer l'état actif
+            timerProgressDiv.style.opacity = "0.7";
+            timerProgressDiv.style.transition = "background 0.3s ease";
+        };
+        
+        // Fonction pour définir l'état de fermeture automatique
+        const setAutoCloseState = () => {
+            // Réactiver l'auto-fermeture avec une nouvelle durée complète
+            timeLeft = duration; // Réinitialiser le compte à rebours
+            
+            // Rétablir l'apparence normale du timer
+            timerProgressDiv.style.opacity = "1";
+            timerProgressDiv.style.background = "linear-gradient(90deg, #4c7b8d, #684054)";
+            timerProgressDiv.style.width = "100%";
+            timerTextSpan.textContent = `${duration}s`;
+            
+            // Redémarrer l'intervalle avec animation fluide
+            clearInterval(activeIntervalId); // S'assurer qu'aucun intervalle n'est actif
+            
+            activeIntervalId = setInterval(() => {
+                if (timeLeft <= 0 || !document.body.contains(textElement) || toggleInput.checked) {
+                    clearInterval(activeIntervalId);
+                    return;
+                }
+                
+                timeLeft--;
+                const percentage = (timeLeft / duration) * 100;
+                timerProgressDiv.style.width = `${percentage}%`;
+                timerTextSpan.textContent = `${timeLeft}s`;
+            }, 1000);
+            
+            // Redémarrer le timer de suppression
+            clearTimeout(timers[timerId]); // S'assurer qu'aucun timer n'est actif
+            timers[timerId] = setTimeout(scheduleRemoval, duration * 1000);
+        };
+        
+        // Ajouter un gestionnaire d'événements pour désactiver/activer la fermeture automatique
+        toggleInput.addEventListener('change', () => {
+            if (toggleInput.checked) {
+                setKeepOpenState();
+            } else {
+                setAutoCloseState();
+            }
+        });
+        
+        // Vérifier l'état initial pour s'assurer que le timer est correctement synchronisé
+        if (toggleInput.checked) {
+            setKeepOpenState();
+        }
 
         return textElement;
     }
