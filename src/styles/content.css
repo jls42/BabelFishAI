@@ -3,17 +3,19 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    max-width: 300px;
+    max-width: 500px;
+    width: 90%;
     background-color: white;
     color: black;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 10000;
     font-family: Arial, sans-serif;
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
+    transition: all 0.3s ease;
 }
 
 /* Bannière d'état */
@@ -351,10 +353,96 @@
 /* Élément de transcription */
 .whisper-transcription-element {
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 15px;
     background-color: #f8f9fa;
-    border-radius: 4px;
-    border-left: 3px solid #684054;
+    border-radius: 6px;
+    border-left: 4px solid #684054;
+    line-height: 1.5;
+    font-size: 14px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Conteneur de contrôles pour la boîte de dialogue */
+.whisper-dialog-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Timer pour l'auto-fermeture */
+.whisper-timer {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #888;
+}
+
+.whisper-timer-bar {
+    width: 50px;
+    height: 6px;
+    background-color: #eee;
+    border-radius: 3px;
+    margin-right: 8px;
+    overflow: hidden;
+}
+
+.whisper-timer-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #4c7b8d, #684054);
+    width: 100%;
+    transition: width 1s linear;
+}
+
+/* Interrupteur pour désactiver l'auto-fermeture */
+.whisper-autoclose-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.whisper-autoclose-toggle input {
+    display: none;
+}
+
+.whisper-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 16px;
+    margin-right: 8px;
+    background-color: #ccc;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.whisper-toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s ease;
+}
+
+.whisper-autoclose-toggle input:checked + .whisper-toggle-switch {
+    background-color: #009688;
+}
+
+.whisper-autoclose-toggle input:checked + .whisper-toggle-switch::after {
+    transform: translateX(14px);
+}
+
+.whisper-autoclose-label {
+    font-size: 12px;
+    color: #666;
 }
 
 /* Dialogue title */

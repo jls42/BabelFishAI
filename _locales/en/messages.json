@@ -1,7 +1,15 @@
 {
+    "contextMenuRephrase": {
+        "message": "Rephrase selection",
+        "description": "Context menu option to rephrase the selected text"
+    },
+    "contextMenuTranslate": {
+        "message": "Translate selection",
+        "description": "Context menu option to translate the selected text"
+    },
     "recordingCanceled": {
         "message": "Recording canceled (Esc key).",
-        "description": "Message displayed when recording is canceled"
+        "description": "Message displayed when canceling the recording"
     },
     "extensionName": {
         "message": "BabelFishAI by jls42.org",
@@ -12,7 +20,7 @@
         "description": "Extension description"
     },
     "welcomeMessage": {
-        "message": "Thank you for installing BabelFishAI, the extension that transforms your voice into text with exceptional precision thanks to OpenAI's Whisper API, the current leader in voice transcription.",
+        "message": "Thank you for installing BabelFishAI, the extension that transforms your voice into text with exceptional accuracy thanks to the Whisper API from OpenAI, the current leader in voice transcription.",
         "description": "Welcome message"
     },
     "essentialSettingsTitle": {
@@ -32,76 +40,76 @@
         "description": "Instructions for shortcuts"
     },
     "shortcutOption1": {
-        "message": "Open Chrome extension settings:",
-        "description": "Option 1 to change shortcut"
+        "message": "Open Chrome extensions settings:",
+        "description": "Option 1 to change the shortcut"
     },
     "shortcutOption2": {
         "message": "Or type in the address bar:",
-        "description": "Option 2 to change shortcut"
+        "description": "Option 2 to change the shortcut"
     },
     "shortcutSteps": {
         "message": "Then:<br>1. Find BabelFishAI in the list<br>2. Click on the current shortcut field<br>3. Press the new key combination",
-        "description": "Steps to change shortcut"
+        "description": "Steps to change the shortcut"
     },
     "optionsTitle": {
         "message": "BabelFishAI Configuration",
-        "description": "Options page title"
+        "description": "Title of the options page"
     },
     "languageSettingsTitle": {
         "message": "Interface Language",
-        "description": "Language section title"
+        "description": "Title of the language section"
     },
     "selectLanguageLabel": {
         "message": "Select language:",
-        "description": "Label for language selector"
+        "description": "Label for the language selector"
     },
     "languageChanged": {
         "message": "Language changed successfully",
-        "description": "Confirmation message for language change"
+        "description": "Language change confirmation message"
     },
     "savedMessage": {
         "message": "Options saved!",
-        "description": "Confirmation message for saving"
+        "description": "Save confirmation message"
     },
     "apiKeyPlaceholder": {
         "message": "Your OpenAI API key (sk-...)",
-        "description": "Placeholder for API key"
+        "description": "Placeholder for the API key"
     },
     "apiKeyInfo": {
-        "message": "Get your API key on",
-        "description": "Information on getting API key"
+        "message": "Get your API key at",
+        "description": "Information on obtaining the API key"
     },
     "apiKeyHelp": {
-        "message": "To use BabelFishAI, you need to enter your OpenAI API key. This key is required to access transcription and translation services.",
-        "description": "Help for API key"
+        "message": "To use BabelFishAI, you must enter your OpenAI API key. This key is required to access the transcription and translation services.",
+        "description": "Help for the API key"
     },
     "pricingInfo": {
-        "message": "More information on pricing (default models: {defaultAudioModel} for audio and {defaultTranslationModel} for translation) available on",
+        "message": "More information on pricing (default models: {defaultAudioModel} for audio and {defaultTranslationModel} for translation) available at",
         "description": "Pricing information"
     },
     "supportProject": {
         "message": "Support the project via PayPal",
-        "description": "Text for PayPal support link"
+        "description": "Text for the PayPal support link"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Default Whisper API URL"
+        "description": "Default URL of the Whisper API"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Default Translation API URL"
+        "description": "Default URL of the translation API"
     },
     "displaySettingsTitle": {
         "message": "Display Settings",
-        "description": "Title of display settings"
+        "description": "Title of the display settings"
     },
     "activeDisplayLabel": {
-        "message": "Active zone (keyboard input)",
+        "message": "Active area (keyboard input)",
         "description": "Label for active display"
     },
     "activeDisplayDescription": {
         "message": "If enabled, the transcribed/translated text will be inserted directly into the text field where you are typing.",
-        "description": "Description of active display option"
+        "description": "Description of the active display option"
     },
     "dialogDisplayLabel": {
         "message": "Dialog box",
@@ -109,14 +117,14 @@
     },
     "dialogDisplayDescription": {
         "message": "If enabled, the transcribed/translated text will appear in a floating dialog box.",
-        "description": "Description of dialog display option"
+        "description": "Description of the dialog display option"
     },
     "dialogDurationLabel": {
         "message": "Dialog display duration (seconds):",
         "description": "Label for dialog duration"
     },
     "dialogDurationDescription": {
-        "message": "Defines how long the dialog box remains visible before automatically disappearing.",
+        "message": "Sets how long the dialog box remains visible before automatically disappearing.",
         "description": "Description of dialog duration"
     },
     "bannerColorsLabel": {
@@ -148,12 +156,12 @@
         "description": "Label for opacity"
     },
     "opacityDescription": {
-        "message": "Defines the transparency of the banner (0% = invisible, 100% = opaque).",
+        "message": "Sets the transparency of the banner (0% = invisible, 100% = opaque).",
         "description": "Description of opacity"
     },
     "translationTitle": {
         "message": "Integrated AI Translation",
-        "description": "Title of translation section"
+        "description": "Title of the translation section"
     },
     "automaticLanguage": {
         "message": "Automatic",
@@ -173,15 +181,15 @@
     },
     "enhancementTitle": {
         "message": "AI Text Enhancement",
-        "description": "Title of text enhancement section"
+        "description": "Title of the text enhancement section"
     },
     "rephraseLabel": {
         "message": "Enable automatic rephrasing",
-        "description": "Label for rephrasing option"
+        "description": "Label for the rephrasing option"
     },
     "rephraseDescription": {
         "message": "If enabled, the transcribed text will be rephrased to improve its clarity and fluency.",
-        "description": "Description of rephrasing option"
+        "description": "Description of the rephrasing option"
     },
     "bannerRephrasing": {
         "message": "Rephrasing in progress...",
@@ -192,12 +200,12 @@
         "description": "Error message for rephrasing"
     },
     "translationExplanation": {
-        "message": "The integrated AI translation feature allows you to get an automatic translation of your transcribed text.<br>To do this:<br><ul><li>Source language: select the language you speak into the microphone.</li><li>Target language: choose the language you want your text to be translated into.</li></ul>These settings only affect translation, not transcription. If you disable automatic translation, your text will be transcribed in the language spoken into the microphone.",
-        "description": "Explanation of translation section"
+        "message": "The integrated AI translation feature allows you to get an automatic translation of your transcribed text.<br>To do this:<br><ul><li>Source language: select the language you speak into the microphone.</li><li>Target language: choose the language you want your text to be translated into.</li></ul>These settings only affect translation, not transcription. If you disable automatic translation, your transcribed text will be in the language spoken into the microphone.",
+        "description": "Explanation of the translation section"
     },
     "expertModeTitle": {
         "message": "Expert Mode",
-        "description": "Title of expert mode"
+        "description": "Title of the expert mode"
     },
     "enableExpertModeLabel": {
         "message": "Enable expert mode",
@@ -205,62 +213,62 @@
     },
     "enableExpertModeDescription": {
         "message": "Unlocks advanced configuration options for experienced users.",
-        "description": "Description of expert mode option"
+        "description": "Description of the expert mode option"
     },
     "translationModelLabel": {
         "message": "Translation model:",
-        "description": "Label for translation model"
+        "description": "Label for the translation model"
     },
     "translationModelDescription": {
-        "message": "Choose the AI model used for translation. `gpt-4o-mini` is the default model (best value for money). `gpt-4o` offers superior quality but is more expensive.",
-        "description": "Description of translation model"
+        "message": "Choose the AI model used for translation. `gpt-4o-mini` is the default model (best quality/price ratio). `gpt-4o` offers superior quality but is more expensive.",
+        "description": "Description of the translation model"
     },
     "audioModelLabel": {
         "message": "Audio model:",
-        "description": "Label for audio model"
+        "description": "Label for the audio model"
     },
     "audioModelDescription": {
         "message": "Choose the AI model used for audio transcription. `whisper-1` is the default model.",
-        "description": "Description of audio model"
+        "description": "Description of the audio model"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
-        "description": "Label for Whisper API URL"
+        "description": "Label for the Whisper API URL"
     },
     "whisperApiUrlDescription": {
         "message": "Allows specifying a custom URL for the Whisper transcription API (for advanced users).",
-        "description": "Description of Whisper API URL"
+        "description": "Description of the Whisper API URL"
     },
     "translationApiUrlLabel": {
         "message": "Translation API URL:",
-        "description": "Label for Translation API URL"
+        "description": "Label for the translation API URL"
     },
     "translationApiUrlDescription": {
         "message": "Allows specifying a custom URL for the translation API (for advanced users).",
-        "description": "Description of Translation API URL"
+        "description": "Description of the translation API URL"
     },
     "forcedDialogDomainsLabel": {
         "message": "Domains with forced dialog box:",
         "description": "Label for forced domains"
     },
     "forcedDialogDomainsDescription": {
-        "message": "List of websites where transcription will *always* appear in a dialog box, even if the 'Active zone' option is selected.",
+        "message": "List of websites where the transcription will *always* appear in a dialog box, even if the 'Active area' option is selected.",
         "description": "Description of forced domains"
     },
     "addDomainPlaceholder": {
         "message": "Example: chat.google.com",
-        "description": "Placeholder for domain addition"
+        "description": "Placeholder for adding a domain"
     },
     "addDomainButton": {
         "message": "Add",
-        "description": "Button to add domain"
+        "description": "Button to add a domain"
     },
     "addDomainDescription": {
         "message": "Adds a domain to the list.",
-        "description": "Description of domain addition"
+        "description": "Description of adding a domain"
     },
     "forcedDialogInfo": {
-        "message": "On these domains, transcription will always appear in a dialog box",
+        "message": "On these domains, the transcription will always appear in a dialog box",
         "description": "Information about forced domains"
     },
     "saveButton": {
@@ -268,32 +276,32 @@
         "description": "Save button"
     },
     "shortcutsTitle": {
-        "message": "Usage Instructions",
+        "message": "Instructions for use",
         "description": "Title of shortcuts"
     },
     "authorSectionTitle": {
         "message": "About the Author",
-        "description": "Title of author section"
+        "description": "Title of the author section"
     },
     "authorName": {
         "message": "Julien LS",
-        "description": "Author name"
+        "description": "Author's name"
     },
     "authorRole": {
         "message": "Developer and creator of BabelFishAI",
-        "description": "Author role"
+        "description": "Author's role"
     },
     "addModelPlaceholder": {
         "message": "Add a model",
-        "description": "Placeholder for model addition"
+        "description": "Placeholder for adding a model"
     },
     "addModelButton": {
         "message": "Add",
-        "description": "Button to add model"
+        "description": "Button to add a model"
     },
     "addModelDescription": {
         "message": "Allows adding a custom model (for advanced users).",
-        "description": "Description of model addition"
+        "description": "Description of adding a model"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM only)",
@@ -312,11 +320,11 @@
         "description": "Banner message during recording"
     },
     "bannerTranscribing": {
-        "message": "Transcribing in progress...",
+        "message": "Transcription in progress...",
         "description": "Banner message during transcription"
     },
     "bannerTranslating": {
-        "message": "Translating in progress...",
+        "message": "Translation in progress...",
         "description": "Banner message during translation"
     },
     "bannerProcessing": {
@@ -332,16 +340,16 @@
         "description": "Error message for translation"
     },
     "useBabelFishInstructions": {
-        "message": "To use BabelFish AI:<br><br>1. Go to a website (e.g., your webmail or a chat site of your favorite AI, such as <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> or <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Pin the extension icon for easy access.<br>3. Start/stop recording:<br>    * Click the extension icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the shortcut.<br>    * Speak into your microphone.<br>    * Click the icon again <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the shortcut.<br>    * The transcription will appear in the active text area or in a dialog box.<br><br>Keyboard shortcuts:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "To use BabelFish AI:<br><br>1. Go to a website (for example, your webmail or a chat site of your favorite AI, like <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat by Mistral AI</a> or <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Pin the extension icon for easy access.<br>3. Start/stop recording:<br>    * Click the extension icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br>    * Speak into your microphone.<br>    * Click the icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> again or use the keyboard shortcut.<br>    * The transcription will appear in the active text area or in a dialog box.<br><br>Keyboard shortcuts:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instructions for using the extension"
     },
     "defaultWhisperApiUrl": {
         "message": "Default URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Default URL for Whisper API"
+        "description": "Default URL for the Whisper API"
     },
     "defaultTranslationApiUrl": {
         "message": "Default URL: https://api.openai.com/v1/chat/completions",
-        "description": "Default URL for Translation API"
+        "description": "Default URL for the translation API"
     },
     "API_KEY_NOT_FOUND": {
         "message": "API key not configured. Please configure it in the extension options.",
@@ -349,43 +357,43 @@
     },
     "CHROME_STORAGE_ERROR": {
         "message": "Chrome storage error",
-        "description": "Error message: storage issue"
+        "description": "Error message: Storage problem"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "Error: microphone unavailable.",
-        "description": "Error message: mic access"
+        "message": "Error: microphone inaccessible.",
+        "description": "Error message: Microphone access"
     },
     "API_ERROR": {
         "message": "Error calling the API",
-        "description": "Error message: general API call"
+        "description": "Error message: General API call"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Error during transcription",
-        "description": "Error message: transcription"
+        "description": "Error message: Transcription"
     },
     "TRANSLATION_ERROR": {
         "message": "Error during translation",
-        "description": "Error message: translation"
+        "description": "Error message: Translation"
     },
     "NO_EDITABLE_ELEMENT": {
         "message": "No editable element found",
-        "description": "Error message: no editable element"
+        "description": "Error message: No editable element"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Error during content script injection",
-        "description": "Error message: script injection"
+        "message": "Error injecting the content script",
+        "description": "Error message: Script injection"
     },
     "NO_ACTIVE_TAB": {
         "message": "No active tab found",
-        "description": "Error message: no active tab"
+        "description": "Error message: No active tab"
     },
     "MISSING_TRANSLATION_PARAMS": {
         "message": "Missing translation parameters",
-        "description": "Error message: translation parameters"
+        "description": "Error message: Translation parameters"
     },
     "INVALID_TRANSLATION_RESPONSE": {
         "message": "Invalid translation response format",
-        "description": "Error message: translation response"
+        "description": "Error message: Translation response"
     },
     "bannerErrorGeneric": {
         "message": "An error occurred",
@@ -393,7 +401,7 @@
     },
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensions > ⌨️ Keyboard shortcuts",
-        "description": "Instructions to change keyboard shortcut"
+        "description": "Instructions for changing the keyboard shortcut"
     },
     "defaultModel": {
         "message": "default",
@@ -426,5 +434,9 @@
     "copyError": {
         "message": "Error during copy",
         "description": "Copy error message"
+    },
+    "keepOpen": {
+        "message": "Keep open",
+        "description": "Text for the toggle that disables automatic closing"
     }
 }

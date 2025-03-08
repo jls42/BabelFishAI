@@ -1652,13 +1652,251 @@
     }
 
     /**
+     * Reformule un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à reformuler
+     * @returns {Promise<void>}
+     */
+    /**
+     * Valide si le texte d'entrée est valide pour le traitement
+     * @param {string} text - Texte à valider
+     * @returns {boolean} - True si le texte est valide
+     */
+    function isValidInputText(text) {
+        return text && typeof text === 'string' && text.trim() !== '';
+    }
+
+    /**
+     * Récupère la clé API ou lève une exception si elle n'est pas disponible
+     * @returns {Promise<string>} - La clé API
+     * @throws {Error} - Si la clé API n'est pas trouvée
+     */
+    async function getOrFetchApiKey() {
+        if (!apiKey) {
+            apiKey = await window.BabelFishAIUtils.api.getApiKey();
+            if (!apiKey) {
+                throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            }
+        }
+        return apiKey;
+    }
+
+    /**
+     * Insère le texte dans un élément éditable
+     * @param {Element} activeElement - Élément cible pour l'insertion
+     * @param {string} newText - Texte à insérer
+     * @returns {boolean} - True si l'insertion a réussi
+     */
+    function insertTextInEditableElement(activeElement, newText) {
+        try {
+            // Restaurer le focus
+            restoreFocus();
+
+            if ((activeElement.tagName === 'TEXTAREA') || 
+                (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
+                return insertInInputElement(activeElement, newText);
+            } else if (activeElement.isContentEditable) {
+                return insertInContentEditableElement(activeElement, newText);
+            }
+            return false;
+        } catch (e) {
+            console.warn("Erreur lors du remplacement du texte:", e);
+            return false;
+        }
+    }
+
+    /**
+     * Insère du texte dans un élément input ou textarea
+     * @param {HTMLInputElement|HTMLTextAreaElement} element - L'élément input/textarea
+     * @param {string} text - Le texte à insérer
+     * @returns {boolean} - True si l'insertion a réussi
+     */
+    function insertInInputElement(element, text) {
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+        
+        if (start !== undefined && end !== undefined && start !== end) {
+            const newValue = element.value.substring(0, start) + 
+                            text + 
+                            element.value.substring(end);
+            element.value = newValue;
+            element.selectionStart = start;
+            element.selectionEnd = start + text.length;
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Insère du texte dans un élément contentEditable
+     * @param {HTMLElement} element - L'élément contentEditable
+     * @param {string} text - Le texte à insérer
+     * @returns {boolean} - True si l'insertion a réussi
+     */
+    function insertInContentEditableElement(element, text) {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.deleteContents();
+            const textNode = document.createTextNode(text);
+            range.insertNode(textNode);
+            range.setStartAfter(textNode);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Reformule un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à reformuler
+     * @returns {Promise<void>}
+     */
+    async function handleTextRephrasing(text) {
+        if (!isValidInputText(text)) {
+            console.warn("Texte vide ou invalide pour la reformulation");
+            return;
+        }
+
+        try {
+            // Vérifier si l'API Key est disponible
+            await getOrFetchApiKey();
+
+            // Stocker l'élément actif avant de commencer le traitement
+            storeFocusAndSelection();
+
+            // Informer l'utilisateur que la reformulation est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasing") || "Reformulation en cours...");
+
+            // Reformuler le texte en utilisant la fonction existante
+            const rephrasedText = await window.BabelFishAIUtils.translation.rephraseText(
+                text,
+                apiKey
+            );
+
+            // Vérifier que la reformulation est valide
+            if (!isValidInputText(rephrasedText)) {
+                throw new Error('Résultat de reformulation vide ou invalide');
+            }
+
+            // Obtenir les options d'affichage
+            const options = await getDisplayOptions();
+
+            // Vérifier si l'élément actif est une zone de texte éditable
+            const activeElement = document.activeElement;
+            let replacedInEditable = false;
+
+            if (isValidElementForInsertion(activeElement)) {
+                replacedInEditable = insertTextInEditableElement(activeElement, rephrasedText);
+            }
+
+            // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
+            if (!replacedInEditable) {
+                showTranscriptionDialog(rephrasedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            }
+
+            // Cacher la bannière une fois l'opération terminée
+            hideBanner();
+
+        } catch (error) {
+            console.error('Erreur lors de la reformulation:', error);
+            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation", error.message);
+        }
+    }
+
+    /**
+     * Gère la traduction d'un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à traduire
+     * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
+     * @returns {Promise<void>}
+     */
+    /**
+     * Détermine les langues source et cible pour la traduction
+     * @param {Object} options - Options actuelles
+     * @param {string} [specifiedTargetLanguage] - Langue cible optionnelle (prioritaire)
+     * @returns {Object} - Objet contenant sourceLanguage et targetLanguage
+     */
+    function determineTranslationLanguages(options, specifiedTargetLanguage) {
+        const sourceLanguage = options.enableTranslation ? options.sourceLanguage : 'auto';
+        const targetLanguage = specifiedTargetLanguage || 
+                            (options.enableTranslation ? options.targetLanguage : 'en');
+        
+        return { sourceLanguage, targetLanguage };
+    }
+
+    /**
+     * Gère la traduction d'un texte sélectionné sans enregistrement audio
+     * @param {string} text - Le texte à traduire
+     * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
+     * @returns {Promise<void>}
+     */
+    async function handleTextTranslation(text, specifiedTargetLanguage) {
+        if (!isValidInputText(text)) {
+            console.warn("Texte vide ou invalide pour la traduction");
+            return;
+        }
+
+        try {
+            // Vérifier si l'API Key est disponible
+            await getOrFetchApiKey();
+
+            // Stocker l'élément actif avant de commencer le traitement
+            storeFocusAndSelection();
+
+            // Informer l'utilisateur que la traduction est en cours
+            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating") || "Traduction en cours...");
+
+            // Obtenir les options de traduction
+            const options = await getDisplayOptions();
+            
+            // Déterminer les langues source et cible
+            const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
+
+            // Traduire le texte en utilisant la fonction existante
+            const translatedText = await window.BabelFishAIUtils.translation.translateText(
+                text,
+                sourceLanguage,
+                targetLanguage,
+                apiKey
+            );
+
+            // Vérifier que la traduction est valide
+            if (!isValidInputText(translatedText)) {
+                throw new Error('Résultat de traduction vide ou invalide');
+            }
+
+            // Vérifier si l'élément actif est une zone de texte éditable
+            const activeElement = document.activeElement;
+            let replacedInEditable = false;
+
+            if (isValidElementForInsertion(activeElement)) {
+                replacedInEditable = insertTextInEditableElement(activeElement, translatedText);
+            }
+
+            // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
+            if (!replacedInEditable) {
+                showTranscriptionDialog(translatedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            }
+
+            // Cacher la bannière une fois l'opération terminée
+            hideBanner();
+
+        } catch (error) {
+            console.error('Erreur lors de la traduction:', error);
+            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError") || "Erreur lors de la traduction", error.message);
+        }
+    }
+
+    /**
      * Gère les messages provenant du script d'arrière-plan
      * @param {Object} message - Le message reçu
      * @param {Object} sender - L'expéditeur du message
      * @param {Function} callback - Fonction de callback pour répondre au message
      */
     function handleBackgroundMessages(message) {
-
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
@@ -1666,6 +1904,19 @@
                     startRecording();
                 } else {
                     stopRecording();
+                }
+            },
+            // Action pour la reformulation de texte sélectionné
+            rephraseSelection: () => {
+                if (message.text) {
+                    handleTextRephrasing(message.text);
+                }
+            },
+            // Action pour la traduction de texte sélectionné
+            translateSelection: () => {
+                if (message.text) {
+                    // Passer la langue cible spécifiée, si disponible
+                    handleTextTranslation(message.text, message.targetLanguage);
                 }
             }
             // Possibilité d'ajouter d'autres gestionnaires d'actions ici

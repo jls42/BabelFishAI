@@ -1,62 +1,70 @@
 {
+    "contextMenuRephrase": {
+        "message": "Omformulera markering",
+        "description": "Kontextmenyalternativ för att omformulera den markerade texten"
+    },
+    "contextMenuTranslate": {
+        "message": "Översätt markering",
+        "description": "Kontextmenyalternativ för att översätta den markerade texten"
+    },
     "recordingCanceled": {
         "message": "Inspelning avbruten (Esc-tangenten).",
         "description": "Meddelande som visas när inspelningen avbryts"
     },
     "extensionName": {
-        "message": "BabelFishAI av jls42.org",
-        "description": "Namn på tillägget"
+        "message": "BabelFishAI by jls42.org",
+        "description": "Tilläggets namn"
     },
     "extensionDescription": {
         "message": "Omvandla din röst till text med AI-driven transkription och översättning",
-        "description": "Beskrivning av tillägget"
+        "description": "Tilläggets beskrivning"
     },
     "welcomeMessage": {
-        "message": "Tack för att du installerat BabelFishAI, tillägget som omvandlar din röst till text med exceptionell precision tack vare OpenAI:s Whisper API, den nuvarande ledaren inom rösttranskription.",
+        "message": "Tack för att du installerade BabelFishAI, tillägget som omvandlar din röst till text med exceptionell noggrannhet tack vare Whisper API från OpenAI, den nuvarande ledaren inom rösttranskription.",
         "description": "Välkomstmeddelande"
     },
     "essentialSettingsTitle": {
-        "message": "Viktiga inställningar",
-        "description": "Titel på avsnittet för viktiga inställningar"
+        "message": "Grundläggande Inställningar",
+        "description": "Titel för avsnittet med grundläggande inställningar"
     },
     "advancedSettingsTitle": {
-        "message": "Avancerade inställningar",
-        "description": "Titel på avsnittet för avancerade inställningar"
+        "message": "Avancerade Inställningar",
+        "description": "Titel för avsnittet med avancerade inställningar"
     },
     "apiKeyConfigTitle": {
         "message": "OpenAI API-nyckel",
-        "description": "Titel på avsnittet för API-nyckelkonfiguration"
+        "description": "Titel för avsnittet för konfiguration av API-nyckel"
     },
     "shortcutInstructions": {
-        "message": "För att ändra genvägen kan du:",
-        "description": "Instruktioner för genvägar"
+        "message": "För att ändra kortkommandot kan du:",
+        "description": "Instruktioner för kortkommandon"
     },
     "shortcutOption1": {
-        "message": "Öppna Chrome-tilläggsinställningar:",
-        "description": "Alternativ 1 för att ändra genväg"
+        "message": "Öppna inställningarna för Chrome-tillägg:",
+        "description": "Alternativ 1 för att ändra kortkommandot"
     },
     "shortcutOption2": {
         "message": "Eller skriv i adressfältet:",
-        "description": "Alternativ 2 för att ändra genväg"
+        "description": "Alternativ 2 för att ändra kortkommandot"
     },
     "shortcutSteps": {
-        "message": "Sedan:<br>1. Hitta BabelFishAI i listan<br>2. Klicka på fältet för aktuell genväg<br>3. Tryck på den nya tangentkombinationen",
-        "description": "Steg för att ändra genväg"
+        "message": "Sedan:<br>1. Hitta BabelFishAI i listan<br>2. Klicka på fältet för det aktuella kortkommandot<br>3. Tryck på den nya tangentkombinationen",
+        "description": "Steg för att ändra kortkommandot"
     },
     "optionsTitle": {
         "message": "BabelFishAI-konfiguration",
-        "description": "Titel på optionssidan"
+        "description": "Titel för alternativsidan"
     },
     "languageSettingsTitle": {
         "message": "Gränssnittsspråk",
-        "description": "Titel på språkavsnittet"
+        "description": "Titel för språkavsnittet"
     },
     "selectLanguageLabel": {
         "message": "Välj språk:",
-        "description": "Etikett för språkval"
+        "description": "Etikett för språkväljaren"
     },
     "languageChanged": {
-        "message": "Språk ändrat framgångsrikt",
+        "message": "Språket har ändrats",
         "description": "Bekräftelsemeddelande för språkändring"
     },
     "savedMessage": {
@@ -64,16 +72,16 @@
         "description": "Bekräftelsemeddelande för sparande"
     },
     "apiKeyPlaceholder": {
-        "message": "Din OpenAI API-nyckel (sk- ...)",
-        "description": "Platshållare för API-nyckel"
+        "message": "Din OpenAI API-nyckel (sk-...)",
+        "description": "Platshållare för API-nyckeln"
     },
     "apiKeyInfo": {
         "message": "Hämta din API-nyckel på",
-        "description": "Information om hur du hämtar API-nyckel"
+        "description": "Information om hur du hämtar API-nyckeln"
     },
     "apiKeyHelp": {
-        "message": "För att använda BabelFishAI måste du ange din OpenAI API-nyckel. Denna nyckel krävs för att få tillgång till transkriptions- och översättningstjänster.",
-        "description": "Hjälp för API-nyckel"
+        "message": "För att använda BabelFishAI måste du ange din OpenAI API-nyckel. Denna nyckel krävs för att få åtkomst till transkriptions- och översättningstjänsterna.",
+        "description": "Hjälp för API-nyckeln"
     },
     "pricingInfo": {
         "message": "Mer information om prissättning (standardmodeller: {defaultAudioModel} för ljud och {defaultTranslationModel} för översättning) finns på",
@@ -81,22 +89,22 @@
     },
     "supportProject": {
         "message": "Stöd projektet via PayPal",
-        "description": "Text för PayPal-stödlänk"
+        "description": "Text för PayPal-supportlänken"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Standard Whisper API URL"
+        "description": "Standard-URL för Whisper API"
     },
     "translationApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Standard Translation API URL"
+        "description": "Standard-URL för översättnings-API"
     },
     "displaySettingsTitle": {
         "message": "Visningsinställningar",
-        "description": "Titel på visningsinställningar"
+        "description": "Titel för visningsinställningarna"
     },
     "activeDisplayLabel": {
-        "message": "Aktiv zon (tangentbordsinmatning)",
+        "message": "Aktivt område (tangentbordsinmatning)",
         "description": "Etikett för aktiv visning"
     },
     "activeDisplayDescription": {
@@ -105,22 +113,22 @@
     },
     "dialogDisplayLabel": {
         "message": "Dialogruta",
-        "description": "Etikett för dialogvisning"
+        "description": "Etikett för visning i dialogruta"
     },
     "dialogDisplayDescription": {
         "message": "Om aktiverat kommer den transkriberade/översatta texten att visas i en flytande dialogruta.",
-        "description": "Beskrivning av alternativet för dialogvisning"
+        "description": "Beskrivning av alternativet för visning i dialogruta"
     },
     "dialogDurationLabel": {
-        "message": "Dialogrutans visningstid (sekunder):",
+        "message": "Visningstid för dialogrutan (sekunder):",
         "description": "Etikett för dialogrutans varaktighet"
     },
     "dialogDurationDescription": {
-        "message": "Definierar hur länge dialogrutan förblir synlig innan den försvinner automatiskt.",
+        "message": "Anger hur länge dialogrutan förblir synlig innan den försvinner automatiskt.",
         "description": "Beskrivning av dialogrutans varaktighet"
     },
     "bannerColorsLabel": {
-        "message": "Statusbannerfärger:",
+        "message": "Färger på statusfältet:",
         "description": "Etikett för bannerfärger"
     },
     "bannerColorsDescription": {
@@ -148,12 +156,12 @@
         "description": "Etikett för opacitet"
     },
     "opacityDescription": {
-        "message": "Definierar bannerns transparens (0% = osynlig, 100% = ogenomskinlig).",
+        "message": "Anger transparensen för bannern (0% = osynlig, 100% = ogenomskinlig).",
         "description": "Beskrivning av opacitet"
     },
     "translationTitle": {
         "message": "Integrerad AI-översättning",
-        "description": "Titel på översättningsavsnittet"
+        "description": "Titel för översättningsavsnittet"
     },
     "automaticLanguage": {
         "message": "Automatisk",
@@ -172,16 +180,16 @@
         "description": "Etikett för målspråk"
     },
     "enhancementTitle": {
-        "message": "AI-textförbättring",
-        "description": "Titel på avsnittet för textförbättring"
+        "message": "AI Textförbättring",
+        "description": "Titel för avsnittet för textförbättring"
     },
     "rephraseLabel": {
         "message": "Aktivera automatisk omformulering",
-        "description": "Etikett för omformuleringsalternativ"
+        "description": "Etikett för alternativet för omformulering"
     },
     "rephraseDescription": {
-        "message": "Om aktiverat kommer den transkriberade texten att omformuleras för att förbättra dess klarhet och flyt.",
-        "description": "Beskrivning av omformuleringsalternativ"
+        "message": "Om aktiverat kommer den transkriberade texten att omformuleras för att förbättra dess tydlighet och flyt.",
+        "description": "Beskrivning av alternativet för omformulering"
     },
     "bannerRephrasing": {
         "message": "Omformulering pågår...",
@@ -192,12 +200,12 @@
         "description": "Felmeddelande för omformulering"
     },
     "translationExplanation": {
-        "message": "Den integrerade AI-översättningsfunktionen gör att du kan få en automatisk översättning av din transkriberade text.<br>För att göra detta:<br><ul><li>Källspråk: välj det språk du talar i mikrofonen.</li><li>Målspråk: välj det språk du vill att din text ska översättas till.</li></ul>Dessa inställningar påverkar endast översättningen, inte transkriptionen. Om du inaktiverar automatisk översättning kommer din text att transkriberas på det språk som talas i mikrofonen.",
+        "message": "Den integrerade AI-översättningsfunktionen gör att du kan få en automatisk översättning av din transkriberade text.<br>För att göra detta:<br><ul><li>Källspråk: välj det språk du talar i mikrofonen.</li><li>Målspråk: välj det språk du vill att din text ska översättas till.</li></ul>Dessa inställningar påverkar bara översättningen, inte transkriptionen. Om du inaktiverar automatisk översättning kommer din transkriberade text att vara på det språk som talas i mikrofonen.",
         "description": "Förklaring av översättningsavsnittet"
     },
     "expertModeTitle": {
         "message": "Expertläge",
-        "description": "Titel på expertläget"
+        "description": "Titel för expertläget"
     },
     "enableExpertModeLabel": {
         "message": "Aktivera expertläge",
@@ -209,58 +217,58 @@
     },
     "translationModelLabel": {
         "message": "Översättningsmodell:",
-        "description": "Etikett för översättningsmodell"
+        "description": "Etikett för översättningsmodellen"
     },
     "translationModelDescription": {
-        "message": "Välj den AI-modell som används för översättning. `gpt-4o-mini` är standardmodellen (bäst valuta för pengarna). `gpt-4o` erbjuder överlägsen kvalitet men är dyrare.",
-        "description": "Beskrivning av översättningsmodell"
+        "message": "Välj den AI-modell som ska användas för översättning. `gpt-4o-mini` är standardmodellen (bästa förhållandet mellan kvalitet och pris). `gpt-4o` erbjuder överlägsen kvalitet men är dyrare.",
+        "description": "Beskrivning av översättningsmodellen"
     },
     "audioModelLabel": {
         "message": "Ljudmodell:",
-        "description": "Etikett för ljudmodell"
+        "description": "Etikett för ljudmodellen"
     },
     "audioModelDescription": {
-        "message": "Välj den AI-modell som används för ljudtranskription. `whisper-1` är standardmodellen.",
-        "description": "Beskrivning av ljudmodell"
+        "message": "Välj den AI-modell som ska användas för ljudtranskription. `whisper-1` är standardmodellen.",
+        "description": "Beskrivning av ljudmodellen"
     },
     "whisperApiUrlLabel": {
         "message": "Whisper API URL:",
         "description": "Etikett för Whisper API URL"
     },
     "whisperApiUrlDescription": {
-        "message": "Tillåter att specificera en anpassad URL för Whisper-transkriptions-API:et (för avancerade användare).",
+        "message": "Gör det möjligt att ange en anpassad URL för Whisper-transkriptions-API:et (för avancerade användare).",
         "description": "Beskrivning av Whisper API URL"
     },
     "translationApiUrlLabel": {
         "message": "Översättnings-API URL:",
-        "description": "Etikett för Översättnings-API URL"
+        "description": "Etikett för översättnings-API URL"
     },
     "translationApiUrlDescription": {
-        "message": "Tillåter att specificera en anpassad URL för översättnings-API:et (för avancerade användare).",
-        "description": "Beskrivning av Översättnings-API URL"
+        "message": "Gör det möjligt att ange en anpassad URL för översättnings-API:et (för avancerade användare).",
+        "description": "Beskrivning av översättnings-API URL"
     },
     "forcedDialogDomainsLabel": {
         "message": "Domäner med tvingad dialogruta:",
         "description": "Etikett för tvingade domäner"
     },
     "forcedDialogDomainsDescription": {
-        "message": "Lista över webbplatser där transkription *alltid* kommer att visas i en dialogruta, även om alternativet 'Aktiv zon' är valt.",
+        "message": "Lista över webbplatser där transkriptionen *alltid* kommer att visas i en dialogruta, även om alternativet \"Aktivt område\" är valt.",
         "description": "Beskrivning av tvingade domäner"
     },
     "addDomainPlaceholder": {
         "message": "Exempel: chat.google.com",
-        "description": "Platshållare för domäntillägg"
+        "description": "Platshållare för att lägga till en domän"
     },
     "addDomainButton": {
         "message": "Lägg till",
-        "description": "Knapp för att lägga till domän"
+        "description": "Knapp för att lägga till en domän"
     },
     "addDomainDescription": {
         "message": "Lägger till en domän i listan.",
-        "description": "Beskrivning av domäntillägg"
+        "description": "Beskrivning av att lägga till en domän"
     },
     "forcedDialogInfo": {
-        "message": "På dessa domäner kommer transkription alltid att visas i en dialogruta",
+        "message": "På dessa domäner kommer transkriptionen alltid att visas i en dialogruta",
         "description": "Information om tvingade domäner"
     },
     "saveButton": {
@@ -268,32 +276,32 @@
         "description": "Spara-knapp"
     },
     "shortcutsTitle": {
-        "message": "Användarinstruktioner",
-        "description": "Titel på genvägar"
+        "message": "Bruksanvisning",
+        "description": "Titel för kortkommandon"
     },
     "authorSectionTitle": {
         "message": "Om författaren",
-        "description": "Titel på författarsektionen"
+        "description": "Titel för författaravsnittet"
     },
     "authorName": {
         "message": "Julien LS",
-        "description": "Författarnamn"
+        "description": "Författarens namn"
     },
     "authorRole": {
         "message": "Utvecklare och skapare av BabelFishAI",
-        "description": "Författarroll"
+        "description": "Författarens roll"
     },
     "addModelPlaceholder": {
         "message": "Lägg till en modell",
-        "description": "Platshållare för modelltillägg"
+        "description": "Platshållare för att lägga till en modell"
     },
     "addModelButton": {
         "message": "Lägg till",
-        "description": "Knapp för att lägga till modell"
+        "description": "Knapp för att lägga till en modell"
     },
     "addModelDescription": {
-        "message": "Tillåter att lägga till en anpassad modell (för avancerade användare).",
-        "description": "Beskrivning av modelltillägg"
+        "message": "Gör det möjligt att lägga till en anpassad modell (för avancerade användare).",
+        "description": "Beskrivning av att lägga till en modell"
     },
     "noLogLabel": {
         "message": "NoLog (endast LiteLLM)",
@@ -305,14 +313,14 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub-länktext"
+        "description": "GitHub link text"
     },
     "bannerRecording": {
-        "message": "Inspelning pågår... (Klicka på ikonen eller använd genvägen för att stoppa)",
+        "message": "Inspelning pågår... (Klicka på ikonen eller använd kortkommandot för att stoppa)",
         "description": "Bannermeddelande under inspelning"
     },
     "bannerTranscribing": {
-        "message": "Transkribering pågår...",
+        "message": "Transkription pågår...",
         "description": "Bannermeddelande under transkription"
     },
     "bannerTranslating": {
@@ -324,7 +332,7 @@
         "description": "Bannermeddelande under textbearbetning"
     },
     "bannerMicAccessError": {
-        "message": "Fel: mikrofonåtkomst nekad.",
+        "message": "Fel: åtkomst till mikrofonen nekad.",
         "description": "Felmeddelande för mikrofonåtkomst"
     },
     "bannerTranslationError": {
@@ -332,68 +340,68 @@
         "description": "Felmeddelande för översättning"
     },
     "useBabelFishInstructions": {
-        "message": "För att använda BabelFish AI:<br><br>1. Gå till en webbplats (t.ex. din webbmail eller en chattsida för din favorit-AI, som <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> eller <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Fäst tilläggsikonen för enkel åtkomst.<br>3. Starta/stoppa inspelning:<br>    * Klicka på tilläggsikonen <img src=\"../../../../images/icon32.png\" alt=\"Tilläggsikon\" width=\"32\" height=\"32\"> eller använd genvägen.<br>    * Tala i din mikrofon.<br>    * Klicka på ikonen igen <img src=\"../../../../images/icon32.png\" alt=\"Tilläggsikon\" width=\"32\" height=\"32\"> eller använd genvägen.<br>    * Transkriptionen visas i det aktiva textområdet eller i en dialogruta.<br><br>Tangentbordsgenvägar:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
-        "description": "Instruktioner för hur du använder tillägget"
+        "message": "För att använda BabelFish AI:<br><br>1. Gå till en webbplats (till exempel din webbmejl eller en chattsida för din favorit-AI, som <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat från Mistral AI</a> eller <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Fäst tilläggsikonen för enkel åtkomst.<br>3. Starta/stoppa inspelning:<br>    * Klicka på tilläggsikonen <img src=\"../../../../images/icon32.png\" alt=\"Tilläggsikon\" width=\"32\" height=\"32\"> eller använd kortkommandot.<br>    * Tala in i din mikrofon.<br>    * Klicka på ikonen <img src=\"../../../../images/icon32.png\" alt=\"Tilläggsikon\" width=\"32\" height=\"32\"> igen eller använd kortkommandot.<br>    * Transkriptionen visas i det aktiva textområdet eller i en dialogruta.<br><br>Kortkommandon:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "Instruktioner för att använda tillägget"
     },
     "defaultWhisperApiUrl": {
-        "message": "Standard URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Standard URL för Whisper API"
+        "message": "Standard-URL: https://api.openai.com/v1/audio/transcriptions",
+        "description": "Standard-URL för Whisper API"
     },
     "defaultTranslationApiUrl": {
-        "message": "Standard URL: https://api.openai.com/v1/chat/completions",
-        "description": "Standard URL för Translation API"
+        "message": "Standard-URL: https://api.openai.com/v1/chat/completions",
+        "description": "Standard-URL för översättnings-API"
     },
     "API_KEY_NOT_FOUND": {
-        "message": "API-nyckel inte konfigurerad. Vänligen konfigurera den i tilläggsalternativen.",
+        "message": "API-nyckel inte konfigurerad. Konfigurera den i tilläggsalternativen.",
         "description": "Felmeddelande: API-nyckel saknas"
     },
     "CHROME_STORAGE_ERROR": {
         "message": "Chrome-lagringsfel",
-        "description": "Felmeddelande: lagringsproblem"
+        "description": "Felmeddelande: Lagringsproblem"
     },
     "MIC_ACCESS_ERROR": {
         "message": "Fel: mikrofonen är inte tillgänglig.",
-        "description": "Felmeddelande: mikrofonåtkomst"
+        "description": "Felmeddelande: Mikrofonåtkomst"
     },
     "API_ERROR": {
-        "message": "Fel vid anrop av API",
-        "description": "Felmeddelande: allmänt API-anrop"
+        "message": "Fel vid anrop till API:et",
+        "description": "Felmeddelande: Allmänt API-anrop"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Fel vid transkription",
-        "description": "Felmeddelande: transkription"
+        "description": "Felmeddelande: Transkription"
     },
     "TRANSLATION_ERROR": {
         "message": "Fel vid översättning",
-        "description": "Felmeddelande: översättning"
+        "description": "Felmeddelande: Översättning"
     },
     "NO_EDITABLE_ELEMENT": {
         "message": "Inget redigerbart element hittades",
-        "description": "Felmeddelande: inget redigerbart element"
+        "description": "Felmeddelande: Inget redigerbart element"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Fel vid injektion av innehållsskript",
-        "description": "Felmeddelande: skriptinjektion"
+        "message": "Fel vid injicering av innehållsskriptet",
+        "description": "Felmeddelande: Skriptinjektion"
     },
     "NO_ACTIVE_TAB": {
         "message": "Ingen aktiv flik hittades",
-        "description": "Felmeddelande: ingen aktiv flik"
+        "description": "Felmeddelande: Ingen aktiv flik"
     },
     "MISSING_TRANSLATION_PARAMS": {
-        "message": "Översättningsparametrar saknas",
-        "description": "Felmeddelande: översättningsparametrar"
+        "message": "Saknade översättningsparametrar",
+        "description": "Felmeddelande: Översättningsparametrar"
     },
     "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Ogiltigt svarsformat för översättning",
-        "description": "Felmeddelande: översättningssvar"
+        "message": "Ogiltigt översättningssvarsformat",
+        "description": "Felmeddelande: Översättningssvar"
     },
     "bannerErrorGeneric": {
         "message": "Ett fel inträffade",
-        "description": "Generiskt felmeddelande"
+        "description": "Allmänt felmeddelande"
     },
     "shortcutChangeInstructions": {
-        "message": "⚙️ Tillägg > ⌨️ Tangentbordsgenvägar",
-        "description": "Instruktioner för att ändra tangentbordsgenväg"
+        "message": "⚙️ Tillägg > ⌨️ Kortkommandon",
+        "description": "Instruktioner för att ändra kortkommandot"
     },
     "defaultModel": {
         "message": "standard",
@@ -413,18 +421,22 @@
     },
     "closeButton": {
         "message": "Stäng",
-        "description": "Stäng knapptext"
+        "description": "Stängningsknappens text"
     },
     "copyButton": {
         "message": "Kopiera",
-        "description": "Kopiera knapptext"
+        "description": "Kopieringsknappens text"
     },
     "copySuccess": {
-        "message": "Texten kopierad!",
+        "message": "Texten har kopierats!",
         "description": "Meddelande om lyckad kopiering"
     },
     "copyError": {
         "message": "Fel vid kopiering",
         "description": "Felmeddelande vid kopiering"
+    },
+    "keepOpen": {
+        "message": "Håll öppet",
+        "description": "Text för växlingen som inaktiverar automatisk stängning"
     }
 }

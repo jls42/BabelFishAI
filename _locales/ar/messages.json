@@ -1,19 +1,27 @@
 {
+    "contextMenuRephrase": {
+        "message": "إعادة صياغة التحديد",
+        "description": "خيار قائمة السياق لإعادة صياغة النص المحدد"
+    },
+    "contextMenuTranslate": {
+        "message": "ترجمة التحديد",
+        "description": "خيار قائمة السياق لترجمة النص المحدد"
+    },
     "recordingCanceled": {
         "message": "تم إلغاء التسجيل (مفتاح Esc).",
-        "description": "رسالة تظهر عند إلغاء التسجيل"
+        "description": "الرسالة المعروضة عند إلغاء التسجيل"
     },
     "extensionName": {
-        "message": "BabelFishAI بواسطة jls42.org",
-        "description": "اسم الامتداد"
+        "message": "BabelFishAI by jls42.org",
+        "description": "اسم الإضافة"
     },
     "extensionDescription": {
         "message": "حوّل صوتك إلى نص باستخدام النسخ والترجمة المدعومين بالذكاء الاصطناعي",
-        "description": "وصف الامتداد"
+        "description": "وصف الإضافة"
     },
     "welcomeMessage": {
-        "message": "شكرًا لتثبيت BabelFishAI، الامتداد الذي يحول صوتك إلى نص بدقة استثنائية بفضل واجهة برمجة تطبيقات Whisper من OpenAI، الرائدة حاليًا في مجال النسخ الصوتي.",
-        "description": "رسالة ترحيبية"
+        "message": "شكرًا لتثبيت BabelFishAI، الإضافة التي تحول صوتك إلى نص بدقة استثنائية بفضل واجهة برمجة تطبيقات Whisper من OpenAI، الرائدة حاليًا في النسخ الصوتي.",
+        "description": "رسالة ترحيب"
     },
     "essentialSettingsTitle": {
         "message": "الإعدادات الأساسية",
@@ -24,23 +32,23 @@
         "description": "عنوان قسم الإعدادات المتقدمة"
     },
     "apiKeyConfigTitle": {
-        "message": "مفتاح API لـ OpenAI",
-        "description": "عنوان قسم تكوين مفتاح API"
+        "message": "مفتاح واجهة برمجة تطبيقات OpenAI",
+        "description": "عنوان قسم تكوين مفتاح واجهة برمجة التطبيقات"
     },
     "shortcutInstructions": {
         "message": "لتغيير الاختصار، يمكنك:",
-        "description": "تعليمات للاختصارات"
+        "description": "تعليمات الاختصارات"
     },
     "shortcutOption1": {
-        "message": "فتح إعدادات امتدادات Chrome:",
+        "message": "فتح إعدادات إضافات Chrome:",
         "description": "الخيار 1 لتغيير الاختصار"
     },
     "shortcutOption2": {
-        "message": "أو اكتب في شريط العناوين:",
+        "message": "أو اكتب في شريط العنوان:",
         "description": "الخيار 2 لتغيير الاختصار"
     },
     "shortcutSteps": {
-        "message": "ثم:<br>1. ابحث عن BabelFishAI في القائمة<br>2. انقر فوق حقل الاختصار الحالي<br>3. اضغط على المجموعة الجديدة من المفاتيح",
+        "message": "ثم :<br>1. ابحث عن BabelFishAI في القائمة<br>2. انقر على حقل الاختصار الحالي<br>3. اضغط على مجموعة المفاتيح الجديدة",
         "description": "خطوات تغيير الاختصار"
     },
     "optionsTitle": {
@@ -53,7 +61,7 @@
     },
     "selectLanguageLabel": {
         "message": "اختر اللغة:",
-        "description": "تسمية لمحدد اللغة"
+        "description": "تسمية محدد اللغة"
     },
     "languageChanged": {
         "message": "تم تغيير اللغة بنجاح",
@@ -64,23 +72,23 @@
         "description": "رسالة تأكيد الحفظ"
     },
     "apiKeyPlaceholder": {
-        "message": "مفتاح API الخاص بك في OpenAI (sk-...)",
-        "description": "عنصر نائب لمفتاح API"
+        "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
+        "description": "العنصر النائب لمفتاح واجهة برمجة التطبيقات"
     },
     "apiKeyInfo": {
-        "message": "احصل على مفتاح API الخاص بك على",
-        "description": "معلومات حول الحصول على مفتاح API"
+        "message": "احصل على مفتاح واجهة برمجة التطبيقات الخاص بك على",
+        "description": "معلومات حول الحصول على مفتاح واجهة برمجة التطبيقات"
     },
     "apiKeyHelp": {
-        "message": "لاستخدام BabelFishAI، يجب عليك إدخال مفتاح API الخاص بك في OpenAI. هذا المفتاح ضروري للوصول إلى خدمات النسخ والترجمة.",
-        "description": "مساعدة لمفتاح API"
+        "message": "لاستخدام BabelFishAI، يجب عليك إدخال مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك. هذا المفتاح ضروري للوصول إلى خدمات النسخ والترجمة.",
+        "description": "مساعدة لمفتاح واجهة برمجة التطبيقات"
     },
     "pricingInfo": {
-        "message": "مزيد من المعلومات حول التسعير (النماذج الافتراضية: {defaultAudioModel} للصوت و {defaultTranslationModel} للترجمة) متاحة على",
-        "description": "معلومات التسعير"
+        "message": "مزيد من المعلومات حول التسعير (النماذج الافتراضية: {defaultAudioModel} للصوت و {defaultTranslationModel} للترجمة) متوفرة على",
+        "description": "معلومات حول التسعير"
     },
     "supportProject": {
-        "message": "ادعم المشروع عبر PayPal",
+        "message": "دعم المشروع عبر PayPal",
         "description": "نص لرابط دعم PayPal"
     },
     "whisperApiUrlPlaceholder": {
@@ -100,39 +108,39 @@
         "description": "تسمية للعرض النشط"
     },
     "activeDisplayDescription": {
-        "message": "إذا تم التمكين، فسيتم إدراج النص المنسوخ/المترجم مباشرة في حقل النص الذي تكتب فيه.",
-        "description": "وصف لخيار العرض النشط"
+        "message": "إذا تم تمكينه، فسيتم إدراج النص المنسوخ/المترجم مباشرة في حقل النص الذي تكتب فيه.",
+        "description": "وصف خيار العرض النشط"
     },
     "dialogDisplayLabel": {
-        "message": "صندوق الحوار",
+        "message": "مربع الحوار",
         "description": "تسمية للعرض في مربع الحوار"
     },
     "dialogDisplayDescription": {
-        "message": "إذا تم التمكين، فسيظهر النص المنسوخ/المترجم في مربع حوار عائم.",
-        "description": "وصف لخيار العرض في مربع الحوار"
+        "message": "إذا تم تمكينه، فسيظهر النص المنسوخ/المترجم في مربع حوار عائم.",
+        "description": "وصف خيار العرض في مربع الحوار"
     },
     "dialogDurationLabel": {
-        "message": "مدة عرض الصندوق (ثواني):",
-        "description": "تسمية لمدة الحوار"
+        "message": "مدة عرض مربع الحوار (بالثواني):",
+        "description": "تسمية لمدة مربع الحوار"
     },
     "dialogDurationDescription": {
         "message": "يحدد المدة التي يظل فيها مربع الحوار مرئيًا قبل أن يختفي تلقائيًا.",
-        "description": "وصف لمدة الحوار"
+        "description": "وصف مدة مربع الحوار"
     },
     "bannerColorsLabel": {
         "message": "ألوان شريط الحالة:",
         "description": "تسمية لألوان الشريط"
     },
     "bannerColorsDescription": {
-        "message": "ألوان الشريط الذي يظهر في أسفل الشاشة أثناء التسجيل والنسخ والترجمة.",
-        "description": "وصف لألوان الشريط"
+        "message": "ألوان الشريط الذي يظهر أسفل الشاشة أثناء التسجيل والنسخ والترجمة.",
+        "description": "وصف ألوان الشريط"
     },
     "startColorLabel": {
         "message": "لون البداية:",
         "description": "تسمية للون البداية"
     },
     "startColorDescription": {
-        "message": "لون البداية لتدرج الشريط.",
+        "message": "لون بداية تدرج الشريط.",
         "description": "وصف لون البداية"
     },
     "endColorLabel": {
@@ -140,59 +148,59 @@
         "description": "تسمية للون النهاية"
     },
     "endColorDescription": {
-        "message": "لون النهاية لتدرج الشريط.",
+        "message": "لون نهاية تدرج الشريط.",
         "description": "وصف لون النهاية"
     },
     "opacityLabel": {
-        "message": "% التعتيم",
-        "description": "تسمية للتعتيم"
+        "message": "% العتامة",
+        "description": "تسمية للعتامة"
     },
     "opacityDescription": {
-        "message": "يحدد شفافية الشريط (0٪ = غير مرئي، 100٪ = معتم).",
-        "description": "وصف للتعتيم"
+        "message": "يحدد شفافية الشريط (0% = غير مرئي، 100% = معتم).",
+        "description": "وصف العتامة"
     },
     "translationTitle": {
-        "message": "ترجمة الذكاء الاصطناعي المدمجة",
+        "message": "الترجمة المتكاملة بالذكاء الاصطناعي",
         "description": "عنوان قسم الترجمة"
     },
     "automaticLanguage": {
         "message": "تلقائي",
-        "description": "خيار اللغة التلقائية"
+        "description": "خيار اللغة التلقائي"
     },
     "enableTranslationLabel": {
-        "message": "تفعيل الترجمة التلقائية",
-        "description": "تسمية لتفعيل الترجمة"
+        "message": "تمكين الترجمة التلقائية",
+        "description": "تسمية لتمكين الترجمة"
     },
     "sourceLanguageLabel": {
-        "message": "لغة المصدر:",
+        "message": "اللغة المصدر:",
         "description": "تسمية للغة المصدر"
     },
     "targetLanguageLabel": {
-        "message": "اللغة المستهدفة:",
-        "description": "تسمية للغة المستهدفة"
+        "message": "اللغة الهدف:",
+        "description": "تسمية للغة الهدف"
     },
     "enhancementTitle": {
-        "message": "تحسين نص الذكاء الاصطناعي",
+        "message": "تحسين النص بالذكاء الاصطناعي",
         "description": "عنوان قسم تحسين النص"
     },
     "rephraseLabel": {
-        "message": "تفعيل إعادة الصياغة التلقائية",
+        "message": "تمكين إعادة الصياغة التلقائية",
         "description": "تسمية لخيار إعادة الصياغة"
     },
     "rephraseDescription": {
-        "message": "إذا تم التمكين، فسيتم إعادة صياغة النص المنسوخ لتحسين وضوحه وسلاسته.",
-        "description": "وصف لخيار إعادة الصياغة"
+        "message": "إذا تم تمكينه، فسيتم إعادة صياغة النص المنسوخ لتحسين وضوحه وسلاسته.",
+        "description": "وصف خيار إعادة الصياغة"
     },
     "bannerRephrasing": {
-        "message": "إعادة الصياغة قيد التقدم...",
+        "message": "جارٍ إعادة الصياغة...",
         "description": "رسالة الشريط أثناء إعادة الصياغة"
     },
     "bannerRephrasingError": {
-        "message": "خطأ أثناء إعادة الصياغة",
+        "message": "حدث خطأ أثناء إعادة الصياغة",
         "description": "رسالة خطأ لإعادة الصياغة"
     },
     "translationExplanation": {
-        "message": "تتيح لك وظيفة ترجمة الذكاء الاصطناعي المدمجة الحصول على ترجمة تلقائية لنصك المنسوخ.<br>للقيام بذلك:<br><ul><li>لغة المصدر: حدد اللغة التي تتحدث بها في الميكروفون.</li><li>اللغة المستهدفة: اختر اللغة التي تريد ترجمة النص إليها.</li></ul>هذه الإعدادات تؤثر فقط على الترجمة، وليس النسخ. إذا قمت بتعطيل الترجمة التلقائية، فسيتم نسخ النص الخاص بك باللغة المنطوقة في الميكروفون.",
+        "message": "تتيح لك ميزة الترجمة المتكاملة بالذكاء الاصطناعي الحصول على ترجمة تلقائية للنص المنسوخ.<br>للقيام بذلك:<br><ul><li>اللغة المصدر: حدد اللغة التي تتحدث بها في الميكروفون.</li><li>اللغة الهدف: اختر اللغة التي تريد ترجمة النص إليها.</li></ul>تؤثر هذه الإعدادات على الترجمة فقط، وليس النسخ. إذا قمت بتعطيل الترجمة التلقائية، فسيتم نسخ النص باللغة التي تتحدث بها في الميكروفون.",
         "description": "شرح قسم الترجمة"
     },
     "expertModeTitle": {
@@ -200,28 +208,28 @@
         "description": "عنوان وضع الخبير"
     },
     "enableExpertModeLabel": {
-        "message": "تفعيل وضع الخبير",
-        "description": "تسمية لتفعيل وضع الخبير"
+        "message": "تمكين وضع الخبير",
+        "description": "تسمية لتمكين وضع الخبير"
     },
     "enableExpertModeDescription": {
         "message": "يفتح خيارات التكوين المتقدمة للمستخدمين ذوي الخبرة.",
-        "description": "وصف لخيار وضع الخبير"
+        "description": "وصف خيار وضع الخبير"
     },
     "translationModelLabel": {
         "message": "نموذج الترجمة:",
         "description": "تسمية لنموذج الترجمة"
     },
     "translationModelDescription": {
-        "message": "اختر نموذج الذكاء الاصطناعي المستخدم للترجمة. `gpt-4o-mini` هو النموذج الافتراضي (أفضل قيمة مقابل المال). `gpt-4o` يقدم جودة فائقة ولكنه أكثر تكلفة.",
-        "description": "وصف لنموذج الترجمة"
+        "message": "اختر نموذج الذكاء الاصطناعي المستخدم للترجمة. `gpt-4o-mini` هو النموذج الافتراضي (أفضل نسبة جودة/سعر). `gpt-4o` يقدم جودة فائقة ولكنه أكثر تكلفة.",
+        "description": "وصف نموذج الترجمة"
     },
     "audioModelLabel": {
         "message": "نموذج الصوت:",
         "description": "تسمية لنموذج الصوت"
     },
     "audioModelDescription": {
-        "message": "اختر نموذج الذكاء الاصطناعي المستخدم لنسخ الصوت. `whisper-1` هو النموذج الافتراضي.",
-        "description": "وصف لنموذج الصوت"
+        "message": "اختر نموذج الذكاء الاصطناعي المستخدم للنسخ الصوتي. `whisper-1` هو النموذج الافتراضي.",
+        "description": "وصف نموذج الصوت"
     },
     "whisperApiUrlLabel": {
         "message": "عنوان URL لواجهة برمجة تطبيقات Whisper:",
@@ -229,7 +237,7 @@
     },
     "whisperApiUrlDescription": {
         "message": "يسمح بتحديد عنوان URL مخصص لواجهة برمجة تطبيقات النسخ Whisper (للمستخدمين المتقدمين).",
-        "description": "وصف لعنوان URL لواجهة برمجة تطبيقات Whisper"
+        "description": "وصف عنوان URL لواجهة برمجة تطبيقات Whisper"
     },
     "translationApiUrlLabel": {
         "message": "عنوان URL لواجهة برمجة تطبيقات الترجمة:",
@@ -237,31 +245,31 @@
     },
     "translationApiUrlDescription": {
         "message": "يسمح بتحديد عنوان URL مخصص لواجهة برمجة تطبيقات الترجمة (للمستخدمين المتقدمين).",
-        "description": "وصف لعنوان URL لواجهة برمجة تطبيقات الترجمة"
+        "description": "وصف عنوان URL لواجهة برمجة تطبيقات الترجمة"
     },
     "forcedDialogDomainsLabel": {
-        "message": "النطاقات ذات مربع الحوار الإجباري:",
-        "description": "تسمية للنطاقات الإجبارية"
+        "message": "المجالات ذات مربع الحوار القسري:",
+        "description": "تسمية للمجالات المفروضة"
     },
     "forcedDialogDomainsDescription": {
-        "message": "قائمة مواقع الويب حيث سيظهر النسخ *دائمًا* في مربع حوار، حتى إذا تم تحديد خيار 'المنطقة النشطة'.",
-        "description": "وصف للنطاقات الإجبارية"
+        "message": "قائمة مواقع الويب التي سيظهر فيها النسخ *دائمًا* في مربع حوار، حتى إذا تم تحديد خيار 'المنطقة النشطة'.",
+        "description": "وصف المجالات المفروضة"
     },
     "addDomainPlaceholder": {
         "message": "مثال: chat.google.com",
-        "description": "عنصر نائب لإضافة نطاق"
+        "description": "العنصر النائب لإضافة مجال"
     },
     "addDomainButton": {
         "message": "إضافة",
-        "description": "زر لإضافة نطاق"
+        "description": "زر لإضافة مجال"
     },
     "addDomainDescription": {
-        "message": "يضيف نطاقًا إلى القائمة.",
-        "description": "وصف لإضافة نطاق"
+        "message": "إضافة مجال إلى القائمة.",
+        "description": "وصف إضافة مجال"
     },
     "forcedDialogInfo": {
-        "message": "في هذه النطاقات، سيظهر النسخ دائمًا في مربع حوار",
-        "description": "معلومات حول النطاقات الإجبارية"
+        "message": "في هذه المجالات، سيظهر النسخ دائمًا في مربع حوار",
+        "description": "معلومات حول المجالات المفروضة"
     },
     "saveButton": {
         "message": "حفظ",
@@ -276,7 +284,7 @@
         "description": "عنوان قسم المؤلف"
     },
     "authorName": {
-        "message": "جوليان LS",
+        "message": "Julien LS",
         "description": "اسم المؤلف"
     },
     "authorRole": {
@@ -285,7 +293,7 @@
     },
     "addModelPlaceholder": {
         "message": "إضافة نموذج",
-        "description": "عنصر نائب لإضافة نموذج"
+        "description": "العنصر النائب لإضافة نموذج"
     },
     "addModelButton": {
         "message": "إضافة",
@@ -293,22 +301,22 @@
     },
     "addModelDescription": {
         "message": "يسمح بإضافة نموذج مخصص (للمستخدمين المتقدمين).",
-        "description": "وصف لإضافة نموذج"
+        "description": "وصف إضافة نموذج"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM فقط)",
-        "description": "تسمية لخيار NoLog"
+        "description": "Label for the NoLog option"
     },
     "noLogDescription": {
         "message": "إذا تم تحديده، فلن يتم الاحتفاظ بأي بيانات بواسطة خدمة LiteLLM.",
-        "description": "وصف لخيار NoLog"
+        "description": "وصف خيار NoLog"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "نص رابط GitHub"
+        "description": "GitHub link text"
     },
     "bannerRecording": {
-        "message": "التسجيل قيد التقدم... (انقر فوق الرمز أو استخدم الاختصار للإيقاف)",
+        "message": "التسجيل قيد التقدم... (انقر على الأيقونة أو استخدم الاختصار للإيقاف)",
         "description": "رسالة الشريط أثناء التسجيل"
     },
     "bannerTranscribing": {
@@ -328,55 +336,55 @@
         "description": "رسالة خطأ للوصول إلى الميكروفون"
     },
     "bannerTranslationError": {
-        "message": "خطأ أثناء الترجمة.",
+        "message": "حدث خطأ أثناء الترجمة.",
         "description": "رسالة خطأ للترجمة"
     },
     "useBabelFishInstructions": {
-        "message": "لاستخدام BabelFish AI:<br><br>1. انتقل إلى موقع ويب (على سبيل المثال، بريدك الإلكتروني على الويب أو موقع دردشة الذكاء الاصطناعي المفضل لديك، مثل <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> أو <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. قم بتثبيت رمز الامتداد للوصول السهل.<br>3. بدء/إيقاف التسجيل:<br>    * انقر فوق رمز الامتداد <img src=\"../../../../images/icon32.png\" alt=\"رمز الامتداد\" width=\"32\" height=\"32\"> أو استخدم الاختصار.<br>    * تحدث في الميكروفون الخاص بك.<br>    * انقر فوق الرمز مرة أخرى <img src=\"../../../../images/icon32.png\" alt=\"رمز الامتداد\" width=\"32\" height=\"32\"> أو استخدم الاختصار.<br>    * سيظهر النسخ في منطقة النص النشطة أو في مربع حوار.<br><br>اختصارات لوحة المفاتيح:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
-        "description": "تعليمات استخدام الامتداد"
+        "message": "لاستخدام BabelFish AI:<br><br>1. انتقل إلى موقع ويب (على سبيل المثال، بريدك الإلكتروني على الويب أو موقع دردشة الذكاء الاصطناعي المفضل لديك، مثل <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> أو <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. قم بتثبيت أيقونة الإضافة لسهولة الوصول إليها.<br>3. بدء/إيقاف التسجيل:<br>    * انقر على أيقونة الإضافة <img src=\"../../../../images/icon32.png\" alt=\"أيقونة الإضافة\" width=\"32\" height=\"32\"> أو استخدم اختصار لوحة المفاتيح.<br>    * تحدث في الميكروفون الخاص بك.<br>    * انقر على الأيقونة <img src=\"../../../../images/icon32.png\" alt=\"أيقونة الإضافة\" width=\"32\" height=\"32\"> مرة أخرى أو استخدم اختصار لوحة المفاتيح.<br>    * سيظهر النسخ في مربع النص النشط أو في مربع حوار.<br><br>اختصارات لوحة المفاتيح:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "تعليمات استخدام الإضافة"
     },
     "defaultWhisperApiUrl": {
-        "message": "عنوان URL الافتراضي: https://api.openai.com/v1/audio/transcriptions",
-        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات Whisper"
+        "message": "URL الافتراضي: https://api.openai.com/v1/audio/transcriptions",
+        "description": "URL الافتراضي لواجهة برمجة تطبيقات Whisper"
     },
     "defaultTranslationApiUrl": {
-        "message": "عنوان URL الافتراضي: https://api.openai.com/v1/chat/completions",
-        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات الترجمة"
+        "message": "URL الافتراضي: https://api.openai.com/v1/chat/completions",
+        "description": "URL الافتراضي لواجهة برمجة تطبيقات الترجمة"
     },
     "API_KEY_NOT_FOUND": {
-        "message": "مفتاح API غير مكون. يرجى تكوينه في خيارات الامتداد.",
-        "description": "رسالة خطأ: مفتاح API مفقود"
+        "message": "لم يتم تكوين مفتاح واجهة برمجة التطبيقات. يرجى تكوينه في خيارات الإضافة.",
+        "description": "رسالة خطأ: مفتاح واجهة برمجة التطبيقات مفقود"
     },
     "CHROME_STORAGE_ERROR": {
         "message": "خطأ في تخزين Chrome",
         "description": "رسالة خطأ: مشكلة في التخزين"
     },
     "MIC_ACCESS_ERROR": {
-        "message": "خطأ: الميكروفون غير متاح.",
+        "message": "خطأ: لا يمكن الوصول إلى الميكروفون.",
         "description": "رسالة خطأ: الوصول إلى الميكروفون"
     },
     "API_ERROR": {
-        "message": "خطأ أثناء استدعاء واجهة برمجة التطبيقات",
-        "description": "رسالة خطأ: استدعاء واجهة برمجة تطبيقات عام"
+        "message": "حدث خطأ أثناء استدعاء واجهة برمجة التطبيقات",
+        "description": "رسالة خطأ: استدعاء واجهة برمجة التطبيقات العام"
     },
     "TRANSCRIPTION_ERROR": {
-        "message": "خطأ أثناء النسخ",
+        "message": "حدث خطأ أثناء النسخ",
         "description": "رسالة خطأ: النسخ"
     },
     "TRANSLATION_ERROR": {
-        "message": "خطأ أثناء الترجمة",
+        "message": "حدث خطأ أثناء الترجمة",
         "description": "رسالة خطأ: الترجمة"
     },
     "NO_EDITABLE_ELEMENT": {
-        "message": "لم يتم العثور على أي عنصر قابل للتحرير",
+        "message": "لم يتم العثور على عنصر قابل للتحرير",
         "description": "رسالة خطأ: لا يوجد عنصر قابل للتحرير"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "خطأ أثناء حقن البرنامج النصي للمحتوى",
+        "message": "حدث خطأ أثناء حقن البرنامج النصي للمحتوى",
         "description": "رسالة خطأ: حقن البرنامج النصي"
     },
     "NO_ACTIVE_TAB": {
-        "message": "لم يتم العثور على أي علامة تبويب نشطة",
+        "message": "لم يتم العثور على علامة تبويب نشطة",
         "description": "رسالة خطأ: لا توجد علامة تبويب نشطة"
     },
     "MISSING_TRANSLATION_PARAMS": {
@@ -392,7 +400,7 @@
         "description": "رسالة خطأ عامة"
     },
     "shortcutChangeInstructions": {
-        "message": "⚙️ الامتدادات > ⌨️ اختصارات لوحة المفاتيح",
+        "message": "⚙️ الإضافات > ⌨️ اختصارات لوحة المفاتيح",
         "description": "تعليمات لتغيير اختصار لوحة المفاتيح"
     },
     "defaultModel": {
@@ -408,7 +416,7 @@
         "description": "نموذج الترجمة الافتراضي"
     },
     "dialogTitle": {
-        "message": "نسخ BabelFishAI",
+        "message": "BabelFishAI Transcription",
         "description": "عنوان مربع الحوار"
     },
     "closeButton": {
@@ -424,7 +432,11 @@
         "description": "رسالة نجاح النسخ"
     },
     "copyError": {
-        "message": "خطأ أثناء النسخ",
-        "description": "رسالة خطأ في النسخ"
+        "message": "حدث خطأ أثناء النسخ",
+        "description": "رسالة خطأ النسخ"
+    },
+    "keepOpen": {
+        "message": "إبقاء مفتوح",
+        "description": "نص للتبديل الذي يعطل الإغلاق التلقائي"
     }
 }
