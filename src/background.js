@@ -1,4 +1,5 @@
 // Service worker de l'extension BabelFishAI
+/* global chrome */
 
 // Configuration spécifique au service worker
 const SERVICE_WORKER_CONFIG = {

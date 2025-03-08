@@ -134,6 +134,63 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Configure les classes CSS de la bannière en fonction du type
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de message ('info' ou 'error')
+     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     */
+    function setBannerClasses(banner, type, isRecording) {
+        // Réinitialiser les classes
+        banner.className = 'whisper-status-banner';
+        
+        // Appliquer les classes spécifiques
+        if (type === MESSAGE_TYPES.ERROR) {
+            banner.classList.add('error');
+        } else if (isRecording) {
+            banner.classList.add('recording');
+        }
+    }
+    
+    /**
+     * Configure l'animation de la bannière
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de message
+     */
+    function setupBannerAnimation(banner, type) {
+        banner.style.animation = 'none';
+        // Forcer un reflow pour réinitialiser l'animation
+        void banner.offsetWidth; // skipcq: JS-0098
+        banner.style.animation = type === MESSAGE_TYPES.ERROR ?
+            'bannerPulse 0.5s ease-in-out' :
+            'bannerFadeIn 0.3s ease-in-out';
+    }
+    
+    /**
+     * Rend la bannière visible et ajuste le layout de la page
+     * @param {HTMLElement} banner - L'élément bannière
+     */
+    function showBannerElement(banner) {
+        // Rendre la bannière visible
+        banner.style.display = 'flex';
+        
+        // Ajouter le padding au body pour éviter le chevauchement
+        if (document.body) {
+            document.body.style.paddingTop = '35px';
+        }
+    }
+    
+    /**
+     * Met à jour la couleur de la bannière si nécessaire
+     * @param {string} type - Le type de message
+     * @param {Function} [updateColorCallback] - Callback pour la mise à jour
+     */
+    function updateBannerColorIfNeeded(type, updateColorCallback) {
+        if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
+            updateColorCallback();
+        }
+    }
+
+    /**
      * Affiche la bannière avec un message et accessibilité améliorée
      * @param {HTMLElement} banner - L'élément bannière
      * @param {string} text - Le message à afficher
@@ -150,45 +207,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Mettre à jour le texte de la bannière
+            // 1. Mettre à jour le texte
             updateBannerText(banner, text);
 
-            // Mettre à jour les classes de la bannière
-            banner.className = 'whisper-status-banner';
-            
-            // Réinitialiser les classes
-            banner.classList.remove('error', 'recording');
+            // 2. Configurer les classes CSS
+            setBannerClasses(banner, type, isRecording);
 
-            // Configurer l'accessibilité
+            // 3. Configurer l'accessibilité
             setupBannerAccessibility(banner, type, isRecording, text);
 
-            // Appliquer les classes spécifiques
-            if (type === MESSAGE_TYPES.ERROR) {
-                banner.classList.add('error');
-            } else if (isRecording) {
-                banner.classList.add('recording');
-            }
+            // 4. Configurer l'animation
+            setupBannerAnimation(banner, type);
 
-            // Ajouter une animation pour attirer l'attention
-            banner.style.animation = 'none';
-            // Forcer un reflow pour réinitialiser l'animation
-            void banner.offsetWidth; // skipcq: JS-0098
-            banner.style.animation = type === MESSAGE_TYPES.ERROR ?
-                'bannerPulse 0.5s ease-in-out' :
-                'bannerFadeIn 0.3s ease-in-out';
+            // 5. Rendre la bannière visible
+            showBannerElement(banner);
 
-            // Rendre la bannière visible (utiliser flex au lieu de block pour la compatibilité)
-            banner.style.display = 'flex';
-            
-            // Ajouter le padding au body quand la bannière est affichée
-            if (document.body) {
-                document.body.style.paddingTop = '35px';
-            }
-
-            // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
-            if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
-                updateColorCallback();
-            }
+            // 6. Mettre à jour la couleur si nécessaire
+            updateBannerColorIfNeeded(type, updateColorCallback);
             
             return true;
         } catch (error) {
