@@ -52,7 +52,7 @@
     let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
     
     // Variable pour stocker les informations de focus et de sélection
-    let lastFocusInfo = {
+    const lastFocusInfo = {
         element: null,
         selectionStart: 0,
         selectionEnd: 0,
@@ -868,7 +868,7 @@
             );
 
             // Vérifier que la reformulation est valide
-            if (rephrasedText && rephrasedText.trim()) {
+            if (rephrasedText?.trim()) {
                 // Cacher la bannière une fois la reformulation terminée
                 hideBanner();
                 return rephrasedText;
@@ -1217,7 +1217,7 @@
             console.error("Error inserting text into input:", error);
             
             // Toujours s'assurer que l'élément est réactivé en cas d'erreur
-            if (element && element.disabled) {
+            if (element?.disabled) {
                 element.disabled = false;
             }
             
@@ -1268,15 +1268,13 @@
         
         // Fonction pour mettre à jour le libellé avec la traduction
         const updateButtonLabel = () => {
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n) {
-                const translated = window.BabelFishAIUtils.i18n.getMessage(i18nKey);
-                if (translated) {
-                    // Enlever le mot "Activer" ou "Enable" du début
-                    const simplifiedText = translated
-                        .replace(/^Activer (la )?/i, '')
-                        .replace(/^Enable /i, '');
-                    textSpan.textContent = simplifiedText;
-                }
+            const translated = window.BabelFishAIUtils?.i18n?.getMessage(i18nKey);
+            if (translated) {
+                // Enlever le mot "Activer" ou "Enable" du début
+                const simplifiedText = translated
+                    .replace(/^Activer (la )?/i, '')
+                    .replace(/^Enable /i, '');
+                textSpan.textContent = simplifiedText;
             }
         };
         
@@ -1305,11 +1303,10 @@
         
         // Mettre à jour le libellé avec i18n
         const updateLabel = () => {
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n) {
-                const translated = window.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
-                if (translated) label.textContent = translated;
-            }
+            const translated = window.BabelFishAIUtils?.i18n?.getMessage("targetLanguageLabel");
+            if (translated) label.textContent = translated;
         };
+        
         
         updateLabel();
         document.addEventListener('babelfishai:i18n-loaded', updateLabel);
@@ -1330,7 +1327,7 @@
     function initializeLanguageSelector(languageSelect) {
         // Récupérer les options des langues
         chrome.runtime.sendMessage({ action: 'getTargetLanguageOptions' }, response => {
-            if (response && response.options) {
+            if (response?.options) {
                 populateLanguageSelect(languageSelect, response.options);
             } else {
                 // Fallback: utiliser le module languages ou charger depuis le stockage
@@ -1367,7 +1364,7 @@
      * @param {HTMLSelectElement} select - Le sélecteur à remplir
      */
     function populateLanguageFromStorage(select) {
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.languages) {
+        if (window.BabelFishAIUtils?.languages) {
             chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
                 window.BabelFishAIUtils.languages.populateLanguageSelect(select, items.targetLanguage);
             });
@@ -1807,7 +1804,9 @@
                             container.style.overflow = 'hidden';
                             
                             // Masquer complètement après l'animation
-                            setTimeout(() => container.style.display = 'none', 300);
+                            setTimeout(() => {
+                                container.style.display = 'none';
+                            }, 300);
                         }
                     }
                 }

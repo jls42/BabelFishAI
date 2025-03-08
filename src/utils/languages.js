@@ -1,8 +1,9 @@
 // Utilitaire de gestion des langues pour BabelFishAI
+'use strict';
+
 window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
 (function (exports) {
-    'use strict';
 
     // Liste des langues disponibles pour la traduction
     const availableLanguages = [

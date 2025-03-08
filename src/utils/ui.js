@@ -486,12 +486,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function removeTranscriptionElement(transcriptionElement) {
         try {
             // Vérifier si l'élément existe toujours et est valide avant de le supprimer
-            if (transcriptionElement && transcriptionElement.parentNode) {
-                try {
-                    transcriptionElement.parentNode.removeChild(transcriptionElement);
-                } catch (e) {
-                    console.warn("Erreur lors de la suppression de l'élément:", e);
-                }
+            try {
+                transcriptionElement?.parentNode?.removeChild(transcriptionElement);
+            } catch (e) {
+                console.warn("Erreur lors de la suppression de l'élément:", e);
             }
     
             // Récupérer à nouveau le conteneur pour éviter les problèmes si le DOM a changé
