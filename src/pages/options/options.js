@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     interfaceLanguageSelect.value = currentLang;
 
     // Charger les options sauvegardées
-    async function loadOptions() {
+    function loadOptions() {
         chrome.storage.sync.get({
             apiKey: '',
             activeDisplay: true,

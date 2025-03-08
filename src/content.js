@@ -833,7 +833,7 @@
      * Récupère les options d'affichage et de traduction depuis le stockage
      * @returns {Promise<Object>} Les options d'affichage, de traduction et de reformulation
      */
-    async function getDisplayOptions() {
+    function getDisplayOptions() {
         return window.BabelFishAIUtils.api.getFromStorage({
             activeDisplay: true,
             dialogDisplay: false,
