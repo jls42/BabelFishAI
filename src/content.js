@@ -105,7 +105,7 @@
         
         try {
             // Vérifier que l'élément existe toujours dans le DOM de manière sécurisée
-            return document.body && document.body.contains(lastFocusInfo.element);
+            return document.body?.contains(lastFocusInfo.element);
         } catch (e) {
             lastFocusInfo.element = null;
             return false;
@@ -1414,7 +1414,7 @@
      * @param {HTMLSelectElement} languageSelect - Sélecteur de langue
      * @param {HTMLElement} languageContainer - Conteneur du sélecteur de langue
      */
-    function setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer) {
+    function setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer) { // skipcq: JS-0128
         // Événements pour le bouton de reformulation
         rephraseButton.addEventListener('mousedown', storeFocusAndSelection);
         rephraseButton.addEventListener('click', () => {
@@ -1425,7 +1425,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log("Reformulation " + (newState ? "activée" : "désactivée") + " depuis le bandeau");
+            console.log(`Reformulation ${newState ? "activée" : "désactivée"} depuis le bandeau`);
         });
         
         // Événements pour le bouton de traduction
@@ -1438,7 +1438,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log("Traduction " + (newState ? "activée" : "désactivée") + " depuis le bandeau");
+            console.log(`Traduction ${newState ? "activée" : "désactivée"} depuis le bandeau`);
         });
         
         // Événements pour le sélecteur de langue
@@ -1448,7 +1448,7 @@
                 setTimeout(() => restoreFocusAndSelection(true, true), 300);
             });
             
-            console.log("Langue cible changée en " + languageSelect.value + " depuis le bandeau");
+            console.log(`Langue cible changée en ${languageSelect.value} depuis le bandeau`);
         });
         
         languageSelect.addEventListener('blur', () => {
