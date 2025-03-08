@@ -78,6 +78,62 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     // Suppression complète des notifications sonores
 
     /**
+     * Configure le contenu textuel de la bannière
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} text - Le message à afficher
+     * @returns {HTMLElement|null} - Le conteneur de texte mis à jour ou null
+     */
+    function updateBannerText(banner, text) {
+        // Trouver le conteneur de texte
+        const statusTextContainer = banner.querySelector('.whisper-status-text');
+        if (statusTextContainer) {
+            statusTextContainer.textContent = text;
+            
+            // Adapter le style du texte en fonction du contenu et des contrôles
+            const controlsContainer = banner.querySelector('.whisper-controls-container');
+            if (controlsContainer && controlsContainer.offsetWidth > 0) {
+                // Si les contrôles sont visibles, limiter la largeur du texte
+                statusTextContainer.style.maxWidth = `${Math.max(200, window.innerWidth - controlsContainer.offsetWidth - 80)}px`;
+                
+                // Gérer l'overflow du texte s'il est trop long
+                if (text.length > 50) {
+                    statusTextContainer.style.textOverflow = 'ellipsis';
+                    statusTextContainer.style.overflow = 'hidden';
+                    statusTextContainer.style.whiteSpace = 'nowrap';
+                }
+            } else {
+                // Si les contrôles ne sont pas visibles, pas de limite de largeur
+                statusTextContainer.style.maxWidth = 'none';
+            }
+            return statusTextContainer;
+        } else {
+            // Si le conteneur n'existe pas (ancien format de bannière), utiliser la bannière directement
+            banner.textContent = text;
+            return null;
+        }
+    }
+    
+    /**
+     * Configure les attributs d'accessibilité de la bannière
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de message ('info' ou 'error')
+     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
+     * @param {string} text - Le message affiché
+     */
+    function setupBannerAccessibility(banner, type, isRecording, text) {
+        // Définir les attributs ARIA pour l'accessibilité
+        banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
+        banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
+
+        // Appliquer les attributs spécifiques au type
+        if (type === MESSAGE_TYPES.ERROR) {
+            banner.setAttribute('aria-atomic', 'true');
+        } else if (isRecording) {
+            banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
+        }
+    }
+
+    /**
      * Affiche la bannière avec un message et accessibilité améliorée
      * @param {HTMLElement} banner - L'élément bannière
      * @param {string} text - Le message à afficher
@@ -94,34 +150,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Mettre à jour le texte dans le conteneur dédié
-            const statusTextContainer = banner.querySelector('.whisper-status-text');
-            if (statusTextContainer) {
-                statusTextContainer.textContent = text;
-            } else {
-                // Si le conteneur n'existe pas (ancien format de bannière), utiliser la bannière directement
-                banner.textContent = text;
-            }
-            
-            // S'assurer que le texte reste visible avec les contrôles en ajustant sa largeur max
-            if (statusTextContainer) {
-                // Adapter le style du texte en fonction du contenu et des contrôles
-                const controlsContainer = banner.querySelector('.whisper-controls-container');
-                if (controlsContainer && controlsContainer.offsetWidth > 0) {
-                    // Si les contrôles sont visibles, limiter la largeur du texte
-                    statusTextContainer.style.maxWidth = `${Math.max(200, window.innerWidth - controlsContainer.offsetWidth - 80)}px`;
-                    
-                    // Gérer l'overflow du texte s'il est trop long
-                    if (text.length > 50) {
-                        statusTextContainer.style.textOverflow = 'ellipsis';
-                        statusTextContainer.style.overflow = 'hidden';
-                        statusTextContainer.style.whiteSpace = 'nowrap';
-                    }
-                } else {
-                    // Si les contrôles ne sont pas visibles, pas de limite de largeur
-                    statusTextContainer.style.maxWidth = 'none';
-                }
-            }
+            // Mettre à jour le texte de la bannière
+            updateBannerText(banner, text);
 
             // Mettre à jour les classes de la bannière
             banner.className = 'whisper-status-banner';
@@ -129,17 +159,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Réinitialiser les classes
             banner.classList.remove('error', 'recording');
 
-            // Définir les attributs ARIA pour l'accessibilité
-            banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
-            banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
+            // Configurer l'accessibilité
+            setupBannerAccessibility(banner, type, isRecording, text);
 
-            // Appliquer les classes et attributs appropriés
+            // Appliquer les classes spécifiques
             if (type === MESSAGE_TYPES.ERROR) {
                 banner.classList.add('error');
-                banner.setAttribute('aria-atomic', 'true');
             } else if (isRecording) {
                 banner.classList.add('recording');
-                banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
             }
 
             // Ajouter une animation pour attirer l'attention
@@ -159,7 +186,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Mettre à jour la couleur uniquement si ce n'est pas un message d'erreur
-            // et si un callback de mise à jour est fourni
             if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
                 updateColorCallback();
             }

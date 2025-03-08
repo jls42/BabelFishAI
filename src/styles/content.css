@@ -18,9 +18,9 @@
 
 /* Bannière d'état */
 .whisper-status-banner {
-    display: flex;
+    display: none; /* Par défaut caché, sera modifié en 'flex' par JS */
     padding: 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(104, 64, 84, 0.3);
     overflow: hidden; /* Pour les animations */
     position: fixed; /* Pour le garder visible */
     left: 0;
@@ -35,8 +35,6 @@
     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
-    display: none;
-    box-shadow: 0 2px 8px rgba(104, 64, 84, 0.3);
     transition: background 0.3s ease;
 }
 
@@ -207,7 +205,6 @@
 .whisper-language-select {
     font-size: 11px;
     padding: 2px 10px;
-    border: none;
     background: rgba(255, 255, 255, 0.3);
     color: white;
     border-radius: 10px;

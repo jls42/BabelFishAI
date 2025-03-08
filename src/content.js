@@ -95,149 +95,158 @@
     }
 
     /**
-     * Restaure le focus et la sélection après l'interaction avec les boutons
-     * @param {boolean} [force=false] - Forcer la restauration même si l'élément actif semble correct
-     * @param {boolean} [preventSelection=false] - Empêcher la sélection, mettre le curseur à la fin du contenu
+     * Vérifie la validité de l'élément stocké pour le focus
+     * @returns {boolean} - True si l'élément est valide, False sinon
      */
-    function restoreFocusAndSelection(force = false, preventSelection = true) {
-        // Vérifications de sécurité pour éviter les erreurs
+    function isStoredElementValid() {
         if (!lastFocusInfo.element) {
-            // Élément non défini, on ne fait rien
-            return;
+            return false;
         }
         
-        // Vérifier que l'élément existe toujours dans le DOM de manière sécurisée
         try {
-            // Certains éléments peuvent lancer une exception lors de la vérification
-            // Par exemple, si l'élément a été déchargé ou si la page a navigué
-            if (!document.body || !document.body.contains(lastFocusInfo.element)) {
-                // Nettoyer l'élément pour éviter des erreurs futures
-                lastFocusInfo.element = null;
-                return;
+            // Vérifier que l'élément existe toujours dans le DOM de manière sécurisée
+            return document.body && document.body.contains(lastFocusInfo.element);
+        } catch (e) {
+            lastFocusInfo.element = null;
+            return false;
+        }
+    }
+    
+    /**
+     * Restaure le focus sur l'élément stocké
+     * @returns {boolean} - True si le focus a été restauré avec succès
+     */
+    function restoreFocus() {
+        try {
+            lastFocusInfo.element.focus();
+            return true;
+        } catch (e) {
+            lastFocusInfo.element = null;
+            return false;
+        }
+    }
+    
+    /**
+     * Gère la position du curseur pour les éléments input/textarea
+     * @param {boolean} preventSelection - Si true, place le curseur à la fin sans sélectionner
+     */
+    function handleInputCursorPosition(preventSelection) {
+        try {
+            if (preventSelection) {
+                // Placer le curseur à la fin sans sélectionner
+                const endPosition = lastFocusInfo.element.value.length;
+                lastFocusInfo.element.setSelectionRange(endPosition, endPosition);
+            } else {
+                // Restaurer la sélection originale
+                lastFocusInfo.element.setSelectionRange(
+                    lastFocusInfo.selectionStart, 
+                    lastFocusInfo.selectionEnd
+                );
             }
         } catch (e) {
-            // En cas d'erreur lors de la vérification, on nettoie et on sort
-            lastFocusInfo.element = null;
+            console.warn("Impossible de restaurer la position du curseur:", e);
+        }
+    }
+    
+    /**
+     * Trouve le dernier nœud de texte dans un élément
+     * @param {Node} node - Le nœud à parcourir
+     * @returns {Node|null} - Le dernier nœud de texte ou null
+     */
+    function findLastTextNode(node) {
+        try {
+            if (!node) return null;
+            
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node;
+            } else if (node.childNodes && node.childNodes.length > 0) {
+                for (let i = node.childNodes.length - 1; i >= 0; i--) {
+                    const result = findLastTextNode(node.childNodes[i]);
+                    if (result) return result;
+                }
+            }
+            return null;
+        } catch (e) {
+            console.warn("Erreur lors de la recherche des nœuds:", e);
+            return null;
+        }
+    }
+    
+    /**
+     * Gère la position du curseur pour les éléments contentEditable
+     * @param {boolean} preventSelection - Si true, place le curseur à la fin sans sélectionner
+     */
+    function handleContentEditableCursor(preventSelection) {
+        try {
+            // Vérifier que window.getSelection() est disponible
+            const selection = window.getSelection();
+            if (!selection) {
+                console.warn("window.getSelection() n'est pas disponible");
+                return;
+            }
+            
+            // Effacer les sélections actuelles de manière sécurisée
+            try {
+                selection.removeAllRanges();
+            } catch (e) {
+                console.warn("Erreur lors de la suppression des ranges:", e);
+                return;
+            }
+            
+            if (preventSelection) {
+                // Créer un range qui place le curseur à la fin du contenu sans sélection
+                const range = document.createRange();
+                
+                // Trouver le dernier nœud de texte dans l'élément
+                const lastTextNode = findLastTextNode(lastFocusInfo.element);
+                
+                if (lastTextNode) {
+                    // Placer le curseur à la fin du dernier nœud de texte
+                    range.setStart(lastTextNode, lastTextNode.length);
+                    range.setEnd(lastTextNode, lastTextNode.length);
+                } else {
+                    // Si aucun nœud de texte n'est trouvé, utiliser la fin de l'élément
+                    range.selectNodeContents(lastFocusInfo.element);
+                    range.collapse(false); // Collapse à la fin
+                }
+                
+                // Appliquer le range
+                selection.addRange(range);
+            } else if (lastFocusInfo.range) {
+                // Restaurer la sélection originale
+                selection.addRange(lastFocusInfo.range);
+            }
+        } catch (e) {
+            console.warn("Impossible de restaurer la position du curseur dans contentEditable:", e);
+            lastFocusInfo.range = null;
+        }
+    }
+    
+    /**
+     * Restaure le focus et la sélection après l'interaction avec les boutons
+     * @param {boolean} [force=false] - Forcer la restauration même si l'élément actif semble correct
+     * @param {boolean} [preventSelection=true] - Empêcher la sélection, mettre le curseur à la fin du contenu
+     */
+    function restoreFocusAndSelection(force = false, preventSelection = true) {
+        // Vérifier si l'élément stocké est valide
+        if (!isStoredElementValid()) {
             return;
         }
         
         // Si l'élément est déjà actif et qu'on ne force pas la restauration, ne rien faire
         if (!force && document.activeElement === lastFocusInfo.element) return;
         
-        // Re-focus avec gestion robuste des erreurs
-        try {
-            lastFocusInfo.element.focus();
-        } catch (e) {
-            // En cas d'erreur, on nettoie l'élément pour éviter des erreurs futures
-            lastFocusInfo.element = null;
+        // Tenter de restaurer le focus
+        if (!restoreFocus()) {
             return;
         }
         
-        // S'il s'agit d'un input/textarea
-        if (
-            (lastFocusInfo.element.tagName === 'TEXTAREA') ||
-            (lastFocusInfo.element.tagName === 'INPUT' && lastFocusInfo.element.type === 'text')
-        ) {
-            try {
-                if (preventSelection) {
-                    // Placer le curseur à la fin sans sélectionner
-                    const endPosition = lastFocusInfo.element.value.length;
-                    lastFocusInfo.element.setSelectionRange(endPosition, endPosition);
-                } else {
-                    // Restaurer la sélection originale
-                    lastFocusInfo.element.setSelectionRange(
-                        lastFocusInfo.selectionStart, 
-                        lastFocusInfo.selectionEnd
-                    );
-                }
-            } catch (e) {
-                console.warn("Impossible de restaurer la position du curseur:", e);
-            }
-        }
-        // S'il s'agit d'un contentEditable
-        else if (lastFocusInfo.element.isContentEditable) {
-            try {
-                // Vérifier que window.getSelection() est disponible
-                const selection = window.getSelection();
-                if (!selection) {
-                    console.warn("window.getSelection() n'est pas disponible");
-                    return;
-                }
-                
-                // Effacer les sélections actuelles de manière sécurisée
-                try {
-                    selection.removeAllRanges();
-                } catch (e) {
-                    console.warn("Erreur lors de la suppression des ranges:", e);
-                    return;
-                }
-                
-                if (preventSelection) {
-                    try {
-                        // Créer un range qui place le curseur à la fin du contenu sans sélection
-                        const range = document.createRange();
-                        
-                        // Protection contre les erreurs lors de la recherche du dernier nœud de texte
-                        try {
-                            // Trouver le dernier nœud de texte dans l'élément
-                            let lastTextNode = null;
-                            const findLastTextNode = (node) => {
-                                try {
-                                    if (!node) return;
-                                    
-                                    if (node.nodeType === Node.TEXT_NODE) {
-                                        lastTextNode = node;
-                                    } else if (node.childNodes && node.childNodes.length > 0) {
-                                        for (let i = node.childNodes.length - 1; i >= 0; i--) {
-                                            findLastTextNode(node.childNodes[i]);
-                                            if (lastTextNode) break;
-                                        }
-                                    }
-                                } catch (e) {
-                                    console.warn("Erreur lors de la recherche des nœuds:", e);
-                                }
-                            };
-                            
-                            findLastTextNode(lastFocusInfo.element);
-                            
-                            if (lastTextNode) {
-                                // Placer le curseur à la fin du dernier nœud de texte
-                                range.setStart(lastTextNode, lastTextNode.length);
-                                range.setEnd(lastTextNode, lastTextNode.length);
-                            } else {
-                                // Si aucun nœud de texte n'est trouvé, utiliser la fin de l'élément
-                                range.selectNodeContents(lastFocusInfo.element);
-                                range.collapse(false); // Collapse à la fin
-                            }
-                        } catch (e) {
-                            console.warn("Erreur lors de la manipulation du range:", e);
-                            // Fallback simple en cas d'erreur
-                            range.selectNodeContents(lastFocusInfo.element);
-                            range.collapse(false);
-                        }
-                        
-                        // Appliquer le range de manière sécurisée
-                        try {
-                            selection.addRange(range);
-                        } catch (e) {
-                            console.warn("Erreur lors de l'ajout du range:", e);
-                        }
-                    } catch (e) {
-                        console.warn("Erreur globale lors de la création du range:", e);
-                    }
-                } else if (lastFocusInfo.range) {
-                    // Restaurer la sélection originale de manière sécurisée
-                    try {
-                        selection.addRange(lastFocusInfo.range);
-                    } catch (e) {
-                        console.warn("Erreur lors de la restauration du range original:", e);
-                    }
-                }
-            } catch (e) {
-                console.warn("Impossible de restaurer la position du curseur dans contentEditable:", e);
-                // Nettoyer les références pour éviter des erreurs futures
-                lastFocusInfo.range = null;
-            }
+        // Traiter selon le type d'élément
+        if ((lastFocusInfo.element.tagName === 'TEXTAREA') || 
+            (lastFocusInfo.element.tagName === 'INPUT' && lastFocusInfo.element.type === 'text')) {
+            handleInputCursorPosition(preventSelection);
+        } else if (lastFocusInfo.element.isContentEditable) {
+            handleContentEditableCursor(preventSelection);
         }
     }
 
@@ -496,8 +505,11 @@
             }
         } finally {
             // S'assurer que la référence au blob est libérée dans tous les cas
-            return null;
+            audioBlob = null;
         }
+        
+        // Retourne null en dehors du bloc finally
+        return null;
     }
 
     /**
@@ -1012,6 +1024,81 @@
     }
 
     /**
+     * Vérifie si l'élément actif est valide pour l'insertion de texte
+     * @param {HTMLElement} activeElement - L'élément actif
+     * @returns {boolean} - True si l'élément est valide
+     */
+    function isValidElementForInsertion(activeElement) {
+        return activeElement && 
+               activeElement.tagName !== 'IFRAME' && 
+               !(activeElement.getAttribute && activeElement.getAttribute('contenteditable') === 'false');
+    }
+    
+    /**
+     * Gère l'insertion de texte dans un élément contentEditable
+     * @param {HTMLElement} element - L'élément contentEditable
+     * @param {string} cleanText - Le texte à insérer
+     * @returns {boolean} - True si l'insertion a réussi
+     */
+    function insertIntoContentEditable(element, cleanText) {
+        // Assurer le focus
+        element.focus();
+        
+        // Normalisation du texte optimisée - en une seule passe
+        const finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
+        
+        try {
+            // Tenter d'utiliser l'API moderne d'insertion
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                
+                // Supprimer le texte sélectionné
+                selection.deleteFromDocument();
+                
+                // Insérer le texte
+                const textNode = document.createTextNode(finalText);
+                range.insertNode(textNode);
+                
+                // Positionner le curseur à la fin du texte inséré
+                range.setStartAfter(textNode);
+                range.setEndAfter(textNode);
+                
+                // Appliquer le nouveau range
+                selection.removeAllRanges();
+                selection.addRange(range);
+            } else {
+                // Fallback à execCommand
+                document.execCommand('insertHTML', false, finalText);
+                
+                // Désélectionner après l'insertion
+                const sel = window.getSelection();
+                if (sel.rangeCount > 0) {
+                    const range = sel.getRangeAt(0);
+                    range.collapse(false); // Collapse à la fin
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+            
+            // Déclencher l'événement input
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            return true;
+        } catch (error) {
+            console.error("Erreur lors de l'insertion dans contentEditable:", error);
+            
+            // Dernier recours: insertion simple
+            try {
+                document.execCommand('insertHTML', false, finalText);
+                return true;
+            } catch (e) {
+                console.error("Échec total de l'insertion:", e);
+                return false;
+            }
+        }
+    }
+    
+    /**
      * Gère l'insertion du texte dans l'élément actif
      * @param {string} text - Le texte à insérer
      * @returns {boolean} Indique si l'insertion a réussi
@@ -1027,89 +1114,22 @@
             // Récupérer l'élément actif
             const activeElement = document.activeElement;
 
-            // Vérifier rapidement si l'élément est valide pour l'insertion
-            if (!activeElement || activeElement.tagName === 'IFRAME' || 
-                (activeElement.getAttribute && activeElement.getAttribute('contenteditable') === 'false')) {
+            // Vérifier si l'élément est valide pour l'insertion
+            if (!isValidElementForInsertion(activeElement)) {
                 return false;
             }
 
             // Nettoyer le texte une seule fois
             const cleanText = text.trimStart();
 
-            // Détection optimisée du type d'élément avec destructuration
+            // Détection optimisée du type d'élément
             const {tagName, type, isContentEditable} = activeElement;
             
-            // Vérification directe pour déterminer si c'est un élément éditable
-            if ((tagName === 'TEXTAREA') || 
-                (tagName === 'INPUT' && type === 'text')) {
-                // Elements input/textarea - utiliser une fonction spécialisée
+            // Traiter selon le type d'élément
+            if ((tagName === 'TEXTAREA') || (tagName === 'INPUT' && type === 'text')) {
                 return insertTextIntoInput(activeElement, cleanText);
-            } 
-            else if (isContentEditable) {
-                // Optimisation pour contentEditable
-                activeElement.focus();
-                
-                // Normalisation du texte optimisée - en une seule passe
-                const finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
-                
-                // Insertion HTML - utiliser la méthode moderne si disponible
-                try {
-                    // Tenter d'abord la nouvelle API d'insertion
-                    const selection = window.getSelection();
-                    if (selection.rangeCount > 0) {
-                        const range = selection.getRangeAt(0);
-                        const cursorPos = range.startOffset;
-                        
-                        // Supprimer seulement le texte sélectionné
-                        selection.deleteFromDocument();
-                        
-                        // Insérer le texte
-                        const textNode = document.createTextNode(finalText);
-                        range.insertNode(textNode);
-                        
-                        // Créer un nouveau range pour positionner le curseur à la fin du texte inséré sans sélection
-                        range.setStartAfter(textNode);
-                        range.setEndAfter(textNode);
-                        
-                        // Effacer toutes les sélections existantes et appliquer le nouveau range
-                        selection.removeAllRanges();
-                        selection.addRange(range);
-                    } else {
-                        // Fallback à execCommand si nécessaire
-                        document.execCommand('insertHTML', false, finalText);
-                        
-                        // Désélectionner après l'insertion
-                        const sel = window.getSelection();
-                        if (sel.rangeCount > 0) {
-                            const range = sel.getRangeAt(0);
-                            range.collapse(false); // Collapse à la fin
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                        }
-                    }
-                } catch (insertError) {
-                    // Fallback final en cas d'erreur
-                    document.execCommand('insertHTML', false, finalText);
-                    
-                    // Tentative de désélection même en cas d'erreur
-                    try {
-                        const sel = window.getSelection();
-                        if (sel.rangeCount > 0) {
-                            const range = sel.getRangeAt(0);
-                            range.collapse(false);
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                        }
-                    } catch (e) {
-                        console.warn("Impossible de désélectionner le texte:", e);
-                    }
-                }
-                
-                // Événement input pour notifier les listeners (une seule création)
-                const inputEvent = new Event('input', { bubbles: true });
-                activeElement.dispatchEvent(inputEvent);
-                
-                return true;
+            } else if (isContentEditable) {
+                return insertIntoContentEditable(activeElement, cleanText);
             }
 
             return false;
@@ -1512,7 +1532,7 @@
             // Mettre à jour la valeur du sélecteur de langue
             languageSelect.value = items.targetLanguage;
             
-            // Configurer la visibilité du sélecteur de langue
+            // Configurer la visibilité du conteneur de langue
             if (items.enableTranslation) {
                 languageContainer.style.display = 'flex';
                 languageContainer.style.opacity = '1';
