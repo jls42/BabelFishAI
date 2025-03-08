@@ -375,7 +375,7 @@ async function handleContextMenuClick(info, tab) {
                 await sendMessageToContentScript(tab, { 
                     action: CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION, 
                     text: selectedText,
-                    targetLanguage: targetLanguage 
+                    targetLanguage 
                 });
             }
         }

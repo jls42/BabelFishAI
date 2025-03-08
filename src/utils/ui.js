@@ -696,8 +696,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 timerTextSpan.textContent = `${timeLeft}s`;
             }, 1000);
             
-            // Redémarrer le timer de suppression
-            clearTimeout(timers[timerId]); // S'assurer qu'aucun timer n'est actif
+            // Redémarrer le timer de suppression avec validation de la clé
+            if (Object.prototype.hasOwnProperty.call(timers, timerId)) {
+                clearTimeout(timers[timerId]); // S'assurer qu'aucun timer n'est actif
+            }
+            // Utiliser Object.create(null) pour éviter les problèmes de prototype
             timers[timerId] = setTimeout(scheduleRemoval, duration * 1000);
         };
         
