@@ -254,7 +254,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Ajouter un icône de copie (optionnel, pour amélioration visuelle)
         const iconSpan = document.createElement('span');
         iconSpan.innerHTML = '📋';
-        iconSpan.style.marginRight = '5px';
+        iconSpan.style.marginRight = '3px';
+        iconSpan.style.fontSize = '10px';
         copyButton.prepend(iconSpan);
 
         // Gestion des événements clavier pour l'accessibilité
@@ -533,15 +534,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // pour éviter les multiples reflows et repaints
         documentFragment.appendChild(textElement);
         
-        // Ajouter le contenu principal
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'whisper-content';
-        contentDiv.textContent = text;
-        textElement.appendChild(contentDiv);
-
-        // Créer le conteneur de contrôles
+        // Créer le conteneur de contrôles (à placer en haut)
         const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'whisper-dialog-controls';
+        controlsDiv.className = 'whisper-dialog-controls whisper-dialog-controls-top';
         
         // Ajouter le bouton de copie
         const copyButton = createCopyButton(text, onError);
@@ -588,8 +583,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         controlsDiv.appendChild(timerDiv);
         controlsDiv.appendChild(toggleLabel);
         
-        // Ajouter les contrôles à l'élément principal
+        // Ajouter les contrôles avant le contenu (en haut)
         textElement.appendChild(controlsDiv);
+        
+        // Ajouter le contenu principal
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'whisper-content';
+        contentDiv.textContent = text;
+        textElement.appendChild(contentDiv);
 
         // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
         // et minimiser les reflows/repaints
