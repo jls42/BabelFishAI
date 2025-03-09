@@ -67,78 +67,114 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          * @returns {Promise<any>} - Le résultat de l'appel API
          * @throws {Error} - Une erreur si l'appel échoue
          */
+        /**
+         * Vérifie la connexion réseau avant de faire l'appel API
+         * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
+         */
+        const checkConnectionBeforeFetch = async (isRetry) => {
+            if (!isRetry) {
+                const networkStatus = await checkNetworkConnection();
+                if (!networkStatus.online) {
+                    throw new Error(`${errorType}: ${networkStatus.message}`);
+                }
+            }
+        };
+
+        /**
+         * Prépare les options de la requête fetch
+         * @returns {Object} - Options de la requête configurées
+         */
+        const prepareRequestOptions = () => {
+            const requestHeaders = {
+                'Authorization': `Bearer ${apiKey}`,
+                ...headers
+            };
+
+            return {
+                method,
+                headers: requestHeaders,
+                body
+            };
+        };
+
+        /**
+         * Gère les erreurs HTTP de la réponse
+         * @param {Response} response - La réponse de fetch
+         */
+        const handleHttpErrors = async (response) => {
+            if (!response.ok) {
+                let errorMessage; // skipcq: JS-0119
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error?.message || errorType;
+                    console.error('API Error:', errorData);
+                } catch (parseError) {
+                    errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
+                    console.error('API Error (could not parse response):', response.status, response.statusText);
+                }
+
+                // Message d'erreur amélioré avec suggestion de résolution
+                const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
+                throw new Error(userFriendlyMessage);
+            }
+        };
+
+        /**
+         * Gère les erreurs réseau et les tentatives de réessai
+         * @param {Error} error - L'erreur survenue
+         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
+         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
+         */
+        const handleNetworkErrors = async (error, isRetry) => {
+            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+            }
+
+            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
+            const isNetworkError = error.name === 'TypeError' || 
+                                   error.message.includes('Timeout') || 
+                                   error.message.includes('connexion');
+                                   
+            if (isNetworkError && retryOnFail && !isRetry) {
+                console.warn(`Retry API call to ${url} after error:`, error.message);
+                console.log("Nouvelle tentative d'appel API après erreur");
+                
+                // Attendre 1500ms avant de réessayer
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                return attemptFetch(true);
+            }
+            
+            throw error;
+        };
+
+        /**
+         * Tente d'effectuer l'appel API avec gestion d'erreurs
+         * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
+         * @returns {Promise<any>} - Résultat de l'appel API
+         */
         const attemptFetch = async (isRetry = false) => {
             try {
-                // Vérifier la connexion réseau si ce n'est pas une tentative de réessai
-                if (!isRetry) {
-                    const networkStatus = await checkNetworkConnection();
-                    if (!networkStatus.online) {
-                        throw new Error(`${errorType}: ${networkStatus.message}`);
-                    }
-                }
-
-                // Préparer les en-têtes avec l'authentification
-                const requestHeaders = {
-                    'Authorization': `Bearer ${apiKey}`,
-                    ...headers
-                };
-
-                // Configuration de la requête
-                const requestOptions = {
-                    method,
-                    headers: requestHeaders,
-                    body
-                };
-
-                // Effectuer l'appel API avec gestion des erreurs réseau et timeout
-                const fetchPromise = fetch(url, requestOptions);
-
-                // Effectuer l'appel API avec gestion des erreurs réseau et timeout
-                const response = await fetchPromise;
-
-                // Gérer les erreurs HTTP
-                if (!response.ok) {
-                    let errorMessage; // skipcq: JS-0119
-                    try {
-                        const errorData = await response.json();
-                        errorMessage = errorData.error?.message || errorType;
-                        console.error('API Error:', errorData);
-                    } catch (parseError) {
-                        errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
-                        console.error('API Error (could not parse response):', response.status, response.statusText);
-                    }
-
-                    // Message d'erreur amélioré avec suggestion de résolution
-                    const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
-                    throw new Error(userFriendlyMessage);
-                }
-
-                // Traiter la réponse JSON
+                // 1. Vérifier la connexion réseau
+                await checkConnectionBeforeFetch(isRetry);
+                
+                // 2. Préparer la requête
+                const requestOptions = prepareRequestOptions();
+                
+                // 3. Effectuer l'appel API
+                const response = await fetch(url, requestOptions);
+                
+                // 4. Gérer les erreurs HTTP
+                await handleHttpErrors(response);
+                
+                // 5. Traiter la réponse JSON
                 const data = await response.json();
-
-                // Appliquer le processeur de réponse personnalisé
+                
+                // 6. Appliquer le processeur de réponse personnalisé
                 return responseProcessor(data);
             } catch (error) {
-                // Erreurs de réseau spécifiques avec messages utilisateur améliorés
-                if (error.name === 'TypeError') {
-                    if (error.message.includes('Failed to fetch')) {
-                        throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
-                    }
-                }
-
-                // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-                if ((error.name === 'TypeError' || error.message.includes('Timeout') || error.message.includes('connexion')) &&
-                    retryOnFail && !isRetry) {
-                    console.warn(`Retry API call to ${url} after error:`, error.message);
-
-                    // Log simple pour informer des réessais
-                    console.log("Nouvelle tentative d'appel API après erreur");
-
-                    // Attendre 1500ms avant de réessayer (plus long pour donner une chance à la connexion)
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    return attemptFetch(true);
-                }
-                throw error;
+                // Gérer les erreurs réseau et les tentatives de réessai
+                return await handleNetworkErrors(error, isRetry);
             }
         };
 
