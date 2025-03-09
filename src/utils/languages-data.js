@@ -1,9 +1,11 @@
 /**
  * Définition partagée des langues disponibles pour BabelFishAI (Service Worker)
+ * Cette variable est délibérément exposée globalement pour être utilisée par le service worker.
  */
 
 // Définition pour le service worker (sans référence à window)
-const AVAILABLE_LANGUAGES = [
+// Cette variable est utilisée par le service worker via importScripts
+const AVAILABLE_LANGUAGES = [ // skipcq: JS-0128
     { value: 'en', text: 'English (en)' },
     { value: 'fr', text: 'Français (fr)' },
     { value: 'es', text: 'Español (es)' },
