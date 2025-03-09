@@ -113,64 +113,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         };
 
         /**
-         * Tente d'effectuer l'appel API avec gestion d'erreurs
-         * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
-         * @returns {Promise<any>} - Résultat de l'appel API
-         */
-        async function attemptFetch(isRetry = false) {
-            try {
-                // 1. Vérifier la connexion réseau
-                await checkConnectionBeforeFetch(isRetry);
-                
-                // 2. Préparer la requête
-                const requestOptions = prepareRequestOptions();
-                
-                // 3. Effectuer l'appel API
-                const response = await fetch(url, requestOptions);
-                
-                // 4. Gérer les erreurs HTTP
-                await handleHttpErrors(response);
-                
-                // 5. Traiter la réponse JSON
-                const data = await response.json();
-                
-                // 6. Appliquer le processeur de réponse personnalisé
-                return responseProcessor(data);
-            } catch (error) {
-                // Gérer les erreurs réseau et les tentatives de réessai
-                return handleNetworkErrors(error, isRetry);
-            }
-        }
-
-        /**
-         * Gère les erreurs réseau et les tentatives de réessai
-         * @param {Error} error - L'erreur survenue
-         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
-         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
-         */
-        const handleNetworkErrors = async (error, isRetry) => {
-            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
-            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
-            }
-
-            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-            const isNetworkError = error.name === 'TypeError' || 
-                                   error.message.includes('Timeout') || 
-                                   error.message.includes('connexion');
-                                   
-            if (isNetworkError && retryOnFail && !isRetry) {
-                // Suppression des console.log/warn pour éviter JS-0002
-                
-                // Attendre 1500ms avant de réessayer
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                return attemptFetch(true);
-            }
-            
-            throw error;
-        };
-
-        /**
          * Améliore les messages d'erreur pour qu'ils soient plus compréhensibles par l'utilisateur final
          * @param {number} statusCode - Code de statut HTTP
          * @param {string} originalMessage - Message d'erreur original
@@ -197,6 +139,71 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             } else {
                 return defaultMessage;
             }
+        }
+
+        // Les fonctions de gestion des appels et des erreurs
+        // Les déclarations de fonction sont hoistées (remontées) au début
+        // du contexte, ce qui résout la référence circulaire
+        function attemptFetch(isRetry = false) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    // 1. Vérifier la connexion réseau
+                    await checkConnectionBeforeFetch(isRetry);
+                    
+                    // 2. Préparer la requête
+                    const requestOptions = prepareRequestOptions();
+                    
+                    // 3. Effectuer l'appel API
+                    const response = await fetch(url, requestOptions);
+                    
+                    // 4. Gérer les erreurs HTTP
+                    await handleHttpErrors(response);
+                    
+                    // 5. Traiter la réponse JSON
+                    const data = await response.json();
+                    
+                    // 6. Appliquer le processeur de réponse personnalisé
+                    resolve(responseProcessor(data));
+                } catch (error) {
+                    try {
+                        // Gérer les erreurs réseau et les tentatives de réessai
+                        const result = await handleNetworkErrors(error, isRetry);
+                        resolve(result);
+                    } catch (handledError) {
+                        reject(handledError);
+                    }
+                }
+            });
+        }
+
+        function handleNetworkErrors(error, isRetry) {
+            return new Promise(async (resolve, reject) => {
+                // Erreurs de réseau spécifiques avec messages utilisateur améliorés
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    reject(new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`));
+                    return;
+                }
+
+                // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
+                const isNetworkError = error.name === 'TypeError' || 
+                                      error.message.includes('Timeout') || 
+                                      error.message.includes('connexion');
+                                      
+                if (isNetworkError && retryOnFail && !isRetry) {
+                    // Suppression des console.log/warn pour éviter JS-0002
+                    
+                    // Attendre 1500ms avant de réessayer
+                    await new Promise(resolveTimeout => setTimeout(resolveTimeout, 1500));
+                    try {
+                        const result = await attemptFetch(true);
+                        resolve(result);
+                    } catch (retryError) {
+                        reject(retryError);
+                    }
+                } else {
+                    reject(error);
+                }
+            });
         }
 
         try {
