@@ -1,6 +1,9 @@
 // Service worker de l'extension BabelFishAI
 /* global chrome */
 
+// Importer la définition des langues disponibles
+importScripts('utils/languages-data.js');
+
 // Configuration spécifique au service worker
 const SERVICE_WORKER_CONFIG = {
     DEBUG: false,
@@ -288,8 +291,8 @@ chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
  * @returns {Array} Liste des langues disponibles
  */
 function getTargetLanguageOptions() {
-    // On utilise la même liste que celle définie dans le service worker
-    return [
+    // Utiliser la liste centralisée, si disponible
+    return self.AVAILABLE_LANGUAGES || [
         { value: 'en', text: 'English (en)' },
         { value: 'fr', text: 'Français (fr)' },
         { value: 'es', text: 'Español (es)' },
@@ -407,25 +410,8 @@ function handleMessage(message, sender, sendResponse) {
     // Gestion des demandes d'options de langues
     if (message.action === 'getTargetLanguageOptions') {
         // Récupérer les options de langues cibles disponibles
-        // Note: Dans le service worker, nous devons maintenir cette liste ici
-        // car nous n'avons pas accès à window.BabelFishAIUtils.languages
-        const targetLanguageOptions = [
-            { value: 'en', text: 'English (en)' },
-            { value: 'fr', text: 'Français (fr)' },
-            { value: 'es', text: 'Español (es)' },
-            { value: 'pt', text: 'Português (pt)' },
-            { value: 'zh', text: '中文 (zh)' },
-            { value: 'hi', text: 'हिंदी (hi)' },
-            { value: 'ar', text: 'العربية (ar)' },
-            { value: 'it', text: 'Italiano (it)' },
-            { value: 'de', text: 'Deutsch (de)' },
-            { value: 'sv', text: 'Svenska (sv)' },
-            { value: 'pl', text: 'Polski (pl)' },
-            { value: 'nl', text: 'Nederlands (nl)' },
-            { value: 'ro', text: 'Română (ro)' },
-            { value: 'ja', text: '日本語 (ja)' },
-            { value: 'ko', text: '한국어 (ko)' }
-        ];
+        // Utiliser la liste centralisée, si disponible
+        const targetLanguageOptions = getTargetLanguageOptions();
         
         sendResponse({ options: targetLanguageOptions });
         return false; // La réponse est envoyée de manière synchrone

@@ -2,6 +2,18 @@
     if (window.__whisperContentScriptHasRun) return;
     window.__whisperContentScriptHasRun = true;
 
+    // Charger le script de langues partagées comme un script standard
+    try {
+        const script = document.createElement('script');
+        script.src = chrome.runtime.getURL('src/utils/languages-shared.js');
+        script.onload = () => {
+            script.remove();
+        };
+        (document.head || document.documentElement).appendChild(script);
+    } catch (error) {
+        console.error("Failed to load languages-shared.js:", error);
+    }
+
     // Importer i18n.js dynamiquement et s'assurer qu'il est initialisé correctement
     try {
         await import(chrome.runtime.getURL('src/utils/i18n.js'));
@@ -40,6 +52,49 @@
         TRANSCRIPTION_ERROR: window.BabelFishAIConstants.ERRORS.TRANSCRIPTION_ERROR,
         NO_EDITABLE_ELEMENT: window.BabelFishAIConstants.ERRORS.NO_EDITABLE_ELEMENT
     };
+    
+    /**
+     * Exécute une fonction en toute sécurité avec gestion d'erreur
+     * @param {Function} fn - Fonction à exécuter
+     * @param {string} errorMsg - Message d'erreur à afficher en cas d'échec
+     * @param {Object} options - Options de configuration
+     * @param {boolean} [options.propagateError=true] - Si true, propage l'erreur, sinon retourne null
+     * @param {boolean} [options.isAsync=true] - Si true, attend le résultat de la fonction asynchrone
+     * @returns {Promise|*} - Le résultat de la fonction ou null en cas d'erreur
+     */
+    function safeExecute(fn, errorMsg, options = {}) {
+        // Valeurs par défaut des options
+        const { 
+            propagateError = true, 
+            isAsync = true 
+        } = options;
+        
+        try {
+            // Exécuter la fonction de manière asynchrone ou synchrone selon les options
+            const result = fn();
+            
+            // Si c'est une fonction asynchrone, attendre le résultat
+            if (isAsync && result instanceof Promise) {
+                return result.catch(e => {
+                    console.warn(errorMsg, e);
+                    if (propagateError) {
+                        throw e; // Propager l'erreur pour la gestion centralisée
+                    }
+                    return null;
+                });
+            }
+            
+            // Pour les fonctions synchrones, retourner directement le résultat
+            return result;
+        } catch (e) {
+            // Gestion des erreurs synchrones
+            console.warn(errorMsg, e);
+            if (propagateError) {
+                throw e; // Propager l'erreur
+            }
+            return null;
+        }
+    }
 
     // État global
     let mediaRecorder = null;
@@ -309,16 +364,6 @@
      * @returns {Promise<boolean>} - Indique si l'enregistrement a démarré avec succès
      */
     async function startRecording() {
-        // Fonction utilitaire pour exécuter une opération en toute sécurité
-        const safeExecute = async (fn, errorMsg) => {
-            try {
-                return await fn();
-            } catch (e) {
-                console.warn(errorMsg, e);
-                throw e; // Propager l'erreur pour la gestion centralisée
-            }
-        };
-
         // Réinitialiser les chunks audio immédiatement
         if (audioChunks.length > 0) {
             audioChunks.length = 0;
@@ -436,16 +481,6 @@
      * @returns {Promise<void>}
      */
     async function processRecordedAudio(audioBlob) {
-        // Fonction utilitaire pour exécuter une opération en toute sécurité
-        const safeExecute = async (fn, errorMsg) => {
-            try {
-                return await fn();
-            } catch (e) {
-                console.warn(errorMsg, e);
-                throw e; // Propager l'erreur pour la gestion centralisée
-            }
-        };
-        
         try {
             // Vérification rapide de la validité du blob audio
             if (!audioBlob || audioBlob.size <= 0 || audioBlob.type.indexOf('audio/') !== 0) {
@@ -518,16 +553,6 @@
      * @param {boolean} [wasCanceled=false] - Indique si l'enregistrement a été annulé
      */
     function cleanupRecordingResources(stream, wasCanceled) {
-        // Fonction utilitaire pour exécuter une opération en toute sécurité
-        const safeExecute = (fn, errorMsg) => {
-            try {
-                return fn();
-            } catch (e) {
-                console.warn(errorMsg, e);
-                return null;
-            }
-        };
-        
         // Réinitialiser l'état d'enregistrement immédiatement
         isRecording = false;
 
@@ -537,21 +562,27 @@
                 action: ACTIONS.STOPPED,
                 canceled: wasCanceled === true
             });
-        }, "Impossible d'envoyer le message d'arrêt au background");
+        }, "Impossible d'envoyer le message d'arrêt au background", { propagateError: false, isAsync: false });
 
         // 2. Libérer les ressources du MediaRecorder
         if (mediaRecorder) {
             // Arrêter l'enregistrement s'il est toujours actif
             if (mediaRecorder.state === 'recording') {
-                safeExecute(() => mediaRecorder.stop(), 
-                    "Erreur lors de l'arrêt du MediaRecorder");
+                safeExecute(
+                    () => mediaRecorder.stop(), 
+                    "Erreur lors de l'arrêt du MediaRecorder",
+                    { propagateError: false, isAsync: false }
+                );
             }
             
             // Supprimer les références aux événements pour éviter les fuites mémoire
             // Utilisation d'un destructuring pour simplifier le code
             ['ondataavailable', 'onstop', 'onerror'].forEach(eventName => {
-                safeExecute(() => { mediaRecorder[eventName] = null; }, 
-                    `Erreur lors de la suppression du gestionnaire d'événement ${eventName}`);
+                safeExecute(
+                    () => { mediaRecorder[eventName] = null; }, 
+                    `Erreur lors de la suppression du gestionnaire d'événement ${eventName}`,
+                    { propagateError: false, isAsync: false }
+                );
             });
             
             // Supprimer toute référence au mediaRecorder
@@ -565,8 +596,11 @@
             
             // Arrêter chaque piste de manière sécurisée
             tracks.forEach(track => {
-                safeExecute(() => track.stop(), 
-                    "Erreur lors de l'arrêt d'une piste audio");
+                safeExecute(
+                    () => track.stop(), 
+                    "Erreur lors de l'arrêt d'une piste audio",
+                    { propagateError: false, isAsync: false }
+                );
             });
             
             // Aider le GC en supprimant les références explicitement
@@ -584,7 +618,11 @@
         // donc cette étape est principalement pour des cas particuliers
         if (window.gc) {
             // Appel direct au GC si disponible (cas rare)
-            safeExecute(() => window.gc(), "Erreur lors de l'appel au garbage collector");
+            safeExecute(
+                () => window.gc(), 
+                "Erreur lors de l'appel au garbage collector",
+                { propagateError: false, isAsync: false }
+            );
         } else {
             // Technique avancée pour suggérer au GC de s'exécuter:
             // Créer et supprimer un grand nombre d'objets pour encourager le GC
@@ -930,7 +968,7 @@
      * @returns {Promise<boolean>} - Indique si l'affichage a réussi
      */
     function displayTranscriptionText(text, options) {
-        if (!text) {
+        if (!isValidInputText(text)) {
             console.warn("Tentative d'affichage de texte vide");
             return false;
         }
@@ -974,7 +1012,7 @@
      */
     async function showTranscription(text) {
         // Valider le texte d'entrée
-        if (!text || typeof text !== 'string') {
+        if (!isValidInputText(text)) {
             const errorMsg = "Texte de transcription invalide";
             console.error(`${errorMsg}:`, text);
             handleError(errorMsg, "Invalid transcription text");
@@ -1035,17 +1073,36 @@
     }
     
     /**
-     * Gère l'insertion de texte dans un élément contentEditable
+     * Insère du texte dans un élément contentEditable avec robustesse
      * @param {HTMLElement} element - L'élément contentEditable
-     * @param {string} cleanText - Le texte à insérer
+     * @param {string} text - Le texte à insérer
+     * @param {Object} options - Options supplémentaires
+     * @param {boolean} [options.ensureFocus=true] - Assurer que l'élément a le focus
+     * @param {boolean} [options.normalizeText=true] - Normaliser le texte (remplacer les sauts de ligne)
      * @returns {boolean} - True si l'insertion a réussi
      */
-    function insertIntoContentEditable(element, cleanText) {
-        // Assurer le focus
-        element.focus();
+    function insertInContentEditable(element, text, options = {}) {
+        // Options par défaut
+        const { 
+            ensureFocus = true, 
+            normalizeText = true 
+        } = options;
         
-        // Normalisation du texte optimisée - en une seule passe
-        const finalText = cleanText.replace(/[\r\n]+/g, ' ').trim();
+        // Validation des paramètres
+        if (!element || !isValidInputText(text)) {
+            console.warn("Paramètres invalides pour l'insertion de texte");
+            return false;
+        }
+        
+        // Assurer le focus si demandé
+        if (ensureFocus) {
+            element.focus();
+        }
+        
+        // Normalisation du texte si demandée
+        const finalText = normalizeText 
+            ? text.replace(/[\r\n]+/g, ' ').trim() 
+            : text;
         
         try {
             // Tenter d'utiliser l'API moderne d'insertion
@@ -1068,7 +1125,7 @@
                 selection.removeAllRanges();
                 selection.addRange(range);
             } else {
-                // Fallback à execCommand
+                // Fallback à execCommand si aucune plage n'est sélectionnée
                 document.execCommand('insertHTML', false, finalText);
                 
                 // Désélectionner après l'insertion
@@ -1106,7 +1163,7 @@
     function handleActiveElementInsertion(text) {
         try {
             // Validation des paramètres
-            if (!text) {
+            if (!isValidInputText(text)) {
                 console.warn("Empty text provided for insertion");
                 return false;
             }
@@ -1129,7 +1186,7 @@
             if ((tagName === 'TEXTAREA') || (tagName === 'INPUT' && type === 'text')) {
                 return insertTextIntoInput(activeElement, cleanText);
             } else if (isContentEditable) {
-                return insertIntoContentEditable(activeElement, cleanText);
+                return insertInContentEditable(activeElement, cleanText, { ensureFocus: true, normalizeText: true });
             }
 
             return false;
@@ -1148,7 +1205,7 @@
     function insertTextIntoInput(element, text) {
         try {
             // Validation des paramètres rapide avec court-circuit
-            if (!element || !text || typeof text !== 'string') {
+            if (!element || !isValidInputText(text)) {
                 console.warn("Invalid element or text for insertion");
                 return false;
             }
@@ -1369,35 +1426,35 @@
                 window.BabelFishAIUtils.languages.populateLanguageSelect(select, items.targetLanguage);
             });
         } else {
-            // Fallback avec les langues codées en dur
+            // Fallback avec les langues du fichier partagé si disponible
             chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
                 // Vider le sélecteur
                 select.innerHTML = '';
                 
-                // Langues disponibles
-                const displayNames = {
-                    'en': 'English (en)',
-                    'fr': 'Français (fr)',
-                    'es': 'Español (es)',
-                    'pt': 'Português (pt)',
-                    'zh': '中文 (zh)',
-                    'hi': 'हिंदी (hi)',
-                    'ar': 'العربية (ar)',
-                    'it': 'Italiano (it)',
-                    'de': 'Deutsch (de)',
-                    'sv': 'Svenska (sv)',
-                    'pl': 'Polski (pl)',
-                    'nl': 'Nederlands (nl)',
-                    'ro': 'Română (ro)',
-                    'ja': '日本語 (ja)',
-                    'ko': '한국어 (ko)'
-                };
+                // Utiliser la liste centralisée des langues si disponible
+                const languagesList = window.BabelFishAI?.AVAILABLE_LANGUAGES || [
+                    { value: 'en', text: 'English (en)' },
+                    { value: 'fr', text: 'Français (fr)' },
+                    { value: 'es', text: 'Español (es)' },
+                    { value: 'pt', text: 'Português (pt)' },
+                    { value: 'zh', text: '中文 (zh)' },
+                    { value: 'hi', text: 'हिंदी (hi)' },
+                    { value: 'ar', text: 'العربية (ar)' },
+                    { value: 'it', text: 'Italiano (it)' },
+                    { value: 'de', text: 'Deutsch (de)' },
+                    { value: 'sv', text: 'Svenska (sv)' },
+                    { value: 'pl', text: 'Polski (pl)' },
+                    { value: 'nl', text: 'Nederlands (nl)' },
+                    { value: 'ro', text: 'Română (ro)' },
+                    { value: 'ja', text: '日本語 (ja)' },
+                    { value: 'ko', text: '한국어 (ko)' }
+                ];
                 
                 // Ajouter chaque option
-                Object.entries(displayNames).forEach(([code, name]) => {
+                languagesList.forEach(lang => {
                     const option = document.createElement('option');
-                    option.value = code;
-                    option.textContent = name;
+                    option.value = lang.value;
+                    option.textContent = lang.text;
                     select.appendChild(option);
                 });
                 
@@ -1695,7 +1752,7 @@
                 (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
                 return insertInInputElement(activeElement, newText);
             } else if (activeElement.isContentEditable) {
-                return insertInContentEditableElement(activeElement, newText);
+                return insertInContentEditable(activeElement, newText, { ensureFocus: false, normalizeText: false });
             }
             return false;
         } catch (e) {
@@ -1727,28 +1784,7 @@
         return false;
     }
 
-    /**
-     * Insère du texte dans un élément contentEditable
-     * @param {HTMLElement} element - L'élément contentEditable
-     * @param {string} text - Le texte à insérer
-     * @returns {boolean} - True si l'insertion a réussi
-     */
-    function insertInContentEditableElement(element, text) {
-        const selection = window.getSelection();
-        if (selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            range.deleteContents();
-            const textNode = document.createTextNode(text);
-            range.insertNode(textNode);
-            range.setStartAfter(textNode);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            element.dispatchEvent(new Event('input', { bubbles: true }));
-            return true;
-        }
-        return false;
-    }
+    // La fonction insertInContentEditableElement a été fusionnée avec insertInContentEditable
 
     /**
      * Reformule un texte sélectionné sans enregistrement audio

@@ -4,9 +4,9 @@
 window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
 (function (exports) {
-
-    // Liste des langues disponibles pour la traduction
-    const availableLanguages = [
+    // Utiliser la liste des langues depuis le fichier partagé
+    // Si le fichier partagé n'est pas chargé, fournir une liste par défaut
+    const availableLanguages = window.BabelFishAI?.AVAILABLE_LANGUAGES || [
         { value: 'en', text: 'English (en)' },
         { value: 'fr', text: 'Français (fr)' },
         { value: 'es', text: 'Español (es)' },
