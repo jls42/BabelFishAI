@@ -43,8 +43,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error('URL API manquante');
         }
 
-        // Vérification simple de la connectivité réseau sans appels externes
-        const checkNetworkConnection = () => {
+        /**
+         * Vérifie la connectivité réseau
+         * @returns {Promise<{online: boolean, message?: string}>} État de la connectivité
+         */
+        function checkNetworkConnection() {
             return new Promise((resolve) => {
                 // Utiliser uniquement la propriété navigator.onLine, sans ping externe
                 if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
@@ -54,30 +57,30 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     });
                 } else {
                     // Considérer l'appareil comme en ligne si navigator.onLine le dit
-                    // sans faire de ping externe supplémentaire
                     resolve({ online: true });
                 }
             });
-        };
+        }
 
         /**
          * Vérifie la connexion réseau avant de faire l'appel API
          * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
+         * @returns {Promise<void>}
          */
-        const checkConnectionBeforeFetch = async (isRetry) => {
+        async function checkConnectionBeforeFetch(isRetry) {
             if (!isRetry) {
                 const networkStatus = await checkNetworkConnection();
                 if (!networkStatus.online) {
                     throw new Error(`${errorType}: ${networkStatus.message}`);
                 }
             }
-        };
+        }
 
         /**
          * Prépare les options de la requête fetch
          * @returns {Object} - Options de la requête configurées
          */
-        const prepareRequestOptions = () => {
+        function prepareRequestOptions() {
             const requestHeaders = {
                 'Authorization': `Bearer ${apiKey}`,
                 ...headers
@@ -88,13 +91,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 headers: requestHeaders,
                 body
             };
-        };
+        }
 
         /**
          * Gère les erreurs HTTP de la réponse
          * @param {Response} response - La réponse de fetch
+         * @returns {Promise<void>}
          */
-        const handleHttpErrors = async (response) => {
+        async function handleHttpErrors(response) {
             if (!response.ok) {
                 let errorMessage; // skipcq: JS-0119
                 try {
@@ -110,7 +114,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
                 throw new Error(userFriendlyMessage);
             }
-        };
+        }
 
         /**
          * Améliore les messages d'erreur pour qu'ils soient plus compréhensibles par l'utilisateur final
@@ -141,83 +145,80 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         }
 
-        // Les fonctions de gestion des appels et des erreurs
-        // Les déclarations de fonction sont hoistées (remontées) au début
-        // du contexte, ce qui résout la référence circulaire
-        
         /**
-         * Tente d'effectuer l'appel API avec gestion d'erreurs
-         * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
-         * @returns {Promise<any>} - Résultat de l'appel API
+         * Effectue une pause avec setTimeout sous forme de promesse
+         * @param {number} ms - Durée de la pause en millisecondes
+         * @returns {Promise<void>}
          */
-        function attemptFetch(isRetry = false) {
-            return new Promise((resolve, reject) => {
-                // Utilisation de .then/.catch au lieu de async/await dans l'exécuteur de promesse
-                checkConnectionBeforeFetch(isRetry)
-                    .then(() => {
-                        // Préparer la requête
-                        const requestOptions = prepareRequestOptions();
-                        return fetch(url, requestOptions);
-                    })
-                    .then(response => {
-                        // Gérer les erreurs HTTP
-                        return handleHttpErrors(response).then(() => response);
-                    })
-                    .then(response => {
-                        // Traiter la réponse JSON
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Appliquer le processeur de réponse personnalisé
-                        resolve(responseProcessor(data));
-                    })
-                    .catch(error => {
-                        // Gérer les erreurs réseau et les tentatives de réessai
-                        handleNetworkErrors(error, isRetry)
-                            .then(result => resolve(result))
-                            .catch(handledError => reject(handledError));
-                    });
-            });
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
 
         /**
-         * Gère les erreurs réseau et les tentatives de réessai
+         * Vérifie si l'erreur est liée au réseau
+         * @param {Error} error - L'erreur à vérifier
+         * @returns {boolean} True si c'est une erreur réseau
+         */
+        function isNetworkError(error) {
+            return error.name === 'TypeError' || 
+                   error.message.includes('Timeout') || 
+                   error.message.includes('connexion');
+        }
+
+        /**
+         * Gère une erreur de type "Failed to fetch"
+         * @returns {never} Lance toujours une erreur
+         */
+        function handleFailedToFetch() {
+            throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+        }
+
+        /**
+         * Tente d'effectuer l'appel API
+         * @param {boolean} isRetry - Indique s'il s'agit d'une réessai
+         * @returns {Promise<any>} Résultat de l'appel API
+         */
+        async function performApiCall(isRetry) {
+            await checkConnectionBeforeFetch(isRetry);
+            const requestOptions = prepareRequestOptions();
+            const response = await fetch(url, requestOptions);
+            await handleHttpErrors(response);
+            const data = await response.json();
+            return responseProcessor(data);
+        }
+
+        /**
+         * Gère les erreurs réseau et tente éventuellement un nouvel essai
          * @param {Error} error - L'erreur survenue
          * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
-         * @returns {Promise<any>} - Promesse de nouvelle tentative ou erreur propagée
+         * @returns {Promise<any>} Résultat après tentative de récupération
          */
-        function handleNetworkErrors(error, isRetry) {
-            return new Promise((resolve, reject) => {
-                // Erreurs de réseau spécifiques avec messages utilisateur améliorés
-                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                    reject(new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`));
-                    return;
-                }
-
-                // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-                const isNetworkError = error.name === 'TypeError' || 
-                                      error.message.includes('Timeout') || 
-                                      error.message.includes('connexion');
-                                      
-                if (isNetworkError && retryOnFail && !isRetry) {
-                    // Attendre 1500ms avant de réessayer
-                    setTimeout(() => {
-                        attemptFetch(true)
-                            .then(result => resolve(result))
-                            .catch(retryError => reject(retryError));
-                    }, 1500);
-                } else {
-                    reject(error);
-                }
-            });
+        async function handleApiErrors(error, isRetry) {
+            // Gérer les erreurs "Failed to fetch" spécifiquement
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                handleFailedToFetch();
+            }
+            
+            // Si c'est une erreur réseau et qu'on peut réessayer
+            if (isNetworkError(error) && retryOnFail && !isRetry) {
+                await delay(1500);
+                return performApiCall(true);
+            }
+            
+            // Si on ne peut pas récupérer, relancer l'erreur
+            throw error;
         }
 
+        // Tenter l'appel API et gérer les erreurs
         try {
-            return await attemptFetch();
+            return await performApiCall(false);
         } catch (error) {
-            // Enrichir le message d'erreur pour le débogage
-            console.error(`API call failed (${url}):`, error);
-            throw error;
+            try {
+                return await handleApiErrors(error, false);
+            } catch (finalError) {
+                console.error(`API call failed (${url}):`, finalError);
+                throw finalError;
+            }
         }
     }
 
