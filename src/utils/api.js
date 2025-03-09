@@ -61,13 +61,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         };
 
         /**
-         * Tente un appel fetch, avec gestion des erreurs et retry.
-         * @async
-         * @param {boolean} [isRetry=false] - Indique si c'est une tentative de réessai
-         * @returns {Promise<any>} - Le résultat de l'appel API
-         * @throws {Error} - Une erreur si l'appel échoue
-         */
-        /**
          * Vérifie la connexion réseau avant de faire l'appel API
          * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
          */
@@ -120,35 +113,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         };
 
         /**
-         * Gère les erreurs réseau et les tentatives de réessai
-         * @param {Error} error - L'erreur survenue
-         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
-         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
-         */
-        const handleNetworkErrors = async (error, isRetry) => {
-            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
-            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
-            }
-
-            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-            const isNetworkError = error.name === 'TypeError' || 
-                                   error.message.includes('Timeout') || 
-                                   error.message.includes('connexion');
-                                   
-            if (isNetworkError && retryOnFail && !isRetry) {
-                console.warn(`Retry API call to ${url} after error:`, error.message);
-                console.log("Nouvelle tentative d'appel API après erreur");
-                
-                // Attendre 1500ms avant de réessayer
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                return attemptFetch(true);
-            }
-            
-            throw error;
-        };
-
-        /**
          * Tente d'effectuer l'appel API avec gestion d'erreurs
          * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
          * @returns {Promise<any>} - Résultat de l'appel API
@@ -174,8 +138,36 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 return responseProcessor(data);
             } catch (error) {
                 // Gérer les erreurs réseau et les tentatives de réessai
-                return await handleNetworkErrors(error, isRetry);
+                return handleNetworkErrors(error, isRetry);
             }
+        };
+
+        /**
+         * Gère les erreurs réseau et les tentatives de réessai
+         * @param {Error} error - L'erreur survenue
+         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
+         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
+         */
+        const handleNetworkErrors = async (error, isRetry) => {
+            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+            }
+
+            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
+            const isNetworkError = error.name === 'TypeError' || 
+                                   error.message.includes('Timeout') || 
+                                   error.message.includes('connexion');
+                                   
+            if (isNetworkError && retryOnFail && !isRetry) {
+                // Suppression des console.log/warn pour éviter JS-0002
+                
+                // Attendre 1500ms avant de réessayer
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                return attemptFetch(true);
+            }
+            
+            throw error;
         };
 
         /**
