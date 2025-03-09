@@ -112,44 +112,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         };
 
-        // Déclarer les fonctions avant de les définir pour éviter le problème de référence circulaire
-        let attemptFetch;
-        let handleNetworkErrors;
-
-        /**
-         * Gère les erreurs réseau et les tentatives de réessai
-         * @param {Error} error - L'erreur survenue
-         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
-         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
-         */
-        handleNetworkErrors = async (error, isRetry) => {
-            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
-            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
-            }
-
-            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
-            const isNetworkError = error.name === 'TypeError' || 
-                                   error.message.includes('Timeout') || 
-                                   error.message.includes('connexion');
-                                   
-            if (isNetworkError && retryOnFail && !isRetry) {
-                // Suppression des console.log/warn pour éviter JS-0002
-                
-                // Attendre 1500ms avant de réessayer
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                return attemptFetch(true);
-            }
-            
-            throw error;
-        };
-
         /**
          * Tente d'effectuer l'appel API avec gestion d'erreurs
          * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
          * @returns {Promise<any>} - Résultat de l'appel API
          */
-        attemptFetch = async (isRetry = false) => {
+        async function attemptFetch(isRetry = false) {
             try {
                 // 1. Vérifier la connexion réseau
                 await checkConnectionBeforeFetch(isRetry);
@@ -172,6 +140,34 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 // Gérer les erreurs réseau et les tentatives de réessai
                 return handleNetworkErrors(error, isRetry);
             }
+        }
+
+        /**
+         * Gère les erreurs réseau et les tentatives de réessai
+         * @param {Error} error - L'erreur survenue
+         * @param {boolean} isRetry - Indique s'il s'agit déjà d'une tentative de réessai
+         * @returns {Promise} - Promesse de nouvelle tentative ou erreur propagée
+         */
+        const handleNetworkErrors = async (error, isRetry) => {
+            // Erreurs de réseau spécifiques avec messages utilisateur améliorés
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+            }
+
+            // Si c'est une erreur réseau ou de timeout et qu'on n'a pas encore retryé
+            const isNetworkError = error.name === 'TypeError' || 
+                                   error.message.includes('Timeout') || 
+                                   error.message.includes('connexion');
+                                   
+            if (isNetworkError && retryOnFail && !isRetry) {
+                // Suppression des console.log/warn pour éviter JS-0002
+                
+                // Attendre 1500ms avant de réessayer
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                return attemptFetch(true);
+            }
+            
+            throw error;
         };
 
         /**
