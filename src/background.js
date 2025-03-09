@@ -1,5 +1,5 @@
 // Service worker de l'extension BabelFishAI
-/* global chrome, importScripts */
+/* global chrome */
 
 // Importer la définition des langues disponibles
 importScripts('utils/languages-data.js'); // skipcq: JS-0103
