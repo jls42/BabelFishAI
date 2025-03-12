@@ -989,7 +989,7 @@
 
             // Afficher dans une boîte de dialogue si nécessaire ou si l'insertion a échoué et si autoCopy est désactivé
             if (!autoCopy && (options.dialogDisplay || isDialogForced || !displayed)) {
-                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION, (errorMessage) => showBanner(errorMessage, MESSAGE_TYPES.ERROR), autoCopy);
+                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
                 displayed = true;
             } else if (autoCopy) {
                 // Si la copie automatique est activée, on considère que l'affichage a réussi.
