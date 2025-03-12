@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const activeDisplayCheckbox = document.getElementById('activeDisplay');
     const dialogDisplayCheckbox = document.getElementById('dialogDisplay');
     const dialogDurationInput = document.getElementById('dialogDuration');
+    const autoCopyCheckbox = document.getElementById('autoCopy');
     const bannerColorStartInput = document.getElementById('bannerColorStart');
     const bannerColorEndInput = document.getElementById('bannerColorEnd');
     const bannerOpacityInput = document.getElementById('bannerOpacity');
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             activeDisplay: true,
             dialogDisplay: false,
             dialogDuration: 15,
+            autoCopy: false,
             disableLogging: false,
             bannerColorStart: '#684054',
             bannerColorEnd: '#4c7b8d',
@@ -105,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             activeDisplayCheckbox.checked = items.activeDisplay;
             dialogDisplayCheckbox.checked = items.dialogDisplay;
             dialogDurationInput.value = items.dialogDuration;
+            autoCopyCheckbox.checked = items.autoCopy;
             bannerColorStartInput.value = items.bannerColorStart;
             bannerColorEndInput.value = items.bannerColorEnd;
             bannerOpacityInput.value = items.bannerOpacity;
@@ -142,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             activeDisplay: activeDisplayCheckbox.checked,
             dialogDisplay: dialogDisplayCheckbox.checked,
             dialogDuration: parseInt(dialogDurationInput.value),
+            autoCopy: autoCopyCheckbox.checked,
             bannerColorStart: bannerColorStartInput.value,
             bannerColorEnd: bannerColorEndInput.value,
             bannerOpacity: parseInt(bannerOpacityInput.value),
@@ -401,6 +405,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     apiKeyInput.addEventListener('input', () => saveOptions(false));
     activeDisplayCheckbox.addEventListener('change', () => saveOptions(false));
     dialogDisplayCheckbox.addEventListener('change', () => saveOptions(false));
+    autoCopyCheckbox.addEventListener('change', () => saveOptions(false));
     dialogDurationInput.addEventListener('input', () => saveOptions(false));
     bannerColorStartInput.addEventListener('input', () => saveOptions(false));
     bannerColorEndInput.addEventListener('input', () => saveOptions(false));

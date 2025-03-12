@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Geöffnet lassen",
         "description": "Text für den Schalter, der das automatische Schließen deaktiviert"
+    },
+    "autoCopyLabel": {
+        "message": "Automatisches Kopieren in die Zwischenablage",
+        "description": "Beschriftung für die Option zum automatischen Kopieren"
+    },
+    "autoCopyDescription": {
+        "message": "Wenn aktiviert, wird das Ergebnis automatisch in die Zwischenablage kopiert und das Dialogfeld wird für die Transkription nicht mehr angezeigt.",
+        "description": "Beschreibung für die Option zum automatischen Kopieren"
     }
 }

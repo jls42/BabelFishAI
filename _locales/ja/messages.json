@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "開いたままにする",
         "description": "自動クローズを無効にするトグルのテキスト"
+    },
+    "autoCopyLabel": {
+        "message": "クリップボードに自動コピー",
+        "description": "自動コピーオプションのラベル"
+    },
+    "autoCopyDescription": {
+        "message": "有効にすると、結果は自動的にクリップボードにコピーされ、文字起こしにはダイアログボックスが表示されなくなります。",
+        "description": "自動コピーオプションの説明"
     }
 }

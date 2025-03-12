@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Garder ouvert",
         "description": "Texte pour le toggle qui désactive la fermeture automatique"
+    },
+    "autoCopyLabel": {
+        "message": "Copie automatique dans le presse-papiers",
+        "description": "Libellé de l'option de copie automatique"
+    },
+    "autoCopyDescription": {
+        "message": "Si activé, le résultat sera automatiquement copié dans le presse-papiers et la boîte de dialogue n'apparaîtra plus pour la transcription.",
+        "description": "Description de l'option de copie automatique"
     }
 }

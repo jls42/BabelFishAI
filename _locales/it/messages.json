@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Tieni aperto",
         "description": "Testo per l'interruttore che disabilita la chiusura automatica"
+    },
+    "autoCopyLabel": {
+        "message": "Copia automatica negli appunti",
+        "description": "Etichetta per l'opzione di copia automatica"
+    },
+    "autoCopyDescription": {
+        "message": "Se abilitato, il risultato verrà copiato automaticamente negli appunti e la finestra di dialogo non verrà più visualizzata per la trascrizione.",
+        "description": "Descrizione per l'opzione di copia automatica"
     }
 }

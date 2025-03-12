@@ -102,7 +102,8 @@
                     <input type="checkbox" id="enableRephrase">
                     <span data-i18n="rephraseLabel">Activer la reformulation automatique</span>
                 </label>
-                <p class="option-description" data-i18n="rephraseDescription">Si activé, le texte transcrit sera reformulé pour améliorer sa clarté et sa fluidité.</p>
+                <p class="option-description" data-i18n="rephraseDescription">Si activé, le texte transcrit sera
+                    reformulé pour améliorer sa clarté et sa fluidité.</p>
             </div>
         </div>
 
@@ -197,6 +198,15 @@
                             (secondes) :</label>
                         <input type="number" id="dialogDuration" min="5" max="60" value="15">
                         <p class="option-description" data-i18n="dialogDurationDescription"></p>
+                    </div>
+                    <div>
+                        <label class="feature-toggle">
+                            <input type="checkbox" id="autoCopy">
+                            <span data-i18n="autoCopyLabel">Copie automatique dans le presse-papiers</span>
+                        </label>
+                        <p class="option-description" data-i18n="autoCopyDescription">Si activé, le résultat sera
+                            automatiquement copié dans le presse-papiers et la boîte de dialogue n'apparaîtra plus pour
+                            la transcription.</p>
                     </div>
                     <div class="color-picker-container">
                         <label data-i18n="bannerColorsLabel">Couleurs du bandeau de statut :</label>

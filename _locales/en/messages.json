@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Keep open",
         "description": "Text for the toggle that disables automatic closing"
+    },
+    "autoCopyLabel": {
+        "message": "Automatic copy to clipboard",
+        "description": "Label for the auto copy option"
+    },
+    "autoCopyDescription": {
+        "message": "If enabled, the result will be automatically copied to the clipboard and the dialog box will no longer appear for transcription.",
+        "description": "Description for the auto copy option"
     }
 }

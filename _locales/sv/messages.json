@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Håll öppet",
         "description": "Text för växlingen som inaktiverar automatisk stängning"
+    },
+    "autoCopyLabel": {
+        "message": "Kopiera automatiskt till urklipp",
+        "description": "Etikett för alternativet automatisk kopiering"
+    },
+    "autoCopyDescription": {
+        "message": "Om aktiverat kopieras resultatet automatiskt till urklipp och dialogrutan visas inte längre för transkription.",
+        "description": "Beskrivning av alternativet för automatisk kopiering"
     }
 }

@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Pozostaw otwarte",
         "description": "Tekst przełącznika, który wyłącza automatyczne zamykanie"
+    },
+    "autoCopyLabel": {
+        "message": "Automatyczne kopiowanie do schowka",
+        "description": "Etykieta opcji automatycznego kopiowania"
+    },
+    "autoCopyDescription": {
+        "message": "Jeśli włączone, wynik zostanie automatycznie skopiowany do schowka, a okno dialogowe nie będzie już wyświetlane dla transkrypcji.",
+        "description": "Opis opcji automatycznego kopiowania"
     }
 }

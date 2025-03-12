@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Open houden",
         "description": "Tekst voor de schakelaar die automatisch sluiten uitschakelt"
+    },
+    "autoCopyLabel": {
+        "message": "Automatisch kopiëren naar klembord",
+        "description": "Label voor de optie automatisch kopiëren"
+    },
+    "autoCopyDescription": {
+        "message": "Indien ingeschakeld, wordt het resultaat automatisch naar het klembord gekopieerd en verschijnt het dialoogvenster niet meer voor transcriptie.",
+        "description": "Beschrijving van de optie automatisch kopiëren"
     }
 }
