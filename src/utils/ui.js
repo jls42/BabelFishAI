@@ -515,37 +515,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const documentFragment = document.createDocumentFragment();
 
     /**
-     * Affiche un texte dans une boîte de dialogue flottante avec optimisation DOM
-     * @param {string} text - Le texte à afficher
-     * @param {number} duration - Durée d'affichage en secondes
-     * @param {Function} onError - Fonction de callback en cas d'erreur
-     * @param {boolean} autoCopy - Indique si la copie automatique est activée
-     * @returns {HTMLElement} L'élément créé
+     * Crée les éléments du timer visuel.
+     * @param {number} duration - Durée initiale en secondes.
+     * @returns {Object} - Objet contenant les éléments du timer.
      */
-    function showTextInDialog(text, duration, onError, autoCopy) {
-        // Récupérer ou créer le conteneur de la boîte de dialogue
-        const container = createTranscriptionContainer();
-
-        // Créer l'élément qui contiendra le texte
-        // Utilisation d'un fragment pour regrouper les manipulations DOM
-        const textElement = document.createElement('div');
-        textElement.className = 'whisper-transcription-element';
-
-        // Création unique du fragment de document avec tous les éléments
-        // pour éviter les multiples reflows et repaints
-        documentFragment.appendChild(textElement);
-
-        // Créer le conteneur de contrôles (à placer en haut)
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'whisper-dialog-controls whisper-dialog-controls-top';
-
-        // Ajouter le bouton de copie si l'option autoCopy n'est pas activée
-        if (!autoCopy) {
-            const copyButton = createCopyButton(text, onError);
-            controlsDiv.appendChild(copyButton);
-        }
-
-        // Créer le timer visuel
+    function createTimerElements(duration) {
         const timerDiv = document.createElement('div');
         timerDiv.className = 'whisper-timer';
 
@@ -563,7 +537,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         timerDiv.appendChild(timerBarDiv);
         timerDiv.appendChild(timerTextSpan);
 
-        // Créer le toggle pour désactiver l'auto-fermeture
+        return { timerDiv, timerProgressDiv, timerTextSpan };
+    }
+
+    /**
+     * Crée les éléments du toggle pour l'auto-fermeture.
+     * @returns {Object} - Objet contenant les éléments du toggle.
+     */
+    function createToggleElements() {
         const toggleLabel = document.createElement('label');
         toggleLabel.className = 'whisper-autoclose-toggle';
 
@@ -582,36 +563,41 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         toggleLabel.appendChild(toggleSwitch);
         toggleLabel.appendChild(toggleText);
 
-        // Assembler les contrôles (le bouton de copie est déjà ajouté conditionnellement)
-        controlsDiv.appendChild(timerDiv);
-        controlsDiv.appendChild(toggleLabel);
+        return { toggleLabel, toggleInput };
+    }
 
-        // Ajouter les contrôles avant le contenu (en haut)
-        textElement.appendChild(controlsDiv);
+    /**
+     * Crée le conteneur de contrôles et ajoute le bouton de copie si nécessaire.
+     * @param {string} text - Le texte à copier.
+     * @param {Function} onError - Fonction de callback en cas d'erreur.
+     * @param {boolean} autoCopy - Indique si la copie automatique est activée.
+     * @returns {HTMLElement} - Le conteneur de contrôles.
+     */
+    function createControlsContainer(text, onError, autoCopy) {
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'whisper-dialog-controls whisper-dialog-controls-top';
 
-        // Ajouter le contenu principal
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'whisper-content';
-        contentDiv.textContent = text;
-        textElement.appendChild(contentDiv);
+        if (!autoCopy) {
+            const copyButton = createCopyButton(text, onError);
+            controlsDiv.appendChild(copyButton);
+        }
 
-        // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu du navigateur
-        // et minimiser les reflows/repaints
-        requestAnimationFrame(() => {
-            // Ajouter l'élément au conteneur en une seule opération
-            container.appendChild(documentFragment);
-        });
+        return controlsDiv;
+    }
 
-        // Utiliser un numéro d'ID unique pour éviter les conflits de timers
+    /**
+     * Configure le timer et la suppression automatique de l'élément.
+     * @param {HTMLElement} textElement - L'élément de texte à supprimer.
+     * @param {number} duration - Durée en secondes avant suppression.
+     */
+    function setupAutoRemoval(textElement, duration, toggleInput, timerProgressDiv, timerTextSpan) {
         const timerId = `dialog_${Date.now()}`;
         const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
 
-        // Supprimer les anciens timers pour éviter les fuites mémoire
         if (timers[timerId]) {
             clearTimeout(timers[timerId]);
         }
 
-        // Utiliser requestIdleCallback si disponible pour la suppression automatique
         const scheduleRemoval = () => {
             try {
                 if ('requestIdleCallback' in window) {
@@ -621,9 +607,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         } catch (e) {
                             console.warn("Erreur lors de la suppression de l'élément:", e);
                         }
-                    }, { timeout: 1000 }); // S'assurer que ça s'exécute dans un délai raisonnable
+                    }, { timeout: 1000 });
                 } else {
-                    // Fallback à setTimeout
                     setTimeout(() => {
                         try {
                             removeTranscriptionElement(textElement);
@@ -637,14 +622,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         };
 
-        // Configurer la suppression automatique après la durée spécifiée
-        const autoRemoveTimeout = duration * 1000; // Convertir en millisecondes
+        const autoRemoveTimeout = duration * 1000;
 
-        // Mettre à jour le timer visuellement
         let timeLeft = duration;
-        const intervalId = setInterval(() => {
+        let activeIntervalId = setInterval(() => {
             if (timeLeft <= 0 || !document.body.contains(textElement)) {
-                clearInterval(intervalId);
+                clearInterval(activeIntervalId);
                 return;
             }
 
@@ -654,39 +637,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             timerTextSpan.textContent = `${timeLeft}s`;
         }, 1000);
 
-        // Stocker le timer pour la suppression automatique
         timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
 
-        // Variable pour stocker l'ID d'intervalle actif
-        let activeIntervalId = intervalId;
-
-        // Fonction pour définir l'état "garder ouvert" (pour éviter la duplication de code)
         const setKeepOpenState = () => {
-            // Annuler tous les timers actifs
             clearTimeout(timers[timerId]);
             clearInterval(activeIntervalId);
 
-            // Arrêter complètement l'affichage du timer et montrer que c'est permanent
             timerTextSpan.textContent = "∞";
             timerProgressDiv.style.width = "100%";
-            timerProgressDiv.style.background = "#009688"; // Couleur verte pour montrer l'état actif
+            timerProgressDiv.style.background = "#009688";
             timerProgressDiv.style.opacity = "0.7";
             timerProgressDiv.style.transition = "background 0.3s ease";
         };
 
-        // Fonction pour définir l'état de fermeture automatique
         const setAutoCloseState = () => {
-            // Réactiver l'auto-fermeture avec une nouvelle durée complète
-            timeLeft = duration; // Réinitialiser le compte à rebours
+            timeLeft = duration;
 
-            // Rétablir l'apparence normale du timer
             timerProgressDiv.style.opacity = "1";
             timerProgressDiv.style.background = "linear-gradient(90deg, #4c7b8d, #684054)";
             timerProgressDiv.style.width = "100%";
             timerTextSpan.textContent = `${duration}s`;
 
-            // Redémarrer l'intervalle avec animation fluide
-            clearInterval(activeIntervalId); // S'assurer qu'aucun intervalle n'est actif
+            clearInterval(activeIntervalId);
 
             activeIntervalId = setInterval(() => {
                 if (timeLeft <= 0 || !document.body.contains(textElement) || toggleInput.checked) {
@@ -700,19 +672,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 timerTextSpan.textContent = `${timeLeft}s`;
             }, 1000);
 
-            // Redémarrer le timer de suppression de manière sécurisée
-            // Utiliser une méthode sécurisée pour accéder aux timers et éviter les injections d'objet
             const currentTimer = timers[timerId];
             if (currentTimer) {
-                window.clearTimeout(currentTimer); // Utiliser window.clearTimeout pour plus de sécurité
+                window.clearTimeout(currentTimer);
             }
 
-            // Stocker le timer de manière sécurisée pour éviter les problèmes d'injection
             const newTimer = window.setTimeout(scheduleRemoval, duration * 1000);
             timers[timerId] = newTimer;
         };
 
-        // Ajouter un gestionnaire d'événements pour désactiver/activer la fermeture automatique
         toggleInput.addEventListener('change', () => {
             if (toggleInput.checked) {
                 setKeepOpenState();
@@ -721,10 +689,48 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         });
 
-        // Vérifier l'état initial pour s'assurer que le timer est correctement synchronisé
         if (toggleInput.checked) {
             setKeepOpenState();
         }
+    }
+
+    /**
+     * Affiche un texte dans une boîte de dialogue flottante.
+     * @param {string} text - Le texte à afficher.
+     * @param {number} duration - Durée d'affichage en secondes.
+     * @param {Function} onError - Fonction de callback en cas d'erreur.
+     * @param {boolean} autoCopy - Indique si la copie automatique est activée.
+     * @returns {HTMLElement} L'élément créé.
+     */
+    function showTextInDialog(text, duration, onError, autoCopy) {
+        const container = createTranscriptionContainer();
+        const textElement = document.createElement('div');
+        textElement.className = 'whisper-transcription-element';
+
+        // Crée le conteneur de contrôles et ajoute le bouton de copie si nécessaire
+        const controlsDiv = createControlsContainer(text, onError, autoCopy);
+
+        // Crée les éléments du timer et du toggle
+        const { timerDiv, timerProgressDiv, timerTextSpan } = createTimerElements(duration);
+        const { toggleLabel, toggleInput } = createToggleElements();
+
+        // Ajoute les éléments du timer et du toggle au conteneur de contrôles
+        controlsDiv.appendChild(timerDiv);
+        controlsDiv.appendChild(toggleLabel);
+
+        textElement.appendChild(controlsDiv);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'whisper-content';
+        contentDiv.textContent = text;
+        textElement.appendChild(contentDiv);
+
+        // Configure la suppression automatique
+        setupAutoRemoval(textElement, duration, toggleInput, timerProgressDiv, timerTextSpan);
+
+        requestAnimationFrame(() => {
+            container.appendChild(textElement);
+        });
 
         return textElement;
     }
