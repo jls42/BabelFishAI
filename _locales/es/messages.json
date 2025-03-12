@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Mantener abierto",
         "description": "Texto para el interruptor que desactiva el cierre automático"
+    },
+    "autoCopyLabel": {
+        "message": "Copia automática al portapapeles",
+        "description": "Etiqueta para la opción de copia automática"
+    },
+    "autoCopyDescription": {
+        "message": "Si está activado, el resultado se copiará automáticamente al portapapeles y el cuadro de diálogo ya no aparecerá para la transcripción.",
+        "description": "Descripción de la opción de copia automática"
     }
 }

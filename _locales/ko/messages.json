@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "계속 열어두기",
         "description": "자동 닫기를 비활성화하는 토글 텍스트"
+    },
+    "autoCopyLabel": {
+        "message": "클립보드에 자동 복사",
+        "description": "자동 복사 옵션 레이블"
+    },
+    "autoCopyDescription": {
+        "message": "활성화되면 결과가 자동으로 클립보드에 복사되고 받아쓰기에는 대화 상자가 더 이상 나타나지 않습니다.",
+        "description": "자동 복사 옵션 설명"
     }
 }

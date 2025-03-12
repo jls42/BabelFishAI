@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "保持开启",
         "description": "禁用自动关闭的切换文本"
+    },
+    "autoCopyLabel": {
+        "message": "自动复制到剪贴板",
+        "description": "自动复制选项的标签"
+    },
+    "autoCopyDescription": {
+        "message": "如果启用，结果将自动复制到剪贴板，并且转录时不再显示对话框。",
+        "description": "自动复制选项的描述"
     }
 }

@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Păstrează deschis",
         "description": "Text pentru comutatorul care dezactivează închiderea automată"
+    },
+    "autoCopyLabel": {
+        "message": "Copiere automată în clipboard",
+        "description": "Etichetă pentru opțiunea de copiere automată"
+    },
+    "autoCopyDescription": {
+        "message": "Dacă este activat, rezultatul va fi copiat automat în clipboard și caseta de dialog nu va mai apărea pentru transcriere.",
+        "description": "Descriere pentru opțiunea de copiere automată"
     }
 }

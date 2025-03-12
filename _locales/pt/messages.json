@@ -438,5 +438,13 @@
     "keepOpen": {
         "message": "Manter aberto",
         "description": "Texto para a alternância que desativa o fechamento automático"
+    },
+    "autoCopyLabel": {
+        "message": "Cópia automática para a área de transferência",
+        "description": "Rótulo para a opção de cópia automática"
+    },
+    "autoCopyDescription": {
+        "message": "Se ativado, o resultado será copiado automaticamente para a área de transferência e a caixa de diálogo não aparecerá mais para a transcrição.",
+        "description": "Descrição para a opção de cópia automática"
     }
 }
