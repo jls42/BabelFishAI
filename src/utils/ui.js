@@ -511,9 +511,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    // Création unique d'un fragment de document pour optimiser les manipulations DOM
-    const documentFragment = document.createDocumentFragment();
-
     /**
      * Crée les éléments du timer visuel.
      * @param {number} duration - Durée initiale en secondes.
@@ -598,6 +595,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             clearTimeout(timers[timerId]);
         }
 
+        /**
+         * Planifie la suppression de l'élément de texte.
+         * Utilise requestIdleCallback si disponible, sinon setTimeout.
+         */
         const scheduleRemoval = () => {
             try {
                 if ('requestIdleCallback' in window) {
@@ -639,6 +640,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         timers[timerId] = setTimeout(scheduleRemoval, autoRemoveTimeout);
 
+        /**
+         * Définit l'état "garder ouvert" pour la boîte de dialogue.
+         * Annule les timers et affiche un symbole infini.
+         */
         const setKeepOpenState = () => {
             clearTimeout(timers[timerId]);
             clearInterval(activeIntervalId);
@@ -650,6 +655,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             timerProgressDiv.style.transition = "background 0.3s ease";
         };
 
+        /**
+         * Définit l'état de fermeture automatique pour la boîte de dialogue.
+         * Réinitialise le timer et redémarre le compte à rebours.
+         */
         const setAutoCloseState = () => {
             timeLeft = duration;
 
