@@ -966,7 +966,7 @@
      * @param {string} text - Le texte à afficher
      * @param {Object} options - Les options d'affichage
      * @param {boolean} autoCopy - Indique si la copie automatique est activée
-     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
+     * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     function displayTranscriptionText(text, options, autoCopy) {
         if (!isValidInputText(text)) {
@@ -981,27 +981,39 @@
                 options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
 
             // Tenter d'insérer le texte dans l'élément actif si l'option est activée
-            let displayed = false;
+            let displayMethod = null;
+            
             if (options.activeDisplay && !isDialogForced) {
-                displayed = handleActiveElementInsertion(text);
+                const insertedInActiveElement = handleActiveElementInsertion(text);
+                if (insertedInActiveElement) {
+                    displayMethod = 'activeElement';
+                }
             }
 
-
-            // Afficher dans une boîte de dialogue si nécessaire ou si l'insertion a échoué et si autoCopy est désactivé
-            if (!autoCopy && (options.dialogDisplay || isDialogForced || !displayed)) {
+            // Afficher dans une boîte de dialogue dans les cas suivants:
+            // 1. Si le domaine force l'affichage en dialogue (même avec autoCopy)
+            // 2. Si l'option dialogDisplay est activée (affichage explicite en dialogue demandé)
+            // 3. Si aucun élément actif n'a reçu le texte et autoCopy n'est pas activé
+            if (isDialogForced || options.dialogDisplay || (!autoCopy && !displayMethod)) {
                 showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
-                displayed = true;
-            } else if (autoCopy) {
-                // Si la copie automatique est activée, on considère que l'affichage a réussi.
-                displayed = true;
+                displayMethod = 'dialog';
+            } else if (autoCopy && !displayMethod) {
+                // Si autoCopy est activé mais qu'aucun élément n'a reçu le texte, et que le domaine
+                // ne force pas l'affichage en dialogue et dialogDisplay n'est pas activé,
+                // on indique que la méthode d'affichage est "clipboard"
+                displayMethod = 'clipboard';
             }
 
             // Avertir si aucune méthode d'affichage n'est activée
-            if (!displayed) {
+            if (!displayMethod) {
                 console.warn("Aucune méthode d'affichage n'est activée");
                 return false;
             }
-            return true;
+            
+            return {
+                success: true,
+                method: displayMethod
+            };
         } catch (error) {
             console.error("Erreur lors de l'affichage du texte:", error);
             handleError(error);
@@ -1012,7 +1024,7 @@
     /**
      * Affiche la transcription selon les options configurées
      * @param {string} text - Le texte à afficher
-     * @returns {Promise<boolean>} - Indique si l'affichage a réussi
+     * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     async function showTranscription(text) {
         // Valider le texte d'entrée
@@ -1046,7 +1058,7 @@
             storeFocusAndSelection();
 
             // Afficher le texte selon les options configurées
-            const result = await displayTranscriptionText(processedText, options, autoCopy);
+            const displayResult = await displayTranscriptionText(processedText, options, autoCopy);
 
             // Attendre un court délai pour permettre au navigateur de terminer les opérations DOM
             // et éviter que le texte soit automatiquement sélectionné
@@ -1055,8 +1067,16 @@
             // Restaurer le focus et la position du curseur sans sélection
             restoreFocusAndSelection(true);
 
-            // Copier dans le presse-papiers si l'option est activée
-            if (autoCopy) {
+            // Vérifier si l'élément actif est un élément valide pour insertion de texte
+            const activeElement = document.activeElement;
+            const isActiveElementValid = isValidElementForInsertion(activeElement);
+            
+            // Copier dans le presse-papiers si autoCopy est activé et:
+            // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
+            // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
+            if (autoCopy && displayResult && 
+                (displayResult.method === 'clipboard' || 
+                (displayResult.method === 'dialog' && !isActiveElementValid))) {
                 try {
                     await navigator.clipboard.writeText(processedText);
                 } catch (err) {
@@ -1064,7 +1084,7 @@
                 }
             }
 
-            return result;
+            return displayResult;
         } catch (error) {
             console.error('Error displaying transcription:', error);
             handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
@@ -1080,12 +1100,28 @@
     /**
      * Vérifie si l'élément actif est valide pour l'insertion de texte
      * @param {HTMLElement} activeElement - L'élément actif
-     * @returns {boolean} - True si l'élément est valide
+     * @returns {boolean} - True si l'élément est valide pour l'insertion de texte
      */
     function isValidElementForInsertion(activeElement) {
-        return activeElement &&
-            activeElement.tagName !== 'IFRAME' &&
+        if (!activeElement) return false;
+        
+        // Éléments spécifiquement considérés comme valides pour l'insertion
+        const isInputOrTextarea = 
+            activeElement.tagName === 'INPUT' && activeElement.type === 'text' || 
+            activeElement.tagName === 'TEXTAREA';
+            
+        // Éléments contentEditable (mais pas contenteditable="false")
+        const isContentEditable = 
+            activeElement.isContentEditable && 
             !(activeElement.getAttribute && activeElement.getAttribute('contenteditable') === 'false');
+            
+        // Ne pas considérer les éléments de base comme BODY ou HTML comme valides
+        const isBasicElement = 
+            activeElement.tagName === 'BODY' || 
+            activeElement.tagName === 'HTML' || 
+            activeElement.tagName === 'IFRAME';
+            
+        return (isInputOrTextarea || isContentEditable) && !isBasicElement;
     }
 
     /**
@@ -1311,6 +1347,9 @@
             (errorMessage) => showBanner(errorMessage, MESSAGE_TYPES.ERROR)
         );
     }
+    
+    // Fonction de débogage supprimée - nous utilisons maintenant une approche directe
+    // en vérifiant si l'élément actif est valide pour l'insertion au moment de la copie
 
     /**
      * Crée un bouton de contrôle pour la bannière avec icône et texte
