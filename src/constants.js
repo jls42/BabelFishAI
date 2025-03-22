@@ -44,7 +44,7 @@ window.BabelFishAIConstants = {
         DEFAULT_GPT_API_URL: 'https://api.openai.com/v1/chat/completions',
         WHISPER_MODEL: 'whisper-1',
         GPT_MODEL: 'gpt-4o-mini',
-        AUDIO_MODELS: ['whisper-1', 'whisper'] // Ajout de la liste des modèles audio
+        AUDIO_MODELS: ['whisper-1', 'whisper', 'gpt-4o-mini-transcribe', 'gpt-4o-transcribe'] // Updated list of audio models
     },
 
     // Messages d'erreur
