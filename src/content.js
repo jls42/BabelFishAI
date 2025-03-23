@@ -14,18 +14,35 @@
         console.error("Failed to load languages-shared.js:", error);
     }
 
-    // Importer i18n.js dynamiquement et s'assurer qu'il est initialisé correctement
+    // Importer les utilitaires dynamiquement et s'assurer qu'ils sont initialisés correctement
     try {
         await import(chrome.runtime.getURL('src/utils/i18n.js'));
+        await import(chrome.runtime.getURL('src/utils/focus-utils.js'));
+        await import(chrome.runtime.getURL('src/utils/error-utils.js'));
+        await import(chrome.runtime.getURL('src/utils/recording-utils.js'));
+        await import(chrome.runtime.getURL('src/utils/text-processing.js'));
+        await import(chrome.runtime.getURL('src/utils/event-handlers.js'));
+        await import(chrome.runtime.getURL('src/utils/transcription-display.js'));
+        await import(chrome.runtime.getURL('src/utils/text-translation.js'));
+        await import(chrome.runtime.getURL('src/utils/banner-utils.js'));
+        await import(chrome.runtime.getURL('src/utils/ui.js'));
+        await import(chrome.runtime.getURL('src/utils/api-utils.js'));
         // Initialisation après l'importation
         await window.BabelFishAIUtils.i18n.init();
-        console.log("Content script and i18n.js injected!");
+        
+        // Créer l'espace de noms BabelFishAI pour les fonctions principales
+        window.BabelFishAI = window.BabelFishAI || {};
+        
+        // Initialiser l'espace de noms UI (les fonctions seront exposées plus bas dans le code)
+        window.BabelFishAI.ui = {};
+        
+        console.log("Content script and utility modules injected!");
 
         // Créer un événement personnalisé pour signaler que i18n est chargé
         const i18nLoadedEvent = new CustomEvent('babelfishai:i18n-loaded');
         document.dispatchEvent(i18nLoadedEvent);
     } catch (error) {
-        console.error("Failed to import i18n.js:", error);
+        console.error("Failed to import utility scripts:", error);
     }
 
     // Content script de l'extension de transcription vocale
@@ -53,53 +70,10 @@
         NO_EDITABLE_ELEMENT: window.BabelFishAIConstants.ERRORS.NO_EDITABLE_ELEMENT
     };
 
-    /**
-     * Exécute une fonction en toute sécurité avec gestion d'erreur
-     * @param {Function} fn - Fonction à exécuter
-     * @param {string} errorMsg - Message d'erreur à afficher en cas d'échec
-     * @param {Object} options - Options de configuration
-     * @param {boolean} [options.propagateError=true] - Si true, propage l'erreur, sinon retourne null
-     * @param {boolean} [options.isAsync=true] - Si true, attend le résultat de la fonction asynchrone
-     * @returns {Promise|*} - Le résultat de la fonction ou null en cas d'erreur
-     */
-    function safeExecute(fn, errorMsg, options = {}) {
-        // Valeurs par défaut des options
-        const {
-            propagateError = true,
-            isAsync = true
-        } = options;
-
-        try {
-            // Exécuter la fonction de manière asynchrone ou synchrone selon les options
-            const result = fn();
-
-            // Si c'est une fonction asynchrone, attendre le résultat
-            if (isAsync && result instanceof Promise) {
-                return result.catch(e => {
-                    console.warn(errorMsg, e);
-                    if (propagateError) {
-                        throw e; // Propager l'erreur pour la gestion centralisée
-                    }
-                    return null;
-                });
-            }
-
-            // Pour les fonctions synchrones, retourner directement le résultat
-            return result;
-        } catch (e) {
-            // Gestion des erreurs synchrones
-            console.warn(errorMsg, e);
-            if (propagateError) {
-                throw e; // Propager l'erreur
-            }
-            return null;
-        }
-    }
+    // Utilisation de la fonction safeExecute depuis error-utils.js
+    const safeExecute = window.BabelFishAIUtils.error.safeExecute;
 
     // État global
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRecording = false;
     let recordingBanner = null;
     let apiKey = null;
     let bannerColorStart = UI_CONFIG.DEFAULT_BANNER_COLOR_START;
@@ -114,196 +88,19 @@
         range: null
     };
 
-    /**
-     * Stocke l'élément actif et sa sélection avant l'interaction avec les boutons
-     */
-    function storeFocusAndSelection() {
-        const activeElem = document.activeElement;
-        if (!activeElem) return;
+    // La fonction storeFocusAndSelection a été migrée vers focus-utils.js
 
-        // Vérifier si c'est un input/textarea
-        if (
-            (activeElem.tagName === 'TEXTAREA') ||
-            (activeElem.tagName === 'INPUT' && activeElem.type === 'text')
-        ) {
-            lastFocusInfo.element = activeElem;
-            lastFocusInfo.selectionStart = activeElem.selectionStart;
-            lastFocusInfo.selectionEnd = activeElem.selectionEnd;
-            lastFocusInfo.range = null;
-        }
-        // Ou un élément contentEditable
-        else if (activeElem.isContentEditable) {
-            lastFocusInfo.element = activeElem;
-            lastFocusInfo.selectionStart = null;
-            lastFocusInfo.selectionEnd = null;
+    // La fonction isStoredElementValid a été migrée vers focus-utils.js
 
-            // Récupération de la sélection (Range) pour contentEditable
-            const selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                lastFocusInfo.range = selection.getRangeAt(0);
-            }
-        } else {
-            // Sinon, on ne fait rien (l'élément n'est pas pertinent pour nous)
-            lastFocusInfo.element = null;
-            lastFocusInfo.range = null;
-        }
-    }
+    // La fonction restoreFocus a été migrée vers focus-utils.js
 
-    /**
-     * Vérifie la validité de l'élément stocké pour le focus
-     * @returns {boolean} - True si l'élément est valide, False sinon
-     */
-    function isStoredElementValid() {
-        if (!lastFocusInfo.element) {
-            return false;
-        }
+    // La fonction handleInputCursorPosition a été migrée vers focus-utils.js
 
-        try {
-            // Vérifier que l'élément existe toujours dans le DOM de manière sécurisée
-            return document.body?.contains(lastFocusInfo.element);
-        } catch (e) {
-            lastFocusInfo.element = null;
-            return false;
-        }
-    }
+    // La fonction findLastTextNode a été migrée vers focus-utils.js
 
-    /**
-     * Restaure le focus sur l'élément stocké
-     * @returns {boolean} - True si le focus a été restauré avec succès
-     */
-    function restoreFocus() {
-        try {
-            lastFocusInfo.element.focus();
-            return true;
-        } catch (e) {
-            lastFocusInfo.element = null;
-            return false;
-        }
-    }
+    // La fonction handleContentEditableCursor a été migrée vers focus-utils.js
 
-    /**
-     * Gère la position du curseur pour les éléments input/textarea
-     * @param {boolean} preventSelection - Si true, place le curseur à la fin sans sélectionner
-     */
-    function handleInputCursorPosition(preventSelection) {
-        try {
-            if (preventSelection) {
-                // Placer le curseur à la fin sans sélectionner
-                const endPosition = lastFocusInfo.element.value.length;
-                lastFocusInfo.element.setSelectionRange(endPosition, endPosition);
-            } else {
-                // Restaurer la sélection originale
-                lastFocusInfo.element.setSelectionRange(
-                    lastFocusInfo.selectionStart,
-                    lastFocusInfo.selectionEnd
-                );
-            }
-        } catch (e) {
-            console.warn("Impossible de restaurer la position du curseur:", e);
-        }
-    }
-
-    /**
-     * Trouve le dernier nœud de texte dans un élément
-     * @param {Node} node - Le nœud à parcourir
-     * @returns {Node|null} - Le dernier nœud de texte ou null
-     */
-    function findLastTextNode(node) {
-        try {
-            if (!node) return null;
-
-            if (node.nodeType === Node.TEXT_NODE) {
-                return node;
-            } else if (node.childNodes && node.childNodes.length > 0) {
-                for (let i = node.childNodes.length - 1; i >= 0; i--) {
-                    const result = findLastTextNode(node.childNodes[i]);
-                    if (result) return result;
-                }
-            }
-            return null;
-        } catch (e) {
-            console.warn("Erreur lors de la recherche des nœuds:", e);
-            return null;
-        }
-    }
-
-    /**
-     * Gère la position du curseur pour les éléments contentEditable
-     * @param {boolean} preventSelection - Si true, place le curseur à la fin sans sélectionner
-     */
-    function handleContentEditableCursor(preventSelection) {
-        try {
-            // Vérifier que window.getSelection() est disponible
-            const selection = window.getSelection();
-            if (!selection) {
-                console.warn("window.getSelection() n'est pas disponible");
-                return;
-            }
-
-            // Effacer les sélections actuelles de manière sécurisée
-            try {
-                selection.removeAllRanges();
-            } catch (e) {
-                console.warn("Erreur lors de la suppression des ranges:", e);
-                return;
-            }
-
-            if (preventSelection) {
-                // Créer un range qui place le curseur à la fin du contenu sans sélection
-                const range = document.createRange();
-
-                // Trouver le dernier nœud de texte dans l'élément
-                const lastTextNode = findLastTextNode(lastFocusInfo.element);
-
-                if (lastTextNode) {
-                    // Placer le curseur à la fin du dernier nœud de texte
-                    range.setStart(lastTextNode, lastTextNode.length);
-                    range.setEnd(lastTextNode, lastTextNode.length);
-                } else {
-                    // Si aucun nœud de texte n'est trouvé, utiliser la fin de l'élément
-                    range.selectNodeContents(lastFocusInfo.element);
-                    range.collapse(false); // Collapse à la fin
-                }
-
-                // Appliquer le range
-                selection.addRange(range);
-            } else if (lastFocusInfo.range) {
-                // Restaurer la sélection originale
-                selection.addRange(lastFocusInfo.range);
-            }
-        } catch (e) {
-            console.warn("Impossible de restaurer la position du curseur dans contentEditable:", e);
-            lastFocusInfo.range = null;
-        }
-    }
-
-    /**
-     * Restaure le focus et la sélection après l'interaction avec les boutons
-     * @param {boolean} [force=false] - Forcer la restauration même si l'élément actif semble correct
-     * @param {boolean} [preventSelection=true] - Empêcher la sélection, mettre le curseur à la fin du contenu
-     */
-    function restoreFocusAndSelection(force = false, preventSelection = true) {
-        // Vérifier si l'élément stocké est valide
-        if (!isStoredElementValid()) {
-            return;
-        }
-
-        // Si l'élément est déjà actif et qu'on ne force pas la restauration, ne rien faire
-        if (!force && document.activeElement === lastFocusInfo.element) return;
-
-        // Tenter de restaurer le focus
-        if (!restoreFocus()) {
-            return;
-        }
-
-        // Traiter selon le type d'élément
-        if ((lastFocusInfo.element.tagName === 'TEXTAREA') ||
-            (lastFocusInfo.element.tagName === 'INPUT' && lastFocusInfo.element.type === 'text')) {
-            handleInputCursorPosition(preventSelection);
-        } else if (lastFocusInfo.element.isContentEditable) {
-            handleContentEditableCursor(preventSelection);
-        }
-    }
+    // La fonction restoreFocusAndSelection a été migrée vers focus-utils.js
 
     /**
      * Initialise les options de l'extension
@@ -312,26 +109,30 @@
         try {
             // Initialisation de la clé API
             apiKey = await window.BabelFishAIUtils.api.getApiKey();
+            // Pas besoin d'afficher d'erreur ici si la clé est null,
+            // car getApiKey() gère déjà l'affichage d'un message approprié
         } catch (error) {
-            console.error("Failed to load API key:", error);
+            // Seulement afficher une erreur si c'est une exception inattendue
+            console.error("Erreur inattendue lors du chargement de la clé API:", error);
         }
 
         // Initialisation des options de couleur du bandeau en utilisant l'utilitaire
         try {
-            window.BabelFishAIUtils.api.getFromStorage({
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
                 bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
                 bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
                 bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
-            }).then(result => {
-                bannerColorStart = result.bannerColorStart;
-                bannerColorEnd = result.bannerColorEnd;
-                bannerOpacity = result.bannerOpacity;
-                if (recordingBanner) {
-                    updateBannerColor();
-                }
             });
+            
+            bannerColorStart = result.bannerColorStart;
+            bannerColorEnd = result.bannerColorEnd;
+            bannerOpacity = result.bannerOpacity;
+            
+            if (recordingBanner) {
+                updateBannerColor();
+            }
         } catch (error) {
-            console.error("Failed to load banner colors:", error);
+            console.error("Erreur lors du chargement des couleurs de la bannière:", error);
         }
     }
 
@@ -339,7 +140,7 @@
     initializeExtensionOptions();
 
     /**
-     * Met à jour la couleur du bandeau en utilisant la fonction de l'utilitaire UI
+     * Met à jour la couleur du bandeau en utilisant la fonction de l'utilitaire banner
      * @param {boolean} [force=false] - Forcer la mise à jour même si la bannière est en mode erreur
      * @returns {boolean} - Indique si la mise à jour a réussi
      */
@@ -347,8 +148,8 @@
         // Éviter de mettre à jour la couleur si la bannière n'existe pas
         if (!recordingBanner) return false;
 
-        // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur du bandeau
-        window.BabelFishAIUtils.ui.updateBannerColor(
+        // Utiliser la fonction de l'utilitaire banner pour mettre à jour la couleur du bandeau
+        window.BabelFishAIUtils.banner.updateBannerColor(
             recordingBanner,
             bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
             bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
@@ -363,389 +164,16 @@
      * Démarre l'enregistrement audio avec optimisation pour la performance
      * @returns {Promise<boolean>} - Indique si l'enregistrement a démarré avec succès
      */
+    // Utilisation de la fonction startRecording depuis recording-utils.js
     async function startRecording() {
-        // Réinitialiser les chunks audio immédiatement
-        if (audioChunks.length > 0) {
-            audioChunks.length = 0;
-        }
-
-        // Variable pour stocker le flux audio
-        let stream = null;
-
-        try {
-            // 1. Vérifier la disponibilité de la clé API (nécessaire avant d'accéder au micro)
-            apiKey = await safeExecute(
-                () => window.BabelFishAIUtils.api.getApiKey(),
-                "Erreur lors de la récupération de la clé API"
-            );
-
-            // 2. Configuration optimale pour la capture audio
-            const audioConstraints = {
-                audio: {
-                    // Paramètres optimaux pour la reconnaissance vocale
-                    echoCancellation: true,    // Suppression de l'écho
-                    noiseSuppression: true,    // Suppression du bruit
-                    autoGainControl: true,     // Ajustement automatique du gain
-                    sampleRate: 44100,         // Fréquence d'échantillonnage standard
-                    channelCount: 1            // Mono (meilleur pour la reconnaissance vocale)
-                },
-                video: false  // Explicitement refuser l'accès vidéo
-            };
-
-            // 3. Demander l'accès au microphone avec les contraintes optimisées
-            stream = await safeExecute(
-                () => navigator.mediaDevices.getUserMedia(audioConstraints),
-                "Erreur lors de l'accès au microphone"
-            );
-
-            // Vérifier que le stream est valide
-            if (!stream || !stream.active) {
-                throw new Error("Stream audio invalide ou inactif");
-            }
-
-            // 4. Créer le MediaRecorder avec les codecs optimaux disponibles
-            const options = {
-                mimeType: 'audio/webm;codecs=opus',  // Format optimal pour la reconnaissance vocale
-                audioBitsPerSecond: 128000           // 128kbps pour un bon compromis taille/qualité
-            };
-
-            // Vérification de compatibilité
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                console.warn(`Format ${options.mimeType} non supporté, utilisation du format par défaut`);
-                mediaRecorder = new MediaRecorder(stream); // Fallback au format par défaut
-            } else {
-                mediaRecorder = new MediaRecorder(stream, options);
-            }
-
-            // 5. Configurer les gestionnaires d'événements (la fonction start est dans setupMediaRecorderEvents)
-            setupMediaRecorderEvents(stream);
-
-            // 6. Mettre à jour l'état UI immédiatement (ne pas attendre le démarrage effectif)
-            isRecording = true;
-
-            // 7. Informer l'utilisateur via la bannière
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRecording"));
-
-            // 8. Informer le background script (opération asynchrone qui ne doit pas bloquer)
-            safeExecute(
-                () => chrome.runtime.sendMessage({ action: ACTIONS.STARTED }),
-                "Impossible d'envoyer la notification de démarrage au background"
-            );
-
-            return true;
-        } catch (error) {
-            console.error("Erreur lors du démarrage de l'enregistrement:", error);
-
-            // Détection intelligente du type d'erreur
-            let errorMessage;
-
-            if (error.message?.includes(ERRORS.API_KEY_NOT_FOUND)) {
-                // Erreur de clé API manquante
-                errorMessage = ERRORS.API_KEY_NOT_FOUND;
-            } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-                // Erreur d'autorisation de microphone refusée
-                errorMessage = window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError");
-            } else if (error.name === 'NotFoundError') {
-                // Aucun périphérique audio trouvé
-                errorMessage = "Aucun microphone détecté sur cet appareil.";
-            } else if (error.name === 'NotReadableError' || error.name === 'AbortError') {
-                // Problème d'accès au périphérique
-                errorMessage = "Impossible d'accéder au microphone (périphérique occupé ou défaillant).";
-            } else {
-                // Erreur générique d'accès au microphone
-                errorMessage = ERRORS.MIC_ACCESS_ERROR;
-            }
-
-            // Affichage centralisé de l'erreur
-            handleError(errorMessage, error.message || error.toString());
-
-            // Nettoyage complet en cas d'échec
-            isRecording = false;
-
-            // Libérer le flux audio si disponible
-            if (stream) {
-                safeExecute(
-                    () => stream.getTracks().forEach(track => track.stop()),
-                    "Erreur lors de la libération des ressources audio"
-                );
-                stream = null;
-            }
-
-            return false;
-        }
+        return await window.BabelFishAIUtils.recording.startRecording();
     }
 
-    /**
-     * Traite l'audio enregistré de manière optimisée
-     * @param {Blob} audioBlob - Le blob audio à traiter
-     * @returns {Promise<void>}
-     */
-    async function processRecordedAudio(audioBlob) {
-        try {
-            // Vérification rapide de la validité du blob audio
-            if (!audioBlob || audioBlob.size <= 0 || audioBlob.type.indexOf('audio/') !== 0) {
-                throw new Error("Blob audio invalide ou vide");
-            }
+    // La fonction processRecordedAudio a été déplacée vers recording-utils.js
 
-            // 1. Informer l'utilisateur que la transcription est en cours
-            await safeExecute(
-                () => showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing")),
-                "Erreur lors de l'affichage de la bannière de transcription"
-            );
+    // La fonction cleanupRecordingResources a été déplacée vers recording-utils.js
 
-            // 2. Transcrire l'audio avec une gestion optimisée des erreurs
-            const transcription = await safeExecute(
-                () => transcribeAudio(audioBlob),
-                "Erreur lors de la transcription audio"
-            );
-
-            // Vérification rapide du résultat avant de continuer
-            if (!transcription || typeof transcription !== 'string' || transcription.trim() === '') {
-                throw new Error("Résultat de transcription vide ou invalide");
-            }
-
-            // 3. Afficher la transcription (avec les éventuelles opérations de traduction/reformulation)
-            await safeExecute(
-                () => showTranscription(transcription),
-                "Erreur lors de l'affichage de la transcription"
-            );
-
-            // 4. Cacher la bannière une fois toutes les opérations terminées avec succès
-            await safeExecute(
-                () => hideBanner(),
-                "Erreur lors de la dissimulation de la bannière"
-            );
-
-            // 5. Aide au garbage collector en supprimant la référence au blob
-            // Cela est particulièrement important pour les gros fichiers audio
-            return null;
-        } catch (error) {
-            // Gestion centralisée et cohérente des erreurs
-            console.error("Erreur pendant le traitement audio:", error);
-
-            // Utiliser le message d'erreur approprié selon le type d'erreur
-            const userMessage = error.name === 'AbortError'
-                ? "Traitement audio annulé"
-                : (window.BabelFishAIUtils.i18n.getMessage("bannerTranscriptionError") || "Erreur pendant la transcription");
-
-            handleError(userMessage, error.message || error.toString());
-
-            // Assurer que la bannière d'erreur est visible même en cas d'erreur dans hideBanner
-            if (recordingBanner) {
-                try {
-                    showBanner(userMessage, MESSAGE_TYPES.ERROR);
-                } catch (e) {
-                    console.error("Erreur lors de l'affichage de la bannière d'erreur:", e);
-                }
-            }
-        } finally {
-            // S'assurer que la référence au blob est libérée dans tous les cas
-            audioBlob = null;
-        }
-
-        // Retourne null en dehors du bloc finally
-        return null;
-    }
-
-    /**
-     * Nettoie les ressources après l'enregistrement
-     * @param {MediaStream} stream - Le flux audio à nettoyer
-     * @param {boolean} [wasCanceled=false] - Indique si l'enregistrement a été annulé
-     */
-    function cleanupRecordingResources(stream, wasCanceled) {
-        // Réinitialiser l'état d'enregistrement immédiatement
-        isRecording = false;
-
-        // 1. Informer le background script - Opération asynchrone qui ne doit pas bloquer
-        safeExecute(() => {
-            chrome.runtime.sendMessage({
-                action: ACTIONS.STOPPED,
-                canceled: wasCanceled === true
-            });
-        }, "Impossible d'envoyer le message d'arrêt au background", { propagateError: false, isAsync: false });
-
-        // 2. Libérer les ressources du MediaRecorder
-        if (mediaRecorder) {
-            // Arrêter l'enregistrement s'il est toujours actif
-            if (mediaRecorder.state === 'recording') {
-                safeExecute(
-                    () => mediaRecorder.stop(),
-                    "Erreur lors de l'arrêt du MediaRecorder",
-                    { propagateError: false, isAsync: false }
-                );
-            }
-
-            // Supprimer les références aux événements pour éviter les fuites mémoire
-            // Utilisation d'un destructuring pour simplifier le code
-            ['ondataavailable', 'onstop', 'onerror'].forEach(eventName => {
-                safeExecute(
-                    () => { mediaRecorder[eventName] = null; },
-                    `Erreur lors de la suppression du gestionnaire d'événement ${eventName}`,
-                    { propagateError: false, isAsync: false }
-                );
-            });
-
-            // Supprimer toute référence au mediaRecorder
-            mediaRecorder = null;
-        }
-
-        // 3. Libérer les ressources du stream audio
-        if (stream?.getTracks) {
-            // Obtenir toutes les pistes en une seule opération
-            const tracks = stream.getTracks();
-
-            // Arrêter chaque piste de manière sécurisée
-            tracks.forEach(track => {
-                safeExecute(
-                    () => track.stop(),
-                    "Erreur lors de l'arrêt d'une piste audio",
-                    { propagateError: false, isAsync: false }
-                );
-            });
-
-            // Aider le GC en supprimant les références explicitement
-            stream = null;
-        }
-
-        // 4. Nettoyer les chunks audio - optimisation pour libérer la mémoire rapidement
-        if (audioChunks.length > 0) {
-            // Vider le tableau de manière optimisée
-            audioChunks.length = 0;
-        }
-
-        // 5. Encourager le garbage collector à s'exécuter (si disponible)
-        // Les navigateurs modernes ont des GC très efficaces, 
-        // donc cette étape est principalement pour des cas particuliers
-        if (window.gc) {
-            // Appel direct au GC si disponible (cas rare)
-            safeExecute(
-                () => window.gc(),
-                "Erreur lors de l'appel au garbage collector",
-                { propagateError: false, isAsync: false }
-            );
-        } else {
-            // Technique avancée pour suggérer au GC de s'exécuter:
-            // Créer et supprimer un grand nombre d'objets pour encourager le GC
-            safeExecute(() => {
-                if (window.requestIdleCallback) {
-                    // Utiliser requestIdleCallback de manière sécurisée
-                    window.requestIdleCallback(() => {
-                        // Créer et supprimer immédiatement un tableau large peut encourager le GC
-                        const temp = new Array(10000).fill(0);
-                        temp.length = 0;
-                    }, { timeout: 100 }); // Utiliser un objet options correct
-                } else {
-                    // Fallback à setTimeout
-                    setTimeout(() => {
-                        const temp = new Array(10000).fill(0);
-                        temp.length = 0;
-                    }, 100);
-                }
-            }, "Erreur lors de la suggestion de garbage collection");
-        }
-    }
-
-    /**
-     * Configure les événements du MediaRecorder
-     * @param {MediaStream} stream - Le flux audio
-     */
-    function setupMediaRecorderEvents(stream) {
-        if (!mediaRecorder) {
-            console.error('MediaRecorder non initialisé');
-            return;
-        }
-
-        // Configuration optimale pour l'enregistrement audio
-        // Nous préférons des chunks plus petits pour un traitement plus fluide
-        // et une meilleure gestion de la mémoire
-        if (typeof mediaRecorder.audioBitsPerSecond === 'number') {
-            // Utiliser un bitrate modéré pour un bon compromis qualité/taille
-            mediaRecorder.audioBitsPerSecond = 128000; // 128 kbps
-        }
-
-        // Événement déclenché lorsque des données audio sont disponibles
-        // Utilisation d'une fonction nommée pour faciliter le nettoyage des listeners
-        const handleDataAvailable = event => {
-            // Vérification optimisée avec court-circuit
-            if (event.data?.size > 0) {
-                // Utilisation d'un push pour ajouter le chunk
-                audioChunks.push(event.data);
-            }
-        };
-
-        // Événement déclenché lorsque l'enregistrement est arrêté
-        // Utilisation d'une fonction nommée pour faciliter le nettoyage
-        const handleRecordingStopped = async () => {
-            let audioBlob = null;
-
-            try {
-                // Sortie rapide en cas d'annulation (économie de traitement)
-                if (mediaRecorder.cancelProcessing) {
-                    console.log("Enregistrement annulé par l'utilisateur, audio non traité"); // skipcq: JS-0002
-                    return;
-                }
-
-                // Vérification optimisée
-                const hasAudioData = audioChunks.length > 0;
-                if (!hasAudioData) {
-                    throw new Error("Aucune donnée audio capturée");
-                }
-
-                // Utilisation de propriétés optimales pour les blobs audio
-                audioBlob = new Blob(audioChunks, {
-                    type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
-                });
-
-                // Vérification optimisée de la taille
-                if (audioBlob.size <= 0) {
-                    throw new Error("Blob audio vide");
-                }
-
-                // Traiter l'audio enregistré - passage du blob par référence
-                await processRecordedAudio(audioBlob);
-            } catch (error) {
-                console.error('Erreur lors du traitement de l\'enregistrement:', error);
-                handleError(error);
-            } finally {
-                // Libération proactive des ressources pour éviter les fuites mémoire
-                if (audioBlob) {
-                    // Aide le GC à libérer le blob plus rapidement
-                    audioBlob = null;
-                }
-
-                // Nettoyer les ressources dans tous les cas
-                cleanupRecordingResources(stream);
-            }
-        };
-
-        // Gestionnaire d'erreurs optimisé
-        const handleRecordingError = error => {
-            console.error('Erreur MediaRecorder:', error);
-
-            // Formater le message d'erreur de manière cohérente
-            const errorName = error?.name || 'MediaRecorder error';
-            const errorMessage = error?.message || 'Erreur d\'enregistrement inconnue';
-
-            // Afficher l'erreur à l'utilisateur
-            handleError('Erreur d\'enregistrement', `${errorName}: ${errorMessage}`);
-
-            // Nettoyer immédiatement les ressources
-            cleanupRecordingResources(stream);
-        };
-
-        // Assigner les gestionnaires d'événements
-        mediaRecorder.ondataavailable = handleDataAvailable;
-        mediaRecorder.onstop = handleRecordingStopped;
-        mediaRecorder.onerror = handleRecordingError;
-
-        // Configuration d'un délai d'interrogation pour les chunks audio
-        // Cela permet d'obtenir des chunks plus petits et plus fréquents pour un traitement plus fluide
-        if (typeof mediaRecorder.start === 'function') {
-            // Obtenir des données chaque seconde pour une meilleure gestion de la mémoire
-            // au lieu d'attendre la fin de l'enregistrement
-            mediaRecorder.start(1000);
-        }
-    }
+    // La fonction setupMediaRecorderEvents a été déplacée vers recording-utils.js
 
     /**
      * Arrête l'enregistrement en cours
@@ -753,43 +181,8 @@
      * @returns {boolean} - Indique si l'arrêt a été effectué
      */
     function stopRecording(cancelProcessing = false) {
-        try {
-            // Vérifier si le mediaRecorder existe et est en cours d'enregistrement
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                // Si on annule, on stocke cette information pour éviter le traitement dans l'événement onstop
-                if (cancelProcessing) {
-                    mediaRecorder.cancelProcessing = true;
-
-                    // Afficher un message d'annulation dans le bandeau
-                    // Le message sera masqué automatiquement par le setTimeout dans cancelRecording()
-                    showBanner(CANCEL_MESSAGE.RECORDING_CANCELED);
-
-                    // Informer le background script
-                    chrome.runtime.sendMessage({
-                        action: ACTIONS.STOPPED,
-                        canceled: true
-                    });
-
-                    // Nettoyage des ressources d'enregistrement
-                    const stream = mediaRecorder.stream;
-                    mediaRecorder.stop();
-                    cleanupRecordingResources(stream, true);
-
-                    // Ne pas continuer avec le reste de la fonction pour éviter un double appel à mediaRecorder.stop()
-                    return true;
-                }
-
-                mediaRecorder.stop();
-                return true;
-            } else {
-                console.warn("No active recording to stop");
-                return false;
-            }
-        } catch (error) {
-            console.error("Error stopping recording:", error);
-            handleError("Erreur lors de l'arrêt de l'enregistrement", error.message);
-            return false;
-        }
+        // Utiliser la fonction stopRecording de recording-utils.js
+        return window.BabelFishAIUtils.recording.stopRecording(cancelProcessing);
     }
 
     /**
@@ -797,33 +190,8 @@
      * @returns {boolean} - Indique si l'annulation a réussi
      */
     function cancelRecording() {
-        if (isRecording) {
-            // Restaurer immédiatement le focus avant même d'arrêter l'enregistrement
-            restoreFocusAndSelection(true, true);
-
-            const result = stopRecording(true);
-
-            // Cacher automatiquement la bannière après 4 secondes
-            setTimeout(() => {
-                // Vérifier le contenu du statusTextContainer pour la compatibilité avec la structure actuelle du bandeau
-                const statusTextContainer = recordingBanner.querySelector('.whisper-status-text');
-                if (recordingBanner) {
-                    if ((statusTextContainer && statusTextContainer.textContent === CANCEL_MESSAGE.RECORDING_CANCELED) ||
-                        recordingBanner.textContent === CANCEL_MESSAGE.RECORDING_CANCELED) {
-                        hideBanner();
-                        console.log("Bandeau masqué après annulation d'enregistrement"); // skipcq: JS-0002
-
-                        // S'assurer que le focus est toujours restauré après avoir caché la bannière
-                        setTimeout(() => {
-                            restoreFocusAndSelection(true, true);
-                        }, 100);
-                    }
-                }
-            }, 4000);
-
-            return result;
-        }
-        return false;
+        // Utiliser la fonction cancelRecording de recording-utils.js
+        return window.BabelFishAIUtils.recording.cancelRecording();
     }
 
 
@@ -833,35 +201,15 @@
      * @returns {Promise<string>} Le texte transcrit
      */
     async function transcribeAudio(audioBlob) {
-        if (!apiKey) {
-            const errorMsg = ERRORS.API_KEY_NOT_FOUND;
-            handleError(errorMsg, errorMsg);
-            throw new Error(errorMsg);
-        }
-
         try {
-            // Récupérer l'URL de l'API et le modèle depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-                audioModelType: API_CONFIG.WHISPER_MODEL
-            });
-
-            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
-            const audioModelType = result.audioModelType;
-
-            // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
-            return await window.BabelFishAIUtils.api.transcribeAudio(
-                audioBlob,
-                apiKey,
-                apiUrl,
-                audioModelType,
-                null, // Pas de nom de fichier spécifique
-                true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
-            );
+            // Utiliser la fonction migrée dans transcription-display.js
+            const result = await window.BabelFishAIUtils.display.transcribeAudio(audioBlob);
+            return result;
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
         } finally {
+            // Nettoyer les ressources spécifiques à content.js
             audioChunks = [];
             audioBlob = null;
         }
@@ -872,16 +220,8 @@
      * @returns {Promise<Object>} Les options d'affichage, de traduction et de reformulation
      */
     function getDisplayOptions() {
-        return window.BabelFishAIUtils.api.getFromStorage({
-            activeDisplay: true,
-            dialogDisplay: false,
-            dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
-            enableRephrase: false,
-            enableTranslation: false,
-            sourceLanguage: 'fr',
-            targetLanguage: 'en',
-            forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
-        });
+        // Cette fonction a été migrée vers transcription-display.js
+        return window.BabelFishAIUtils.display.getDisplayOptions();
     }
 
     /**
@@ -899,8 +239,8 @@
             // Informer l'utilisateur que la reformulation est en cours
             showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasing") || "Reformulation en cours...");
 
-            // Reformuler le texte
-            const rephrasedText = await window.BabelFishAIUtils.translation.rephraseText(
+            // Utiliser la fonction rephraseText du module text-processing
+            const rephrasedText = await window.BabelFishAIUtils.textProcessing.rephraseText(
                 text,
                 apiKey
             );
@@ -936,8 +276,8 @@
             // Informer l'utilisateur que la traduction est en cours
             showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
 
-            // Traduire le texte
-            const translatedText = await window.BabelFishAIUtils.translation.translateText(
+            // Utiliser la fonction translateText du module text-processing
+            const translatedText = await window.BabelFishAIUtils.textProcessing.translateText(
                 text,
                 options.sourceLanguage,
                 options.targetLanguage,
@@ -969,56 +309,8 @@
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     function displayTranscriptionText(text, options, autoCopy) {
-        if (!isValidInputText(text)) {
-            console.warn("Tentative d'affichage de texte vide");
-            return false;
-        }
-
-        try {
-            // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
-            const currentDomain = window.location.hostname;
-            const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
-                options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
-
-            // Tenter d'insérer le texte dans l'élément actif si l'option est activée
-            let displayMethod = null;
-            
-            if (options.activeDisplay && !isDialogForced) {
-                const insertedInActiveElement = handleActiveElementInsertion(text);
-                if (insertedInActiveElement) {
-                    displayMethod = 'activeElement';
-                }
-            }
-
-            // Afficher dans une boîte de dialogue dans les cas suivants:
-            // 1. Si le domaine force l'affichage en dialogue (même avec autoCopy)
-            // 2. Si l'option dialogDisplay est activée (affichage explicite en dialogue demandé)
-            // 3. Si aucun élément actif n'a reçu le texte et autoCopy n'est pas activé
-            if (isDialogForced || options.dialogDisplay || (!autoCopy && !displayMethod)) {
-                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
-                displayMethod = 'dialog';
-            } else if (autoCopy && !displayMethod) {
-                // Si autoCopy est activé mais qu'aucun élément n'a reçu le texte, et que le domaine
-                // ne force pas l'affichage en dialogue et dialogDisplay n'est pas activé,
-                // on indique que la méthode d'affichage est "clipboard"
-                displayMethod = 'clipboard';
-            }
-
-            // Avertir si aucune méthode d'affichage n'est activée
-            if (!displayMethod) {
-                console.warn("Aucune méthode d'affichage n'est activée");
-                return false;
-            }
-            
-            return {
-                success: true,
-                method: displayMethod
-            };
-        } catch (error) {
-            console.error("Erreur lors de l'affichage du texte:", error);
-            handleError(error);
-            return false;
-        }
+        // Cette fonction a été migrée vers transcription-display.js
+        return window.BabelFishAIUtils.display.displayTranscriptionText(text, options, autoCopy);
     }
 
     /**
@@ -1027,74 +319,8 @@
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     async function showTranscription(text) {
-        // Valider le texte d'entrée
-        if (!isValidInputText(text)) {
-            const errorMsg = "Texte de transcription invalide";
-            console.error(`${errorMsg}:`, text);
-            handleError(errorMsg, "Invalid transcription text");
-            return false;
-        }
-
-        try {
-            // Informer l'utilisateur que le traitement est en cours
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
-
-            // Récupérer les options de configuration
-            const options = await getDisplayOptions();
-
-            // Récupérer l'option autoCopy
-            const { autoCopy } = await window.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
-
-            // Étape 1: Reformuler le texte si l'option est activée
-            let processedText = text;
-            if (options.enableRephrase) {
-                processedText = await rephraseTextIfEnabled(processedText, options);
-            }
-
-            // Étape 2: Traduire le texte si l'option est activée
-            processedText = await translateTextIfEnabled(processedText, options);
-
-            // Stocker l'élément actif avant d'afficher le texte
-            storeFocusAndSelection();
-
-            // Afficher le texte selon les options configurées
-            const displayResult = await displayTranscriptionText(processedText, options, autoCopy);
-
-            // Attendre un court délai pour permettre au navigateur de terminer les opérations DOM
-            // et éviter que le texte soit automatiquement sélectionné
-            await new Promise(resolve => setTimeout(resolve, 10));
-
-            // Restaurer le focus et la position du curseur sans sélection
-            restoreFocusAndSelection(true);
-
-            // Vérifier si l'élément actif est un élément valide pour insertion de texte
-            const activeElement = document.activeElement;
-            const isActiveElementValid = isValidElementForInsertion(activeElement);
-            
-            // Copier dans le presse-papiers si autoCopy est activé et:
-            // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
-            // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
-            if (autoCopy && displayResult && 
-                (displayResult.method === 'clipboard' || 
-                (displayResult.method === 'dialog' && !isActiveElementValid))) {
-                try {
-                    await navigator.clipboard.writeText(processedText);
-                } catch (err) {
-                    console.error('Failed to copy text: ', err);
-                }
-            }
-
-            return displayResult;
-        } catch (error) {
-            console.error('Error displaying transcription:', error);
-            handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
-            return false;
-        } finally {
-            // Si une erreur se produit ailleurs, s'assurer que la bannière de traitement disparaît
-            if (recordingBanner && recordingBanner.textContent === window.BabelFishAIUtils.i18n.getMessage("bannerProcessing")) {
-                hideBanner();
-            }
-        }
+        // Cette fonction a été migrée vers transcription-display.js
+        return window.BabelFishAIUtils.display.showTranscription(text);
     }
 
     /**
@@ -1103,25 +329,8 @@
      * @returns {boolean} - True si l'élément est valide pour l'insertion de texte
      */
     function isValidElementForInsertion(activeElement) {
-        if (!activeElement) return false;
-        
-        // Éléments spécifiquement considérés comme valides pour l'insertion
-        const isInputOrTextarea = 
-            activeElement.tagName === 'INPUT' && activeElement.type === 'text' || 
-            activeElement.tagName === 'TEXTAREA';
-            
-        // Éléments contentEditable (mais pas contenteditable="false")
-        const isContentEditable = 
-            activeElement.isContentEditable && 
-            !(activeElement.getAttribute && activeElement.getAttribute('contenteditable') === 'false');
-            
-        // Ne pas considérer les éléments de base comme BODY ou HTML comme valides
-        const isBasicElement = 
-            activeElement.tagName === 'BODY' || 
-            activeElement.tagName === 'HTML' || 
-            activeElement.tagName === 'IFRAME';
-            
-        return (isInputOrTextarea || isContentEditable) && !isBasicElement;
+        // Cette fonction a été migrée vers focus-utils.js
+        return window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
     }
 
     /**
@@ -1213,39 +422,8 @@
      * @returns {boolean} Indique si l'insertion a réussi
      */
     function handleActiveElementInsertion(text) {
-        try {
-            // Validation des paramètres
-            if (!isValidInputText(text)) {
-                console.warn("Empty text provided for insertion");
-                return false;
-            }
-
-            // Récupérer l'élément actif
-            const activeElement = document.activeElement;
-
-            // Vérifier si l'élément est valide pour l'insertion
-            if (!isValidElementForInsertion(activeElement)) {
-                return false;
-            }
-
-            // Nettoyer le texte une seule fois
-            const cleanText = text.trimStart();
-
-            // Détection optimisée du type d'élément
-            const { tagName, type, isContentEditable } = activeElement;
-
-            // Traiter selon le type d'élément
-            if ((tagName === 'TEXTAREA') || (tagName === 'INPUT' && type === 'text')) {
-                return insertTextIntoInput(activeElement, cleanText);
-            } else if (isContentEditable) {
-                return insertInContentEditable(activeElement, cleanText, { ensureFocus: true, normalizeText: true });
-            }
-
-            return false;
-        } catch (error) {
-            console.error("Error inserting text into active element:", error);
-            return false;
-        }
+        // Cette fonction a été migrée vers focus-utils.js
+        return window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
     }
 
     /**
@@ -1255,83 +433,8 @@
      * @returns {boolean} - Indique si l'insertion a réussi
      */
     function insertTextIntoInput(element, text) {
-        try {
-            // Validation des paramètres rapide avec court-circuit
-            if (!element || !isValidInputText(text)) {
-                console.warn("Invalid element or text for insertion");
-                return false;
-            }
-
-            // Validation de l'élément en une seule condition
-            if (!(element.value !== undefined &&
-                'selectionStart' in element &&
-                'selectionEnd' in element)) {
-                console.warn("Element is not a valid input or textarea");
-                return false;
-            }
-
-            // Extraire les valeurs nécessaires une seule fois (optimisation)
-            const { value: currentValue, selectionStart, selectionEnd } = element;
-
-            // Construire la nouvelle valeur toujours de la même façon
-            const newValue = currentValue.substring(0, selectionStart) +
-                text +
-                currentValue.substring(selectionEnd);
-
-            // Calculer la nouvelle position du curseur une seule fois
-            const newCursorPosition = selectionStart + text.length;
-
-            // Stratégie d'insertion basée sur la taille (optimisation pour grands volumes)
-            const isLongText = text.length > 1000 || currentValue.length > 10000;
-
-            if (isLongText) {
-                // Désactiver temporairement pour éviter le traitement pendant les modifications
-                element.disabled = true;
-
-                // Utiliser requestAnimationFrame pour synchroniser avec le cycle de rendu
-                requestAnimationFrame(() => {
-                    try {
-                        // Appliquer les changements dans le prochain cycle de peinture
-                        element.value = newValue;
-                        // Placer le curseur à la fin du texte sans sélectionner
-                        element.selectionStart = newCursorPosition;
-                        element.selectionEnd = newCursorPosition;
-
-                        // Réactiver et refocaliser
-                        element.disabled = false;
-                        element.focus();
-
-                        // Créer un seul événement et le réutiliser
-                        const inputEvent = new Event('input', { bubbles: true });
-
-                        // Utiliser un délai minimal pour permettre au navigateur de terminer le rendu
-                        setTimeout(() => element.dispatchEvent(inputEvent), 0);
-                    } catch (innerError) {
-                        console.error("Error in deferred text insertion:", innerError);
-                        // S'assurer que l'élément est toujours réactivé
-                        element.disabled = false;
-                    }
-                });
-            } else {
-                // Approche directe pour les textes courts
-                element.value = newValue;
-                // Placer le curseur à la fin du texte sans sélectionner
-                element.selectionStart = newCursorPosition;
-                element.selectionEnd = newCursorPosition;
-                element.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-
-            return true;
-        } catch (error) {
-            console.error("Error inserting text into input:", error);
-
-            // Toujours s'assurer que l'élément est réactivé en cas d'erreur
-            if (element?.disabled) {
-                element.disabled = false;
-            }
-
-            return false;
-        }
+        // Cette fonction a été migrée vers focus-utils.js
+        return window.BabelFishAIUtils.focus.insertTextIntoInput(element, text);
     }
 
     /**
@@ -1340,237 +443,28 @@
      * @param {number} duration - Durée d'affichage en secondes
      */
     function showTranscriptionDialog(text, duration) {
-        // Utiliser la fonction utilitaire pour afficher le texte dans une boîte de dialogue
-        window.BabelFishAIUtils.ui.showTextInDialog(
-            text,
-            duration,
-            (errorMessage) => showBanner(errorMessage, MESSAGE_TYPES.ERROR)
-        );
+        // Cette fonction a été migrée vers transcription-display.js
+        return window.BabelFishAIUtils.display.showTranscriptionDialog(text, duration);
     }
     
     // Fonction de débogage supprimée - nous utilisons maintenant une approche directe
     // en vérifiant si l'élément actif est valide pour l'insertion au moment de la copie
 
-    /**
-     * Crée un bouton de contrôle pour la bannière avec icône et texte
-     * @param {string} id - ID du bouton
-     * @param {string} icon - Icône HTML à afficher (ex: '✨')
-     * @param {string} defaultText - Texte par défaut du bouton
-     * @param {string} i18nKey - Clé de traduction pour le texte du bouton
-     * @returns {HTMLButtonElement} Le bouton créé
-     */
-    function createBannerButton(id, icon, defaultText, i18nKey) {
-        // Créer le bouton
-        const button = document.createElement('button');
-        button.id = id;
-        button.className = 'whisper-toggle-button';
-        button.setAttribute('data-active', 'false');
-
-        // Ajouter l'icône
-        const iconSpan = document.createElement('span');
-        iconSpan.className = 'whisper-button-icon';
-        iconSpan.innerHTML = icon;
-        button.appendChild(iconSpan);
-
-        // Ajouter le texte
-        const textSpan = document.createElement('span');
-        textSpan.className = 'whisper-button-text';
-        textSpan.textContent = defaultText;
-        button.appendChild(textSpan);
-
-        // Fonction pour mettre à jour le libellé avec la traduction
-        const updateButtonLabel = () => {
-            const translated = window.BabelFishAIUtils?.i18n?.getMessage(i18nKey);
-            if (translated) {
-                // Enlever le mot "Activer" ou "Enable" du début
-                const simplifiedText = translated
-                    .replace(/^Activer (la )?/i, '')
-                    .replace(/^Enable /i, '');
-                textSpan.textContent = simplifiedText;
-            }
-        };
-
-        // Mettre à jour immédiatement et lors du chargement de i18n
-        updateButtonLabel();
-        document.addEventListener('babelfishai:i18n-loaded', updateButtonLabel);
-
-        return button;
-    }
+    // La fonction createBannerButton a été migrée vers ui.js
 
     /**
      * Crée un sélecteur de langue pour la bannière
      * @returns {Object} Un objet contenant le conteneur et le sélecteur
      */
-    function createLanguageSelector() {
-        // Créer le conteneur
-        const container = document.createElement('div');
-        container.className = 'whisper-language-container';
-        container.style.display = 'none';
+    // La fonction createLanguageSelector a été migrée vers banner-utils.js
 
-        // Créer le libellé
-        const label = document.createElement('span');
-        label.className = 'whisper-language-label';
-        label.textContent = 'Langue cible:';  // Texte par défaut
-        container.appendChild(label);
+    // La fonction initializeLanguageSelector a été migrée vers banner-utils.js
 
-        // Mettre à jour le libellé avec i18n
-        const updateLabel = () => {
-            const translated = window.BabelFishAIUtils?.i18n?.getMessage("targetLanguageLabel");
-            if (translated) label.textContent = translated;
-        };
+    // La fonction populateLanguageSelect a été migrée vers banner-utils.js
 
+    // La fonction populateLanguageFromStorage a été migrée vers banner-utils.js
 
-        updateLabel();
-        document.addEventListener('babelfishai:i18n-loaded', updateLabel);
-
-        // Créer le sélecteur
-        const select = document.createElement('select');
-        select.id = 'whisper-language-select';
-        select.className = 'whisper-language-select';
-        container.appendChild(select);
-
-        return { container, select, label };
-    }
-
-    /**
-     * Initialise le sélecteur de langues avec les options disponibles
-     * @param {HTMLSelectElement} languageSelect - L'élément select à initialiser
-     */
-    function initializeLanguageSelector(languageSelect) {
-        // Récupérer les options des langues
-        chrome.runtime.sendMessage({ action: 'getTargetLanguageOptions' }, response => {
-            if (response?.options) {
-                populateLanguageSelect(languageSelect, response.options);
-            } else {
-                // Fallback: utiliser le module languages ou charger depuis le stockage
-                populateLanguageFromStorage(languageSelect);
-            }
-        });
-    }
-
-    /**
-     * Remplit le sélecteur de langues avec les options fournies
-     * @param {HTMLSelectElement} select - Le sélecteur à remplir
-     * @param {Array} options - Les options de langues
-     */
-    function populateLanguageSelect(select, options) {
-        chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
-            // Vider d'abord le sélecteur
-            select.innerHTML = '';
-
-            // Ajouter les options
-            options.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option.value;
-                optionElement.textContent = option.text;
-                select.appendChild(optionElement);
-            });
-
-            // Sélectionner la langue active
-            select.value = items.targetLanguage;
-        });
-    }
-
-    /**
-     * Remplit le sélecteur de langues à partir du module languages ou en fallback
-     * @param {HTMLSelectElement} select - Le sélecteur à remplir
-     */
-    function populateLanguageFromStorage(select) {
-        if (window.BabelFishAIUtils?.languages) {
-            chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
-                window.BabelFishAIUtils.languages.populateLanguageSelect(select, items.targetLanguage);
-            });
-        } else {
-            // Fallback avec les langues du fichier partagé si disponible
-            chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
-                // Vider le sélecteur
-                select.innerHTML = '';
-
-                // Utiliser la liste centralisée des langues si disponible
-                const languagesList = window.BabelFishAI?.AVAILABLE_LANGUAGES || [
-                    { value: 'en', text: 'English (en)' },
-                    { value: 'fr', text: 'Français (fr)' },
-                    { value: 'es', text: 'Español (es)' },
-                    { value: 'pt', text: 'Português (pt)' },
-                    { value: 'zh', text: '中文 (zh)' },
-                    { value: 'hi', text: 'हिंदी (hi)' },
-                    { value: 'ar', text: 'العربية (ar)' },
-                    { value: 'it', text: 'Italiano (it)' },
-                    { value: 'de', text: 'Deutsch (de)' },
-                    { value: 'sv', text: 'Svenska (sv)' },
-                    { value: 'pl', text: 'Polski (pl)' },
-                    { value: 'nl', text: 'Nederlands (nl)' },
-                    { value: 'ro', text: 'Română (ro)' },
-                    { value: 'ja', text: '日本語 (ja)' },
-                    { value: 'ko', text: '한국어 (ko)' }
-                ];
-
-                // Ajouter chaque option
-                languagesList.forEach(lang => {
-                    const option = document.createElement('option');
-                    option.value = lang.value;
-                    option.textContent = lang.text;
-                    select.appendChild(option);
-                });
-
-                // Sélectionner la langue active
-                select.value = items.targetLanguage;
-            });
-        }
-    }
-
-    /**
-     * Configure les gestionnaires d'événements pour les contrôles de la bannière
-     * @param {HTMLButtonElement} rephraseButton - Bouton de reformulation
-     * @param {HTMLButtonElement} translateButton - Bouton de traduction
-     * @param {HTMLSelectElement} languageSelect - Sélecteur de langue
-     * @param {HTMLElement} languageContainer - Conteneur du sélecteur de langue
-     */
-    function setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer) { // skipcq: JS-0128
-        // Événements pour le bouton de reformulation
-        rephraseButton.addEventListener('mousedown', storeFocusAndSelection);
-        rephraseButton.addEventListener('click', () => {
-            const isActive = rephraseButton.getAttribute('data-active') === 'true';
-            const newState = !isActive;
-
-            chrome.storage.sync.set({ enableRephrase: newState }, () => {
-                setTimeout(() => restoreFocusAndSelection(true, true), 300);
-            });
-
-            console.log(`Reformulation ${newState ? "activée" : "désactivée"} depuis le bandeau`); // skipcq: JS-0002
-        });
-
-        // Événements pour le bouton de traduction
-        translateButton.addEventListener('mousedown', storeFocusAndSelection);
-        translateButton.addEventListener('click', () => {
-            const isActive = translateButton.getAttribute('data-active') === 'true';
-            const newState = !isActive;
-
-            chrome.storage.sync.set({ enableTranslation: newState }, () => {
-                setTimeout(() => restoreFocusAndSelection(true, true), 300);
-            });
-
-            console.log(`Traduction ${newState ? "activée" : "désactivée"} depuis le bandeau`); // skipcq: JS-0002
-        });
-
-        // Événements pour le sélecteur de langue
-        languageSelect.addEventListener('mousedown', storeFocusAndSelection);
-        languageSelect.addEventListener('change', () => {
-            chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
-                setTimeout(() => restoreFocusAndSelection(true, true), 300);
-            });
-
-            console.log(`Langue cible changée en ${languageSelect.value} depuis le bandeau`); // skipcq: JS-0002
-        });
-
-        languageSelect.addEventListener('blur', () => {
-            setTimeout(() => {
-                if (lastFocusInfo.element) {
-                    restoreFocusAndSelection(true, true);
-                }
-            }, 300);
-        });
-    }
+    // La fonction setupBannerEventListeners a été migrée vers banner-utils.js
 
     /**
      * Initialise la bannière d'état avec des contrôles pour la reformulation et la traduction
@@ -1582,81 +476,8 @@
             return recordingBanner;
         }
 
-        // Créer la structure de base de la bannière
-        recordingBanner = document.createElement('div');
-        recordingBanner.id = 'babelfishai-status-banner';
-        recordingBanner.className = 'whisper-status-banner';
-        recordingBanner.style.display = 'none';
-        recordingBanner.setAttribute('data-extension', 'babelfishai');
-
-        // Créer le conteneur pour tous les éléments
-        const bannerContent = document.createElement('div');
-        bannerContent.className = 'whisper-banner-content';
-        recordingBanner.appendChild(bannerContent);
-
-        // Créer le conteneur pour le texte du statut
-        const statusTextContainer = document.createElement('div');
-        statusTextContainer.className = 'whisper-status-text';
-        bannerContent.appendChild(statusTextContainer);
-
-        // Créer le conteneur pour les contrôles
-        const controlsContainer = document.createElement('div');
-        controlsContainer.className = 'whisper-controls-container';
-        bannerContent.appendChild(controlsContainer);
-
-        // Créer les boutons de contrôle
-        const rephraseControl = createBannerButton(
-            'whisper-rephrase-control',
-            '✨',
-            'Reformulation',
-            'rephraseLabel'
-        );
-        controlsContainer.appendChild(rephraseControl);
-
-        const translationControl = createBannerButton(
-            'whisper-translation-control',
-            '🌐',
-            'Traduction',
-            'enableTranslationLabel'
-        );
-        controlsContainer.appendChild(translationControl);
-
-        // Créer le sélecteur de langue
-        const { container: languageContainer, select: languageSelect } = createLanguageSelector();
-        controlsContainer.appendChild(languageContainer);
-
-        // Initialiser le sélecteur de langues
-        initializeLanguageSelector(languageSelect);
-
-        // Charger les préférences et configurer l'état initial des contrôles
-        chrome.storage.sync.get({
-            enableRephrase: false,
-            enableTranslation: false,
-            targetLanguage: 'en'
-        }, (items) => {
-            // Mettre à jour l'état visuel des boutons
-            rephraseControl.setAttribute('data-active', items.enableRephrase.toString());
-            translationControl.setAttribute('data-active', items.enableTranslation.toString());
-
-            // Mettre à jour la valeur du sélecteur de langue
-            languageSelect.value = items.targetLanguage;
-
-            // Configurer la visibilité du conteneur de langue
-            if (items.enableTranslation) {
-                languageContainer.style.display = 'flex';
-                languageContainer.style.opacity = '1';
-                languageContainer.style.maxHeight = '30px';
-                languageContainer.style.overflow = 'visible';
-            } else {
-                languageContainer.style.display = 'none';
-                languageContainer.style.opacity = '0';
-                languageContainer.style.maxHeight = '0';
-                languageContainer.style.overflow = 'hidden';
-            }
-        });
-
-        // Configurer les gestionnaires d'événements
-        setupBannerEventListeners(rephraseControl, translationControl, languageSelect, languageContainer);
+        // Utiliser la fonction du module banner-utils pour créer la bannière
+        recordingBanner = window.BabelFishAIUtils.banner.initBanner();
 
         // Insérer la bannière dans le document
         if (document.body) {
@@ -1685,12 +506,12 @@
      * @returns {boolean} - Indique si l'affichage a réussi
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
-        // Utiliser la fonction de l'utilitaire UI pour afficher la bannière
-        return window.BabelFishAIUtils.ui.showBanner(
+        // Utiliser la fonction de l'utilitaire banner-utils pour afficher la bannière
+        return window.BabelFishAIUtils.banner.showBanner(
             recordingBanner,
             text,
             type,
-            isRecording,
+            window.BabelFishAIUtils.recording.isCurrentlyRecording(),
             updateBannerColor
         );
     }
@@ -1700,26 +521,11 @@
      * @returns {boolean} - Indique si l'opération a réussi
      */
     function hideBanner() {
-        try {
-            // Vérifier si la bannière existe
-            if (!recordingBanner) {
-                return false;
-            }
-
-            // Cacher la bannière en modifiant son style d'affichage
-            recordingBanner.style.display = 'none';
-
-            // Enlever le padding du body quand la bannière est cachée
-            if (document.body) {
-                document.body.style.paddingTop = '0';
-            }
-
-            return true;
-        } catch (error) {
-            console.error("Error hiding banner:", error);
-            return false;
-        }
+        return window.BabelFishAIUtils.banner.toggleBannerVisibility(recordingBanner, false);
     }
+    
+    // Les fonctions UI seront exposées plus bas dans le code
+    // dans l'objet window.BabelFishAI.ui
 
     /**
      * Gère les erreurs de manière centralisée en affichant un message à l'utilisateur
@@ -1728,40 +534,50 @@
      * @param {string} [errorMessage] - Le message d'erreur technique à envoyer au background script
      */
     function handleError(displayMessage, errorMessage) {
-        // Normaliser les paramètres pour gérer différents types d'entrées
-        let userMessage = '';
-        let technicalMessage = '';
-
-        // Si l'erreur est fournie comme objet Error
-        if (displayMessage instanceof Error) {
-            userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
-            technicalMessage = displayMessage.stack || displayMessage.message;
-        }
-        // Si l'erreur est fournie comme chaîne de caractères
-        else {
-            userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric");
-            technicalMessage = errorMessage || displayMessage;
-        }
-
-        // Logger l'erreur technique pour le débogage
-        console.error("Erreur technique:", technicalMessage);
-
-        // Afficher le message d'erreur à l'utilisateur via la bannière
-        showBanner(userMessage, MESSAGE_TYPES.ERROR);
-
-        // Informer le background script de l'erreur pour mise à jour du badge
-        try {
-            chrome.runtime.sendMessage({
-                action: ACTIONS.ERROR,
-                error: technicalMessage
-            });
-        } catch (e) {
-            console.error("Impossible d'envoyer l'erreur au script d'arrière-plan:", e);
-        }
-
-        // Cacher automatiquement la bannière après un délai défini
-        setTimeout(hideBanner, CONFIG.ERROR_BANNER_DURATION);
+        // Utiliser la fonction du module error-utils
+        return window.BabelFishAIUtils.error.handleError(displayMessage, errorMessage);
     }
+    
+    /**
+     * Affiche un message d'état dans la bannière
+     * @param {string} text - Le message à afficher
+     * @param {string} [type='info'] - Le type de message ('info', 'error', etc.)
+     * @returns {boolean} - Indique si l'affichage a réussi
+     */
+    function showStatus(text, type = 'info') {
+        // S'assurer que la bannière est initialisée
+        if (!recordingBanner) {
+            initBanner();
+        }
+        
+        // Utiliser la fonction du module banner-utils
+        return window.BabelFishAIUtils.banner.showStatus(recordingBanner, text, type);
+    }
+    
+    // Exposer les fonctions d'interface utilisateur dans l'espace de noms window.BabelFishAI.ui
+    window.BabelFishAI.ui = {
+        showBanner,
+        hideBanner,
+        handleError,
+        showStatus,
+        showTranscription, // Cette fonction sera définie plus bas dans le code
+        // Ajouter une fonction pour obtenir la bannière (utilisée par error-utils)
+        getBanner: () => recordingBanner
+    };
+    
+    // Exposer les fonctions d'enregistrement dans l'espace de noms window.BabelFishAI
+    window.BabelFishAI.startRecording = startRecording;
+    window.BabelFishAI.stopRecording = stopRecording;
+    window.BabelFishAI.cancelRecording = cancelRecording;
+    
+    // Exposer les fonctions de traitement de texte dans l'espace de noms window.BabelFishAI
+    window.BabelFishAI.handleTextRephrasing = handleTextRephrasing;
+    window.BabelFishAI.handleTextTranslation = handleTextTranslation;
+    window.BabelFishAI.isValidInputText = isValidInputText;
+    
+    // Exposer la fonction de mise à jour de la couleur du bandeau
+    // Cette fonction est appelée depuis event-handlers.js lors des changements d'options
+    window.BabelFishAI.updateBannerColor = updateBannerColor;
 
     /**
      * Reformule un texte sélectionné sans enregistrement audio
@@ -1774,7 +590,8 @@
      * @returns {boolean} - True si le texte est valide
      */
     function isValidInputText(text) {
-        return text && typeof text === 'string' && text.trim() !== '';
+        // Utiliser la fonction du module text-processing
+        return window.BabelFishAIUtils.textProcessing.isValidInputText(text);
     }
 
     /**
@@ -1783,13 +600,16 @@
      * @throws {Error} - Si la clé API n'est pas trouvée
      */
     async function getOrFetchApiKey() {
-        if (!apiKey) {
-            apiKey = await window.BabelFishAIUtils.api.getApiKey();
-            if (!apiKey) {
-                throw new Error(ERRORS.API_KEY_NOT_FOUND);
-            }
+        try {
+            // Utiliser la fonction du module text-processing
+            const key = await window.BabelFishAIUtils.textProcessing.getOrFetchApiKey();
+            // Mettre à jour la variable apiKey locale
+            apiKey = key;
+            return apiKey;
+        } catch (error) {
+            console.error("Erreur lors de la récupération de la clé API:", error);
+            throw error;
         }
-        return apiKey;
     }
 
     /**
@@ -1799,21 +619,7 @@
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertTextInEditableElement(activeElement, newText) {
-        try {
-            // Restaurer le focus
-            restoreFocus();
-
-            if ((activeElement.tagName === 'TEXTAREA') ||
-                (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
-                return insertInInputElement(activeElement, newText);
-            } else if (activeElement.isContentEditable) {
-                return insertInContentEditable(activeElement, newText, { ensureFocus: false, normalizeText: false });
-            }
-            return false;
-        } catch (e) {
-            console.warn("Erreur lors du remplacement du texte:", e);
-            return false;
-        }
+        return window.BabelFishAIUtils.focus.insertTextInEditableElement(activeElement, newText);
     }
 
     /**
@@ -1823,20 +629,8 @@
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertInInputElement(element, text) {
-        const start = element.selectionStart;
-        const end = element.selectionEnd;
-
-        if (start !== undefined && end !== undefined && start !== end) {
-            const newValue = element.value.substring(0, start) +
-                text +
-                element.value.substring(end);
-            element.value = newValue;
-            element.selectionStart = start;
-            element.selectionEnd = start + text.length;
-            element.dispatchEvent(new Event('input', { bubbles: true }));
-            return true;
-        }
-        return false;
+        // Utiliser la fonction migrée dans focus-utils.js
+        return window.BabelFishAIUtils.focus.insertTextIntoInput(element, text);
     }
 
     // La fonction insertInContentEditableElement a été fusionnée avec insertInContentEditable
@@ -1847,54 +641,31 @@
      * @returns {Promise<void>}
      */
     async function handleTextRephrasing(text) {
-        if (!isValidInputText(text)) {
-            console.warn("Texte vide ou invalide pour la reformulation");
-            return;
-        }
-
         try {
-            // Vérifier si l'API Key est disponible
-            await getOrFetchApiKey();
-
             // Stocker l'élément actif avant de commencer le traitement
-            storeFocusAndSelection();
-
-            // Informer l'utilisateur que la reformulation est en cours
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasing") || "Reformulation en cours...");
-
-            // Reformuler le texte en utilisant la fonction existante
-            const rephrasedText = await window.BabelFishAIUtils.translation.rephraseText(
-                text,
-                apiKey
-            );
-
-            // Vérifier que la reformulation est valide
-            if (!isValidInputText(rephrasedText)) {
-                throw new Error('Résultat de reformulation vide ou invalide');
-            }
-
+            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            
+            // Utiliser la fonction du module text-processing pour la reformulation
+            const rephrasedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
+            
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
-
+            
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
             let replacedInEditable = false;
-
+            
             if (isValidElementForInsertion(activeElement)) {
                 replacedInEditable = insertTextInEditableElement(activeElement, rephrasedText);
             }
-
+            
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
                 showTranscriptionDialog(rephrasedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
             }
-
-            // Cacher la bannière une fois l'opération terminée
-            hideBanner();
-
         } catch (error) {
-            console.error('Erreur lors de la reformulation:', error);
-            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation", error.message);
+            console.error('Erreur lors de la reformulation dans content.js:', error);
+            // L'erreur a déjà été gérée dans le module text-processing
         }
     }
 
@@ -1911,11 +682,8 @@
      * @returns {Object} - Objet contenant sourceLanguage et targetLanguage
      */
     function determineTranslationLanguages(options, specifiedTargetLanguage) {
-        const sourceLanguage = options.enableTranslation ? options.sourceLanguage : 'auto';
-        const targetLanguage = specifiedTargetLanguage ||
-            (options.enableTranslation ? options.targetLanguage : 'en');
-
-        return { sourceLanguage, targetLanguage };
+        // Utiliser la fonction du module text-processing
+        return window.BabelFishAIUtils.textProcessing.determineTranslationLanguages(options, specifiedTargetLanguage);
     }
 
     /**
@@ -1925,268 +693,59 @@
      * @returns {Promise<void>}
      */
     async function handleTextTranslation(text, specifiedTargetLanguage) {
-        if (!isValidInputText(text)) {
-            console.warn("Texte vide ou invalide pour la traduction");
-            return;
-        }
-
         try {
-            // Vérifier si l'API Key est disponible
-            await getOrFetchApiKey();
-
             // Stocker l'élément actif avant de commencer le traitement
-            storeFocusAndSelection();
-
-            // Informer l'utilisateur que la traduction est en cours
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating") || "Traduction en cours...");
-
+            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            
             // Obtenir les options de traduction
             const options = await getDisplayOptions();
-
-            // Déterminer les langues source et cible
-            const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
-
-            // Traduire le texte en utilisant la fonction existante
-            const translatedText = await window.BabelFishAIUtils.translation.translateText(
-                text,
-                sourceLanguage,
-                targetLanguage,
-                apiKey
-            );
-
-            // Vérifier que la traduction est valide
-            if (!isValidInputText(translatedText)) {
-                throw new Error('Résultat de traduction vide ou invalide');
-            }
-
+            
+            // Utiliser la fonction du module text-processing pour la traduction
+            const translatedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(text, options, specifiedTargetLanguage);
+            
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
             let replacedInEditable = false;
-
+            
             if (isValidElementForInsertion(activeElement)) {
                 replacedInEditable = insertTextInEditableElement(activeElement, translatedText);
             }
-
+            
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
                 showTranscriptionDialog(translatedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
             }
-
-            // Cacher la bannière une fois l'opération terminée
-            hideBanner();
-
         } catch (error) {
-            console.error('Erreur lors de la traduction:', error);
-            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError") || "Erreur lors de la traduction", error.message);
+            console.error('Erreur lors de la traduction dans content.js:', error);
+            // L'erreur a déjà été gérée dans le module text-processing
         }
     }
 
-    /**
-     * Gère les messages provenant du script d'arrière-plan
-     * @param {Object} message - Le message reçu
-     * @param {Object} sender - L'expéditeur du message
-     * @param {Function} callback - Fonction de callback pour répondre au message
-     */
-    function handleBackgroundMessages(message) {
-        // Mapper les actions aux fonctions correspondantes
-        const actionHandlers = {
-            [ACTIONS.TOGGLE]: () => {
-                if (!isRecording) {
-                    startRecording();
-                } else {
-                    stopRecording();
-                }
-            },
-            // Action pour la reformulation de texte sélectionné
-            rephraseSelection: () => {
-                if (message.text) {
-                    handleTextRephrasing(message.text);
-                }
-            },
-            // Action pour la traduction de texte sélectionné
-            translateSelection: () => {
-                if (message.text) {
-                    // Passer la langue cible spécifiée, si disponible
-                    handleTextTranslation(message.text, message.targetLanguage);
-                }
-            }
-            // Possibilité d'ajouter d'autres gestionnaires d'actions ici
-        };
+    // La fonction handleBackgroundMessages a été déplacée vers event-handlers.js
+    
+    // Initialiser le module de gestion d'événements avec les références nécessaires
+    window.BabelFishAIUtils.events.init({
+        recordingBanner,
+        bannerColorStart,
+        bannerColorEnd
+    });
+    
+    // Écouter les messages du background script en utilisant la fonction du module event-handlers.js
+    chrome.runtime.onMessage.addListener(window.BabelFishAIUtils.events.handleBackgroundMessages);
 
-        // Exécuter le gestionnaire correspondant à l'action
-        if (message.action && actionHandlers[message.action]) {
-            actionHandlers[message.action]();
-        }
-    }
+    // La fonction handleKeyboardEvents a été déplacée vers event-handlers.js
 
-    // Écouter les messages du background script
-    chrome.runtime.onMessage.addListener(handleBackgroundMessages);
-
-    /**
-     * Gère les événements clavier pour l'extension
-     * @param {KeyboardEvent} event - L'événement clavier
-     */
-    function handleKeyboardEvents(event) {
-        // La touche Échap (code 27) pour annuler l'enregistrement
-        if (event.key === 'Escape' && isRecording) {
-            console.log("Touche Échap détectée pendant l'enregistrement, annulation..."); // skipcq: JS-0002
-            cancelRecording();
-            // Empêcher les gestionnaires d'événements par défaut et la propagation
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    }
-
-    // Ajouter l'écouteur d'événement pour les touches du clavier
-    document.addEventListener('keydown', handleKeyboardEvents);
+    // Ajouter l'écouteur d'événement pour les touches du clavier en utilisant la fonction du module event-handlers.js
+    document.addEventListener('keydown', window.BabelFishAIUtils.events.handleKeyboardEvents);
 
     /**
      * Met à jour les options de couleur du bandeau
      * @param {Object} changes - Les changements dans les options
      */
-    function updateBannerColorOptions(changes) {
-        // Vérification rapide - si le bandeau n'est pas initialisé, inutile de continuer
-        if (!recordingBanner) return;
+    // La fonction updateBannerColorOptions a été déplacée vers event-handlers.js
 
-        // Utilisation d'un mapping direct des propriétés aux variables, 
-        // sans fonctions intermédiaires pour de meilleures performances
-        const colorMappings = {
-            bannerColorStart: false,
-            bannerColorEnd: false,
-            bannerOpacity: false
-        };
+    // La fonction handleStorageChanges a été déplacée vers event-handlers.js
 
-        // Mettre à jour les valeurs en une seule passe
-        for (const key in changes) {
-            if (key === 'bannerColorStart') {
-                bannerColorStart = changes[key].newValue;
-                colorMappings.bannerColorStart = true;
-            } else if (key === 'bannerColorEnd') {
-                bannerColorEnd = changes[key].newValue;
-                colorMappings.bannerColorEnd = true;
-            } else if (key === 'bannerOpacity') {
-                bannerOpacity = changes[key].newValue;
-                colorMappings.bannerOpacity = true;
-            }
-        }
-
-        // Vérifier si au moins une propriété de couleur a été modifiée
-        const shouldUpdate = colorMappings.bannerColorStart ||
-            colorMappings.bannerColorEnd ||
-            colorMappings.bannerOpacity;
-
-        // Mettre à jour la couleur une seule fois si nécessaire
-        if (shouldUpdate) {
-            updateBannerColor();
-        }
-    }
-
-    /**
-     * Gestionnaire centralisé pour les modifications du stockage
-     * @param {Object} changes - Les changements détectés
-     * @param {string} namespace - L'espace de noms du stockage
-     */
-    function handleStorageChanges(changes, namespace) {
-        // Vérification rapide - ne traiter que les changements de stockage synchronisé
-        if (namespace !== 'sync' || !recordingBanner) return;
-
-        // Traiter les changements de couleur du bandeau
-        updateBannerColorOptions(changes);
-
-        // Cache des éléments DOM fréquemment utilisés - évite les accès DOM répétés
-        const elements = {
-            rephraseControl: null,
-            translationControl: null,
-            languageContainer: null,
-            languageSelect: null
-        };
-
-        // Fonction pour récupérer paresseusement un élément (le trouve une seule fois)
-        const getElement = (key, selector) => {
-            if (!elements[key]) {
-                elements[key] = recordingBanner.querySelector(selector);
-            }
-            return elements[key];
-        };
-
-        // Liste des changements à traiter en une seule passe
-        const handlersMap = {
-            // Gestion de l'état de reformulation
-            enableRephrase: (newValue) => {
-                const control = getElement('rephraseControl', '#whisper-rephrase-control');
-                if (control) {
-                    control.setAttribute('data-active', String(newValue));
-                }
-            },
-
-            // Gestion de l'état de traduction et visibilité du sélecteur de langue
-            enableTranslation: (newValue) => {
-                const control = getElement('translationControl', '#whisper-translation-control');
-                const container = getElement('languageContainer', '.whisper-language-container');
-
-                if (control) {
-                    control.setAttribute('data-active', String(newValue));
-
-                    if (container) {
-                        // Animation optimisée avec requestAnimationFrame
-                        if (newValue) {
-                            // Montrer le conteneur de langue
-                            container.style.display = 'flex';
-
-                            // Utiliser rAF pour grouper les changements visuels
-                            requestAnimationFrame(() => {
-                                container.style.opacity = '1';
-                                container.style.maxHeight = '30px';
-                                container.style.overflow = 'visible';
-                            });
-                        } else {
-                            // Cacher le conteneur de langue avec transition
-                            container.style.opacity = '0';
-                            container.style.maxHeight = '0';
-                            container.style.overflow = 'hidden';
-
-                            // Masquer complètement après l'animation
-                            setTimeout(() => {
-                                container.style.display = 'none';
-                            }, 300);
-                        }
-                    }
-                }
-            },
-
-            // Mise à jour de la langue cible sélectionnée
-            targetLanguage: (newValue) => {
-                const select = getElement('languageSelect', '#whisper-language-select');
-
-                // Mettre à jour uniquement si nécessaire (valeur différente)
-                if (select && select.value !== newValue) {
-                    select.value = newValue;
-                }
-            },
-
-            // Gestion des changements de langue d'interface
-            interfaceLanguage: (newValue) => {
-                if (window.BabelFishAIUtils?.i18n) {
-                    window.BabelFishAIUtils.i18n.changeLanguage(newValue)
-                        .then(() => {
-                            // Déclencher l'événement en réutilisant l'objet CustomEvent
-                            document.dispatchEvent(new CustomEvent('babelfishai:i18n-loaded'));
-                        })
-                        .catch(error => {
-                            console.warn("Erreur lors du changement de langue:", error);
-                        });
-                }
-            }
-        };
-
-        // Traiter tous les changements pertinents en une seule passe (plus efficace)
-        for (const key in changes) {
-            if (handlersMap[key]) {
-                handlersMap[key](changes[key].newValue);
-            }
-        }
-    }
-
-    // Écouter les changements dans les options
-    chrome.storage.onChanged.addListener(handleStorageChanges);
+    // Écouter les changements dans les options en utilisant la fonction du module event-handlers.js
+    chrome.storage.onChanged.addListener(window.BabelFishAIUtils.events.handleStorageChanges);
 })();

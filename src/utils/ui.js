@@ -744,15 +744,48 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return textElement;
     }
 
+    /**
+     * Cache la bannière en modifiant son style d'affichage
+     * @param {HTMLElement} banner - L'élément bannière à cacher
+     * @returns {boolean} - Indique si l'opération a réussi
+     */
+    function hideBanner(banner) {
+        try {
+            // Vérifier si la bannière existe
+            if (!banner) {
+                return false;
+            }
+
+            // Cacher la bannière en modifiant son style d'affichage
+            banner.style.display = 'none';
+
+            // Enlever le padding du body quand la bannière est cachée
+            if (document.body) {
+                document.body.style.paddingTop = '0';
+            }
+
+            return true;
+        } catch (error) {
+            console.error("Error hiding banner:", error);
+            return false;
+        }
+    }
+
+    // Note: La fonction createBannerButton a été déplacée vers banner-utils.js
+
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.ui = {
-        updateBannerColor,
-        showStatus,
-        showBanner,
         createCopyButton,
         showTextInDialog,
         createTranscriptionContainer,
-        removeTranscriptionElement
+        removeTranscriptionElement,
+        createTimerElements,
+        createToggleElements,
+        createControlsContainer,
+        setupAutoRemoval,
+        updateBannerColor,
+        hideBanner,
+        showBanner
     };
 
 })(window.BabelFishAIUtils);

@@ -1,0 +1,52 @@
+# Fichier .clinesrules pour l'extension Chrome Babel Fish AI
+
+## Pourquoi ce fichier ?
+Le fichier `.clinesrules` permet à l'outil de codage de maintenir une cohérence et des règles claires pour l'extension Babel Fish AI. Il indique les règles spécifiques que l'extension doit respecter pour assurer une évolution structurée et sécurisée.
+
+## Quand et comment le mettre à jour ?
+L'outil de codage doit automatiquement actualiser ce fichier chaque fois qu'une modification du projet rend ces règles obsolètes ou incohérentes avec la structure existante.
+
+- Vérifier la compatibilité avec `manifest.json` et les scripts de l'extension (`background.js`, `content.js`).
+- Mettre à jour les règles de sécurité (API keys, URL d'API sensibles).
+- Assurer l'intégrité des fichiers d'internationalisation (`_locales`).
+
+## Règles spécifiques à respecter
+- Ne jamais exposer directement la clé API OpenAI ni les URLs sensibles.
+- Toutes les évolutions de fonctionnalités doivent être documentées dans le `README.md`.
+- Mettre à jour les fichiers de traduction FR (`messages.json`) lorsque de nouvelles fonctionnalités sont introduites ou modifiées. Les autres langues c'est dans un second temps quand je le demande.
+- Vérifier régulièrement l'intégration entre les fichiers JavaScript (`api.js`, `translation.js`, `ui.js`) pour maintenir la robustesse du code.
+- Respecter le mode expert et les options avancées telles que décrites dans la documentation utilisateur.
+
+## Règles de rigueur pour la refactorisation et la migration de code
+- PRIMORDIAL : Ne JAMAIS modifier la logique métier existante lors de la migration de code.
+- Lors de la migration de fonctions vers de nouveaux fichiers, conserver EXACTEMENT les mêmes prompts, paramètres et comportements.
+- Ne pas inventer ou ajouter de nouveaux paramètres ou options qui n'existaient pas dans le code original.
+- Toujours vérifier le code original avant de migrer une fonction pour s'assurer de préserver tous les cas particuliers et conditions.
+- Maintenir les messages d'erreur exacts et les constantes utilisées dans le code original.
+- Préserver la structure des appels API, y compris les paramètres optionnels, les timeouts et les mécanismes de retry.
+- Conserver les commentaires explicatifs du code original pour maintenir la documentation interne.
+- Tester rigoureusement chaque fonction migrée pour s'assurer qu'elle fonctionne exactement comme l'originale.
+- Ne pas simplifier ou "améliorer" le code existant sans demande explicite.
+
+## Procédure détaillée pour la migration de code
+1. **Analyse préliminaire** : Avant de migrer une fonction, l'examiner en détail pour comprendre ses dépendances, ses variables globales et son contexte d'utilisation.
+2. **Identification des dépendances** : Identifier toutes les variables, constantes et fonctions auxiliaires utilisées par la fonction à migrer.
+3. **Extraction progressive** : Migrer une fonction à la fois, puis vérifier que les références dans content.js sont correctement mises à jour.
+4. **Vérification des appels** : S'assurer que les appels à la fonction migrée utilisent exactement les mêmes paramètres et dans le même ordre que dans le code original.
+5. **Gestion des espaces de noms** : Utiliser la structure d'espace de noms window.BabelFishAIUtils pour exposer les fonctions migrées de manière cohérente.
+6. **Préservation des commentaires** : Conserver tous les commentaires explicatifs du code original, y compris les commentaires JSDoc.
+7. **Vérification des constantes** : S'assurer que toutes les constantes utilisées dans les fonctions migrées sont disponibles dans le nouveau contexte.
+8. **Test d'intégration** : Après chaque migration, vérifier que l'intégration avec le reste du code fonctionne correctement.
+
+## Erreurs à éviter absolument
+- Ne pas modifier les prompts utilisés pour les appels API (OpenAI, Whisper, etc.).
+- Ne pas changer la structure des objets de configuration ou des paramètres.
+- Ne pas altérer la gestion des erreurs ou les messages d'erreur.
+- Ne pas supprimer ou modifier les commentaires explicatifs.
+- Ne pas ajouter de nouvelles fonctionnalités ou optimisations non demandées.
+- Ne pas changer les noms de fonctions ou de variables pour les "améliorer".
+- Ne pas réorganiser l'ordre des paramètres des fonctions.
+- Ne pas modifier le comportement des animations et transitions UI (notamment pour le sélecteur de langue).
+- Ne pas altérer la logique d'affichage/masquage des éléments UI comme le conteneur de langue.
+
+Ce fichier est essentiel pour maintenir une gestion claire, sécurisée et à jour de l'extension Babel Fish AI.

@@ -199,6 +199,10 @@
         "message": "Erreur lors de la reformulation",
         "description": "Message d'erreur pour la reformulation"
     },
+    "bannerTranscriptionError": {
+        "message": "Erreur pendant la transcription",
+        "description": "Message d'erreur affiché lorsqu'une erreur survient pendant la transcription"
+    },
     "translationExplanation": {
         "message": "La fonctionnalité de traduction IA intégrée vous permet d'obtenir une traduction automatique de votre texte transcrit.<br>Pour cela :<br><ul><li>Langue source : sélectionnez la langue que vous parlez dans le micro.</li><li>Langue cible : choisissez la langue dans laquelle vous souhaitez que votre texte soit traduit.</li></ul>Ces paramètres n'affectent que la traduction, pas la transcription. Si vous désactivez la traduction automatique, votre texte transcrit le sera dans la langue parlée au micro.",
         "description": "Explication de la section traduction"
