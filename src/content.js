@@ -202,15 +202,42 @@
      */
     async function transcribeAudio(audioBlob) {
         try {
-            // Utiliser la fonction migrée dans transcription-display.js
-            const result = await window.BabelFishAIUtils.display.transcribeAudio(audioBlob);
-            return result;
+            // Récupérer la clé API depuis le stockage
+            const apiKey = await window.BabelFishAIUtils.api.getApiKey();
+            if (!apiKey) {
+                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+                window.BabelFishAI.ui.handleError(errorMsg, errorMsg);
+                throw new Error(errorMsg);
+            }
+
+            // Récupérer l'URL de l'API et le modèle depuis le stockage
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
+                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
+                audioModelType: API_CONFIG.WHISPER_MODEL
+            });
+
+            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
+            const audioModelType = result.audioModelType;
+
+            // Utiliser directement la fonction dans api-utils.js
+            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
+                audioBlob,
+                apiKey,
+                apiUrl,
+                audioModelType,
+                null, // Pas de nom de fichier spécifique
+                true  // Générer un nom de fichier unique
+            );
+            
+            return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
         } finally {
             // Nettoyer les ressources spécifiques à content.js
-            audioChunks = [];
+            if (Array.isArray(audioChunks)) {
+                audioChunks.length = 0;
+            }
             audioBlob = null;
         }
     }
@@ -601,8 +628,8 @@
      */
     async function getOrFetchApiKey() {
         try {
-            // Utiliser la fonction du module text-processing
-            const key = await window.BabelFishAIUtils.textProcessing.getOrFetchApiKey();
+            // Utiliser directement la fonction du module api-utils
+            const key = await window.BabelFishAIUtils.api.getOrFetchApiKey();
             // Mettre à jour la variable apiKey locale
             apiKey = key;
             return apiKey;

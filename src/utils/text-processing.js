@@ -222,21 +222,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Récupère la clé API ou lève une exception si elle n'est pas disponible
      * @returns {Promise<string>} - La clé API
      * @throws {Error} - Si la clé API n'est pas trouvée
+     * @deprecated Utiliser window.BabelFishAIUtils.api.getOrFetchApiKey à la place
      */
     async function getOrFetchApiKey() {
-        // Vérifier si la fonction getApiKey est disponible
-        if (!window.BabelFishAIUtils || !window.BabelFishAIUtils.api || !window.BabelFishAIUtils.api.getApiKey) {
-            throw new Error("API de gestion des clés non disponible");
-        }
-
-        // Récupérer la clé API
-        const apiKey = await window.BabelFishAIUtils.api.getApiKey();
-        if (!apiKey) {
-            const errorMessage = window.BabelFishAIConstants?.ERRORS?.API_KEY_NOT_FOUND || "Clé API non trouvée";
-            throw new Error(errorMessage);
-        }
-        
-        return apiKey;
+        // Déléguer à l'implémentation dans api-utils.js
+        return await window.BabelFishAIUtils.api.getOrFetchApiKey();
     }
 
     /**

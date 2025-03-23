@@ -1,4 +1,6 @@
-// Utilitaires API pour l'extension BabelFishAI
+// Utilitaires API pour l'extension BabelFishAI (DEPRECATED - Utiliser api-utils.js à la place)
+// Ce fichier est conservé pour la compatibilité avec le code existant
+// mais toutes les fonctions sont maintenant déléguées à api-utils.js
 window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
 (function (exports) {
@@ -231,32 +233,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
+     * @deprecated Utiliser window.BabelFishAIUtils.api.transcribeAudio à la place
      */
     async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) { // skipcq: JS-0116
-        // Déterminer le nom de fichier final
-        let finalFilename; // skipcq: JS-0119
-        if (generateUniqueFilename) {
-            // Générer un nom de fichier avec timestamp et élément aléatoire
-            const timestamp = Date.now();
-            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
-            finalFilename = `audio-${timestamp}-${randomPart}.webm`;
-        } else {
-            finalFilename = filename || 'audio.webm';
-        }
-
-        // Préparer le FormData pour l'envoi du fichier audio
-        const formData = new FormData();
-        formData.append('file', audioBlob, finalFilename);
-        formData.append('model', modelType);
-
-        // Utiliser la fonction callApi pour effectuer la requête
-        return callApi({
-            url: apiUrl,
+        // Déléguer à l'implémentation dans api-utils.js
+        return await window.BabelFishAIUtils.api.transcribeAudio(
+            audioBlob,
             apiKey,
-            body: formData,
-            errorType: ERRORS.TRANSCRIPTION_ERROR,
-            responseProcessor: (data) => data.text
-        });
+            apiUrl,
+            modelType,
+            filename,
+            generateUniqueFilename
+        );
     }
 
     /**
@@ -313,6 +301,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Note: Ces fonctions sont maintenant déléguées à api-utils.js
     exports.api = {
         transcribeAudio,
         getApiKey,

@@ -342,7 +342,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             apiKey,
             body: formData,
             errorType: ERRORS.TRANSCRIPTION_ERROR,
-            responseProcessor: (data) => data.text
+            responseProcessor: (data) => {
+                // Nettoyer le texte transcrit pour éliminer les retours à la ligne superflus au début
+                let text = data.text || '';
+                text = text.trim();
+                return text;
+            }
         });
     }
 

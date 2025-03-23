@@ -13,21 +13,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Valide si le texte d'entrée est valide pour le traitement
      * @param {string} text - Texte à valider
      * @returns {boolean} - True si le texte est valide
+     * @deprecated Utiliser window.BabelFishAIUtils.textProcessing.isValidInputText à la place
      */
     function isValidInputText(text) {
-        if (!text) return false;
-        
-        // Vérifier si le texte est vide ou ne contient que des espaces
-        if (text.trim().length === 0) return false;
-        
-        // Vérifier si le texte est trop court (moins de 2 caractères)
-        if (text.trim().length < 2) return false;
-        
-        // Vérifier si le texte est trop long (plus de 4000 tokens)
-        // Estimation très approximative: 1 token ≈ 4 caractères
-        if (text.length > 16000) return false;
-        
-        return true;
+        // Déléguer à l'implémentation dans text-processing.js
+        return window.BabelFishAIUtils.textProcessing.isValidInputText(text);
     }
 
     /**

@@ -505,7 +505,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const audioModelType = result.audioModelType;
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
-            return await window.BabelFishAIUtils.api.transcribeAudio(
+            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 apiKey,
                 apiUrl,
@@ -513,11 +513,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 null, // Pas de nom de fichier spécifique
                 true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
+            
+            return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
         } finally {
-            audioChunks = [];
+            // Nettoyer les ressources spécifiques au module d'enregistrement
+            if (Array.isArray(audioChunks)) {
+                audioChunks.length = 0;
+            }
             audioBlob = null;
         }
     }
