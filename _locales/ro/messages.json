@@ -16,7 +16,7 @@
         "description": "Numele extensiei"
     },
     "extensionDescription": {
-        "message": "Transformă-ți vocea în text cu transcriere și traducere bazate pe inteligență artificială",
+        "message": "Transformă-ți vocea în text cu transcriere și traducere bazate pe IA",
         "description": "Descrierea extensiei"
     },
     "welcomeMessage": {
@@ -88,7 +88,7 @@
         "description": "Informații despre prețuri"
     },
     "supportProject": {
-        "message": "Susține proiectul prin PayPal",
+        "message": "Susțineți proiectul prin PayPal",
         "description": "Text pentru linkul de suport PayPal"
     },
     "whisperApiUrlPlaceholder": {
@@ -108,16 +108,16 @@
         "description": "Etichetă pentru afișarea activă"
     },
     "activeDisplayDescription": {
-        "message": "Dacă este activat, textul transcris/tradus va fi inserat direct în câmpul de text în care tastați.",
+        "message": "Dacă este activată, textul transcris/tradus va fi inserat direct în câmpul de text în care tastați.",
         "description": "Descrierea opțiunii de afișare activă"
     },
     "dialogDisplayLabel": {
         "message": "Casetă de dialog",
-        "description": "Etichetă pentru afișarea în caseta de dialog"
+        "description": "Etichetă pentru afișarea în casetă de dialog"
     },
     "dialogDisplayDescription": {
-        "message": "Dacă este activat, textul transcris/tradus va apărea într-o casetă de dialog flotantă.",
-        "description": "Descrierea opțiunii de afișare în caseta de dialog"
+        "message": "Dacă este activată, textul transcris/tradus va apărea într-o casetă de dialog flotantă.",
+        "description": "Descrierea opțiunii de afișare în casetă de dialog"
     },
     "dialogDurationLabel": {
         "message": "Durata de afișare a casetei de dialog (secunde):",
@@ -136,7 +136,7 @@
         "description": "Descrierea culorilor bannerului"
     },
     "startColorLabel": {
-        "message": "Culoare început:",
+        "message": "Culoare de început:",
         "description": "Etichetă pentru culoarea de început"
     },
     "startColorDescription": {
@@ -144,7 +144,7 @@
         "description": "Descrierea culorii de început"
     },
     "endColorLabel": {
-        "message": "Culoare sfârșit:",
+        "message": "Culoare de sfârșit:",
         "description": "Etichetă pentru culoarea de sfârșit"
     },
     "endColorDescription": {
@@ -160,7 +160,7 @@
         "description": "Descrierea opacității"
     },
     "translationTitle": {
-        "message": "Traducere AI Integrată",
+        "message": "Traducere IA Integrată",
         "description": "Titlul secțiunii de traducere"
     },
     "automaticLanguage": {
@@ -180,7 +180,7 @@
         "description": "Etichetă pentru limba țintă"
     },
     "enhancementTitle": {
-        "message": "Îmbunătățire Text AI",
+        "message": "Îmbunătățire text IA",
         "description": "Titlul secțiunii de îmbunătățire a textului"
     },
     "rephraseLabel": {
@@ -188,7 +188,7 @@
         "description": "Etichetă pentru opțiunea de reformulare"
     },
     "rephraseDescription": {
-        "message": "Dacă este activat, textul transcris va fi reformulat pentru a-i îmbunătăți claritatea și fluența.",
+        "message": "Dacă este activată, textul transcris va fi reformulat pentru a-i îmbunătăți claritatea și fluența.",
         "description": "Descrierea opțiunii de reformulare"
     },
     "bannerRephrasing": {
@@ -199,8 +199,12 @@
         "message": "Eroare la reformulare",
         "description": "Mesaj de eroare pentru reformulare"
     },
+    "bannerTranscriptionError": {
+        "message": "Eroare în timpul transcrierii",
+        "description": "Mesaj de eroare afișat când apare o eroare în timpul transcrierii"
+    },
     "translationExplanation": {
-        "message": "Funcționalitatea de traducere AI integrată vă permite să obțineți o traducere automată a textului transcris.<br>Pentru a face acest lucru:<br><ul><li>Limba sursă: selectați limba pe care o vorbiți în microfon.</li><li>Limba țintă: alegeți limba în care doriți să fie tradus textul.</li></ul>Aceste setări afectează doar traducerea, nu și transcrierea. Dacă dezactivați traducerea automată, textul transcris va fi în limba vorbită în microfon.",
+        "message": "Funcționalitatea de traducere IA integrată vă permite să obțineți o traducere automată a textului transcris.<br>Pentru a face acest lucru:<br><ul><li>Limba sursă: selectați limba pe care o vorbiți în microfon.</li><li>Limba țintă: alegeți limba în care doriți să fie tradus textul.</li></ul>Aceste setări afectează doar traducerea, nu și transcrierea. Dacă dezactivați traducerea automată, textul transcris va fi în limba vorbită în microfon.",
         "description": "Explicația secțiunii de traducere"
     },
     "expertModeTitle": {
@@ -220,7 +224,7 @@
         "description": "Etichetă pentru modelul de traducere"
     },
     "translationModelDescription": {
-        "message": "Alegeți modelul AI utilizat pentru traducere. `gpt-4o-mini` este modelul implicit (cel mai bun raport calitate/preț). `gpt-4o` oferă o calitate superioară, dar este mai scump.",
+        "message": "Alegeți modelul de IA utilizat pentru traducere. `gpt-4o-mini` este modelul implicit (cel mai bun raport calitate/preț). `gpt-4o` oferă o calitate superioară, dar este mai scump.",
         "description": "Descrierea modelului de traducere"
     },
     "audioModelLabel": {
@@ -228,7 +232,7 @@
         "description": "Etichetă pentru modelul audio"
     },
     "audioModelDescription": {
-        "message": "Alegeți modelul AI utilizat pentru transcrierea audio. `whisper-1` este modelul implicit.",
+        "message": "Alegeți modelul de IA utilizat pentru transcrierea audio. `whisper-1` este modelul implicit.",
         "description": "Descrierea modelului audio"
     },
     "whisperApiUrlLabel": {
@@ -284,7 +288,7 @@
         "description": "Titlul secțiunii autorului"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "Julien L.S.",
         "description": "Numele autorului"
     },
     "authorRole": {
@@ -313,7 +317,7 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Text link GitHub"
     },
     "bannerRecording": {
         "message": "Înregistrare în curs... (Faceți clic pe pictogramă sau utilizați comanda rapidă pentru a opri)",
@@ -336,11 +340,11 @@
         "description": "Mesaj de eroare pentru accesul la microfon"
     },
     "bannerTranslationError": {
-        "message": "Eroare la traducere.",
+        "message": "Eroare în timpul traducerii.",
         "description": "Mesaj de eroare pentru traducere"
     },
     "useBabelFishInstructions": {
-        "message": "Pentru a utiliza BabelFish AI:<br><br>1. Accesați un site web (de exemplu, webmail-ul dvs. sau un site de chat al AI-ului dvs. preferat, cum ar fi <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de la Mistral AI</a> sau <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Fixați pictograma extensiei pentru acces ușor.<br>3. Porniți/opriți înregistrarea:<br>    * Faceți clic pe pictograma extensiei <img src=\"../../../../images/icon32.png\" alt=\"Pictograma extensiei\" width=\"32\" height=\"32\"> sau utilizați comanda rapidă de la tastatură.<br>    * Vorbiți în microfon.<br>    * Faceți clic din nou pe pictogramă <img src=\"../../../../images/icon32.png\" alt=\"Pictograma extensiei\" width=\"32\" height=\"32\"> sau utilizați comanda rapidă de la tastatură.<br>    * Transcrierea va apărea în zona de text activă sau într-o casetă de dialog.<br><br>Comenzi rapide de la tastatură:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "Pentru a utiliza BabelFish AI:<br><br>1. Accesați un site web (de exemplu, webmail-ul dvs. sau un site de chat al AI-ului dvs. preferat, cum ar fi <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> sau <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Fixați pictograma extensiei pentru acces ușor.<br>3. Porniți/opriți înregistrarea:<br>    * Faceți clic pe pictograma extensiei <img src=\"../../../../images/icon32.png\" alt=\"Pictograma extensiei\" width=\"32\" height=\"32\"> sau utilizați comanda rapidă de la tastatură.<br>    * Vorbiți în microfon.<br>    * Faceți clic din nou pe pictogramă <img src=\"../../../../images/icon32.png\" alt=\"Pictograma extensiei\" width=\"32\" height=\"32\"> sau utilizați comanda rapidă de la tastatură.<br>    * Transcrierea va apărea în zona de text activă sau într-o casetă de dialog.<br><br>Comenzi rapide de la tastatură:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrucțiuni pentru utilizarea extensiei"
     },
     "defaultWhisperApiUrl": {
@@ -353,7 +357,7 @@
     },
     "API_KEY_NOT_FOUND": {
         "message": "Cheia API nu este configurată. Vă rugăm să o configurați în opțiunile extensiei.",
-        "description": "Mesaj de eroare: lipsește cheia API"
+        "description": "Mesaj de eroare: cheia API lipsește"
     },
     "CHROME_STORAGE_ERROR": {
         "message": "Eroare de stocare Chrome",
@@ -364,15 +368,15 @@
         "description": "Mesaj de eroare: acces la microfon"
     },
     "API_ERROR": {
-        "message": "Eroare la apelarea API-ului",
+        "message": "Eroare în timpul apelului API",
         "description": "Mesaj de eroare: apel API general"
     },
     "TRANSCRIPTION_ERROR": {
-        "message": "Eroare la transcriere",
+        "message": "Eroare în timpul transcrierii",
         "description": "Mesaj de eroare: transcriere"
     },
     "TRANSLATION_ERROR": {
-        "message": "Eroare la traducere",
+        "message": "Eroare în timpul traducerii",
         "description": "Mesaj de eroare: traducere"
     },
     "NO_EDITABLE_ELEMENT": {
@@ -444,7 +448,7 @@
         "description": "Etichetă pentru opțiunea de copiere automată"
     },
     "autoCopyDescription": {
-        "message": "Dacă este activat, rezultatul va fi copiat automat în clipboard și caseta de dialog nu va mai apărea pentru transcriere.",
-        "description": "Descriere pentru opțiunea de copiere automată"
+        "message": "Dacă este activată, rezultatul va fi copiat automat în clipboard și caseta de dialog nu va mai apărea pentru transcriere.",
+        "description": "Descrierea opțiunii de copiere automată"
     }
 }

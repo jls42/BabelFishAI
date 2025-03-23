@@ -16,11 +16,11 @@
         "description": "एक्सटेंशन का नाम"
     },
     "extensionDescription": {
-        "message": "एआई-संचालित ट्रांसक्रिप्शन और अनुवाद के साथ अपनी आवाज को टेक्स्ट में बदलें",
+        "message": "AI-संचालित ट्रांसक्रिप्शन और अनुवाद के साथ अपनी आवाज़ को टेक्स्ट में बदलें",
         "description": "एक्सटेंशन विवरण"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI स्थापित करने के लिए धन्यवाद, वह एक्सटेंशन जो OpenAI के व्हिस्पर एपीआई की बदौलत आपकी आवाज को असाधारण सटीकता के साथ टेक्स्ट में बदल देता है, जो वर्तमान में वॉयस ट्रांसक्रिप्शन में अग्रणी है।",
+        "message": "BabelFishAI इंस्टॉल करने के लिए धन्यवाद, वह एक्सटेंशन जो OpenAI के व्हिस्पर एपीआई की बदौलत आपकी आवाज़ को असाधारण सटीकता के साथ टेक्स्ट में बदल देता है, जो वर्तमान में वॉयस ट्रांसक्रिप्शन में अग्रणी है।",
         "description": "स्वागत संदेश"
     },
     "essentialSettingsTitle": {
@@ -32,8 +32,8 @@
         "description": "उन्नत सेटिंग्स अनुभाग का शीर्षक"
     },
     "apiKeyConfigTitle": {
-        "message": "OpenAI एपीआई कुंजी",
-        "description": "एपीआई कुंजी कॉन्फ़िगरेशन अनुभाग का शीर्षक"
+        "message": "OpenAI API कुंजी",
+        "description": "API कुंजी कॉन्फ़िगरेशन अनुभाग का शीर्षक"
     },
     "shortcutInstructions": {
         "message": "शॉर्टकट बदलने के लिए, आप यह कर सकते हैं:",
@@ -69,27 +69,27 @@
     },
     "savedMessage": {
         "message": "विकल्प सहेजे गए!",
-        "description": "सहेजें पुष्टिकरण संदेश"
+        "description": "पुष्टिकरण संदेश सहेजें"
     },
     "apiKeyPlaceholder": {
-        "message": "आपकी OpenAI एपीआई कुंजी (sk-...)",
-        "description": "एपीआई कुंजी के लिए प्लेसहोल्डर"
+        "message": "आपकी OpenAI API कुंजी (sk-...)",
+        "description": "API कुंजी के लिए प्लेसहोल्डर"
     },
     "apiKeyInfo": {
-        "message": "अपनी एपीआई कुंजी यहां प्राप्त करें",
-        "description": "एपीआई कुंजी प्राप्त करने की जानकारी"
+        "message": "अपनी API कुंजी यहां प्राप्त करें",
+        "description": "API कुंजी प्राप्त करने की जानकारी"
     },
     "apiKeyHelp": {
-        "message": "BabelFishAI का उपयोग करने के लिए, आपको अपनी OpenAI एपीआई कुंजी दर्ज करनी होगी। यह कुंजी ट्रांसक्रिप्शन और अनुवाद सेवाओं तक पहुंचने के लिए आवश्यक है।",
-        "description": "एपीआई कुंजी के लिए सहायता"
+        "message": "BabelFishAI का उपयोग करने के लिए, आपको अपनी OpenAI API कुंजी दर्ज करनी होगी। ट्रांसक्रिप्शन और अनुवाद सेवाओं तक पहुंचने के लिए यह कुंजी आवश्यक है।",
+        "description": "API कुंजी के लिए सहायता"
     },
     "pricingInfo": {
         "message": "मूल्य निर्धारण (डिफ़ॉल्ट मॉडल: ऑडियो के लिए {defaultAudioModel} और अनुवाद के लिए {defaultTranslationModel}) के बारे में अधिक जानकारी यहां उपलब्ध है",
-        "description": "मूल्य निर्धारण जानकारी"
+        "description": "मूल्य निर्धारण की जानकारी"
     },
     "supportProject": {
-        "message": "पेपैल के माध्यम से परियोजना का समर्थन करें",
-        "description": "पेपैल समर्थन लिंक के लिए पाठ"
+        "message": "PayPal के माध्यम से परियोजना का समर्थन करें",
+        "description": "PayPal समर्थन लिंक के लिए पाठ"
     },
     "whisperApiUrlPlaceholder": {
         "message": "https://api.openai.com/v1/audio/transcriptions",
@@ -113,18 +113,18 @@
     },
     "dialogDisplayLabel": {
         "message": "संवाद बॉक्स",
-        "description": "संवाद प्रदर्शन के लिए लेबल"
+        "description": "संवाद बॉक्स प्रदर्शन के लिए लेबल"
     },
     "dialogDisplayDescription": {
-        "message": "यदि सक्षम किया गया है, तो ट्रांसक्राइब्ड/अनुवादित टेक्स्ट एक फ्लोटिंग डायलॉग बॉक्स में दिखाई देगा।",
-        "description": "संवाद प्रदर्शन विकल्प का विवरण"
+        "message": "यदि सक्षम किया गया है, तो ट्रांसक्राइब्ड/अनुवादित टेक्स्ट एक फ़्लोटिंग डायलॉग बॉक्स में दिखाई देगा।",
+        "description": "संवाद बॉक्स प्रदर्शन विकल्प का विवरण"
     },
     "dialogDurationLabel": {
         "message": "संवाद प्रदर्शन अवधि (सेकंड):",
         "description": "संवाद अवधि के लिए लेबल"
     },
     "dialogDurationDescription": {
-        "message": "यह सेट करता है कि संवाद बॉक्स स्वचालित रूप से गायब होने से पहले कितनी देर तक दिखाई देता है।",
+        "message": "यह सेट करता है कि डायलॉग बॉक्स स्वचालित रूप से गायब होने से पहले कितनी देर तक दिखाई देता है।",
         "description": "संवाद अवधि का विवरण"
     },
     "bannerColorsLabel": {
@@ -140,7 +140,7 @@
         "description": "आरंभ रंग के लिए लेबल"
     },
     "startColorDescription": {
-        "message": "बैनर ग्रेडिएंट का आरंभ रंग।",
+        "message": "बैनर ग्रेडिएंट का आरंभिक रंग।",
         "description": "आरंभ रंग का विवरण"
     },
     "endColorLabel": {
@@ -188,7 +188,7 @@
         "description": "रीफ़्रेशिंग विकल्प के लिए लेबल"
     },
     "rephraseDescription": {
-        "message": "यदि सक्षम किया गया है, तो ट्रांसक्राइब्ड टेक्स्ट को उसकी स्पष्टता और प्रवाह को बेहतर बनाने के लिए रीफ़्रेश किया जाएगा।",
+        "message": "यदि सक्षम किया गया है, तो ट्रांसक्राइब्ड टेक्स्ट को इसकी स्पष्टता और प्रवाह को बेहतर बनाने के लिए रीफ़्रेश किया जाएगा।",
         "description": "रीफ़्रेशिंग विकल्प का विवरण"
     },
     "bannerRephrasing": {
@@ -198,6 +198,10 @@
     "bannerRephrasingError": {
         "message": "रीफ़्रेशिंग के दौरान त्रुटि",
         "description": "रीफ़्रेशिंग के लिए त्रुटि संदेश"
+    },
+    "bannerTranscriptionError": {
+        "message": "ट्रांसक्रिप्शन के दौरान त्रुटि",
+        "description": "ट्रांसक्रिप्शन के दौरान कोई त्रुटि होने पर प्रदर्शित त्रुटि संदेश"
     },
     "translationExplanation": {
         "message": "एकीकृत एआई अनुवाद सुविधा आपको अपने ट्रांसक्राइब्ड टेक्स्ट का स्वचालित अनुवाद प्राप्त करने की अनुमति देती है।<br>ऐसा करने के लिए:<br><ul><li>स्रोत भाषा: वह भाषा चुनें जिसे आप माइक्रोफ़ोन में बोलते हैं।</li><li>लक्ष्य भाषा: वह भाषा चुनें जिसमें आप अपना टेक्स्ट अनुवादित करना चाहते हैं।</li></ul>ये सेटिंग्स केवल अनुवाद को प्रभावित करती हैं, ट्रांसक्रिप्शन को नहीं। यदि आप स्वचालित अनुवाद अक्षम करते हैं, तो आपका ट्रांसक्राइब्ड टेक्स्ट माइक्रोफ़ोन में बोली जाने वाली भाषा में होगा।",
@@ -220,7 +224,7 @@
         "description": "अनुवाद मॉडल के लिए लेबल"
     },
     "translationModelDescription": {
-        "message": "अनुवाद के लिए उपयोग किए जाने वाले एआई मॉडल को चुनें। `gpt-4o-mini` डिफ़ॉल्ट मॉडल है (सर्वोत्तम गुणवत्ता/मूल्य अनुपात)। `gpt-4o` बेहतर गुणवत्ता प्रदान करता है लेकिन अधिक महंगा है।",
+        "message": "अनुवाद के लिए उपयोग किए जाने वाले एआई मॉडल को चुनें। `gpt-4o-mini` डिफ़ॉल्ट मॉडल है (सर्वोत्तम गुणवत्ता/मूल्य अनुपात)। `gpt-4o` उच्च गुणवत्ता प्रदान करता है लेकिन अधिक महंगा है।",
         "description": "अनुवाद मॉडल का विवरण"
     },
     "audioModelLabel": {
@@ -284,7 +288,7 @@
         "description": "लेखक अनुभाग का शीर्षक"
     },
     "authorName": {
-        "message": "जूलियन एलएस",
+        "message": "जूलियन एल.एस.",
         "description": "लेखक का नाम"
     },
     "authorRole": {
@@ -308,28 +312,28 @@
         "description": "NoLog विकल्प के लिए लेबल"
     },
     "noLogDescription": {
-        "message": "यदि चेक किया जाता है, तो LiteLLM सेवा द्वारा कोई डेटा नहीं रखा जाएगा।",
+        "message": "यदि चेक किया गया है, तो LiteLLM सेवा द्वारा कोई डेटा बरकरार नहीं रखा जाएगा।",
         "description": "NoLog विकल्प का विवरण"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "GitHub लिंक टेक्स्ट"
     },
     "bannerRecording": {
         "message": "रिकॉर्डिंग प्रगति पर है... (रोकने के लिए आइकन पर क्लिक करें या शॉर्टकट का उपयोग करें)",
         "description": "रिकॉर्डिंग के दौरान बैनर संदेश"
     },
     "bannerTranscribing": {
-        "message": "ट्रांसक्रिप्शन प्रगति पर है...",
+        "message": "ट्रांसक्राइबिंग...",
         "description": "ट्रांसक्रिप्शन के दौरान बैनर संदेश"
     },
     "bannerTranslating": {
-        "message": "अनुवाद प्रगति पर है...",
+        "message": "अनुवाद...",
         "description": "अनुवाद के दौरान बैनर संदेश"
     },
     "bannerProcessing": {
-        "message": "प्रसंस्करण प्रगति पर है...",
-        "description": "पाठ प्रसंस्करण के दौरान बैनर संदेश"
+        "message": "प्रोसेसिंग...",
+        "description": "टेक्स्ट प्रोसेसिंग के दौरान बैनर संदेश"
     },
     "bannerMicAccessError": {
         "message": "त्रुटि: माइक्रोफ़ोन एक्सेस अस्वीकृत।",
@@ -340,8 +344,8 @@
         "description": "अनुवाद के लिए त्रुटि संदेश"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AI का उपयोग करने के लिए:<br><br>1. एक वेबसाइट पर जाएं (उदाहरण के लिए, आपका वेबमेल या आपकी पसंदीदा AI की चैट साइट, जैसे <a href=\"https://chat.mistral.ai/\" target=\"_blank\">मिस्ट्रल AI द्वारा ले चैट</a> या <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>)।<br>2. आसान पहुंच के लिए एक्सटेंशन आइकन को पिन करें।<br>3. रिकॉर्डिंग शुरू/बंद करें:<br>    * एक्सटेंशन आइकन <img src=\"../../../../images/icon32.png\" alt=\"एक्सटेंशन आइकन\" width=\"32\" height=\"32\"> पर क्लिक करें या कीबोर्ड शॉर्टकट का उपयोग करें।<br>    * अपने माइक्रोफ़ोन में बोलें।<br>    * आइकन <img src=\"../../../../images/icon32.png\" alt=\"एक्सटेंशन आइकन\" width=\"32\" height=\"32\"> पर फिर से क्लिक करें या कीबोर्ड शॉर्टकट का उपयोग करें।<br>    * ट्रांसक्रिप्शन सक्रिय टेक्स्ट क्षेत्र में या एक संवाद बॉक्स में दिखाई देगा।<br><br>कीबोर्ड शॉर्टकट:<br><ul><li>विंडोज: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>मैक: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
-        "description": "एक्सटेंशन का उपयोग करने के निर्देश"
+        "message": "BabelFish AI का उपयोग करने के लिए:<br><br>1. एक वेबसाइट पर जाएं (उदाहरण के लिए, आपका वेबमेल या आपकी पसंदीदा AI की चैट साइट, जैसे <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> या <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>)।<br>2. आसान पहुंच के लिए एक्सटेंशन आइकन को पिन करें।<br>3. रिकॉर्डिंग शुरू/बंद करें:<br>    * एक्सटेंशन आइकन <img src=\"../../../../images/icon32.png\" alt=\"एक्सटेंशन आइकन\" width=\"32\" height=\"32\"> पर क्लिक करें या कीबोर्ड शॉर्टकट का उपयोग करें।<br>    * अपने माइक्रोफ़ोन में बोलें।<br>    * आइकन <img src=\"../../../../images/icon32.png\" alt=\"एक्सटेंशन आइकन\" width=\"32\" height=\"32\"> पर फिर से क्लिक करें या कीबोर्ड शॉर्टकट का उपयोग करें।<br>    * ट्रांसक्रिप्शन सक्रिय टेक्स्ट क्षेत्र में या एक डायलॉग बॉक्स में दिखाई देगा।<br><br>कीबोर्ड शॉर्टकट:<br><ul><li>विंडोज: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>मैक: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "description": "एक्सटेंशन का उपयोग करने के लिए निर्देश"
     },
     "defaultWhisperApiUrl": {
         "message": "डिफ़ॉल्ट यूआरएल: https://api.openai.com/v1/audio/transcriptions",
@@ -364,7 +368,7 @@
         "description": "त्रुटि संदेश: माइक्रोफ़ोन एक्सेस"
     },
     "API_ERROR": {
-        "message": "एपीआई को कॉल करने में त्रुटि",
+        "message": "एपीआई कॉल के दौरान त्रुटि",
         "description": "त्रुटि संदेश: सामान्य एपीआई कॉल"
     },
     "TRANSCRIPTION_ERROR": {
@@ -380,7 +384,7 @@
         "description": "त्रुटि संदेश: कोई संपादन योग्य तत्व नहीं"
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "सामग्री स्क्रिप्ट इंजेक्ट करने में त्रुटि",
+        "message": "सामग्री स्क्रिप्ट इंजेक्ट करते समय त्रुटि",
         "description": "त्रुटि संदेश: स्क्रिप्ट इंजेक्शन"
     },
     "NO_ACTIVE_TAB": {
@@ -417,15 +421,15 @@
     },
     "dialogTitle": {
         "message": "BabelFishAI ट्रांसक्रिप्शन",
-        "description": "संवाद बॉक्स शीर्षक"
+        "description": "डायलॉग बॉक्स का शीर्षक"
     },
     "closeButton": {
         "message": "बंद करें",
-        "description": "बंद करें बटन टेक्स्ट"
+        "description": "बंद करें बटन का पाठ"
     },
     "copyButton": {
         "message": "कॉपी करें",
-        "description": "कॉपी बटन टेक्स्ट"
+        "description": "कॉपी बटन का पाठ"
     },
     "copySuccess": {
         "message": "टेक्स्ट कॉपी किया गया!",
@@ -440,11 +444,11 @@
         "description": "स्वचालित समापन को अक्षम करने वाले टॉगल के लिए पाठ"
     },
     "autoCopyLabel": {
-        "message": "स्वचालित रूप से क्लिपबोर्ड पर कॉपी करें",
-        "description": "स्वचालित कॉपी विकल्प के लिए लेबल"
+        "message": "क्लिपबोर्ड पर स्वचालित प्रतिलिपि",
+        "description": "स्वचालित प्रतिलिपि विकल्प के लिए लेबल"
     },
     "autoCopyDescription": {
-        "message": "यदि सक्षम है, तो परिणाम स्वचालित रूप से क्लिपबोर्ड पर कॉपी हो जाएगा और ट्रांसक्रिप्शन के लिए डायलॉग बॉक्स अब दिखाई नहीं देगा।",
-        "description": "स्वचालित कॉपी विकल्प के लिए विवरण"
+        "message": "यदि सक्षम किया गया है, तो परिणाम स्वचालित रूप से क्लिपबोर्ड पर कॉपी हो जाएगा और ट्रांसक्रिप्शन के लिए डायलॉग बॉक्स अब दिखाई नहीं देगा।",
+        "description": "स्वचालित प्रतिलिपि विकल्प का विवरण"
     }
 }
