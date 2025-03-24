@@ -48,6 +48,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Vérifie si les dépendances nécessaires sont disponibles
+     * @returns {boolean} - True si les dépendances sont disponibles, sinon false
+     */
+    function areDependenciesAvailable() {
+        return window.BabelFishAIUtils && window.BabelFishAIUtils.i18n;
+    }
+
+    /**
+     * Vérifie si l'API UI est disponible
+     * @returns {boolean} - True si l'API UI est disponible, sinon false
+     */
+    function isUIAvailable() {
+        return window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function';
+    }
+
+    /**
      * Gère une erreur en l'affichant à l'utilisateur et en la journalisant
      * @param {string|Error} displayMessage - Message à afficher à l'utilisateur ou objet Error
      * @param {string} [errorMessage] - Message technique d'erreur (optionnel)
@@ -55,7 +71,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function handleError(displayMessage, errorMessage) {
         try {
             // Vérifier si les dépendances nécessaires sont disponibles
-            if (!window.BabelFishAIUtils || !window.BabelFishAIUtils.i18n) {
+            if (!areDependenciesAvailable()) {
                 console.error("Erreur: BabelFishAIUtils ou i18n n'est pas disponible", displayMessage);
                 return;
             }
@@ -66,55 +82,84 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const CONFIG = window.BabelFishAIConstants?.CONFIG || { ERROR_BANNER_DURATION: 5000 };
 
             // Normaliser les paramètres pour gérer différents types d'entrées
-            let userMessage = '';
-            let technicalMessage = '';
-
-            // Si l'erreur est fournie comme objet Error
-            if (displayMessage instanceof Error) {
-                userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
-                technicalMessage = displayMessage.stack || displayMessage.message;
-            }
-            // Si l'erreur est fournie comme chaîne de caractères
-            else {
-                userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
-                technicalMessage = errorMessage || displayMessage;
-            }
+            const { userMessage, technicalMessage } = normalizeError(displayMessage, errorMessage);
 
             // Logger l'erreur technique pour le débogage
             console.error("Erreur technique:", technicalMessage);
 
             // Afficher le message d'erreur à l'utilisateur via la bannière
-            if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function') {
-                try {
-                    window.BabelFishAI.ui.showBanner(userMessage, MESSAGE_TYPES.ERROR);
-                    
-                    // Cacher automatiquement la bannière après un délai défini
-                    setTimeout(() => {
-                        if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.hideBanner === 'function') {
-                            window.BabelFishAI.ui.hideBanner();
-                        }
-                    }, CONFIG.ERROR_BANNER_DURATION);
-                } catch (bannerError) {
-                    console.error("Erreur lors de l'affichage de la bannière:", bannerError);
-                }
+            if (isUIAvailable()) {
+                showErrorBanner(userMessage, MESSAGE_TYPES, CONFIG);
             } else {
                 console.warn("Impossible d'afficher la bannière, l'API UI n'est pas disponible");
             }
 
             // Informer le background script de l'erreur pour mise à jour du badge
-            try {
-                if (chrome && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
-                    chrome.runtime.sendMessage({
-                        action: ACTIONS.ERROR,
-                        error: technicalMessage
-                    });
-                }
-            } catch (e) {
-                console.error("Impossible d'envoyer l'erreur au script d'arrière-plan:", e);
-            }
+            notifyBackgroundOnError(technicalMessage, ACTIONS);
+
         } catch (fatalError) {
             // Gestion des erreurs critiques dans la fonction handleError elle-même
             console.error("Erreur fatale dans handleError:", fatalError, "\nMessage original:", displayMessage);
+        }
+    }
+
+    /**
+     * Normalise les paramètres d'erreur
+     * @param {string|Error} displayMessage - Message à afficher ou objet Error
+     * @param {string} [errorMessage] - Message technique (optionnel)
+     * @returns {{userMessage: string, technicalMessage: string}} - Objet d'erreur normalisé
+     */
+    function normalizeError(displayMessage, errorMessage) {
+        let userMessage = '';
+        let technicalMessage = '';
+
+        if (displayMessage instanceof Error) {
+            userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            technicalMessage = displayMessage.stack || displayMessage.message;
+        } else {
+            userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            technicalMessage = errorMessage || displayMessage;
+        }
+
+        return { userMessage, technicalMessage };
+    }
+
+    /**
+     * Affiche la bannière d'erreur
+     * @param {string} userMessage - Le message à afficher
+     * @param {object} MESSAGE_TYPES - Les types de messages
+     * @param {object} CONFIG - La configuration
+     */
+    function showErrorBanner(userMessage, MESSAGE_TYPES, CONFIG) {
+        try {
+            window.BabelFishAI.ui.showBanner(userMessage, MESSAGE_TYPES.ERROR);
+
+            // Cacher automatiquement la bannière après un délai défini
+            setTimeout(() => {
+                if (isUIAvailable()) {
+                    window.BabelFishAI.ui.hideBanner();
+                }
+            }, CONFIG.ERROR_BANNER_DURATION);
+        } catch (bannerError) {
+            console.error("Erreur lors de l'affichage de la bannière:", bannerError);
+        }
+    }
+
+    /**
+     * Notifie le script background en cas d'erreur
+     * @param {string} technicalMessage - Le message technique
+     * @param {object} ACTIONS - Les actions
+     */
+    function notifyBackgroundOnError(technicalMessage, ACTIONS) {
+        try {
+            if (chrome && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
+                chrome.runtime.sendMessage({
+                    action: ACTIONS.ERROR,
+                    error: technicalMessage
+                });
+            }
+        } catch (e) {
+            console.error("Impossible d'envoyer l'erreur au script d'arrière-plan:", e);
         }
     }
 
@@ -131,7 +176,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 try {
                     // Obtenir la bannière depuis l'API de BabelFishAI si disponible
                     const banner = window.BabelFishAI?.ui?.getBanner?.() || null;
-                    
+
                     if (banner) {
                         return window.BabelFishAIUtils.banner.showStatus(banner, text, type);
                     }
@@ -139,7 +184,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     console.warn("Erreur lors de l'accès à la bannière via l'API banner-utils:", bannerError);
                 }
             }
-            
+
             // Fallback: utiliser l'API UI directement si disponible
             if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showStatus === 'function') {
                 try {
@@ -148,7 +193,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     console.warn("Erreur lors de l'utilisation de l'API UI pour afficher le statut:", uiError);
                 }
             }
-            
+
             // Si aucune méthode n'est disponible, juste logger le message
             console.log(`Status (${type}): ${text}`);
             return false;
