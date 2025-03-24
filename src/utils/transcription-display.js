@@ -126,33 +126,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
-     * @param {string} text - Le texte à afficher
-     * @param {Object} options - Les options d'affichage
-     * @param {boolean} autoCopy - Indique si la copie automatique est activée
-     * @param {string} currentDomain - Le domaine actuel
-     * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
-     */
+      * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
+      * @param {string} text - Le texte à afficher
+      * @param {Object} options - Les options d'affichage
+      * @param {boolean} autoCopy - Indique si la copie automatique est activée
+      * @param {string} currentDomain - Le domaine actuel
+      * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
+      */
     function determineDisplayMethod(text, options, autoCopy, currentDomain) {
         const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
             options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
 
-        let displayMethod = null;
+        // Règles pour déterminer la méthode d'affichage
+        const displayRules = [
+            { method: 'dialog', condition: () => isDialogForced || options.dialogDisplay },
+            { method: 'clipboard', condition: () => autoCopy && !options.activeDisplay },
+            { method: 'activeElement', condition: () => options.activeDisplay && !isDialogForced && window.BabelFishAIUtils.focus.handleActiveElementInsertion(text) },
+        ];
 
-        if (options.activeDisplay && !isDialogForced) {
-            const insertedInActiveElement = window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
-            if (insertedInActiveElement) {
-                displayMethod = 'activeElement';
-            }
-        }
+        // Trouver la première règle qui correspond
+        const rule = displayRules.find(rule => rule.condition());
 
-        if (isDialogForced || options.dialogDisplay || (!autoCopy && !displayMethod)) {
-            displayMethod = 'dialog';
-        } else if (autoCopy && !displayMethod) {
-            displayMethod = 'clipboard';
-        }
-
-        return displayMethod;
+        return rule ? rule.method : null;
     }
 
     /**

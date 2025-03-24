@@ -90,18 +90,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function handleRecordingStartError(error, stream) {
         console.error("Erreur lors du démarrage de l'enregistrement:", error);
 
-        let errorMessage;
-        if (error.message?.includes(ERRORS.API_KEY_NOT_FOUND)) {
-            errorMessage = ERRORS.API_KEY_NOT_FOUND;
-        } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-            errorMessage = window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError");
-        } else if (error.name === 'NotFoundError') {
-            errorMessage = "Aucun microphone détecté sur cet appareil.";
-        } else if (error.name === 'NotReadableError' || error.name === 'AbortError') {
-            errorMessage = "Impossible d'accéder au microphone (périphérique occupé ou défaillant).";
-        } else {
-            errorMessage = ERRORS.MIC_ACCESS_ERROR;
-        }
+        const errorMessages = {
+            [ERRORS.API_KEY_NOT_FOUND]: ERRORS.API_KEY_NOT_FOUND,
+            'NotAllowedError': window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
+            'PermissionDeniedError': window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
+            'NotFoundError': "Aucun microphone détecté sur cet appareil.",
+            'NotReadableError': "Impossible d'accéder au microphone (périphérique occupé ou défaillant).",
+            'AbortError': "Impossible d'accéder au microphone (périphérique occupé ou défaillant).",
+            'default': ERRORS.MIC_ACCESS_ERROR
+        };
+
+        let errorMessage = errorMessages[error.name] || errorMessages[error.message] || errorMessages['default'];
 
         window.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
 
@@ -218,16 +217,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 if (!hasAudioData) {
                     throw new Error("Aucune donnée audio capturée");
                 }
-
                 // Utilisation de propriétés optimales pour les blobs audio
                 audioBlob = new Blob(audioChunks, {
                     type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
                 });
 
-                // Vérification optimisée de la taille
-                if (audioBlob.size <= 0) {
-                    throw new Error("Blob audio vide");
+                // Vérification combinée de la présence et de la taille du blob
+                if (!audioBlob || audioBlob.size <= 0) {
+                    throw new Error("Blob audio vide ou invalide");
                 }
+
 
                 // Traiter l'audio enregistré - passage du blob par référence
                 await processRecordedAudio(audioBlob);
