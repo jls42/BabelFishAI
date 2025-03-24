@@ -35,15 +35,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const { autoCopy } = await window.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
 
             // Étape 1: Reformuler le texte si l'option est activée
-            let processedText = text;
-            if (options.enableRephrase) {
-                processedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(processedText);
-            }
-
-            // Étape 2: Traduire le texte si l'option est activée
-            if (options.enableTranslation) {
-                processedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(processedText, options);
-            }
+            let processedText = await processText(text, options);
 
             // Stocker l'élément actif avant d'afficher le texte
             window.BabelFishAIUtils.focus.storeFocusAndSelection();
@@ -61,13 +53,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Vérifier si l'élément actif est un élément valide pour insertion de texte
             const activeElement = document.activeElement;
             const isActiveElementValid = window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
-            
+
             // Copier dans le presse-papiers si autoCopy est activé et:
             // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
             // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
-            if (autoCopy && displayResult && 
-                (displayResult.method === 'clipboard' || 
-                (displayResult.method === 'dialog' && !isActiveElementValid))) {
+            if (autoCopy && displayResult &&
+                (displayResult.method === 'clipboard' ||
+                    (displayResult.method === 'dialog' && !isActiveElementValid))) {
                 try {
                     await navigator.clipboard.writeText(processedText);
                 } catch (err) {
@@ -84,6 +76,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Si une erreur se produit ailleurs, s'assurer que la bannière de traitement disparaît
             window.BabelFishAI.ui.hideBanner();
         }
+    }
+
+    /**
+    * Traite le texte en fonction des options de reformulation et de traduction
+    * @param {string} text - Le texte initial
+    * @param {Object} options - Les options de configuration
+    * @returns {Promise<string>} - Le texte traité
+    */
+    async function processText(text, options) {
+        let processedText = text;
+        if (options.enableRephrase) {
+            processedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(processedText);
+        }
+        if (options.enableTranslation) {
+            processedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(processedText, options);
+        }
+        return processedText;
     }
 
     /**
@@ -124,7 +133,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             // Tenter d'insérer le texte dans l'élément actif si l'option est activée
             let displayMethod = null;
-            
+
             if (options.activeDisplay && !isDialogForced) {
                 const insertedInActiveElement = window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
                 if (insertedInActiveElement) {
@@ -151,7 +160,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 console.warn("Aucune méthode d'affichage n'est activée");
                 return false;
             }
-            
+
             return {
                 success: true,
                 method: displayMethod
@@ -184,7 +193,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function transcribeAudio(audioBlob) {
         const apiKey = await window.BabelFishAIUtils.api.getApiKey();
-        
+
         if (!apiKey) {
             const errorMsg = ERRORS.API_KEY_NOT_FOUND;
             window.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
@@ -210,7 +219,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 null, // Pas de nom de fichier spécifique
                 true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
-            
+
             return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
