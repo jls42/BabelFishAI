@@ -17,13 +17,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function storeFocusAndSelection() {
         try {
             storedActiveElement = document.activeElement;
-            
+
             // Pour les éléments input et textarea
             if (storedActiveElement && (storedActiveElement.tagName === 'INPUT' || storedActiveElement.tagName === 'TEXTAREA')) {
                 storedSelectionStart = storedActiveElement.selectionStart;
                 storedSelectionEnd = storedActiveElement.selectionEnd;
                 storedSelectionText = storedActiveElement.value.substring(storedSelectionStart, storedSelectionEnd);
-            } 
+            }
             // Pour les éléments contentEditable
             else if (storedActiveElement && storedActiveElement.isContentEditable) {
                 const selection = window.getSelection();
@@ -43,7 +43,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function isStoredElementValid() {
         if (!storedActiveElement) return false;
-        
+
         // Vérifier si l'élément est toujours dans le DOM
         return document.body.contains(storedActiveElement);
     }
@@ -54,7 +54,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function restoreFocus() {
         if (!isStoredElementValid()) return false;
-        
+
         try {
             storedActiveElement.focus();
             return document.activeElement === storedActiveElement;
@@ -70,7 +70,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleInputCursorPosition(preventSelection) {
         if (!storedActiveElement) return;
-        
+
         try {
             if (preventSelection || storedSelectionStart === storedSelectionEnd) {
                 // Placer le curseur à la fin du contenu
@@ -92,11 +92,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function findLastTextNode(node) {
         if (!node) return null;
-        
+
         if (node.nodeType === Node.TEXT_NODE) {
             return node;
         }
-        
+
         // Parcourir les enfants en ordre inverse pour trouver le dernier nœud de texte
         if (node.childNodes && node.childNodes.length > 0) {
             for (let i = node.childNodes.length - 1; i >= 0; i--) {
@@ -106,7 +106,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -116,17 +116,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleContentEditableCursor(preventSelection) {
         if (!storedActiveElement || !storedActiveElement.isContentEditable) return;
-        
+
         try {
             const selection = window.getSelection();
-            
+
             if (preventSelection || !storedNodeRange || storedSelectionText === '') {
                 // Placer le curseur à la fin du contenu
                 selection.removeAllRanges();
-                
+
                 const range = document.createRange();
                 const lastTextNode = findLastTextNode(storedActiveElement);
-                
+
                 if (lastTextNode) {
                     range.setStart(lastTextNode, lastTextNode.length);
                     range.setEnd(lastTextNode, lastTextNode.length);
@@ -135,7 +135,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     range.selectNodeContents(storedActiveElement);
                     range.collapse(false); // Collapse à la fin
                 }
-                
+
                 selection.addRange(range);
             } else {
                 // Restaurer la sélection précédente
@@ -155,14 +155,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function restoreFocusAndSelection(force = false, preventSelection = true) {
         // Si l'élément actif est déjà correct et qu'on ne force pas, ne rien faire
         if (!force && document.activeElement === storedActiveElement) return;
-        
+
         // Vérifier si l'élément stocké est valide
         if (!isStoredElementValid()) return;
-        
+
         // Restaurer le focus
         const focusRestored = restoreFocus();
         if (!focusRestored) return;
-        
+
         // Gérer la position du curseur selon le type d'élément
         if (storedActiveElement.tagName === 'INPUT' || storedActiveElement.tagName === 'TEXTAREA') {
             handleInputCursorPosition(preventSelection);
@@ -178,27 +178,35 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function isValidElementForInsertion(activeElement) {
         if (!activeElement) return false;
-        
+
         // Vérifier si c'est un élément input ou textarea
         const isInputOrTextarea = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
-        
+
         // Vérifier si c'est un élément input qui accepte du texte
-        const isValidInputType = activeElement.tagName !== 'INPUT' || 
-            (activeElement.type !== 'button' && 
-             activeElement.type !== 'checkbox' && 
-             activeElement.type !== 'radio' && 
-             activeElement.type !== 'file' && 
-             activeElement.type !== 'image' && 
-             activeElement.type !== 'reset' && 
-             activeElement.type !== 'submit');
-        
+        const isValidInput = activeElement.tagName !== 'INPUT' || isValidInputType(activeElement);
+
         // Vérifier si c'est un élément contentEditable
         const isContentEditable = activeElement.isContentEditable;
-        
+
         // Vérifier si l'élément n'est pas en lecture seule
         const isNotReadOnly = !activeElement.readOnly;
-        
-        return (isInputOrTextarea && isValidInputType && isNotReadOnly) || isContentEditable;
+
+        return (isInputOrTextarea && isValidInput && isNotReadOnly) || isContentEditable;
+    }
+
+    /**
+     * Vérifie si un élément input est d'un type valide pour l'insertion de texte
+     * @param {HTMLElement} activeElement - L'élément actif (doit être un input)
+     * @returns {boolean} - True si le type d'input est valide, sinon false
+     */
+    function isValidInputType(activeElement) {
+        return activeElement.type !== 'button' &&
+            activeElement.type !== 'checkbox' &&
+            activeElement.type !== 'radio' &&
+            activeElement.type !== 'file' &&
+            activeElement.type !== 'image' &&
+            activeElement.type !== 'reset' &&
+            activeElement.type !== 'submit';
     }
 
     /**
@@ -212,44 +220,44 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function insertInContentEditable(element, text, options = {}) {
         const { ensureFocus = true, normalizeText = true } = options;
-        
+
         if (!element || !element.isContentEditable) return false;
-        
+
         try {
             // S'assurer que l'élément a le focus
             if (ensureFocus && document.activeElement !== element) {
                 element.focus();
             }
-            
+
             // Normaliser le texte si nécessaire
             let processedText = text;
             if (normalizeText) {
                 // Remplacer les sauts de ligne par <br> pour les éléments contentEditable
                 processedText = text.replace(/\n/g, '<br>');
             }
-            
+
             // Insérer le texte à la position du curseur
             const selection = window.getSelection();
-            
+
             if (selection.rangeCount > 0) {
                 // Supprimer le contenu sélectionné
                 const range = selection.getRangeAt(0);
                 range.deleteContents();
-                
+
                 // Insérer le nouveau texte
                 if (normalizeText) {
                     // Utiliser insertHTML pour le texte avec des balises HTML
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = processedText;
-                    
+
                     // Insérer chaque nœud du div temporaire
                     const fragment = document.createDocumentFragment();
                     while (tempDiv.firstChild) {
                         fragment.appendChild(tempDiv.firstChild);
                     }
-                    
+
                     range.insertNode(fragment);
-                    
+
                     // Placer le curseur à la fin du texte inséré
                     range.collapse(false);
                     selection.removeAllRanges();
@@ -258,7 +266,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     // Insérer le texte brut
                     const textNode = document.createTextNode(processedText);
                     range.insertNode(textNode);
-                    
+
                     // Placer le curseur à la fin du texte inséré
                     range.setStartAfter(textNode);
                     range.setEndAfter(textNode);
@@ -273,11 +281,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     element.textContent += processedText;
                 }
             }
-            
+
             // Déclencher un événement input pour notifier les frameworks JS
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
             element.dispatchEvent(inputEvent);
-            
+
             return true;
         } catch (error) {
             console.error('Error inserting text into contentEditable:', error);
@@ -292,19 +300,19 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleActiveElementInsertion(text) {
         const activeElement = document.activeElement;
-        
+
         if (!isValidElementForInsertion(activeElement)) {
             console.warn('No valid active element for text insertion');
             return false;
         }
-        
+
         try {
             if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
                 return insertTextIntoInput(activeElement, text);
             } else if (activeElement.isContentEditable) {
                 return insertInContentEditable(activeElement, text);
             }
-            
+
             return false;
         } catch (error) {
             console.error('Error handling active element insertion:', error);
@@ -322,33 +330,33 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (!element || (element.tagName !== 'INPUT' && element.tagName !== 'TEXTAREA')) {
             return false;
         }
-        
+
         try {
             const originalValue = element.value;
             const selStart = element.selectionStart || 0;
             const selEnd = element.selectionEnd || 0;
-            
+
             // Optimisation pour les grands volumes de texte
             const newValue = originalValue.substring(0, selStart) + text + originalValue.substring(selEnd);
-            
+
             // Mettre à jour la valeur
             element.value = newValue;
-            
+
             // Placer le curseur après le texte inséré
             const newCursorPos = selStart + text.length;
             element.setSelectionRange(newCursorPos, newCursorPos);
-            
+
             // Déclencher des événements pour notifier les frameworks JS
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
             element.dispatchEvent(inputEvent);
-            
+
             const changeEvent = new Event('change', { bubbles: true, cancelable: true });
             element.dispatchEvent(changeEvent);
-            
+
             return true;
         } catch (error) {
             console.error('Error inserting text into input:', error);
-            
+
             // Fallback pour les navigateurs plus anciens
             try {
                 document.execCommand('insertText', false, text);
