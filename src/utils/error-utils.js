@@ -172,13 +172,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function showStatus(text, type = 'info') {
         try {
             // Vérifier si la bannière est accessible via l'API banner-utils
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.banner && typeof window.BabelFishAIUtils.banner.showStatus === 'function') {
+            if (isBannerUtilsAvailable()) {
                 try {
                     // Obtenir la bannière depuis l'API de BabelFishAI si disponible
                     const banner = window.BabelFishAI?.ui?.getBanner?.() || null;
 
                     if (banner) {
-                        return window.BabelFishAIUtils.banner.showStatus(banner, text, type);
+                        return showStatusViaBannerUtils(banner, text, type);
                     }
                 } catch (bannerError) {
                     console.warn("Erreur lors de l'accès à la bannière via l'API banner-utils:", bannerError);
@@ -186,9 +186,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Fallback: utiliser l'API UI directement si disponible
-            if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showStatus === 'function') {
+            if (isUIDirectlyAvailable()) {
                 try {
-                    return window.BabelFishAI.ui.showStatus(text, type);
+                    return showStatusViaUI(text, type);
                 } catch (uiError) {
                     console.warn("Erreur lors de l'utilisation de l'API UI pour afficher le statut:", uiError);
                 }
@@ -202,6 +202,43 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             console.error("Erreur fatale dans showStatus:", fatalError, "\nMessage original:", text);
             return false;
         }
+    }
+
+    /**
+     * Vérifie si l'API banner-utils est disponible
+     * @returns {boolean} - True si l'API est disponible, sinon false
+     */
+    function isBannerUtilsAvailable() {
+        return window.BabelFishAIUtils && window.BabelFishAIUtils.banner && typeof window.BabelFishAIUtils.banner.showStatus === 'function';
+    }
+
+    /**
+     * Vérifie si l'API UI est directement disponible
+     * @returns {boolean} - True si l'API est disponible, sinon false
+     */
+    function isUIDirectlyAvailable() {
+        return window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showStatus === 'function';
+    }
+
+    /**
+     * Affiche le statut via l'API banner-utils
+     * @param {object} banner - L'objet bannière
+     * @param {string} text - Le texte à afficher
+     * @param {string} type - Le type de message
+     * @returns {boolean} - True si l'affichage a réussi, sinon false
+     */
+    function showStatusViaBannerUtils(banner, text, type) {
+        return window.BabelFishAIUtils.banner.showStatus(banner, text, type);
+    }
+
+    /**
+     * Affiche le statut via l'API UI directement
+     * @param {string} text - Le texte à afficher
+     * @param {string} type - Le type de message
+     * @returns {boolean} - True si l'affichage a réussi, sinon false
+     */
+    function showStatusViaUI(text, type) {
+        return window.BabelFishAI.ui.showStatus(text, type);
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
