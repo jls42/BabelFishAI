@@ -235,44 +235,42 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} - Le texte reformulé si tout s'est bien passé, sinon une erreur est levée
      */
     async function handleTextRephrasing(text) {
+        // Combiner les vérifications du texte d'entrée et de sortie
         if (!isValidInputText(text)) {
-            console.warn("Texte vide ou invalide pour la reformulation");
-            throw new Error("Texte vide ou invalide pour la reformulation");
+            const errorMessage = "Texte vide ou invalide pour la reformulation";
+            console.warn(errorMessage);
+            throw new Error(errorMessage);
         }
 
         try {
             // Vérifier si l'API Key est disponible
             const apiKey = await getOrFetchApiKey();
 
-            // Informer l'utilisateur que la reformulation est en cours via l'API UI
-            if (window.BabelFishAI && window.BabelFishAI.ui) {
-                const message = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
-                window.BabelFishAI.ui.showBanner(message);
-            }
+            // Informer l'utilisateur que la reformulation est en cours
+            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
+            window.BabelFishAI.ui.showBanner(message);
 
             // Reformuler le texte en utilisant la fonction existante
             const rephrasedText = await rephraseText(text, apiKey);
 
-            // Vérifier que la reformulation est valide
+            // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(rephrasedText)) {
-                throw new Error('Résultat de reformulation vide ou invalide');
+                const errorMessage = "Résultat de reformulation vide ou invalide";
+                console.warn(errorMessage);
+                throw new Error(errorMessage);
             }
 
             // Cacher la bannière une fois l'opération terminée
-            if (window.BabelFishAI && window.BabelFishAI.ui && window.BabelFishAI.ui.hideBanner) {
-                window.BabelFishAI.ui.hideBanner();
-            }
+            window.BabelFishAI.ui.hideBanner();
 
             return rephrasedText;
         } catch (error) {
             console.error('Erreur lors de la reformulation:', error);
-            
+
             // Gérer l'erreur via l'API d'erreur
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.error && window.BabelFishAIUtils.error.handleError) {
-                const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation";
-                window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
-            }
-            
+            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation";
+            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
+
             throw error;
         }
     }
@@ -319,13 +317,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             return translatedText;
         } catch (error) {
             console.error('Erreur lors de la traduction:', error);
-            
+
             // Gérer l'erreur via l'API d'erreur
             if (window.BabelFishAIUtils && window.BabelFishAIUtils.error && window.BabelFishAIUtils.error.handleError) {
                 const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
                 window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
             }
-            
+
             throw error;
         }
     }
