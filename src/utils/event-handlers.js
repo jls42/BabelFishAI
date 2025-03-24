@@ -211,6 +211,57 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Met à jour l'état du bouton de traduction
+     * @param {HTMLElement} translateButton - Le bouton de traduction
+     * @param {boolean} enableTranslation - Indique si la traduction est activée
+     */
+    function updateTranslateButton(translateButton, enableTranslation) {
+        translateButton.setAttribute('data-active', String(enableTranslation));
+        console.log(`Bouton de traduction mis à jour: ${enableTranslation}`);
+    }
+
+    /**
+     * Gère l'affichage du conteneur de langue
+     * @param {HTMLElement} languageContainer - Le conteneur de langue
+     * @param {boolean} show - Indique si le conteneur doit être affiché
+     */
+    function updateLanguageContainerDisplay(languageContainer, show) {
+        if (show) {
+            // Montrer le conteneur de langue
+            languageContainer.style.display = 'flex';
+
+            // Utiliser rAF pour grouper les changements visuels
+            requestAnimationFrame(() => {
+                languageContainer.style.opacity = '1';
+                languageContainer.style.maxHeight = '30px';
+                languageContainer.style.overflow = 'visible';
+            });
+        } else {
+            // Cacher le conteneur de langue avec transition
+            languageContainer.style.opacity = '0';
+            languageContainer.style.maxHeight = '0';
+            languageContainer.style.overflow = 'hidden';
+
+            // Masquer complètement après l'animation
+            setTimeout(() => {
+                languageContainer.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    /**
+     * Met à jour la langue cible sélectionnée dans le sélecteur
+     * @param {HTMLElement} languageSelect - Le sélecteur de langue
+     * @param {string} newTargetLanguage - La nouvelle langue cible
+     */
+    function updateTargetLanguageSelect(languageSelect, newTargetLanguage) {
+        if (languageSelect && languageSelect.value !== newTargetLanguage) {
+            languageSelect.value = newTargetLanguage;
+            console.log(`Sélecteur de langue mis à jour: ${newTargetLanguage}`);
+        }
+    }
+
+    /**
      * Gère les changements d'options de traduction
      * @param {Object} changes - Les changements détectés
      */
@@ -232,44 +283,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const languageContainer = recordingBanner?.querySelector('.whisper-language-container');
 
             if (translateButton && 'enableTranslation' in changes) {
-                // Mettre à jour l'attribut data-active pour changer l'état visuel du bouton
-                translateButton.setAttribute('data-active', String(changes.enableTranslation.newValue));
-                console.log(`Bouton de traduction mis à jour: ${changes.enableTranslation.newValue}`);
+                updateTranslateButton(translateButton, changes.enableTranslation.newValue);
 
-                // Gérer l'affichage du conteneur de langue en fonction de l'état de traduction
+                // Gérer l'affichage du conteneur de langue
                 if (languageContainer) {
-                    // Animation optimisée avec requestAnimationFrame
-                    if (changes.enableTranslation.newValue) {
-                        // Montrer le conteneur de langue
-                        languageContainer.style.display = 'flex';
-
-                        // Utiliser rAF pour grouper les changements visuels
-                        requestAnimationFrame(() => {
-                            languageContainer.style.opacity = '1';
-                            languageContainer.style.maxHeight = '30px';
-                            languageContainer.style.overflow = 'visible';
-                        });
-                    } else {
-                        // Cacher le conteneur de langue avec transition
-                        languageContainer.style.opacity = '0';
-                        languageContainer.style.maxHeight = '0';
-                        languageContainer.style.overflow = 'hidden';
-
-                        // Masquer complètement après l'animation
-                        setTimeout(() => {
-                            languageContainer.style.display = 'none';
-                        }, 300);
-                    }
+                    updateLanguageContainerDisplay(languageContainer, changes.enableTranslation.newValue);
                 }
             }
 
-            // Mettre à jour la langue cible sélectionnée si nécessaire
+            // Mettre à jour la langue cible sélectionnée
             if ('targetLanguage' in changes) {
                 const languageSelect = recordingBanner?.querySelector('#whisper-language-select');
-                if (languageSelect && languageSelect.value !== changes.targetLanguage.newValue) {
-                    languageSelect.value = changes.targetLanguage.newValue;
-                    console.log(`Sélecteur de langue mis à jour: ${changes.targetLanguage.newValue}`);
-                }
+                updateTargetLanguageSelect(languageSelect, changes.targetLanguage.newValue);
             }
         }
     }
