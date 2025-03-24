@@ -30,7 +30,7 @@
         // Ajouter l'icône
         const iconSpan = document.createElement('span');
         iconSpan.className = 'whisper-button-icon';
-        iconSpan.innerHTML = icon;
+        iconSpan.textContent = icon;
         button.appendChild(iconSpan);
 
         // Ajouter le texte
