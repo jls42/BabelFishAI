@@ -137,27 +137,26 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
             options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
 
-        // Règles pour déterminer la méthode d'affichage
-        const displayRules = [
-            { method: 'dialog', condition: () => isDialogForced || options.dialogDisplay },
-            {
-                method: 'activeElement', condition: () => {
-                    const activeElement = document.activeElement;
-                    return options.activeDisplay && !isDialogForced && window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
-                }
-            },
-            { method: 'clipboard', condition: () => autoCopy && !options.activeDisplay }
-        ];
+        const activeElement = document.activeElement;
+        const isValidForInsertion = window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
 
-        // Trouver la première règle qui correspond
-        let rule = displayRules.find(rule => rule.condition());
-
-        // Si aucune règle ne correspond, utiliser la boîte de dialogue par défaut
-        if (!rule) {
-            rule = { method: 'dialog' };
+        // 1. Si l'élément actif est valide et l'option activeDisplay est activée, utiliser activeElement
+        if (options.activeDisplay && isValidForInsertion) {
+            return 'activeElement';
         }
 
-        return rule.method;
+        // 2. Si autoCopy est activé, utiliser clipboard
+        if (autoCopy) {
+            return 'clipboard';
+        }
+
+        // 3. Si dialogDisplay est activé ou si le domaine force la boîte de dialogue, utiliser dialog
+        if (options.dialogDisplay || isDialogForced) {
+            return 'dialog';
+        }
+
+        // Par défaut, utiliser la boîte de dialogue si aucune autre condition n'est remplie
+        return 'dialog';
     }
 
     /**
