@@ -22,11 +22,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (refs.recordingBanner) {
             recordingBanner = refs.recordingBanner;
         }
-        
+
         if (refs.bannerColorStart) {
             bannerColorStart = refs.bannerColorStart;
         }
-        
+
         if (refs.bannerColorEnd) {
             bannerColorEnd = refs.bannerColorEnd;
         }
@@ -91,41 +91,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {Object} changes - Les changements dans les options
      */
     function updateBannerColorOptions(changes) {
-        // Vérification rapide - si le bandeau n'est pas initialisé, inutile de continuer
         if (!recordingBanner) return;
 
-        // Utilisation d'un mapping direct des propriétés aux variables, 
-        // sans fonctions intermédiaires pour de meilleures performances
-        const colorMappings = {
-            bannerColorStart: false,
-            bannerColorEnd: false,
-            bannerOpacity: false
-        };
-
-        // Vérifier si les changements concernent les couleurs du bandeau
         let hasColorChanges = false;
 
-        // Parcourir les changements pour identifier ceux qui concernent les couleurs
-        for (const key in changes) {
-            if (key in colorMappings) {
-                // Mettre à jour la variable correspondante
-                if (key === 'bannerColorStart') {
-                    bannerColorStart = changes[key].newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_START;
-                    colorMappings.bannerColorStart = true;
-                } else if (key === 'bannerColorEnd') {
-                    bannerColorEnd = changes[key].newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_END;
-                    colorMappings.bannerColorEnd = true;
-                } else if (key === 'bannerOpacity') {
-                    // Stocker la valeur d'opacité dans une variable globale si nécessaire
-                    // ou la passer directement à updateBannerColor
-                    colorMappings.bannerOpacity = true;
-                }
-                
-                hasColorChanges = true;
-            }
+        if (changes.bannerColorStart) {
+            bannerColorStart = changes.bannerColorStart.newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_START;
+            hasColorChanges = true;
+        }
+        if (changes.bannerColorEnd) {
+            bannerColorEnd = changes.bannerColorEnd.newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_END;
+            hasColorChanges = true;
+        }
+        if (changes.bannerOpacity) {
+            // Mettre à jour l'opacité (si nécessaire, selon l'implémentation de updateBannerColor)
+            hasColorChanges = true;
         }
 
-        // Si des changements de couleur ont été détectés, mettre à jour le bandeau
         if (hasColorChanges) {
             window.BabelFishAI.updateBannerColor(true);
         }
@@ -154,7 +136,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Traiter les changements de langue
         if (changes.defaultLanguage) {
             console.log("Langue par défaut mise à jour:", changes.defaultLanguage.newValue);
-            
+
             // Mettre à jour le sélecteur de langue dans la bannière si disponible
             const languageSelect = recordingBanner?.querySelector('.whisper-language-select');
             if (languageSelect) {
@@ -182,17 +164,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         if (hasAdvancedChanges) {
             console.log("Options avancées mises à jour");
-            
+
             // Si le mode expert est activé/désactivé, mettre à jour l'interface
             if ('enableAdvancedOptions' in changes) {
                 const expertMode = changes.enableAdvancedOptions.newValue === true;
-                
+
                 // Mettre à jour les éléments de l'interface qui dépendent du mode expert
                 const expertElements = document.querySelectorAll('.whisper-expert-only');
                 expertElements.forEach(el => {
                     el.style.display = expertMode ? 'block' : 'none';
                 });
-                
+
                 console.log(`Mode expert ${expertMode ? 'activé' : 'désactivé'}`);
             }
         }
@@ -209,7 +191,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         if (hasDisplayChanges) {
             console.log("Options d'affichage mises à jour");
-            
+
             // Mettre à jour les comportements d'affichage en fonction des nouvelles options
             // Ces changements seront appliqués lors du prochain affichage de transcription
         }
@@ -226,16 +208,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         if (hasTranslationChanges) {
             console.log("Options de traduction mises à jour");
-            
+
             // Mettre à jour l'interface de traduction si nécessaire
             const translateButton = recordingBanner?.querySelector('#whisper-translation-control');
             const languageContainer = recordingBanner?.querySelector('.whisper-language-container');
-            
+
             if (translateButton && 'enableTranslation' in changes) {
                 // Mettre à jour l'attribut data-active pour changer l'état visuel du bouton
                 translateButton.setAttribute('data-active', String(changes.enableTranslation.newValue));
                 console.log(`Bouton de traduction mis à jour: ${changes.enableTranslation.newValue}`);
-                
+
                 // Gérer l'affichage du conteneur de langue en fonction de l'état de traduction
                 if (languageContainer) {
                     // Animation optimisée avec requestAnimationFrame
@@ -262,7 +244,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     }
                 }
             }
-            
+
             // Mettre à jour la langue cible sélectionnée si nécessaire
             if ('targetLanguage' in changes) {
                 const languageSelect = recordingBanner?.querySelector('#whisper-language-select');
@@ -276,7 +258,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Traiter les changements d'options de reformulation
         if ('enableRephrase' in changes) {
             console.log("Option de reformulation mise à jour:", changes.enableRephrase.newValue);
-            
+
             // Mettre à jour l'interface de reformulation si nécessaire
             const rephraseButton = recordingBanner?.querySelector('#whisper-rephrase-control');
             if (rephraseButton) {
