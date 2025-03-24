@@ -37,118 +37,135 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     /**
      * Démarre l'enregistrement audio
+    /**
+     * Récupère la clé API de manière asynchrone.
+     * @returns {Promise<string>} La clé API.
+     */
+    async function getApiKey() {
+        return await window.BabelFishAIUtils.error.safeExecute(
+            () => window.BabelFishAIUtils.api.getApiKey(),
+            "Erreur lors de la récupération de la clé API"
+        );
+    }
+
+    /**
+     * Demande l'accès au microphone avec les contraintes spécifiées.
+     * @param {Object} audioConstraints - Les contraintes audio.
+     * @returns {Promise<MediaStream>} Le flux audio.
+     */
+    async function requestMicrophoneAccess(audioConstraints) {
+        const stream = await window.BabelFishAIUtils.error.safeExecute(
+            () => navigator.mediaDevices.getUserMedia(audioConstraints),
+            "Erreur lors de l'accès au microphone"
+        );
+
+        if (!stream || !stream.active) {
+            throw new Error("Stream audio invalide ou inactif");
+        }
+        return stream;
+    }
+
+    /**
+     * Crée et configure le MediaRecorder.
+     * @param {MediaStream} stream - Le flux audio.
+     * @param {Object} options - Les options du MediaRecorder.
+     * @returns {MediaRecorder} L'objet MediaRecorder.
+     */
+    function createMediaRecorder(stream, options) {
+        let recorder;
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            console.warn(`Format ${options.mimeType} non supporté, utilisation du format par défaut`);
+            recorder = new MediaRecorder(stream); // Fallback au format par défaut
+        } else {
+            recorder = new MediaRecorder(stream, options);
+        }
+        return recorder;
+    }
+
+    /**
+     * Gère les erreurs survenues lors du démarrage de l'enregistrement.
+     * @param {Error} error - L'erreur survenue.
+     * @param {MediaStream} stream - Le flux audio (peut être null).
+     */
+    function handleRecordingStartError(error, stream) {
+        console.error("Erreur lors du démarrage de l'enregistrement:", error);
+
+        let errorMessage;
+        if (error.message?.includes(ERRORS.API_KEY_NOT_FOUND)) {
+            errorMessage = ERRORS.API_KEY_NOT_FOUND;
+        } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            errorMessage = window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError");
+        } else if (error.name === 'NotFoundError') {
+            errorMessage = "Aucun microphone détecté sur cet appareil.";
+        } else if (error.name === 'NotReadableError' || error.name === 'AbortError') {
+            errorMessage = "Impossible d'accéder au microphone (périphérique occupé ou défaillant).";
+        } else {
+            errorMessage = ERRORS.MIC_ACCESS_ERROR;
+        }
+
+        window.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
+
+        isRecording = false;
+
+        if (stream) {
+            window.BabelFishAIUtils.error.safeExecute(
+                () => stream.getTracks().forEach(track => track.stop()),
+                "Erreur lors de la libération des ressources audio"
+            );
+            stream = null;
+        }
+    }
+
+
+    /**
+     * Démarre l'enregistrement audio
      * @returns {Promise<boolean>} - Indique si le démarrage a réussi
      */
     async function startRecording() {
-        // Réinitialiser les chunks audio immédiatement
         if (audioChunks.length > 0) {
             audioChunks.length = 0;
         }
 
-        // Variable pour stocker le flux audio
         let stream = null;
 
         try {
-            // 1. Vérifier la disponibilité de la clé API (nécessaire avant d'accéder au micro)
-            apiKey = await window.BabelFishAIUtils.error.safeExecute(
-                () => window.BabelFishAIUtils.api.getApiKey(),
-                "Erreur lors de la récupération de la clé API"
-            );
+            apiKey = await getApiKey();
 
-            // 2. Configuration optimale pour la capture audio
             const audioConstraints = {
                 audio: {
-                    // Paramètres optimaux pour la reconnaissance vocale
-                    echoCancellation: true,    // Suppression de l'écho
-                    noiseSuppression: true,    // Suppression du bruit
-                    autoGainControl: true,     // Ajustement automatique du gain
-                    sampleRate: 44100,         // Fréquence d'échantillonnage standard
-                    channelCount: 1            // Mono (meilleur pour la reconnaissance vocale)
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                    sampleRate: 44100,
+                    channelCount: 1
                 },
-                video: false  // Explicitement refuser l'accès vidéo
+                video: false
             };
 
-            // 3. Demander l'accès au microphone avec les contraintes optimisées
-            stream = await window.BabelFishAIUtils.error.safeExecute(
-                () => navigator.mediaDevices.getUserMedia(audioConstraints),
-                "Erreur lors de l'accès au microphone"
-            );
+            stream = await requestMicrophoneAccess(audioConstraints);
 
-            // Vérifier que le stream est valide
-            if (!stream || !stream.active) {
-                throw new Error("Stream audio invalide ou inactif");
-            }
-
-            // 4. Créer le MediaRecorder avec les codecs optimaux disponibles
             const options = {
-                mimeType: 'audio/webm;codecs=opus',  // Format optimal pour la reconnaissance vocale
-                audioBitsPerSecond: 128000           // 128kbps pour un bon compromis taille/qualité
+                mimeType: 'audio/webm;codecs=opus',
+                audioBitsPerSecond: 128000
             };
 
-            // Vérification de compatibilité
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                console.warn(`Format ${options.mimeType} non supporté, utilisation du format par défaut`);
-                mediaRecorder = new MediaRecorder(stream); // Fallback au format par défaut
-            } else {
-                mediaRecorder = new MediaRecorder(stream, options);
-            }
-
-            // 5. Configurer les gestionnaires d'événements
+            mediaRecorder = createMediaRecorder(stream, options);
             setupMediaRecorderEvents(stream);
-
-            // 6. Mettre à jour l'état UI immédiatement (ne pas attendre le démarrage effectif)
             isRecording = true;
 
-            // 7. Informer l'utilisateur via la bannière
             window.BabelFishAI.ui.showBanner(
                 window.BabelFishAIUtils.i18n.getMessage("bannerRecording")
             );
 
-            // 8. Informer le background script (opération asynchrone qui ne doit pas bloquer)
             window.BabelFishAIUtils.error.safeExecute(
                 () => chrome.runtime.sendMessage({ action: ACTIONS.STARTED }),
                 "Impossible d'envoyer la notification de démarrage au background"
             );
 
             return true;
+
         } catch (error) {
-            console.error("Erreur lors du démarrage de l'enregistrement:", error);
-
-            // Détection intelligente du type d'erreur
-            let errorMessage;
-
-            if (error.message?.includes(ERRORS.API_KEY_NOT_FOUND)) {
-                // Erreur de clé API manquante
-                errorMessage = ERRORS.API_KEY_NOT_FOUND;
-            } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-                // Erreur d'autorisation de microphone refusée
-                errorMessage = window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError");
-            } else if (error.name === 'NotFoundError') {
-                // Aucun périphérique audio trouvé
-                errorMessage = "Aucun microphone détecté sur cet appareil.";
-            } else if (error.name === 'NotReadableError' || error.name === 'AbortError') {
-                // Problème d'accès au périphérique
-                errorMessage = "Impossible d'accéder au microphone (périphérique occupé ou défaillant).";
-            } else {
-                // Erreur générique d'accès au microphone
-                errorMessage = ERRORS.MIC_ACCESS_ERROR;
-            }
-
-            // Affichage centralisé de l'erreur
-            window.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
-
-            // Nettoyage complet en cas d'échec
-            isRecording = false;
-
-            // Libérer le flux audio si disponible
-            if (stream) {
-                window.BabelFishAIUtils.error.safeExecute(
-                    () => stream.getTracks().forEach(track => track.stop()),
-                    "Erreur lors de la libération des ressources audio"
-                );
-                stream = null;
-            }
-
+            handleRecordingStartError(error, stream);
             return false;
         }
     }
@@ -184,7 +201,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const handleRecordingStopped = async () => {
             // S'assurer que isRecording est mis à false immédiatement
             isRecording = false;
-            
+
             let audioBlob = null;
 
             try {
@@ -232,7 +249,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Gestionnaire d'erreurs optimisé
         const handleRecordingError = error => {
             console.error('Erreur MediaRecorder:', error);
-            
+
             // S'assurer que isRecording est mis à false immédiatement
             isRecording = false;
 
@@ -379,11 +396,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             if (mediaRecorder && mediaRecorder.state === 'recording') {
                 // Mettre à jour l'état d'enregistrement immédiatement
                 isRecording = false;
-                
+
                 // Si on annule, on stocke cette information pour éviter le traitement dans l'événement onstop
                 if (cancelProcessing && mediaRecorder) {
                     mediaRecorder.cancelProcessing = true;
-                    
+
                     // En cas d'annulation, vider les chunks audio immédiatement
                     if (isRecordingCanceled) {
                         audioChunks = [];
@@ -446,7 +463,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (isCurrentlyRecording()) {
             // Définir la variable d'annulation pour éviter le traitement de l'audio
             isRecordingCanceled = true;
-            
+
             // Restaurer immédiatement le focus avant même d'arrêter l'enregistrement
             window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
 
@@ -466,7 +483,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                         console.log("Bandeau masqué après annulation d'enregistrement (direct)"); // skipcq: JS-0002
                     }
                 }
-                
+
                 // S'assurer que le focus est toujours restauré après avoir caché la bannière
                 setTimeout(() => {
                     window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
@@ -513,7 +530,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 null, // Pas de nom de fichier spécifique
                 true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
-            
+
             return transcription;
         } catch (error) {
             console.error('Transcription error:', error);
