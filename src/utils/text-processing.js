@@ -283,20 +283,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} - Le texte traduit si tout s'est bien passé, sinon une erreur est levée
      */
     async function handleTextTranslation(text, options, specifiedTargetLanguage) {
+        // Combiner les vérifications du texte d'entrée et de sortie
         if (!isValidInputText(text)) {
-            console.warn("Texte vide ou invalide pour la traduction");
-            throw new Error("Texte vide ou invalide pour la traduction");
+            const errorMessage = "Texte vide ou invalide pour la traduction";
+            console.warn(errorMessage);
+            throw new Error(errorMessage);
         }
 
         try {
             // Vérifier si l'API Key est disponible
             const apiKey = await getOrFetchApiKey();
 
-            // Informer l'utilisateur que la traduction est en cours via l'API UI
-            if (window.BabelFishAI && window.BabelFishAI.ui) {
-                const message = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
-                window.BabelFishAI.ui.showBanner(message);
-            }
+            // Informer l'utilisateur que la traduction est en cours
+            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
+            window.BabelFishAI.ui.showBanner(message);
 
             // Déterminer les langues source et cible
             const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
@@ -304,25 +304,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Traduire le texte en utilisant la fonction existante
             const translatedText = await translateText(text, sourceLanguage, targetLanguage, apiKey);
 
-            // Vérifier que la traduction est valide
+            // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(translatedText)) {
-                throw new Error('Résultat de traduction vide ou invalide');
+                const errorMessage = "Résultat de traduction vide ou invalide";
+                console.warn(errorMessage);
+                throw new Error(errorMessage);
             }
 
             // Cacher la bannière une fois l'opération terminée
-            if (window.BabelFishAI && window.BabelFishAI.ui && window.BabelFishAI.ui.hideBanner) {
-                window.BabelFishAI.ui.hideBanner();
-            }
+            window.BabelFishAI.ui.hideBanner();
 
             return translatedText;
         } catch (error) {
             console.error('Erreur lors de la traduction:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.error && window.BabelFishAIUtils.error.handleError) {
-                const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
-                window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
-            }
+            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
+            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
         }
