@@ -297,32 +297,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 "Erreur lors de l'affichage de la bannière de transcription"
             );
 
-            // 2. Transcrire l'audio avec une gestion optimisée des erreurs
-            const transcription = await window.BabelFishAIUtils.error.safeExecute(
-                () => transcribeAudio(audioBlob),
-                "Erreur lors de la transcription audio"
-            );
-
-            // Vérification rapide du résultat avant de continuer
-            if (!transcription || typeof transcription !== 'string' || transcription.trim() === '') {
-                throw new Error("Résultat de transcription vide ou invalide");
-            }
-
-            // 3. Afficher la transcription (avec les éventuelles opérations de traduction/reformulation)
-            await window.BabelFishAIUtils.error.safeExecute(
-                () => window.BabelFishAI.ui.showTranscription(transcription),
-                "Erreur lors de l'affichage de la transcription"
-            );
-
-            // 4. Cacher la bannière une fois toutes les opérations terminées avec succès
-            await window.BabelFishAIUtils.error.safeExecute(
-                () => window.BabelFishAI.ui.hideBanner(),
-                "Erreur lors de la dissimulation de la bannière"
-            );
-
-            // 5. Aide au garbage collector en supprimant la référence au blob
-            // Cela est particulièrement important pour les gros fichiers audio
+            await transcribeAndDisplayText(audioBlob);
             return null;
+
         } catch (error) {
             // Gestion centralisée et cohérente des erreurs
             console.error("Erreur pendant le traitement audio:", error);
@@ -347,6 +324,37 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         // Retourne null en dehors du bloc finally
         return null;
+    }
+
+    /**
+    * Transcrit le blob audio et affiche le texte résultant
+    * @param {Blob} audioBlob - Le blob audio à transcrire
+    * @returns {Promise<void>}
+    */
+    async function transcribeAndDisplayText(audioBlob) {
+
+        // 2. Transcrire l'audio avec une gestion optimisée des erreurs
+        const transcription = await window.BabelFishAIUtils.error.safeExecute(
+            () => transcribeAudio(audioBlob),
+            "Erreur lors de la transcription audio"
+        );
+
+        // Vérification rapide du résultat avant de continuer
+        if (!transcription || typeof transcription !== 'string' || transcription.trim() === '') {
+            throw new Error("Résultat de transcription vide ou invalide");
+        }
+
+        // 3. Afficher la transcription (avec les éventuelles opérations de traduction/reformulation)
+        await window.BabelFishAIUtils.error.safeExecute(
+            () => window.BabelFishAI.ui.showTranscription(transcription),
+            "Erreur lors de l'affichage de la transcription"
+        );
+
+        // 4. Cacher la bannière une fois toutes les opérations terminées avec succès
+        await window.BabelFishAIUtils.error.safeExecute(
+            () => window.BabelFishAI.ui.hideBanner(),
+            "Erreur lors de la dissimulation de la bannière"
+        );
     }
 
     /**
