@@ -79,6 +79,19 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+    * Détermine si le texte doit être copié automatiquement dans le presse-papiers
+    * @param {boolean} autoCopy - Indique si la copie automatique est activée
+    * @param {Object} displayResult - Le résultat de l'affichage du texte
+    * @param {boolean} isActiveElementValid - Indique si l'élément actif est valide pour l'insertion
+    * @returns {boolean} - True si le texte doit être copié, sinon false
+    */
+    function shouldCopyText(autoCopy, displayResult, isActiveElementValid) {
+        return autoCopy && displayResult &&
+            (displayResult.method === 'clipboard' ||
+                (displayResult.method === 'dialog' && !isActiveElementValid));
+    }
+
+    /**
     * Traite le texte en fonction des options de reformulation et de traduction
     * @param {string} text - Le texte initial
     * @param {Object} options - Les options de configuration
@@ -113,6 +126,36 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
+     * @param {string} text - Le texte à afficher
+     * @param {Object} options - Les options d'affichage
+     * @param {boolean} autoCopy - Indique si la copie automatique est activée
+     * @param {string} currentDomain - Le domaine actuel
+     * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
+     */
+    function determineDisplayMethod(text, options, autoCopy, currentDomain) {
+        const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
+            options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
+
+        let displayMethod = null;
+
+        if (options.activeDisplay && !isDialogForced) {
+            const insertedInActiveElement = window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
+            if (insertedInActiveElement) {
+                displayMethod = 'activeElement';
+            }
+        }
+
+        if (isDialogForced || options.dialogDisplay || (!autoCopy && !displayMethod)) {
+            displayMethod = 'dialog';
+        } else if (autoCopy && !displayMethod) {
+            displayMethod = 'clipboard';
+        }
+
+        return displayMethod;
+    }
+
+    /**
      * Détermine le mode d'affichage et affiche le texte selon les options configurées
      * @param {string} text - Le texte à afficher
      * @param {Object} options - Les options d'affichage
@@ -120,45 +163,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     function displayTranscriptionText(text, options, autoCopy) {
-        if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
-            console.warn("Tentative d'affichage de texte vide");
-            return false;
-        }
-
         try {
             // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
             const currentDomain = window.location.hostname;
-            const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
-                options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
-
-            // Tenter d'insérer le texte dans l'élément actif si l'option est activée
-            let displayMethod = null;
-
-            if (options.activeDisplay && !isDialogForced) {
-                const insertedInActiveElement = window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
-                if (insertedInActiveElement) {
-                    displayMethod = 'activeElement';
-                }
-            }
-
-            // Afficher dans une boîte de dialogue dans les cas suivants:
-            // 1. Si le domaine force l'affichage en dialogue (même avec autoCopy)
-            // 2. Si l'option dialogDisplay est activée (affichage explicite en dialogue demandé)
-            // 3. Si aucun élément actif n'a reçu le texte et autoCopy n'est pas activé
-            if (isDialogForced || options.dialogDisplay || (!autoCopy && !displayMethod)) {
-                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
-                displayMethod = 'dialog';
-            } else if (autoCopy && !displayMethod) {
-                // Si autoCopy est activé mais qu'aucun élément n'a reçu le texte, et que le domaine
-                // ne force pas l'affichage en dialogue et dialogDisplay n'est pas activé,
-                // on indique que la méthode d'affichage est "clipboard"
-                displayMethod = 'clipboard';
-            }
+            const displayMethod = determineDisplayMethod(text, options, autoCopy, currentDomain);
 
             // Avertir si aucune méthode d'affichage n'est activée
             if (!displayMethod) {
                 console.warn("Aucune méthode d'affichage n'est activée");
                 return false;
+            }
+
+            // Afficher le texte en fonction de la méthode déterminée
+            if (displayMethod === 'dialog') {
+                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            } else if (displayMethod === 'activeElement') {
+                // Le texte a déjà été inséré dans l'élément actif dans determineDisplayMethod
             }
 
             return {
