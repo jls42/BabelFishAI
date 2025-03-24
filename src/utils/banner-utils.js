@@ -2,7 +2,7 @@
  * Utilitaires pour la gestion de la bannière d'état et des contrôles associés
  * Ce module fait partie de BabelFishAI et gère l'interface utilisateur de la bannière
  */
-(function(exports) {
+(function (exports) {
     'use strict';
 
     // Référence aux constantes UI
@@ -36,17 +36,17 @@
         // Ajouter le texte
         const textSpan = document.createElement('span');
         textSpan.className = 'whisper-button-text';
-        
+
         // Définir le texte par défaut d'abord
         let buttonText = defaultText;
-        
+
         // Essayer d'utiliser la traduction si disponible
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && 
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
             typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
             const translated = window.BabelFishAIUtils.i18n.getMessage(i18nKey);
             if (translated) buttonText = translated;
         }
-        
+
         textSpan.textContent = buttonText;
         button.appendChild(textSpan);
 
@@ -84,7 +84,7 @@
 
         // Mettre à jour le libellé avec i18n
         const updateLabel = () => {
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && 
+            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
                 typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
                 const translated = window.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
                 if (translated) label.textContent = translated;
@@ -130,7 +130,7 @@
             { value: 'ja', text: '日本語 (ja)' },
             { value: 'ko', text: '한국어 (ko)' }
         ];
-        
+
         // Remplir le sélecteur avec les langues disponibles
         populateLanguageSelect(languageSelect, availableLanguages);
     }
@@ -242,7 +242,7 @@
         rephraseButton.addEventListener('click', () => {
             const isActive = rephraseButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
-            
+
             // Stocker la référence à la fonction avant d'utiliser setTimeout
             const restoreFunction = window.BabelFishAIUtils.focus.restoreFocusAndSelection;
 
@@ -265,7 +265,7 @@
         translateButton.addEventListener('click', () => {
             const isActive = translateButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
-            
+
             // Stocker la référence à la fonction avant d'utiliser setTimeout
             const restoreFunction = window.BabelFishAIUtils.focus.restoreFocusAndSelection;
 
@@ -279,7 +279,7 @@
             // Mettre à jour l'état visuel
             translateButton.setAttribute('data-active', String(newState));
             translateButton.setAttribute('aria-checked', String(newState));
-            
+
             // Afficher/masquer le sélecteur de langue
             if (newState) {
                 languageContainer.style.display = 'flex';
@@ -356,87 +356,87 @@
         banner.setAttribute('role', 'status');
         banner.setAttribute('aria-live', 'polite');
         banner.setAttribute('data-extension', 'babelfishai'); // Ajouter l'attribut data-extension
-        
+
         // Fonction pour configurer le contenu de la bannière une fois les traductions chargées
         const setupBannerContent = () => {
 
-        // Créer le conteneur pour tous les éléments (whisper-banner-content)
-        const bannerContent = document.createElement('div');
-        bannerContent.className = 'whisper-banner-content';
-        banner.appendChild(bannerContent);
+            // Créer le conteneur pour tous les éléments (whisper-banner-content)
+            const bannerContent = document.createElement('div');
+            bannerContent.className = 'whisper-banner-content';
+            banner.appendChild(bannerContent);
 
-        // Créer le conteneur de texte
-        const textContainer = document.createElement('div');
-        textContainer.className = 'whisper-status-text';
-        // Utiliser une valeur par défaut si la traduction n'est pas disponible
-        textContainer.textContent = "Initialisation...";
-        // Essayer d'utiliser la traduction si disponible
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
-            const translated = window.BabelFishAIUtils.i18n.getMessage("bannerRecording");
-            if (translated) textContainer.textContent = translated;
-        }
-        bannerContent.appendChild(textContainer);
-
-        // Créer le conteneur de contrôles
-        const controlsContainer = document.createElement('div');
-        controlsContainer.className = 'whisper-controls-container';
-        bannerContent.appendChild(controlsContainer);
-
-        // Créer le bouton de reformulation
-        const rephraseButton = createBannerButton(
-            'whisper-rephrase-control',
-            '✨',
-            'Reformuler',  // Texte par défaut en français
-            'rephraseLabel'  // Clé correcte du fichier de traduction
-        );
-        controlsContainer.appendChild(rephraseButton);
-
-        // Créer le bouton de traduction
-        const translateButton = createBannerButton(
-            'whisper-translate-control',
-            '🌐',
-            'Traduire',  // Texte par défaut en français
-            'enableTranslationLabel'  // Clé correcte du fichier de traduction
-        );
-        controlsContainer.appendChild(translateButton);
-
-        // Créer le sélecteur de langue
-        const { container: languageContainer, select: languageSelect } = createLanguageSelector();
-        controlsContainer.appendChild(languageContainer);
-
-        // Initialiser le sélecteur de langues
-        initializeLanguageSelector(languageSelect);
-
-        // Configurer les gestionnaires d'événements
-        setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer);
-
-        // Récupérer les préférences de l'utilisateur pour l'état initial des boutons
-        chrome.storage.sync.get(['enableRephrase', 'enableTranslation'], (result) => {
-            // Définir l'état initial du bouton de reformulation
-            if (result.enableRephrase) {
-                rephraseButton.setAttribute('data-active', 'true');
-                rephraseButton.setAttribute('aria-checked', 'true');
+            // Créer le conteneur de texte
+            const textContainer = document.createElement('div');
+            textContainer.className = 'whisper-status-text';
+            // Utiliser une valeur par défaut si la traduction n'est pas disponible
+            textContainer.textContent = "Initialisation...";
+            // Essayer d'utiliser la traduction si disponible
+            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
+                const translated = window.BabelFishAIUtils.i18n.getMessage("bannerRecording");
+                if (translated) textContainer.textContent = translated;
             }
+            bannerContent.appendChild(textContainer);
 
-            // Définir l'état initial du bouton de traduction et du conteneur de langue
-            if (result.enableTranslation) {
-                translateButton.setAttribute('data-active', 'true');
-                translateButton.setAttribute('aria-checked', 'true');
-                
-                // Afficher le sélecteur de langue
-                languageContainer.style.display = 'flex';
-                languageContainer.style.opacity = '1';
-                languageContainer.style.maxHeight = '30px';
-                languageContainer.style.overflow = 'visible';
-            }
-        });
+            // Créer le conteneur de contrôles
+            const controlsContainer = document.createElement('div');
+            controlsContainer.className = 'whisper-controls-container';
+            bannerContent.appendChild(controlsContainer);
 
-        // Ne pas ajouter la bannière au document, cela sera fait par content.js
-        // document.body.appendChild(banner);
+            // Créer le bouton de reformulation
+            const rephraseButton = createBannerButton(
+                'whisper-rephrase-control',
+                '✨',
+                'Reformuler',  // Texte par défaut en français
+                'rephraseLabel'  // Clé correcte du fichier de traduction
+            );
+            controlsContainer.appendChild(rephraseButton);
+
+            // Créer le bouton de traduction
+            const translateButton = createBannerButton(
+                'whisper-translate-control',
+                '🌐',
+                'Traduire',  // Texte par défaut en français
+                'enableTranslationLabel'  // Clé correcte du fichier de traduction
+            );
+            controlsContainer.appendChild(translateButton);
+
+            // Créer le sélecteur de langue
+            const { container: languageContainer, select: languageSelect } = createLanguageSelector();
+            controlsContainer.appendChild(languageContainer);
+
+            // Initialiser le sélecteur de langues
+            initializeLanguageSelector(languageSelect);
+
+            // Configurer les gestionnaires d'événements
+            setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer);
+
+            // Récupérer les préférences de l'utilisateur pour l'état initial des boutons
+            chrome.storage.sync.get(['enableRephrase', 'enableTranslation'], (result) => {
+                // Définir l'état initial du bouton de reformulation
+                if (result.enableRephrase) {
+                    rephraseButton.setAttribute('data-active', 'true');
+                    rephraseButton.setAttribute('aria-checked', 'true');
+                }
+
+                // Définir l'état initial du bouton de traduction et du conteneur de langue
+                if (result.enableTranslation) {
+                    translateButton.setAttribute('data-active', 'true');
+                    translateButton.setAttribute('aria-checked', 'true');
+
+                    // Afficher le sélecteur de langue
+                    languageContainer.style.display = 'flex';
+                    languageContainer.style.opacity = '1';
+                    languageContainer.style.maxHeight = '30px';
+                    languageContainer.style.overflow = 'visible';
+                }
+            });
+
+            // Ne pas ajouter la bannière au document, cela sera fait par content.js
+            // document.body.appendChild(banner);
         };
-        
+
         // Vérifier si les traductions sont déjà chargées
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && 
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
             typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
             // Si les traductions sont déjà chargées, initialiser immédiatement
             setupBannerContent();
@@ -461,30 +461,39 @@
      */
     function updateBannerColor(banner, startColor, endColor, opacity, force = false) {
         if (!banner) return;
-        
+
         // Si le deuxième paramètre est une chaîne courte, c'est probablement un type et non une couleur
         if (typeof startColor === 'string' && startColor.length < 10 && !startColor.startsWith('#')) {
             // Mode compatibilité avec l'ancienne fonction : startColor est utilisé comme type
             const type = startColor;
-            
-            // Réinitialiser les classes
-            banner.classList.remove('error', 'recording', 'success', 'warning');
-            
-            // Ajouter la classe appropriée
-            if (type) {
-                banner.classList.add(type);
-            }
-            
+
+            setBannerType(banner, type);
+
             return;
         }
-        
+
         // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur avec le dégradé
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.ui && 
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.ui &&
             typeof window.BabelFishAIUtils.ui.updateBannerColor === 'function') {
-            
+
             window.BabelFishAIUtils.ui.updateBannerColor(banner, startColor, endColor, opacity, force);
         } else {
             console.warn('La fonction updateBannerColor de UI n\'est pas disponible');
+        }
+    }
+
+    /**
+     * Définit le type de bannière (erreur, enregistrement, succès, avertissement)
+     * @param {HTMLElement} banner - L'élément bannière
+     * @param {string} type - Le type de bannière
+     */
+    function setBannerType(banner, type) {
+        // Réinitialiser les classes
+        banner.classList.remove('error', 'recording', 'success', 'warning');
+
+        // Ajouter la classe appropriée
+        if (type) {
+            banner.classList.add(type);
         }
     }
 
@@ -495,7 +504,7 @@
      */
     function updateBannerText(banner, text) {
         if (!banner) return;
-        
+
         // Chercher l'élément de texte avec la classe appropriée
         const textContainer = banner.querySelector('.whisper-status-text');
         if (textContainer) {
@@ -512,10 +521,10 @@
      */
     function toggleBannerVisibility(banner, show) {
         if (!banner) return;
-        
+
         banner.style.display = show ? 'flex' : 'none';
     }
-    
+
     /**
      * Affiche la bannière avec un message spécifique
      * @param {HTMLElement} banner - L'élément bannière à afficher
@@ -528,18 +537,18 @@
     function showBanner(banner, text, type, isRecording, updateColorCallback) {
         try {
             if (!banner) return false;
-            
+
             // Mettre à jour le texte de la bannière
             updateBannerText(banner, text);
-            
+
             // Afficher la bannière
             toggleBannerVisibility(banner, true);
-            
+
             // Mettre à jour la couleur en fonction du type de message
             if (typeof updateColorCallback === 'function') {
                 updateColorCallback(true);
             }
-            
+
             return true;
         } catch (error) {
             console.error("Error showing banner:", error);
@@ -557,7 +566,7 @@
     function showStatus(banner, message, type = 'info') {
         try {
             if (!banner) return false;
-            
+
             updateBannerText(banner, message);
             updateBannerColor(banner, type);
             toggleBannerVisibility(banner, true);
