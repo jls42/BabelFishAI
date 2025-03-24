@@ -415,22 +415,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
                     // Afficher un message d'annulation dans le bandeau
                     // Le message sera masqué automatiquement par le setTimeout dans cancelRecording()
-                    if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function') {
-                        // Utiliser la fonction showBanner exposée dans l'espace de noms global
-                        window.BabelFishAI.ui.showBanner(CANCEL_MESSAGE.RECORDING_CANCELED, MESSAGE_TYPES.INFO);
-                    } else {
-                        // Fallback si la fonction showBanner n'est pas disponible
-                        const recordingBanner = document.querySelector('#whisper-recording-banner');
-                        if (recordingBanner) {
-                            const statusText = recordingBanner.querySelector('.whisper-status-text');
-                            if (statusText) {
-                                statusText.textContent = CANCEL_MESSAGE.RECORDING_CANCELED;
-                            } else {
-                                recordingBanner.textContent = CANCEL_MESSAGE.RECORDING_CANCELED;
-                            }
-                            recordingBanner.style.display = 'block';
-                        }
-                    }
+                    showCancellationBanner();
 
                     // Informer le background script
                     chrome.runtime.sendMessage({
@@ -459,6 +444,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Mettre à jour l'état d'enregistrement même en cas d'erreur
             isRecording = false;
             return false;
+        }
+    }
+
+    /**
+    * Affiche le message d'annulation dans le bandeau, avec un fallback si nécessaire.
+    */
+    function showCancellationBanner() {
+        if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function') {
+            // Utiliser la fonction showBanner exposée dans l'espace de noms global
+            window.BabelFishAI.ui.showBanner(CANCEL_MESSAGE.RECORDING_CANCELED, MESSAGE_TYPES.INFO);
+        } else {
+            // Fallback si la fonction showBanner n'est pas disponible
+            const recordingBanner = document.querySelector('#whisper-recording-banner');
+            if (recordingBanner) {
+                const statusText = recordingBanner.querySelector('.whisper-status-text');
+                if (statusText) {
+                    statusText.textContent = CANCEL_MESSAGE.RECORDING_CANCELED;
+                } else {
+                    recordingBanner.textContent = CANCEL_MESSAGE.RECORDING_CANCELED;
+                }
+                recordingBanner.style.display = 'block';
+            }
         }
     }
 
