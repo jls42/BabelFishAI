@@ -117,23 +117,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Gestionnaire centralisé pour les modifications du stockage
      * @param {Object} changes - Les changements détectés
      * @param {string} namespace - L'espace de noms du stockage
+    /**
+     * Gère les changements de raccourcis clavier
+     * @param {Object} changes - Les changements détectés
      */
-    function handleStorageChanges(changes, namespace) {
-        // Vérifier que les changements concernent le stockage local ou sync
-        if (namespace !== 'local' && namespace !== 'sync') {
-            return;
-        }
-
-        // Traiter les changements de couleur du bandeau
-        updateBannerColorOptions(changes);
-
-        // Traiter les changements de raccourcis clavier
+    function handleKeyboardShortcutChanges(changes) {
         if (changes.keyboardShortcuts) {
             console.log("Raccourcis clavier mis à jour:", changes.keyboardShortcuts.newValue);
             // La mise à jour des raccourcis est gérée automatiquement par le background script
         }
+    }
 
-        // Traiter les changements de langue
+    /**
+     * Gère les changements de langue par défaut
+     * @param {Object} changes - Les changements détectés
+     */
+    function handleDefaultLanguageChanges(changes) {
         if (changes.defaultLanguage) {
             console.log("Langue par défaut mise à jour:", changes.defaultLanguage.newValue);
 
@@ -146,8 +145,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }
             }
         }
+    }
 
-        // Traiter les changements d'options avancées
+    /**
+     * Gestionnaire centralisé pour les modifications du stockage
+     * @param {Object} changes - Les changements détectés
+     * @param {string} namespace - L'espace de noms du stockage
+    /**
+     * Gère les changements d'options avancées
+     * @param {Object} changes - Les changements détectés
+     */
+    function handleAdvancedOptionChanges(changes) {
         const advancedOptionKeys = [
             'enableAdvancedOptions',
             'whisperApiUrl',
@@ -178,8 +186,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 console.log(`Mode expert ${expertMode ? 'activé' : 'désactivé'}`);
             }
         }
+    }
 
-        // Traiter les changements d'options d'affichage
+    /**
+     * Gère les changements d'options d'affichage
+     * @param {Object} changes - Les changements détectés
+     */
+    function handleDisplayOptionChanges(changes) {
         const displayOptionKeys = [
             'activeDisplay',
             'autoCopy',
@@ -195,8 +208,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Mettre à jour les comportements d'affichage en fonction des nouvelles options
             // Ces changements seront appliqués lors du prochain affichage de transcription
         }
+    }
 
-        // Traiter les changements d'options de traduction
+    /**
+     * Gère les changements d'options de traduction
+     * @param {Object} changes - Les changements détectés
+     */
+    function handleTranslationOptionChanges(changes) {
         const translationOptionKeys = [
             'enableTranslation',
             'sourceLanguage',
@@ -254,8 +272,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }
             }
         }
+    }
 
-        // Traiter les changements d'options de reformulation
+    /**
+     * Gère les changements d'options de reformulation
+     * @param {Object} changes - Les changements détectés
+     */
+    function handleRephraseOptionChanges(changes) {
         if ('enableRephrase' in changes) {
             console.log("Option de reformulation mise à jour:", changes.enableRephrase.newValue);
 
@@ -267,6 +290,39 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 console.log(`Bouton de reformulation mis à jour: ${changes.enableRephrase.newValue}`);
             }
         }
+    }
+
+    /**
+     * Gestionnaire centralisé pour les modifications du stockage
+     * @param {Object} changes - Les changements détectés
+     * @param {string} namespace - L'espace de noms du stockage
+     */
+    function handleStorageChanges(changes, namespace) {
+        // Vérifier que les changements concernent le stockage local ou sync
+        if (namespace !== 'local' && namespace !== 'sync') {
+            return;
+        }
+
+        // Traiter les changements de couleur du bandeau
+        updateBannerColorOptions(changes);
+
+        // Traiter les changements de raccourcis clavier
+        handleKeyboardShortcutChanges(changes);
+
+        // Traiter les changements de langue
+        handleDefaultLanguageChanges(changes);
+
+        // Traiter les changements d'options avancées
+        handleAdvancedOptionChanges(changes);
+
+        // Traiter les changements d'options d'affichage
+        handleDisplayOptionChanges(changes);
+
+        // Traiter les changements d'options de traduction
+        handleTranslationOptionChanges(changes);
+
+        // Traiter les changements d'options de reformulation
+        handleRephraseOptionChanges(changes);
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
