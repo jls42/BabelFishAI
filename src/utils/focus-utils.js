@@ -210,6 +210,59 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Normalise le texte en remplaçant les sauts de ligne par des balises <br>.
+     * @param {string} text - Le texte à normaliser.
+     * @returns {string} - Le texte normalisé.
+     */
+    function normalizeTextContent(text) {
+        return text.replace(/\n/g, '<br>');
+    }
+
+    /**
+     * Insère du texte normalisé (avec des balises HTML) dans un range donné.
+     * @param {Range} range - Le range où insérer le texte.
+     * @param {string} processedText - Le texte normalisé à insérer.
+     */
+    function insertNormalizedText(range, processedText) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = processedText;
+
+        const fragment = document.createDocumentFragment();
+        while (tempDiv.firstChild) {
+            fragment.appendChild(tempDiv.firstChild);
+        }
+
+        range.insertNode(fragment);
+        range.collapse(false);
+    }
+
+    /**
+     * Insère du texte brut dans un range donné.
+     * @param {Range} range - Le range où insérer le texte.
+     * @param {string} processedText - Le texte brut à insérer.
+     */
+    function insertPlainText(range, processedText) {
+        const textNode = document.createTextNode(processedText);
+        range.insertNode(textNode);
+        range.setStartAfter(textNode);
+        range.setEndAfter(textNode);
+    }
+
+    /**
+     * Gère l'insertion de texte lorsqu'aucune sélection n'est active.
+     * @param {HTMLElement} element - L'élément contentEditable.
+     * @param {string} processedText - Le texte traité à insérer.
+     * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
+     */
+    function insertTextWithoutSelection(element, processedText, normalizeText) {
+        if (normalizeText) {
+            element.innerHTML += processedText;
+        } else {
+            element.textContent += processedText;
+        }
+    }
+
+    /**
      * Insère du texte dans un élément contentEditable avec robustesse
      * @param {HTMLElement} element - L'élément contentEditable
      * @param {string} text - Le texte à insérer
@@ -224,65 +277,33 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (!element || !element.isContentEditable) return false;
 
         try {
-            // S'assurer que l'élément a le focus
             if (ensureFocus && document.activeElement !== element) {
                 element.focus();
             }
 
-            // Normaliser le texte si nécessaire
             let processedText = text;
             if (normalizeText) {
-                // Remplacer les sauts de ligne par <br> pour les éléments contentEditable
-                processedText = text.replace(/\n/g, '<br>');
+                processedText = normalizeTextContent(text);
             }
 
-            // Insérer le texte à la position du curseur
             const selection = window.getSelection();
 
             if (selection.rangeCount > 0) {
-                // Supprimer le contenu sélectionné
                 const range = selection.getRangeAt(0);
                 range.deleteContents();
 
-                // Insérer le nouveau texte
                 if (normalizeText) {
-                    // Utiliser insertHTML pour le texte avec des balises HTML
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = processedText;
-
-                    // Insérer chaque nœud du div temporaire
-                    const fragment = document.createDocumentFragment();
-                    while (tempDiv.firstChild) {
-                        fragment.appendChild(tempDiv.firstChild);
-                    }
-
-                    range.insertNode(fragment);
-
-                    // Placer le curseur à la fin du texte inséré
-                    range.collapse(false);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
+                    insertNormalizedText(range, processedText);
                 } else {
-                    // Insérer le texte brut
-                    const textNode = document.createTextNode(processedText);
-                    range.insertNode(textNode);
-
-                    // Placer le curseur à la fin du texte inséré
-                    range.setStartAfter(textNode);
-                    range.setEndAfter(textNode);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
+                    insertPlainText(range, processedText);
                 }
+
+                selection.removeAllRanges();
+                selection.addRange(range);
             } else {
-                // Fallback si aucune sélection n'est active
-                if (normalizeText) {
-                    element.innerHTML += processedText;
-                } else {
-                    element.textContent += processedText;
-                }
+                insertTextWithoutSelection(element, processedText, normalizeText);
             }
 
-            // Déclencher un événement input pour notifier les frameworks JS
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
             element.dispatchEvent(inputEvent);
 
