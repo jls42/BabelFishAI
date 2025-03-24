@@ -255,11 +255,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
      */
     function insertTextWithoutSelection(element, processedText, normalizeText) {
+        element.innerHTML += processedText;
+    }
+
+    /**
+     * Insère du texte dans un élément contentEditable lorsqu'il y a une sélection.
+     * @param {HTMLElement} element - L'élément contentEditable.
+     * @param {Selection} selection - La sélection actuelle.
+     * @param {string} processedText - Le texte traité à insérer.
+     * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
+     */
+    function insertTextWithSelection(element, selection, processedText, normalizeText) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
         if (normalizeText) {
-            element.innerHTML += processedText;
+            insertNormalizedText(range, processedText);
         } else {
-            element.textContent += processedText;
+            insertPlainText(range, processedText);
         }
+
+        selection.removeAllRanges();
+        selection.addRange(range);
     }
 
     /**
@@ -289,17 +306,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const selection = window.getSelection();
 
             if (selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-                range.deleteContents();
-
-                if (normalizeText) {
-                    insertNormalizedText(range, processedText);
-                } else {
-                    insertPlainText(range, processedText);
-                }
-
-                selection.removeAllRanges();
-                selection.addRange(range);
+                insertTextWithSelection(element, selection, processedText, normalizeText);
             } else {
                 insertTextWithoutSelection(element, processedText, normalizeText);
             }
