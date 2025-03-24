@@ -140,14 +140,24 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Règles pour déterminer la méthode d'affichage
         const displayRules = [
             { method: 'dialog', condition: () => isDialogForced || options.dialogDisplay },
-            { method: 'clipboard', condition: () => autoCopy && !options.activeDisplay },
-            { method: 'activeElement', condition: () => options.activeDisplay && !isDialogForced && window.BabelFishAIUtils.focus.handleActiveElementInsertion(text) },
+            {
+                method: 'activeElement', condition: () => {
+                    const activeElement = document.activeElement;
+                    return options.activeDisplay && !isDialogForced && window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
+                }
+            },
+            { method: 'clipboard', condition: () => autoCopy && !options.activeDisplay }
         ];
 
         // Trouver la première règle qui correspond
-        const rule = displayRules.find(rule => rule.condition());
+        let rule = displayRules.find(rule => rule.condition());
 
-        return rule ? rule.method : null;
+        // Si aucune règle ne correspond, utiliser la boîte de dialogue par défaut
+        if (!rule) {
+            rule = { method: 'dialog' };
+        }
+
+        return rule.method;
     }
 
     /**
@@ -163,17 +173,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const currentDomain = window.location.hostname;
             const displayMethod = determineDisplayMethod(text, options, autoCopy, currentDomain);
 
-            // Avertir si aucune méthode d'affichage n'est activée
-            if (!displayMethod) {
-                console.warn("Aucune méthode d'affichage n'est activée");
-                return false;
-            }
-
             // Afficher le texte en fonction de la méthode déterminée
             if (displayMethod === 'dialog') {
                 showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
             } else if (displayMethod === 'activeElement') {
-                // Le texte a déjà été inséré dans l'élément actif dans determineDisplayMethod
+                // Inserer le texte dans l'élément actif
+                window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
+            } else if (displayMethod === 'clipboard') {
+                // Ne rien faire, le texte sera copié dans le presse-papiers plus tard
             }
 
             return {
