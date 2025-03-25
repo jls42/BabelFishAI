@@ -106,7 +106,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             });
 
             // Extraire et retourner le texte reformulé
-            if (response && response.choices && response.choices.length > 0) {
+            // Utilisation du chaînage optionnel
+            if (response?.choices?.length > 0) {
                 const rephrasedText = response.choices[0].message.content.trim();
                 return rephrasedText;
             } else {
@@ -192,7 +193,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             });
 
             // Extraire et retourner le texte traduit
-            if (response && response.choices && response.choices.length > 0) {
+            // Utilisation du chaînage optionnel
+            if (response?.choices?.length > 0) {
                 const translatedText = response.choices[0].message.content.trim();
                 return translatedText;
             } else {
@@ -224,10 +226,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @throws {Error} - Si la clé API n'est pas trouvée
      * @deprecated Utiliser window.BabelFishAIUtils.api.getOrFetchApiKey à la place
      */
-    async function getOrFetchApiKey() {
-        // Déléguer à l'implémentation dans api-utils.js
-        return await window.BabelFishAIUtils.api.getOrFetchApiKey();
-    }
+    // La fonction locale getOrFetchApiKey a été supprimée car elle était obsolète.
+    // L'appel a été remplacé par window.BabelFishAIUtils.api.getOrFetchApiKey directement.
 
     /**
      * Reformule un texte sélectionné sans enregistrement audio
@@ -243,8 +243,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Vérifier si l'API Key est disponible
-            const apiKey = await getOrFetchApiKey();
+            // Vérifier si l'API Key est disponible en utilisant la fonction non obsolète
+            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
 
             // Informer l'utilisateur que la reformulation est en cours
             const message = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
@@ -291,8 +291,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Vérifier si l'API Key est disponible
-            const apiKey = await getOrFetchApiKey();
+            // Vérifier si l'API Key est disponible en utilisant la fonction non obsolète
+            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
 
             // Informer l'utilisateur que la traduction est en cours
             const message = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";

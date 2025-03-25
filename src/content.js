@@ -64,7 +64,7 @@
 
     // État global
     let recordingBanner = null;
-    let apiKey = null;
+    // apiKey n'est plus utilisé globalement dans ce fichier après refactorisation
     let bannerColorStart = UI_CONFIG.DEFAULT_BANNER_COLOR_START;
     let bannerColorEnd = UI_CONFIG.DEFAULT_BANNER_COLOR_END;
     let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
@@ -90,8 +90,8 @@
      */
     async function initializeExtensionOptions() {
         try {
-            // Initialisation de la clé API
-            apiKey = await window.BabelFishAIUtils.api.getApiKey();
+            // Initialisation de la clé API (assignation supprimée car apiKey n'est plus utilisé globalement ici)
+            await window.BabelFishAIUtils.api.getApiKey();
             // Pas besoin d'afficher d'erreur ici si la clé est null,
             // car getApiKey() gère déjà l'affichage d'un message approprié
         } catch (error) {

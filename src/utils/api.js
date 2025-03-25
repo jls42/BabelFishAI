@@ -7,7 +7,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     'use strict';
 
     // Utilisation des constantes globales depuis constants.js
-    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    // API_CONFIG n'est plus utilisé dans ce fichier obsolète
     const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**

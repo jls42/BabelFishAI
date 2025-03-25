@@ -9,16 +9,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
     const ERRORS = window.BabelFishAIConstants.ERRORS;
 
-    /**
-     * Valide si le texte d'entrée est valide pour le traitement
-     * @param {string} text - Texte à valider
-     * @returns {boolean} - True si le texte est valide
-     * @deprecated Utiliser window.BabelFishAIUtils.textProcessing.isValidInputText à la place
-     */
-    function isValidInputText(text) {
-        // Déléguer à l'implémentation dans text-processing.js
-        return window.BabelFishAIUtils.textProcessing.isValidInputText(text);
-    }
+    // La fonction locale isValidInputText a été supprimée car elle était obsolète.
+    // Les appels ont été remplacés par window.BabelFishAIUtils.textProcessing.isValidInputText directement.
 
     /**
      * Reformule le texte si l'option est activée
@@ -27,7 +19,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} Le texte reformulé ou le texte original en cas d'erreur
      */
     async function rephraseTextIfEnabled(text, options) {
-        if (!options.rephrase || !isValidInputText(text)) {
+        // Utilisation de la fonction non obsolète de text-processing.js
+        if (!options.rephrase || !window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             return text;
         }
 
@@ -83,7 +76,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} Le texte traduit ou le texte original en cas d'erreur
      */
     async function translateTextIfEnabled(text, options) {
-        if (!options.translate || !isValidInputText(text)) {
+        // Utilisation de la fonction non obsolète de text-processing.js
+        if (!options.translate || !window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             return text;
         }
 
@@ -104,8 +98,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const requestData = {
                 model: API_CONFIG.CHAT_MODEL,
                 messages: [
-                    { 
-                        role: "system", 
+                    {
+                        role: "system",
                         content: API_CONFIG.TRANSLATE_SYSTEM_PROMPT
                             .replace("{{SOURCE_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(sourceLanguage) || sourceLanguage)
                             .replace("{{TARGET_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(targetLanguage) || targetLanguage)
@@ -149,20 +143,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function determineTranslationLanguages(options, specifiedTargetLanguage) {
         // Langue source: langue de transcription ou langue par défaut
         const sourceLanguage = options.language || CONFIG.DEFAULT_LANGUAGE;
-        
+
         // Langue cible: langue spécifiée, langue préférée ou langue par défaut
         let targetLanguage = specifiedTargetLanguage || options.targetLanguage;
-        
+
         // Si la langue cible n'est pas définie ou est identique à la source, utiliser la langue par défaut
         if (!targetLanguage || targetLanguage === sourceLanguage) {
             targetLanguage = CONFIG.DEFAULT_TARGET_LANGUAGE;
-            
+
             // Si la langue par défaut est identique à la source, utiliser une autre langue
             if (targetLanguage === sourceLanguage) {
                 targetLanguage = sourceLanguage === 'en' ? 'fr' : 'en';
             }
         }
-        
+
         return { sourceLanguage, targetLanguage };
     }
 
@@ -172,7 +166,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<void>}
      */
     async function handleTextRephrasing(text) {
-        if (!isValidInputText(text)) {
+        // Utilisation de la fonction non obsolète de text-processing.js
+        if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("invalidTextForProcessing"), 'error');
             return;
         }
@@ -180,22 +175,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             // Récupérer les options d'affichage
             const options = await window.BabelFishAI.getDisplayOptions();
-            
+
             // Activer temporairement l'option de reformulation
             const tempOptions = { ...options, rephrase: true };
-            
+
             // Reformuler le texte
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingText"));
             const rephrasedText = await rephraseTextIfEnabled(text, tempOptions);
-            
+
             if (rephrasedText === text) {
                 window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingError"), 'error');
                 return;
             }
-            
+
             // Afficher le texte reformulé
             const displayResult = await window.BabelFishAI.displayTranscriptionText(rephrasedText, options, false);
-            
+
             if (displayResult) {
                 window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingComplete"));
             } else {
@@ -214,7 +209,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<void>}
      */
     async function handleTextTranslation(text, specifiedTargetLanguage) {
-        if (!isValidInputText(text)) {
+        // Utilisation de la fonction non obsolète de text-processing.js
+        if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("invalidTextForProcessing"), 'error');
             return;
         }
@@ -222,30 +218,30 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             // Récupérer les options d'affichage
             const options = await window.BabelFishAI.getDisplayOptions();
-            
+
             // Activer temporairement l'option de traduction
             const tempOptions = { ...options, translate: true };
-            
+
             // Traduire le texte
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translatingText"));
-            
+
             // Déterminer les langues source et cible
             const { sourceLanguage, targetLanguage } = determineTranslationLanguages(tempOptions, specifiedTargetLanguage);
-            
+
             // Mettre à jour les options avec les langues déterminées
             tempOptions.language = sourceLanguage;
             tempOptions.targetLanguage = targetLanguage;
-            
+
             const translatedText = await translateTextIfEnabled(text, tempOptions);
-            
+
             if (translatedText === text) {
                 window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationError"), 'error');
                 return;
             }
-            
+
             // Afficher le texte traduit
             const displayResult = await window.BabelFishAI.displayTranscriptionText(translatedText, options, false);
-            
+
             if (displayResult) {
                 window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationComplete"));
             } else {
@@ -259,7 +255,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.translation = {
-        isValidInputText,
+        // isValidInputText n'est plus exporté ici car la fonction locale a été supprimée
         rephraseTextIfEnabled,
         translateTextIfEnabled,
         determineTranslationLanguages,

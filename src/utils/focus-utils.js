@@ -347,13 +347,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             if (selection.rangeCount > 0) {
                 insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
+            } else if (shouldNormalizeText) { // Fusionné avec else if
+                insertNormalizedTextWithoutSelection(element, processedText);
             } else {
-                // Appeler la fonction appropriée en fonction de la normalisation
-                if (shouldNormalizeText) {
-                    insertNormalizedTextWithoutSelection(element, processedText);
-                } else {
-                    insertPlainTextWithoutSelection(element, processedText);
-                }
+                insertPlainTextWithoutSelection(element, processedText);
             }
 
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
@@ -432,7 +429,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             // Fallback pour les navigateurs plus anciens
             try {
-                document.execCommand('insertText', false, text);
+                document.execCommand('insertText', false, text); // NOSONAR - Utilisation délibérée de l'API obsolète comme fallback
                 return true;
             } catch (fallbackError) {
                 console.error('Fallback insertion failed:', fallbackError);
