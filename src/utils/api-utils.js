@@ -8,52 +8,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     const ERRORS = window.BabelFishAIConstants.ERRORS;
 
     /**
-     * Récupère la clé API ou lève une exception si elle n'est pas disponible
-     * @returns {Promise<string>} - La clé API
-     * @throws {Error} - Si la clé API n'est pas trouvée
+     * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
+     * @returns {Promise<string|null>} La clé API ou null si non trouvée.
+     * @private
      */
-    async function getOrFetchApiKey() {
-        // S'assurer que l'espace de noms BabelFishAI existe
-        window.BabelFishAI = window.BabelFishAI || {};
-
-        // Utiliser la clé en mémoire si disponible
-        if (window.BabelFishAI.apiKey) {
-            return window.BabelFishAI.apiKey;
-        }
-
+    async function _fetchAndCacheApiKeyFromStorage() {
         try {
-            // Récupérer la clé depuis le stockage
-            const result = await chrome.storage.sync.get(['apiKey']);
-            const apiKey = result.apiKey;
-
-            if (!apiKey) {
-                throw new Error(ERRORS.API_KEY_NOT_FOUND);
-            }
-
-            // Stocker la clé en mémoire pour les futures utilisations
-            window.BabelFishAI.apiKey = apiKey;
-            return apiKey;
-        } catch (error) {
-            console.error("Erreur lors de la récupération de la clé API:", error);
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
-        }
-    }
-
-    /**
-     * Récupère la clé API sans lever d'exception
-     * @returns {Promise<string|null>} - La clé API ou null si non disponible
-     */
-    async function getApiKey() {
-        try {
-            // S'assurer que l'espace de noms BabelFishAI existe
-            window.BabelFishAI = window.BabelFishAI || {};
-
-            // Utiliser la clé en mémoire si disponible
-            if (window.BabelFishAI.apiKey) {
-                return window.BabelFishAI.apiKey;
-            }
-
-            // Sinon, essayer de la récupérer depuis le stockage
             const result = await chrome.storage.sync.get(['apiKey']);
             const apiKey = result.apiKey;
 
@@ -62,15 +22,66 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 window.BabelFishAI.apiKey = apiKey;
                 return apiKey;
             }
-
-            // Afficher un message d'erreur convivial si la clé n'est pas trouvée
-            console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
-            return null;
+            return null; // Clé non trouvée dans le stockage
         } catch (error) {
-            console.error("Erreur lors de la récupération de la clé API:", error);
+            console.error("Erreur lors de la récupération de la clé API depuis le stockage:", error);
+            // En cas d'erreur de stockage, on considère que la clé n'est pas disponible
             return null;
         }
     }
+
+
+    /**
+     * Récupère la clé API (depuis la mémoire ou le stockage) ou lève une exception si elle n'est pas disponible.
+     * @returns {Promise<string>} - La clé API.
+     * @throws {Error} - Si la clé API n'est pas trouvée.
+     */
+    async function getOrFetchApiKey() {
+        // S'assurer que l'espace de noms BabelFishAI existe
+        window.BabelFishAI = window.BabelFishAI || {};
+
+        // 1. Essayer la clé en mémoire
+        if (window.BabelFishAI.apiKey) {
+            return window.BabelFishAI.apiKey;
+        }
+
+        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
+
+        // 3. Vérifier le résultat et lever une erreur si nécessaire
+        if (!apiKeyFromStorage) {
+            // L'erreur est levée ici pour correspondre au comportement original
+            console.error("Erreur lors de la récupération de la clé API: Clé non trouvée.");
+            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+        }
+
+        return apiKeyFromStorage;
+    }
+
+    /**
+     * Récupère la clé API (depuis la mémoire ou le stockage) sans lever d'exception.
+     * @returns {Promise<string|null>} - La clé API ou null si non disponible.
+     */
+    async function getApiKey() {
+        // S'assurer que l'espace de noms BabelFishAI existe
+        window.BabelFishAI = window.BabelFishAI || {};
+
+        // 1. Essayer la clé en mémoire
+        if (window.BabelFishAI.apiKey) {
+            return window.BabelFishAI.apiKey;
+        }
+
+        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
+
+        // 3. Afficher un avertissement si non trouvée et retourner le résultat (null si non trouvée)
+        if (!apiKeyFromStorage) {
+            console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
+        }
+
+        return apiKeyFromStorage; // Retourne la clé ou null
+    }
+
 
     /**
      * Récupère des données depuis le stockage Chrome

@@ -13,6 +13,61 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     // Les appels ont été remplacés par window.BabelFishAIUtils.textProcessing.isValidInputText directement.
 
     /**
+     * Fonction interne pour appeler l'API GPT (Chat Completion)
+     * @param {string} apiKey - La clé API OpenAI
+     * @param {Array<Object>} messages - Les messages pour l'API
+     * @param {string} errorType - Le type d'erreur à utiliser
+     * @returns {Promise<string>} - Le contenu de la réponse de l'IA
+     * @private
+     */
+    async function _callGptApi(apiKey, messages, errorType) {
+        try {
+            // Récupérer le modèle et l'URL de l'API depuis le stockage
+            const result = await window.BabelFishAIUtils.api.getFromStorage({
+                modelType: API_CONFIG.GPT_MODEL, // Utiliser GPT_MODEL défini dans constants.js
+                translationApiUrl: API_CONFIG.DEFAULT_GPT_API_URL, // Utiliser DEFAULT_GPT_API_URL
+                disableLogging: false
+            });
+            const { modelType, translationApiUrl, disableLogging } = result;
+
+            // Préparer la charge utile pour l'API
+            const payload = {
+                model: modelType,
+                messages
+                // Les paramètres comme temperature, max_tokens peuvent être ajoutés ici si nécessaire
+            };
+
+            // Ajouter l'option no-log si demandé
+            if (disableLogging) {
+                payload["no-log"] = true;
+            }
+
+            // Utiliser la fonction callApi de api-utils.js
+            const response = await window.BabelFishAIUtils.api.callApi({
+                url: translationApiUrl,
+                apiKey: apiKey,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                errorType: errorType,
+                retryOnFail: true,
+                timeout: 20000 // Timeout augmenté
+            });
+
+            // Extraire et retourner le contenu du message
+            if (response?.choices?.length > 0) {
+                return response.choices[0].message.content.trim();
+            } else {
+                throw new Error('Réponse API invalide ou vide');
+            }
+        } catch (error) {
+            console.error(`Erreur lors de l'appel API GPT (${errorType}):`, error);
+            // Propager l'erreur pour qu'elle soit gérée par la fonction appelante
+            throw error;
+        }
+    }
+
+
+    /**
      * Reformule le texte si l'option est activée
      * @param {string} text - Le texte à reformuler
      * @param {Object} options - Les options de reformulation
@@ -25,8 +80,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Récupérer la clé API
-            const apiKey = await window.BabelFishAI.getOrFetchApiKey();
+            // Récupérer la clé API via le module api-utils
+            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
             if (!apiKey) {
                 throw new Error(ERRORS.API_KEY_NOT_FOUND);
             }
@@ -34,38 +89,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Afficher un message de statut
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingText"));
 
-            // Construire la requête pour l'API de reformulation
-            const requestData = {
-                model: API_CONFIG.CHAT_MODEL,
-                messages: [
-                    { role: "system", content: API_CONFIG.REPHRASE_SYSTEM_PROMPT },
-                    { role: "user", content: text }
-                ],
-                temperature: 0.7,
-                max_tokens: 2000
-            };
+            // Construire les messages pour l'API
+            const messages = [
+                { role: "system", content: API_CONFIG.REPHRASE_SYSTEM_PROMPT },
+                { role: "user", content: text }
+            ];
 
-            // Appeler l'API de reformulation
-            const response = await fetch(API_CONFIG.CHAT_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify(requestData)
-            });
+            // Appeler la fonction helper pour l'API GPT
+            const rephrasedText = await _callGptApi(apiKey, messages, ERRORS.REPHRASE_ERROR);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erreur API: ${errorData.error?.message || response.statusText}`);
-            }
+            // Retourner le texte reformulé ou le texte original si la réponse est vide
+            return rephrasedText || text;
 
-            const data = await response.json();
-            return data.choices[0]?.message?.content || text;
         } catch (error) {
-            console.error("Erreur lors de la reformulation:", error);
+            // L'erreur est déjà loggée par _callGptApi ou getOrFetchApiKey
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingError"), 'error');
-            return text;
+            return text; // Retourner le texte original en cas d'erreur
         }
     }
 
@@ -82,8 +121,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Récupérer la clé API
-            const apiKey = await window.BabelFishAI.getOrFetchApiKey();
+            // Récupérer la clé API via le module api-utils
+            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
             if (!apiKey) {
                 throw new Error(ERRORS.API_KEY_NOT_FOUND);
             }
@@ -94,43 +133,27 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Déterminer les langues source et cible
             const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options);
 
-            // Construire la requête pour l'API de traduction
-            const requestData = {
-                model: API_CONFIG.CHAT_MODEL,
-                messages: [
-                    {
-                        role: "system",
-                        content: API_CONFIG.TRANSLATE_SYSTEM_PROMPT
-                            .replace("{{SOURCE_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(sourceLanguage) || sourceLanguage)
-                            .replace("{{TARGET_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(targetLanguage) || targetLanguage)
-                    },
-                    { role: "user", content: text }
-                ],
-                temperature: 0.3,
-                max_tokens: 2000
-            };
-
-            // Appeler l'API de traduction
-            const response = await fetch(API_CONFIG.CHAT_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+            // Construire les messages pour l'API
+            const messages = [
+                {
+                    role: "system",
+                    content: API_CONFIG.TRANSLATE_SYSTEM_PROMPT
+                        .replace("{{SOURCE_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(sourceLanguage) || sourceLanguage)
+                        .replace("{{TARGET_LANG}}", window.BabelFishAIUtils.i18n.getLanguageName(targetLanguage) || targetLanguage)
                 },
-                body: JSON.stringify(requestData)
-            });
+                { role: "user", content: text }
+            ];
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erreur API: ${errorData.error?.message || response.statusText}`);
-            }
+            // Appeler la fonction helper pour l'API GPT
+            const translatedText = await _callGptApi(apiKey, messages, ERRORS.TRANSLATION_ERROR);
 
-            const data = await response.json();
-            return data.choices[0]?.message?.content || text;
+            // Retourner le texte traduit ou le texte original si la réponse est vide
+            return translatedText || text;
+
         } catch (error) {
-            console.error("Erreur lors de la traduction:", error);
+            // L'erreur est déjà loggée par _callGptApi ou getOrFetchApiKey
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationError"), 'error');
-            return text;
+            return text; // Retourner le texte original en cas d'erreur
         }
     }
 
@@ -161,6 +184,61 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Fonction helper pour gérer le traitement (reformulation/traduction) du texte sélectionné.
+     * @param {string} text - Le texte original.
+     * @param {Function} processFunction - La fonction de traitement (rephraseTextIfEnabled ou translateTextIfEnabled).
+     * @param {Object} baseOptions - Les options d'affichage de base.
+     * @param {Object} processingOptions - Options spécifiques au traitement (ex: { rephrase: true } ou { translate: true }).
+     * @param {Object} statusMessages - Messages i18n pour les statuts (processing, success, error).
+     * @param {string} [specifiedTargetLanguage] - Langue cible optionnelle pour la traduction.
+     * @private
+     */
+    async function _handleSelectedTextProcessing(text, processFunction, baseOptions, processingOptions, statusMessages, specifiedTargetLanguage = null) {
+        // 1. Validation (déjà faite par l'appelant, mais on pourrait la remettre ici si besoin)
+        // if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) { ... }
+
+        try {
+            // 2. Préparer les options temporaires
+            const tempOptions = { ...baseOptions, ...processingOptions };
+
+            // 3. Afficher le statut "en cours"
+            window.BabelFishAI.ui.showStatus(statusMessages.processing);
+
+            // 4. Déterminer les langues si c'est une traduction
+            if (processingOptions.translate) {
+                const { sourceLanguage, targetLanguage } = determineTranslationLanguages(tempOptions, specifiedTargetLanguage);
+                tempOptions.language = sourceLanguage;
+                tempOptions.targetLanguage = targetLanguage;
+            }
+
+            // 5. Appeler la fonction de traitement
+            const processedText = await processFunction(text, tempOptions);
+
+            // 6. Vérifier si le traitement a échoué (texte inchangé)
+            if (processedText === text) {
+                window.BabelFishAI.ui.showStatus(statusMessages.error, 'error');
+                return; // Sortir si le traitement n'a rien changé
+            }
+
+            // 7. Afficher le résultat
+            // Note: On utilise les options de base pour l'affichage, pas les tempOptions
+            const displayResult = await window.BabelFishAI.displayTranscriptionText(processedText, baseOptions, false);
+
+            // 8. Afficher le statut final
+            if (displayResult) {
+                window.BabelFishAI.ui.showStatus(statusMessages.success);
+            } else {
+                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("displayError"), 'error');
+            }
+        } catch (error) {
+            console.error(`Erreur lors de ${statusMessages.processing}:`, error);
+            window.BabelFishAI.ui.showStatus(statusMessages.error, 'error');
+            // L'erreur est déjà loggée, pas besoin de la relancer ici si on ne veut pas bloquer plus haut.
+        }
+    }
+
+
+    /**
      * Reformule un texte sélectionné sans enregistrement audio
      * @param {string} text - Le texte à reformuler
      * @returns {Promise<void>}
@@ -171,35 +249,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("invalidTextForProcessing"), 'error');
             return;
         }
-
-        try {
-            // Récupérer les options d'affichage
-            const options = await window.BabelFishAI.getDisplayOptions();
-
-            // Activer temporairement l'option de reformulation
-            const tempOptions = { ...options, rephrase: true };
-
-            // Reformuler le texte
-            window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingText"));
-            const rephrasedText = await rephraseTextIfEnabled(text, tempOptions);
-
-            if (rephrasedText === text) {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingError"), 'error');
-                return;
+        // Stocker l'élément actif avant de commencer le traitement
+        window.BabelFishAIUtils.focus.storeFocusAndSelection();
+        // Récupérer les options d'affichage
+        const options = await window.BabelFishAI.getDisplayOptions();
+        // Appeler le helper générique
+        await _handleSelectedTextProcessing(
+            text,
+            rephraseTextIfEnabled,
+            options,
+            { rephrase: true },
+            {
+                processing: window.BabelFishAIUtils.i18n.getMessage("rephrasingText"),
+                success: window.BabelFishAIUtils.i18n.getMessage("rephrasingComplete"),
+                error: window.BabelFishAIUtils.i18n.getMessage("rephrasingError")
             }
-
-            // Afficher le texte reformulé
-            const displayResult = await window.BabelFishAI.displayTranscriptionText(rephrasedText, options, false);
-
-            if (displayResult) {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingComplete"));
-            } else {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("displayError"), 'error');
-            }
-        } catch (error) {
-            console.error("Erreur lors de la reformulation:", error);
-            window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("rephrasingError"), 'error');
-        }
+        );
     }
 
     /**
@@ -214,43 +279,23 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("invalidTextForProcessing"), 'error');
             return;
         }
-
-        try {
-            // Récupérer les options d'affichage
-            const options = await window.BabelFishAI.getDisplayOptions();
-
-            // Activer temporairement l'option de traduction
-            const tempOptions = { ...options, translate: true };
-
-            // Traduire le texte
-            window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translatingText"));
-
-            // Déterminer les langues source et cible
-            const { sourceLanguage, targetLanguage } = determineTranslationLanguages(tempOptions, specifiedTargetLanguage);
-
-            // Mettre à jour les options avec les langues déterminées
-            tempOptions.language = sourceLanguage;
-            tempOptions.targetLanguage = targetLanguage;
-
-            const translatedText = await translateTextIfEnabled(text, tempOptions);
-
-            if (translatedText === text) {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationError"), 'error');
-                return;
-            }
-
-            // Afficher le texte traduit
-            const displayResult = await window.BabelFishAI.displayTranscriptionText(translatedText, options, false);
-
-            if (displayResult) {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationComplete"));
-            } else {
-                window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("displayError"), 'error');
-            }
-        } catch (error) {
-            console.error("Erreur lors de la traduction:", error);
-            window.BabelFishAI.ui.showStatus(window.BabelFishAIUtils.i18n.getMessage("translationError"), 'error');
-        }
+        // Stocker l'élément actif avant de commencer le traitement
+        window.BabelFishAIUtils.focus.storeFocusAndSelection();
+        // Récupérer les options d'affichage
+        const options = await window.BabelFishAI.getDisplayOptions();
+        // Appeler le helper générique
+        await _handleSelectedTextProcessing(
+            text,
+            translateTextIfEnabled,
+            options,
+            { translate: true },
+            {
+                processing: window.BabelFishAIUtils.i18n.getMessage("translatingText"),
+                success: window.BabelFishAIUtils.i18n.getMessage("translationComplete"),
+                error: window.BabelFishAIUtils.i18n.getMessage("translationError")
+            },
+            specifiedTargetLanguage // Passer la langue cible spécifiée
+        );
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
