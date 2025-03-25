@@ -212,10 +212,19 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     /**
      * Normalise le texte en remplaçant les sauts de ligne par des balises <br>.
      * @param {string} text - Le texte à normaliser.
-     * @returns {string} - Le texte normalisé.
+     * @returns {string} - Le texte normalisé et sécurisé.
      */
     function normalizeText(text) {
-        return text.replace(/\n/g, '<br>');
+        // Remplacer les sauts de ligne par des balises <br>
+        const textWithBr = text.replace(/\n/g, '<br>');
+        
+        // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML) {
+            return window.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
+        }
+        
+        // Fallback si la fonction sanitizeHTML n'est pas disponible
+        return textWithBr;
     }
 
     /**
@@ -224,8 +233,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} processedText - Le texte normalisé à insérer.
      */
     function insertNormalizedText(range, processedText) {
+        // Le texte a déjà été sécurisé par normalizeText, mais on peut ajouter une vérification supplémentaire
+        let safeText = processedText;
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML && 
+            typeof processedText === 'string' && processedText.includes('<')) {
+            safeText = window.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
+        }
+        
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = processedText;
+        tempDiv.innerHTML = safeText;
 
         const fragment = document.createDocumentFragment();
         while (tempDiv.firstChild) {

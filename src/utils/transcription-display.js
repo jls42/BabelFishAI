@@ -78,19 +78,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-    * Détermine si le texte doit être copié automatiquement dans le presse-papiers
-    * @param {boolean} autoCopy - Indique si la copie automatique est activée
-    * @param {Object} displayResult - Le résultat de l'affichage du texte
-    * @param {boolean} isActiveElementValid - Indique si l'élément actif est valide pour l'insertion
-    * @returns {boolean} - True si le texte doit être copié, sinon false
-    */
-    function shouldCopyText(autoCopy, displayResult, isActiveElementValid) {
-        return autoCopy && displayResult &&
-            (displayResult.method === 'clipboard' ||
-                (displayResult.method === 'dialog' && !isActiveElementValid));
-    }
-
-    /**
     * Traite le texte en fonction des options de reformulation et de traduction
     * @param {string} text - Le texte initial
     * @param {Object} options - Les options de configuration

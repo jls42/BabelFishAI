@@ -350,6 +350,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         translatePage,
         translateElement,
         createTranslatedElement,
+        sanitizeHTML,
         init,
         getCurrentLanguage: () => currentLanguage
     };

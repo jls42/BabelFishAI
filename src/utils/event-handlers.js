@@ -6,7 +6,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Référence aux constantes globales
     const ACTIONS = window.BabelFishAIConstants.ACTIONS;
-    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
 
     // Variables pour stocker les références aux fonctions externes
     let recordingBanner = null;
