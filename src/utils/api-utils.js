@@ -325,6 +325,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (generateUniqueFilename) {
             // Générer un nom de fichier avec timestamp et élément aléatoire
             const timestamp = Date.now();
+            // NOSONAR javascript:S2245 - Math.random() est utilisé ici pour l'unicité pratique du nom de fichier, pas pour la sécurité cryptographique.
             const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
             finalFilename = `audio-${timestamp}-${randomPart}.webm`;
         } else {
