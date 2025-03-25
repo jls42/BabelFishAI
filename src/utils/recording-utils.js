@@ -234,7 +234,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             try {
                 // Sortie rapide en cas d'annulation (économie de traitement)
-                if (isRecordingCanceled || (mediaRecorder && mediaRecorder.cancelProcessing)) {
+                // Utilisation du chaînage optionnel pour cancelProcessing
+                if (isRecordingCanceled || mediaRecorder?.cancelProcessing) {
                     console.log("Enregistrement annulé par l'utilisateur, audio non traité"); // skipcq: JS-0002
                     // Réinitialiser la variable d'annulation pour le prochain enregistrement
                     isRecordingCanceled = false;
@@ -503,7 +504,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     * Affiche le message d'annulation dans le bandeau, avec un fallback si nécessaire.
     */
     function showCancellationBanner() {
-        if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function') {
+        // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction showBanner
+        if (typeof window.BabelFishAI?.ui?.showBanner === 'function') {
             // Utiliser la fonction showBanner exposée dans l'espace de noms global
             window.BabelFishAI.ui.showBanner(CANCEL_MESSAGE.RECORDING_CANCELED, MESSAGE_TYPES.INFO);
         } else {
@@ -538,7 +540,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Cacher automatiquement la bannière après 1 seconde
             setTimeout(() => {
                 // Utiliser la fonction hideBanner exposée dans l'espace de noms global si disponible
-                if (window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.hideBanner === 'function') {
+                // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction hideBanner
+                if (typeof window.BabelFishAI?.ui?.hideBanner === 'function') {
                     window.BabelFishAI.ui.hideBanner();
                     console.log("Bandeau masqué après annulation d'enregistrement (via UI)"); // skipcq: JS-0002
                 } else {

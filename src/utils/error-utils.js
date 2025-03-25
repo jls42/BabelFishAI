@@ -52,7 +52,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si les dépendances sont disponibles, sinon false
      */
     function areDependenciesAvailable() {
-        return window.BabelFishAIUtils && window.BabelFishAIUtils.i18n;
+        // Utilisation du chaînage optionnel pour vérifier l'existence des propriétés imbriquées
+        return !!window.BabelFishAIUtils?.i18n; // Convertit le résultat en booléen explicite
     }
 
     /**
@@ -60,7 +61,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'API UI est disponible, sinon false
      */
     function isUIAvailable() {
-        return window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showBanner === 'function';
+        // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
+        return typeof window.BabelFishAI?.ui?.showBanner === 'function';
     }
 
     /**
@@ -152,7 +154,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function notifyBackgroundOnError(technicalMessage, ACTIONS) {
         try {
-            if (chrome && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
+            // Utilisation du chaînage optionnel pour vérifier l'existence de sendMessage
+            if (typeof chrome?.runtime?.sendMessage === 'function') {
                 chrome.runtime.sendMessage({
                     action: ACTIONS.ERROR,
                     error: technicalMessage
@@ -209,7 +212,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'API est disponible, sinon false
      */
     function isBannerUtilsAvailable() {
-        return window.BabelFishAIUtils && window.BabelFishAIUtils.banner && typeof window.BabelFishAIUtils.banner.showStatus === 'function';
+        // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
+        return typeof window.BabelFishAIUtils?.banner?.showStatus === 'function';
     }
 
     /**
@@ -217,7 +221,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'API est disponible, sinon false
      */
     function isUIDirectlyAvailable() {
-        return window.BabelFishAI && window.BabelFishAI.ui && typeof window.BabelFishAI.ui.showStatus === 'function';
+        // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
+        return typeof window.BabelFishAI?.ui?.showStatus === 'function';
     }
 
     /**

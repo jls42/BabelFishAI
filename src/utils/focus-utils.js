@@ -25,9 +25,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 storedSelectionText = storedActiveElement.value.substring(storedSelectionStart, storedSelectionEnd);
             }
             // Pour les éléments contentEditable
-            else if (storedActiveElement && storedActiveElement.isContentEditable) {
+            else if (storedActiveElement?.isContentEditable) { // Utilisation du chaînage optionnel
                 const selection = window.getSelection();
-                if (selection.rangeCount > 0) {
+                if (selection?.rangeCount > 0) { // Chaînage optionnel aussi pour selection
                     storedNodeRange = selection.getRangeAt(0).cloneRange();
                     storedSelectionText = selection.toString();
                 }
@@ -98,7 +98,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         // Parcourir les enfants en ordre inverse pour trouver le dernier nœud de texte
-        if (node.childNodes && node.childNodes.length > 0) {
+        if (node?.childNodes?.length > 0) { // Utilisation du chaînage optionnel
             for (let i = node.childNodes.length - 1; i >= 0; i--) {
                 const textNode = findLastTextNode(node.childNodes[i]);
                 if (textNode) {
@@ -219,7 +219,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const textWithBr = text.replace(/\n/g, '<br>');
 
         // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML) {
+        // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction
+        if (typeof window.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function') {
             return window.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
         }
 
@@ -243,7 +244,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function insertNormalizedText(range, processedText) {
         // Le texte a déjà été sécurisé par normalizeText, mais on peut ajouter une vérification supplémentaire
         let safeText = processedText;
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML &&
+        // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction sanitizeHTML
+        if (typeof window.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function' &&
             typeof processedText === 'string' && processedText.includes('<')) {
             safeText = window.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
@@ -273,20 +275,26 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Gère l'insertion de texte lorsqu'aucune sélection n'est active.
+     * Gère l'insertion de texte normalisé (HTML) lorsqu'aucune sélection n'est active.
      * @param {HTMLElement} element - L'élément contentEditable.
-     * @param {string} processedText - Le texte traité à insérer.
-     * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
+     * @param {string} processedText - Le texte normalisé (sécurisé) à insérer.
      */
-    function insertTextWithoutSelection(element, processedText, normalizeText) {
-        if (normalizeText) {
-            // Utiliser innerHTML pour le texte normalisé (avec balises HTML)
-            element.innerHTML += processedText;
-        } else {
-            // Utiliser textContent pour le texte brut
-            element.textContent += processedText;
-        }
+    function insertNormalizedTextWithoutSelection(element, processedText) {
+        // Utiliser innerHTML pour le texte normalisé (avec balises HTML)
+        // Le texte est supposé avoir été sécurisé en amont (par normalizeText)
+        element.innerHTML += processedText;
     }
+
+    /**
+     * Gère l'insertion de texte brut lorsqu'aucune sélection n'est active.
+     * @param {HTMLElement} element - L'élément contentEditable.
+     * @param {string} processedText - Le texte brut à insérer.
+     */
+    function insertPlainTextWithoutSelection(element, processedText) {
+        // Utiliser textContent pour le texte brut
+        element.textContent += processedText;
+    }
+
 
     /**
      * Insère du texte dans un élément contentEditable lorsqu'il y a une sélection.
@@ -340,7 +348,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             if (selection.rangeCount > 0) {
                 insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
             } else {
-                insertTextWithoutSelection(element, processedText, shouldNormalizeText);
+                // Appeler la fonction appropriée en fonction de la normalisation
+                if (shouldNormalizeText) {
+                    insertNormalizedTextWithoutSelection(element, processedText);
+                } else {
+                    insertPlainTextWithoutSelection(element, processedText);
+                }
             }
 
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
@@ -466,7 +479,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         normalizeText,
         insertNormalizedText,
         insertPlainText,
-        insertTextWithoutSelection,
+        insertNormalizedTextWithoutSelection, // Ajoutée
+        insertPlainTextWithoutSelection,    // Ajoutée
         insertTextWithSelection,
         insertInContentEditable,
         handleActiveElementInsertion,

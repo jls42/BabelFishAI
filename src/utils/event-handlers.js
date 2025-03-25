@@ -202,30 +202,37 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     /**
      * Gère l'affichage du conteneur de langue
      * @param {HTMLElement} languageContainer - Le conteneur de langue
-     * @param {boolean} show - Indique si le conteneur doit être affiché
+     * @param {HTMLElement} languageContainer - Le conteneur de langue à afficher
      */
-    function updateLanguageContainerDisplay(languageContainer, show) {
-        if (show) {
-            // Montrer le conteneur de langue
-            languageContainer.style.display = 'flex';
+    function showLanguageContainer(languageContainer) {
+        // Montrer le conteneur de langue
+        languageContainer.style.display = 'flex';
 
-            // Utiliser rAF pour grouper les changements visuels
-            requestAnimationFrame(() => {
-                languageContainer.style.opacity = '1';
-                languageContainer.style.maxHeight = '30px';
-                languageContainer.style.overflow = 'visible';
-            });
-        } else {
-            // Cacher le conteneur de langue avec transition
-            languageContainer.style.opacity = '0';
-            languageContainer.style.maxHeight = '0';
-            languageContainer.style.overflow = 'hidden';
+        // Utiliser rAF pour grouper les changements visuels
+        requestAnimationFrame(() => {
+            languageContainer.style.opacity = '1';
+            languageContainer.style.maxHeight = '30px'; // Assurez-vous que cette hauteur est suffisante
+            languageContainer.style.overflow = 'visible';
+        });
+    }
 
-            // Masquer complètement après l'animation
-            setTimeout(() => {
+    /**
+     * Masque le conteneur de langue avec une transition
+     * @param {HTMLElement} languageContainer - Le conteneur de langue à masquer
+     */
+    function hideLanguageContainer(languageContainer) {
+        // Cacher le conteneur de langue avec transition
+        languageContainer.style.opacity = '0';
+        languageContainer.style.maxHeight = '0';
+        languageContainer.style.overflow = 'hidden';
+
+        // Masquer complètement après l'animation (display: none)
+        setTimeout(() => {
+            // Vérifier si le conteneur existe toujours avant de modifier le style
+            if (languageContainer) {
                 languageContainer.style.display = 'none';
-            }, 300);
-        }
+            }
+        }, 300); // Correspond à la durée de la transition CSS (à définir)
     }
 
     /**
@@ -266,7 +273,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
                 // Gérer l'affichage du conteneur de langue
                 if (languageContainer) {
-                    updateLanguageContainerDisplay(languageContainer, changes.enableTranslation.newValue);
+                    if (changes.enableTranslation.newValue) {
+                        showLanguageContainer(languageContainer);
+                    } else {
+                        hideLanguageContainer(languageContainer);
+                    }
                 }
             }
 

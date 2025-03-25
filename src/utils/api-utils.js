@@ -15,7 +15,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function getOrFetchApiKey() {
         // S'assurer que l'espace de noms BabelFishAI existe
         window.BabelFishAI = window.BabelFishAI || {};
-        
+
         // Utiliser la clé en mémoire si disponible
         if (window.BabelFishAI.apiKey) {
             return window.BabelFishAI.apiKey;
@@ -47,22 +47,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             // S'assurer que l'espace de noms BabelFishAI existe
             window.BabelFishAI = window.BabelFishAI || {};
-            
+
             // Utiliser la clé en mémoire si disponible
             if (window.BabelFishAI.apiKey) {
                 return window.BabelFishAI.apiKey;
             }
-            
+
             // Sinon, essayer de la récupérer depuis le stockage
             const result = await chrome.storage.sync.get(['apiKey']);
             const apiKey = result.apiKey;
-            
+
             if (apiKey) {
                 // Stocker la clé en mémoire pour les futures utilisations
                 window.BabelFishAI.apiKey = apiKey;
                 return apiKey;
             }
-            
+
             // Afficher un message d'erreur convivial si la clé n'est pas trouvée
             console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
             return null;
@@ -225,7 +225,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`
             };
 
-            if (Object.prototype.hasOwnProperty.call(errorMessages, statusCode)) {
+            if (Object.hasOwn(errorMessages, statusCode)) {
                 return errorMessages[statusCode];
             } else {
                 return defaultMessage;
@@ -247,9 +247,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          * @returns {boolean} True si c'est une erreur réseau
          */
         function isNetworkError(error) {
-            return error.name === 'TypeError' || 
-                   error.message.includes('Timeout') || 
-                   error.message.includes('connexion');
+            return error.name === 'TypeError' ||
+                error.message.includes('Timeout') ||
+                error.message.includes('connexion');
         }
 
         /**
@@ -285,13 +285,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
                 handleFailedToFetch();
             }
-            
+
             // Si c'est une erreur réseau et qu'on peut réessayer
             if (isNetworkError(error) && retryOnFail && !isRetry) {
                 await delay(1500);
                 return performApiCall(true);
             }
-            
+
             // Si on ne peut pas récupérer, relancer l'erreur
             throw error;
         }

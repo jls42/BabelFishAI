@@ -49,7 +49,7 @@
 
     // Utilisation directe des constantes globales depuis constants.js
     const CONFIG = window.BabelFishAIConstants.CONFIG;
-    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    // API_CONFIG n'est plus utilisé directement dans ce fichier après refactorisation
     const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
 
     // Utilisation des constantes globales pour les types de messages
@@ -58,14 +58,7 @@
 
     // CANCEL_MESSAGE n'est plus utilisé directement dans ce fichier après refactorisation
 
-    // Erreurs spécifiques au content script
-    const ERRORS = {
-        API_KEY_NOT_FOUND: window.BabelFishAIConstants.ERRORS.API_KEY_NOT_FOUND,
-        CHROME_STORAGE_ERROR: window.BabelFishAIConstants.ERRORS.CHROME_STORAGE_ERROR,
-        MIC_ACCESS_ERROR: window.BabelFishAIConstants.ERRORS.MIC_ACCESS_ERROR,
-        TRANSCRIPTION_ERROR: window.BabelFishAIConstants.ERRORS.TRANSCRIPTION_ERROR,
-        NO_EDITABLE_ELEMENT: window.BabelFishAIConstants.ERRORS.NO_EDITABLE_ELEMENT
-    };
+    // ERRORS n'est plus utilisé directement dans ce fichier après refactorisation
 
     // safeExecute n'est plus utilisé directement dans ce fichier après refactorisation
 
@@ -455,23 +448,15 @@
      * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
      * @returns {Promise<void>}
      */
-    /**
-     * Détermine les langues source et cible pour la traduction
-     * @param {Object} options - Options actuelles
-     * @param {string} [specifiedTargetLanguage] - Langue cible optionnelle (prioritaire)
-     * @returns {Object} - Objet contenant sourceLanguage et targetLanguage
-     */
-    function determineTranslationLanguages(options, specifiedTargetLanguage) {
-        // Utiliser la fonction du module text-processing
-        return window.BabelFishAIUtils.textProcessing.determineTranslationLanguages(options, specifiedTargetLanguage);
-    }
+    // La fonction determineTranslationLanguages locale a été supprimée car la logique est maintenant gérée
+    // par le module text-processing.js
 
     /**
      * Gère la traduction d'un texte sélectionné sans enregistrement audio
      * @param {string} text - Le texte à traduire
      * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
-     * @returns {Promise<void>}
-     */
+    * @returns {Promise<void>}
+    */
     async function handleTextTranslation(text, specifiedTargetLanguage) {
         try {
             // Stocker l'élément actif avant de commencer le traitement

@@ -162,9 +162,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          * @returns {boolean} True si c'est une erreur réseau
          */
         function isNetworkError(error) {
-            return error.name === 'TypeError' || 
-                   error.message.includes('Timeout') || 
-                   error.message.includes('connexion');
+            return error.name === 'TypeError' ||
+                error.message.includes('Timeout') ||
+                error.message.includes('connexion');
         }
 
         /**
@@ -200,13 +200,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
                 handleFailedToFetch();
             }
-            
+
             // Si c'est une erreur réseau et qu'on peut réessayer
             if (isNetworkError(error) && retryOnFail && !isRetry) {
                 await delay(1500);
                 return performApiCall(true);
             }
-            
+
             // Si on ne peut pas récupérer, relancer l'erreur
             throw error;
         }
@@ -224,28 +224,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    /**
-     * Transcrit l'audio en texte via l'API Whisper
-     * @param {Blob} audioBlob - Le blob audio à transcrire
-     * @param {string} apiKey - La clé API OpenAI
-     * @param {string} apiUrl - L'URL de l'API Whisper
-     * @param {string} [modelType] - Le modèle Whisper à utiliser
-     * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
-     * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
-     * @returns {Promise<string>} Le texte transcrit
-     * @deprecated Utiliser window.BabelFishAIUtils.api.transcribeAudio à la place
-     */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) { // skipcq: JS-0116
-        // Déléguer à l'implémentation dans api-utils.js
-        return await window.BabelFishAIUtils.api.transcribeAudio(
-            audioBlob,
-            apiKey,
-            apiUrl,
-            modelType,
-            filename,
-            generateUniqueFilename
-        );
-    }
+    // La fonction locale transcribeAudio a été supprimée car elle était obsolète et déléguait simplement
+    // à l'implémentation dans api-utils.js. L'exportation ci-dessous pointera directement vers la bonne fonction.
 
     /**
      * Récupère des données depuis le stockage synchronisé de Chrome.
@@ -302,8 +282,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     // Note: Ces fonctions sont maintenant déléguées à api-utils.js
+    // transcribeAudio n'est plus exporté ici pour éviter d'écraser l'export de api-utils.js
     exports.api = {
-        transcribeAudio,
         getApiKey,
         getFromStorage,
         saveToStorage,
