@@ -198,13 +198,39 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         };
 
+        /**
+         * Crée et valide un Blob audio à partir des chunks.
+         * @param {Blob[]} chunks - Les morceaux de données audio.
+         * @returns {Blob} Le Blob audio validé.
+         * @throws {Error} Si aucune donnée n'est disponible ou si le Blob est invalide.
+         */
+        function createAndValidateAudioBlob(chunks) {
+            // Vérification optimisée
+            const hasAudioData = chunks.length > 0;
+            if (!hasAudioData) {
+                throw new Error("Aucune donnée audio capturée");
+            }
+
+            // Utilisation de propriétés optimales pour les blobs audio
+            const blob = new Blob(chunks, {
+                type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
+            });
+
+            // Vérification combinée de la présence et de la taille du blob
+            if (!blob || blob.size <= 0) {
+                throw new Error("Blob audio vide ou invalide");
+            }
+
+            return blob;
+        }
+
         // Événement déclenché lorsque l'enregistrement est arrêté
         // Utilisation d'une fonction nommée pour faciliter le nettoyage
         const handleRecordingStopped = async () => {
             // S'assurer que isRecording est mis à false immédiatement
             isRecording = false;
 
-            let audioBlob = null;
+            let audioBlob = null; // Garder une référence pour le finally
 
             try {
                 // Sortie rapide en cas d'annulation (économie de traitement)
@@ -212,38 +238,28 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     console.log("Enregistrement annulé par l'utilisateur, audio non traité"); // skipcq: JS-0002
                     // Réinitialiser la variable d'annulation pour le prochain enregistrement
                     isRecordingCanceled = false;
-                    return;
+                    return; // Sortie propre sans traitement
                 }
 
-                // Vérification optimisée
-                const hasAudioData = audioChunks.length > 0;
-                if (!hasAudioData) {
-                    throw new Error("Aucune donnée audio capturée");
-                }
-                // Utilisation de propriétés optimales pour les blobs audio
-                audioBlob = new Blob(audioChunks, {
-                    type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
-                });
-
-                // Vérification combinée de la présence et de la taille du blob
-                if (!audioBlob || audioBlob.size <= 0) {
-                    throw new Error("Blob audio vide ou invalide");
-                }
-
+                // Créer et valider le blob audio
+                audioBlob = createAndValidateAudioBlob(audioChunks);
 
                 // Traiter l'audio enregistré - passage du blob par référence
                 await processRecordedAudio(audioBlob);
+
             } catch (error) {
+                // Gérer les erreurs de createAndValidateAudioBlob et processRecordedAudio
                 console.error('Erreur lors du traitement de l\'enregistrement:', error);
                 window.BabelFishAI.ui.handleError(error);
             } finally {
                 // Libération proactive des ressources pour éviter les fuites mémoire
+                // Même si audioBlob est null (erreur de création), la vérification est sûre
                 if (audioBlob) {
                     // Aide le GC à libérer le blob plus rapidement
                     audioBlob = null;
                 }
 
-                // Nettoyer les ressources dans tous les cas
+                // Nettoyer les ressources dans tous les cas (annulation, erreur, succès)
                 cleanupRecordingResources(stream);
             }
         };
@@ -285,14 +301,47 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {Blob} audioBlob - Le blob audio à traiter
      * @returns {Promise<void>}
      */
+    function validateAudioBlob(blob) {
+        if (!blob || blob.size <= 0 || blob.type.indexOf('audio/') !== 0) {
+            throw new Error("Blob audio invalide ou vide");
+        }
+    }
+
+    /**
+     * Détermine le message d'erreur à afficher à l'utilisateur.
+     * @param {Error} error - L'erreur survenue.
+     * @returns {string} Le message d'erreur pour l'utilisateur.
+     */
+    function getUserErrorMessage(error) {
+        if (error.name === 'AbortError') {
+            return "Traitement audio annulé";
+        }
+        return window.BabelFishAIUtils.i18n.getMessage("bannerTranscriptionError") || "Erreur pendant la transcription";
+    }
+
+    /**
+     * Affiche la bannière d'erreur de manière sécurisée.
+     * @param {string} message - Le message principal de la bannière.
+     */
+    function displayErrorBanner(message) {
+        try {
+            window.BabelFishAI.ui.showBanner(message, window.BabelFishAIConstants.MESSAGE_TYPES.ERROR);
+        } catch (e) {
+            console.error("Erreur lors de l'affichage de la bannière d'erreur:", e);
+        }
+    }
+
+    /**
+     * Traite l'audio enregistré de manière optimisée
+     * @param {Blob} audioBlob - Le blob audio à traiter
+     * @returns {Promise<void>}
+     */
     async function processRecordedAudio(audioBlob) {
         try {
-            // Vérification rapide de la validité du blob audio
-            if (!audioBlob || audioBlob.size <= 0 || audioBlob.type.indexOf('audio/') !== 0) {
-                throw new Error("Blob audio invalide ou vide");
-            }
+            // 1. Valider le blob audio
+            validateAudioBlob(audioBlob);
 
-            // 1. Informer l'utilisateur que la transcription est en cours
+            // 2. Informer l'utilisateur que la transcription est en cours
             await window.BabelFishAIUtils.error.safeExecute(
                 () => window.BabelFishAI.ui.showBanner(
                     window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing")
@@ -300,33 +349,33 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 "Erreur lors de l'affichage de la bannière de transcription"
             );
 
+            // 3. Transcrire et afficher
             await transcribeAndDisplayText(audioBlob);
-            return null;
 
         } catch (error) {
             // Gestion centralisée et cohérente des erreurs
             console.error("Erreur pendant le traitement audio:", error);
 
-            // Utiliser le message d'erreur approprié selon le type d'erreur
-            const userMessage = error.name === 'AbortError'
-                ? "Traitement audio annulé"
-                : (window.BabelFishAIUtils.i18n.getMessage("bannerTranscriptionError") || "Erreur pendant la transcription");
+            const userMessage = getUserErrorMessage(error);
+            const errorDetails = error.message || error.toString();
 
-            window.BabelFishAI.ui.handleError(userMessage, error.message || error.toString());
+            // Gérer l'erreur (log interne, etc.)
+            window.BabelFishAI.ui.handleError(userMessage, errorDetails);
 
-            // Assurer que la bannière d'erreur est visible même en cas d'erreur dans hideBanner
-            try {
-                window.BabelFishAI.ui.showBanner(userMessage, window.BabelFishAIConstants.MESSAGE_TYPES.ERROR);
-            } catch (e) {
-                console.error("Erreur lors de l'affichage de la bannière d'erreur:", e);
-            }
+            // Afficher la bannière d'erreur à l'utilisateur
+            displayErrorBanner(userMessage);
+
         } finally {
             // S'assurer que la référence au blob est libérée dans tous les cas
+            // Note: audioBlob est passé par valeur, la modification ici n'affecte pas l'appelant,
+            // mais c'est une bonne pratique de nettoyer les références locales si possible.
+            // Cependant, dans ce cas, cela n'a pas d'effet réel sur la libération de la mémoire du blob original.
+            // La vraie libération se fait quand l'appelant perd sa référence.
+            // On pourrait envisager de ne pas avoir ce finally si audioBlob n'est pas réutilisé.
+            // Pour l'instant, on le garde pour la clarté, mais son utilité est limitée.
             audioBlob = null;
         }
-
-        // Retourne null en dehors du bloc finally
-        return null;
+        // Pas besoin de return null explicite ici, une fonction async sans return renvoie implicitement Promise<undefined>
     }
 
     /**

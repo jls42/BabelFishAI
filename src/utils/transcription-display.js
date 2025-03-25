@@ -14,65 +14,93 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} text - Le texte à afficher
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
-    async function showTranscription(text) {
-        // Valider le texte d'entrée
+    function validateInputText(text) {
         if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             const errorMsg = "Texte de transcription invalide";
             console.error(`${errorMsg}:`, text);
             window.BabelFishAIUtils.error.handleError(errorMsg, "Invalid transcription text");
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Gère la copie automatique dans le presse-papiers si nécessaire.
+     * @param {string} textToCopy - Le texte à copier.
+     * @param {Object|boolean} displayResult - Le résultat de l'affichage.
+     * @param {boolean} isActiveElementValid - Si l'élément actif est valide pour l'insertion.
+     * @param {boolean} autoCopyEnabled - Si l'option autoCopy est activée.
+     */
+    async function handleAutoCopy(textToCopy, displayResult, isActiveElementValid, autoCopyEnabled) {
+        // Copier dans le presse-papiers si autoCopy est activé et:
+        // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
+        // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
+        if (autoCopyEnabled && displayResult &&
+            (displayResult.method === 'clipboard' ||
+                (displayResult.method === 'dialog' && !isActiveElementValid))) {
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                // Ne pas bloquer l'exécution pour une erreur de copie
+            }
+        }
+    }
+
+    /**
+     * Récupère toutes les options nécessaires (affichage, traitement, copie).
+     * @returns {Promise<Object>} Un objet contenant toutes les options.
+     */
+    async function getAllOptions() {
+        const displayOpts = await getDisplayOptions();
+        const { autoCopy } = await window.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
+        return { ...displayOpts, autoCopy };
+    }
+
+
+    async function showTranscription(text) {
+        if (!validateInputText(text)) {
+            return false;
+        }
+
+        let displayResult = false; // Initialiser à false
 
         try {
             // Informer l'utilisateur que le traitement est en cours
             window.BabelFishAI.ui.showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
 
-            // Récupérer les options de configuration
-            const options = await getDisplayOptions();
+            // Récupérer toutes les options
+            const options = await getAllOptions();
 
-            // Récupérer l'option autoCopy
-            const { autoCopy } = await window.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
-
-            // Étape 1: Reformuler le texte si l'option est activée
+            // Étape 1: Traiter le texte (reformulation/traduction)
             let processedText = await processText(text, options);
 
             // Stocker l'élément actif avant d'afficher le texte
             window.BabelFishAIUtils.focus.storeFocusAndSelection();
 
-            // Afficher le texte selon les options configurées
-            const displayResult = await displayTranscriptionText(processedText, options, autoCopy);
+            // Étape 2: Afficher le texte selon les options configurées
+            displayResult = await displayTranscriptionText(processedText, options, options.autoCopy);
 
-            // Attendre un court délai pour permettre au navigateur de terminer les opérations DOM
-            // et éviter que le texte soit automatiquement sélectionné
+            // Attendre un court délai pour les opérations DOM
             await new Promise(resolve => setTimeout(resolve, 10));
 
-            // Restaurer le focus et la position du curseur sans sélection
+            // Restaurer le focus sans sélection
             window.BabelFishAIUtils.focus.restoreFocusAndSelection(true);
 
-            // Vérifier si l'élément actif est un élément valide pour insertion de texte
-            const activeElement = document.activeElement;
-            const isActiveElementValid = window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
+            // Vérifier la validité de l'élément actif après restauration
+            const isActiveElementValid = window.BabelFishAIUtils.focus.isValidElementForInsertion(document.activeElement);
 
-            // Copier dans le presse-papiers si autoCopy est activé et:
-            // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
-            // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
-            if (autoCopy && displayResult &&
-                (displayResult.method === 'clipboard' ||
-                    (displayResult.method === 'dialog' && !isActiveElementValid))) {
-                try {
-                    await navigator.clipboard.writeText(processedText);
-                } catch (err) {
-                    console.error('Failed to copy text: ', err);
-                }
-            }
+            // Étape 3: Gérer la copie automatique
+            await handleAutoCopy(processedText, displayResult, isActiveElementValid, options.autoCopy);
 
-            return displayResult;
+            return displayResult; // Retourner le résultat de l'affichage
+
         } catch (error) {
             console.error('Error displaying transcription:', error);
             window.BabelFishAIUtils.error.handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
-            return false;
+            return false; // Retourner false en cas d'erreur
         } finally {
-            // Si une erreur se produit ailleurs, s'assurer que la bannière de traitement disparaît
+            // Cacher la bannière de traitement dans tous les cas (succès ou erreur)
             window.BabelFishAI.ui.hideBanner();
         }
     }

@@ -217,14 +217,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function normalizeText(text) {
         // Remplacer les sauts de ligne par des balises <br>
         const textWithBr = text.replace(/\n/g, '<br>');
-        
+
         // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
         if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML) {
             return window.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
         }
-        
-        // Fallback si la fonction sanitizeHTML n'est pas disponible
-        return textWithBr;
+
+        // Fallback si la fonction sanitizeHTML n'est pas disponible: échapper le HTML pour la sécurité
+        console.warn('sanitizeHTML function not found. Falling back to basic HTML escaping.');
+        const escapedText = textWithBr
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        // Note: Les <br> seront aussi échappés, ce qui n'est pas idéal mais plus sûr.
+        return escapedText;
     }
 
     /**
@@ -235,11 +243,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function insertNormalizedText(range, processedText) {
         // Le texte a déjà été sécurisé par normalizeText, mais on peut ajouter une vérification supplémentaire
         let safeText = processedText;
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML && 
+        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && window.BabelFishAIUtils.i18n.sanitizeHTML &&
             typeof processedText === 'string' && processedText.includes('<')) {
             safeText = window.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
-        
+
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = safeText;
 
