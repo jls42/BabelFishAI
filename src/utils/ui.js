@@ -56,24 +56,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    /**
-     * Affiche un message de statut
-     * @param {HTMLElement} statusElement - L'élément de statut
-     * @param {string} message - Le message à afficher
-     * @param {string} type - Le type de message ('success' ou 'error')
-     */
-    function showStatus(statusElement, message, type = 'success') {
-        statusElement.textContent = message;
-        statusElement.className = `status ${type}`;
-        statusElement.style.display = 'block';
-
-        if (type === 'success') {
-            setTimeout(() => {
-                statusElement.style.display = 'none';
-                statusElement.className = 'status';
-            }, CONFIG.COPY_FEEDBACK_DURATION);
-        }
-    }
+    // La fonction showStatus locale a été supprimée car elle n'était pas utilisée.
+    // La logique d'affichage de statut est gérée par banner-utils.js via content.js.
 
     // Suppression complète des notifications sonores
 

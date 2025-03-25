@@ -29,13 +29,13 @@
         await import(chrome.runtime.getURL('src/utils/api-utils.js'));
         // Initialisation après l'importation
         await window.BabelFishAIUtils.i18n.init();
-        
+
         // Créer l'espace de noms BabelFishAI pour les fonctions principales
         window.BabelFishAI = window.BabelFishAI || {};
-        
+
         // Initialiser l'espace de noms UI (les fonctions seront exposées plus bas dans le code)
         window.BabelFishAI.ui = {};
-        
+
         console.log("Content script and utility modules injected!");
 
         // Créer un événement personnalisé pour signaler que i18n est chargé
@@ -52,14 +52,11 @@
     const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
     const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
 
-    // Utilisation des constantes globales pour les actions et types de messages
-    const ACTIONS = window.BabelFishAIConstants.ACTIONS;
+    // Utilisation des constantes globales pour les types de messages
+    // ACTIONS n'est plus utilisé directement dans ce fichier après refactorisation
     const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
 
-    // Constantes spécifiques pour les messages d'annulation
-    const CANCEL_MESSAGE = {
-        RECORDING_CANCELED: window.BabelFishAIUtils.i18n?.getMessage("recordingCanceled") || "Enregistrement annulé (touche Échap)."
-    };
+    // CANCEL_MESSAGE n'est plus utilisé directement dans ce fichier après refactorisation
 
     // Erreurs spécifiques au content script
     const ERRORS = {
@@ -70,8 +67,7 @@
         NO_EDITABLE_ELEMENT: window.BabelFishAIConstants.ERRORS.NO_EDITABLE_ELEMENT
     };
 
-    // Utilisation de la fonction safeExecute depuis error-utils.js
-    const safeExecute = window.BabelFishAIUtils.error.safeExecute;
+    // safeExecute n'est plus utilisé directement dans ce fichier après refactorisation
 
     // État global
     let recordingBanner = null;
@@ -80,13 +76,7 @@
     let bannerColorEnd = UI_CONFIG.DEFAULT_BANNER_COLOR_END;
     let bannerOpacity = UI_CONFIG.DEFAULT_BANNER_OPACITY;
 
-    // Variable pour stocker les informations de focus et de sélection
-    const lastFocusInfo = {
-        element: null,
-        selectionStart: 0,
-        selectionEnd: 0,
-        range: null
-    };
+    // lastFocusInfo n'est plus utilisé directement dans ce fichier après refactorisation vers focus-utils.js
 
     // La fonction storeFocusAndSelection a été migrée vers focus-utils.js
 
@@ -123,11 +113,11 @@
                 bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
                 bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
             });
-            
+
             bannerColorStart = result.bannerColorStart;
             bannerColorEnd = result.bannerColorEnd;
             bannerOpacity = result.bannerOpacity;
-            
+
             if (recordingBanner) {
                 updateBannerColor();
             }
@@ -200,47 +190,8 @@
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob) {
-        try {
-            // Récupérer la clé API depuis le stockage
-            const apiKey = await window.BabelFishAIUtils.api.getApiKey();
-            if (!apiKey) {
-                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
-                window.BabelFishAI.ui.handleError(errorMsg, errorMsg);
-                throw new Error(errorMsg);
-            }
-
-            // Récupérer l'URL de l'API et le modèle depuis le stockage
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-                audioModelType: API_CONFIG.WHISPER_MODEL
-            });
-
-            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
-            const audioModelType = result.audioModelType;
-
-            // Utiliser directement la fonction dans api-utils.js
-            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
-                audioBlob,
-                apiKey,
-                apiUrl,
-                audioModelType,
-                null, // Pas de nom de fichier spécifique
-                true  // Générer un nom de fichier unique
-            );
-            
-            return transcription;
-        } catch (error) {
-            console.error('Transcription error:', error);
-            throw error;
-        } finally {
-            // Nettoyer les ressources spécifiques à content.js
-            if (Array.isArray(audioChunks)) {
-                audioChunks.length = 0;
-            }
-            audioBlob = null;
-        }
-    }
+    // La fonction transcribeAudio locale a été supprimée car la logique est maintenant gérée
+    // par les modules utilitaires (e.g., window.BabelFishAIUtils.api.transcribeAudio)
 
     /**
      * Récupère les options d'affichage et de traduction depuis le stockage
@@ -251,94 +202,14 @@
         return window.BabelFishAIUtils.display.getDisplayOptions();
     }
 
-    /**
-     * Reformule le texte si l'option est activée
-     * @param {string} text - Le texte à reformuler
-     * @param {Object} options - Les options de reformulation
-     * @returns {Promise<string>} Le texte reformulé ou le texte original en cas d'erreur
-     */
-    async function rephraseTextIfEnabled(text, options) {
-        if (!options.enableRephrase) {
-            return text;
-        }
+    // La fonction rephraseTextIfEnabled locale a été supprimée car la logique est maintenant gérée
+    // par les modules utilitaires (e.g., window.BabelFishAIUtils.textProcessing.handleTextRephrasing)
 
-        try {
-            // Informer l'utilisateur que la reformulation est en cours
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasing") || "Reformulation en cours...");
+    // La fonction translateTextIfEnabled locale a été supprimée car la logique est maintenant gérée
+    // par les modules utilitaires (e.g., window.BabelFishAIUtils.textProcessing.handleTextTranslation)
 
-            // Utiliser la fonction rephraseText du module text-processing
-            const rephrasedText = await window.BabelFishAIUtils.textProcessing.rephraseText(
-                text,
-                apiKey
-            );
-
-            // Vérifier que la reformulation est valide
-            if (rephrasedText?.trim()) {
-                // Cacher la bannière une fois la reformulation terminée
-                hideBanner();
-                return rephrasedText;
-            } else {
-                throw new Error('Empty rephrasing result');
-            }
-        } catch (error) {
-            console.error('Rephrasing failed:', error);
-            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation", error.message);
-            // En cas d'erreur de reformulation, on utilise le texte original
-            return text;
-        }
-    }
-
-    /**
-     * Traduit le texte si l'option est activée
-     * @param {string} text - Le texte à traduire
-     * @param {Object} options - Les options de traduction
-     * @returns {Promise<string>} Le texte traduit ou le texte original en cas d'erreur
-     */
-    async function translateTextIfEnabled(text, options) {
-        if (!options.enableTranslation) {
-            return text;
-        }
-
-        try {
-            // Informer l'utilisateur que la traduction est en cours
-            showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerTranslating"));
-
-            // Utiliser la fonction translateText du module text-processing
-            const translatedText = await window.BabelFishAIUtils.textProcessing.translateText(
-                text,
-                options.sourceLanguage,
-                options.targetLanguage,
-                apiKey
-            );
-
-            // Vérifier que la traduction est valide
-            if (translatedText && translatedText.trim()) {
-                // Cacher la bannière une fois la traduction terminée
-                hideBanner();
-                return translatedText;
-            } else {
-                throw new Error('Empty translation result');
-            }
-        } catch (error) {
-            console.error('Translation failed:', error);
-            handleError(window.BabelFishAIUtils.i18n.getMessage("bannerTranslationError"), error.message);
-            // En cas d'erreur de traduction, on utilise le texte original
-            return text;
-        }
-    }
-
-
-    /**
-     * Détermine le mode d'affichage et affiche le texte selon les options configurées
-     * @param {string} text - Le texte à afficher
-     * @param {Object} options - Les options d'affichage
-     * @param {boolean} autoCopy - Indique si la copie automatique est activée
-     * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
-     */
-    function displayTranscriptionText(text, options, autoCopy) {
-        // Cette fonction a été migrée vers transcription-display.js
-        return window.BabelFishAIUtils.display.displayTranscriptionText(text, options, autoCopy);
-    }
+    // La fonction displayTranscriptionText locale a été supprimée car la logique est maintenant gérée
+    // par le module transcription-display.js
 
     /**
      * Affiche la transcription selon les options configurées
@@ -360,49 +231,14 @@
         return window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
     }
 
-    /**
-     * Insère du texte dans un élément contentEditable avec robustesse
-     * @param {HTMLElement} element - L'élément contentEditable
-     * @param {string} text - Le texte à insérer
-     * @param {Object} options - Options supplémentaires
-     * @param {boolean} [options.ensureFocus=true] - Assurer que l'élément a le focus
-     * @param {boolean} [options.shouldNormalizeText=true] - Normaliser le texte (remplacer les sauts de ligne)
-     * @returns {boolean} - True si l'insertion a réussi
-     */
-    function insertInContentEditable(element, text, options = {}) {
-        // Validation des paramètres
-        if (!element || !isValidInputText(text)) {
-            console.warn("Paramètres invalides pour l'insertion de texte");
-            return false;
-        }
-        
-        // Utiliser la fonction dans focus-utils.js
-        return window.BabelFishAIUtils.focus.insertInContentEditable(element, text, {
-            ensureFocus: options.ensureFocus,
-            shouldNormalizeText: options.normalizeText || options.shouldNormalizeText
-        });
-    }
+    // La fonction insertInContentEditable locale a été supprimée car la logique est maintenant gérée
+    // par le module focus-utils.js
 
-    /**
-     * Gère l'insertion du texte dans l'élément actif
-     * @param {string} text - Le texte à insérer
-     * @returns {boolean} Indique si l'insertion a réussi
-     */
-    function handleActiveElementInsertion(text) {
-        // Cette fonction a été migrée vers focus-utils.js
-        return window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
-    }
+    // La fonction handleActiveElementInsertion locale a été supprimée car la logique est maintenant gérée
+    // par le module focus-utils.js
 
-    /**
-     * Insère du texte dans un élément input ou textarea avec optimisation pour grands volumes
-     * @param {HTMLInputElement|HTMLTextAreaElement} element - L'élément de saisie
-     * @param {string} text - Le texte à insérer
-     * @returns {boolean} - Indique si l'insertion a réussi
-     */
-    function insertTextIntoInput(element, text) {
-        // Cette fonction a été migrée vers focus-utils.js
-        return window.BabelFishAIUtils.focus.insertTextIntoInput(element, text);
-    }
+    // La fonction insertTextIntoInput locale a été supprimée car la logique est maintenant gérée
+    // par le module focus-utils.js
 
     /**
      * Affiche la transcription dans une boîte de dialogue flottante
@@ -413,7 +249,7 @@
         // Cette fonction a été migrée vers transcription-display.js
         return window.BabelFishAIUtils.display.showTranscriptionDialog(text, duration);
     }
-    
+
     // Fonction de débogage supprimée - nous utilisons maintenant une approche directe
     // en vérifiant si l'élément actif est valide pour l'insertion au moment de la copie
 
@@ -490,7 +326,7 @@
     function hideBanner() {
         return window.BabelFishAIUtils.banner.toggleBannerVisibility(recordingBanner, false);
     }
-    
+
     // Les fonctions UI seront exposées plus bas dans le code
     // dans l'objet window.BabelFishAI.ui
 
@@ -504,7 +340,7 @@
         // Utiliser la fonction du module error-utils
         return window.BabelFishAIUtils.error.handleError(displayMessage, errorMessage);
     }
-    
+
     /**
      * Affiche un message d'état dans la bannière
      * @param {string} text - Le message à afficher
@@ -516,11 +352,11 @@
         if (!recordingBanner) {
             initBanner();
         }
-        
+
         // Utiliser la fonction du module banner-utils
         return window.BabelFishAIUtils.banner.showStatus(recordingBanner, text, type);
     }
-    
+
     // Exposer les fonctions d'interface utilisateur dans l'espace de noms window.BabelFishAI.ui
     window.BabelFishAI.ui = {
         showBanner,
@@ -531,17 +367,17 @@
         // Ajouter une fonction pour obtenir la bannière (utilisée par error-utils)
         getBanner: () => recordingBanner
     };
-    
+
     // Exposer les fonctions d'enregistrement dans l'espace de noms window.BabelFishAI
     window.BabelFishAI.startRecording = startRecording;
     window.BabelFishAI.stopRecording = stopRecording;
     window.BabelFishAI.cancelRecording = cancelRecording;
-    
+
     // Exposer les fonctions de traitement de texte dans l'espace de noms window.BabelFishAI
     window.BabelFishAI.handleTextRephrasing = handleTextRephrasing;
     window.BabelFishAI.handleTextTranslation = handleTextTranslation;
     window.BabelFishAI.isValidInputText = isValidInputText;
-    
+
     // Exposer la fonction de mise à jour de la couleur du bandeau
     // Cette fonction est appelée depuis event-handlers.js lors des changements d'options
     window.BabelFishAI.updateBannerColor = updateBannerColor;
@@ -561,23 +397,8 @@
         return window.BabelFishAIUtils.textProcessing.isValidInputText(text);
     }
 
-    /**
-     * Récupère la clé API ou lève une exception si elle n'est pas disponible
-     * @returns {Promise<string>} - La clé API
-     * @throws {Error} - Si la clé API n'est pas trouvée
-     */
-    async function getOrFetchApiKey() {
-        try {
-            // Utiliser directement la fonction du module api-utils
-            const key = await window.BabelFishAIUtils.api.getOrFetchApiKey();
-            // Mettre à jour la variable apiKey locale
-            apiKey = key;
-            return apiKey;
-        } catch (error) {
-            console.error("Erreur lors de la récupération de la clé API:", error);
-            throw error;
-        }
-    }
+    // La fonction getOrFetchApiKey locale a été supprimée car la logique est maintenant gérée
+    // par le module api-utils.js
 
     /**
      * Insère le texte dans un élément éditable
@@ -589,16 +410,8 @@
         return window.BabelFishAIUtils.focus.insertTextInEditableElement(activeElement, newText);
     }
 
-    /**
-     * Insère du texte dans un élément input ou textarea
-     * @param {HTMLInputElement|HTMLTextAreaElement} element - L'élément input/textarea
-     * @param {string} text - Le texte à insérer
-     * @returns {boolean} - True si l'insertion a réussi
-     */
-    function insertInInputElement(element, text) {
-        // Utiliser la fonction migrée dans focus-utils.js
-        return window.BabelFishAIUtils.focus.insertTextIntoInput(element, text);
-    }
+    // La fonction insertInInputElement locale a été supprimée car la logique est maintenant gérée
+    // par le module focus-utils.js
 
     // La fonction insertInContentEditableElement a été fusionnée avec insertInContentEditable
 
@@ -611,21 +424,21 @@
         try {
             // Stocker l'élément actif avant de commencer le traitement
             window.BabelFishAIUtils.focus.storeFocusAndSelection();
-            
+
             // Utiliser la fonction du module text-processing pour la reformulation
             const rephrasedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
-            
+
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
-            
+
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
             let replacedInEditable = false;
-            
+
             if (isValidElementForInsertion(activeElement)) {
                 replacedInEditable = insertTextInEditableElement(activeElement, rephrasedText);
             }
-            
+
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
                 showTranscriptionDialog(rephrasedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
@@ -663,21 +476,21 @@
         try {
             // Stocker l'élément actif avant de commencer le traitement
             window.BabelFishAIUtils.focus.storeFocusAndSelection();
-            
+
             // Obtenir les options de traduction
             const options = await getDisplayOptions();
-            
+
             // Utiliser la fonction du module text-processing pour la traduction
             const translatedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(text, options, specifiedTargetLanguage);
-            
+
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
             let replacedInEditable = false;
-            
+
             if (isValidElementForInsertion(activeElement)) {
                 replacedInEditable = insertTextInEditableElement(activeElement, translatedText);
             }
-            
+
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
                 showTranscriptionDialog(translatedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
@@ -689,14 +502,14 @@
     }
 
     // La fonction handleBackgroundMessages a été déplacée vers event-handlers.js
-    
+
     // Initialiser le module de gestion d'événements avec les références nécessaires
     window.BabelFishAIUtils.events.init({
         recordingBanner,
         bannerColorStart,
         bannerColorEnd
     });
-    
+
     // Écouter les messages du background script en utilisant la fonction du module event-handlers.js
     chrome.runtime.onMessage.addListener(window.BabelFishAIUtils.events.handleBackgroundMessages);
 
