@@ -9,7 +9,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     let audioChunks = [];
     let isRecording = false;
     let isRecordingCanceled = false; // Pour suivre si l'enregistrement a été annulé
-    let apiKey = null;
 
     // Constantes
     const ACTIONS = {
@@ -128,7 +127,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         let stream = null;
 
         try {
-            apiKey = await getApiKey();
+            // Vérifier que la clé API existe sans l'assigner à une variable
+            const apiKey = await getApiKey();
+            if (!apiKey) {
+                throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            }
 
             const audioConstraints = {
                 audio: {

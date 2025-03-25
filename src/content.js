@@ -366,81 +366,21 @@
      * @param {string} text - Le texte à insérer
      * @param {Object} options - Options supplémentaires
      * @param {boolean} [options.ensureFocus=true] - Assurer que l'élément a le focus
-     * @param {boolean} [options.normalizeText=true] - Normaliser le texte (remplacer les sauts de ligne)
+     * @param {boolean} [options.shouldNormalizeText=true] - Normaliser le texte (remplacer les sauts de ligne)
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertInContentEditable(element, text, options = {}) {
-        // Options par défaut
-        const {
-            ensureFocus = true,
-            normalizeText = true
-        } = options;
-
         // Validation des paramètres
         if (!element || !isValidInputText(text)) {
             console.warn("Paramètres invalides pour l'insertion de texte");
             return false;
         }
-
-        // Assurer le focus si demandé
-        if (ensureFocus) {
-            element.focus();
-        }
-
-        // Normalisation du texte si demandée
-        const finalText = normalizeText
-            ? text.replace(/[\r\n]+/g, ' ').trim()
-            : text;
-
-        try {
-            // Tenter d'utiliser l'API moderne d'insertion
-            const selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-
-                // Supprimer le texte sélectionné
-                selection.deleteFromDocument();
-
-                // Insérer le texte
-                const textNode = document.createTextNode(finalText);
-                range.insertNode(textNode);
-
-                // Positionner le curseur à la fin du texte inséré
-                range.setStartAfter(textNode);
-                range.setEndAfter(textNode);
-
-                // Appliquer le nouveau range
-                selection.removeAllRanges();
-                selection.addRange(range);
-            } else {
-                // Fallback à execCommand si aucune plage n'est sélectionnée
-                document.execCommand('insertHTML', false, finalText);
-
-                // Désélectionner après l'insertion
-                const sel = window.getSelection();
-                if (sel.rangeCount > 0) {
-                    const range = sel.getRangeAt(0);
-                    range.collapse(false); // Collapse à la fin
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                }
-            }
-
-            // Déclencher l'événement input
-            element.dispatchEvent(new Event('input', { bubbles: true }));
-            return true;
-        } catch (error) {
-            console.error("Erreur lors de l'insertion dans contentEditable:", error);
-
-            // Dernier recours: insertion simple
-            try {
-                document.execCommand('insertHTML', false, finalText);
-                return true;
-            } catch (e) {
-                console.error("Échec total de l'insertion:", e);
-                return false;
-            }
-        }
+        
+        // Utiliser la fonction dans focus-utils.js
+        return window.BabelFishAIUtils.focus.insertInContentEditable(element, text, {
+            ensureFocus: options.ensureFocus,
+            shouldNormalizeText: options.normalizeText || options.shouldNormalizeText
+        });
     }
 
     /**

@@ -7,12 +7,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     // Référence aux constantes globales
     const ACTIONS = window.BabelFishAIConstants.ACTIONS;
     const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
-    const CONFIG = window.BabelFishAIConstants.CONFIG;
 
     // Variables pour stocker les références aux fonctions externes
     let recordingBanner = null;
-    let bannerColorStart = null;
-    let bannerColorEnd = null;
 
     /**
      * Initialise les références aux éléments UI et fonctions nécessaires
@@ -21,14 +18,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function init(refs) {
         if (refs.recordingBanner) {
             recordingBanner = refs.recordingBanner;
-        }
-
-        if (refs.bannerColorStart) {
-            bannerColorStart = refs.bannerColorStart;
-        }
-
-        if (refs.bannerColorEnd) {
-            bannerColorEnd = refs.bannerColorEnd;
         }
     }
 
@@ -95,16 +84,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         let hasColorChanges = false;
 
-        if (changes.bannerColorStart) {
-            bannerColorStart = changes.bannerColorStart.newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_START;
-            hasColorChanges = true;
-        }
-        if (changes.bannerColorEnd) {
-            bannerColorEnd = changes.bannerColorEnd.newValue || UI_CONFIG.DEFAULT_BANNER_COLOR_END;
-            hasColorChanges = true;
-        }
-        if (changes.bannerOpacity) {
-            // Mettre à jour l'opacité (si nécessaire, selon l'implémentation de updateBannerColor)
+        if (changes.bannerColorStart || changes.bannerColorEnd || changes.bannerOpacity) {
             hasColorChanges = true;
         }
 

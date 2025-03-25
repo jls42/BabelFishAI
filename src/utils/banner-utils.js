@@ -5,11 +5,7 @@
 (function (exports) {
     'use strict';
 
-    // Référence aux constantes UI
-    const UI_CONFIG = window.BabelFishAIConstants?.UI_CONFIG || {
-        DEFAULT_BANNER_COLOR_START: '#4c7b8d',
-        DEFAULT_BANNER_COLOR_END: '#684054'
-    };
+    // Aucune référence aux constantes UI n'est nécessaire dans ce module
 
     /**
      * Crée un bouton de contrôle pour la bannière avec icône et texte

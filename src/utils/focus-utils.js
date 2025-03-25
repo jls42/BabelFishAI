@@ -214,7 +214,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {string} text - Le texte à normaliser.
      * @returns {string} - Le texte normalisé.
      */
-    function normalizeTextContent(text) {
+    function normalizeText(text) {
         return text.replace(/\n/g, '<br>');
     }
 
@@ -255,7 +255,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
      */
     function insertTextWithoutSelection(element, processedText, normalizeText) {
-        element.innerHTML += processedText;
+        if (normalizeText) {
+            // Utiliser innerHTML pour le texte normalisé (avec balises HTML)
+            element.innerHTML += processedText;
+        } else {
+            // Utiliser textContent pour le texte brut
+            element.textContent += processedText;
+        }
     }
 
     /**
@@ -270,8 +276,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         range.deleteContents();
 
         if (normalizeText) {
+            // Utiliser la fonction insertNormalizedText pour le texte normalisé
             insertNormalizedText(range, processedText);
         } else {
+            // Utiliser la fonction insertPlainText pour le texte brut
             insertPlainText(range, processedText);
         }
 
@@ -289,7 +297,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertInContentEditable(element, text, options = {}) {
-        const { ensureFocus = true, normalizeText = true } = options;
+        const { ensureFocus = true, shouldNormalizeText = true } = options;
 
         if (!element || !element.isContentEditable) return false;
 
@@ -299,16 +307,16 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             let processedText = text;
-            if (normalizeText) {
-                processedText = normalizeTextContent(text);
+            if (shouldNormalizeText) {
+                processedText = normalizeText(text);
             }
 
             const selection = window.getSelection();
 
             if (selection.rangeCount > 0) {
-                insertTextWithSelection(element, selection, processedText, normalizeText);
+                insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
             } else {
-                insertTextWithoutSelection(element, processedText, normalizeText);
+                insertTextWithoutSelection(element, processedText, shouldNormalizeText);
             }
 
             const inputEvent = new Event('input', { bubbles: true, cancelable: true });
@@ -411,7 +419,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
                 return insertTextIntoInput(activeElement, newText);
             } else if (activeElement.isContentEditable) {
-                return insertInContentEditable(activeElement, newText, { ensureFocus: false, normalizeText: false });
+                return insertInContentEditable(activeElement, newText, { ensureFocus: false, shouldNormalizeText: false });
             }
             return false;
         } catch (e) {
@@ -430,6 +438,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         handleContentEditableCursor,
         restoreFocusAndSelection,
         isValidElementForInsertion,
+        isValidInputType,
+        normalizeText,
+        insertNormalizedText,
+        insertPlainText,
+        insertTextWithoutSelection,
+        insertTextWithSelection,
         insertInContentEditable,
         handleActiveElementInsertion,
         insertTextIntoInput,
