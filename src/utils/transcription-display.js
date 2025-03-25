@@ -59,7 +59,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
 
     async function showTranscription(text) {
-        if (!validateInputText(text)) {
+        if (!validateInputText(text)) { // NOSONAR - S6544: Faux positif, validateInputText est synchrone et retourne un booléen.
             return false;
         }
 

@@ -115,7 +115,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} preventSelection - Si true, place le curseur à la fin sans sélectionner
      */
     function handleContentEditableCursor(preventSelection) {
-        if (!storedActiveElement || !storedActiveElement.isContentEditable) return;
+        if (!storedActiveElement || !storedActiveElement.isContentEditable) return; // NOSONAR - S6582: La vérification avec || est idiomatique et sûre ici.
 
         try {
             const selection = window.getSelection();
@@ -331,7 +331,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function insertInContentEditable(element, text, options = {}) {
         const { ensureFocus = true, shouldNormalizeText = true } = options;
 
-        if (!element || !element.isContentEditable) return false;
+        if (!element || !element.isContentEditable) return false; // NOSONAR - S6582: La vérification avec || est idiomatique et sûre ici.
 
         try {
             if (ensureFocus && document.activeElement !== element) {

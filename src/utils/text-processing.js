@@ -332,7 +332,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         cleanText,
         rephraseText,
         translateText,
-        handleTextRephrasing,
+        handleTextRephrasing, // NOSONAR - S1874: Faux positif, cette fonction est utilisée par d'autres modules.
         handleTextTranslation,
         determineTranslationLanguages
     };

@@ -58,7 +58,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             "Erreur lors de l'accès au microphone"
         );
 
-        if (!stream || !stream.active) {
+        if (!stream || !stream.active) { // NOSONAR - S6582: La vérification avec || est idiomatique et sûre ici.
             throw new Error("Stream audio invalide ou inactif");
         }
         return stream;
