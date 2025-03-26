@@ -112,15 +112,48 @@ Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/), qui perm
 
 L'extension est composée de plusieurs fichiers JavaScript qui interagissent entre eux :
 
-*   **`manifest.json`:** Le fichier de configuration principal de l'extension. Il définit les permissions, les scripts, les ressources accessibles, etc. Il utilise la version 3 du manifeste et déclare les permissions `activeTab`, `storage`, `commands`, `scripting` et `contextMenus`. Les `web_accessible_resources` permettent l'accès aux ressources de l'extension dans les différents contextes d'exécution.
+#### Fichiers Principaux
+
+*   **`manifest.json`:** Le fichier de configuration principal de l'extension. Il définit les permissions, les scripts, les ressources accessibles, etc. Il utilise la version 3 du manifeste et déclare les permissions `activeTab`, `storage`, `commands`, `scripting` et `contextMenus`.
 *   **`background.js`:** Le service worker qui s'exécute en arrière-plan. Il gère les événements (clic sur l'icône, raccourcis clavier, menu contextuel), injecte le `content script` si nécessaire, et communique avec le `content script`.
-*   **`content.js`:** Le script qui est injecté dans les pages web. Il interagit directement avec le DOM, capture l'audio du microphone, appelle les API de transcription et de traduction, et affiche les résultats.
-*   **`src/utils/api.js`:** Contient les fonctions permettant d'interagir avec les API, notamment `transcribeAudio` pour appeler l'API Whisper d'OpenAI (transcription) et des fonctions utilitaires pour gérer le stockage.
-*   **`src/utils/translation.js`:** Contient les fonctions `translateText` et `rephraseText` pour appeler l'API GPT d'OpenAI (traduction et reformulation).
-*   **`src/utils/ui.js`:** Contient des fonctions utilitaires pour gérer l'interface utilisateur (bannière, boîte de dialogue, bouton de copie).
-*   **`src/utils/languages-shared.js` et `src/utils/languages-data.js`:** Définissent la liste centralisée des langues supportées, respectivement pour le contexte de la page web et pour le service worker.
-*   **`src/utils/i18n.js`:** Gère l'internationalisation pour l'interface utilisateur.
+*   **`content.js`:** Le script principal qui est injecté dans les pages web. Il coordonne les différents modules utilitaires et gère le flux global de l'extension.
 *   **`src/constants.js`:** Définit des constantes pour la configuration, les états, les actions, etc.
+
+#### Modules Utilitaires
+
+L'extension utilise une architecture modulaire avec plusieurs fichiers utilitaires spécialisés :
+
+##### Gestion des API et Traitement des Données
+
+*   **`src/utils/api.js`:** Contient les fonctions permettant d'interagir avec les API, notamment `transcribeAudio` pour appeler l'API Whisper d'OpenAI.
+*   **`src/utils/api-utils.js`:** Fonctions avancées pour l'interaction avec les API externes.
+*   **`src/utils/translation.js`:** Contient les fonctions `translateText` et `rephraseText` pour appeler l'API GPT d'OpenAI.
+*   **`src/utils/text-translation.js`:** Fonctions spécialisées pour la traduction et la reformulation de texte.
+*   **`src/utils/text-processing.js`:** Fonctions de traitement de texte générales.
+
+##### Interface Utilisateur et Interaction
+
+*   **`src/utils/ui.js`:** Fonctions utilitaires générales pour l'interface utilisateur.
+*   **`src/utils/banner-utils.js`:** Gère la bannière d'état, ses contrôles et le sélecteur de langue.
+*   **`src/utils/focus-utils.js`:** Gère la sauvegarde et la restauration du focus et de la sélection de texte.
+*   **`src/utils/transcription-display.js`:** Gère l'affichage des résultats de transcription.
+*   **`src/utils/error-utils.js`:** Gère l'affichage et le traitement des erreurs.
+*   **`src/styles/content.css`:** Styles CSS pour l'interface utilisateur injectée dans les pages web.
+
+##### Enregistrement et Événements
+
+*   **`src/utils/recording-utils.js`:** Gère l'enregistrement audio via le microphone et le traitement des données audio.
+*   **`src/utils/event-handlers.js`:** Contient les gestionnaires d'événements pour les interactions utilisateur.
+
+##### Internationalisation et Langues
+
+*   **`src/utils/languages.js`:** Définit les langues supportées par l'extension.
+*   **`src/utils/languages-shared.js`:** Définit la liste des langues supportées pour le contexte de la page web.
+*   **`src/utils/languages-data.js`:** Définit la liste des langues supportées pour le service worker.
+*   **`src/utils/i18n.js`:** Gère l'internationalisation pour l'interface utilisateur.
+
+##### Page d'Options
+
 *   **`src/pages/options/`:** Contient les fichiers pour la page d'options de l'extension (HTML, CSS, JavaScript).
 
 ### Processus de Transcription et Traduction

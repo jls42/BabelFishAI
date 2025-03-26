@@ -1,10 +1,10 @@
 {
     "contextMenuRephrase": {
-        "message": "선택 영역 바꾸어 쓰기",
+        "message": "선택 항목 바꾸어 쓰기",
         "description": "선택한 텍스트를 바꾸어 쓰기 위한 컨텍스트 메뉴 옵션"
     },
     "contextMenuTranslate": {
-        "message": "선택 영역 번역",
+        "message": "선택 항목 번역",
         "description": "선택한 텍스트를 번역하기 위한 컨텍스트 메뉴 옵션"
     },
     "recordingCanceled": {
@@ -20,7 +20,7 @@
         "description": "확장 프로그램 설명"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 OpenAI의 Whisper API 덕분에 음성을 매우 정확하게 텍스트로 변환합니다. Whisper API는 현재 음성 텍스트 변환 분야의 선두 주자입니다.",
+        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 현재 음성 텍스트 변환 분야의 선두 주자인 OpenAI의 Whisper API 덕분에 음성을 매우 정확하게 텍스트로 변환합니다.",
         "description": "환영 메시지"
     },
     "essentialSettingsTitle": {
@@ -40,15 +40,15 @@
         "description": "단축키 지침"
     },
     "shortcutOption1": {
-        "message": "Chrome 확장 프로그램 설정을 엽니다.",
+        "message": "Chrome 확장 프로그램 설정 열기:",
         "description": "단축키를 변경하는 옵션 1"
     },
     "shortcutOption2": {
-        "message": "또는 주소 표시줄에 다음을 입력합니다.",
+        "message": "또는 주소 표시줄에 다음을 입력하십시오.",
         "description": "단축키를 변경하는 옵션 2"
     },
     "shortcutSteps": {
-        "message": "그런 다음:<br>1. 목록에서 BabelFishAI를 찾습니다<br>2. 현재 단축키 필드를 클릭합니다<br>3. 새 키 조합을 누릅니다",
+        "message": "그런 다음:<br>1. 목록에서 BabelFishAI 찾기<br>2. 현재 단축키 필드 클릭<br>3. 새 키 조합 누르기",
         "description": "단축키를 변경하는 단계"
     },
     "optionsTitle": {
@@ -76,15 +76,15 @@
         "description": "API 키 자리 표시자"
     },
     "apiKeyInfo": {
-        "message": "API 키는 여기에서 받으세요",
-        "description": "API 키를 얻는 방법에 대한 정보"
+        "message": "API 키 받기",
+        "description": "API 키 획득에 대한 정보"
     },
     "apiKeyHelp": {
         "message": "BabelFishAI를 사용하려면 OpenAI API 키를 입력해야 합니다. 이 키는 음성 텍스트 변환 및 번역 서비스에 액세스하는 데 필요합니다.",
         "description": "API 키 도움말"
     },
     "pricingInfo": {
-        "message": "가격 정보(기본 모델: 오디오의 경우 {defaultAudioModel}, 번역의 경우 {defaultTranslationModel})는 여기에서 확인할 수 있습니다.",
+        "message": "가격 정보(기본 모델: 오디오의 경우 {defaultAudioModel}, 번역의 경우 {defaultTranslationModel})는 다음에서 확인할 수 있습니다.",
         "description": "가격 정보"
     },
     "supportProject": {
@@ -113,11 +113,11 @@
     },
     "dialogDisplayLabel": {
         "message": "대화 상자",
-        "description": "대화 상자 디스플레이 레이블"
+        "description": "대화 상자 표시 레이블"
     },
     "dialogDisplayDescription": {
         "message": "활성화하면 음성 텍스트 변환/번역된 텍스트가 플로팅 대화 상자에 나타납니다.",
-        "description": "대화 상자 디스플레이 옵션 설명"
+        "description": "대화 상자 표시 옵션 설명"
     },
     "dialogDurationLabel": {
         "message": "대화 상자 표시 시간(초):",
@@ -144,12 +144,12 @@
         "description": "시작 색상 설명"
     },
     "endColorLabel": {
-        "message": "끝 색상:",
-        "description": "끝 색상 레이블"
+        "message": "종료 색상:",
+        "description": "종료 색상 레이블"
     },
     "endColorDescription": {
-        "message": "배너 그라데이션의 끝 색상입니다.",
-        "description": "끝 색상 설명"
+        "message": "배너 그라데이션의 종료 색상입니다.",
+        "description": "종료 색상 설명"
     },
     "opacityLabel": {
         "message": "% 불투명도",
@@ -199,8 +199,12 @@
         "message": "바꾸어 쓰기 중 오류 발생",
         "description": "바꾸어 쓰기 오류 메시지"
     },
+    "bannerTranscriptionError": {
+        "message": "음성 텍스트 변환 중 오류 발생",
+        "description": "음성 텍스트 변환 중 오류가 발생하면 표시되는 오류 메시지"
+    },
     "translationExplanation": {
-        "message": "통합 AI 번역 기능을 사용하면 음성 텍스트 변환된 텍스트의 자동 번역을 얻을 수 있습니다.<br>이를 수행하려면:<br><ul><li>소스 언어: 마이크에 대고 말하는 언어를 선택합니다.</li><li>대상 언어: 텍스트를 번역할 언어를 선택합니다.</li></ul>이 설정은 번역에만 영향을 미치며 음성 텍스트 변환에는 영향을 미치지 않습니다. 자동 번역을 비활성화하면 음성 텍스트 변환된 텍스트는 마이크에 대고 말한 언어로 됩니다.",
+        "message": "통합 AI 번역 기능을 사용하면 음성 텍스트 변환된 텍스트의 자동 번역을 얻을 수 있습니다.<br>이를 수행하려면:<br><ul><li>소스 언어: 마이크에 대고 말하는 언어를 선택합니다.</li><li>대상 언어: 텍스트를 번역할 언어를 선택합니다.</li></ul>이 설정은 번역에만 영향을 미치며 음성 텍스트 변환에는 영향을 미치지 않습니다. 자동 번역을 비활성화하면 음성 텍스트 변환된 텍스트는 마이크에 대고 말한 언어로 표시됩니다.",
         "description": "번역 섹션 설명"
     },
     "expertModeTitle": {
@@ -220,7 +224,7 @@
         "description": "번역 모델 레이블"
     },
     "translationModelDescription": {
-        "message": "번역에 사용할 AI 모델을 선택합니다. `gpt-4o-mini`가 기본 모델입니다(최고의 품질/가격 비율). `gpt-4o`는 우수한 품질을 제공하지만 더 비쌉니다.",
+        "message": "번역에 사용할 AI 모델을 선택합니다. `gpt-4o-mini`가 기본 모델입니다(최고의 품질/가격 비율). `gpt-4o`는 더 높은 품질을 제공하지만 더 비쌉니다.",
         "description": "번역 모델 설명"
     },
     "audioModelLabel": {
@@ -280,16 +284,16 @@
         "description": "단축키 제목"
     },
     "authorSectionTitle": {
-        "message": "저자 정보",
-        "description": "저자 섹션 제목"
+        "message": "작성자 정보",
+        "description": "작성자 섹션 제목"
     },
     "authorName": {
-        "message": "줄리앙 LS",
-        "description": "저자 이름"
+        "message": "줄리앙 L.S.",
+        "description": "작성자 이름"
     },
     "authorRole": {
         "message": "BabelFishAI 개발자 및 제작자",
-        "description": "저자 역할"
+        "description": "작성자 역할"
     },
     "addModelPlaceholder": {
         "message": "모델 추가",
@@ -313,10 +317,10 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "GitHub 링크 텍스트"
     },
     "bannerRecording": {
-        "message": "녹음 중... (아이콘을 클릭하거나 단축키를 사용하여 중지)",
+        "message": "녹음 중... (중지하려면 아이콘을 클릭하거나 단축키를 사용하세요)",
         "description": "녹음 중 배너 메시지"
     },
     "bannerTranscribing": {
@@ -340,16 +344,16 @@
         "description": "번역 오류 메시지"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AI를 사용하려면:<br><br>1. 웹사이트(예: 웹메일 또는 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Mistral AI의 Le Chat</a> 또는 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>와 같은 즐겨찾는 AI의 채팅 사이트)로 이동합니다.<br>2. 쉽게 액세스할 수 있도록 확장 프로그램 아이콘을 고정합니다.<br>3. 녹음 시작/중지:<br>    * 확장 프로그램 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 클릭하거나 키보드 단축키를 사용합니다.<br>    * 마이크에 대고 말합니다.<br>    * 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 다시 클릭하거나 키보드 단축키를 사용합니다.<br>    * 음성 텍스트 변환은 활성 텍스트 영역 또는 대화 상자에 나타납니다.<br><br>키보드 단축키:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "BabelFish AI를 사용하려면:<br><br>1. 웹사이트로 이동합니다(예: 웹메일 또는 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> 또는 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>와 같은 즐겨찾는 AI의 채팅 사이트).<br>2. 쉽게 액세스할 수 있도록 확장 프로그램 아이콘을 고정합니다.<br>3. 녹음 시작/중지:<br>    * 확장 프로그램 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 클릭하거나 키보드 단축키를 사용합니다.<br>    * 마이크에 대고 말합니다.<br>    * 아이콘 <img src=\"../../../../images/icon32.png\" alt=\"확장 프로그램 아이콘\" width=\"32\" height=\"32\">을 다시 클릭하거나 키보드 단축키를 사용합니다.<br>    * 음성 텍스트 변환은 활성 텍스트 영역 또는 대화 상자에 나타납니다.<br><br>키보드 단축키:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "확장 프로그램 사용 지침"
     },
     "defaultWhisperApiUrl": {
         "message": "기본 URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API 기본 URL"
+        "description": "Whisper API의 기본 URL"
     },
     "defaultTranslationApiUrl": {
         "message": "기본 URL: https://api.openai.com/v1/chat/completions",
-        "description": "번역 API 기본 URL"
+        "description": "번역 API의 기본 URL"
     },
     "API_KEY_NOT_FOUND": {
         "message": "API 키가 구성되지 않았습니다. 확장 프로그램 옵션에서 구성하십시오.",
@@ -400,7 +404,7 @@
         "description": "일반 오류 메시지"
     },
     "shortcutChangeInstructions": {
-        "message": "⚙️ 확장 프로그램 > ⌨️ 키보드 단축키",
+        "message": "⚙️ 확장 프로그램 > ⌨️ 단축키",
         "description": "키보드 단축키 변경 지침"
     },
     "defaultModel": {
@@ -428,7 +432,7 @@
         "description": "복사 버튼 텍스트"
     },
     "copySuccess": {
-        "message": "텍스트가 복사되었습니다!",
+        "message": "텍스트 복사됨!",
         "description": "복사 성공 메시지"
     },
     "copyError": {
@@ -436,7 +440,7 @@
         "description": "복사 오류 메시지"
     },
     "keepOpen": {
-        "message": "계속 열어두기",
+        "message": "열어 두기",
         "description": "자동 닫기를 비활성화하는 토글 텍스트"
     },
     "autoCopyLabel": {
@@ -444,7 +448,7 @@
         "description": "자동 복사 옵션 레이블"
     },
     "autoCopyDescription": {
-        "message": "활성화되면 결과가 자동으로 클립보드에 복사되고 받아쓰기에는 대화 상자가 더 이상 나타나지 않습니다.",
+        "message": "활성화하면 결과가 자동으로 클립보드에 복사되고 음성 텍스트 변환을 위한 대화 상자가 더 이상 나타나지 않습니다.",
         "description": "자동 복사 옵션 설명"
     }
 }

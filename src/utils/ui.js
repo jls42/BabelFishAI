@@ -56,24 +56,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    /**
-     * Affiche un message de statut
-     * @param {HTMLElement} statusElement - L'élément de statut
-     * @param {string} message - Le message à afficher
-     * @param {string} type - Le type de message ('success' ou 'error')
-     */
-    function showStatus(statusElement, message, type = 'success') {
-        statusElement.textContent = message;
-        statusElement.className = `status ${type}`;
-        statusElement.style.display = 'block';
-
-        if (type === 'success') {
-            setTimeout(() => {
-                statusElement.style.display = 'none';
-                statusElement.className = 'status';
-            }, CONFIG.COPY_FEEDBACK_DURATION);
-        }
-    }
+    // La fonction showStatus locale a été supprimée car elle n'était pas utilisée.
+    // La logique d'affichage de statut est gérée par banner-utils.js via content.js.
 
     // Suppression complète des notifications sonores
 
@@ -744,15 +728,48 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return textElement;
     }
 
+    /**
+     * Cache la bannière en modifiant son style d'affichage
+     * @param {HTMLElement} banner - L'élément bannière à cacher
+     * @returns {boolean} - Indique si l'opération a réussi
+     */
+    function hideBanner(banner) {
+        try {
+            // Vérifier si la bannière existe
+            if (!banner) {
+                return false;
+            }
+
+            // Cacher la bannière en modifiant son style d'affichage
+            banner.style.display = 'none';
+
+            // Enlever le padding du body quand la bannière est cachée
+            if (document.body) {
+                document.body.style.paddingTop = '0';
+            }
+
+            return true;
+        } catch (error) {
+            console.error("Error hiding banner:", error);
+            return false;
+        }
+    }
+
+    // Note: La fonction createBannerButton a été déplacée vers banner-utils.js
+
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.ui = {
-        updateBannerColor,
-        showStatus,
-        showBanner,
         createCopyButton,
         showTextInDialog,
         createTranscriptionContainer,
-        removeTranscriptionElement
+        removeTranscriptionElement,
+        createTimerElements,
+        createToggleElements,
+        createControlsContainer,
+        setupAutoRemoval,
+        updateBannerColor,
+        hideBanner,
+        showBanner
     };
 
 })(window.BabelFishAIUtils);

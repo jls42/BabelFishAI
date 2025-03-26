@@ -9,18 +9,18 @@
     },
     "recordingCanceled": {
         "message": "Nagrywanie anulowane (klawisz Esc).",
-        "description": "Komunikat wyświetlany po anulowaniu nagrywania"
+        "description": "Komunikat wyświetlany podczas anulowania nagrywania"
     },
     "extensionName": {
         "message": "BabelFishAI by jls42.org",
         "description": "Nazwa rozszerzenia"
     },
     "extensionDescription": {
-        "message": "Przekształć swój głos w tekst dzięki transkrypcji i tłumaczeniu opartym na sztucznej inteligencji",
+        "message": "Zamień swój głos na tekst dzięki transkrypcji i tłumaczeniu opartym na sztucznej inteligencji",
         "description": "Opis rozszerzenia"
     },
     "welcomeMessage": {
-        "message": "Dziękujemy za zainstalowanie BabelFishAI, rozszerzenia, które przekształca Twój głos w tekst z wyjątkową dokładnością dzięki interfejsowi API Whisper firmy OpenAI, obecnemu liderowi w transkrypcji głosu.",
+        "message": "Dziękujemy za zainstalowanie BabelFishAI, rozszerzenia, które przekształca Twój głos w tekst z wyjątkową dokładnością dzięki interfejsowi API Whisper firmy OpenAI, obecnemu liderowi w dziedzinie transkrypcji głosu.",
         "description": "Wiadomość powitalna"
     },
     "essentialSettingsTitle": {
@@ -80,7 +80,7 @@
         "description": "Informacje o uzyskiwaniu klucza API"
     },
     "apiKeyHelp": {
-        "message": "Aby korzystać z BabelFishAI, musisz wprowadzić swój klucz API OpenAI. Ten klucz jest wymagany do uzyskania dostępu do usług transkrypcji i tłumaczenia.",
+        "message": "Aby korzystać z BabelFishAI, musisz wprowadzić swój klucz API OpenAI. Ten klucz jest niezbędny do uzyskania dostępu do usług transkrypcji i tłumaczenia.",
         "description": "Pomoc dotycząca klucza API"
     },
     "pricingInfo": {
@@ -128,7 +128,7 @@
         "description": "Opis czasu trwania okna dialogowego"
     },
     "bannerColorsLabel": {
-        "message": "Kolory banera stanu:",
+        "message": "Kolory banera statusu:",
         "description": "Etykieta kolorów banera"
     },
     "bannerColorsDescription": {
@@ -180,7 +180,7 @@
         "description": "Etykieta języka docelowego"
     },
     "enhancementTitle": {
-        "message": "Ulepszanie Tekstu AI",
+        "message": "Ulepszanie tekstu AI",
         "description": "Tytuł sekcji ulepszania tekstu"
     },
     "rephraseLabel": {
@@ -199,28 +199,32 @@
         "message": "Błąd podczas przeformułowania",
         "description": "Komunikat błędu przeformułowania"
     },
+    "bannerTranscriptionError": {
+        "message": "Błąd podczas transkrypcji",
+        "description": "Komunikat błędu wyświetlany, gdy wystąpi błąd podczas transkrypcji"
+    },
     "translationExplanation": {
         "message": "Zintegrowana funkcja tłumaczenia AI umożliwia uzyskanie automatycznego tłumaczenia transkrybowanego tekstu.<br>Aby to zrobić:<br><ul><li>Język źródłowy: wybierz język, którym mówisz do mikrofonu.</li><li>Język docelowy: wybierz język, na który chcesz przetłumaczyć tekst.</li></ul>Te ustawienia wpływają tylko na tłumaczenie, a nie na transkrypcję. Jeśli wyłączysz automatyczne tłumaczenie, transkrybowany tekst będzie w języku mówionym do mikrofonu.",
         "description": "Wyjaśnienie sekcji tłumaczenia"
     },
     "expertModeTitle": {
-        "message": "Tryb Ekspercki",
-        "description": "Tytuł trybu eksperckiego"
+        "message": "Tryb Eksperta",
+        "description": "Tytuł trybu eksperta"
     },
     "enableExpertModeLabel": {
-        "message": "Włącz tryb ekspercki",
-        "description": "Etykieta włączania trybu eksperckiego"
+        "message": "Włącz tryb eksperta",
+        "description": "Etykieta włączania trybu eksperta"
     },
     "enableExpertModeDescription": {
         "message": "Odblokowuje zaawansowane opcje konfiguracji dla doświadczonych użytkowników.",
-        "description": "Opis opcji trybu eksperckiego"
+        "description": "Opis opcji trybu eksperta"
     },
     "translationModelLabel": {
         "message": "Model tłumaczenia:",
         "description": "Etykieta modelu tłumaczenia"
     },
     "translationModelDescription": {
-        "message": "Wybierz model AI używany do tłumaczenia. `gpt-4o-mini` to model domyślny (najlepszy stosunek jakości do ceny). `gpt-4o` oferuje wyższą jakość, ale jest droższy.",
+        "message": "Wybierz model AI używany do tłumaczenia. `gpt-4o-mini` jest modelem domyślnym (najlepszy stosunek jakości do ceny). `gpt-4o` oferuje wyższą jakość, ale jest droższy.",
         "description": "Opis modelu tłumaczenia"
     },
     "audioModelLabel": {
@@ -228,7 +232,7 @@
         "description": "Etykieta modelu audio"
     },
     "audioModelDescription": {
-        "message": "Wybierz model AI używany do transkrypcji audio. `whisper-1` to model domyślny.",
+        "message": "Wybierz model AI używany do transkrypcji audio. `whisper-1` jest modelem domyślnym.",
         "description": "Opis modelu audio"
     },
     "whisperApiUrlLabel": {
@@ -249,11 +253,11 @@
     },
     "forcedDialogDomainsLabel": {
         "message": "Domeny z wymuszonym oknem dialogowym:",
-        "description": "Etykieta domen wymuszonych"
+        "description": "Etykieta wymuszonych domen"
     },
     "forcedDialogDomainsDescription": {
-        "message": "Lista witryn internetowych, na których transkrypcja *zawsze* pojawi się w oknie dialogowym, nawet jeśli wybrano opcję „Aktywny obszar”.",
-        "description": "Opis domen wymuszonych"
+        "message": "Lista stron internetowych, na których transkrypcja *zawsze* pojawi się w oknie dialogowym, nawet jeśli wybrano opcję „Aktywny obszar”.",
+        "description": "Opis wymuszonych domen"
     },
     "addDomainPlaceholder": {
         "message": "Przykład: chat.google.com",
@@ -268,8 +272,8 @@
         "description": "Opis dodawania domeny"
     },
     "forcedDialogInfo": {
-        "message": "W tych domenach transkrypcja zawsze pojawi się w oknie dialogowym",
-        "description": "Informacje o domenach wymuszonych"
+        "message": "Na tych domenach transkrypcja zawsze pojawi się w oknie dialogowym",
+        "description": "Informacje o wymuszonych domenach"
     },
     "saveButton": {
         "message": "Zapisz",
@@ -284,7 +288,7 @@
         "description": "Tytuł sekcji autora"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "Julien L.S.",
         "description": "Imię i nazwisko autora"
     },
     "authorRole": {
@@ -313,7 +317,7 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Tekst linku GitHub"
     },
     "bannerRecording": {
         "message": "Trwa nagrywanie... (Kliknij ikonę lub użyj skrótu, aby zatrzymać)",
@@ -340,7 +344,7 @@
         "description": "Komunikat błędu tłumaczenia"
     },
     "useBabelFishInstructions": {
-        "message": "Aby korzystać z BabelFish AI:<br><br>1. Przejdź do strony internetowej (na przykład swojej poczty internetowej lub strony czatu swojego ulubionego AI, takiej jak <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat od Mistral AI</a> lub <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Przypnij ikonę rozszerzenia, aby uzyskać łatwy dostęp.<br>3. Rozpocznij/zatrzymaj nagrywanie:<br>    * Kliknij ikonę rozszerzenia <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Mów do mikrofonu.<br>    * Kliknij ponownie ikonę <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Transkrypcja pojawi się w aktywnym obszarze tekstowym lub w oknie dialogowym.<br><br>Skróty klawiaturowe:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "Aby korzystać z BabelFish AI:<br><br>1. Przejdź do strony internetowej (na przykład swojej poczty internetowej lub strony czatu swojego ulubionego AI, takiej jak <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> lub <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Przypnij ikonę rozszerzenia, aby ułatwić dostęp.<br>3. Rozpocznij/zatrzymaj nagrywanie:<br>    * Kliknij ikonę rozszerzenia <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Mów do mikrofonu.<br>    * Kliknij ponownie ikonę <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Transkrypcja pojawi się w aktywnym obszarze tekstowym lub w oknie dialogowym.<br><br>Skróty klawiaturowe:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrukcje korzystania z rozszerzenia"
     },
     "defaultWhisperApiUrl": {
@@ -364,8 +368,8 @@
         "description": "Komunikat błędu: dostęp do mikrofonu"
     },
     "API_ERROR": {
-        "message": "Błąd podczas wywoływania interfejsu API",
-        "description": "Komunikat błędu: ogólne wywołanie interfejsu API"
+        "message": "Błąd podczas wywołania API",
+        "description": "Komunikat błędu: ogólne wywołanie API"
     },
     "TRANSCRIPTION_ERROR": {
         "message": "Błąd podczas transkrypcji",
@@ -444,7 +448,7 @@
         "description": "Etykieta opcji automatycznego kopiowania"
     },
     "autoCopyDescription": {
-        "message": "Jeśli włączone, wynik zostanie automatycznie skopiowany do schowka, a okno dialogowe nie będzie już wyświetlane dla transkrypcji.",
+        "message": "Jeśli włączone, wynik zostanie automatycznie skopiowany do schowka, a okno dialogowe nie pojawi się już w przypadku transkrypcji.",
         "description": "Opis opcji automatycznego kopiowania"
     }
 }

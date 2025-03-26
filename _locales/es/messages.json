@@ -16,7 +16,7 @@
         "description": "Nombre de la extensión"
     },
     "extensionDescription": {
-        "message": "Transforma tu voz en texto con transcripción y traducción impulsadas por IA",
+        "message": "Convierte tu voz en texto con la transcripción y traducción impulsadas por IA",
         "description": "Descripción de la extensión"
     },
     "welcomeMessage": {
@@ -32,7 +32,7 @@
         "description": "Título de la sección de ajustes avanzados"
     },
     "apiKeyConfigTitle": {
-        "message": "Clave API de OpenAI",
+        "message": "Clave API OpenAI",
         "description": "Título de la sección de configuración de la clave API"
     },
     "shortcutInstructions": {
@@ -72,7 +72,7 @@
         "description": "Mensaje de confirmación de guardado"
     },
     "apiKeyPlaceholder": {
-        "message": "Tu clave API de OpenAI (sk-...)",
+        "message": "Tu clave API OpenAI (sk-...)",
         "description": "Marcador de posición para la clave API"
     },
     "apiKeyInfo": {
@@ -80,7 +80,7 @@
         "description": "Información sobre la obtención de la clave API"
     },
     "apiKeyHelp": {
-        "message": "Para usar BabelFishAI, debes ingresar tu clave API de OpenAI. Esta clave es necesaria para acceder a los servicios de transcripción y traducción.",
+        "message": "Para usar BabelFishAI, debes ingresar tu clave API OpenAI. Esta clave es necesaria para acceder a los servicios de transcripción y traducción.",
         "description": "Ayuda para la clave API"
     },
     "pricingInfo": {
@@ -104,7 +104,7 @@
         "description": "Título de los ajustes de visualización"
     },
     "activeDisplayLabel": {
-        "message": "Área activa (entrada de teclado)",
+        "message": "Zona activa (entrada de teclado)",
         "description": "Etiqueta para la visualización activa"
     },
     "activeDisplayDescription": {
@@ -168,8 +168,8 @@
         "description": "Opción de idioma automático"
     },
     "enableTranslationLabel": {
-        "message": "Habilitar la traducción automática",
-        "description": "Etiqueta para habilitar la traducción"
+        "message": "Activar la traducción automática",
+        "description": "Etiqueta para activar la traducción"
     },
     "sourceLanguageLabel": {
         "message": "Idioma de origen:",
@@ -180,11 +180,11 @@
         "description": "Etiqueta para el idioma de destino"
     },
     "enhancementTitle": {
-        "message": "Mejora de Texto IA",
+        "message": "Mejora de texto IA",
         "description": "Título de la sección de mejora de texto"
     },
     "rephraseLabel": {
-        "message": "Habilitar la reformulación automática",
+        "message": "Activar la reformulación automática",
         "description": "Etiqueta para la opción de reformulación"
     },
     "rephraseDescription": {
@@ -192,15 +192,19 @@
         "description": "Descripción de la opción de reformulación"
     },
     "bannerRephrasing": {
-        "message": "Reformulando en curso...",
+        "message": "Reformulación en curso...",
         "description": "Mensaje del banner durante la reformulación"
     },
     "bannerRephrasingError": {
         "message": "Error durante la reformulación",
         "description": "Mensaje de error para la reformulación"
     },
+    "bannerTranscriptionError": {
+        "message": "Error durante la transcripción",
+        "description": "Mensaje de error que se muestra cuando ocurre un error durante la transcripción"
+    },
     "translationExplanation": {
-        "message": "La funcionalidad de traducción IA integrada te permite obtener una traducción automática de tu texto transcrito.<br>Para ello:<br><ul><li>Idioma de origen: selecciona el idioma que hablas en el micrófono.</li><li>Idioma de destino: elige el idioma al que quieres que se traduzca tu texto.</li></ul>Estos parámetros solo afectan a la traducción, no a la transcripción. Si desactivas la traducción automática, tu texto transcrito estará en el idioma hablado en el micrófono.",
+        "message": "La función de traducción IA integrada te permite obtener una traducción automática de tu texto transcrito.<br>Para ello:<br><ul><li>Idioma de origen: selecciona el idioma que hablas en el micrófono.</li><li>Idioma de destino: elige el idioma al que quieres que se traduzca tu texto.</li></ul>Estos ajustes solo afectan a la traducción, no a la transcripción. Si desactivas la traducción automática, tu texto transcrito estará en el idioma hablado en el micrófono.",
         "description": "Explicación de la sección de traducción"
     },
     "expertModeTitle": {
@@ -208,8 +212,8 @@
         "description": "Título del modo experto"
     },
     "enableExpertModeLabel": {
-        "message": "Habilitar el modo experto",
-        "description": "Etiqueta para habilitar el modo experto"
+        "message": "Activar el modo experto",
+        "description": "Etiqueta para activar el modo experto"
     },
     "enableExpertModeDescription": {
         "message": "Desbloquea opciones de configuración avanzadas para usuarios experimentados.",
@@ -252,7 +256,7 @@
         "description": "Etiqueta para los dominios forzados"
     },
     "forcedDialogDomainsDescription": {
-        "message": "Lista de sitios web donde la transcripción aparecerá *siempre* en un cuadro de diálogo, incluso si la opción 'Área activa' está seleccionada.",
+        "message": "Lista de sitios web donde la transcripción aparecerá *siempre* en un cuadro de diálogo, incluso si la opción 'Zona activa' está seleccionada.",
         "description": "Descripción de los dominios forzados"
     },
     "addDomainPlaceholder": {
@@ -284,7 +288,7 @@
         "description": "Título de la sección del autor"
     },
     "authorName": {
-        "message": "Julien LS",
+        "message": "Julien L.S.",
         "description": "Nombre del autor"
     },
     "authorRole": {
@@ -305,7 +309,7 @@
     },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
-        "description": "Label for the NoLog option"
+        "description": "Etiqueta para la opción NoLog"
     },
     "noLogDescription": {
         "message": "Si está marcado, el servicio LiteLLM no conservará ningún dato.",
@@ -313,22 +317,22 @@
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "Texto del enlace de GitHub"
     },
     "bannerRecording": {
         "message": "Grabación en curso... (Haz clic en el icono o usa el atajo para detener)",
         "description": "Mensaje del banner durante la grabación"
     },
     "bannerTranscribing": {
-        "message": "Transcribiendo en curso...",
+        "message": "Transcribiendo...",
         "description": "Mensaje del banner durante la transcripción"
     },
     "bannerTranslating": {
-        "message": "Traduciendo en curso...",
+        "message": "Traduciendo...",
         "description": "Mensaje del banner durante la traducción"
     },
     "bannerProcessing": {
-        "message": "Procesando en curso...",
+        "message": "Procesando...",
         "description": "Mensaje del banner durante el procesamiento del texto"
     },
     "bannerMicAccessError": {
@@ -345,7 +349,7 @@
     },
     "defaultWhisperApiUrl": {
         "message": "URL predeterminada: https://api.openai.com/v1/audio/transcriptions",
-        "description": "URL predeterminada para la API Whisper"
+        "description": "URL predeterminada para la API de Whisper"
     },
     "defaultTranslationApiUrl": {
         "message": "URL predeterminada: https://api.openai.com/v1/chat/completions",
@@ -364,7 +368,7 @@
         "description": "Mensaje de error: acceso al micrófono"
     },
     "API_ERROR": {
-        "message": "Error al llamar a la API",
+        "message": "Error durante la llamada a la API",
         "description": "Mensaje de error: llamada a la API general"
     },
     "TRANSCRIPTION_ERROR": {
@@ -381,7 +385,7 @@
     },
     "CONTENT_SCRIPT_INJECTION_ERROR": {
         "message": "Error al inyectar el script de contenido",
-        "description": "Mensaje de error: inyección del script"
+        "description": "Mensaje de error: inyección de script"
     },
     "NO_ACTIVE_TAB": {
         "message": "No se encontró ninguna pestaña activa",
@@ -441,10 +445,10 @@
     },
     "autoCopyLabel": {
         "message": "Copia automática al portapapeles",
-        "description": "Etiqueta para la opción de copia automática"
+        "description": "Etiqueta de la opción de copia automática"
     },
     "autoCopyDescription": {
-        "message": "Si está activado, el resultado se copiará automáticamente al portapapeles y el cuadro de diálogo ya no aparecerá para la transcripción.",
+        "message": "Si está activado, el resultado se copiará automáticamente en el portapapeles y el cuadro de diálogo ya no aparecerá para la transcripción.",
         "description": "Descripción de la opción de copia automática"
     }
 }

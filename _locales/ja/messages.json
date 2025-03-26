@@ -4,7 +4,7 @@
         "description": "選択したテキストを言い換えるためのコンテキストメニューオプション"
     },
     "contextMenuTranslate": {
-        "message": "選択範囲を翻訳する",
+        "message": "選択範囲を翻訳",
         "description": "選択したテキストを翻訳するためのコンテキストメニューオプション"
     },
     "recordingCanceled": {
@@ -16,7 +16,7 @@
         "description": "拡張機能名"
     },
     "extensionDescription": {
-        "message": "AIを活用した文字起こしと翻訳で、あなたの声をテキストに変換します",
+        "message": "AIを活用した文字起こしと翻訳で、あなたの声をテキストに変換",
         "description": "拡張機能の説明"
     },
     "welcomeMessage": {
@@ -48,7 +48,7 @@
         "description": "ショートカットを変更するオプション2"
     },
     "shortcutSteps": {
-        "message": "次に:<br>1. リストでBabelFishAIを見つけます<br>2. 現在のショートカットフィールドをクリックします<br>3. 新しいキーの組み合わせを押します",
+        "message": "次に:<br>1. リストからBabelFishAIを見つけます<br>2. 現在のショートカットフィールドをクリックします<br>3. 新しいキーの組み合わせを押します",
         "description": "ショートカットを変更する手順"
     },
     "optionsTitle": {
@@ -60,7 +60,7 @@
         "description": "言語セクションのタイトル"
     },
     "selectLanguageLabel": {
-        "message": "言語を選択:",
+        "message": "言語を選択してください:",
         "description": "言語セレクターのラベル"
     },
     "languageChanged": {
@@ -76,7 +76,7 @@
         "description": "APIキーのプレースホルダー"
     },
     "apiKeyInfo": {
-        "message": "APIキーはこちらで取得してください",
+        "message": "APIキーを取得する",
         "description": "APIキーの取得に関する情報"
     },
     "apiKeyHelp": {
@@ -84,8 +84,8 @@
         "description": "APIキーのヘルプ"
     },
     "pricingInfo": {
-        "message": "価格設定の詳細（デフォルトモデル：音声の場合は{defaultAudioModel}、翻訳の場合は{defaultTranslationModel}）はこちらで確認できます",
-        "description": "価格情報"
+        "message": "価格設定の詳細（デフォルトモデル：オーディオの場合は{defaultAudioModel}、翻訳の場合は{defaultTranslationModel}）は、こちらをご覧ください。",
+        "description": "価格設定に関する情報"
     },
     "supportProject": {
         "message": "PayPalでプロジェクトをサポートする",
@@ -113,11 +113,11 @@
     },
     "dialogDisplayLabel": {
         "message": "ダイアログボックス",
-        "description": "ダイアログ表示のラベル"
+        "description": "ダイアログボックス表示のラベル"
     },
     "dialogDisplayDescription": {
         "message": "有効にすると、文字起こし/翻訳されたテキストがフローティングダイアログボックスに表示されます。",
-        "description": "ダイアログ表示オプションの説明"
+        "description": "ダイアログボックス表示オプションの説明"
     },
     "dialogDurationLabel": {
         "message": "ダイアログ表示時間（秒）：",
@@ -129,11 +129,11 @@
     },
     "bannerColorsLabel": {
         "message": "ステータスバナーの色：",
-        "description": "バナー色のラベル"
+        "description": "バナーの色のラベル"
     },
     "bannerColorsDescription": {
         "message": "録音、文字起こし、翻訳中に画面下部に表示されるバナーの色。",
-        "description": "バナー色の説明"
+        "description": "バナーの色の説明"
     },
     "startColorLabel": {
         "message": "開始色：",
@@ -188,7 +188,7 @@
         "description": "言い換えオプションのラベル"
     },
     "rephraseDescription": {
-        "message": "有効にすると、文字起こしされたテキストは、明瞭さと流暢さを向上させるために言い換えられます。",
+        "message": "有効にすると、文字起こしされたテキストは、その明瞭さと流暢さを向上させるために言い換えられます。",
         "description": "言い換えオプションの説明"
     },
     "bannerRephrasing": {
@@ -198,6 +198,10 @@
     "bannerRephrasingError": {
         "message": "言い換え中にエラーが発生しました",
         "description": "言い換えのエラーメッセージ"
+    },
+    "bannerTranscriptionError": {
+        "message": "文字起こし中にエラーが発生しました",
+        "description": "文字起こし中にエラーが発生した場合に表示されるエラーメッセージ"
     },
     "translationExplanation": {
         "message": "統合されたAI翻訳機能を使用すると、文字起こしされたテキストの自動翻訳を取得できます。<br>これを行うには：<br><ul><li>ソース言語：マイクに向かって話す言語を選択します。</li><li>ターゲット言語：テキストを翻訳する言語を選択します。</li></ul>これらの設定は翻訳にのみ影響し、文字起こしには影響しません。自動翻訳を無効にすると、文字起こしされたテキストはマイクに向かって話された言語になります。",
@@ -220,7 +224,7 @@
         "description": "翻訳モデルのラベル"
     },
     "translationModelDescription": {
-        "message": "翻訳に使用するAIモデルを選択します。`gpt-4o-mini`がデフォルトモデルです（最高の品質/価格比）。`gpt-4o`は優れた品質を提供しますが、より高価です。",
+        "message": "翻訳に使用するAIモデルを選択します。`gpt-4o-mini`がデフォルトモデルです（最高の品質/価格比）。`gpt-4o`はより高品質ですが、より高価です。",
         "description": "翻訳モデルの説明"
     },
     "audioModelLabel": {
@@ -284,7 +288,7 @@
         "description": "著者セクションのタイトル"
     },
     "authorName": {
-        "message": "ジュリアンLS",
+        "message": "ジュリアン L.S.",
         "description": "著者の名前"
     },
     "authorRole": {
@@ -304,19 +308,19 @@
         "description": "モデル追加の説明"
     },
     "noLogLabel": {
-        "message": "NoLog (LiteLLM のみ)",
-        "description": "NoLog オプションのラベル"
+        "message": "NoLog（LiteLLMのみ）",
+        "description": "NoLogオプションのラベル"
     },
     "noLogDescription": {
-        "message": "チェックした場合、LiteLLM サービスによってデータは保持されません。",
-        "description": "NoLog オプションの説明"
+        "message": "オンにすると、LiteLLMサービスによってデータは保持されません。",
+        "description": "NoLogオプションの説明"
     },
     "githubLink": {
         "message": "GitHub",
-        "description": "GitHub link text"
+        "description": "GitHubリンクテキスト"
     },
     "bannerRecording": {
-        "message": "録音中...（アイコンをクリックするか、ショートカットを使用して停止します）",
+        "message": "録音中...（アイコンをクリックするか、ショートカットを使用して停止）",
         "description": "録音中のバナーメッセージ"
     },
     "bannerTranscribing": {
@@ -340,15 +344,15 @@
         "description": "翻訳のエラーメッセージ"
     },
     "useBabelFishInstructions": {
-        "message": "BabelFish AIを使用するには：<br><br>1. ウェブサイトにアクセスします（たとえば、ウェブメールやお気に入りのAIのチャットサイト、<a href=\"https://chat.mistral.ai/\" target=\"_blank\">ミストラルAIのLe Chat</a>や<a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>など）。<br>2. 簡単にアクセスできるように、拡張機能アイコンをピン留めします。<br>3. 録音を開始/停止します：<br>    * 拡張機能アイコン<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">をクリックするか、キーボードショートカットを使用します。<br>    * マイクに向かって話します。<br>    * アイコン<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">をもう一度クリックするか、キーボードショートカットを使用します。<br>    * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット：<br><ul><li>Windows： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
+        "message": "BabelFish AIを使用するには：<br><br>1. ウェブサイトにアクセスします（たとえば、ウェブメールやお気に入りのAIのチャットサイトなど、<a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a>や<a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>など）。<br>2. 簡単にアクセスできるように、拡張機能アイコンをピン留めします。<br>3. 録音を開始/停止します：<br>    * 拡張機能アイコン<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">をクリックするか、キーボードショートカットを使用します。<br>    * マイクに向かって話します。<br>    * アイコン<img src=\"../../../../images/icon32.png\" alt=\"拡張機能アイコン\" width=\"32\" height=\"32\">をもう一度クリックするか、キーボードショートカットを使用します。<br>    * 文字起こしは、アクティブなテキスト領域またはダイアログボックスに表示されます。<br><br>キーボードショートカット：<br><ul><li>Windows： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "拡張機能の使用方法"
     },
     "defaultWhisperApiUrl": {
-        "message": "デフォルトURL：https://api.openai.com/v1/audio/transcriptions",
+        "message": "デフォルトのURL：https://api.openai.com/v1/audio/transcriptions",
         "description": "Whisper APIのデフォルトURL"
     },
     "defaultTranslationApiUrl": {
-        "message": "デフォルトURL：https://api.openai.com/v1/chat/completions",
+        "message": "デフォルトのURL：https://api.openai.com/v1/chat/completions",
         "description": "翻訳APIのデフォルトURL"
     },
     "API_KEY_NOT_FOUND": {
@@ -364,7 +368,7 @@
         "description": "エラーメッセージ：マイクアクセス"
     },
     "API_ERROR": {
-        "message": "APIの呼び出し中にエラーが発生しました",
+        "message": "API呼び出し中にエラーが発生しました",
         "description": "エラーメッセージ：一般的なAPI呼び出し"
     },
     "TRANSCRIPTION_ERROR": {
@@ -440,11 +444,11 @@
         "description": "自動クローズを無効にするトグルのテキスト"
     },
     "autoCopyLabel": {
-        "message": "クリップボードに自動コピー",
+        "message": "クリップボードへの自動コピー",
         "description": "自動コピーオプションのラベル"
     },
     "autoCopyDescription": {
-        "message": "有効にすると、結果は自動的にクリップボードにコピーされ、文字起こしにはダイアログボックスが表示されなくなります。",
+        "message": "有効にすると、結果は自動的にクリップボードにコピーされ、文字起こしのためのダイアログボックスは表示されなくなります。",
         "description": "自動コピーオプションの説明"
     }
 }

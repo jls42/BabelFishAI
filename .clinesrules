@@ -1,0 +1,116 @@
+# Règles et notes pour le développement de l'extension BabelFishAI
+
+## Contexte du projet
+BabelFishAI est une extension Chrome pour la transcription vocale et la traduction avec IA. Elle utilise l'API Whisper d'OpenAI pour la transcription et peut également traduire le texte transcrit. L'extension supporte 15 langues différentes (ar, de, en, es, fr, hi, it, ja, ko, nl, pl, pt, ro, sv, zh).
+
+## Pourquoi ce fichier ?
+Ce fichier permet à l'outil de codage de maintenir une cohérence et des règles claires pour l'extension BabelFishAI. Il indique les règles spécifiques que l'extension doit respecter pour assurer une évolution structurée et sécurisée.
+
+## Quand et comment le mettre à jour ?
+L'outil de codage doit automatiquement actualiser ce fichier chaque fois qu'une modification du projet rend ces règles obsolètes ou incohérentes avec la structure existante.
+
+- Vérifier la compatibilité avec `manifest.json` et les scripts de l'extension (`background.js`, `content.js`).
+- Mettre à jour les règles de sécurité (API keys, URL d'API sensibles).
+- Assurer l'intégrité des fichiers d'internationalisation (`_locales`).
+
+## Structure du projet et refactorisation
+Le projet est en cours de refactorisation pour réduire la taille du fichier content.js qui est devenu trop volumineux (plus de 2000 lignes). Nous adoptons une approche progressive :
+
+1. Identifier les groupes logiques de fonctions dans content.js
+2. Créer des fichiers utilitaires séparés pour chaque groupe
+3. Migrer une fonction à la fois et tester après chaque migration
+4. Mettre à jour les références dans content.js pour utiliser les fonctions importées
+
+### Modules utilitaires identifiés
+- ✅ Gestion du focus et de la sélection (`focus-utils.js`) - Créé
+- ✅ Gestion des erreurs (`error-utils.js`) - Créé
+- ✅ Enregistrement audio (`recording-utils.js`) - Créé et partiellement migré
+- ✅ Traitement du texte (`text-processing.js`) - Créé et partiellement migré
+- ✅ Interface utilisateur (`ui.js`) - Existant et mis à jour
+- ✅ Gestion des événements (`event-handlers.js`) - Créé et partiellement migré
+- ✅ Gestion de la bannière (`banner-utils.js`) - Créé et partiellement migré
+
+## Règles de développement
+
+### Règles générales
+1. La langue principale du projet est le français pour les commentaires et les messages utilisateur.
+2. Toujours tester après chaque migration de fonction pour s'assurer que tout fonctionne correctement.
+3. Ne jamais exposer directement la clé API OpenAI ni les URLs sensibles.
+4. Mettre à jour les fichiers de traduction FR (`messages.json`) lorsque de nouvelles fonctionnalités sont introduites ou modifiées. Les autres langues c'est dans un second temps quand je le demande.
+5. Vérifier régulièrement l'intégration entre les fichiers JavaScript (`api.js`, `translation.js`, `ui.js`) pour maintenir la robustesse du code.
+6. Respecter le mode expert et les options avancées telles que décrites dans la documentation utilisateur.
+7. Toutes les évolutions de fonctionnalités doivent être documentées dans le `README.md`.
+
+### Règles spécifiques à la refactorisation
+1. **Approche progressive** : Ne pas essayer de tout refactoriser en une seule fois.
+2. **Espaces de noms** : Utiliser l'espace de noms global `window.BabelFishAIUtils` pour les utilitaires.
+3. **Exposition des fonctions** : Exposer les fonctions dans l'espace de noms approprié pour qu'elles soient accessibles depuis d'autres modules.
+4. **Compatibilité** : Maintenir la compatibilité avec le code existant pendant la transition.
+5. **Éviter les duplications** : S'assurer qu'il n'y a pas de code dupliqué ni de variables inutilisées.
+
+### Règles CSS et interface utilisateur
+1. **Cohérence des classes CSS** : Utiliser les mêmes noms de classes CSS dans tout le projet.
+   - Boutons de contrôle dans la bannière : `whisper-toggle-button` (pas `whisper-control-button`)
+   - Icônes de bouton : `whisper-button-icon`
+   - Texte de bouton : `whisper-button-text`
+   - Conteneur de langue : `whisper-language-container`
+2. **Styles intégrés vs externes** : Privilégier les styles CSS externes (dans `content.css`) plutôt que les styles intégrés dans les fichiers JavaScript.
+3. **Attributs data** : Utiliser l'attribut `data-active` pour gérer l'état des boutons (valeurs : `"true"` ou `"false"`).
+
+### Communication entre modules
+- Les modules doivent communiquer via les espaces de noms globaux (`window.BabelFishAI` et `window.BabelFishAIUtils`).
+- Exemple : `window.BabelFishAIUtils.recording.startRecording()` pour appeler une fonction du module d'enregistrement.
+
+## Règles de rigueur pour la refactorisation et la migration de code
+- PRIMORDIAL : Ne JAMAIS modifier la logique métier existante lors de la migration de code.
+- Lors de la migration de fonctions vers de nouveaux fichiers, conserver EXACTEMENT les mêmes prompts, paramètres et comportements.
+- Ne pas inventer ou ajouter de nouveaux paramètres ou options qui n'existaient pas dans le code original.
+- Toujours vérifier le code original avant de migrer une fonction pour s'assurer de préserver tous les cas particuliers et conditions.
+- Maintenir les messages d'erreur exacts et les constantes utilisées dans le code original.
+- Préserver la structure des appels API, y compris les paramètres optionnels, les timeouts et les mécanismes de retry.
+- Conserver les commentaires explicatifs du code original pour maintenir la documentation interne.
+- Tester rigoureusement chaque fonction migrée pour s'assurer qu'elle fonctionne exactement comme l'originale.
+- Ne pas simplifier ou "améliorer" le code existant sans demande explicite.
+
+## Procédure détaillée pour la migration de code
+1. **Analyse préliminaire** : Avant de migrer une fonction, l'examiner en détail pour comprendre ses dépendances, ses variables globales et son contexte d'utilisation.
+2. **Identification des dépendances** : Identifier toutes les variables, constantes et fonctions auxiliaires utilisées par la fonction à migrer.
+3. **Extraction progressive** : Migrer une fonction à la fois, puis vérifier que les références dans content.js sont correctement mises à jour.
+4. **Vérification des appels** : S'assurer que les appels à la fonction migrée utilisent exactement les mêmes paramètres et dans le même ordre que dans le code original.
+5. **Gestion des espaces de noms** : Utiliser la structure d'espace de noms window.BabelFishAIUtils pour exposer les fonctions migrées de manière cohérente.
+6. **Préservation des commentaires** : Conserver tous les commentaires explicatifs du code original, y compris les commentaires JSDoc.
+7. **Vérification des constantes** : S'assurer que toutes les constantes utilisées dans les fonctions migrées sont disponibles dans le nouveau contexte.
+8. **Test d'intégration** : Après chaque migration, vérifier que l'intégration avec le reste du code fonctionne correctement.
+
+## Erreurs à éviter absolument
+- Ne pas modifier les prompts utilisés pour les appels API (OpenAI, Whisper, etc.).
+- Ne pas changer la structure des objets de configuration ou des paramètres.
+- Ne pas altérer la gestion des erreurs ou les messages d'erreur.
+- Ne pas supprimer ou modifier les commentaires explicatifs.
+- Ne pas ajouter de nouvelles fonctionnalités ou optimisations non demandées.
+- Ne pas changer les noms de fonctions ou de variables pour les "améliorer".
+- Ne pas réorganiser l'ordre des paramètres des fonctions.
+- Ne pas modifier le comportement des animations et transitions UI (notamment pour le sélecteur de langue).
+- Ne pas altérer la logique d'affichage/masquage des éléments UI comme le conteneur de langue.
+
+## Problèmes connus et solutions
+1. **Problème de bandeau persistant** : Lors de l'annulation d'un enregistrement, le bandeau ne disparaissait pas correctement.
+   - Solution : Utiliser directement la fonction `hideBanner` et réduire le délai d'attente.
+
+2. **Duplication de code** : Éviter de définir les mêmes fonctions à plusieurs endroits.
+   - Solution : Centraliser l'exposition des fonctions dans un seul bloc par module.
+
+## Prochaines étapes
+1. Continuer la migration des fonctions de traitement de texte vers `text-processing.js`.
+2. Continuer la migration des fonctions d'interface utilisateur vers `ui.js`.
+3. Continuer la migration des gestionnaires d'événements vers `event-handlers.js`.
+4. Identifier d'autres groupes logiques de fonctions qui pourraient être migrés vers de nouveaux fichiers utilitaires.
+5. S'assurer que les fichiers utilitaires ne deviennent pas trop volumineux, créer de nouveaux fichiers si nécessaire.
+
+## Notes pour les développeurs
+- Consulter le fichier `manifest.json` pour comprendre la structure de l'extension.
+- Utiliser les outils de débogage de Chrome pour tester les modifications.
+- Vérifier les logs dans la console pour identifier les problèmes potentiels.
+- La refactorisation vise à améliorer la maintenabilité sans changer le comportement de l'extension.
+
+Ce fichier est essentiel pour maintenir une gestion claire, sécurisée et à jour de l'extension BabelFishAI.
