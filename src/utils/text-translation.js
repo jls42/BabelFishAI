@@ -45,10 +45,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser la fonction callApi de api-utils.js
             const response = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey: apiKey,
+                apiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                errorType: errorType,
+                errorType,
                 retryOnFail: true,
                 timeout: 20000 // Timeout augmenté
             });

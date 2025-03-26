@@ -182,7 +182,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser l'API pour traduire le texte
             const response = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey: apiKey,
+                apiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: window.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,

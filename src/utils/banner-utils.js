@@ -37,8 +37,7 @@
         let buttonText = defaultText;
 
         // Essayer d'utiliser la traduction si disponible
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
-            typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
+        if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
             const translated = window.BabelFishAIUtils.i18n.getMessage(i18nKey);
             if (translated) buttonText = translated;
         }
@@ -80,8 +79,7 @@
 
         // Mettre à jour le libellé avec i18n
         const updateLabel = () => {
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
-                typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
+            if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
                 const translated = window.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
                 if (translated) label.textContent = translated;
             }
@@ -171,10 +169,10 @@
     function populateLanguageFromStorage(select) {
         try {
             // Essayer d'abord de récupérer les langues depuis le stockage
-            chrome.storage.local.get(['availableLanguages'], (result) => {
-                if (result.availableLanguages && Array.isArray(result.availableLanguages)) {
+            chrome.storage.local.get(['availableLanguages'], (storageResult) => {
+                if (storageResult.availableLanguages && Array.isArray(storageResult.availableLanguages)) {
                     // Formater les langues pour le sélecteur
-                    const options = result.availableLanguages.map(lang => ({
+                    const options = storageResult.availableLanguages.map(lang => ({
                         code: lang.code,
                         name: lang.name || lang.code.toUpperCase()
                     }));
@@ -252,8 +250,6 @@
             // Mettre à jour l'état visuel
             rephraseButton.setAttribute('data-active', String(newState));
             rephraseButton.setAttribute('aria-checked', String(newState));
-
-            console.log(`Reformulation ${newState ? "activée" : "désactivée"} depuis le bandeau`);
         });
 
         // Événements pour le bouton de traduction
@@ -288,8 +284,6 @@
                 languageContainer.style.maxHeight = '0';
                 languageContainer.style.overflow = 'hidden';
             }
-
-            console.log(`Traduction ${newState ? "activée" : "désactivée"} depuis le bandeau`);
         });
 
         // Événements pour le sélecteur de langue
@@ -298,8 +292,6 @@
             chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
                 setTimeout(() => window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true), 300);
             });
-
-            console.log(`Langue cible changée en ${languageSelect.value} depuis le bandeau`);
         });
 
         // Gestion de la perte de focus du sélecteur de langue
@@ -367,7 +359,7 @@
             // Utiliser une valeur par défaut si la traduction n'est pas disponible
             textContainer.textContent = "Initialisation...";
             // Essayer d'utiliser la traduction si disponible
-            if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n && typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
+            if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
                 const translated = window.BabelFishAIUtils.i18n.getMessage("bannerRecording");
                 if (translated) textContainer.textContent = translated;
             }
@@ -432,8 +424,7 @@
         };
 
         // Vérifier si les traductions sont déjà chargées
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.i18n &&
-            typeof window.BabelFishAIUtils.i18n.getMessage === 'function') {
+        if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
             // Si les traductions sont déjà chargées, initialiser immédiatement
             setupBannerContent();
         } else {
@@ -469,9 +460,7 @@
         }
 
         // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur avec le dégradé
-        if (window.BabelFishAIUtils && window.BabelFishAIUtils.ui &&
-            typeof window.BabelFishAIUtils.ui.updateBannerColor === 'function') {
-
+        if (typeof window.BabelFishAIUtils?.ui?.updateBannerColor === 'function') {
             window.BabelFishAIUtils.ui.updateBannerColor(banner, startColor, endColor, opacity, force);
         } else {
             console.warn('La fonction updateBannerColor de UI n\'est pas disponible');

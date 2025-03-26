@@ -36,8 +36,6 @@
         // Initialiser l'espace de noms UI (les fonctions seront exposées plus bas dans le code)
         window.BabelFishAI.ui = {};
 
-        console.log("Content script and utility modules injected!");
-
         // Créer un événement personnalisé pour signaler que i18n est chargé
         const i18nLoadedEvent = new CustomEvent('babelfishai:i18n-loaded');
         document.dispatchEvent(i18nLoadedEvent);
@@ -149,7 +147,7 @@
      */
     // Utilisation de la fonction startRecording depuis recording-utils.js
     async function startRecording() {
-        return await window.BabelFishAIUtils.recording.startRecording();
+        return window.BabelFishAIUtils.recording.startRecording();
     }
 
     // La fonction processRecordedAudio a été déplacée vers recording-utils.js

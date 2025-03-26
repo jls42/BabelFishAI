@@ -53,7 +53,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function areDependenciesAvailable() {
         // Utilisation du chaînage optionnel pour vérifier l'existence des propriétés imbriquées
-        return !!window.BabelFishAIUtils?.i18n; // Convertit le résultat en booléen explicite
+        return Boolean(window.BabelFishAIUtils?.i18n); // Convertit le résultat en booléen explicite
     }
 
     /**
@@ -197,8 +197,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 }
             }
 
-            // Si aucune méthode n'est disponible, juste logger le message
-            console.log(`Status (${type}): ${text}`);
+            // Si aucune méthode n'est disponible, ne rien faire ou envisager une alternative silencieuse
             return false;
         } catch (fatalError) {
             // Gestion des erreurs critiques dans la fonction showStatus elle-même

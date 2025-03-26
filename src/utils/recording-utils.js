@@ -41,7 +41,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} La clé API.
      */
     async function getApiKey() {
-        return await window.BabelFishAIUtils.error.safeExecute(
+        return window.BabelFishAIUtils.error.safeExecute(
             () => window.BabelFishAIUtils.api.getApiKey(),
             "Erreur lors de la récupération de la clé API"
         );
@@ -99,7 +99,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             'default': ERRORS.MIC_ACCESS_ERROR
         };
 
-        let errorMessage = errorMessages[error.name] || errorMessages[error.message] || errorMessages['default'];
+        const errorMessage = errorMessages[error.name] || errorMessages[error.message] || errorMessages['default'];
 
         window.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
 

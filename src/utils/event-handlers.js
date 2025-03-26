@@ -66,7 +66,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function handleKeyboardEvents(event) {
         // La touche Échap (code 27) pour annuler l'enregistrement
         if (event.key === 'Escape' && window.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-            console.log("Touche Échap détectée pendant l'enregistrement, annulation..."); // skipcq: JS-0002
             window.BabelFishAI.cancelRecording();
             // Empêcher les gestionnaires d'événements par défaut et la propagation
             event.preventDefault();
@@ -102,7 +101,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleKeyboardShortcutChanges(changes) {
         if (changes.keyboardShortcuts) {
-            console.log("Raccourcis clavier mis à jour:", changes.keyboardShortcuts.newValue);
             // La mise à jour des raccourcis est gérée automatiquement par le background script
         }
     }
@@ -113,8 +111,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleDefaultLanguageChanges(changes) {
         if (changes.defaultLanguage) {
-            console.log("Langue par défaut mise à jour:", changes.defaultLanguage.newValue);
-
             // Mettre à jour le sélecteur de langue dans la bannière si disponible
             const languageSelect = recordingBanner?.querySelector('.whisper-language-select');
             if (languageSelect) {
@@ -150,8 +146,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const hasAdvancedChanges = advancedOptionKeys.some(key => key in changes);
 
         if (hasAdvancedChanges) {
-            console.log("Options avancées mises à jour");
-
             // Si le mode expert est activé/désactivé, mettre à jour l'interface
             if ('enableAdvancedOptions' in changes) {
                 const expertMode = changes.enableAdvancedOptions.newValue === true;
@@ -161,8 +155,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 expertElements.forEach(el => {
                     el.style.display = expertMode ? 'block' : 'none';
                 });
-
-                console.log(`Mode expert ${expertMode ? 'activé' : 'désactivé'}`);
             }
         }
     }
@@ -182,8 +174,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const hasDisplayChanges = displayOptionKeys.some(key => key in changes);
 
         if (hasDisplayChanges) {
-            console.log("Options d'affichage mises à jour");
-
             // Mettre à jour les comportements d'affichage en fonction des nouvelles options
             // Ces changements seront appliqués lors du prochain affichage de transcription
         }
@@ -196,7 +186,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function updateTranslateButton(translateButton, enableTranslation) {
         translateButton.setAttribute('data-active', String(enableTranslation));
-        console.log(`Bouton de traduction mis à jour: ${enableTranslation}`);
     }
 
     /**
@@ -243,7 +232,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function updateTargetLanguageSelect(languageSelect, newTargetLanguage) {
         if (languageSelect && languageSelect.value !== newTargetLanguage) {
             languageSelect.value = newTargetLanguage;
-            console.log(`Sélecteur de langue mis à jour: ${newTargetLanguage}`);
         }
     }
 
@@ -262,8 +250,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const hasTranslationChanges = translationOptionKeys.some(key => key in changes);
 
         if (hasTranslationChanges) {
-            console.log("Options de traduction mises à jour");
-
             // Mettre à jour l'interface de traduction si nécessaire
             const translateButton = recordingBanner?.querySelector('#whisper-translation-control');
             const languageContainer = recordingBanner?.querySelector('.whisper-language-container');
@@ -295,14 +281,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleRephraseOptionChanges(changes) {
         if ('enableRephrase' in changes) {
-            console.log("Option de reformulation mise à jour:", changes.enableRephrase.newValue);
-
             // Mettre à jour l'interface de reformulation si nécessaire
             const rephraseButton = recordingBanner?.querySelector('#whisper-rephrase-control');
             if (rephraseButton) {
                 // Mettre à jour l'attribut data-active pour changer l'état visuel du bouton
                 rephraseButton.setAttribute('data-active', String(changes.enableRephrase.newValue));
-                console.log(`Bouton de reformulation mis à jour: ${changes.enableRephrase.newValue}`);
             }
         }
     }

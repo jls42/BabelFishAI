@@ -301,13 +301,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {HTMLElement} element - L'élément contentEditable.
      * @param {Selection} selection - La sélection actuelle.
      * @param {string} processedText - Le texte traité à insérer.
-     * @param {boolean} normalizeText - Indique si le texte doit être normalisé.
+     * @param {boolean} shouldNormalize - Indique si le texte doit être normalisé.
      */
-    function insertTextWithSelection(element, selection, processedText, normalizeText) {
+    function insertTextWithSelection(element, selection, processedText, shouldNormalize) {
         const range = selection.getRangeAt(0);
         range.deleteContents();
 
-        if (normalizeText) {
+        if (shouldNormalize) {
             // Utiliser la fonction insertNormalizedText pour le texte normalisé
             insertNormalizedText(range, processedText);
         } else {

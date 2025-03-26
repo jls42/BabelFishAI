@@ -57,7 +57,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return { ...displayOpts, autoCopy };
     }
 
-
+    /**
+     * Traite (reformule/traduit si activé) et affiche le texte de transcription selon les options configurées.
+     * Gère également la copie automatique et la restauration du focus.
+     * @param {string} text - Le texte de transcription initial à traiter et afficher.
+     * @returns {Promise<Object|boolean>} Une promesse qui se résout avec un objet `{ success: boolean, method: string }` indiquant le succès et la méthode d'affichage, ou `false` en cas d'échec.
+     */
     async function showTranscription(text) {
         if (!validateInputText(text)) { // NOSONAR - S6544: Faux positif, validateInputText est synchrone et retourne un booléen.
             return false;
@@ -73,7 +78,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const options = await getAllOptions();
 
             // Étape 1: Traiter le texte (reformulation/traduction)
-            let processedText = await processText(text, options);
+            const processedText = await processText(text, options);
 
             // Stocker l'élément actif avant d'afficher le texte
             window.BabelFishAIUtils.focus.storeFocusAndSelection();
