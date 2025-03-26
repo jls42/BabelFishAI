@@ -88,7 +88,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {Object} defaults - Valeurs par défaut à utiliser si les clés ne sont pas trouvées
      * @returns {Promise<Object>} - Les données récupérées
      */
-    async function getFromStorage(defaults = {}) {
+    function getFromStorage(defaults = {}) {
         return new Promise((resolve, reject) => {
             try {
                 chrome.storage.sync.get(defaults, (items) => {
@@ -198,7 +198,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          */
         async function handleHttpErrors(response) {
             if (!response.ok) {
-                let errorMessage;
+                let errorMessage; // skipcq: JS-0119 - Initialisation dépend du bloc try/catch.
                 try {
                     const errorData = await response.json();
                     errorMessage = errorData.error?.message || errorType;
@@ -330,18 +330,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    async function transcribeAudio(audioBlob, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
+    function transcribeAudio(audioBlob, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         // Déterminer le nom de fichier final
-        let finalFilename;
-        if (generateUniqueFilename) {
+        const finalFilename = generateUniqueFilename
             // Générer un nom de fichier avec timestamp et élément aléatoire
-            const timestamp = Date.now();
-            // NOSONAR javascript:S2245 - Math.random() est utilisé ici pour l'unicité pratique du nom de fichier, pas pour la sécurité cryptographique.
-            const randomPart = Math.random().toString(36).substring(2, 10); // Génère une chaîne aléatoire de 8 caractères
-            finalFilename = `audio-${timestamp}-${randomPart}.webm`;
-        } else {
-            finalFilename = filename || 'audio.webm';
-        }
+            ? `audio-${Date.now()}-${Math.random().toString(36).substring(2, 10)}.webm` // NOSONAR javascript:S2245 - Math.random() pour unicité pratique.
+            : filename || 'audio.webm';
 
         // Préparer le FormData pour l'envoi du fichier audio
         const formData = new FormData();

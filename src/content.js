@@ -146,7 +146,7 @@
      * @returns {Promise<boolean>} - Indique si l'enregistrement a démarré avec succès
      */
     // Utilisation de la fonction startRecording depuis recording-utils.js
-    async function startRecording() {
+    function startRecording() {
         return window.BabelFishAIUtils.recording.startRecording();
     }
 
@@ -207,7 +207,7 @@
      * @param {string} text - Le texte à afficher
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
-    async function showTranscription(text) {
+    function showTranscription(text) {
         // Cette fonction a été migrée vers transcription-display.js
         return window.BabelFishAIUtils.display.showTranscription(text);
     }

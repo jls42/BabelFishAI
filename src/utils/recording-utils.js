@@ -40,7 +40,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Récupère la clé API de manière asynchrone.
      * @returns {Promise<string>} La clé API.
      */
-    async function getApiKey() {
+    async function getApiKey() { // skipcq: JS-0116 - Garder async pour cohérence de l'interface (retourne toujours une promesse).
         return window.BabelFishAIUtils.error.safeExecute(
             () => window.BabelFishAIUtils.api.getApiKey(),
             "Erreur lors de la récupération de la clé API"
@@ -71,7 +71,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {MediaRecorder} L'objet MediaRecorder.
      */
     function createMediaRecorder(stream, options) {
-        let recorder;
+        let recorder; // skipcq: JS-0119 - Initialisation dépend de la condition if/else.
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
             console.warn(`Format ${options.mimeType} non supporté, utilisation du format par défaut`);
             recorder = new MediaRecorder(stream); // Fallback au format par défaut
