@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Indien ingeschakeld, wordt het resultaat automatisch naar het klembord gekopieerd en verschijnt het dialoogvenster niet meer voor transcriptie.",
         "description": "Beschrijving van de automatische kopieeroptie"
+    },
+    "providersTitle": {
+        "message": "AI-providers",
+        "description": "Titel van de providersectie"
+    },
+    "providersDescription": {
+        "message": "Configureer een of meer providers voor transcriptie en vertaling.",
+        "description": "Beschrijving van de providersectie"
+    },
+    "providerActive": {
+        "message": "Actief",
+        "description": "Status van een actieve provider"
+    },
+    "providerInactive": {
+        "message": "Inactief",
+        "description": "Status van een inactieve provider"
+    },
+    "providerMissingKey": {
+        "message": "Sleutel ontbreekt",
+        "description": "Status wanneer de API-sleutel ontbreekt"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Verkrijg uw API-sleutel op",
+        "description": "Informatie voor het verkrijgen van de Mistral API-sleutel"
+    },
+    "advancedUrlsTitle": {
+        "message": "Aangepaste URL's (geavanceerd)",
+        "description": "Titel voor aangepaste URL's"
+    },
+    "transcriptionUrlLabel": {
+        "message": "Transcriptie-URL:",
+        "description": "Label voor de transcriptie-URL"
+    },
+    "chatUrlLabel": {
+        "message": "Chat-URL:",
+        "description": "Label voor de chat-URL"
+    },
+    "serviceSelectionTitle": {
+        "message": "Servicekeuze",
+        "description": "Titel voor servicekeuze"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcriptie:",
+        "description": "Label voor de transcriptieprovider"
+    },
+    "chatProviderLabel": {
+        "message": "Vertaling/Herformulering:",
+        "description": "Label voor de chatprovider"
+    },
+    "invalidUrlError": {
+        "message": "Fout: URL's moeten HTTPS gebruiken.",
+        "description": "Foutmelding voor ongeldige URL's"
+    },
+    "displayError": {
+        "message": "Weergavefout",
+        "description": "Foutmelding bij het weergeven van het resultaat"
+    },
+    "invalidTextForProcessing": {
+        "message": "Ongeldige tekst voor verwerking",
+        "description": "Foutmelding wanneer de tekst ongeldig is"
+    },
+    "rephrasingComplete": {
+        "message": "Herformulering voltooid",
+        "description": "Succesmelding voor herformulering"
+    },
+    "rephrasingError": {
+        "message": "Fout tijdens herformulering",
+        "description": "Foutmelding voor herformulering"
+    },
+    "rephrasingText": {
+        "message": "Tekst wordt hergeformuleerd...",
+        "description": "Bericht tijdens herformulering"
+    },
+    "translatingText": {
+        "message": "Tekst wordt vertaald...",
+        "description": "Bericht tijdens vertaling"
+    },
+    "translationComplete": {
+        "message": "Vertaling voltooid",
+        "description": "Succesmelding voor vertaling"
+    },
+    "translationError": {
+        "message": "Fout tijdens vertaling",
+        "description": "Foutmelding voor vertaling"
     }
 }

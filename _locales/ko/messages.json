@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "활성화하면 결과가 자동으로 클립보드에 복사되고 음성 텍스트 변환을 위한 대화 상자가 더 이상 나타나지 않습니다.",
         "description": "자동 복사 옵션 설명"
+    },
+    "providersTitle": {
+        "message": "AI 제공업체",
+        "description": "제공업체 섹션 제목"
+    },
+    "providersDescription": {
+        "message": "전사 및 번역을 위한 하나 이상의 제공업체를 구성합니다.",
+        "description": "제공업체 섹션 설명"
+    },
+    "providerActive": {
+        "message": "활성",
+        "description": "활성 제공업체 상태"
+    },
+    "providerInactive": {
+        "message": "비활성",
+        "description": "비활성 제공업체 상태"
+    },
+    "providerMissingKey": {
+        "message": "키 누락",
+        "description": "API 키가 누락된 경우 상태"
+    },
+    "mistralApiKeyInfo": {
+        "message": "API 키를 받으세요",
+        "description": "Mistral API 키 취득 정보"
+    },
+    "advancedUrlsTitle": {
+        "message": "사용자 지정 URL (고급)",
+        "description": "사용자 지정 URL 제목"
+    },
+    "transcriptionUrlLabel": {
+        "message": "전사 URL:",
+        "description": "전사 URL 레이블"
+    },
+    "chatUrlLabel": {
+        "message": "채팅 URL:",
+        "description": "채팅 URL 레이블"
+    },
+    "serviceSelectionTitle": {
+        "message": "서비스 선택",
+        "description": "서비스 선택 제목"
+    },
+    "transcriptionProviderLabel": {
+        "message": "전사:",
+        "description": "전사 제공업체 레이블"
+    },
+    "chatProviderLabel": {
+        "message": "번역/다시 쓰기:",
+        "description": "채팅 제공업체 레이블"
+    },
+    "invalidUrlError": {
+        "message": "오류: URL은 HTTPS를 사용해야 합니다.",
+        "description": "유효하지 않은 URL에 대한 오류 메시지"
+    },
+    "displayError": {
+        "message": "표시 오류",
+        "description": "결과를 표시할 때 오류 메시지"
+    },
+    "invalidTextForProcessing": {
+        "message": "처리할 수 없는 텍스트",
+        "description": "텍스트가 유효하지 않을 때 오류 메시지"
+    },
+    "rephrasingComplete": {
+        "message": "다시 쓰기 완료",
+        "description": "다시 쓰기 성공 메시지"
+    },
+    "rephrasingError": {
+        "message": "다시 쓰기 중 오류",
+        "description": "다시 쓰기 오류 메시지"
+    },
+    "rephrasingText": {
+        "message": "텍스트 다시 쓰기 중...",
+        "description": "다시 쓰기 중 메시지"
+    },
+    "translatingText": {
+        "message": "텍스트 번역 중...",
+        "description": "번역 중 메시지"
+    },
+    "translationComplete": {
+        "message": "번역 완료",
+        "description": "번역 성공 메시지"
+    },
+    "translationError": {
+        "message": "번역 중 오류",
+        "description": "번역 오류 메시지"
     }
 }

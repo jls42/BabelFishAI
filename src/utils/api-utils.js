@@ -6,6 +6,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Constantes importées depuis l'espace global
     const ERRORS = window.BabelFishAIConstants.ERRORS;
+    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
@@ -104,6 +105,142 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
             }
         });
+    }
+
+    /**
+     * Résout la configuration API pour un type de service donné
+     * Supporte le multi-provider avec fallback sur la configuration legacy
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @returns {Promise<Object>} Configuration API résolue
+     */
+    async function resolveApiConfig(serviceType) {
+        const data = await getFromStorage({
+            // Nouvelles clés multi-provider
+            providers: null,
+            transcriptionProvider: 'openai',
+            chatProvider: 'openai',
+            // Clés legacy pour rétrocompatibilité
+            apiKey: '',
+            apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
+            translationApiUrl: API_CONFIG.DEFAULT_GPT_API_URL,
+            audioModelType: API_CONFIG.WHISPER_MODEL,
+            modelType: API_CONFIG.GPT_MODEL,
+            disableLogging: false
+        });
+
+        // Déterminer le provider à utiliser
+        const providerId = serviceType === 'transcription'
+            ? data.transcriptionProvider
+            : data.chatProvider;
+
+        // Récupérer la configuration du provider (si multi-provider activé)
+        const providerConfig = data.providers?.[providerId];
+
+        // Récupérer les définitions du provider depuis le registre
+        const Providers = window.BabelFishAIProviders;
+        const providerDef = Providers ? Providers.getProvider(providerId) : null;
+
+        // Debug sans exposer la clé API
+        console.log('[resolveApiConfig]', serviceType, '- providerId:', providerId, '- hasProviderConfig:', !!providerConfig, '- providerDef:', providerDef?.name);
+
+        // Résoudre l'URL
+        // Priorité : 1) URL custom du provider, 2) URL par défaut du provider
+        // Les URLs legacy (mode expert) sont IGNORÉES pour les providers non-OpenAI
+        let url;
+        if (serviceType === 'transcription') {
+            if (providerConfig?.transcriptionUrl) {
+                // URL custom configurée pour ce provider
+                url = providerConfig.transcriptionUrl;
+            } else if (providerDef) {
+                // URL par défaut du provider (Mistral, OpenAI, etc.)
+                url = providerDef.defaultUrls.transcription;
+            } else {
+                // Fallback absolu
+                url = API_CONFIG.DEFAULT_WHISPER_API_URL;
+            }
+        } else {
+            if (providerConfig?.chatUrl) {
+                // URL custom configurée pour ce provider
+                url = providerConfig.chatUrl;
+            } else if (providerDef) {
+                // URL par défaut du provider
+                url = providerDef.defaultUrls.chat;
+            } else {
+                // Fallback absolu
+                url = API_CONFIG.DEFAULT_GPT_API_URL;
+            }
+        }
+
+        // Résoudre la clé API (priorité : config provider > legacy si OpenAI)
+        let apiKey = providerConfig?.apiKey;
+        if (!apiKey && providerId === 'openai') {
+            // Fallback sur la clé legacy uniquement pour OpenAI
+            apiKey = data.apiKey;
+        }
+
+        // Résoudre le modèle (priorité : modèle par défaut du provider > modèle legacy si compatible)
+        let model;
+        if (serviceType === 'transcription') {
+            // Pour la transcription, utiliser le modèle du provider ou le modèle sauvegardé si compatible
+            if (providerDef) {
+                const savedModel = data.audioModelType;
+                // Vérifier si le modèle sauvegardé appartient à ce provider
+                const providerModels = providerDef.transcriptionModels.map(m => m.id);
+                if (savedModel && providerModels.includes(savedModel)) {
+                    model = savedModel;
+                } else {
+                    model = Providers.getDefaultModel(providerId, 'transcription');
+                }
+            } else {
+                model = data.audioModelType || API_CONFIG.WHISPER_MODEL;
+            }
+        } else {
+            // Pour le chat, utiliser le modèle du provider ou le modèle sauvegardé si compatible
+            if (providerDef) {
+                const savedModel = data.modelType;
+                // Vérifier si le modèle sauvegardé appartient à ce provider
+                const providerModels = providerDef.chatModels.map(m => m.id);
+                if (savedModel && providerModels.includes(savedModel)) {
+                    model = savedModel;
+                } else {
+                    model = Providers.getDefaultModel(providerId, 'chat');
+                }
+            } else {
+                model = data.modelType || API_CONFIG.GPT_MODEL;
+            }
+        }
+
+        // Vérifier si NoLog est supporté et activé
+        const supportsNoLog = providerDef ? providerDef.supportsNoLog : (providerId === 'openai');
+        const disableLogging = supportsNoLog && data.disableLogging;
+
+        console.log('[resolveApiConfig] Result:', { providerId, url, model, hasApiKey: !!apiKey });
+
+        return {
+            apiKey,
+            url,
+            model,
+            providerId,
+            disableLogging
+        };
+    }
+
+    /**
+     * Récupère la clé API pour un provider spécifique ou le provider actif
+     * @param {string} [providerId] - ID du provider (optionnel, utilise le provider par défaut si non spécifié)
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider par défaut
+     * @returns {Promise<string|null>} La clé API ou null si non trouvée
+     */
+    async function getApiKeyForProvider(providerId, serviceType = 'transcription') {
+        const config = await resolveApiConfig(serviceType);
+
+        // Si un provider spécifique est demandé
+        if (providerId && providerId !== config.providerId) {
+            const data = await getFromStorage({ providers: null });
+            return data.providers?.[providerId]?.apiKey || null;
+        }
+
+        return config.apiKey || null;
     }
 
     /**
@@ -361,7 +498,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     exports.api = {
         getOrFetchApiKey,
         getApiKey,
+        getApiKeyForProvider,
         getFromStorage,
+        resolveApiConfig,
         transcribeAudio,
         callApi
     };

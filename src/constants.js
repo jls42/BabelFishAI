@@ -40,11 +40,27 @@ window.BabelFishAIConstants = {
 
     // Configuration de l'API
     API_CONFIG: {
+        // URLs par défaut OpenAI
         DEFAULT_WHISPER_API_URL: 'https://api.openai.com/v1/audio/transcriptions',
         DEFAULT_GPT_API_URL: 'https://api.openai.com/v1/chat/completions',
+        // URLs par défaut Mistral
+        DEFAULT_MISTRAL_TRANSCRIPTION_URL: 'https://api.mistral.ai/v1/audio/transcriptions',
+        DEFAULT_MISTRAL_CHAT_URL: 'https://api.mistral.ai/v1/chat/completions',
+        // Modèles par défaut
         WHISPER_MODEL: 'whisper-1',
         GPT_MODEL: 'gpt-4o-mini',
-        AUDIO_MODELS: ['whisper-1', 'whisper', 'gpt-4o-mini-transcribe', 'gpt-4o-transcribe'] // Updated list of audio models
+        VOXTRAL_MODEL: 'voxtral-mini-latest',
+        MISTRAL_CHAT_MODEL: 'mistral-small-latest',
+        // Liste des modèles audio (OpenAI + Mistral)
+        AUDIO_MODELS: ['whisper-1', 'whisper', 'gpt-4o-mini-transcribe', 'gpt-4o-transcribe', 'voxtral-mini-latest'],
+        // Liste des modèles chat (OpenAI + Mistral)
+        CHAT_MODELS: ['gpt-4o-mini', 'gpt-4o', 'mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest', 'codestral-latest']
+    },
+
+    // Configuration des providers
+    PROVIDERS: {
+        DEFAULT_PROVIDER: 'openai',
+        AVAILABLE: ['openai', 'mistral']
     },
 
     // Messages d'erreur

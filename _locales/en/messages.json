@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "If enabled, the result will be automatically copied to the clipboard and the dialog box will no longer appear for transcription.",
         "description": "Description of the automatic copy option"
+    },
+    "providersTitle": {
+        "message": "AI Providers",
+        "description": "Title of the providers section"
+    },
+    "providersDescription": {
+        "message": "Configure one or more providers for transcription and translation.",
+        "description": "Description of the providers section"
+    },
+    "providerActive": {
+        "message": "Active",
+        "description": "Status of an active provider"
+    },
+    "providerInactive": {
+        "message": "Inactive",
+        "description": "Status of an inactive provider"
+    },
+    "providerMissingKey": {
+        "message": "Missing key",
+        "description": "Status when the API key is missing"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Get your API key at",
+        "description": "Information for obtaining the Mistral API key"
+    },
+    "advancedUrlsTitle": {
+        "message": "Custom URLs (advanced)",
+        "description": "Title for custom URLs"
+    },
+    "transcriptionUrlLabel": {
+        "message": "Transcription URL:",
+        "description": "Label for the transcription URL"
+    },
+    "chatUrlLabel": {
+        "message": "Chat URL:",
+        "description": "Label for the chat URL"
+    },
+    "serviceSelectionTitle": {
+        "message": "Service Selection",
+        "description": "Title for service selection"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcription:",
+        "description": "Label for the transcription provider"
+    },
+    "chatProviderLabel": {
+        "message": "Translation/Rephrasing:",
+        "description": "Label for the chat provider"
+    },
+    "invalidUrlError": {
+        "message": "Error: URLs must use HTTPS.",
+        "description": "Error message for invalid URLs"
+    },
+    "displayError": {
+        "message": "Display error",
+        "description": "Error message when displaying the result"
+    },
+    "invalidTextForProcessing": {
+        "message": "Invalid text for processing",
+        "description": "Error message when text is invalid"
+    },
+    "rephrasingComplete": {
+        "message": "Rephrasing complete",
+        "description": "Rephrasing success message"
+    },
+    "rephrasingError": {
+        "message": "Error during rephrasing",
+        "description": "Rephrasing error message"
+    },
+    "rephrasingText": {
+        "message": "Rephrasing text...",
+        "description": "Message during rephrasing"
+    },
+    "translatingText": {
+        "message": "Translating text...",
+        "description": "Message during translation"
+    },
+    "translationComplete": {
+        "message": "Translation complete",
+        "description": "Translation success message"
+    },
+    "translationError": {
+        "message": "Error during translation",
+        "description": "Translation error message"
     }
 }

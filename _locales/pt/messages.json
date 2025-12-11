@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Se ativado, o resultado será copiado automaticamente para a área de transferência e a caixa de diálogo não aparecerá mais para a transcrição.",
         "description": "Descrição da opção de cópia automática"
+    },
+    "providersTitle": {
+        "message": "Provedores de IA",
+        "description": "Título da seção de provedores"
+    },
+    "providersDescription": {
+        "message": "Configure um ou mais provedores para transcrição e tradução.",
+        "description": "Descrição da seção de provedores"
+    },
+    "providerActive": {
+        "message": "Ativo",
+        "description": "Status de um provedor ativo"
+    },
+    "providerInactive": {
+        "message": "Inativo",
+        "description": "Status de um provedor inativo"
+    },
+    "providerMissingKey": {
+        "message": "Chave ausente",
+        "description": "Status quando a chave API está ausente"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Obtenha sua chave API em",
+        "description": "Informações para obter a chave API do Mistral"
+    },
+    "advancedUrlsTitle": {
+        "message": "URLs personalizadas (avançado)",
+        "description": "Título para URLs personalizadas"
+    },
+    "transcriptionUrlLabel": {
+        "message": "URL de transcrição:",
+        "description": "Rótulo para a URL de transcrição"
+    },
+    "chatUrlLabel": {
+        "message": "URL de chat:",
+        "description": "Rótulo para a URL de chat"
+    },
+    "serviceSelectionTitle": {
+        "message": "Seleção de serviços",
+        "description": "Título para seleção de serviços"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcrição:",
+        "description": "Rótulo para o provedor de transcrição"
+    },
+    "chatProviderLabel": {
+        "message": "Tradução/Reformulação:",
+        "description": "Rótulo para o provedor de chat"
+    },
+    "invalidUrlError": {
+        "message": "Erro: as URLs devem usar HTTPS.",
+        "description": "Mensagem de erro para URLs inválidas"
+    },
+    "displayError": {
+        "message": "Erro de exibição",
+        "description": "Mensagem de erro ao exibir o resultado"
+    },
+    "invalidTextForProcessing": {
+        "message": "Texto inválido para processamento",
+        "description": "Mensagem de erro quando o texto é inválido"
+    },
+    "rephrasingComplete": {
+        "message": "Reformulação concluída",
+        "description": "Mensagem de sucesso da reformulação"
+    },
+    "rephrasingError": {
+        "message": "Erro durante a reformulação",
+        "description": "Mensagem de erro da reformulação"
+    },
+    "rephrasingText": {
+        "message": "Reformulando texto...",
+        "description": "Mensagem durante a reformulação"
+    },
+    "translatingText": {
+        "message": "Traduzindo texto...",
+        "description": "Mensagem durante a tradução"
+    },
+    "translationComplete": {
+        "message": "Tradução concluída",
+        "description": "Mensagem de sucesso da tradução"
+    },
+    "translationError": {
+        "message": "Erro durante a tradução",
+        "description": "Mensagem de erro da tradução"
     }
 }

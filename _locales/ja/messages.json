@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "有効にすると、結果は自動的にクリップボードにコピーされ、文字起こしのためのダイアログボックスは表示されなくなります。",
         "description": "自動コピーオプションの説明"
+    },
+    "providersTitle": {
+        "message": "AIプロバイダー",
+        "description": "プロバイダーセクションのタイトル"
+    },
+    "providersDescription": {
+        "message": "文字起こしと翻訳用に1つ以上のプロバイダーを設定します。",
+        "description": "プロバイダーセクションの説明"
+    },
+    "providerActive": {
+        "message": "アクティブ",
+        "description": "アクティブなプロバイダーのステータス"
+    },
+    "providerInactive": {
+        "message": "非アクティブ",
+        "description": "非アクティブなプロバイダーのステータス"
+    },
+    "providerMissingKey": {
+        "message": "キーがありません",
+        "description": "APIキーが不足している場合のステータス"
+    },
+    "mistralApiKeyInfo": {
+        "message": "APIキーを取得してください",
+        "description": "Mistral APIキーの取得に関する情報"
+    },
+    "advancedUrlsTitle": {
+        "message": "カスタムURL（上級者向け）",
+        "description": "カスタムURLのタイトル"
+    },
+    "transcriptionUrlLabel": {
+        "message": "文字起こしURL:",
+        "description": "文字起こしURLのラベル"
+    },
+    "chatUrlLabel": {
+        "message": "チャットURL:",
+        "description": "チャットURLのラベル"
+    },
+    "serviceSelectionTitle": {
+        "message": "サービス選択",
+        "description": "サービス選択のタイトル"
+    },
+    "transcriptionProviderLabel": {
+        "message": "文字起こし:",
+        "description": "文字起こしプロバイダーのラベル"
+    },
+    "chatProviderLabel": {
+        "message": "翻訳/言い換え:",
+        "description": "チャットプロバイダーのラベル"
+    },
+    "invalidUrlError": {
+        "message": "エラー: URLはHTTPSを使用する必要があります。",
+        "description": "無効なURLのエラーメッセージ"
+    },
+    "displayError": {
+        "message": "表示エラー",
+        "description": "結果を表示する際のエラーメッセージ"
+    },
+    "invalidTextForProcessing": {
+        "message": "処理に無効なテキスト",
+        "description": "テキストが無効な場合のエラーメッセージ"
+    },
+    "rephrasingComplete": {
+        "message": "言い換え完了",
+        "description": "言い換え成功メッセージ"
+    },
+    "rephrasingError": {
+        "message": "言い換え中にエラー",
+        "description": "言い換えエラーメッセージ"
+    },
+    "rephrasingText": {
+        "message": "テキストを言い換え中...",
+        "description": "言い換え中のメッセージ"
+    },
+    "translatingText": {
+        "message": "テキストを翻訳中...",
+        "description": "翻訳中のメッセージ"
+    },
+    "translationComplete": {
+        "message": "翻訳完了",
+        "description": "翻訳成功メッセージ"
+    },
+    "translationError": {
+        "message": "翻訳中にエラー",
+        "description": "翻訳エラーメッセージ"
     }
 }

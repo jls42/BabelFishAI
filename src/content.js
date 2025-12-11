@@ -16,6 +16,7 @@
 
     // Importer les utilitaires dynamiquement et s'assurer qu'ils sont initialisés correctement
     try {
+        await import(chrome.runtime.getURL('src/utils/providers.js'));
         await import(chrome.runtime.getURL('src/utils/i18n.js'));
         await import(chrome.runtime.getURL('src/utils/focus-utils.js'));
         await import(chrome.runtime.getURL('src/utils/error-utils.js'));

@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Dacă este activată, rezultatul va fi copiat automat în clipboard și caseta de dialog nu va mai apărea pentru transcriere.",
         "description": "Descrierea opțiunii de copiere automată"
+    },
+    "providersTitle": {
+        "message": "Furnizori AI",
+        "description": "Titlul secțiunii furnizorilor"
+    },
+    "providersDescription": {
+        "message": "Configurați unul sau mai mulți furnizori pentru transcriere și traducere.",
+        "description": "Descrierea secțiunii furnizorilor"
+    },
+    "providerActive": {
+        "message": "Activ",
+        "description": "Starea unui furnizor activ"
+    },
+    "providerInactive": {
+        "message": "Inactiv",
+        "description": "Starea unui furnizor inactiv"
+    },
+    "providerMissingKey": {
+        "message": "Cheie lipsă",
+        "description": "Stare când cheia API lipsește"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Obțineți cheia API la",
+        "description": "Informații pentru obținerea cheii API Mistral"
+    },
+    "advancedUrlsTitle": {
+        "message": "URL-uri personalizate (avansat)",
+        "description": "Titlu pentru URL-uri personalizate"
+    },
+    "transcriptionUrlLabel": {
+        "message": "URL transcriere:",
+        "description": "Etichetă pentru URL-ul de transcriere"
+    },
+    "chatUrlLabel": {
+        "message": "URL chat:",
+        "description": "Etichetă pentru URL-ul de chat"
+    },
+    "serviceSelectionTitle": {
+        "message": "Selecția serviciilor",
+        "description": "Titlu pentru selecția serviciilor"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcriere:",
+        "description": "Etichetă pentru furnizorul de transcriere"
+    },
+    "chatProviderLabel": {
+        "message": "Traducere/Reformulare:",
+        "description": "Etichetă pentru furnizorul de chat"
+    },
+    "invalidUrlError": {
+        "message": "Eroare: URL-urile trebuie să folosească HTTPS.",
+        "description": "Mesaj de eroare pentru URL-uri invalide"
+    },
+    "displayError": {
+        "message": "Eroare de afișare",
+        "description": "Mesaj de eroare la afișarea rezultatului"
+    },
+    "invalidTextForProcessing": {
+        "message": "Text invalid pentru procesare",
+        "description": "Mesaj de eroare când textul este invalid"
+    },
+    "rephrasingComplete": {
+        "message": "Reformulare completă",
+        "description": "Mesaj de succes pentru reformulare"
+    },
+    "rephrasingError": {
+        "message": "Eroare în timpul reformulării",
+        "description": "Mesaj de eroare pentru reformulare"
+    },
+    "rephrasingText": {
+        "message": "Se reformulează textul...",
+        "description": "Mesaj în timpul reformulării"
+    },
+    "translatingText": {
+        "message": "Se traduce textul...",
+        "description": "Mesaj în timpul traducerii"
+    },
+    "translationComplete": {
+        "message": "Traducere completă",
+        "description": "Mesaj de succes pentru traducere"
+    },
+    "translationError": {
+        "message": "Eroare în timpul traducerii",
+        "description": "Mesaj de eroare pentru traducere"
     }
 }

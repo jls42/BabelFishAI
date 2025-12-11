@@ -60,14 +60,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const cleanedText = cleanText(text);
 
         try {
-            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-                disableLogging: false
-            });
+            // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const effectiveApiKey = apiKey || config.apiKey;
+            const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
-            const { modelType, translationApiUrl, disableLogging } = result;
+            console.log('[TextProcessing] rephraseText using provider:', config.providerId, 'url:', translationApiUrl);
 
             // Préparer les messages pour l'API
             const messages = [
@@ -95,7 +93,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
             const response = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey,
+                apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: window.BabelFishAIConstants.ERRORS.REPHRASE_ERROR,
@@ -125,11 +123,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Traduit un texte en utilisant l'API OpenAI
+     * Traduit un texte en utilisant le provider de chat configuré (multi-provider)
      * @param {string} text - Le texte à traduire
      * @param {string} sourceLanguage - La langue source
      * @param {string} targetLanguage - La langue cible
-     * @param {string} apiKey - La clé API OpenAI
+     * @param {string} apiKey - La clé API (optionnel, utilise la config multi-provider si non fourni)
      * @returns {Promise<string>} - Le texte traduit
      */
     async function translateText(text, sourceLanguage, targetLanguage, apiKey) {
@@ -137,22 +135,20 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             throw new Error('Texte vide ou invalide');
         }
 
-        if (!apiKey) {
-            throw new Error('Clé API OpenAI manquante');
-        }
-
         // Nettoyer le texte avant traduction
         const cleanedText = cleanText(text);
 
         try {
-            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-                disableLogging: false
-            });
+            // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const effectiveApiKey = apiKey || config.apiKey;
+            const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
-            const { modelType, translationApiUrl, disableLogging } = result;
+            console.log('[TextProcessing] translateText using provider:', config.providerId, 'url:', translationApiUrl);
+
+            if (!effectiveApiKey) {
+                throw new Error('Clé API manquante');
+            }
 
             // Préparer les messages pour l'API avec la logique originale pour les deux cas
             const messages = [
@@ -182,7 +178,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser l'API pour traduire le texte
             const response = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey,
+                apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: window.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,
@@ -243,15 +239,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Vérifier si l'API Key est disponible en utilisant la fonction non obsolète
-            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
-
             // Informer l'utilisateur que la reformulation est en cours
             const message = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
             window.BabelFishAI.ui.showBanner(message);
 
-            // Reformuler le texte en utilisant la fonction existante
-            const rephrasedText = await rephraseText(text, apiKey);
+            // Reformuler le texte (la clé API est gérée par resolveApiConfig dans rephraseText)
+            const rephrasedText = await rephraseText(text);
 
             // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(rephrasedText)) {
@@ -291,9 +284,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         try {
-            // Vérifier si l'API Key est disponible en utilisant la fonction non obsolète
-            const apiKey = await window.BabelFishAIUtils.api.getOrFetchApiKey();
-
             // Informer l'utilisateur que la traduction est en cours
             const message = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
             window.BabelFishAI.ui.showBanner(message);
@@ -301,8 +291,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Déterminer les langues source et cible
             const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
 
-            // Traduire le texte en utilisant la fonction existante
-            const translatedText = await translateText(text, sourceLanguage, targetLanguage, apiKey);
+            // Traduire le texte (la clé API est gérée par resolveApiConfig dans translateText)
+            const translatedText = await translateText(text, sourceLanguage, targetLanguage);
 
             // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(translatedText)) {

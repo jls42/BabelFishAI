@@ -567,35 +567,30 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
 
     /**
-     * Transcrit l'audio en texte via l'API Whisper en utilisant la fonction de l'API
+     * Transcrit l'audio en texte via l'API de transcription en utilisant resolveApiConfig
+     * Supporte multi-provider (OpenAI Whisper, Mistral Voxtral, etc.)
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @returns {Promise<string>} Le texte transcrit
      */
     async function transcribeAudio(audioBlob) {
         try {
-            // Récupérer la clé API depuis le stockage
-            const apiKey = await window.BabelFishAIUtils.api.getApiKey();
-            if (!apiKey) {
+            // Utiliser resolveApiConfig pour obtenir la config multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('transcription');
+
+            if (!config.apiKey) {
                 const errorMsg = ERRORS.API_KEY_NOT_FOUND;
                 window.BabelFishAI.ui.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }
 
-            // Récupérer l'URL de l'API et le modèle depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-                audioModelType: API_CONFIG.WHISPER_MODEL
-            });
-
-            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
-            const audioModelType = result.audioModelType;
+            console.log('[Recording] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
             const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
-                apiKey,
-                apiUrl,
-                audioModelType,
+                config.apiKey,
+                config.url,
+                config.model,
                 null, // Pas de nom de fichier spécifique
                 true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );

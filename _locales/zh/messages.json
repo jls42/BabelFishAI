@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "如果启用，结果将自动复制到剪贴板，并且转录的对话框将不再出现。",
         "description": "自动复制选项的描述"
+    },
+    "providersTitle": {
+        "message": "AI 提供商",
+        "description": "提供商部分的标题"
+    },
+    "providersDescription": {
+        "message": "配置一个或多个转录和翻译提供商。",
+        "description": "提供商部分的描述"
+    },
+    "providerActive": {
+        "message": "已激活",
+        "description": "活跃提供商的状态"
+    },
+    "providerInactive": {
+        "message": "未激活",
+        "description": "非活跃提供商的状态"
+    },
+    "providerMissingKey": {
+        "message": "缺少密钥",
+        "description": "当 API 密钥缺失时的状态"
+    },
+    "mistralApiKeyInfo": {
+        "message": "在此获取您的 API 密钥",
+        "description": "获取 Mistral API 密钥的信息"
+    },
+    "advancedUrlsTitle": {
+        "message": "自定义 URL（高级）",
+        "description": "自定义 URL 的标题"
+    },
+    "transcriptionUrlLabel": {
+        "message": "转录 URL：",
+        "description": "转录 URL 的标签"
+    },
+    "chatUrlLabel": {
+        "message": "聊天 URL：",
+        "description": "聊天 URL 的标签"
+    },
+    "serviceSelectionTitle": {
+        "message": "服务选择",
+        "description": "服务选择的标题"
+    },
+    "transcriptionProviderLabel": {
+        "message": "转录：",
+        "description": "转录提供商的标签"
+    },
+    "chatProviderLabel": {
+        "message": "翻译/改写：",
+        "description": "聊天提供商的标签"
+    },
+    "invalidUrlError": {
+        "message": "错误：URL 必须使用 HTTPS。",
+        "description": "无效 URL 的错误消息"
+    },
+    "displayError": {
+        "message": "显示错误",
+        "description": "显示结果时的错误消息"
+    },
+    "invalidTextForProcessing": {
+        "message": "无法处理的无效文本",
+        "description": "当文本无效时的错误消息"
+    },
+    "rephrasingComplete": {
+        "message": "改写完成",
+        "description": "改写成功消息"
+    },
+    "rephrasingError": {
+        "message": "改写时出错",
+        "description": "改写错误消息"
+    },
+    "rephrasingText": {
+        "message": "正在改写文本...",
+        "description": "改写期间的消息"
+    },
+    "translatingText": {
+        "message": "正在翻译文本...",
+        "description": "翻译期间的消息"
+    },
+    "translationComplete": {
+        "message": "翻译完成",
+        "description": "翻译成功消息"
+    },
+    "translationError": {
+        "message": "翻译时出错",
+        "description": "翻译错误消息"
     }
 }

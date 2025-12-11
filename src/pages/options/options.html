@@ -20,8 +20,110 @@
         <!-- Paramètres Essentiels -->
         <div class="section-block essential-section">
             <h2 data-i18n="essentialSettingsTitle">Paramètres Essentiels</h2>
-            <!-- Configuration API -->
-            <div class="subsection api-section">
+
+            <!-- Section Providers IA -->
+            <div class="subsection providers-section">
+                <h3 data-i18n="providersTitle">Providers IA</h3>
+                <p class="option-description" data-i18n="providersDescription">Configurez un ou plusieurs providers pour la transcription et la traduction.</p>
+
+                <!-- Provider OpenAI -->
+                <div class="provider-card" id="providerOpenAI">
+                    <div class="provider-header">
+                        <div class="provider-title">
+                            <span class="provider-name">OpenAI</span>
+                            <span class="provider-status" id="openaiStatus"></span>
+                        </div>
+                        <label class="provider-toggle">
+                            <input type="checkbox" id="openaiEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="provider-content" id="openaiContent">
+                        <div class="api-key-container">
+                            <input type="password" id="openaiApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="sk-...">
+                            <button type="button" class="toggle-password" data-target="openaiApiKey">👁️</button>
+                        </div>
+                        <div class="api-help">
+                            <div class="api-info">
+                                <span data-i18n="apiKeyInfo">Obtenez votre clé API sur</span>
+                                <a href="https://platform.openai.com/account/api-keys" target="_blank" class="api-link">
+                                    platform.openai.com/account/api-keys
+                                </a>
+                            </div>
+                        </div>
+                        <details class="provider-advanced">
+                            <summary data-i18n="advancedUrlsTitle">URLs personnalisées (LiteLLM Proxy)</summary>
+                            <div class="provider-urls">
+                                <div class="form-group">
+                                    <label for="openaiTranscriptionUrl" data-i18n="transcriptionUrlLabel">URL Transcription :</label>
+                                    <input type="text" id="openaiTranscriptionUrl" placeholder="https://api.openai.com/v1/audio/transcriptions">
+                                </div>
+                                <div class="form-group">
+                                    <label for="openaiChatUrl" data-i18n="chatUrlLabel">URL Chat :</label>
+                                    <input type="text" id="openaiChatUrl" placeholder="https://api.openai.com/v1/chat/completions">
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Provider Mistral -->
+                <div class="provider-card" id="providerMistral">
+                    <div class="provider-header">
+                        <div class="provider-title">
+                            <span class="provider-name">Mistral AI</span>
+                            <span class="provider-status" id="mistralStatus"></span>
+                        </div>
+                        <label class="provider-toggle">
+                            <input type="checkbox" id="mistralEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="provider-content" id="mistralContent">
+                        <div class="api-key-container">
+                            <input type="password" id="mistralApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
+                            <button type="button" class="toggle-password" data-target="mistralApiKey">👁️</button>
+                        </div>
+                        <div class="api-help">
+                            <div class="api-info">
+                                <span data-i18n="mistralApiKeyInfo">Obtenez votre clé API sur</span>
+                                <a href="https://console.mistral.ai/api-keys" target="_blank" class="api-link">
+                                    console.mistral.ai/api-keys
+                                </a>
+                            </div>
+                        </div>
+                        <details class="provider-advanced">
+                            <summary data-i18n="advancedUrlsTitle">URLs personnalisées</summary>
+                            <div class="provider-urls">
+                                <div class="form-group">
+                                    <label for="mistralTranscriptionUrl" data-i18n="transcriptionUrlLabel">URL Transcription :</label>
+                                    <input type="text" id="mistralTranscriptionUrl" placeholder="https://api.mistral.ai/v1/audio/transcriptions">
+                                </div>
+                                <div class="form-group">
+                                    <label for="mistralChatUrl" data-i18n="chatUrlLabel">URL Chat :</label>
+                                    <input type="text" id="mistralChatUrl" placeholder="https://api.mistral.ai/v1/chat/completions">
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Sélection des services (visible si plusieurs providers actifs) -->
+                <div class="provider-services" id="providerServices" style="display: none;">
+                    <h4 data-i18n="serviceSelectionTitle">Sélection des services</h4>
+                    <div class="service-selector">
+                        <label for="transcriptionProvider" data-i18n="transcriptionProviderLabel">Transcription :</label>
+                        <select id="transcriptionProvider"></select>
+                    </div>
+                    <div class="service-selector">
+                        <label for="chatProvider" data-i18n="chatProviderLabel">Traduction/Reformulation :</label>
+                        <select id="chatProvider"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration API legacy (masquée, pour rétrocompatibilité) -->
+            <div class="subsection api-section" id="legacyApiSection" style="display: none;">
                 <h3 data-i18n="apiKeyConfigTitle">Clé API OpenAI</h3>
                 <div class="api-help">
                     <p data-i18n="apiKeyHelp"></p>
@@ -350,6 +452,7 @@
 
     <!-- Chargement des scripts dans le bon ordre -->
     <script src="../../constants.js"></script>
+    <script src="../../utils/providers.js"></script>
     <script src="../../utils/i18n.js"></script>
     <script src="options.js"></script>
 </body>

@@ -22,12 +22,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Traduit le texte avec GPT
+     * Traduit le texte avec GPT (ou provider de chat configuré)
      * @param {string} text - Le texte à traduire
      * @param {string} sourceLang - La langue source
      * @param {string} targetLang - La langue cible
-     * @param {string} apiKey - La clé API OpenAI
-     * @param {string} [apiUrl] - URL de l'API GPT (optionnel)
+     * @param {string} [apiKey] - La clé API (optionnel, utilise la config multi-provider si non fourni)
      * @returns {Promise<string>} Le texte traduit
      */
     async function translateText(text, sourceLang, targetLang, apiKey) {
@@ -44,14 +43,21 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
 
         try {
-            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-                disableLogging: false
-            });
+            // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
 
-            const { modelType, translationApiUrl, disableLogging } = result;
+            // Utiliser la clé API fournie en paramètre ou celle de la config
+            const effectiveApiKey = apiKey || config.apiKey;
+            const { url: translationApiUrl, model: modelType, disableLogging } = config;
+
+            // Log pour debug multi-provider
+            console.log('[Translation] Using chat provider:', config.providerId, 'model:', modelType, 'url:', translationApiUrl);
+
+            debugTranslation('Using provider config:', {
+                providerId: config.providerId,
+                model: modelType,
+                url: translationApiUrl
+            });
 
             // Préparer les messages pour l'API
             const messages = [
@@ -83,7 +89,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
             const translationResponse = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey,
+                apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: ERRORS.TRANSLATION_ERROR,
@@ -117,10 +123,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Reformule le texte avec GPT pour l'améliorer
+     * Reformule le texte avec GPT (ou provider de chat configuré) pour l'améliorer
      * @param {string} text - Le texte à reformuler
-     * @param {string} apiKey - La clé API OpenAI
-     * @param {string} [apiUrl] - URL de l'API GPT (optionnel)
+     * @param {string} [apiKey] - La clé API (optionnel, utilise la config multi-provider si non fourni)
      * @returns {Promise<string>} Le texte reformulé
      */
     async function rephraseText(text, apiKey) {
@@ -135,14 +140,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
 
         try {
-            // Récupérer le modèle et l'URL de l'API depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                modelType: window.BabelFishAIConstants.API_CONFIG.GPT_MODEL,
-                translationApiUrl: window.BabelFishAIConstants.API_CONFIG.DEFAULT_GPT_API_URL,
-                disableLogging: false
-            });
+            // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
 
-            const { modelType, translationApiUrl, disableLogging } = result;
+            // Utiliser la clé API fournie en paramètre ou celle de la config
+            const effectiveApiKey = apiKey || config.apiKey;
+            const { url: translationApiUrl, model: modelType, disableLogging } = config;
+
+            debugTranslation('Using provider config:', {
+                providerId: config.providerId,
+                model: modelType,
+                url: translationApiUrl
+            });
 
             // Préparer les messages pour l'API
             const messages = [
@@ -172,7 +181,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
             const rephrasedResponse = await window.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
-                apiKey,
+                apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 errorType: ERRORS.REPHRASE_ERROR,

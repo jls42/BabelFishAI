@@ -76,8 +76,10 @@ async function injectContentScript(tab) {
             target: { tabId: tab.id },
             files: [
                 'src/constants.js',
+                'src/utils/providers.js',
                 'src/utils/ui.js',
                 'src/utils/banner-utils.js',
+                'src/utils/api-utils.js',
                 'src/utils/api.js',
                 'src/utils/translation.js',
                 'src/utils/languages.js',
@@ -271,11 +273,78 @@ chrome.action.onClicked.addListener(handleExtensionIconClick);
 chrome.commands.onCommand.addListener(handleCommand);
 
 /**
+ * URLs par défaut pour la migration (dupliquées depuis constants.js car non accessible dans le service worker)
+ */
+const DEFAULT_URLS = {
+    WHISPER: 'https://api.openai.com/v1/audio/transcriptions',
+    GPT: 'https://api.openai.com/v1/chat/completions'
+};
+
+/**
+ * Migre la configuration existante vers le nouveau schéma multi-provider
+ * Cette migration est transparente et préserve la rétrocompatibilité
+ * @returns {Promise<void>}
+ */
+async function migrateToMultiProvider() {
+    try {
+        // Récupérer la configuration actuelle
+        const data = await chrome.storage.sync.get(null);
+
+        // Vérifier si la migration est nécessaire
+        if (data.providers) {
+            debug('Migration multi-provider déjà effectuée');
+            return;
+        }
+
+        debug('Début de la migration vers le schéma multi-provider');
+
+        // Détecter si des URLs custom sont configurées (mode LiteLLM)
+        const hasCustomTranscriptionUrl = data.apiUrl && data.apiUrl !== DEFAULT_URLS.WHISPER;
+        const hasCustomChatUrl = data.translationApiUrl && data.translationApiUrl !== DEFAULT_URLS.GPT;
+
+        // Créer la nouvelle structure providers
+        const providers = {
+            openai: {
+                apiKey: data.apiKey || '',
+                enabled: !!data.apiKey,
+                // Préserver les URLs custom si configurées
+                transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
+                chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
+            },
+            mistral: {
+                apiKey: '',
+                enabled: false,
+                transcriptionUrl: '',
+                chatUrl: ''
+            }
+        };
+
+        // Sauvegarder la nouvelle configuration
+        // Les anciennes clés sont préservées pour la rétrocompatibilité
+        await chrome.storage.sync.set({
+            providers,
+            transcriptionProvider: 'openai',
+            chatProvider: 'openai'
+        });
+
+        debug('Migration multi-provider terminée avec succès', {
+            hasApiKey: !!data.apiKey,
+            hasCustomUrls: hasCustomTranscriptionUrl || hasCustomChatUrl
+        });
+    } catch (error) {
+        console.error('Erreur lors de la migration multi-provider:', error);
+    }
+}
+
+/**
  * Gère les événements d'installation ou de mise à jour de l'extension
  * @param {Object} details - Détails de l'événement d'installation
  */
-function handleExtensionInstalled(details) {
+async function handleExtensionInstalled(details) {
     debug(`Extension ${details.reason} event detected`);
+
+    // Effectuer la migration multi-provider si nécessaire
+    await migrateToMultiProvider();
 
     // Ouvrir la page des options uniquement lors de l'installation initiale
     if (details.reason === 'install') {

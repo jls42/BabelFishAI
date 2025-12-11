@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "إذا تم تمكينه، فسيتم نسخ النتيجة تلقائيًا إلى الحافظة ولن يظهر مربع الحوار بعد ذلك للنسخ.",
         "description": "وصف خيار النسخ التلقائي"
+    },
+    "providersTitle": {
+        "message": "موفرو الذكاء الاصطناعي",
+        "description": "عنوان قسم الموفرين"
+    },
+    "providersDescription": {
+        "message": "قم بتكوين موفر واحد أو أكثر للنسخ والترجمة.",
+        "description": "وصف قسم الموفرين"
+    },
+    "providerActive": {
+        "message": "نشط",
+        "description": "حالة الموفر النشط"
+    },
+    "providerInactive": {
+        "message": "غير نشط",
+        "description": "حالة الموفر غير النشط"
+    },
+    "providerMissingKey": {
+        "message": "مفتاح مفقود",
+        "description": "الحالة عند فقدان مفتاح API"
+    },
+    "mistralApiKeyInfo": {
+        "message": "احصل على مفتاح API الخاص بك على",
+        "description": "معلومات للحصول على مفتاح API لـ Mistral"
+    },
+    "advancedUrlsTitle": {
+        "message": "عناوين URL مخصصة (متقدم)",
+        "description": "عنوان لعناوين URL المخصصة"
+    },
+    "transcriptionUrlLabel": {
+        "message": "عنوان URL للنسخ:",
+        "description": "تسمية لعنوان URL للنسخ"
+    },
+    "chatUrlLabel": {
+        "message": "عنوان URL للدردشة:",
+        "description": "تسمية لعنوان URL للدردشة"
+    },
+    "serviceSelectionTitle": {
+        "message": "اختيار الخدمة",
+        "description": "عنوان اختيار الخدمة"
+    },
+    "transcriptionProviderLabel": {
+        "message": "النسخ:",
+        "description": "تسمية لموفر النسخ"
+    },
+    "chatProviderLabel": {
+        "message": "الترجمة/إعادة الصياغة:",
+        "description": "تسمية لموفر الدردشة"
+    },
+    "invalidUrlError": {
+        "message": "خطأ: يجب أن تستخدم عناوين URL بروتوكول HTTPS.",
+        "description": "رسالة خطأ لعناوين URL غير صالحة"
+    },
+    "displayError": {
+        "message": "خطأ في العرض",
+        "description": "رسالة خطأ عند عرض النتيجة"
+    },
+    "invalidTextForProcessing": {
+        "message": "نص غير صالح للمعالجة",
+        "description": "رسالة خطأ عندما يكون النص غير صالح"
+    },
+    "rephrasingComplete": {
+        "message": "اكتملت إعادة الصياغة",
+        "description": "رسالة نجاح إعادة الصياغة"
+    },
+    "rephrasingError": {
+        "message": "خطأ أثناء إعادة الصياغة",
+        "description": "رسالة خطأ إعادة الصياغة"
+    },
+    "rephrasingText": {
+        "message": "جاري إعادة صياغة النص...",
+        "description": "رسالة أثناء إعادة الصياغة"
+    },
+    "translatingText": {
+        "message": "جاري ترجمة النص...",
+        "description": "رسالة أثناء الترجمة"
+    },
+    "translationComplete": {
+        "message": "اكتملت الترجمة",
+        "description": "رسالة نجاح الترجمة"
+    },
+    "translationError": {
+        "message": "خطأ أثناء الترجمة",
+        "description": "رسالة خطأ الترجمة"
     }
 }

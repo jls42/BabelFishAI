@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Si está activado, el resultado se copiará automáticamente en el portapapeles y el cuadro de diálogo ya no aparecerá para la transcripción.",
         "description": "Descripción de la opción de copia automática"
+    },
+    "providersTitle": {
+        "message": "Proveedores de IA",
+        "description": "Título de la sección de proveedores"
+    },
+    "providersDescription": {
+        "message": "Configure uno o más proveedores para la transcripción y la traducción.",
+        "description": "Descripción de la sección de proveedores"
+    },
+    "providerActive": {
+        "message": "Activo",
+        "description": "Estado de un proveedor activo"
+    },
+    "providerInactive": {
+        "message": "Inactivo",
+        "description": "Estado de un proveedor inactivo"
+    },
+    "providerMissingKey": {
+        "message": "Clave faltante",
+        "description": "Estado cuando falta la clave API"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Obtén tu clave API en",
+        "description": "Información para obtener la clave API de Mistral"
+    },
+    "advancedUrlsTitle": {
+        "message": "URLs personalizadas (avanzado)",
+        "description": "Título para URLs personalizadas"
+    },
+    "transcriptionUrlLabel": {
+        "message": "URL de transcripción:",
+        "description": "Etiqueta para la URL de transcripción"
+    },
+    "chatUrlLabel": {
+        "message": "URL de chat:",
+        "description": "Etiqueta para la URL de chat"
+    },
+    "serviceSelectionTitle": {
+        "message": "Selección de servicios",
+        "description": "Título para la selección de servicios"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcripción:",
+        "description": "Etiqueta para el proveedor de transcripción"
+    },
+    "chatProviderLabel": {
+        "message": "Traducción/Reformulación:",
+        "description": "Etiqueta para el proveedor de chat"
+    },
+    "invalidUrlError": {
+        "message": "Error: Las URLs deben usar HTTPS.",
+        "description": "Mensaje de error para URLs inválidas"
+    },
+    "displayError": {
+        "message": "Error de visualización",
+        "description": "Mensaje de error al mostrar el resultado"
+    },
+    "invalidTextForProcessing": {
+        "message": "Texto inválido para procesar",
+        "description": "Mensaje de error cuando el texto es inválido"
+    },
+    "rephrasingComplete": {
+        "message": "Reformulación completada",
+        "description": "Mensaje de éxito de reformulación"
+    },
+    "rephrasingError": {
+        "message": "Error durante la reformulación",
+        "description": "Mensaje de error de reformulación"
+    },
+    "rephrasingText": {
+        "message": "Reformulando texto...",
+        "description": "Mensaje durante la reformulación"
+    },
+    "translatingText": {
+        "message": "Traduciendo texto...",
+        "description": "Mensaje durante la traducción"
+    },
+    "translationComplete": {
+        "message": "Traducción completada",
+        "description": "Mensaje de éxito de traducción"
+    },
+    "translationError": {
+        "message": "Error durante la traducción",
+        "description": "Mensaje de error de traducción"
     }
 }

@@ -227,35 +227,30 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
-     * Transcrit un blob audio en utilisant l'API Whisper
+     * Transcrit un blob audio en utilisant l'API de transcription (multi-provider)
+     * Supporte OpenAI Whisper, Mistral Voxtral, etc.
      * @param {Blob} audioBlob - Le blob audio à transcrire
      * @returns {Promise<Object>} - La réponse de l'API de transcription
      */
     async function transcribeAudio(audioBlob) {
-        const apiKey = await window.BabelFishAIUtils.api.getApiKey();
-
-        if (!apiKey) {
-            const errorMsg = ERRORS.API_KEY_NOT_FOUND;
-            window.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
-            throw new Error(errorMsg);
-        }
-
         try {
-            // Récupérer l'URL de l'API et le modèle depuis le stockage en utilisant l'utilitaire
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
-                apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-                audioModelType: API_CONFIG.WHISPER_MODEL
-            });
+            // Utiliser resolveApiConfig pour obtenir la config multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
-            const apiUrl = result.apiUrl || API_CONFIG.DEFAULT_WHISPER_API_URL;
-            const audioModelType = result.audioModelType;
+            if (!config.apiKey) {
+                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+                window.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
+                throw new Error(errorMsg);
+            }
+
+            console.log('[Display] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
             const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
-                apiKey,
-                apiUrl,
-                audioModelType,
+                config.apiKey,
+                config.url,
+                config.model,
                 null, // Pas de nom de fichier spécifique
                 true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
@@ -264,10 +259,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         } catch (error) {
             console.error('Transcription error:', error);
             throw error;
-        } finally {
-            // Nettoyer les ressources
-            // Note: Ces variables étaient globales dans content.js, mais ici nous ne les gérons pas
-            // car elles seront gérées par le module d'enregistrement
         }
     }
 

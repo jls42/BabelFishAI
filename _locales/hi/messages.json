@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "यदि सक्षम किया गया है, तो परिणाम स्वचालित रूप से क्लिपबोर्ड पर कॉपी हो जाएगा और ट्रांसक्रिप्शन के लिए डायलॉग बॉक्स अब दिखाई नहीं देगा।",
         "description": "स्वचालित प्रतिलिपि विकल्प का विवरण"
+    },
+    "providersTitle": {
+        "message": "एआई प्रदाता",
+        "description": "प्रदाता अनुभाग का शीर्षक"
+    },
+    "providersDescription": {
+        "message": "ट्रांसक्रिप्शन और अनुवाद के लिए एक या अधिक प्रदाताओं को कॉन्फ़िगर करें।",
+        "description": "प्रदाता अनुभाग का विवरण"
+    },
+    "providerActive": {
+        "message": "सक्रिय",
+        "description": "एक सक्रिय प्रदाता की स्थिति"
+    },
+    "providerInactive": {
+        "message": "निष्क्रिय",
+        "description": "एक निष्क्रिय प्रदाता की स्थिति"
+    },
+    "providerMissingKey": {
+        "message": "कुंजी गुम है",
+        "description": "जब API कुंजी गुम हो तो स्थिति"
+    },
+    "mistralApiKeyInfo": {
+        "message": "अपनी API कुंजी यहां प्राप्त करें",
+        "description": "Mistral API कुंजी प्राप्त करने की जानकारी"
+    },
+    "advancedUrlsTitle": {
+        "message": "कस्टम URLs (उन्नत)",
+        "description": "कस्टम URLs के लिए शीर्षक"
+    },
+    "transcriptionUrlLabel": {
+        "message": "ट्रांसक्रिप्शन URL:",
+        "description": "ट्रांसक्रिप्शन URL के लिए लेबल"
+    },
+    "chatUrlLabel": {
+        "message": "चैट URL:",
+        "description": "चैट URL के लिए लेबल"
+    },
+    "serviceSelectionTitle": {
+        "message": "सेवा चयन",
+        "description": "सेवा चयन के लिए शीर्षक"
+    },
+    "transcriptionProviderLabel": {
+        "message": "ट्रांसक्रिप्शन:",
+        "description": "ट्रांसक्रिप्शन प्रदाता के लिए लेबल"
+    },
+    "chatProviderLabel": {
+        "message": "अनुवाद/रीफ़्रेशिंग:",
+        "description": "चैट प्रदाता के लिए लेबल"
+    },
+    "invalidUrlError": {
+        "message": "त्रुटि: URLs को HTTPS का उपयोग करना चाहिए।",
+        "description": "अमान्य URLs के लिए त्रुटि संदेश"
+    },
+    "displayError": {
+        "message": "प्रदर्शन त्रुटि",
+        "description": "परिणाम प्रदर्शित करते समय त्रुटि संदेश"
+    },
+    "invalidTextForProcessing": {
+        "message": "प्रसंस्करण के लिए अमान्य पाठ",
+        "description": "जब पाठ अमान्य हो तो त्रुटि संदेश"
+    },
+    "rephrasingComplete": {
+        "message": "रीफ़्रेशिंग पूर्ण",
+        "description": "रीफ़्रेशिंग सफलता संदेश"
+    },
+    "rephrasingError": {
+        "message": "रीफ़्रेशिंग के दौरान त्रुटि",
+        "description": "रीफ़्रेशिंग त्रुटि संदेश"
+    },
+    "rephrasingText": {
+        "message": "पाठ रीफ़्रेश हो रहा है...",
+        "description": "रीफ़्रेशिंग के दौरान संदेश"
+    },
+    "translatingText": {
+        "message": "पाठ का अनुवाद हो रहा है...",
+        "description": "अनुवाद के दौरान संदेश"
+    },
+    "translationComplete": {
+        "message": "अनुवाद पूर्ण",
+        "description": "अनुवाद सफलता संदेश"
+    },
+    "translationError": {
+        "message": "अनुवाद के दौरान त्रुटि",
+        "description": "अनुवाद त्रुटि संदेश"
     }
 }

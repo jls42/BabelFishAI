@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Om aktiverat kommer resultatet att kopieras automatiskt till urklipp och dialogrutan kommer inte längre att visas för transkription.",
         "description": "Beskrivning av alternativet för automatisk kopiering"
+    },
+    "providersTitle": {
+        "message": "AI-leverantörer",
+        "description": "Titel för leverantörssektionen"
+    },
+    "providersDescription": {
+        "message": "Konfigurera en eller flera leverantörer för transkription och översättning.",
+        "description": "Beskrivning av leverantörssektionen"
+    },
+    "providerActive": {
+        "message": "Aktiv",
+        "description": "Status för en aktiv leverantör"
+    },
+    "providerInactive": {
+        "message": "Inaktiv",
+        "description": "Status för en inaktiv leverantör"
+    },
+    "providerMissingKey": {
+        "message": "Nyckel saknas",
+        "description": "Status när API-nyckeln saknas"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Hämta din API-nyckel på",
+        "description": "Information för att få Mistral API-nyckel"
+    },
+    "advancedUrlsTitle": {
+        "message": "Anpassade URL:er (avancerat)",
+        "description": "Titel för anpassade URL:er"
+    },
+    "transcriptionUrlLabel": {
+        "message": "Transkriptions-URL:",
+        "description": "Etikett för transkriptions-URL"
+    },
+    "chatUrlLabel": {
+        "message": "Chatt-URL:",
+        "description": "Etikett för chatt-URL"
+    },
+    "serviceSelectionTitle": {
+        "message": "Tjänsteval",
+        "description": "Titel för tjänsteval"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transkription:",
+        "description": "Etikett för transkriptionsleverantör"
+    },
+    "chatProviderLabel": {
+        "message": "Översättning/Omformulering:",
+        "description": "Etikett för chattleverantör"
+    },
+    "invalidUrlError": {
+        "message": "Fel: URL:er måste använda HTTPS.",
+        "description": "Felmeddelande för ogiltiga URL:er"
+    },
+    "displayError": {
+        "message": "Visningsfel",
+        "description": "Felmeddelande vid visning av resultat"
+    },
+    "invalidTextForProcessing": {
+        "message": "Ogiltig text för bearbetning",
+        "description": "Felmeddelande när texten är ogiltig"
+    },
+    "rephrasingComplete": {
+        "message": "Omformulering klar",
+        "description": "Framgångsmeddelande för omformulering"
+    },
+    "rephrasingError": {
+        "message": "Fel vid omformulering",
+        "description": "Felmeddelande för omformulering"
+    },
+    "rephrasingText": {
+        "message": "Omformulerar text...",
+        "description": "Meddelande under omformulering"
+    },
+    "translatingText": {
+        "message": "Översätter text...",
+        "description": "Meddelande under översättning"
+    },
+    "translationComplete": {
+        "message": "Översättning klar",
+        "description": "Framgångsmeddelande för översättning"
+    },
+    "translationError": {
+        "message": "Fel vid översättning",
+        "description": "Felmeddelande för översättning"
     }
 }

@@ -1,8 +1,28 @@
 // Script de gestion des options
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = window.BabelFishAIUtils.i18n;
+    const Providers = window.BabelFishAIProviders;
 
-    // Éléments du DOM
+    // Éléments du DOM - Providers
+    const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
+    const openaiApiKeyInput = document.getElementById('openaiApiKey');
+    const openaiTranscriptionUrlInput = document.getElementById('openaiTranscriptionUrl');
+    const openaiChatUrlInput = document.getElementById('openaiChatUrl');
+    const openaiStatus = document.getElementById('openaiStatus');
+    const providerOpenAI = document.getElementById('providerOpenAI');
+
+    const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
+    const mistralApiKeyInput = document.getElementById('mistralApiKey');
+    const mistralTranscriptionUrlInput = document.getElementById('mistralTranscriptionUrl');
+    const mistralChatUrlInput = document.getElementById('mistralChatUrl');
+    const mistralStatus = document.getElementById('mistralStatus');
+    const providerMistral = document.getElementById('providerMistral');
+
+    const providerServices = document.getElementById('providerServices');
+    const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
+    const chatProviderSelect = document.getElementById('chatProvider');
+
+    // Éléments du DOM - Legacy (gardés pour rétrocompatibilité)
     const apiKeyInput = document.getElementById('apiKey');
     const toggleApiKeyButton = document.getElementById('toggleApiKey');
     const activeDisplayCheckbox = document.getElementById('activeDisplay');
@@ -42,6 +62,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     // État du mode avancé
     let isAdvancedVisible = false;
 
+    // Timer pour le debounce des sauvegardes
+    let saveDebounceTimer = null;
+    const SAVE_DEBOUNCE_DELAY = 500; // 500ms de délai
+
+    /**
+     * Wrapper avec debounce pour éviter les erreurs MAX_WRITE_OPERATIONS_PER_MINUTE
+     * @param {boolean} scrollToStatus - Si true, scroll vers le message de statut
+     */
+    function debouncedSaveOptions(scrollToStatus = false) {
+        // Annuler le timer précédent
+        if (saveDebounceTimer) {
+            clearTimeout(saveDebounceTimer);
+        }
+        // Programmer une nouvelle sauvegarde
+        saveDebounceTimer = setTimeout(() => {
+            saveOptions(scrollToStatus);
+        }, SAVE_DEBOUNCE_DELAY);
+    }
+
     // Fonction pour valider une URL HTTPS
     function isValidHttpsUrl(string) {
         try {
@@ -50,6 +89,275 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (_) {
             return false;
         }
+    }
+
+    // ===== Gestion des Providers =====
+
+    /**
+     * Met à jour l'affichage visuel d'un provider
+     * @param {string} providerId - ID du provider ('openai' ou 'mistral')
+     */
+    function updateProviderDisplay(providerId) {
+        const isOpenAI = providerId === 'openai';
+        const enabledCheckbox = isOpenAI ? openaiEnabledCheckbox : mistralEnabledCheckbox;
+        const apiKeyInput = isOpenAI ? openaiApiKeyInput : mistralApiKeyInput;
+        const statusElement = isOpenAI ? openaiStatus : mistralStatus;
+        const cardElement = isOpenAI ? providerOpenAI : providerMistral;
+
+        const isEnabled = enabledCheckbox.checked;
+        const hasApiKey = apiKeyInput.value.trim().length > 0;
+
+        // Mettre à jour la classe active de la carte
+        cardElement.classList.toggle('active', isEnabled);
+
+        // Mettre à jour le statut
+        if (isEnabled && hasApiKey) {
+            statusElement.textContent = i18n.getMessage('providerActive') || 'Actif';
+            statusElement.className = 'provider-status';
+        } else if (isEnabled && !hasApiKey) {
+            statusElement.textContent = i18n.getMessage('providerMissingKey') || 'Clé manquante';
+            statusElement.className = 'provider-status inactive';
+        } else {
+            statusElement.textContent = i18n.getMessage('providerInactive') || 'Inactif';
+            statusElement.className = 'provider-status inactive';
+        }
+
+        // Mettre à jour la visibilité des sélecteurs de service
+        updateServiceSelectorsVisibility();
+    }
+
+    /**
+     * Met à jour la visibilité des sélecteurs de service
+     * Visible uniquement si 2+ providers sont actifs
+     */
+    function updateServiceSelectorsVisibility() {
+        const enabledProviders = getEnabledProviderIds();
+        const showSelectors = enabledProviders.length > 1;
+
+        providerServices.style.display = showSelectors ? 'block' : 'none';
+
+        if (showSelectors) {
+            populateServiceSelectors(enabledProviders);
+        }
+    }
+
+    /**
+     * Récupère la liste des IDs de providers activés (avec clé API)
+     * @returns {string[]} Liste des IDs
+     */
+    function getEnabledProviderIds() {
+        const enabled = [];
+        if (openaiEnabledCheckbox.checked && openaiApiKeyInput.value.trim()) {
+            enabled.push('openai');
+        }
+        if (mistralEnabledCheckbox.checked && mistralApiKeyInput.value.trim()) {
+            enabled.push('mistral');
+        }
+        return enabled;
+    }
+
+    /**
+     * Récupère la liste des IDs de providers avec checkbox activée (même sans clé)
+     * @returns {string[]} Liste des IDs
+     */
+    function getCheckedProviderIds() {
+        const checked = [];
+        if (openaiEnabledCheckbox.checked) {
+            checked.push('openai');
+        }
+        if (mistralEnabledCheckbox.checked) {
+            checked.push('mistral');
+        }
+        return checked;
+    }
+
+    /**
+     * Remplit les sélecteurs de service avec les providers actifs
+     * @param {string[]} enabledProviders - Liste des IDs de providers actifs
+     */
+    function populateServiceSelectors(enabledProviders) {
+        // Sauvegarder les valeurs actuelles
+        const currentTranscription = transcriptionProviderSelect.value;
+        const currentChat = chatProviderSelect.value;
+
+        // Vider et repeupler les selects
+        transcriptionProviderSelect.innerHTML = '';
+        chatProviderSelect.innerHTML = '';
+
+        enabledProviders.forEach(providerId => {
+            const provider = Providers.getProvider(providerId);
+            if (!provider) return;
+
+            // Option pour transcription
+            const transcriptionOption = document.createElement('option');
+            transcriptionOption.value = providerId;
+            transcriptionOption.textContent = provider.name;
+            transcriptionProviderSelect.appendChild(transcriptionOption);
+
+            // Option pour chat
+            const chatOption = document.createElement('option');
+            chatOption.value = providerId;
+            chatOption.textContent = provider.name;
+            chatProviderSelect.appendChild(chatOption);
+        });
+
+        // Restaurer les valeurs si elles sont toujours valides
+        if (enabledProviders.includes(currentTranscription)) {
+            transcriptionProviderSelect.value = currentTranscription;
+        }
+        if (enabledProviders.includes(currentChat)) {
+            chatProviderSelect.value = currentChat;
+        }
+    }
+
+    /**
+     * Charge la configuration des providers depuis le storage
+     */
+    function loadProvidersConfig() {
+        chrome.storage.sync.get({
+            providers: null,
+            transcriptionProvider: 'openai',
+            chatProvider: 'openai',
+            // Legacy keys pour migration
+            apiKey: ''
+        }, (items) => {
+            console.log('[Options] Loading providers config:', items);
+
+            // Si pas de config providers, utiliser la config legacy
+            if (!items.providers) {
+                // Mode legacy : utiliser l'ancienne clé API pour OpenAI
+                openaiApiKeyInput.value = items.apiKey || '';
+                openaiEnabledCheckbox.checked = !!items.apiKey;
+                mistralEnabledCheckbox.checked = false;
+            } else {
+                // Mode multi-provider
+                const openaiConfig = items.providers.openai || {};
+                openaiApiKeyInput.value = openaiConfig.apiKey || '';
+                openaiEnabledCheckbox.checked = openaiConfig.enabled || false;
+                openaiTranscriptionUrlInput.value = openaiConfig.transcriptionUrl || '';
+                openaiChatUrlInput.value = openaiConfig.chatUrl || '';
+
+                const mistralConfig = items.providers.mistral || {};
+                mistralApiKeyInput.value = mistralConfig.apiKey || '';
+                mistralEnabledCheckbox.checked = mistralConfig.enabled || false;
+                mistralTranscriptionUrlInput.value = mistralConfig.transcriptionUrl || '';
+                mistralChatUrlInput.value = mistralConfig.chatUrl || '';
+            }
+
+            // Mettre à jour l'affichage des cartes
+            updateProviderDisplay('openai');
+            updateProviderDisplay('mistral');
+
+            // Mettre à jour les sélecteurs de service après avoir chargé les providers
+            const enabledProviders = getEnabledProviderIds();
+            if (enabledProviders.length > 1) {
+                populateServiceSelectors(enabledProviders);
+                // Restaurer les valeurs sauvegardées
+                if (enabledProviders.includes(items.transcriptionProvider)) {
+                    transcriptionProviderSelect.value = items.transcriptionProvider;
+                }
+                if (enabledProviders.includes(items.chatProvider)) {
+                    chatProviderSelect.value = items.chatProvider;
+                }
+            }
+
+            console.log('[Options] Loaded - transcriptionProvider:', items.transcriptionProvider, 'chatProvider:', items.chatProvider);
+        });
+    }
+
+    /**
+     * Sauvegarde la configuration des providers
+     */
+    function saveProvidersConfig() {
+        const providers = {
+            openai: {
+                apiKey: openaiApiKeyInput.value.trim(),
+                enabled: openaiEnabledCheckbox.checked,
+                transcriptionUrl: openaiTranscriptionUrlInput.value.trim(),
+                chatUrl: openaiChatUrlInput.value.trim()
+            },
+            mistral: {
+                apiKey: mistralApiKeyInput.value.trim(),
+                enabled: mistralEnabledCheckbox.checked,
+                transcriptionUrl: mistralTranscriptionUrlInput.value.trim(),
+                chatUrl: mistralChatUrlInput.value.trim()
+            }
+        };
+
+        // Valider les URLs
+        const urlsToValidate = [
+            providers.openai.transcriptionUrl,
+            providers.openai.chatUrl,
+            providers.mistral.transcriptionUrl,
+            providers.mistral.chatUrl
+        ].filter(url => url); // Filtrer les URLs vides
+
+        for (const url of urlsToValidate) {
+            if (!isValidHttpsUrl(url)) {
+                showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS.', 'error');
+                return false;
+            }
+        }
+
+        // Déterminer les providers actifs pour la sélection de service
+        const enabledProviders = getEnabledProviderIds();
+        let transcriptionProvider = 'openai';
+        let chatProvider = 'openai';
+
+        if (enabledProviders.length > 1) {
+            // Plusieurs providers actifs : utiliser les sélecteurs
+            transcriptionProvider = transcriptionProviderSelect.value || enabledProviders[0];
+            chatProvider = chatProviderSelect.value || enabledProviders[0];
+        } else if (enabledProviders.length === 1) {
+            // Un seul provider actif : utiliser celui-là pour tout
+            transcriptionProvider = enabledProviders[0];
+            chatProvider = enabledProviders[0];
+        }
+        // Si aucun provider actif, garder 'openai' par défaut
+
+        // Synchroniser avec la clé legacy pour rétrocompatibilité
+        // Utiliser la clé du provider de transcription actif
+        const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
+
+        console.log('[Options] Saving providers config:', {
+            transcriptionProvider,
+            chatProvider,
+            enabledProviders
+        });
+
+        chrome.storage.sync.set({
+            providers,
+            transcriptionProvider,
+            chatProvider,
+            // Legacy keys pour rétrocompatibilité
+            apiKey: legacyApiKey
+        }, () => {
+            if (chrome.runtime.lastError) {
+                console.error('[Options] Error saving:', chrome.runtime.lastError);
+            } else {
+                console.log('[Options] Config saved successfully');
+            }
+            updateProviderDisplay('openai');
+            updateProviderDisplay('mistral');
+        });
+
+        return true;
+    }
+
+    /**
+     * Gère le clic sur les boutons toggle password des providers
+     */
+    function setupProviderPasswordToggles() {
+        document.querySelectorAll('.provider-card .toggle-password').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input) {
+                    input.type = input.type === 'password' ? 'text' : 'password';
+                    button.textContent = input.type === 'password' ? '👁️' : '🔒';
+                }
+            });
+        });
     }
 
     // Gestion du mode avancé
@@ -136,12 +444,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Sauvegarder les options
     function saveOptions(scrollToStatus = true) {
+        // Sauvegarder d'abord la config providers
+        if (!saveProvidersConfig()) {
+            return; // Arrêter si la validation a échoué
+        }
+
         const customModelTypes = Array.from(customModelsList.children).map(item =>
             item.textContent.replace('×', '').trim()
         );
 
+        // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
+        const legacyApiKey = openaiApiKeyInput.value.trim();
+
         const options = {
-            apiKey: apiKeyInput.value,
+            apiKey: legacyApiKey,
             activeDisplay: activeDisplayCheckbox.checked,
             dialogDisplay: dialogDisplayCheckbox.checked,
             dialogDuration: parseInt(dialogDurationInput.value),
@@ -400,26 +716,53 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleApiKeyButton.textContent = type === 'password' ? '🔒' : '👁️';
     }
 
-    // Event listeners
+    // Event listeners - Providers (avec debounce pour les inputs)
+    openaiEnabledCheckbox.addEventListener('change', () => {
+        updateProviderDisplay('openai');
+        debouncedSaveOptions();
+    });
+    openaiApiKeyInput.addEventListener('input', () => {
+        updateProviderDisplay('openai');
+        debouncedSaveOptions();
+    });
+    openaiTranscriptionUrlInput.addEventListener('input', () => debouncedSaveOptions());
+    openaiChatUrlInput.addEventListener('input', () => debouncedSaveOptions());
+
+    mistralEnabledCheckbox.addEventListener('change', () => {
+        updateProviderDisplay('mistral');
+        debouncedSaveOptions();
+    });
+    mistralApiKeyInput.addEventListener('input', () => {
+        updateProviderDisplay('mistral');
+        debouncedSaveOptions();
+    });
+    mistralTranscriptionUrlInput.addEventListener('input', () => debouncedSaveOptions());
+    mistralChatUrlInput.addEventListener('input', () => debouncedSaveOptions());
+
+    transcriptionProviderSelect.addEventListener('change', () => debouncedSaveOptions());
+    chatProviderSelect.addEventListener('change', () => debouncedSaveOptions());
+
+    // Event listeners - Legacy (avec debounce pour les inputs)
     interfaceLanguageSelect.addEventListener('change', handleLanguageChange);
-    apiKeyInput.addEventListener('input', () => saveOptions(false));
-    activeDisplayCheckbox.addEventListener('change', () => saveOptions(false));
-    dialogDisplayCheckbox.addEventListener('change', () => saveOptions(false));
-    autoCopyCheckbox.addEventListener('change', () => saveOptions(false));
-    dialogDurationInput.addEventListener('input', () => saveOptions(false));
-    bannerColorStartInput.addEventListener('input', () => saveOptions(false));
-    bannerColorEndInput.addEventListener('input', () => saveOptions(false));
-    bannerOpacityInput.addEventListener('input', () => saveOptions(false));
-    enableRephraseCheckbox.addEventListener('change', () => saveOptions(false));
-    enableTranslationCheckbox.addEventListener('change', () => saveOptions(false));
-    sourceLanguageSelect.addEventListener('change', () => saveOptions(false));
-    targetLanguageSelect.addEventListener('change', () => saveOptions(false));
-    expertModeCheckbox.addEventListener('change', () => saveOptions(false));
-    modelTypeSelect.addEventListener('change', () => saveOptions(false));
-    disableLoggingCheckbox.addEventListener('change', () => saveOptions(false));
-    audioModelTypeSelect.addEventListener('change', () => saveOptions(false));
-    apiUrlInput.addEventListener('input', () => saveOptions(false));
-    translationApiUrlInput.addEventListener('input', () => saveOptions(false));
+    if (apiKeyInput) apiKeyInput.addEventListener('input', () => debouncedSaveOptions());
+    activeDisplayCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    dialogDisplayCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    autoCopyCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    dialogDurationInput.addEventListener('input', () => debouncedSaveOptions());
+    bannerColorStartInput.addEventListener('input', () => debouncedSaveOptions());
+    bannerColorEndInput.addEventListener('input', () => debouncedSaveOptions());
+    bannerOpacityInput.addEventListener('input', () => debouncedSaveOptions());
+    enableRephraseCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    enableTranslationCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    sourceLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
+    targetLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
+    expertModeCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    modelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
+    disableLoggingCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    audioModelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
+    apiUrlInput.addEventListener('input', () => debouncedSaveOptions());
+    translationApiUrlInput.addEventListener('input', () => debouncedSaveOptions());
+    // Les boutons de sauvegarde explicites n'ont pas de debounce
     saveButton.addEventListener('click', () => saveOptions(true));
     saveAdvancedButton.addEventListener('click', () => saveOptions(true));
     toggleApiKeyButton.addEventListener('click', toggleApiKeyVisibility);
@@ -431,6 +774,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialiser l'internationalisation et charger les options
     await i18n.init();
+    setupProviderPasswordToggles();
+    loadProvidersConfig();
     loadOptions();
     populateAudioModelOptions();
 });

@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Wenn aktiviert, wird das Ergebnis automatisch in die Zwischenablage kopiert und das Dialogfeld wird für die Transkription nicht mehr angezeigt.",
         "description": "Beschreibung der automatischen Kopieroption"
+    },
+    "providersTitle": {
+        "message": "KI-Anbieter",
+        "description": "Titel des Anbieterabschnitts"
+    },
+    "providersDescription": {
+        "message": "Konfigurieren Sie einen oder mehrere Anbieter für Transkription und Übersetzung.",
+        "description": "Beschreibung des Anbieterabschnitts"
+    },
+    "providerActive": {
+        "message": "Aktiv",
+        "description": "Status eines aktiven Anbieters"
+    },
+    "providerInactive": {
+        "message": "Inaktiv",
+        "description": "Status eines inaktiven Anbieters"
+    },
+    "providerMissingKey": {
+        "message": "Schlüssel fehlt",
+        "description": "Status wenn der API-Schlüssel fehlt"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Holen Sie sich Ihren API-Schlüssel unter",
+        "description": "Information zum Erhalt des Mistral API-Schlüssels"
+    },
+    "advancedUrlsTitle": {
+        "message": "Benutzerdefinierte URLs (erweitert)",
+        "description": "Titel für benutzerdefinierte URLs"
+    },
+    "transcriptionUrlLabel": {
+        "message": "Transkriptions-URL:",
+        "description": "Beschriftung für die Transkriptions-URL"
+    },
+    "chatUrlLabel": {
+        "message": "Chat-URL:",
+        "description": "Beschriftung für die Chat-URL"
+    },
+    "serviceSelectionTitle": {
+        "message": "Dienstauswahl",
+        "description": "Titel für die Dienstauswahl"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transkription:",
+        "description": "Beschriftung für den Transkriptionsanbieter"
+    },
+    "chatProviderLabel": {
+        "message": "Übersetzung/Neuformulierung:",
+        "description": "Beschriftung für den Chat-Anbieter"
+    },
+    "invalidUrlError": {
+        "message": "Fehler: URLs müssen HTTPS verwenden.",
+        "description": "Fehlermeldung für ungültige URLs"
+    },
+    "displayError": {
+        "message": "Anzeigefehler",
+        "description": "Fehlermeldung beim Anzeigen des Ergebnisses"
+    },
+    "invalidTextForProcessing": {
+        "message": "Ungültiger Text zur Verarbeitung",
+        "description": "Fehlermeldung wenn der Text ungültig ist"
+    },
+    "rephrasingComplete": {
+        "message": "Neuformulierung abgeschlossen",
+        "description": "Erfolgsmeldung für Neuformulierung"
+    },
+    "rephrasingError": {
+        "message": "Fehler bei der Neuformulierung",
+        "description": "Fehlermeldung für Neuformulierung"
+    },
+    "rephrasingText": {
+        "message": "Text wird neuformuliert...",
+        "description": "Meldung während der Neuformulierung"
+    },
+    "translatingText": {
+        "message": "Text wird übersetzt...",
+        "description": "Meldung während der Übersetzung"
+    },
+    "translationComplete": {
+        "message": "Übersetzung abgeschlossen",
+        "description": "Erfolgsmeldung für Übersetzung"
+    },
+    "translationError": {
+        "message": "Fehler bei der Übersetzung",
+        "description": "Fehlermeldung für Übersetzung"
     }
 }

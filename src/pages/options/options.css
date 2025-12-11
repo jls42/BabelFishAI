@@ -525,3 +525,211 @@ select:focus {
 #saveAdvanced {
     display: none;
 }
+
+/* ===== Section Providers IA ===== */
+.providers-section {
+    background: linear-gradient(to bottom,
+            rgba(104, 64, 84, 0.03),
+            rgba(76, 123, 141, 0.03));
+}
+
+.provider-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.provider-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.provider-card.active {
+    border-color: var(--primary-color-2);
+    box-shadow: 0 2px 12px rgba(76, 123, 141, 0.15);
+}
+
+.provider-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: rgba(248, 249, 250, 0.5);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.provider-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.provider-name {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--primary-color-1);
+}
+
+.provider-status {
+    font-size: 0.85em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+}
+
+.provider-status.inactive {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+/* Toggle switch pour provider */
+.provider-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.provider-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.provider-toggle input:checked + .toggle-slider {
+    background: var(--primary-gradient);
+}
+
+.provider-toggle input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.provider-content {
+    padding: 20px;
+    display: none;
+}
+
+.provider-card.active .provider-content {
+    display: block;
+}
+
+.provider-advanced {
+    margin-top: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.provider-advanced summary {
+    padding: 12px 15px;
+    background: rgba(248, 249, 250, 0.8);
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--primary-color-1);
+    transition: background 0.2s;
+}
+
+.provider-advanced summary:hover {
+    background: rgba(248, 249, 250, 1);
+}
+
+.provider-urls {
+    padding: 15px;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.provider-urls .form-group {
+    margin-bottom: 15px;
+}
+
+.provider-urls .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Sélection des services */
+.provider-services {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(76, 123, 141, 0.05);
+    border-radius: 10px;
+    border: 1px dashed var(--border-color);
+}
+
+.provider-services h4 {
+    margin: 0 0 15px 0;
+    color: var(--primary-color-1);
+    font-size: 1em;
+}
+
+.service-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.service-selector:last-child {
+    margin-bottom: 0;
+}
+
+.service-selector label {
+    flex: 0 0 180px;
+    font-weight: 500;
+    color: #555;
+}
+
+.service-selector select {
+    flex: 1;
+    max-width: 300px;
+}
+
+/* Responsive pour providers */
+@media screen and (max-width: 600px) {
+    .provider-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .service-selector {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .service-selector label {
+        flex: none;
+    }
+
+    .service-selector select {
+        width: 100%;
+        max-width: none;
+    }
+}

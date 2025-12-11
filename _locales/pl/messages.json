@@ -450,5 +450,89 @@
     "autoCopyDescription": {
         "message": "Jeśli włączone, wynik zostanie automatycznie skopiowany do schowka, a okno dialogowe nie pojawi się już w przypadku transkrypcji.",
         "description": "Opis opcji automatycznego kopiowania"
+    },
+    "providersTitle": {
+        "message": "Dostawcy AI",
+        "description": "Tytuł sekcji dostawców"
+    },
+    "providersDescription": {
+        "message": "Skonfiguruj jednego lub więcej dostawców transkrypcji i tłumaczenia.",
+        "description": "Opis sekcji dostawców"
+    },
+    "providerActive": {
+        "message": "Aktywny",
+        "description": "Status aktywnego dostawcy"
+    },
+    "providerInactive": {
+        "message": "Nieaktywny",
+        "description": "Status nieaktywnego dostawcy"
+    },
+    "providerMissingKey": {
+        "message": "Brak klucza",
+        "description": "Status gdy brakuje klucza API"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Uzyskaj swój klucz API na",
+        "description": "Informacja o uzyskaniu klucza API Mistral"
+    },
+    "advancedUrlsTitle": {
+        "message": "Niestandardowe adresy URL (zaawansowane)",
+        "description": "Tytuł dla niestandardowych adresów URL"
+    },
+    "transcriptionUrlLabel": {
+        "message": "URL transkrypcji:",
+        "description": "Etykieta dla URL transkrypcji"
+    },
+    "chatUrlLabel": {
+        "message": "URL czatu:",
+        "description": "Etykieta dla URL czatu"
+    },
+    "serviceSelectionTitle": {
+        "message": "Wybór usług",
+        "description": "Tytuł dla wyboru usług"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transkrypcja:",
+        "description": "Etykieta dla dostawcy transkrypcji"
+    },
+    "chatProviderLabel": {
+        "message": "Tłumaczenie/Parafraza:",
+        "description": "Etykieta dla dostawcy czatu"
+    },
+    "invalidUrlError": {
+        "message": "Błąd: adresy URL muszą używać HTTPS.",
+        "description": "Komunikat błędu dla nieprawidłowych adresów URL"
+    },
+    "displayError": {
+        "message": "Błąd wyświetlania",
+        "description": "Komunikat błędu podczas wyświetlania wyniku"
+    },
+    "invalidTextForProcessing": {
+        "message": "Nieprawidłowy tekst do przetworzenia",
+        "description": "Komunikat błędu gdy tekst jest nieprawidłowy"
+    },
+    "rephrasingComplete": {
+        "message": "Parafraza zakończona",
+        "description": "Komunikat sukcesu parafrazy"
+    },
+    "rephrasingError": {
+        "message": "Błąd podczas parafrazy",
+        "description": "Komunikat błędu parafrazy"
+    },
+    "rephrasingText": {
+        "message": "Parafrazowanie tekstu...",
+        "description": "Komunikat podczas parafrazy"
+    },
+    "translatingText": {
+        "message": "Tłumaczenie tekstu...",
+        "description": "Komunikat podczas tłumaczenia"
+    },
+    "translationComplete": {
+        "message": "Tłumaczenie zakończone",
+        "description": "Komunikat sukcesu tłumaczenia"
+    },
+    "translationError": {
+        "message": "Błąd podczas tłumaczenia",
+        "description": "Komunikat błędu tłumaczenia"
     }
 }
