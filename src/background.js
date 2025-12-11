@@ -217,36 +217,7 @@ async function handleCommand(command) {
     }
 }
 
-/**
- * Gère les messages reçus du content script
- * @param {Object} message - Le message reçu
- * @param {Object} sender - L'expéditeur du message
- * @param {Function} sendResponse - Fonction pour envoyer une réponse
- */
-function handleContentScriptMessage(message) {
-    debug("Message received:", message);
-
-    // Mapping des actions aux états correspondants
-    const actionStateMap = {
-        [ACTIONS.STARTED]: STATES.RECORDING,
-        [ACTIONS.STOPPED]: STATES.STOPPED,
-        [ACTIONS.ERROR]: STATES.ERROR
-    };
-
-    // Vérifier si l'action est connue
-    if (actionStateMap[message.action]) {
-        // Mettre à jour l'état en fonction de l'action
-        updateRecordingState(
-            actionStateMap[message.action],
-            message.action === ACTIONS.ERROR ? message.error : ''
-        );
-    } else {
-        debug("Unknown action:", message.action);
-    }
-}
-
-// Enregistrer le gestionnaire d'événements pour les messages du content script
-chrome.runtime.onMessage.addListener(handleContentScriptMessage);
+// Note: Les messages du content script sont gérés par handleMessage (unique listener centralisé)
 
 /**
  * Gère le clic sur l'icône de l'extension
@@ -468,26 +439,42 @@ chrome.runtime.onStartup.addListener(createContextMenus);
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
- * Gère les messages du content script
+ * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
  * @param {Object} sender - L'expéditeur du message
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
 function handleMessage(message, sender, sendResponse) {
-    debug("Message received from content script:", message);
+    debug("Message received:", message);
+
+    // Mapping des actions d'état aux états correspondants
+    const actionStateMap = {
+        [ACTIONS.STARTED]: STATES.RECORDING,
+        [ACTIONS.STOPPED]: STATES.STOPPED,
+        [ACTIONS.ERROR]: STATES.ERROR
+    };
+
+    // Gestion des notifications d'état d'enregistrement
+    if (message.action && actionStateMap[message.action]) {
+        updateRecordingState(
+            actionStateMap[message.action],
+            message.action === ACTIONS.ERROR ? message.error : ''
+        );
+        sendResponse({});
+        return false;
+    }
 
     // Gestion des demandes d'options de langues
     if (message.action === 'getTargetLanguageOptions') {
-        // Récupérer les options de langues cibles disponibles
-        // Utiliser la liste centralisée, si disponible
         const targetLanguageOptions = getTargetLanguageOptions();
-        
         sendResponse({ options: targetLanguageOptions });
-        return false; // La réponse est envoyée de manière synchrone
+        return false;
     }
 
-    return false; // La réponse est envoyée de manière synchrone
+    // Message non reconnu - répondre quand même pour fermer proprement le port
+    sendResponse({});
+    return false;
 }
 
 // Enregistrer le gestionnaire d'événements pour la réception de messages

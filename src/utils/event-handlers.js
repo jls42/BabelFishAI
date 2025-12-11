@@ -24,9 +24,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Gère les messages provenant du script d'arrière-plan
      * @param {Object} message - Le message reçu
      * @param {Object} sender - L'expéditeur du message
-     * @param {Function} callback - Fonction de callback pour répondre au message
+     * @param {Function} sendResponse - Fonction de callback pour répondre au message
+     * @returns {boolean} false pour indiquer une réponse synchrone
      */
-    function handleBackgroundMessages(message) {
+    function handleBackgroundMessages(message, sender, sendResponse) {
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
@@ -57,6 +58,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (message.action && actionHandlers[message.action]) {
             actionHandlers[message.action]();
         }
+
+        // Toujours envoyer une réponse pour fermer proprement le port
+        // Même si l'action n'est pas gérée, on répond pour éviter le warning
+        sendResponse({});
+
+        // Retourner false pour indiquer une réponse synchrone
+        return false;
     }
 
     /**
