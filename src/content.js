@@ -24,7 +24,6 @@
         await import(chrome.runtime.getURL('src/utils/text-processing.js'));
         await import(chrome.runtime.getURL('src/utils/event-handlers.js'));
         await import(chrome.runtime.getURL('src/utils/transcription-display.js'));
-        await import(chrome.runtime.getURL('src/utils/text-translation.js'));
         await import(chrome.runtime.getURL('src/utils/banner-utils.js'));
         await import(chrome.runtime.getURL('src/utils/ui.js'));
         await import(chrome.runtime.getURL('src/utils/api-utils.js'));
