@@ -97,3 +97,7 @@ window.BabelFishAIUtils.moduleName = {
 - **Banner not disappearing on cancel**: Use `hideBanner` directly with reduced delay
 - **Code duplication**: Centralize function exposure in single block per module
 - **NoLog option**: Only for LiteLLM Proxy, causes errors with official OpenAI API
+
+## Git Workflow
+
+**OBLIGATOIRE** : Pour créer un commit, utiliser `Skill` avec le skill de commit. Ne JAMAIS faire de commit manuellement.

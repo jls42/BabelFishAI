@@ -71,11 +71,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const messages = [
                 {
                     role: "system",
-                    content: "You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent."
+                    content: "You are a text improvement engine. Output ONLY the rephrased text, nothing else. No introductions, no explanations, no notes, no quotes around the result. Just the improved text."
                 },
                 {
                     role: "user",
-                    content: `Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Return only the improved text without any introduction, notes, or explanation: ${cleanedText}`
+                    content: `Rephrase this text to be clearer and more professional. Keep the same meaning and language. Output only the improved text:\n\n${cleanedText}`
                 }
             ];
 
@@ -154,13 +154,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const messages = [
                 {
                     role: "system",
-                    content: "You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language."
+                    content: "You are a translation engine. Output ONLY the translated text, nothing else. No introductions, no explanations, no notes, no quotes around the result. Just the pure translation."
                 },
                 {
                     role: "user",
                     content: sourceLanguage === 'auto'
-                        ? `Translate the following text to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`
-                        : `Perform a direct translation from ${sourceLanguage} to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`
+                        ? `Translate to ${targetLanguage}. Keep URLs unchanged. Output only the translation:\n\n${cleanedText}`
+                        : `Translate from ${sourceLanguage} to ${targetLanguage}. Keep URLs unchanged. Output only the translation:\n\n${cleanedText}`
                 }
             ];
 
