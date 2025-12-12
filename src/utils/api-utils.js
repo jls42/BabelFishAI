@@ -136,8 +136,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             chatProvider: 'openai',
             // Clés legacy pour rétrocompatibilité
             apiKey: '',
-            apiUrl: API_CONFIG.DEFAULT_WHISPER_API_URL,
-            translationApiUrl: API_CONFIG.DEFAULT_GPT_API_URL,
             audioModelType: API_CONFIG.WHISPER_MODEL,
             modelType: API_CONFIG.GPT_MODEL,
             disableLogging: false
@@ -151,15 +149,25 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Récupérer la configuration du provider (si multi-provider activé)
         let providerConfig = data.providers?.[providerId];
 
-        // Vérifier si le provider sélectionné a une clé API valide
-        // Si non, chercher un provider activé avec une clé
-        if (data.providers && (!providerConfig?.apiKey || !providerConfig?.enabled)) {
-            // Chercher un provider activé avec une clé API
+        // Vérifier si le provider sélectionné a une configuration valide
+        // Pour custom, il faut aussi les URLs
+        const isProviderValid = (id, config) => {
+            if (!config?.enabled || !config?.apiKey) return false;
+            // Pour le provider custom, les URLs sont obligatoires
+            if (id === 'custom') {
+                return config.transcriptionUrl && config.chatUrl;
+            }
+            return true;
+        };
+
+        // Si non valide, chercher un provider activé avec une configuration valide
+        if (data.providers && !isProviderValid(providerId, providerConfig)) {
+            // Chercher un provider activé avec une configuration valide
             const availableProvider = Object.entries(data.providers).find(
-                ([_id, config]) => config?.enabled && config?.apiKey
+                ([id, config]) => isProviderValid(id, config)
             );
             if (availableProvider) {
-                console.log(`[resolveApiConfig] Provider ${providerId} n'a pas de clé API valide, fallback vers ${availableProvider[0]}`);
+                console.log(`[resolveApiConfig] Provider ${providerId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
                 providerId = availableProvider[0];
                 providerConfig = availableProvider[1];
             }
@@ -207,33 +215,27 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             apiKey = data.apiKey;
         }
 
-        // Résoudre le modèle (priorité : modèle par défaut du provider > modèle legacy si compatible)
+        // Résoudre le modèle (priorité : modèle sélectionné du provider > modèle par défaut)
         let model;
         if (serviceType === 'transcription') {
-            // Pour la transcription, utiliser le modèle du provider ou le modèle sauvegardé si compatible
-            if (providerDef) {
-                const savedModel = data.audioModelType;
-                // Vérifier si le modèle sauvegardé appartient à ce provider
-                const providerModels = providerDef.transcriptionModels.map(m => m.id);
-                if (savedModel && providerModels.includes(savedModel)) {
-                    model = savedModel;
-                } else {
-                    model = Providers.getDefaultModel(providerId, 'transcription');
-                }
+            // Utiliser le modèle sélectionné pour ce provider
+            const selectedModel = providerConfig?.selectedTranscriptionModel;
+            if (selectedModel) {
+                model = selectedModel;
+            } else if (providerDef) {
+                // Fallback sur le modèle par défaut du provider
+                model = Providers.getDefaultModel(providerId, 'transcription');
             } else {
                 model = data.audioModelType || API_CONFIG.WHISPER_MODEL;
             }
         } else {
-            // Pour le chat, utiliser le modèle du provider ou le modèle sauvegardé si compatible
-            if (providerDef) {
-                const savedModel = data.modelType;
-                // Vérifier si le modèle sauvegardé appartient à ce provider
-                const providerModels = providerDef.chatModels.map(m => m.id);
-                if (savedModel && providerModels.includes(savedModel)) {
-                    model = savedModel;
-                } else {
-                    model = Providers.getDefaultModel(providerId, 'chat');
-                }
+            // Utiliser le modèle sélectionné pour ce provider
+            const selectedModel = providerConfig?.selectedChatModel;
+            if (selectedModel) {
+                model = selectedModel;
+            } else if (providerDef) {
+                // Fallback sur le modèle par défaut du provider
+                model = Providers.getDefaultModel(providerId, 'chat');
             } else {
                 model = data.modelType || API_CONFIG.GPT_MODEL;
             }

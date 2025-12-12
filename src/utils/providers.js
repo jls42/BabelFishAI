@@ -17,13 +17,16 @@ window.BabelFishAIProviders = (function () {
                 chat: 'https://api.openai.com/v1/chat/completions'
             },
             transcriptionModels: [
-                { id: 'whisper-1', name: 'Whisper', default: true },
-                { id: 'gpt-4o-mini-transcribe', name: 'GPT-4o Mini Transcribe' },
-                { id: 'gpt-4o-transcribe', name: 'GPT-4o Transcribe' }
+                { id: 'whisper-1', name: 'whisper-1', default: true },
+                { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
+                { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' }
             ],
             chatModels: [
-                { id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true },
-                { id: 'gpt-4o', name: 'GPT-4o' }
+                { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
+                { id: 'gpt-4o', name: 'gpt-4o' },
+                { id: 'gpt-4.1', name: 'gpt-4.1' },
+                { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
+                { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
             ],
             // Supporte l'option NoLog via LiteLLM Proxy
             supportsNoLog: true
@@ -46,13 +49,32 @@ window.BabelFishAIProviders = (function () {
             ],
             // Mistral n'a pas besoin de l'option NoLog
             supportsNoLog: false
+        },
+        custom: {
+            id: 'custom',
+            name: 'Custom/LiteLLM',
+            // URLs obligatoires - pas de défaut, l'utilisateur doit les configurer
+            defaultUrls: {
+                transcription: '',
+                chat: ''
+            },
+            // Modèles par défaut communs, l'utilisateur peut en ajouter
+            transcriptionModels: [
+                { id: 'whisper-1', name: 'whisper-1', default: true },
+                { id: 'whisper', name: 'whisper' }
+            ],
+            chatModels: [
+                { id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }
+            ],
+            // Supporte l'option NoLog (LiteLLM)
+            supportsNoLog: true
         }
     };
 
     /**
      * Liste ordonnée des IDs de providers (pour l'affichage UI)
      */
-    const PROVIDER_ORDER = ['openai', 'mistral'];
+    const PROVIDER_ORDER = ['openai', 'mistral', 'custom'];
 
     /**
      * Récupère un provider par son ID
@@ -254,30 +276,47 @@ window.BabelFishAIProviders = (function () {
             openai: {
                 apiKey: '',
                 enabled: false,
-                transcriptionUrl: '',
-                chatUrl: ''
+                transcriptionModels: [],
+                chatModels: []
             },
             mistral: {
                 apiKey: '',
                 enabled: false,
+                transcriptionModels: [],
+                chatModels: []
+            },
+            custom: {
+                apiKey: '',
+                enabled: false,
                 transcriptionUrl: '',
-                chatUrl: ''
+                chatUrl: '',
+                transcriptionModels: [],
+                chatModels: []
             }
         };
     }
 
     /**
-     * Valide une URL (doit commencer par https://)
+     * Valide une URL (doit commencer par https:// ou http:// pour localhost)
      * @param {string} url - URL à valider
+     * @param {boolean} allowHttp - Si true, accepte HTTP pour localhost (provider custom)
      * @returns {boolean} True si l'URL est valide
      */
-    function isValidUrl(url) {
+    function isValidUrl(url, allowHttp = false) {
         if (!url || typeof url !== 'string') {
             return true; // URL vide = utiliser le défaut, donc valide
         }
         try {
             const parsed = new URL(url.trim());
-            return parsed.protocol === 'https:';
+            if (parsed.protocol === 'https:') {
+                return true;
+            }
+            // Permettre HTTP pour localhost si autorisé (développement local)
+            if (allowHttp && parsed.protocol === 'http:') {
+                const hostname = parsed.hostname.toLowerCase();
+                return hostname === 'localhost' || hostname === '127.0.0.1';
+            }
+            return false;
         } catch {
             return false;
         }

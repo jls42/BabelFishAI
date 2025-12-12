@@ -733,3 +733,85 @@ select:focus {
         max-width: none;
     }
 }
+
+/* ===== Modèles personnalisés des providers ===== */
+.custom-models-section {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+}
+
+.custom-models-section .form-group {
+    margin-bottom: 20px;
+}
+
+.custom-models-section .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.model-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.model-select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.model-input-container {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.model-input-container input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.model-input-container input::placeholder {
+    font-family: inherit;
+    color: #999;
+}
+
+.model-input-container button {
+    padding: 8px 16px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.model-input-container button:hover {
+    background: #2980b9;
+}
+
+/* URLs obligatoires pour le provider custom */
+.custom-urls-required {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    border-left: 3px solid #e74c3c;
+}
+
+.custom-urls-required label {
+    color: #c0392b;
+    font-weight: 500;
+}

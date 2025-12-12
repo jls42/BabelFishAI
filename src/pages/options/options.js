@@ -6,17 +6,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Éléments du DOM - Providers
     const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
     const openaiApiKeyInput = document.getElementById('openaiApiKey');
-    const openaiTranscriptionUrlInput = document.getElementById('openaiTranscriptionUrl');
-    const openaiChatUrlInput = document.getElementById('openaiChatUrl');
     const openaiStatus = document.getElementById('openaiStatus');
     const providerOpenAI = document.getElementById('providerOpenAI');
 
     const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
     const mistralApiKeyInput = document.getElementById('mistralApiKey');
-    const mistralTranscriptionUrlInput = document.getElementById('mistralTranscriptionUrl');
-    const mistralChatUrlInput = document.getElementById('mistralChatUrl');
     const mistralStatus = document.getElementById('mistralStatus');
     const providerMistral = document.getElementById('providerMistral');
+
+    const customEnabledCheckbox = document.getElementById('customEnabled');
+    const customApiKeyInput = document.getElementById('customApiKey');
+    const customTranscriptionUrlInput = document.getElementById('customTranscriptionUrl');
+    const customChatUrlInput = document.getElementById('customChatUrl');
+    const customStatus = document.getElementById('customStatus');
+    const providerCustom = document.getElementById('providerCustom');
+
+    // Éléments DOM pour les modèles de chaque provider
+    const providerModelElements = {
+        openai: {
+            transcriptionSelect: document.getElementById('openaiTranscriptionModel'),
+            chatSelect: document.getElementById('openaiChatModel'),
+            newTranscriptionInput: document.getElementById('newOpenaiTranscriptionModel'),
+            newChatInput: document.getElementById('newOpenaiChatModel'),
+            addTranscriptionButton: document.getElementById('addOpenaiTranscriptionModel'),
+            addChatButton: document.getElementById('addOpenaiChatModel')
+        },
+        mistral: {
+            transcriptionSelect: document.getElementById('mistralTranscriptionModel'),
+            chatSelect: document.getElementById('mistralChatModel'),
+            newTranscriptionInput: document.getElementById('newMistralTranscriptionModel'),
+            newChatInput: document.getElementById('newMistralChatModel'),
+            addTranscriptionButton: document.getElementById('addMistralTranscriptionModel'),
+            addChatButton: document.getElementById('addMistralChatModel')
+        },
+        custom: {
+            transcriptionSelect: document.getElementById('customTranscriptionModel'),
+            chatSelect: document.getElementById('customChatModel'),
+            newTranscriptionInput: document.getElementById('newCustomTranscriptionModel'),
+            newChatInput: document.getElementById('newCustomChatModel'),
+            addTranscriptionButton: document.getElementById('addCustomTranscriptionModel'),
+            addChatButton: document.getElementById('addCustomChatModel')
+        }
+    };
 
     const providerServices = document.getElementById('providerServices');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
@@ -46,8 +77,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addModelTypeButton = document.getElementById('addModelType');
     const customModelsList = document.getElementById('customModelsList');
     const audioModelTypeSelect = document.getElementById('audioModelType');
-    const apiUrlInput = document.getElementById('apiUrl');
-    const translationApiUrlInput = document.getElementById('translationApiUrl');
     const newDomainInput = document.getElementById('newDomain');
     const addDomainButton = document.getElementById('addDomain');
     const domainsList = document.getElementById('domainsList');
@@ -95,27 +124,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /**
      * Met à jour l'affichage visuel d'un provider
-     * @param {string} providerId - ID du provider ('openai' ou 'mistral')
+     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
      */
     function updateProviderDisplay(providerId) {
-        const isOpenAI = providerId === 'openai';
-        const enabledCheckbox = isOpenAI ? openaiEnabledCheckbox : mistralEnabledCheckbox;
-        const apiKeyInput = isOpenAI ? openaiApiKeyInput : mistralApiKeyInput;
-        const statusElement = isOpenAI ? openaiStatus : mistralStatus;
-        const cardElement = isOpenAI ? providerOpenAI : providerMistral;
+        let enabledCheckbox, apiKeyInputEl, statusElement, cardElement;
+
+        if (providerId === 'openai') {
+            enabledCheckbox = openaiEnabledCheckbox;
+            apiKeyInputEl = openaiApiKeyInput;
+            statusElement = openaiStatus;
+            cardElement = providerOpenAI;
+        } else if (providerId === 'mistral') {
+            enabledCheckbox = mistralEnabledCheckbox;
+            apiKeyInputEl = mistralApiKeyInput;
+            statusElement = mistralStatus;
+            cardElement = providerMistral;
+        } else if (providerId === 'custom') {
+            enabledCheckbox = customEnabledCheckbox;
+            apiKeyInputEl = customApiKeyInput;
+            statusElement = customStatus;
+            cardElement = providerCustom;
+        } else {
+            return;
+        }
 
         const isEnabled = enabledCheckbox.checked;
-        const hasApiKey = apiKeyInput.value.trim().length > 0;
+        const hasApiKey = apiKeyInputEl.value.trim().length > 0;
+
+        // Pour le provider custom, vérifier aussi les URLs
+        let hasRequiredUrls = true;
+        if (providerId === 'custom') {
+            hasRequiredUrls = customTranscriptionUrlInput.value.trim().length > 0 &&
+                customChatUrlInput.value.trim().length > 0;
+        }
 
         // Mettre à jour la classe active de la carte
         cardElement.classList.toggle('active', isEnabled);
 
         // Mettre à jour le statut
-        if (isEnabled && hasApiKey) {
+        if (isEnabled && hasApiKey && hasRequiredUrls) {
             statusElement.textContent = i18n.getMessage('providerActive') || 'Actif';
             statusElement.className = 'provider-status';
         } else if (isEnabled && !hasApiKey) {
             statusElement.textContent = i18n.getMessage('providerMissingKey') || 'Clé manquante';
+            statusElement.className = 'provider-status inactive';
+        } else if (isEnabled && providerId === 'custom' && !hasRequiredUrls) {
+            statusElement.textContent = i18n.getMessage('providerMissingUrl') || 'URLs manquantes';
             statusElement.className = 'provider-status inactive';
         } else {
             statusElement.textContent = i18n.getMessage('providerInactive') || 'Inactif';
@@ -142,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Récupère la liste des IDs de providers activés (avec clé API)
+     * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom)
      * @returns {string[]} Liste des IDs
      */
     function getEnabledProviderIds() {
@@ -152,6 +206,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (mistralEnabledCheckbox.checked && mistralApiKeyInput.value.trim()) {
             enabled.push('mistral');
+        }
+        // Pour custom, vérifier aussi les URLs obligatoires
+        if (customEnabledCheckbox.checked && customApiKeyInput.value.trim() &&
+            customTranscriptionUrlInput.value.trim() && customChatUrlInput.value.trim()) {
+            enabled.push('custom');
         }
         return enabled;
     }
@@ -167,6 +226,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (mistralEnabledCheckbox.checked) {
             checked.push('mistral');
+        }
+        if (customEnabledCheckbox.checked) {
+            checked.push('custom');
         }
         return checked;
     }
@@ -229,24 +291,44 @@ document.addEventListener('DOMContentLoaded', async () => {
                 openaiApiKeyInput.value = items.apiKey || '';
                 openaiEnabledCheckbox.checked = !!items.apiKey;
                 mistralEnabledCheckbox.checked = false;
+                customEnabledCheckbox.checked = false;
+
+                // Peupler les sélecteurs avec les modèles par défaut
+                populateProviderModelSelect('openai', 'transcription', [], null);
+                populateProviderModelSelect('openai', 'chat', [], null);
+                populateProviderModelSelect('mistral', 'transcription', [], null);
+                populateProviderModelSelect('mistral', 'chat', [], null);
+                populateProviderModelSelect('custom', 'transcription', [], null);
+                populateProviderModelSelect('custom', 'chat', [], null);
             } else {
                 // Mode multi-provider
                 const openaiConfig = items.providers.openai || {};
                 openaiApiKeyInput.value = openaiConfig.apiKey || '';
                 openaiEnabledCheckbox.checked = openaiConfig.enabled || false;
-                openaiTranscriptionUrlInput.value = openaiConfig.transcriptionUrl || '';
-                openaiChatUrlInput.value = openaiConfig.chatUrl || '';
 
                 const mistralConfig = items.providers.mistral || {};
                 mistralApiKeyInput.value = mistralConfig.apiKey || '';
                 mistralEnabledCheckbox.checked = mistralConfig.enabled || false;
-                mistralTranscriptionUrlInput.value = mistralConfig.transcriptionUrl || '';
-                mistralChatUrlInput.value = mistralConfig.chatUrl || '';
+
+                const customConfig = items.providers.custom || {};
+                customApiKeyInput.value = customConfig.apiKey || '';
+                customEnabledCheckbox.checked = customConfig.enabled || false;
+                customTranscriptionUrlInput.value = customConfig.transcriptionUrl || '';
+                customChatUrlInput.value = customConfig.chatUrl || '';
+
+                // Peupler les sélecteurs avec les modèles (par défaut + personnalisés)
+                populateProviderModelSelect('openai', 'transcription', openaiConfig.transcriptionModels || [], openaiConfig.selectedTranscriptionModel);
+                populateProviderModelSelect('openai', 'chat', openaiConfig.chatModels || [], openaiConfig.selectedChatModel);
+                populateProviderModelSelect('mistral', 'transcription', mistralConfig.transcriptionModels || [], mistralConfig.selectedTranscriptionModel);
+                populateProviderModelSelect('mistral', 'chat', mistralConfig.chatModels || [], mistralConfig.selectedChatModel);
+                populateProviderModelSelect('custom', 'transcription', customConfig.transcriptionModels || [], customConfig.selectedTranscriptionModel);
+                populateProviderModelSelect('custom', 'chat', customConfig.chatModels || [], customConfig.selectedChatModel);
             }
 
             // Mettre à jour l'affichage des cartes
             updateProviderDisplay('openai');
             updateProviderDisplay('mistral');
+            updateProviderDisplay('custom');
 
             // Mettre à jour les sélecteurs de service après avoir chargé les providers
             const enabledProviders = getEnabledProviderIds();
@@ -273,29 +355,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             openai: {
                 apiKey: openaiApiKeyInput.value.trim(),
                 enabled: openaiEnabledCheckbox.checked,
-                transcriptionUrl: openaiTranscriptionUrlInput.value.trim(),
-                chatUrl: openaiChatUrlInput.value.trim()
+                transcriptionModels: getProviderCustomModels('openai', 'transcription'),
+                chatModels: getProviderCustomModels('openai', 'chat'),
+                selectedTranscriptionModel: getSelectedProviderModel('openai', 'transcription'),
+                selectedChatModel: getSelectedProviderModel('openai', 'chat')
             },
             mistral: {
                 apiKey: mistralApiKeyInput.value.trim(),
                 enabled: mistralEnabledCheckbox.checked,
-                transcriptionUrl: mistralTranscriptionUrlInput.value.trim(),
-                chatUrl: mistralChatUrlInput.value.trim()
+                transcriptionModels: getProviderCustomModels('mistral', 'transcription'),
+                chatModels: getProviderCustomModels('mistral', 'chat'),
+                selectedTranscriptionModel: getSelectedProviderModel('mistral', 'transcription'),
+                selectedChatModel: getSelectedProviderModel('mistral', 'chat')
+            },
+            custom: {
+                apiKey: customApiKeyInput.value.trim(),
+                enabled: customEnabledCheckbox.checked,
+                transcriptionUrl: customTranscriptionUrlInput.value.trim(),
+                chatUrl: customChatUrlInput.value.trim(),
+                transcriptionModels: getProviderCustomModels('custom', 'transcription'),
+                chatModels: getProviderCustomModels('custom', 'chat'),
+                selectedTranscriptionModel: getSelectedProviderModel('custom', 'transcription'),
+                selectedChatModel: getSelectedProviderModel('custom', 'chat')
             }
         };
 
-        // Valider les URLs
-        const urlsToValidate = [
-            providers.openai.transcriptionUrl,
-            providers.openai.chatUrl,
-            providers.mistral.transcriptionUrl,
-            providers.mistral.chatUrl
-        ].filter(url => url); // Filtrer les URLs vides
-
-        for (const url of urlsToValidate) {
-            if (!isValidHttpsUrl(url)) {
-                showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS.', 'error');
-                return false;
+        // Valider les URLs du provider custom (accepte HTTP pour localhost)
+        if (providers.custom.enabled) {
+            const customUrls = [providers.custom.transcriptionUrl, providers.custom.chatUrl];
+            for (const url of customUrls) {
+                if (!url) {
+                    showStatus(i18n.getMessage('customUrlRequiredError') || 'Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.', 'error');
+                    return false;
+                }
+                if (!Providers.isValidUrl(url, true)) { // allowHttp = true pour localhost
+                    showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).', 'error');
+                    return false;
+                }
             }
         }
 
@@ -339,6 +435,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             updateProviderDisplay('openai');
             updateProviderDisplay('mistral');
+            updateProviderDisplay('custom');
         });
 
         return true;
@@ -358,6 +455,148 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
         });
+    }
+
+    // ===== Gestion des modèles pour tous les providers =====
+
+    // Stockage temporaire des modèles personnalisés par provider
+    const providerCustomModelsCache = {
+        openai: { transcription: [], chat: [] },
+        mistral: { transcription: [], chat: [] },
+        custom: { transcription: [], chat: [] }
+    };
+
+    /**
+     * Peuple le sélecteur de modèles d'un provider (par défaut + personnalisés)
+     * @param {string} providerId - ID du provider ('openai', 'mistral', 'custom')
+     * @param {string} modelType - 'transcription' ou 'chat'
+     * @param {string[]} customModels - Liste des modèles personnalisés
+     * @param {string} selectedModel - Modèle actuellement sélectionné
+     */
+    function populateProviderModelSelect(providerId, modelType, customModels = [], selectedModel = null) {
+        const elements = providerModelElements[providerId];
+        if (!elements) return;
+
+        const selectElement = modelType === 'transcription'
+            ? elements.transcriptionSelect
+            : elements.chatSelect;
+
+        if (!selectElement) return;
+
+        // Sauvegarder les modèles personnalisés dans le cache
+        providerCustomModelsCache[providerId][modelType] = [...customModels];
+
+        selectElement.innerHTML = '';
+
+        // Récupérer les modèles par défaut depuis providers.js
+        const providerDef = Providers.getProvider(providerId);
+        const defaultModels = providerDef
+            ? (modelType === 'transcription' ? providerDef.transcriptionModels : providerDef.chatModels)
+            : [];
+
+        // Ajouter les modèles par défaut
+        defaultModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.id;
+            option.textContent = model.id; // Nom technique
+            if (model.default && !selectedModel) {
+                option.selected = true;
+            }
+            selectElement.appendChild(option);
+        });
+
+        // Ajouter les modèles personnalisés
+        customModels.forEach(modelId => {
+            // Ne pas ajouter si c'est déjà un modèle par défaut
+            if (defaultModels.some(m => m.id === modelId)) return;
+
+            const option = document.createElement('option');
+            option.value = modelId;
+            option.textContent = modelId + ' (custom)';
+            option.dataset.isCustom = 'true';
+            selectElement.appendChild(option);
+        });
+
+        // Sélectionner le modèle sauvegardé si présent
+        if (selectedModel) {
+            selectElement.value = selectedModel;
+        }
+    }
+
+    /**
+     * Récupère les modèles personnalisés d'un provider depuis le cache
+     * @param {string} providerId - ID du provider
+     * @param {string} modelType - 'transcription' ou 'chat'
+     * @returns {string[]} Liste des modèles personnalisés
+     */
+    function getProviderCustomModels(providerId, modelType) {
+        return providerCustomModelsCache[providerId]?.[modelType] || [];
+    }
+
+    /**
+     * Récupère le modèle sélectionné pour un provider
+     * @param {string} providerId - ID du provider
+     * @param {string} modelType - 'transcription' ou 'chat'
+     * @returns {string} ID du modèle sélectionné
+     */
+    function getSelectedProviderModel(providerId, modelType) {
+        const elements = providerModelElements[providerId];
+        if (!elements) return null;
+
+        const selectElement = modelType === 'transcription'
+            ? elements.transcriptionSelect
+            : elements.chatSelect;
+
+        return selectElement?.value || null;
+    }
+
+    /**
+     * Ajoute un modèle personnalisé à un provider
+     * @param {string} providerId - ID du provider
+     * @param {string} modelType - 'transcription' ou 'chat'
+     */
+    function addProviderModel(providerId, modelType) {
+        const elements = providerModelElements[providerId];
+        if (!elements) return;
+
+        const inputElement = modelType === 'transcription'
+            ? elements.newTranscriptionInput
+            : elements.newChatInput;
+        const selectElement = modelType === 'transcription'
+            ? elements.transcriptionSelect
+            : elements.chatSelect;
+
+        if (!inputElement || !selectElement) return;
+
+        const newModel = inputElement.value.trim();
+        if (!newModel) return;
+
+        // Vérifier si le modèle existe déjà dans le select
+        const existingOptions = Array.from(selectElement.options).map(opt => opt.value);
+        if (existingOptions.includes(newModel)) {
+            inputElement.value = '';
+            // Sélectionner le modèle existant
+            selectElement.value = newModel;
+            return;
+        }
+
+        // Ajouter au cache
+        if (!providerCustomModelsCache[providerId][modelType].includes(newModel)) {
+            providerCustomModelsCache[providerId][modelType].push(newModel);
+        }
+
+        // Ajouter au select
+        const option = document.createElement('option');
+        option.value = newModel;
+        option.textContent = newModel + ' (custom)';
+        option.dataset.isCustom = 'true';
+        selectElement.appendChild(option);
+
+        // Sélectionner le nouveau modèle
+        selectElement.value = newModel;
+
+        inputElement.value = '';
+        debouncedSaveOptions();
     }
 
     // Gestion du mode avancé
@@ -407,8 +646,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             modelType: 'gpt-4o-mini',
             customModelTypes: [],
             audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
-            apiUrl: 'https://api.openai.com/v1/audio/transcriptions',
-            translationApiUrl: 'https://api.openai.com/v1/chat/completions',
             forcedDialogDomains: ['chat.google.com']
         }, (items) => {
             apiKeyInput.value = items.apiKey;
@@ -426,8 +663,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             expertModeCheckbox.checked = items.expertMode;
             modelTypeSelect.value = items.modelType;
             disableLoggingCheckbox.checked = items.disableLogging;
-            apiUrlInput.value = items.apiUrl;
-            translationApiUrlInput.value = items.translationApiUrl;
             audioModelTypeSelect.value = items.audioModelType;
 
             // Charger et afficher les modèles personnalisés
@@ -474,19 +709,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             disableLogging: disableLoggingCheckbox.checked,
             customModelTypes: customModelTypes,
             audioModelType: audioModelTypeSelect.value,
-            apiUrl: apiUrlInput.value,
-            translationApiUrl: translationApiUrlInput.value,
             forcedDialogDomains: Array.from(domainsList.children).map(item =>
                 item.textContent.replace('×', '').trim()
             )
         };
-
-        // Validation des URL avant la sauvegarde
-        if ((apiUrlInput.value && !isValidHttpsUrl(apiUrlInput.value)) ||
-            (translationApiUrlInput.value && !isValidHttpsUrl(translationApiUrlInput.value))) {
-            showStatus('Erreur : Les URL des API personnalisées doivent utiliser HTTPS.', 'error');
-            return;
-        }
 
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
@@ -725,8 +951,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProviderDisplay('openai');
         debouncedSaveOptions();
     });
-    openaiTranscriptionUrlInput.addEventListener('input', () => debouncedSaveOptions());
-    openaiChatUrlInput.addEventListener('input', () => debouncedSaveOptions());
 
     mistralEnabledCheckbox.addEventListener('change', () => {
         updateProviderDisplay('mistral');
@@ -736,8 +960,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProviderDisplay('mistral');
         debouncedSaveOptions();
     });
-    mistralTranscriptionUrlInput.addEventListener('input', () => debouncedSaveOptions());
-    mistralChatUrlInput.addEventListener('input', () => debouncedSaveOptions());
+
+    // Event listeners - Provider Custom
+    customEnabledCheckbox.addEventListener('change', () => {
+        updateProviderDisplay('custom');
+        debouncedSaveOptions();
+    });
+    customApiKeyInput.addEventListener('input', () => {
+        updateProviderDisplay('custom');
+        debouncedSaveOptions();
+    });
+    customTranscriptionUrlInput.addEventListener('input', () => {
+        updateProviderDisplay('custom');
+        debouncedSaveOptions();
+    });
+    customChatUrlInput.addEventListener('input', () => {
+        updateProviderDisplay('custom');
+        debouncedSaveOptions();
+    });
+
+    // Event listeners - Modèles pour tous les providers
+    Object.keys(providerModelElements).forEach(providerId => {
+        const elements = providerModelElements[providerId];
+        // Boutons d'ajout de modèles
+        if (elements.addTranscriptionButton) {
+            elements.addTranscriptionButton.addEventListener('click', () => addProviderModel(providerId, 'transcription'));
+        }
+        if (elements.addChatButton) {
+            elements.addChatButton.addEventListener('click', () => addProviderModel(providerId, 'chat'));
+        }
+        // Sélecteurs de modèles
+        if (elements.transcriptionSelect) {
+            elements.transcriptionSelect.addEventListener('change', () => debouncedSaveOptions());
+        }
+        if (elements.chatSelect) {
+            elements.chatSelect.addEventListener('change', () => debouncedSaveOptions());
+        }
+    });
 
     transcriptionProviderSelect.addEventListener('change', () => debouncedSaveOptions());
     chatProviderSelect.addEventListener('change', () => debouncedSaveOptions());
@@ -760,8 +1019,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     modelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
     disableLoggingCheckbox.addEventListener('change', () => debouncedSaveOptions());
     audioModelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
-    apiUrlInput.addEventListener('input', () => debouncedSaveOptions());
-    translationApiUrlInput.addEventListener('input', () => debouncedSaveOptions());
     // Les boutons de sauvegarde explicites n'ont pas de debounce
     saveButton.addEventListener('click', () => saveOptions(true));
     saveAdvancedButton.addEventListener('click', () => saveOptions(true));

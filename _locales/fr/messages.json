@@ -499,8 +499,40 @@
         "message": "Traduction/Reformulation :",
         "description": "Label pour le provider de chat"
     },
+    "customProviderDescription": {
+        "message": "Provider personnalisé pour LiteLLM ou autres proxies. Les URLs sont obligatoires.",
+        "description": "Description du provider custom"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "URL Transcription (obligatoire) :",
+        "description": "Label pour l'URL de transcription du provider custom"
+    },
+    "customChatUrlLabel": {
+        "message": "URL Chat (obligatoire) :",
+        "description": "Label pour l'URL de chat du provider custom"
+    },
+    "modelsConfigTitle": {
+        "message": "Configuration des modèles",
+        "description": "Titre pour la section de configuration des modèles"
+    },
+    "transcriptionModelLabel": {
+        "message": "Modèle de transcription :",
+        "description": "Label pour le sélecteur de modèle de transcription"
+    },
+    "chatModelLabel": {
+        "message": "Modèle de chat :",
+        "description": "Label pour le sélecteur de modèle de chat"
+    },
+    "customUrlRequiredError": {
+        "message": "Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.",
+        "description": "Message d'erreur quand les URLs du provider custom ne sont pas configurées"
+    },
+    "providerMissingUrl": {
+        "message": "URLs manquantes",
+        "description": "Statut quand les URLs du provider custom sont manquantes"
+    },
     "invalidUrlError": {
-        "message": "Erreur : Les URLs doivent utiliser HTTPS.",
+        "message": "Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).",
         "description": "Message d'erreur pour les URLs invalides"
     },
     "displayError": {
