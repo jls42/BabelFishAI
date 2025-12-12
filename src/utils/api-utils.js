@@ -34,24 +34,31 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     /**
      * Récupère la clé API (depuis la mémoire ou le stockage) ou lève une exception si elle n'est pas disponible.
+     * Utilise le système multi-provider pour trouver une clé API valide.
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider
      * @returns {Promise<string>} - La clé API.
      * @throws {Error} - Si la clé API n'est pas trouvée.
      */
-    async function getOrFetchApiKey() {
+    async function getOrFetchApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
         window.BabelFishAI = window.BabelFishAI || {};
 
-        // 1. Essayer la clé en mémoire
-        if (window.BabelFishAI.apiKey) {
-            return window.BabelFishAI.apiKey;
+        // Utiliser resolveApiConfig pour obtenir la clé du provider actif
+        try {
+            const config = await resolveApiConfig(serviceType);
+            if (config.apiKey) {
+                // Mettre en cache pour compatibilité
+                window.BabelFishAI.apiKey = config.apiKey;
+                return config.apiKey;
+            }
+        } catch (error) {
+            console.warn("Erreur lors de la résolution de la config API:", error);
         }
 
-        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        // Fallback sur l'ancienne méthode
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
-        // 3. Vérifier le résultat et lever une erreur si nécessaire
         if (!apiKeyFromStorage) {
-            // L'erreur est levée ici pour correspondre au comportement original
             console.error("Erreur lors de la récupération de la clé API: Clé non trouvée.");
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
@@ -61,26 +68,34 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     /**
      * Récupère la clé API (depuis la mémoire ou le stockage) sans lever d'exception.
+     * Utilise le système multi-provider pour trouver une clé API valide.
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider
      * @returns {Promise<string|null>} - La clé API ou null si non disponible.
      */
-    async function getApiKey() {
+    async function getApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
         window.BabelFishAI = window.BabelFishAI || {};
 
-        // 1. Essayer la clé en mémoire
-        if (window.BabelFishAI.apiKey) {
-            return window.BabelFishAI.apiKey;
+        // Utiliser resolveApiConfig pour obtenir la clé du provider actif
+        try {
+            const config = await resolveApiConfig(serviceType);
+            if (config.apiKey) {
+                // Mettre en cache pour compatibilité
+                window.BabelFishAI.apiKey = config.apiKey;
+                return config.apiKey;
+            }
+        } catch (error) {
+            console.warn("Erreur lors de la résolution de la config API:", error);
         }
 
-        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        // Fallback sur l'ancienne méthode si resolveApiConfig échoue
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
-        // 3. Afficher un avertissement si non trouvée et retourner le résultat (null si non trouvée)
         if (!apiKeyFromStorage) {
             console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
         }
 
-        return apiKeyFromStorage; // Retourne la clé ou null
+        return apiKeyFromStorage;
     }
 
 
@@ -129,12 +144,26 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         });
 
         // Déterminer le provider à utiliser
-        const providerId = serviceType === 'transcription'
+        let providerId = serviceType === 'transcription'
             ? data.transcriptionProvider
             : data.chatProvider;
 
         // Récupérer la configuration du provider (si multi-provider activé)
-        const providerConfig = data.providers?.[providerId];
+        let providerConfig = data.providers?.[providerId];
+
+        // Vérifier si le provider sélectionné a une clé API valide
+        // Si non, chercher un provider activé avec une clé
+        if (data.providers && (!providerConfig?.apiKey || !providerConfig?.enabled)) {
+            // Chercher un provider activé avec une clé API
+            const availableProvider = Object.entries(data.providers).find(
+                ([_id, config]) => config?.enabled && config?.apiKey
+            );
+            if (availableProvider) {
+                console.log(`[resolveApiConfig] Provider ${providerId} n'a pas de clé API valide, fallback vers ${availableProvider[0]}`);
+                providerId = availableProvider[0];
+                providerConfig = availableProvider[1];
+            }
+        }
 
         // Récupérer les définitions du provider depuis le registre
         const Providers = window.BabelFishAIProviders;
