@@ -80,7 +80,6 @@ async function injectContentScript(tab) {
                 'src/utils/ui.js',
                 'src/utils/banner-utils.js',
                 'src/utils/api-utils.js',
-                'src/utils/api.js',
                 'src/utils/i18n.js',
                 'src/content.js'
             ]
