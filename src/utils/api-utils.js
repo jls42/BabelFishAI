@@ -518,7 +518,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 // Nettoyer le texte transcrit pour éliminer les retours à la ligne superflus au début
                 let text = data.text || '';
                 text = text.trim();
-                return text;
+                // Ajouter un espace à la fin pour permettre de continuer à dicter
+                return text + ' ';
             }
         });
     }
