@@ -229,6 +229,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} text - Le texte à normaliser.
      * @returns {string} - Le texte normalisé et sécurisé.
      */
+    // skipcq: JS-0440 - Safe HTML: BR_TAG is static, escapedText is sanitized
     function normalizeText(text) {
         // 1. D'abord échapper le HTML pour éviter XSS
         const hasSanitizer = typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function';
@@ -237,7 +238,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             : escapeHtml(text);
 
         // 2. Ensuite remplacer les sauts de ligne par <br> (safe car le texte est déjà échappé)
-        const BR_TAG = '<br>';
+        const BR_TAG = '<br>'; // skipcq: JS-0440
         return escapedText.replaceAll('\n', BR_TAG);
     }
 

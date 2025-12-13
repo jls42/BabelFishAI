@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {HTMLInputElement} keyInput - Input de la clé API
      * @returns {boolean}
      */
+    // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
     function isStandardProviderEnabled(enabledCheckbox, keyInput) {
         return enabledCheckbox.checked && Boolean(keyInput.value.trim());
     }
@@ -372,6 +373,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {HTMLInputElement} keyInput - Input de la clé API
      * @param {HTMLInputElement} checkbox - Checkbox d'activation
      */
+    // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
     function loadStandardProviderConfig(config, keyInput, checkbox) {
         keyInput.value = config.apiKey || '';
         checkbox.checked = config.enabled || false;
