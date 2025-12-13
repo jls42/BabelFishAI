@@ -1,5 +1,6 @@
 /* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
 /* eslint-disable security/detect-non-literal-fs-filename -- chrome.runtime.getURL returns safe extension-internal URLs */
+// skipcq: JS-0116 - IIFE required for Chrome extension content scripts (top-level await not supported in this context)
 (async function () {
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;

@@ -291,12 +291,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /**
      * Vérifie si un provider standard (OpenAI/Mistral) est activé
-     * @param {HTMLInputElement} checkbox - Checkbox d'activation
-     * @param {HTMLInputElement} apiKeyInput - Input de la clé API
+     * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
+     * @param {HTMLInputElement} keyInput - Input de la clé API
      * @returns {boolean}
      */
-    function isStandardProviderEnabled(checkbox, apiKeyInput) {
-        return checkbox.checked && Boolean(apiKeyInput.value.trim());
+    function isStandardProviderEnabled(enabledCheckbox, keyInput) {
+        return enabledCheckbox.checked && Boolean(keyInput.value.trim());
     }
 
     /**
@@ -369,12 +369,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     /**
      * Charge la configuration d'un provider standard (OpenAI/Mistral)
      * @param {Object} config - Configuration du provider
-     * @param {HTMLInputElement} apiKeyInput - Input de la clé API
-     * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
+     * @param {HTMLInputElement} keyInput - Input de la clé API
+     * @param {HTMLInputElement} checkbox - Checkbox d'activation
      */
-    function loadStandardProviderConfig(config, apiKeyInput, enabledCheckbox) {
-        apiKeyInput.value = config.apiKey || '';
-        enabledCheckbox.checked = config.enabled || false;
+    function loadStandardProviderConfig(config, keyInput, checkbox) {
+        keyInput.value = config.apiKey || '';
+        checkbox.checked = config.enabled || false;
     }
 
     /**
@@ -397,6 +397,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modelTypes = ['transcription', 'chat'];
 
         for (const providerId of providerIds) {
+            // eslint-disable-next-line security/detect-object-injection -- providerId from constant array
             const config = configs[providerId] || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];

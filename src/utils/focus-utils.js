@@ -231,11 +231,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function normalizeText(text) {
         // 1. D'abord échapper le HTML pour éviter XSS
-        const sanitize = globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML;
-        const escapedText = typeof sanitize === 'function' ? sanitize(text) : escapeHtml(text);
+        let escapedText;
+        if (typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function') {
+            escapedText = globalThis.BabelFishAIUtils.i18n.sanitizeHTML(text);
+        } else {
+            escapedText = escapeHtml(text);
+        }
 
         // 2. Ensuite remplacer les sauts de ligne par <br> (safe car le texte est déjà échappé)
-        return escapedText.replaceAll('\n', '<br>');
+        // Note: <br> est une chaîne statique sûre, le texte utilisateur a déjà été échappé ci-dessus
+        const BR_TAG = '<br>';
+        return escapedText.replaceAll('\n', BR_TAG);
     }
 
     /**
