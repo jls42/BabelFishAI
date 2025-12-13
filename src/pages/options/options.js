@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Object} Statut du provider
      */
     function getProviderStatus(providerId) {
-        let enabledCheckbox, apiKeyInputEl, name;
+        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables intentionally assigned in if/else blocks
 
         if (providerId === 'openai') {
             enabledCheckbox = openaiEnabledCheckbox;
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return {
             enabled: isEnabled,
             configured: hasApiKey && (providerId !== 'custom' || hasRequiredUrls),
-            name: name
+            name
         };
     }
 
@@ -604,7 +604,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const option = document.createElement('option');
             option.value = modelId;
-            option.textContent = modelId + ' (custom)';
+            option.textContent = `${modelId} (custom)`;
             option.dataset.isCustom = 'true';
             selectElement.appendChild(option);
         });
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Ajouter au select
         const option = document.createElement('option');
         option.value = newModel;
-        option.textContent = newModel + ' (custom)';
+        option.textContent = `${newModel} (custom)`;
         option.dataset.isCustom = 'true';
         selectElement.appendChild(option);
 

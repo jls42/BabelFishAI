@@ -123,6 +123,87 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Vérifie si un provider a une configuration valide
+     * @param {string} id - ID du provider
+     * @param {Object} config - Configuration du provider
+     * @returns {boolean} True si valide
+     */
+    function isProviderValid(id, config) {
+        if (!config?.enabled || !config?.apiKey) return false;
+        // Pour le provider custom, les URLs sont obligatoires
+        if (id === 'custom') {
+            return Boolean(config.transcriptionUrl && config.chatUrl);
+        }
+        return true;
+    }
+
+    /**
+     * Résout l'URL pour un type de service
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {Object} providerDef - Définition du provider
+     * @returns {string} URL résolue
+     */
+    function resolveUrl(serviceType, providerConfig, providerDef) {
+        if (serviceType === 'transcription') {
+            return providerConfig?.transcriptionUrl
+                || providerDef?.defaultUrls.transcription
+                || API_CONFIG.DEFAULT_WHISPER_API_URL;
+        }
+        return providerConfig?.chatUrl
+            || providerDef?.defaultUrls.chat
+            || API_CONFIG.DEFAULT_GPT_API_URL;
+    }
+
+    /**
+     * Résout le modèle pour un type de service
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {Object} providerDef - Définition du provider
+     * @param {Object} Providers - Registre des providers
+     * @param {string} providerId - ID du provider
+     * @param {Object} data - Données de configuration legacy
+     * @returns {string} Modèle résolu
+     */
+    function resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data) {
+        const isTranscription = serviceType === 'transcription';
+        const selectedModel = isTranscription
+            ? providerConfig?.selectedTranscriptionModel
+            : providerConfig?.selectedChatModel;
+
+        if (selectedModel) return selectedModel;
+
+        if (providerDef && Providers) {
+            return Providers.getDefaultModel(providerId, serviceType);
+        }
+
+        return isTranscription
+            ? (data.audioModelType || API_CONFIG.WHISPER_MODEL)
+            : (data.modelType || API_CONFIG.GPT_MODEL);
+    }
+
+    /**
+     * Trouve un provider de fallback valide
+     * @param {Object} providers - Configuration des providers
+     * @param {string} currentProviderId - ID du provider actuel
+     * @returns {{providerId: string, providerConfig: Object}|null} Provider de fallback ou null
+     */
+    function findFallbackProvider(providers, currentProviderId) {
+        if (!providers) return null;
+
+        const availableProvider = Object.entries(providers).find(
+            ([id, config]) => isProviderValid(id, config)
+        );
+
+        if (availableProvider) {
+            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
+            console.log(`[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
+            return { providerId: availableProvider[0], providerConfig: availableProvider[1] };
+        }
+        return null;
+    }
+
+    /**
      * Résout la configuration API pour un type de service donné
      * Supporte le multi-provider avec fallback sur la configuration legacy
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
@@ -130,11 +211,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     async function resolveApiConfig(serviceType) {
         const data = await getFromStorage({
-            // Nouvelles clés multi-provider
             providers: null,
             transcriptionProvider: 'openai',
             chatProvider: 'openai',
-            // Clés legacy pour rétrocompatibilité
             apiKey: '',
             audioModelType: API_CONFIG.WHISPER_MODEL,
             modelType: API_CONFIG.GPT_MODEL,
@@ -146,116 +225,38 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             ? data.transcriptionProvider
             : data.chatProvider;
 
-        // Récupérer la configuration du provider (si multi-provider activé)
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID ('openai'|'mistral'|'custom')
         let providerConfig = data.providers?.[providerId];
 
-        // Vérifier si le provider sélectionné a une configuration valide
-        // Pour custom, il faut aussi les URLs
-        const isProviderValid = (id, config) => {
-            if (!config?.enabled || !config?.apiKey) return false;
-            // Pour le provider custom, les URLs sont obligatoires
-            if (id === 'custom') {
-                return config.transcriptionUrl && config.chatUrl;
-            }
-            return true;
-        };
-
-        // Si non valide, chercher un provider activé avec une configuration valide
+        // Si non valide, chercher un provider de fallback
         if (data.providers && !isProviderValid(providerId, providerConfig)) {
-            // Chercher un provider activé avec une configuration valide
-            const availableProvider = Object.entries(data.providers).find(
-                ([id, config]) => isProviderValid(id, config)
-            );
-            if (availableProvider) {
-                // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
-                console.log(`[resolveApiConfig] Provider ${providerId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
-                providerId = availableProvider[0];
-                providerConfig = availableProvider[1];
+            const fallback = findFallbackProvider(data.providers, providerId);
+            if (fallback) {
+                providerId = fallback.providerId;
+                providerConfig = fallback.providerConfig;
             }
         }
 
         // Récupérer les définitions du provider depuis le registre
         const Providers = globalThis.BabelFishAIProviders;
-        const providerDef = Providers ? Providers.getProvider(providerId) : null;
+        const providerDef = Providers?.getProvider(providerId) ?? null;
 
-        // Debug sans exposer la clé API
         // eslint-disable-next-line no-console -- Debug log for provider config diagnostics
         console.log('[resolveApiConfig]', serviceType, '- providerId:', providerId, '- hasProviderConfig:', Boolean(providerConfig), '- providerDef:', providerDef?.name);
 
-        // Résoudre l'URL
-        // Priorité : 1) URL custom du provider, 2) URL par défaut du provider
-        // Les URLs legacy (mode expert) sont IGNORÉES pour les providers non-OpenAI
-        let url;
-        if (serviceType === 'transcription') {
-            if (providerConfig?.transcriptionUrl) {
-                // URL custom configurée pour ce provider
-                url = providerConfig.transcriptionUrl;
-            } else if (providerDef) {
-                // URL par défaut du provider (Mistral, OpenAI, etc.)
-                url = providerDef.defaultUrls.transcription;
-            } else {
-                // Fallback absolu
-                url = API_CONFIG.DEFAULT_WHISPER_API_URL;
-            }
-        } else if (providerConfig?.chatUrl) {
-            // URL custom configurée pour ce provider
-            url = providerConfig.chatUrl;
-        } else if (providerDef) {
-            // URL par défaut du provider
-            url = providerDef.defaultUrls.chat;
-        } else {
-            // Fallback absolu
-            url = API_CONFIG.DEFAULT_GPT_API_URL;
-        }
-
-        // Résoudre la clé API (priorité : config provider > legacy si OpenAI)
-        let apiKey = providerConfig?.apiKey;
-        if (!apiKey && providerId === 'openai') {
-            // Fallback sur la clé legacy uniquement pour OpenAI
-            apiKey = data.apiKey;
-        }
-
-        // Résoudre le modèle (priorité : modèle sélectionné du provider > modèle par défaut)
-        let model;
-        if (serviceType === 'transcription') {
-            // Utiliser le modèle sélectionné pour ce provider
-            const selectedModel = providerConfig?.selectedTranscriptionModel;
-            if (selectedModel) {
-                model = selectedModel;
-            } else if (providerDef) {
-                // Fallback sur le modèle par défaut du provider
-                model = Providers.getDefaultModel(providerId, 'transcription');
-            } else {
-                model = data.audioModelType || API_CONFIG.WHISPER_MODEL;
-            }
-        } else {
-            // Utiliser le modèle sélectionné pour ce provider
-            const selectedModel = providerConfig?.selectedChatModel;
-            if (selectedModel) {
-                model = selectedModel;
-            } else if (providerDef) {
-                // Fallback sur le modèle par défaut du provider
-                model = Providers.getDefaultModel(providerId, 'chat');
-            } else {
-                model = data.modelType || API_CONFIG.GPT_MODEL;
-            }
-        }
+        // Résoudre URL, clé API et modèle
+        const url = resolveUrl(serviceType, providerConfig, providerDef);
+        const apiKey = providerConfig?.apiKey || (providerId === 'openai' ? data.apiKey : null);
+        const model = resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data);
 
         // Vérifier si NoLog est supporté et activé
-        const supportsNoLog = providerDef ? providerDef.supportsNoLog : (providerId === 'openai');
+        const supportsNoLog = providerDef?.supportsNoLog ?? (providerId === 'openai');
         const disableLogging = supportsNoLog && data.disableLogging;
 
         // eslint-disable-next-line no-console -- Debug log for provider config result
         console.log('[resolveApiConfig] Result:', { providerId, url, model, hasApiKey: Boolean(apiKey) });
 
-        return {
-            apiKey,
-            url,
-            model,
-            providerId,
-            disableLogging
-        };
+        return { apiKey, url, model, providerId, disableLogging };
     }
 
     /**
@@ -526,7 +527,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 let text = data.text || '';
                 text = text.trim();
                 // Ajouter un espace à la fin pour permettre de continuer à dicter
-                return text + ' ';
+                return `${text} `;
             }
         });
     }

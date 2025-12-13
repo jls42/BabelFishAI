@@ -30,10 +30,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         // Supprimer les espaces multiples et les sauts de ligne excessifs
-        // Note: Using replace() with regex patterns /\s+/ and /\n\s*\n/ - replaceAll not applicable for these patterns
-        let cleanedText = text.trim()
-            .replace(/\s+/g, ' ')
-            .replace(/\n\s*\n/g, '\n\n');
+        // eslint-disable-next-line unicorn/prefer-string-replace-all -- Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
+        let cleanedText = text.trim().replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n\n');
 
         // Limiter la taille du texte pour éviter les problèmes avec l'API
         if (cleanedText.length > TEXT_PROCESSING_CONFIG.MAX_TEXT_LENGTH) {
@@ -164,7 +162,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Préparer le payload pour l'API
             const payload = {
                 model: modelType,
-                messages: messages,
+                messages,
                 temperature: 0.1 // Température basse pour des corrections précises
             };
 

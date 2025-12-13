@@ -378,7 +378,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         // Ajouter un espace à la fin pour éviter que les transcriptions consécutives soient collées
-        const textWithTrailingSpace = text + ' ';
+        const textWithTrailingSpace = `${text} `;
 
         try {
             if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
