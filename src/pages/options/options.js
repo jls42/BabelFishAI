@@ -507,7 +507,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Legacy keys pour rétrocompatibilité
             apiKey: legacyApiKey
         }, () => {
+            // eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
             if (chrome.runtime.lastError) {
+                // eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
                 console.error('[Options] Error saving:', chrome.runtime.lastError);
             } else {
                 console.log('[Options] Config saved successfully');
@@ -625,6 +627,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     function getSelectedProviderModel(providerId, modelType) {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return null;
 
