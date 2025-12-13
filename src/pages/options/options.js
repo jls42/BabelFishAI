@@ -22,6 +22,54 @@ function loadStandardProviderConfig(config, keyInput, checkbox) {
     checkbox.checked = config.enabled || false;
 }
 
+/**
+ * Valide les URLs du provider custom
+ * @param {Object} customConfig - Configuration du provider custom
+ * @param {Function} showStatus - Fonction pour afficher les messages
+ * @param {Object} i18n - Service d'internationalisation
+ * @param {Object} Providers - Service des providers
+ * @returns {boolean} True si les URLs sont valides
+ */
+function validateCustomProviderUrls(customConfig, showStatus, i18n, Providers) {
+    if (!customConfig.enabled) return true;
+
+    const urls = [customConfig.transcriptionUrl, customConfig.chatUrl];
+    for (const url of urls) {
+        if (!url) {
+            showStatus(i18n.getMessage('customUrlRequiredError') || 'Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.', 'error');
+            return false;
+        }
+        if (!Providers.isValidUrl(url, true)) {
+            showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).', 'error');
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Détermine les providers actifs pour transcription et chat
+ * @param {string[]} enabledProviders - Liste des providers activés
+ * @param {HTMLSelectElement} transcriptionSelect - Sélecteur de provider pour transcription
+ * @param {HTMLSelectElement} chatSelect - Sélecteur de provider pour chat
+ * @returns {{transcriptionProvider: string, chatProvider: string}}
+ */
+function determineActiveProviders(enabledProviders, transcriptionSelect, chatSelect) {
+    if (enabledProviders.length > 1) {
+        return {
+            transcriptionProvider: transcriptionSelect.value || enabledProviders[0],
+            chatProvider: chatSelect.value || enabledProviders[0]
+        };
+    }
+    if (enabledProviders.length === 1) {
+        return {
+            transcriptionProvider: enabledProviders[0],
+            chatProvider: enabledProviders[0]
+        };
+    }
+    return { transcriptionProvider: 'openai', chatProvider: 'openai' };
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
@@ -511,36 +559,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-        // Valider les URLs du provider custom (accepte HTTP pour localhost)
-        if (providers.custom.enabled) {
-            const customUrls = [providers.custom.transcriptionUrl, providers.custom.chatUrl];
-            for (const url of customUrls) {
-                if (!url) {
-                    showStatus(i18n.getMessage('customUrlRequiredError') || 'Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.', 'error');
-                    return false;
-                }
-                if (!Providers.isValidUrl(url, true)) { // allowHttp = true pour localhost
-                    showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).', 'error');
-                    return false;
-                }
-            }
+        // Valider les URLs du provider custom
+        if (!validateCustomProviderUrls(providers.custom, showStatus, i18n, Providers)) {
+            return false;
         }
 
         // Déterminer les providers actifs pour la sélection de service
         const enabledProviders = getEnabledProviderIds();
-        let transcriptionProvider = 'openai';
-        let chatProvider = 'openai';
-
-        if (enabledProviders.length > 1) {
-            // Plusieurs providers actifs : utiliser les sélecteurs
-            transcriptionProvider = transcriptionProviderSelect.value || enabledProviders[0];
-            chatProvider = chatProviderSelect.value || enabledProviders[0];
-        } else if (enabledProviders.length === 1) {
-            // Un seul provider actif : utiliser celui-là pour tout
-            transcriptionProvider = enabledProviders[0];
-            chatProvider = enabledProviders[0];
-        }
-        // Si aucun provider actif, garder 'openai' par défaut
+        const { transcriptionProvider, chatProvider } = determineActiveProviders(
+            enabledProviders,
+            transcriptionProviderSelect,
+            chatProviderSelect
+        );
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité
         // Utiliser la clé du provider de transcription actif
@@ -682,8 +712,6 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} modelType - 'transcription' ou 'chat'
      * @returns {string} ID du modèle sélectionné
      */
-    // skipcq: JS-0044 - Simple function, complexity is low (false positive from stale analysis)
-    // eslint-disable-next-line complexity -- False positive: function is simple
     function getSelectedProviderModel(providerId, modelType) {
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
