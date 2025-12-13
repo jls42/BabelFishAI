@@ -195,10 +195,19 @@ self.AVAILABLE_LANGUAGES = [...];
 ```javascript
 // ✅ CORRECT
 const value = Number.parseInt(input.value, 10);
-const hex = Number.parseInt(color.substr(1, 2), 16);
+const hex = Number.parseInt(color.substring(1, 3), 16);
 
 // ❌ INCORRECT
 const value = parseInt(input.value);
+```
+
+#### 2b. Utiliser `substring()` au lieu de `substr()` (deprecated)
+```javascript
+// ✅ CORRECT
+const hex = color.substring(1, 3);  // De l'index 1 à 3 (exclu)
+
+// ❌ INCORRECT (deprecated)
+const hex = color.substr(1, 2);  // De l'index 1, longueur 2
 ```
 
 #### 3. Utiliser `replaceAll()` au lieu de `replace()` avec regex globale (quand applicable)
@@ -284,6 +293,27 @@ container.appendChild(span);
 container.innerHTML = `<span class="status">${text}</span>`;
 ```
 
+#### 10. Accessibilité (a11y)
+```html
+<!-- ✅ CORRECT - Labels avec aria-label pour les toggles sans texte visible -->
+<label class="provider-toggle" aria-label="Enable OpenAI provider">
+    <input type="checkbox" id="openaiEnabled" aria-label="Enable OpenAI">
+    <span class="toggle-slider"></span>
+</label>
+
+<!-- ✅ CORRECT - Contraste suffisant (texte blanc sur fond sombre) -->
+.toggle-advanced {
+    background: rgba(0, 0, 0, 0.3);  /* Fond sombre */
+    color: white;  /* Bon contraste */
+}
+
+<!-- ❌ INCORRECT - Mauvais contraste -->
+.toggle-advanced {
+    background: rgba(255, 255, 255, 0.2);  /* Fond clair */
+    color: white;  /* Mauvais contraste */
+}
+```
+
 ### Variables et Fonctions
 - **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
 - **Supprimer les fonctions inutilisées** ou ajouter `// skipcq: JS-0128` si conservées intentionnellement
@@ -337,11 +367,70 @@ my_function() {
 if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 ```
 
-### Commentaires skipcq
-Pour les cas où le code est intentionnel mais flaggé par le linter :
+### Commentaires skipcq (DeepSource)
+Pour les cas où le code est intentionnel mais flaggé par DeepSource :
 - `// skipcq: JS-0128` - Fonction/variable non utilisée mais conservée intentionnellement
 - `// skipcq: JS-0002` - Console.log intentionnel (debug)
 - `// skipcq: JS-0119` - Initialisation dans déclaration intentionnelle
+
+### Annotations ESLint pour Faux Positifs (Codacy/SonarCloud)
+
+**Codacy et SonarCloud** utilisent ESLint pour l'analyse. Utiliser la syntaxe ESLint pour ignorer les faux positifs :
+
+#### Syntaxe de base
+```javascript
+// Ignorer la ligne suivante
+// eslint-disable-next-line <rule> -- <justification>
+
+// Ignorer un bloc
+/* eslint-disable <rule> */
+// code...
+/* eslint-enable <rule> */
+```
+
+#### Faux Positifs Courants dans ce Projet
+
+**1. Object Injection Sink** - Accès dynamique avec clés contrôlées
+```javascript
+// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+const config = providers[providerId];
+```
+
+**2. 'chrome' is not defined** - Global fourni par l'environnement Chrome
+```javascript
+// eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
+chrome.storage.sync.set({ ... });
+```
+
+**3. Prefer top-level await** - IIFE nécessaire pour content scripts Chrome
+```javascript
+// eslint-disable-next-line unicorn/prefer-top-level-await -- IIFE required for Chrome extension content scripts isolation
+(async function () { ... })();
+```
+
+**4. Prefer replaceAll** - Regex patterns complexes intentionnels
+```javascript
+// eslint-disable-next-line unicorn/prefer-string-replace-all -- Intentional: regex patterns /\s+/ cannot use replaceAll
+text.replace(/\s+/g, ' ');
+```
+
+**5. HTML in function** - Contenu statique suivi de sanitization
+```javascript
+// eslint-disable-next-line security/detect-unsafe-regex -- False positive: static string '<br>' replacement, followed by sanitizeHTML()
+const textWithBr = text.replaceAll('\n', '<br>');
+```
+
+#### Règles Importantes
+1. **Toujours ajouter une justification** avec `--` expliquant pourquoi c'est sûr
+2. **Être spécifique** sur la règle désactivée
+3. **Vérifier avant de désactiver** - s'assurer que c'est vraiment un faux positif
+4. **Utiliser la portée la plus étroite** - préférer ligne > bloc > fichier
+
+#### Issues NON Faux Positifs (à corriger vraiment)
+- **Cyclomatic complexity** → Nécessite refactoring des fonctions complexes
+- **Cognitive complexity** → Diviser en fonctions plus petites
+- **Method too long** → Extraire des sous-fonctions
+- **Contrast accessibility** → Améliorer les couleurs CSS
 
 ## Developer Notes
 
