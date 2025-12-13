@@ -23,18 +23,31 @@
 
             <!-- Section Providers IA - Design Dropdown + Panel -->
             <div class="subsection providers-section">
-                <h3 data-i18n="providersTitle">Providers IA</h3>
+                <div class="providers-header">
+                    <h3 data-i18n="providersTitle">Providers IA</h3>
+                    <div class="provider-status-badges" id="dropdownStatus"></div>
+                </div>
 
-                <!-- Dropdown sélecteur de provider -->
+                <!-- Dropdown sélecteur de provider + Toggle -->
                 <div class="provider-selector-wrapper">
-                    <label for="providerSelector" class="provider-selector-label" data-i18n="selectProviderLabel">Configurer le provider :</label>
-                    <div class="provider-dropdown-container">
-                        <select id="providerSelector" class="provider-dropdown">
-                            <option value="openai">OpenAI</option>
-                            <option value="mistral">Mistral AI</option>
-                            <option value="custom">Custom/LiteLLM</option>
-                        </select>
-                        <div class="provider-dropdown-status" id="dropdownStatus"></div>
+                    <select id="providerSelector" class="provider-dropdown">
+                        <option value="openai">OpenAI</option>
+                        <option value="mistral">Mistral AI</option>
+                        <option value="custom">Custom/LiteLLM</option>
+                    </select>
+                    <div class="provider-toggle-wrapper" id="providerToggleWrapper">
+                        <label class="provider-toggle" id="toggleOpenAI">
+                            <input type="checkbox" id="openaiEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <label class="provider-toggle" id="toggleMistral" style="display:none;">
+                            <input type="checkbox" id="mistralEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <label class="provider-toggle" id="toggleCustom" style="display:none;">
+                            <input type="checkbox" id="customEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
                 </div>
 
@@ -43,13 +56,6 @@
 
                     <!-- Config OpenAI -->
                     <div class="provider-config" id="configOpenAI" data-provider="openai">
-                        <div class="provider-config-header">
-                            <span class="provider-config-name">OpenAI</span>
-                            <label class="provider-toggle">
-                                <input type="checkbox" id="openaiEnabled">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
                         <div class="provider-config-body">
                             <div class="api-key-container">
                                 <input type="password" id="openaiApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="sk-...">
@@ -85,13 +91,6 @@
 
                     <!-- Config Mistral -->
                     <div class="provider-config" id="configMistral" data-provider="mistral" style="display: none;">
-                        <div class="provider-config-header">
-                            <span class="provider-config-name">Mistral AI</span>
-                            <label class="provider-toggle">
-                                <input type="checkbox" id="mistralEnabled">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
                         <div class="provider-config-body">
                             <div class="api-key-container">
                                 <input type="password" id="mistralApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
@@ -127,13 +126,6 @@
 
                     <!-- Config Custom/LiteLLM -->
                     <div class="provider-config" id="configCustom" data-provider="custom" style="display: none;">
-                        <div class="provider-config-header">
-                            <span class="provider-config-name">Custom/LiteLLM</span>
-                            <label class="provider-toggle">
-                                <input type="checkbox" id="customEnabled">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
                         <div class="provider-config-body">
                             <div class="api-key-container">
                                 <input type="password" id="customApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
@@ -184,14 +176,16 @@
 
                 <!-- Sélection des services (visible si plusieurs providers actifs) -->
                 <div class="provider-services" id="providerServices" style="display: none;">
-                    <h4 data-i18n="serviceSelectionTitle">Services actifs</h4>
-                    <div class="service-selector">
-                        <label for="transcriptionProvider" data-i18n="transcriptionProviderLabel">Transcription :</label>
-                        <select id="transcriptionProvider"></select>
-                    </div>
-                    <div class="service-selector">
-                        <label for="chatProvider" data-i18n="chatProviderLabel">Traduction/Reformulation :</label>
-                        <select id="chatProvider"></select>
+                    <h4 data-i18n="serviceSelectionTitle">Sélection des services</h4>
+                    <div class="services-grid">
+                        <div class="service-selector">
+                            <label for="transcriptionProvider" data-i18n="transcriptionProviderLabel">Transcription :</label>
+                            <select id="transcriptionProvider"></select>
+                        </div>
+                        <div class="service-selector">
+                            <label for="chatProvider" data-i18n="chatProviderLabel">Traduction/Reformulation :</label>
+                            <select id="chatProvider"></select>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -140,8 +140,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             targetConfig.style.display = 'block';
         }
 
+        // Afficher le toggle correspondant
+        showProviderToggle(providerId);
+
         // Mettre à jour la bordure du panel selon l'état enabled
         updatePanelBorder(providerId);
+    }
+
+    /**
+     * Affiche le toggle ON/OFF du provider sélectionné
+     * @param {string} providerId - ID du provider
+     */
+    function showProviderToggle(providerId) {
+        const toggles = {
+            'openai': document.getElementById('toggleOpenAI'),
+            'mistral': document.getElementById('toggleMistral'),
+            'custom': document.getElementById('toggleCustom')
+        };
+
+        // Masquer tous les toggles
+        Object.values(toggles).forEach(toggle => {
+            if (toggle) toggle.style.display = 'none';
+        });
+
+        // Afficher le toggle du provider sélectionné
+        if (toggles[providerId]) {
+            toggles[providerId].style.display = 'inline-block';
+        }
     }
 
     /**
@@ -709,7 +734,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             dialogDisplay: false,
             dialogDuration: 15,
             autoCopy: false,
-            disableLogging: false,
+            disableLogging: true,
             bannerColorStart: '#684054',
             bannerColorEnd: '#4c7b8d',
             bannerOpacity: 80,
