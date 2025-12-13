@@ -1,3 +1,4 @@
+/* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
 // eslint-disable-next-line unicorn/prefer-top-level-await -- IIFE required for Chrome extension content scripts isolation
 (async function () {
     if (globalThis.__whisperContentScriptHasRun) return;

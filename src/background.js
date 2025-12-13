@@ -275,7 +275,7 @@ async function migrateToMultiProvider() {
         const providers = {
             openai: {
                 apiKey: data.apiKey || '',
-                enabled: !!data.apiKey,
+                enabled: Boolean(data.apiKey),
                 // Préserver les URLs custom si configurées
                 transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
                 chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
@@ -297,7 +297,7 @@ async function migrateToMultiProvider() {
         });
 
         debug('Migration multi-provider terminée avec succès', {
-            hasApiKey: !!data.apiKey,
+            hasApiKey: Boolean(data.apiKey),
             hasCustomUrls: hasCustomTranscriptionUrl || hasCustomChatUrl
         });
     } catch (error) {

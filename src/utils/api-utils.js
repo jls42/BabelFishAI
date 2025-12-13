@@ -168,6 +168,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 ([id, config]) => isProviderValid(id, config)
             );
             if (availableProvider) {
+                // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
                 console.log(`[resolveApiConfig] Provider ${providerId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
                 providerId = availableProvider[0];
                 providerConfig = availableProvider[1];
@@ -179,7 +180,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const providerDef = Providers ? Providers.getProvider(providerId) : null;
 
         // Debug sans exposer la clé API
-        console.log('[resolveApiConfig]', serviceType, '- providerId:', providerId, '- hasProviderConfig:', !!providerConfig, '- providerDef:', providerDef?.name);
+        // eslint-disable-next-line no-console -- Debug log for provider config diagnostics
+        console.log('[resolveApiConfig]', serviceType, '- providerId:', providerId, '- hasProviderConfig:', Boolean(providerConfig), '- providerDef:', providerDef?.name);
 
         // Résoudre l'URL
         // Priorité : 1) URL custom du provider, 2) URL par défaut du provider
@@ -244,7 +246,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const supportsNoLog = providerDef ? providerDef.supportsNoLog : (providerId === 'openai');
         const disableLogging = supportsNoLog && data.disableLogging;
 
-        console.log('[resolveApiConfig] Result:', { providerId, url, model, hasApiKey: !!apiKey });
+        // eslint-disable-next-line no-console -- Debug log for provider config result
+        console.log('[resolveApiConfig] Result:', { providerId, url, model, hasApiKey: Boolean(apiKey) });
 
         return {
             apiKey,

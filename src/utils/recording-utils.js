@@ -580,6 +580,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 throw new Error(errorMsg);
             }
 
+            // eslint-disable-next-line no-console -- Debug log for provider diagnostics
             console.log('[Recording] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique

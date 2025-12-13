@@ -1,6 +1,7 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
 
+// eslint-disable-next-line strict -- 'use strict' inside IIFE is intentional for ES5 compatibility and module isolation
 globalThis.BabelFishAIProviders = (function () {
     'use strict';
 

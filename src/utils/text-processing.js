@@ -66,6 +66,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
+            // eslint-disable-next-line no-console -- Debug log for provider diagnostics
             console.log('[TextProcessing] rephraseText using provider:', config.providerId, 'url:', translationApiUrl);
 
             // Préparer les messages pour l'API
@@ -145,6 +146,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: apiUrl, model: modelType, disableLogging } = config;
 
+            // eslint-disable-next-line no-console -- Debug log for provider diagnostics
             console.log('[TextProcessing] correctText using provider:', config.providerId, 'url:', apiUrl);
 
             // Préparer les messages pour l'API
@@ -216,6 +218,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
+            // eslint-disable-next-line no-console -- Debug log for provider diagnostics
             console.log('[TextProcessing] translateText using provider:', config.providerId, 'url:', translationApiUrl);
 
             if (!effectiveApiKey) {

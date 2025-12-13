@@ -360,6 +360,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Legacy keys pour migration
             apiKey: ''
         }, (items) => {
+            // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
             console.log('[Options] Loading providers config:', items);
 
             // Charger la configuration des providers
@@ -389,7 +390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 // Mode legacy : utiliser l'ancienne clé API pour OpenAI
                 openaiApiKeyInput.value = items.apiKey || '';
-                openaiEnabledCheckbox.checked = !!items.apiKey;
+                openaiEnabledCheckbox.checked = Boolean(items.apiKey);
                 mistralEnabledCheckbox.checked = false;
                 customEnabledCheckbox.checked = false;
 
@@ -422,6 +423,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
 
+            // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
             console.log('[Options] Loaded - transcriptionProvider:', items.transcriptionProvider, 'chatProvider:', items.chatProvider);
         });
     }
@@ -495,6 +497,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // eslint-disable-next-line security/detect-object-injection -- False positive: transcriptionProvider is a controlled provider ID
         const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
 
+        // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
         console.log('[Options] Saving providers config:', {
             transcriptionProvider,
             chatProvider,
@@ -514,6 +517,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
                 console.error('[Options] Error saving:', chrome.runtime.lastError);
             } else {
+                // eslint-disable-next-line no-console -- Debug log for options saving success
                 console.log('[Options] Config saved successfully');
             }
             updateProviderDisplay('openai');
