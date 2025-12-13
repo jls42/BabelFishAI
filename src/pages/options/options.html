@@ -21,172 +21,163 @@
         <div class="section-block essential-section">
             <h2 data-i18n="essentialSettingsTitle">Paramètres Essentiels</h2>
 
-            <!-- Section Providers IA -->
+            <!-- Section Providers IA - Design Dropdown + Panel -->
             <div class="subsection providers-section">
                 <h3 data-i18n="providersTitle">Providers IA</h3>
-                <p class="option-description" data-i18n="providersDescription">Configurez un ou plusieurs providers pour la transcription et la traduction.</p>
 
-                <!-- Provider OpenAI -->
-                <div class="provider-card" id="providerOpenAI">
-                    <div class="provider-header">
-                        <div class="provider-title">
-                            <span class="provider-name">OpenAI</span>
-                            <span class="provider-status" id="openaiStatus"></span>
-                        </div>
-                        <label class="provider-toggle">
-                            <input type="checkbox" id="openaiEnabled">
-                            <span class="toggle-slider"></span>
-                        </label>
+                <!-- Dropdown sélecteur de provider -->
+                <div class="provider-selector-wrapper">
+                    <label for="providerSelector" class="provider-selector-label" data-i18n="selectProviderLabel">Configurer le provider :</label>
+                    <div class="provider-dropdown-container">
+                        <select id="providerSelector" class="provider-dropdown">
+                            <option value="openai">OpenAI</option>
+                            <option value="mistral">Mistral AI</option>
+                            <option value="custom">Custom/LiteLLM</option>
+                        </select>
+                        <div class="provider-dropdown-status" id="dropdownStatus"></div>
                     </div>
-                    <div class="provider-content" id="openaiContent">
-                        <div class="api-key-container">
-                            <input type="password" id="openaiApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="sk-...">
-                            <button type="button" class="toggle-password" data-target="openaiApiKey">👁️</button>
+                </div>
+
+                <!-- Panel de configuration (contenu dynamique selon provider sélectionné) -->
+                <div class="provider-config-panel" id="providerConfigPanel">
+
+                    <!-- Config OpenAI -->
+                    <div class="provider-config" id="configOpenAI" data-provider="openai">
+                        <div class="provider-config-header">
+                            <span class="provider-config-name">OpenAI</span>
+                            <label class="provider-toggle">
+                                <input type="checkbox" id="openaiEnabled">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <div class="api-help">
-                            <div class="api-info">
+                        <div class="provider-config-body">
+                            <div class="api-key-container">
+                                <input type="password" id="openaiApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="sk-...">
+                                <button type="button" class="toggle-password" data-target="openaiApiKey">👁️</button>
+                            </div>
+                            <div class="api-help">
                                 <span data-i18n="apiKeyInfo">Obtenez votre clé API sur</span>
-                                <a href="https://platform.openai.com/account/api-keys" target="_blank" class="api-link">
-                                    platform.openai.com/account/api-keys
-                                </a>
+                                <a href="https://platform.openai.com/account/api-keys" target="_blank" class="api-link">platform.openai.com</a>
                             </div>
-                        </div>
-
-                        <!-- Sélection des modèles OpenAI -->
-                        <details class="provider-advanced">
-                            <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
-                            <div class="custom-models-section">
-                                <div class="form-group">
-                                    <label for="openaiTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
-                                    <select id="openaiTranscriptionModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newOpenaiTranscriptionModel" placeholder="whisper-large-v3">
-                                        <button type="button" id="addOpenaiTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
+                            <details class="provider-advanced">
+                                <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
+                                <div class="custom-models-section">
+                                    <div class="form-group">
+                                        <label for="openaiTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
+                                        <select id="openaiTranscriptionModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newOpenaiTranscriptionModel" placeholder="whisper-large-v3">
+                                            <button type="button" id="addOpenaiTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="openaiChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
+                                        <select id="openaiChatModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newOpenaiChatModel" placeholder="gpt-4-turbo">
+                                            <button type="button" id="addOpenaiChatModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="openaiChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
-                                    <select id="openaiChatModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newOpenaiChatModel" placeholder="gpt-4-turbo">
-                                        <button type="button" id="addOpenaiChatModel" data-i18n="addModelButton">Ajouter</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
+                            </details>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Provider Mistral -->
-                <div class="provider-card" id="providerMistral">
-                    <div class="provider-header">
-                        <div class="provider-title">
-                            <span class="provider-name">Mistral AI</span>
-                            <span class="provider-status" id="mistralStatus"></span>
+                    <!-- Config Mistral -->
+                    <div class="provider-config" id="configMistral" data-provider="mistral" style="display: none;">
+                        <div class="provider-config-header">
+                            <span class="provider-config-name">Mistral AI</span>
+                            <label class="provider-toggle">
+                                <input type="checkbox" id="mistralEnabled">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="provider-toggle">
-                            <input type="checkbox" id="mistralEnabled">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="provider-content" id="mistralContent">
-                        <div class="api-key-container">
-                            <input type="password" id="mistralApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
-                            <button type="button" class="toggle-password" data-target="mistralApiKey">👁️</button>
-                        </div>
-                        <div class="api-help">
-                            <div class="api-info">
+                        <div class="provider-config-body">
+                            <div class="api-key-container">
+                                <input type="password" id="mistralApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
+                                <button type="button" class="toggle-password" data-target="mistralApiKey">👁️</button>
+                            </div>
+                            <div class="api-help">
                                 <span data-i18n="mistralApiKeyInfo">Obtenez votre clé API sur</span>
-                                <a href="https://console.mistral.ai/api-keys" target="_blank" class="api-link">
-                                    console.mistral.ai/api-keys
-                                </a>
+                                <a href="https://console.mistral.ai/api-keys" target="_blank" class="api-link">console.mistral.ai</a>
                             </div>
+                            <details class="provider-advanced">
+                                <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
+                                <div class="custom-models-section">
+                                    <div class="form-group">
+                                        <label for="mistralTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
+                                        <select id="mistralTranscriptionModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newMistralTranscriptionModel" placeholder="voxtral-large">
+                                            <button type="button" id="addMistralTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mistralChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
+                                        <select id="mistralChatModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newMistralChatModel" placeholder="mistral-nemo">
+                                            <button type="button" id="addMistralChatModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
                         </div>
-
-                        <!-- Sélection des modèles Mistral -->
-                        <details class="provider-advanced">
-                            <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
-                            <div class="custom-models-section">
-                                <div class="form-group">
-                                    <label for="mistralTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
-                                    <select id="mistralTranscriptionModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newMistralTranscriptionModel" placeholder="voxtral-large">
-                                        <button type="button" id="addMistralTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="mistralChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
-                                    <select id="mistralChatModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newMistralChatModel" placeholder="mistral-nemo">
-                                        <button type="button" id="addMistralChatModel" data-i18n="addModelButton">Ajouter</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
                     </div>
-                </div>
 
-                <!-- Provider Custom/LiteLLM -->
-                <div class="provider-card" id="providerCustom">
-                    <div class="provider-header">
-                        <div class="provider-title">
-                            <span class="provider-name">Custom/LiteLLM</span>
-                            <span class="provider-status" id="customStatus"></span>
+                    <!-- Config Custom/LiteLLM -->
+                    <div class="provider-config" id="configCustom" data-provider="custom" style="display: none;">
+                        <div class="provider-config-header">
+                            <span class="provider-config-name">Custom/LiteLLM</span>
+                            <label class="provider-toggle">
+                                <input type="checkbox" id="customEnabled">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="provider-toggle">
-                            <input type="checkbox" id="customEnabled">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="provider-content" id="customContent">
-                        <div class="api-key-container">
-                            <input type="password" id="customApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
-                            <button type="button" class="toggle-password" data-target="customApiKey">👁️</button>
-                        </div>
-                        <p class="option-description" data-i18n="customProviderDescription">Provider personnalisé pour LiteLLM ou autres proxies. Les URLs sont obligatoires.</p>
-
-                        <!-- URLs obligatoires -->
-                        <div class="provider-urls custom-urls-required">
-                            <div class="form-group">
-                                <label for="customTranscriptionUrl" data-i18n="customTranscriptionUrlLabel">URL Transcription (obligatoire) :</label>
-                                <input type="text" id="customTranscriptionUrl" placeholder="http://localhost:4000/v1/audio/transcriptions" required>
+                        <div class="provider-config-body">
+                            <div class="api-key-container">
+                                <input type="password" id="customApiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="...">
+                                <button type="button" class="toggle-password" data-target="customApiKey">👁️</button>
                             </div>
-                            <div class="form-group">
-                                <label for="customChatUrl" data-i18n="customChatUrlLabel">URL Chat (obligatoire) :</label>
-                                <input type="text" id="customChatUrl" placeholder="http://localhost:4000/v1/chat/completions" required>
-                            </div>
-                        </div>
-
-                        <!-- Sélection des modèles Custom -->
-                        <details class="provider-advanced">
-                            <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
-                            <div class="custom-models-section">
+                            <p class="option-description" data-i18n="customProviderDescription">Provider personnalisé pour LiteLLM ou autres proxies.</p>
+                            <div class="provider-urls custom-urls-required">
                                 <div class="form-group">
-                                    <label for="customTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
-                                    <select id="customTranscriptionModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newCustomTranscriptionModel" placeholder="whisper-large-v3">
-                                        <button type="button" id="addCustomTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
-                                    </div>
+                                    <label for="customTranscriptionUrl" data-i18n="customTranscriptionUrlLabel">URL Transcription :</label>
+                                    <input type="text" id="customTranscriptionUrl" placeholder="http://localhost:4000/v1/audio/transcriptions">
                                 </div>
                                 <div class="form-group">
-                                    <label for="customChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
-                                    <select id="customChatModel" class="model-select"></select>
-                                    <div class="model-input-container">
-                                        <input type="text" id="newCustomChatModel" placeholder="llama-3.1-70b">
-                                        <button type="button" id="addCustomChatModel" data-i18n="addModelButton">Ajouter</button>
-                                    </div>
+                                    <label for="customChatUrl" data-i18n="customChatUrlLabel">URL Chat :</label>
+                                    <input type="text" id="customChatUrl" placeholder="http://localhost:4000/v1/chat/completions">
                                 </div>
                             </div>
-                        </details>
+                            <details class="provider-advanced">
+                                <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
+                                <div class="custom-models-section">
+                                    <div class="form-group">
+                                        <label for="customTranscriptionModel" data-i18n="transcriptionModelLabel">Modèle de transcription :</label>
+                                        <select id="customTranscriptionModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newCustomTranscriptionModel" placeholder="whisper-large-v3">
+                                            <button type="button" id="addCustomTranscriptionModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customChatModel" data-i18n="chatModelLabel">Modèle de chat :</label>
+                                        <select id="customChatModel" class="model-select"></select>
+                                        <div class="model-input-container">
+                                            <input type="text" id="newCustomChatModel" placeholder="llama-3.1-70b">
+                                            <button type="button" id="addCustomChatModel" data-i18n="addModelButton">Ajouter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Sélection des services (visible si plusieurs providers actifs) -->
                 <div class="provider-services" id="providerServices" style="display: none;">
-                    <h4 data-i18n="serviceSelectionTitle">Sélection des services</h4>
+                    <h4 data-i18n="serviceSelectionTitle">Services actifs</h4>
                     <div class="service-selector">
                         <label for="transcriptionProvider" data-i18n="transcriptionProviderLabel">Transcription :</label>
                         <select id="transcriptionProvider"></select>

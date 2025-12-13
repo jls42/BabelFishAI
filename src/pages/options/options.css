@@ -526,63 +526,120 @@ select:focus {
     display: none;
 }
 
-/* ===== Section Providers IA ===== */
+/* ===== Section Providers IA - Design Dropdown + Panel ===== */
 .providers-section {
     background: linear-gradient(to bottom,
             rgba(104, 64, 84, 0.03),
             rgba(76, 123, 141, 0.03));
 }
 
-.provider-card {
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    transition: box-shadow 0.2s, border-color 0.2s;
+/* Dropdown sélecteur de provider */
+.provider-selector-wrapper {
+    margin-bottom: 20px;
 }
 
-.provider-card:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.provider-card.active {
-    border-color: var(--primary-color-2);
-    box-shadow: 0 2px 12px rgba(76, 123, 141, 0.15);
-}
-
-.provider-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    background: rgba(248, 249, 250, 0.5);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.provider-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.provider-name {
+.provider-selector-label {
+    display: block;
     font-weight: 600;
-    font-size: 1.1em;
     color: var(--primary-color-1);
+    margin-bottom: 8px;
 }
 
-.provider-status {
+.provider-dropdown-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.provider-dropdown {
+    flex: 1;
+    max-width: 300px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.provider-dropdown:hover {
+    border-color: var(--primary-color-2);
+}
+
+.provider-dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color-2);
+    box-shadow: 0 0 0 3px rgba(76, 123, 141, 0.15);
+}
+
+.provider-dropdown-status {
+    display: flex;
+    gap: 6px;
     font-size: 0.85em;
-    padding: 2px 8px;
-    border-radius: 12px;
+}
+
+.provider-dropdown-status .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.provider-dropdown-status .status-dot.configured {
     background: rgba(40, 167, 69, 0.1);
     color: var(--success-color);
 }
 
-.provider-status.inactive {
-    background: rgba(108, 117, 125, 0.1);
-    color: #6c757d;
+.provider-dropdown-status .status-dot.active {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+/* Panel de configuration */
+.provider-config-panel {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.provider-config-panel:has(.provider-toggle input:checked) {
+    border-color: var(--primary-color-2);
+}
+
+.provider-config {
+    animation: fadeIn 0.2s ease-out;
+}
+
+.provider-config-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(to right, rgba(104, 64, 84, 0.05), rgba(76, 123, 141, 0.05));
+    border-bottom: 1px solid var(--border-color);
+}
+
+.provider-config-name {
+    font-weight: 600;
+    font-size: 1.15em;
+    color: var(--primary-color-1);
+}
+
+.provider-config-body {
+    padding: 20px;
+}
+
+/* Legacy card styles (kept for reference but not used) */
+.provider-card {
+    display: none;
 }
 
 /* Toggle switch pour provider */
@@ -631,13 +688,19 @@ select:focus {
     transform: translateX(24px);
 }
 
-.provider-content {
-    padding: 20px;
-    display: none;
+/* Provider config body spacing */
+.provider-config-body .api-key-container {
+    margin-bottom: 12px;
 }
 
-.provider-card.active .provider-content {
-    display: block;
+.provider-config-body .api-help {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    font-size: 0.9em;
+}
+
+.provider-config-body .option-description {
+    margin: 8px 0 12px;
 }
 
 .provider-advanced {
@@ -712,9 +775,23 @@ select:focus {
 
 /* Responsive pour providers */
 @media screen and (max-width: 600px) {
-    .provider-header {
+    .provider-dropdown-container {
         flex-direction: column;
-        gap: 15px;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .provider-dropdown {
+        max-width: none;
+    }
+
+    .provider-dropdown-status {
+        justify-content: center;
+    }
+
+    .provider-config-header {
+        flex-direction: column;
+        gap: 12px;
         text-align: center;
     }
 

@@ -3,23 +3,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const i18n = window.BabelFishAIUtils.i18n;
     const Providers = window.BabelFishAIProviders;
 
-    // Éléments du DOM - Providers
+    // Éléments du DOM - Providers (nouveau design dropdown + panel)
+    const providerSelector = document.getElementById('providerSelector');
+    const dropdownStatus = document.getElementById('dropdownStatus');
+    const providerConfigPanel = document.getElementById('providerConfigPanel');
+
     const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
     const openaiApiKeyInput = document.getElementById('openaiApiKey');
-    const openaiStatus = document.getElementById('openaiStatus');
-    const providerOpenAI = document.getElementById('providerOpenAI');
+    const configOpenAI = document.getElementById('configOpenAI');
 
     const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
     const mistralApiKeyInput = document.getElementById('mistralApiKey');
-    const mistralStatus = document.getElementById('mistralStatus');
-    const providerMistral = document.getElementById('providerMistral');
+    const configMistral = document.getElementById('configMistral');
 
     const customEnabledCheckbox = document.getElementById('customEnabled');
     const customApiKeyInput = document.getElementById('customApiKey');
     const customTranscriptionUrlInput = document.getElementById('customTranscriptionUrl');
     const customChatUrlInput = document.getElementById('customChatUrl');
-    const customStatus = document.getElementById('customStatus');
-    const providerCustom = document.getElementById('providerCustom');
+    const configCustom = document.getElementById('configCustom');
 
     // Éléments DOM pour les modèles de chaque provider
     const providerModelElements = {
@@ -120,32 +121,109 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ===== Gestion des Providers =====
+    // ===== Gestion des Providers (nouveau design dropdown + panel) =====
 
     /**
-     * Met à jour l'affichage visuel d'un provider
+     * Affiche le panel de configuration du provider sélectionné
      * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
      */
-    function updateProviderDisplay(providerId) {
-        let enabledCheckbox, apiKeyInputEl, statusElement, cardElement;
+    function showProviderConfig(providerId) {
+        // Masquer tous les panels
+        const allConfigs = providerConfigPanel.querySelectorAll('.provider-config');
+        allConfigs.forEach(config => {
+            config.style.display = 'none';
+        });
+
+        // Mapper providerId vers l'ID du panel HTML
+        const panelIdMap = {
+            'openai': 'configOpenAI',
+            'mistral': 'configMistral',
+            'custom': 'configCustom'
+        };
+
+        // Afficher le panel sélectionné
+        const targetConfig = document.getElementById(panelIdMap[providerId]);
+        if (targetConfig) {
+            targetConfig.style.display = 'block';
+        }
+
+        // Mettre à jour la bordure du panel selon l'état enabled
+        updatePanelBorder(providerId);
+    }
+
+    /**
+     * Met à jour la bordure du panel selon si le provider est activé
+     * @param {string} providerId - ID du provider
+     */
+    function updatePanelBorder(providerId) {
+        let isEnabled = false;
+        if (providerId === 'openai') {
+            isEnabled = openaiEnabledCheckbox.checked;
+        } else if (providerId === 'mistral') {
+            isEnabled = mistralEnabledCheckbox.checked;
+        } else if (providerId === 'custom') {
+            isEnabled = customEnabledCheckbox.checked;
+        }
+
+        if (isEnabled) {
+            providerConfigPanel.style.borderColor = 'var(--primary-color-2)';
+        } else {
+            providerConfigPanel.style.borderColor = 'var(--border-color)';
+        }
+    }
+
+    /**
+     * Met à jour l'affichage des status à côté du dropdown
+     */
+    function updateDropdownStatus() {
+        const providers = ['openai', 'mistral', 'custom'];
+        let statusHtml = '';
+
+        providers.forEach(providerId => {
+            const status = getProviderStatus(providerId);
+            let cssClass = 'status-dot';
+            let symbol = '';
+
+            if (status.enabled && status.configured) {
+                cssClass += ' active';
+                symbol = '●';
+            } else if (status.configured) {
+                cssClass += ' configured';
+                symbol = '●';
+            } else {
+                symbol = '○';
+            }
+
+            // Nom court pour le badge
+            const shortNames = { openai: 'OAI', mistral: 'Mis', custom: 'Cus' };
+            statusHtml += `<span class="${cssClass}" title="${status.name}">${symbol} ${shortNames[providerId]}</span>`;
+        });
+
+        dropdownStatus.innerHTML = statusHtml;
+    }
+
+    /**
+     * Récupère le statut d'un provider
+     * @param {string} providerId - ID du provider
+     * @returns {Object} Statut du provider
+     */
+    function getProviderStatus(providerId) {
+        let enabledCheckbox, apiKeyInputEl, name;
 
         if (providerId === 'openai') {
             enabledCheckbox = openaiEnabledCheckbox;
             apiKeyInputEl = openaiApiKeyInput;
-            statusElement = openaiStatus;
-            cardElement = providerOpenAI;
+            name = 'OpenAI';
         } else if (providerId === 'mistral') {
             enabledCheckbox = mistralEnabledCheckbox;
             apiKeyInputEl = mistralApiKeyInput;
-            statusElement = mistralStatus;
-            cardElement = providerMistral;
+            name = 'Mistral';
         } else if (providerId === 'custom') {
             enabledCheckbox = customEnabledCheckbox;
             apiKeyInputEl = customApiKeyInput;
-            statusElement = customStatus;
-            cardElement = providerCustom;
+            name = 'Custom';
         } else {
-            return;
+            return { enabled: false, configured: false, name: '' };
         }
 
         const isEnabled = enabledCheckbox.checked;
@@ -158,22 +236,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 customChatUrlInput.value.trim().length > 0;
         }
 
-        // Mettre à jour la classe active de la carte
-        cardElement.classList.toggle('active', isEnabled);
+        return {
+            enabled: isEnabled,
+            configured: hasApiKey && (providerId !== 'custom' || hasRequiredUrls),
+            name: name
+        };
+    }
 
-        // Mettre à jour le statut
-        if (isEnabled && hasApiKey && hasRequiredUrls) {
-            statusElement.textContent = i18n.getMessage('providerActive') || 'Actif';
-            statusElement.className = 'provider-status';
-        } else if (isEnabled && !hasApiKey) {
-            statusElement.textContent = i18n.getMessage('providerMissingKey') || 'Clé manquante';
-            statusElement.className = 'provider-status inactive';
-        } else if (isEnabled && providerId === 'custom' && !hasRequiredUrls) {
-            statusElement.textContent = i18n.getMessage('providerMissingUrl') || 'URLs manquantes';
-            statusElement.className = 'provider-status inactive';
-        } else {
-            statusElement.textContent = i18n.getMessage('providerInactive') || 'Inactif';
-            statusElement.className = 'provider-status inactive';
+    /**
+     * Met à jour l'affichage visuel d'un provider (appelé après changement)
+     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
+     */
+    function updateProviderDisplay(providerId) {
+        // Mettre à jour les badges de statut
+        updateDropdownStatus();
+
+        // Mettre à jour la bordure du panel si c'est le provider actuellement affiché
+        if (providerSelector.value === providerId) {
+            updatePanelBorder(providerId);
         }
 
         // Mettre à jour la visibilité des sélecteurs de service
@@ -325,10 +405,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 populateProviderModelSelect('custom', 'chat', customConfig.chatModels || [], customConfig.selectedChatModel);
             }
 
-            // Mettre à jour l'affichage des cartes
+            // Mettre à jour l'affichage des providers et des badges de statut
             updateProviderDisplay('openai');
             updateProviderDisplay('mistral');
             updateProviderDisplay('custom');
+            updateDropdownStatus();
+            updatePanelBorder(providerSelector.value);
 
             // Mettre à jour les sélecteurs de service après avoir chargé les providers
             const enabledProviders = getEnabledProviderIds();
@@ -942,6 +1024,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleApiKeyButton.textContent = type === 'password' ? '🔒' : '👁️';
     }
 
+    // Event listener - Dropdown sélecteur de provider
+    providerSelector.addEventListener('change', () => {
+        showProviderConfig(providerSelector.value);
+    });
+
     // Event listeners - Providers (avec debounce pour les inputs)
     openaiEnabledCheckbox.addEventListener('change', () => {
         updateProviderDisplay('openai');
@@ -1035,4 +1122,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadProvidersConfig();
     loadOptions();
     populateAudioModelOptions();
+
+    // Initialiser le nouveau design dropdown + panel
+    showProviderConfig(providerSelector.value);
+    updateDropdownStatus();
 });

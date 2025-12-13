@@ -459,6 +459,10 @@
         "message": "Configurez un ou plusieurs providers pour la transcription et la traduction.",
         "description": "Description de la section des providers"
     },
+    "selectProviderLabel": {
+        "message": "Configurer le provider :",
+        "description": "Label du sélecteur de provider"
+    },
     "providerActive": {
         "message": "Actif",
         "description": "Statut d'un provider actif"
