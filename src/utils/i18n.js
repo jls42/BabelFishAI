@@ -69,7 +69,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     function translatePage(root = document) {
         // Traduire le titre de la page
         if (document.title) {
-            const titleKey = document.documentElement.getAttribute('data-i18n-title');
+            const titleKey = document.documentElement.dataset.i18nTitle;
             if (titleKey) {
                 document.title = getMessage(titleKey);
             }
@@ -78,7 +78,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Traduire les éléments avec data-i18n
         const elements = root.querySelectorAll('[data-i18n]');
         elements.forEach(element => {
-            const key = element.getAttribute('data-i18n');
+            const key = element.dataset.i18n;
             const translated = getMessage(key);
             if (translated) {
                 const sanitized = sanitizeHTML(translated);
@@ -95,7 +95,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Traduire les placeholders avec data-i18n-placeholder
         const placeholders = root.querySelectorAll('[data-i18n-placeholder]');
         placeholders.forEach(element => {
-            const key = element.getAttribute('data-i18n-placeholder');
+            const key = element.dataset.i18nPlaceholder;
             const translated = getMessage(key);
             if (translated) {
                 element.placeholder = translated;
@@ -105,7 +105,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Traduire les titres avec data-i18n-title
         const titles = root.querySelectorAll('[data-i18n-title]');
         titles.forEach(element => {
-            const key = element.getAttribute('data-i18n-title');
+            const key = element.dataset.i18nTitle;
             const translated = getMessage(key);
             if (translated) {
                 element.title = translated;
@@ -116,7 +116,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const selects = root.querySelectorAll('select[data-i18n-options]');
         selects.forEach(select => {
             Array.from(select.options).forEach(option => {
-                const key = option.getAttribute('data-i18n');
+                const key = option.dataset.i18n;
                 if (key) {
                     option.text = getMessage(key);
                 }
@@ -219,7 +219,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const container = doc.body.firstChild;
 
         // Define allowed tags and attributes
-        const allowedTags = ['a', 'b', 'i', 'strong', 'em', 'br', 'span', 'p', 'ul', 'ol', 'li', 'img', 'div'];
+        const allowedTags = new Set(['a', 'b', 'i', 'strong', 'em', 'br', 'span', 'p', 'ul', 'ol', 'li', 'img', 'div']);
         const allowedAttributes = {
             // Global attributes allowed on any element
             all: ['class', 'id', 'style', 'title'],
@@ -243,7 +243,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const tagName = node.tagName.toLowerCase();
 
             // If the tag is not in our allowed list, just take its text content
-            if (!allowedTags.includes(tagName)) {
+            if (!allowedTags.has(tagName)) {
                 const text = document.createTextNode(node.textContent);
                 return text;
             }

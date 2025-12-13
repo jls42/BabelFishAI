@@ -195,17 +195,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 // Fallback absolu
                 url = API_CONFIG.DEFAULT_WHISPER_API_URL;
             }
+        } else if (providerConfig?.chatUrl) {
+            // URL custom configurée pour ce provider
+            url = providerConfig.chatUrl;
+        } else if (providerDef) {
+            // URL par défaut du provider
+            url = providerDef.defaultUrls.chat;
         } else {
-            if (providerConfig?.chatUrl) {
-                // URL custom configurée pour ce provider
-                url = providerConfig.chatUrl;
-            } else if (providerDef) {
-                // URL par défaut du provider
-                url = providerDef.defaultUrls.chat;
-            } else {
-                // Fallback absolu
-                url = API_CONFIG.DEFAULT_GPT_API_URL;
-            }
+            // Fallback absolu
+            url = API_CONFIG.DEFAULT_GPT_API_URL;
         }
 
         // Résoudre la clé API (priorité : config provider > legacy si OpenAI)
@@ -275,6 +273,45 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Vérifie la connectivité réseau
+     * @returns {Promise<{online: boolean, message?: string}>} État de la connectivité
+     */
+    function checkNetworkConnection() {
+        return new Promise((resolve) => {
+            // Utiliser uniquement la propriété navigator.onLine, sans ping externe
+            if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+                resolve({
+                    online: false,
+                    message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
+                });
+            } else {
+                // Considérer l'appareil comme en ligne si navigator.onLine le dit
+                resolve({ online: true });
+            }
+        });
+    }
+
+    /**
+     * Effectue une pause avec setTimeout sous forme de promesse
+     * @param {number} ms - Durée de la pause en millisecondes
+     * @returns {Promise<void>}
+     */
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    /**
+     * Vérifie si l'erreur est liée au réseau
+     * @param {Error} error - L'erreur à vérifier
+     * @returns {boolean} True si c'est une erreur réseau
+     */
+    function isNetworkError(error) {
+        return error.name === 'TypeError' ||
+            error.message.includes('Timeout') ||
+            error.message.includes('connexion');
+    }
+
+    /**
      * Effectue un appel API générique avec gestion d'erreur standardisée.
      * Cette fonction centralise tous les appels API et uniformise la gestion des erreurs.
      * @param {Object} options - Options pour l'appel API
@@ -307,25 +344,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         if (!url) {
             throw new Error('URL API manquante');
-        }
-
-        /**
-         * Vérifie la connectivité réseau
-         * @returns {Promise<{online: boolean, message?: string}>} État de la connectivité
-         */
-        function checkNetworkConnection() {
-            return new Promise((resolve) => {
-                // Utiliser uniquement la propriété navigator.onLine, sans ping externe
-                if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
-                    resolve({
-                        online: false,
-                        message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
-                    });
-                } else {
-                    // Considérer l'appareil comme en ligne si navigator.onLine le dit
-                    resolve({ online: true });
-                }
-            });
         }
 
         /**
@@ -411,26 +429,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             } else {
                 return defaultMessage;
             }
-        }
-
-        /**
-         * Effectue une pause avec setTimeout sous forme de promesse
-         * @param {number} ms - Durée de la pause en millisecondes
-         * @returns {Promise<void>}
-         */
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        /**
-         * Vérifie si l'erreur est liée au réseau
-         * @param {Error} error - L'erreur à vérifier
-         * @returns {boolean} True si c'est une erreur réseau
-         */
-        function isNetworkError(error) {
-            return error.name === 'TypeError' ||
-                error.message.includes('Timeout') ||
-                error.message.includes('connexion');
         }
 
         /**

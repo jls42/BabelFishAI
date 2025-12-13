@@ -356,22 +356,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, (items) => {
             console.log('[Options] Loading providers config:', items);
 
-            // Si pas de config providers, utiliser la config legacy
-            if (!items.providers) {
-                // Mode legacy : utiliser l'ancienne clé API pour OpenAI
-                openaiApiKeyInput.value = items.apiKey || '';
-                openaiEnabledCheckbox.checked = !!items.apiKey;
-                mistralEnabledCheckbox.checked = false;
-                customEnabledCheckbox.checked = false;
-
-                // Peupler les sélecteurs avec les modèles par défaut
-                populateProviderModelSelect('openai', 'transcription', [], null);
-                populateProviderModelSelect('openai', 'chat', [], null);
-                populateProviderModelSelect('mistral', 'transcription', [], null);
-                populateProviderModelSelect('mistral', 'chat', [], null);
-                populateProviderModelSelect('custom', 'transcription', [], null);
-                populateProviderModelSelect('custom', 'chat', [], null);
-            } else {
+            // Charger la configuration des providers
+            if (items.providers) {
                 // Mode multi-provider
                 const openaiConfig = items.providers.openai || {};
                 openaiApiKeyInput.value = openaiConfig.apiKey || '';
@@ -394,6 +380,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 populateProviderModelSelect('mistral', 'chat', mistralConfig.chatModels || [], mistralConfig.selectedChatModel);
                 populateProviderModelSelect('custom', 'transcription', customConfig.transcriptionModels || [], customConfig.selectedTranscriptionModel);
                 populateProviderModelSelect('custom', 'chat', customConfig.chatModels || [], customConfig.selectedChatModel);
+            } else {
+                // Mode legacy : utiliser l'ancienne clé API pour OpenAI
+                openaiApiKeyInput.value = items.apiKey || '';
+                openaiEnabledCheckbox.checked = !!items.apiKey;
+                mistralEnabledCheckbox.checked = false;
+                customEnabledCheckbox.checked = false;
+
+                // Peupler les sélecteurs avec les modèles par défaut
+                populateProviderModelSelect('openai', 'transcription', [], null);
+                populateProviderModelSelect('openai', 'chat', [], null);
+                populateProviderModelSelect('mistral', 'transcription', [], null);
+                populateProviderModelSelect('mistral', 'chat', [], null);
+                populateProviderModelSelect('custom', 'transcription', [], null);
+                populateProviderModelSelect('custom', 'chat', [], null);
             }
 
             // Mettre à jour l'affichage des providers et des badges de statut

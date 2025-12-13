@@ -32,10 +32,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
                 // Utiliser la fonction isCurrentlyRecording de recording-utils.js pour vérifier l'état d'enregistrement
-                if (!globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-                    globalThis.BabelFishAI.startRecording();
-                } else {
+                if (globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
                     globalThis.BabelFishAI.stopRecording();
+                } else {
+                    globalThis.BabelFishAI.startRecording();
                 }
             },
             // Action pour la reformulation de texte sélectionné

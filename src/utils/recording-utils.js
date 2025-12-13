@@ -69,11 +69,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function createMediaRecorder(stream, options) {
         let recorder; // skipcq: JS-0119 - Initialisation dépend de la condition if/else.
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        if (MediaRecorder.isTypeSupported(options.mimeType)) {
+            recorder = new MediaRecorder(stream, options);
+        } else {
             console.warn(`Format ${options.mimeType} non supporté, utilisation du format par défaut`);
             recorder = new MediaRecorder(stream); // Fallback au format par défaut
-        } else {
-            recorder = new MediaRecorder(stream, options);
         }
         return recorder;
     }
@@ -170,6 +170,32 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Crée et valide un Blob audio à partir des chunks.
+     * @param {Blob[]} chunks - Les morceaux de données audio.
+     * @returns {Blob} Le Blob audio validé.
+     * @throws {Error} Si aucune donnée n'est disponible ou si le Blob est invalide.
+     */
+    function createAndValidateAudioBlob(chunks) {
+        // Vérification optimisée
+        const hasAudioData = chunks.length > 0;
+        if (!hasAudioData) {
+            throw new Error("Aucune donnée audio capturée");
+        }
+
+        // Utilisation de propriétés optimales pour les blobs audio
+        const blob = new Blob(chunks, {
+            type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
+        });
+
+        // Vérification combinée de la présence et de la taille du blob
+        if (!blob || blob.size <= 0) {
+            throw new Error("Blob audio vide ou invalide");
+        }
+
+        return blob;
+    }
+
+    /**
      * Configure les événements du MediaRecorder
      * @param {MediaStream} stream - Le flux audio à configurer
      */
@@ -194,32 +220,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 audioChunks.push(event.data);
             }
         };
-
-        /**
-         * Crée et valide un Blob audio à partir des chunks.
-         * @param {Blob[]} chunks - Les morceaux de données audio.
-         * @returns {Blob} Le Blob audio validé.
-         * @throws {Error} Si aucune donnée n'est disponible ou si le Blob est invalide.
-         */
-        function createAndValidateAudioBlob(chunks) {
-            // Vérification optimisée
-            const hasAudioData = chunks.length > 0;
-            if (!hasAudioData) {
-                throw new Error("Aucune donnée audio capturée");
-            }
-
-            // Utilisation de propriétés optimales pour les blobs audio
-            const blob = new Blob(chunks, {
-                type: 'audio/webm;codecs=opus' // Spécifier le codec pour une meilleure compatibilité
-            });
-
-            // Vérification combinée de la présence et de la taille du blob
-            if (!blob || blob.size <= 0) {
-                throw new Error("Blob audio vide ou invalide");
-            }
-
-            return blob;
-        }
 
         // Événement déclenché lorsque l'enregistrement est arrêté
         // Utilisation d'une fonction nommée pour faciliter le nettoyage

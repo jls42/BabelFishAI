@@ -35,12 +35,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         try {
             // Convertir les couleurs hex en RGB
-            const startR = Number.parseInt(start.substr(1, 2), 16);
-            const startG = Number.parseInt(start.substr(3, 2), 16);
-            const startB = Number.parseInt(start.substr(5, 2), 16);
-            const endR = Number.parseInt(end.substr(1, 2), 16);
-            const endG = Number.parseInt(end.substr(3, 2), 16);
-            const endB = Number.parseInt(end.substr(5, 2), 16);
+            const startR = Number.parseInt(start.substring(1, 3), 16);
+            const startG = Number.parseInt(start.substring(3, 5), 16);
+            const startB = Number.parseInt(start.substring(5, 7), 16);
+            const endR = Number.parseInt(end.substring(1, 3), 16);
+            const endG = Number.parseInt(end.substring(3, 5), 16);
+            const endB = Number.parseInt(end.substring(5, 7), 16);
 
             const gradient = `linear-gradient(45deg,
                 rgba(${startR}, ${startG}, ${startB}, ${opacityValue}),
