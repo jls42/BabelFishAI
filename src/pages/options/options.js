@@ -1,5 +1,27 @@
 // Script de gestion des options
 /* global chrome */ // Chrome extension API global
+
+/**
+ * Vérifie si un provider standard (OpenAI/Mistral) est activé
+ * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
+ * @param {HTMLInputElement} keyInput - Input de la clé API
+ * @returns {boolean}
+ */
+function isStandardProviderEnabled(enabledCheckbox, keyInput) {
+    return enabledCheckbox.checked && Boolean(keyInput.value.trim());
+}
+
+/**
+ * Charge la configuration d'un provider standard (OpenAI/Mistral)
+ * @param {Object} config - Configuration du provider
+ * @param {HTMLInputElement} keyInput - Input de la clé API
+ * @param {HTMLInputElement} checkbox - Checkbox d'activation
+ */
+function loadStandardProviderConfig(config, keyInput, checkbox) {
+    keyInput.value = config.apiKey || '';
+    checkbox.checked = config.enabled || false;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
@@ -290,18 +312,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Vérifie si un provider standard (OpenAI/Mistral) est activé
-     * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
-     * @param {HTMLInputElement} keyInput - Input de la clé API
-     * @returns {boolean}
-     */
-    // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
-    // eslint-disable-next-line no-inner-declarations -- Needs DOM context from DOMContentLoaded
-    function isStandardProviderEnabled(enabledCheckbox, keyInput) {
-        return enabledCheckbox.checked && Boolean(keyInput.value.trim());
-    }
-
-    /**
      * Vérifie si le provider custom est activé (nécessite URLs en plus)
      * @returns {boolean}
      */
@@ -366,19 +376,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (enabledProviders.includes(currentChat)) {
             chatProviderSelect.value = currentChat;
         }
-    }
-
-    /**
-     * Charge la configuration d'un provider standard (OpenAI/Mistral)
-     * @param {Object} config - Configuration du provider
-     * @param {HTMLInputElement} keyInput - Input de la clé API
-     * @param {HTMLInputElement} checkbox - Checkbox d'activation
-     */
-    // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
-    // eslint-disable-next-line no-inner-declarations -- Needs DOM context from DOMContentLoaded
-    function loadStandardProviderConfig(config, keyInput, checkbox) {
-        keyInput.value = config.apiKey || '';
-        checkbox.checked = config.enabled || false;
     }
 
     /**
