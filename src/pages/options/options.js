@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {boolean}
      */
     // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
-    // eslint-disable-next-line sonarjs/no-nested-functions -- Needs DOM context from DOMContentLoaded
+    // eslint-disable-next-line no-inner-declarations -- Needs DOM context from DOMContentLoaded
     function isStandardProviderEnabled(enabledCheckbox, keyInput) {
         return enabledCheckbox.checked && Boolean(keyInput.value.trim());
     }
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {HTMLInputElement} checkbox - Checkbox d'activation
      */
     // skipcq: JS-0128 - Function needs DOM context from DOMContentLoaded callback
-    // eslint-disable-next-line sonarjs/no-nested-functions -- Needs DOM context from DOMContentLoaded
+    // eslint-disable-next-line no-inner-declarations -- Needs DOM context from DOMContentLoaded
     function loadStandardProviderConfig(config, keyInput, checkbox) {
         keyInput.value = config.apiKey || '';
         checkbox.checked = config.enabled || false;
@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     // skipcq: JS-0044 - Simple function, complexity is low (false positive from stale analysis)
-    // eslint-disable-next-line sonarjs/cognitive-complexity -- False positive: function is simple
+    // eslint-disable-next-line complexity -- False positive: function is simple
     function getSelectedProviderModel(providerId, modelType) {
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
