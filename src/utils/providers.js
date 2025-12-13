@@ -1,9 +1,8 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
 
-// eslint-disable-next-line strict -- 'use strict' inside IIFE is intentional for ES5 compatibility and module isolation
-globalThis.BabelFishAIProviders = (function () { // skipcq: JS-0118 - 'use strict' inside IIFE is intentional
-    'use strict';
+globalThis.BabelFishAIProviders = (function () {
+    'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
     /**
      * Définition des providers IA disponibles

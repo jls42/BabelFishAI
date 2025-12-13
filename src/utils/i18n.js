@@ -187,7 +187,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {string} The escaped string.
      */
     function escapeRegExp(string) {
-        // eslint-disable-next-line unicorn/prefer-string-replace-all -- Intentional: regex pattern escapes special chars, replaceAll not applicable
+        // skipcq: JS-0377 - Intentional: regex pattern escapes special chars, replaceAll not applicable
         return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`); // $& means the whole matched string
     }
 

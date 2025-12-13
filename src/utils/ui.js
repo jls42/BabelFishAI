@@ -183,8 +183,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {Function} [updateColorCallback] - Callback pour mettre à jour la couleur du bandeau
      * @returns {boolean} - Indique si l'affichage a réussi
      */
-    // eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne potentiel
-    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) { // skipcq: JS-0128
+    // skipcq: JS-0128 - Fonction conservée pour usage interne potentiel
+    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) {
         // Vérifier si la bannière existe
         if (!banner) {
             console.warn('Banner element is null or undefined');
@@ -734,8 +734,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {HTMLElement} banner - L'élément bannière à cacher
      * @returns {boolean} - Indique si l'opération a réussi
      */
-    // eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne potentiel
-    function hideBanner(banner) { // skipcq: JS-0128
+    // skipcq: JS-0128 - Fonction conservée pour usage interne potentiel
+    function hideBanner(banner) {
         try {
             // Vérifier si la bannière existe
             if (!banner) {

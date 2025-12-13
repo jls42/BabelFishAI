@@ -30,7 +30,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         // Supprimer les espaces multiples et les sauts de ligne excessifs
-        // eslint-disable-next-line unicorn/prefer-string-replace-all -- Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
+        // skipcq: JS-0377 - Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
         let cleanedText = text.trim().replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n\n');
 
         // Limiter la taille du texte pour éviter les problèmes avec l'API
