@@ -150,6 +150,13 @@
                                     <input type="text" id="customChatUrl" placeholder="http://localhost:4000/v1/chat/completions">
                                 </div>
                             </div>
+                            <div class="form-group nolog-option">
+                                <label class="feature-toggle">
+                                    <input type="checkbox" id="disableLogging">
+                                    <span data-i18n="noLogLabel">NoLog</span>
+                                </label>
+                                <p class="option-description" data-i18n="noLogDescription"></p>
+                            </div>
                             <details class="provider-advanced">
                                 <summary data-i18n="modelsConfigTitle">Configuration des modèles</summary>
                                 <div class="custom-models-section">
@@ -402,61 +409,19 @@
                     </div>
                 </div>
 
-                <!-- Mode Expert -->
-                <div class="subsection expert-section">
-                    <h3 data-i18n="expertModeTitle">Mode Expert</h3>
-                    <label class="feature-toggle">
-                        <input type="checkbox" id="expertMode">
-                        <span data-i18n="enableExpertModeLabel">Activer le mode expert</span>
-                    </label>
-                    <p class="option-description" data-i18n="enableExpertModeDescription"></p>
-
-                    <div id="expertOptions" style="display: none;">
-                        <div class="form-group">
-                            <label for="modelType" data-i18n="translationModelLabel" class="highlighted-label">Modèle de
-                                traduction :</label>
-                            <p class="option-description" data-i18n="translationModelDescription"></p>
-                            <div id="modelTypeContainer">
-                                <select id="modelType">
-                                    <option value="gpt-4o-mini">gpt-4o-mini</option>
-                                    <option value="gpt-4o">gpt-4o</option>
-                                </select>
-                                <input type="text" id="newModelType" data-i18n-placeholder="addModelPlaceholder"
-                                    placeholder="Ajouter un modèle">
-                                <button type="button" id="addModelType" data-i18n="addModelButton">Ajouter</button>
-                                <p class="option-description" data-i18n="addModelDescription"></p>
-                                <div id="customModelsList"></div>
-                            </div>
-                            <div class="form-group">
-                                <label class="feature-toggle">
-                                    <input type="checkbox" id="disableLogging">
-                                    <span data-i18n="noLogLabel">NoLog (LiteLLM uniquement)</span>
-                                </label>
-                                <p class="option-description" data-i18n="noLogDescription"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="audioModelType" data-i18n="audioModelLabel" class="highlighted-label">Modèle
-                                audio :</label>
-                            <p class="option-description" data-i18n="audioModelDescription"></p>
-                            <select id="audioModelType"></select>
-                        </div>
-                        <div class="form-group">
-                            <label data-i18n="forcedDialogDomainsLabel" class="highlighted-label">Domaines avec boîte de
-                                dialogue forcée :</label>
-                            <p class="option-description" data-i18n="forcedDialogDomainsDescription"></p>
-                            <div class="domains-list" id="domainsList"></div>
-                            <div class="domain-input-container">
-                                <input type="text" id="newDomain" data-i18n-placeholder="addDomainPlaceholder"
-                                    placeholder="Exemple: chat.google.com">
-                                <button type="button" id="addDomain" class="add-domain-button"
-                                    data-i18n="addDomainButton">Ajouter</button>
-                                <p class="option-description" data-i18n="addDomainDescription"></p>
-                            </div>
-                            <div class="api-info" data-i18n="forcedDialogInfo">Sur ces domaines, la transcription
-                                apparaîtra toujours dans une boîte de dialogue</div>
-                        </div>
+                <!-- Domaines avec boîte de dialogue forcée -->
+                <div class="subsection forced-domains-section">
+                    <h3 data-i18n="forcedDialogDomainsLabel">Domaines avec boîte de dialogue forcée</h3>
+                    <p class="option-description" data-i18n="forcedDialogDomainsDescription"></p>
+                    <div class="domains-list" id="domainsList"></div>
+                    <div class="domain-input-container">
+                        <input type="text" id="newDomain" data-i18n-placeholder="addDomainPlaceholder"
+                            placeholder="Exemple: chat.google.com">
+                        <button type="button" id="addDomain" class="add-domain-button"
+                            data-i18n="addDomainButton">Ajouter</button>
                     </div>
+                    <div class="api-info" data-i18n="forcedDialogInfo">Sur ces domaines, la transcription
+                        apparaîtra toujours dans une boîte de dialogue</div>
                 </div>
 
                 <!-- Bouton de sauvegarde pour les options avancées -->

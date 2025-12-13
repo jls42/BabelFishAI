@@ -70,14 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const translationOptions = document.getElementById('translationOptions');
     const sourceLanguageSelect = document.getElementById('sourceLanguage');
     const targetLanguageSelect = document.getElementById('targetLanguage');
-    const expertModeCheckbox = document.getElementById('expertMode');
-    const expertOptions = document.getElementById('expertOptions');
-    const modelTypeSelect = document.getElementById('modelType');
     const disableLoggingCheckbox = document.getElementById('disableLogging');
-    const newModelTypeInput = document.getElementById('newModelType');
-    const addModelTypeButton = document.getElementById('addModelType');
-    const customModelsList = document.getElementById('customModelsList');
-    const audioModelTypeSelect = document.getElementById('audioModelType');
     const newDomainInput = document.getElementById('newDomain');
     const addDomainButton = document.getElementById('addDomain');
     const domainsList = document.getElementById('domainsList');
@@ -724,10 +717,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             enableTranslation: false,
             sourceLanguage: 'auto',
             targetLanguage: 'en',
-            expertMode: false,
-            modelType: 'gpt-4o-mini',
-            customModelTypes: [],
-            audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
             forcedDialogDomains: ['chat.google.com']
         }, (items) => {
             apiKeyInput.value = items.apiKey;
@@ -742,18 +731,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             enableTranslationCheckbox.checked = items.enableTranslation;
             sourceLanguageSelect.value = items.sourceLanguage || 'auto';
             targetLanguageSelect.value = items.targetLanguage;
-            expertModeCheckbox.checked = items.expertMode;
-            modelTypeSelect.value = items.modelType;
             disableLoggingCheckbox.checked = items.disableLogging;
-            audioModelTypeSelect.value = items.audioModelType;
-
-            // Charger et afficher les modèles personnalisés
-            displayCustomModels(items.customModelTypes);
-            populateModelTypeOptions(items.customModelTypes);
 
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
-            updateExpertOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(items.forcedDialogDomains);
         });
@@ -765,10 +746,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!saveProvidersConfig()) {
             return; // Arrêter si la validation a échoué
         }
-
-        const customModelTypes = Array.from(customModelsList.children).map(item =>
-            item.textContent.replace('×', '').trim()
-        );
 
         // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
         const legacyApiKey = openaiApiKeyInput.value.trim();
@@ -786,11 +763,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             enableTranslation: enableTranslationCheckbox.checked,
             sourceLanguage: sourceLanguageSelect.value,
             targetLanguage: targetLanguageSelect.value,
-            expertMode: expertModeCheckbox.checked,
-            modelType: modelTypeSelect.value,
             disableLogging: disableLoggingCheckbox.checked,
-            customModelTypes: customModelTypes,
-            audioModelType: audioModelTypeSelect.value,
             forcedDialogDomains: Array.from(domainsList.children).map(item =>
                 item.textContent.replace('×', '').trim()
             )
@@ -801,100 +774,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (scrollToStatus) {
                 statusElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
-            populateAudioModelOptions();
-            populateModelTypeOptions(customModelTypes);
 
             // Mettre à jour les états dépendants
             updateTranslationOptionsVisibility();
-            updateExpertOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(options.forcedDialogDomains);
-        });
-    }
-
-    // Fonction pour remplir les options du modèle audio
-    function populateAudioModelOptions() {
-        audioModelTypeSelect.innerHTML = '';
-        window.BabelFishAIConstants.API_CONFIG.AUDIO_MODELS.forEach(model => {
-            const option = document.createElement('option');
-            option.value = model;
-            option.textContent = model;
-            audioModelTypeSelect.appendChild(option);
-        });
-
-        chrome.storage.sync.get({ audioModelType: window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL }, (items) => {
-            audioModelTypeSelect.value = items.audioModelType;
-        });
-    }
-
-    // Fonction pour remplir les options du modèle de traduction
-    function populateModelTypeOptions(customModels) {
-        modelTypeSelect.innerHTML = '';
-
-        // Ajouter les options par défaut
-        const defaultModels = ['gpt-4o-mini', 'gpt-4o'];
-        defaultModels.forEach(model => {
-            const option = document.createElement('option');
-            option.value = model;
-            option.textContent = model + (model === 'gpt-4o-mini' ? ` (${i18n.getMessage("defaultModel")})` : '');
-            modelTypeSelect.appendChild(option);
-        });
-
-        // Ajouter les modèles personnalisés
-        customModels.forEach(model => {
-            const option = document.createElement('option');
-            option.value = model;
-            option.textContent = model;
-            modelTypeSelect.appendChild(option);
-        });
-
-        // Restaurer la sélection
-        chrome.storage.sync.get({ modelType: 'gpt-4o-mini' }, (items) => {
-            modelTypeSelect.value = items.modelType;
-        });
-    }
-
-    // Ajouter un modèle personnalisé
-    function addModelType() {
-        const newModel = newModelTypeInput.value.trim();
-        if (newModel && !Array.from(modelTypeSelect.options).some(option => option.value === newModel)) {
-            const item = document.createElement('div');
-            item.className = 'custom-model-item';
-            item.textContent = newModel;
-
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-model-button';
-            removeButton.textContent = '×';
-            removeButton.onclick = () => {
-                item.remove();
-                saveOptions(false);
-            };
-
-            item.appendChild(removeButton);
-            customModelsList.appendChild(item);
-            newModelTypeInput.value = '';
-            saveOptions(false);
-        }
-    }
-
-    // Afficher les modèles personnalisés
-    function displayCustomModels(models) {
-        customModelsList.innerHTML = '';
-        models.forEach(model => {
-            const item = document.createElement('div');
-            item.className = 'custom-model-item';
-            item.textContent = model;
-
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-model-button';
-            removeButton.textContent = '×';
-            removeButton.onclick = () => {
-                item.remove();
-                saveOptions(false);
-            };
-
-            item.appendChild(removeButton);
-            customModelsList.appendChild(item);
         });
     }
 
@@ -938,22 +822,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             translationOptions.style.opacity = '0';
             setTimeout(() => {
                 translationOptions.style.display = 'none';
-            }, 300);
-        }
-    }
-
-    // Mettre à jour la visibilité des options expert
-    function updateExpertOptionsVisibility() {
-        if (expertModeCheckbox.checked) {
-            expertOptions.style.display = 'block';
-            expertOptions.style.opacity = '0';
-            requestAnimationFrame(() => {
-                expertOptions.style.opacity = '1';
-            });
-        } else {
-            expertOptions.style.opacity = '0';
-            setTimeout(() => {
-                expertOptions.style.display = 'none';
             }, 300);
         }
     }
@@ -1102,18 +970,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     enableTranslationCheckbox.addEventListener('change', () => debouncedSaveOptions());
     sourceLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
     targetLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
-    expertModeCheckbox.addEventListener('change', () => debouncedSaveOptions());
-    modelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
     disableLoggingCheckbox.addEventListener('change', () => debouncedSaveOptions());
-    audioModelTypeSelect.addEventListener('change', () => debouncedSaveOptions());
     // Les boutons de sauvegarde explicites n'ont pas de debounce
     saveButton.addEventListener('click', () => saveOptions(true));
     saveAdvancedButton.addEventListener('click', () => saveOptions(true));
     toggleApiKeyButton.addEventListener('click', toggleApiKeyVisibility);
     enableTranslationCheckbox.addEventListener('change', updateTranslationOptionsVisibility);
-    expertModeCheckbox.addEventListener('change', updateExpertOptionsVisibility);
     addDomainButton.addEventListener('click', addDomain);
-    addModelTypeButton.addEventListener('click', addModelType);
     advancedHeader.addEventListener('click', toggleAdvancedSection);
 
     // Initialiser l'internationalisation et charger les options
@@ -1121,7 +984,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupProviderPasswordToggles();
     loadProvidersConfig();
     loadOptions();
-    populateAudioModelOptions();
 
     // Initialiser le nouveau design dropdown + panel
     showProviderConfig(providerSelector.value);

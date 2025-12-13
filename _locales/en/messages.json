@@ -503,6 +503,34 @@
         "message": "Translation/Rephrasing:",
         "description": "Label for the chat provider"
     },
+    "customProviderDescription": {
+        "message": "Custom provider for LiteLLM or other proxies.",
+        "description": "Description of the custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "Transcription URL:",
+        "description": "Label for the custom transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "Chat URL:",
+        "description": "Label for the custom chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Model Configuration",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Transcription model:",
+        "description": "Label for the transcription model"
+    },
+    "chatModelLabel": {
+        "message": "Chat model:",
+        "description": "Label for the chat model"
+    },
+    "addModelButton": {
+        "message": "Add",
+        "description": "Button to add a model"
+    },
     "invalidUrlError": {
         "message": "Error: URLs must use HTTPS.",
         "description": "Error message for invalid URLs"
