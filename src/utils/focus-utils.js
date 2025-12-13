@@ -376,11 +376,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             return false;
         }
 
+        // Ajouter un espace à la fin pour éviter que les transcriptions consécutives soient collées
+        const textWithTrailingSpace = text + ' ';
+
         try {
             if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
-                return insertTextIntoInput(activeElement, text);
+                return insertTextIntoInput(activeElement, textWithTrailingSpace);
             } else if (activeElement.isContentEditable) {
-                return insertInContentEditable(activeElement, text);
+                return insertInContentEditable(activeElement, textWithTrailingSpace);
             }
 
             return false;
