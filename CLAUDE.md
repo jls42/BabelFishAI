@@ -367,70 +367,74 @@ my_function() {
 if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 ```
 
-### Commentaires skipcq (DeepSource)
-Pour les cas où le code est intentionnel mais flaggé par DeepSource :
-- `// skipcq: JS-0128` - Fonction/variable non utilisée mais conservée intentionnellement
-- `// skipcq: JS-0002` - Console.log intentionnel (debug)
-- `// skipcq: JS-0119` - Initialisation dans déclaration intentionnelle
+### Annotations pour Analyseurs Statiques (Faux Positifs)
 
-### Annotations ESLint pour Faux Positifs (Codacy/SonarCloud)
+**IMPORTANT** : Différents analyseurs utilisent différents formats de commentaires :
+- **DeepSource** : `// skipcq: <code>` (format propriétaire)
+- **Codacy/SonarCloud** : `// skipcq: <code>` ET/OU `// eslint-disable-next-line <rule>`
+- **SonarQube** : `// NOSONAR` ou `// NOSONAR - justification`
 
-**Codacy et SonarCloud** utilisent ESLint pour l'analyse. Utiliser la syntaxe ESLint pour ignorer les faux positifs :
+#### Format skipcq (DeepSource/Codacy) - À PRIVILÉGIER
 
-#### Syntaxe de base
+Le format `skipcq` est reconnu par DeepSource et Codacy. **Toujours placer le commentaire sur la ligne AVANT** le code concerné :
+
 ```javascript
-// Ignorer la ligne suivante
-// eslint-disable-next-line <rule> -- <justification>
+// skipcq: JS-0128 - Fonction conservée pour usage interne potentiel
+function unusedButKept() { }
 
-// Ignorer un bloc
-/* eslint-disable <rule> */
-// code...
-/* eslint-enable <rule> */
+// skipcq: JS-0118 - 'use strict' inside IIFE is intentional
+'use strict';
+
+// skipcq: JS-0119 - Variables intentionally assigned in if/else blocks
+let a, b, c;
+
+// skipcq: JS-0377 - Regex patterns cannot use replaceAll
+text.replace(/\s+/g, ' ');
+
+// skipcq: JS-0440 - Static HTML string is safe, sanitized after
+text.replaceAll('\n', '<br>');
 ```
 
-#### Faux Positifs Courants dans ce Projet
+#### Codes skipcq courants
+| Code | Description |
+|------|-------------|
+| `JS-0128` | Fonction/variable non utilisée mais conservée intentionnellement |
+| `JS-0118` | 'use strict' dans IIFE (intentionnel pour isolation) |
+| `JS-0119` | Variable non initialisée à la déclaration (assignée dans if/else) |
+| `JS-0377` | replace() avec regex au lieu de replaceAll() (patterns complexes) |
+| `JS-0440` | HTML passé à une fonction (contenu statique sûr) |
 
-**1. Object Injection Sink** - Accès dynamique avec clés contrôlées
+#### Format ESLint (Codacy) - Quand skipcq ne suffit pas
+
+Certaines règles ESLint nécessitent le format ESLint. **Attention** : certaines règles comme `unicorn/prefer-string-replace-all` n'existent pas dans tous les analyseurs et causeront une erreur "Definition for rule not found".
+
 ```javascript
-// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+// Pour le global 'chrome' dans les extensions Chrome
+/* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
+
+// Pour les accès dynamiques avec clés contrôlées
+// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is controlled enum
 const config = providers[providerId];
 ```
 
-**2. 'chrome' is not defined** - Global fourni par l'environnement Chrome
-```javascript
-// eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
-chrome.storage.sync.set({ ... });
-```
+#### Issues Acceptées (NE PAS CORRIGER)
 
-**3. Prefer top-level await** - IIFE nécessaire pour content scripts Chrome
-```javascript
-// eslint-disable-next-line unicorn/prefer-top-level-await -- IIFE required for Chrome extension content scripts isolation
-(async function () { ... })();
-```
+Ces issues sont des limitations connues acceptées dans le projet :
 
-**4. Prefer replaceAll** - Regex patterns complexes intentionnels
-```javascript
-// eslint-disable-next-line unicorn/prefer-string-replace-all -- Intentional: regex patterns /\s+/ cannot use replaceAll
-text.replace(/\s+/g, ' ');
-```
+| Fichier | Issue | Raison |
+|---------|-------|--------|
+| `options.js` | Cyclomatic complexity (9-23) | UI complexe avec multi-provider |
+| `providers.js` | Method too long (68 lines) | Définitions des providers |
+| `ui.js` | Unused functions (showBanner, hideBanner) | Conservées pour usage futur |
+| `focus-utils.js` | HTML in replaceAll | Contenu statique '<br>' sûr |
+| `i18n.js`, `text-processing.js` | Prefer replaceAll | Regex patterns complexes |
 
-**5. HTML in function** - Contenu statique suivi de sanitization
-```javascript
-// eslint-disable-next-line security/detect-unsafe-regex -- False positive: static string '<br>' replacement, followed by sanitizeHTML()
-const textWithBr = text.replaceAll('\n', '<br>');
-```
+#### Stratégie de Gestion des Issues
 
-#### Règles Importantes
-1. **Toujours ajouter une justification** avec `--` expliquant pourquoi c'est sûr
-2. **Être spécifique** sur la règle désactivée
-3. **Vérifier avant de désactiver** - s'assurer que c'est vraiment un faux positif
-4. **Utiliser la portée la plus étroite** - préférer ligne > bloc > fichier
-
-#### Issues NON Faux Positifs (à corriger vraiment)
-- **Cyclomatic complexity** → Nécessite refactoring des fonctions complexes
-- **Cognitive complexity** → Diviser en fonctions plus petites
-- **Method too long** → Extraire des sous-fonctions
-- **Contrast accessibility** → Améliorer les couleurs CSS
+1. **Faux positif évident** → Ajouter `// skipcq: <code> - justification`
+2. **Règle ESLint non reconnue** → Utiliser skipcq au lieu de eslint-disable
+3. **Complexité acceptée** → Documenter dans ce fichier, ne pas corriger
+4. **Vraie issue** → Refactorer si demandé explicitement
 
 ## Developer Notes
 
