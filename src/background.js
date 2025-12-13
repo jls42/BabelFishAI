@@ -19,32 +19,32 @@ const CONTEXT_MENU_ACTIONS = {
 
 // Définition des constantes nécessaires pour le service worker
 // IMPORTANT: Ces constantes sont dupliquées intentionnellement car le service worker
-// n'a pas accès à window.BabelFishAIConstants en raison des limitations des service workers
+// n'a pas accès à globalThis.BabelFishAIConstants en raison des limitations des service workers
 // de Chrome. Assurez-vous que ces valeurs correspondent à celles définies dans constants.js.
 //
 // Si vous modifiez ces constantes, vous DEVEZ également mettre à jour leurs équivalents dans constants.js:
-// - STATES correspond à window.BabelFishAIConstants.STATES
-// - ACTIONS correspond à window.BabelFishAIConstants.ACTIONS
-// - BADGES correspond à window.BabelFishAIConstants.BADGES
-// - ERRORS est un sous-ensemble de window.BabelFishAIConstants.ERRORS
+// - STATES correspond à globalThis.BabelFishAIConstants.STATES
+// - ACTIONS correspond à globalThis.BabelFishAIConstants.ACTIONS
+// - BADGES correspond à globalThis.BabelFishAIConstants.BADGES
+// - ERRORS est un sous-ensemble de globalThis.BabelFishAIConstants.ERRORS
 
 const STATES = {
-    RECORDING: 'recording',  // Doit correspondre à window.BabelFishAIConstants.STATES.RECORDING
-    STOPPED: 'stopped',      // Doit correspondre à window.BabelFishAIConstants.STATES.STOPPED
-    ERROR: 'error'           // Doit correspondre à window.BabelFishAIConstants.STATES.ERROR
+    RECORDING: 'recording',  // Doit correspondre à globalThis.BabelFishAIConstants.STATES.RECORDING
+    STOPPED: 'stopped',      // Doit correspondre à globalThis.BabelFishAIConstants.STATES.STOPPED
+    ERROR: 'error'           // Doit correspondre à globalThis.BabelFishAIConstants.STATES.ERROR
 };
 
 const ACTIONS = {
-    TOGGLE: 'toggleRecording',    // Doit correspondre à window.BabelFishAIConstants.ACTIONS.TOGGLE
-    STARTED: 'recordingStarted',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STARTED
-    STOPPED: 'recordingStopped',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STOPPED
-    ERROR: 'recordingError'       // Doit correspondre à window.BabelFishAIConstants.ACTIONS.ERROR
+    TOGGLE: 'toggleRecording',    // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.TOGGLE
+    STARTED: 'recordingStarted',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STARTED
+    STOPPED: 'recordingStopped',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STOPPED
+    ERROR: 'recordingError'       // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.ERROR
 };
 
 const BADGES = {
-    RECORDING: '⏺',  // Doit correspondre à window.BabelFishAIConstants.BADGES.RECORDING
-    STOPPED: '',      // Doit correspondre à window.BabelFishAIConstants.BADGES.STOPPED
-    ERROR: '!'        // Doit correspondre à window.BabelFishAIConstants.BADGES.ERROR
+    RECORDING: '⏺',  // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
+    STOPPED: '',      // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
+    ERROR: '!'        // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
 };
 
 const ERRORS = {
@@ -107,9 +107,9 @@ async function sendMessageToContentScript(tab, message) {
     try {
         // Tenter d'envoyer le message directement
         await chrome.tabs.sendMessage(tab.id, message);
-    } catch (error) {
+    } catch (sendError) {
         // Si le content script n'est pas prêt, tenter de l'injecter
-        debug("Content script not ready, attempting to inject it");
+        debug("Content script not ready, attempting to inject it:", sendError.message);
 
         try {
             // Injecter le content script
@@ -331,7 +331,7 @@ chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
  */
 function getTargetLanguageOptions() {
     // Utiliser la liste centralisée, si disponible
-    return self.AVAILABLE_LANGUAGES || [
+    return globalThis.AVAILABLE_LANGUAGES || [
         { value: 'en', text: 'English (en)' },
         { value: 'fr', text: 'Français (fr)' },
         { value: 'es', text: 'Español (es)' },

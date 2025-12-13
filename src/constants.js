@@ -1,5 +1,5 @@
 // Constants globales pour l'extension BabelFishAI
-window.BabelFishAIConstants = {
+globalThis.BabelFishAIConstants = {
     // Configuration générale
     CONFIG: {
         DEBUG: false,

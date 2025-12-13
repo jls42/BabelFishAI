@@ -19,9 +19,12 @@ BabelFishAI is a Chrome extension (Manifest V3) for AI-powered voice transcripti
 ## Architecture
 
 ### Global Namespaces
-- `window.BabelFishAIConstants` - Configuration constants
-- `window.BabelFishAIUtils` - Utility functions (recording, text, UI, etc.)
-- `window.BabelFishAI` - Main application state
+- `globalThis.BabelFishAIConstants` - Configuration constants
+- `globalThis.BabelFishAIUtils` - Utility functions (recording, text, UI, etc.)
+- `globalThis.BabelFishAI` - Main application state
+- `globalThis.BabelFishAIProviders` - AI provider registry
+
+**Note**: Utiliser `globalThis` au lieu de `window` pour la portabilité ES2020+.
 
 ### Key Files
 - `manifest.json` - Extension configuration (Manifest V3)
@@ -128,16 +131,16 @@ The project is undergoing modular refactoring from a monolithic `content.js`. Wh
 
 ### Module Exposure Pattern
 ```javascript
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
-window.BabelFishAIUtils.moduleName = {
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils.moduleName = {
     functionName: functionName,
     // ...
 };
 ```
 
 ### Inter-module Communication
-Modules communicate via global namespaces (`window.BabelFishAI` and `window.BabelFishAIUtils`).
-Example: `window.BabelFishAIUtils.recording.startRecording()` to call a recording module function.
+Modules communicate via global namespaces (`globalThis.BabelFishAI` and `globalThis.BabelFishAIUtils`).
+Example: `globalThis.BabelFishAIUtils.recording.startRecording()` to call a recording module function.
 
 ## APIs Used
 
@@ -172,6 +175,115 @@ Les fichiers deprecated ont été supprimés :
 
 ## Code Quality - Linting Rules
 
+### Conventions ES2020+ (Analyseurs de Code Statique)
+
+**IMPORTANT** : Ces règles sont obligatoires pour éviter les warnings des analyseurs (SonarQube, Codacy, etc.)
+
+#### 1. Utiliser `globalThis` au lieu de `window` ou `self`
+```javascript
+// ✅ CORRECT
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
+const selection = globalThis.getSelection();
+globalThis.setTimeout(callback, 1000);
+
+// ❌ INCORRECT
+window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+self.AVAILABLE_LANGUAGES = [...];
+```
+
+#### 2. Utiliser `Number.parseInt()` au lieu de `parseInt()`
+```javascript
+// ✅ CORRECT
+const value = Number.parseInt(input.value, 10);
+const hex = Number.parseInt(color.substr(1, 2), 16);
+
+// ❌ INCORRECT
+const value = parseInt(input.value);
+```
+
+#### 3. Utiliser `replaceAll()` au lieu de `replace()` avec regex globale (quand applicable)
+```javascript
+// ✅ CORRECT (pour remplacements simples)
+const escaped = text.replaceAll('<', '&lt;');
+
+// ✅ CORRECT (regex complexes - garder replace)
+const cleaned = text.replace(/\s+/g, ' ');  // Pattern complexe, OK
+```
+
+#### 4. Utiliser Optional Chaining (`?.`) et Nullish Coalescing (`??`)
+```javascript
+// ✅ CORRECT
+if (mediaRecorder?.state === 'recording') { }
+const url = provider?.defaultUrls.chat ?? DEFAULT_URL;
+return config?.enabled && config?.apiKey;
+
+// ❌ INCORRECT
+if (mediaRecorder && mediaRecorder.state === 'recording') { }
+return provider ? provider.defaultUrls.chat : DEFAULT_URL;
+```
+
+#### 5. Utiliser `.dataset` au lieu de `getAttribute/setAttribute` pour data-*
+```javascript
+// ✅ CORRECT
+button.dataset.active = 'true';
+const target = button.dataset.target;
+
+// ❌ INCORRECT
+button.setAttribute('data-active', 'true');
+const target = button.getAttribute('data-target');
+```
+
+#### 6. Utiliser `element.remove()` au lieu de `parentNode.removeChild()`
+```javascript
+// ✅ CORRECT
+element.remove();
+
+// ❌ INCORRECT
+element.parentNode.removeChild(element);
+```
+
+#### 7. Éviter les ternaires imbriquées
+```javascript
+// ✅ CORRECT
+let models = [];
+if (providerDef) {
+    models = type === 'transcription'
+        ? providerDef.transcriptionModels
+        : providerDef.chatModels;
+}
+
+// ❌ INCORRECT
+const models = providerDef
+    ? (type === 'transcription' ? providerDef.transcriptionModels : providerDef.chatModels)
+    : [];
+```
+
+#### 8. Toujours utiliser les exceptions attrapées
+```javascript
+// ✅ CORRECT
+} catch (error) {
+    console.error('Error:', error.message);
+}
+
+// ❌ INCORRECT
+} catch (error) {
+    // error non utilisé
+    console.error('Something went wrong');
+}
+```
+
+#### 9. Éviter innerHTML pour la sécurité (XSS)
+```javascript
+// ✅ CORRECT (créer des éléments DOM)
+const span = document.createElement('span');
+span.className = 'status';
+span.textContent = text;
+container.appendChild(span);
+
+// ❌ INCORRECT (risque XSS)
+container.innerHTML = `<span class="status">${text}</span>`;
+```
+
 ### Variables et Fonctions
 - **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
 - **Supprimer les fonctions inutilisées** ou ajouter `// skipcq: JS-0128` si conservées intentionnellement
@@ -181,7 +293,7 @@ Les fichiers deprecated ont été supprimés :
 La fonction `callApi` attend UN SEUL objet avec toutes les options :
 ```javascript
 // ✅ CORRECT
-await window.BabelFishAIUtils.api.callApi({
+await globalThis.BabelFishAIUtils.api.callApi({
     url: apiUrl,
     apiKey: effectiveApiKey,
     headers: { 'Content-Type': 'application/json' },
@@ -191,7 +303,7 @@ await window.BabelFishAIUtils.api.callApi({
 });
 
 // ❌ INCORRECT (deux arguments)
-await window.BabelFishAIUtils.api.callApi(apiUrl, { ... });
+await globalThis.BabelFishAIUtils.api.callApi(apiUrl, { ... });
 ```
 
 ### Scripts Shell (Bash)

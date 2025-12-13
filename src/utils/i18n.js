@@ -1,5 +1,5 @@
 // Utilitaire d'internationalisation pour BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
@@ -362,4 +362,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         init();
     }
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

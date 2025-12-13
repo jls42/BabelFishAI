@@ -1,12 +1,12 @@
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Utilisation des constantes globales depuis constants.js
-    const CONFIG = window.BabelFishAIConstants.CONFIG;
-    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
-    const ERRORS = window.BabelFishAIConstants.ERRORS;
+    const CONFIG = globalThis.BabelFishAIConstants.CONFIG;
+    const MESSAGE_TYPES = globalThis.BabelFishAIConstants.MESSAGE_TYPES;
+    const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
 
     /**
      * Affiche la transcription selon les options configurées
@@ -14,10 +14,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
      */
     function validateInputText(text) {
-        if (!window.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
+        if (!globalThis.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
             const errorMsg = "Texte de transcription invalide";
             console.error(`${errorMsg}:`, text);
-            window.BabelFishAIUtils.error.handleError(errorMsg, "Invalid transcription text");
+            globalThis.BabelFishAIUtils.error.handleError(errorMsg, "Invalid transcription text");
             return false;
         }
         return true;
@@ -52,7 +52,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function getAllOptions() {
         const displayOpts = await getDisplayOptions();
-        const { autoCopy } = await window.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
+        const { autoCopy } = await globalThis.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
         return { ...displayOpts, autoCopy };
     }
 
@@ -71,7 +71,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Informer l'utilisateur que le traitement est en cours
-            window.BabelFishAI.ui.showBanner(window.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
+            globalThis.BabelFishAI.ui.showBanner(globalThis.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
 
             // Récupérer toutes les options
             const options = await getAllOptions();
@@ -80,7 +80,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const processedText = await processText(text, options);
 
             // Stocker l'élément actif avant d'afficher le texte
-            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Étape 2: Afficher le texte selon les options configurées
             displayResult = await displayTranscriptionText(processedText, options, options.autoCopy);
@@ -89,10 +89,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             await new Promise(resolve => setTimeout(resolve, 10));
 
             // Restaurer le focus sans sélection
-            window.BabelFishAIUtils.focus.restoreFocusAndSelection(true);
+            globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true);
 
             // Vérifier la validité de l'élément actif après restauration
-            const isActiveElementValid = window.BabelFishAIUtils.focus.isValidElementForInsertion(document.activeElement);
+            const isActiveElementValid = globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(document.activeElement);
 
             // Étape 3: Gérer la copie automatique
             await handleAutoCopy(processedText, displayResult, isActiveElementValid, options.autoCopy);
@@ -101,11 +101,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         } catch (error) {
             console.error('Error displaying transcription:', error);
-            window.BabelFishAIUtils.error.handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
+            globalThis.BabelFishAIUtils.error.handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
             return false; // Retourner false en cas d'erreur
         } finally {
             // Cacher la bannière de traitement dans tous les cas (succès ou erreur)
-            window.BabelFishAI.ui.hideBanner();
+            globalThis.BabelFishAI.ui.hideBanner();
         }
     }
 
@@ -118,10 +118,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function processText(text, options) {
         let processedText = text;
         if (options.enableRephrase) {
-            processedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(processedText);
+            processedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(processedText);
         }
         if (options.enableTranslation) {
-            processedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(processedText, options);
+            processedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(processedText, options);
         }
         return processedText;
     }
@@ -131,7 +131,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<Object>} Les options d'affichage, de traduction et de reformulation
      */
     function getDisplayOptions() {
-        return window.BabelFishAIUtils.api.getFromStorage({
+        return globalThis.BabelFishAIUtils.api.getFromStorage({
             activeDisplay: true,
             dialogDisplay: false,
             dialogDuration: CONFIG.DEFAULT_DIALOG_DURATION,
@@ -156,7 +156,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
 
         const activeElement = document.activeElement;
-        const isValidForInsertion = window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
+        const isValidForInsertion = globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
 
         // 1. Si l'élément actif est valide et l'option activeDisplay est activée, utiliser activeElement
         if (options.activeDisplay && isValidForInsertion) {
@@ -187,7 +187,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function displayTranscriptionText(text, options, autoCopy) {
         try {
             // Déterminer si l'affichage dans une boîte de dialogue est forcé pour ce domaine
-            const currentDomain = window.location.hostname;
+            const currentDomain = globalThis.location.hostname;
             const displayMethod = determineDisplayMethod(text, options, autoCopy, currentDomain);
 
             // Afficher le texte en fonction de la méthode déterminée
@@ -195,7 +195,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
             } else if (displayMethod === 'activeElement') {
                 // Inserer le texte dans l'élément actif
-                window.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
+                globalThis.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
             } else if (displayMethod === 'clipboard') {
                 // Ne rien faire, le texte sera copié dans le presse-papiers plus tard
             }
@@ -206,7 +206,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             };
         } catch (error) {
             console.error("Erreur lors de l'affichage du texte:", error);
-            window.BabelFishAIUtils.error.handleError(error);
+            globalThis.BabelFishAIUtils.error.handleError(error);
             return false;
         }
     }
@@ -218,10 +218,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function showTranscriptionDialog(text, duration) {
         // Utiliser la fonction utilitaire pour afficher le texte dans une boîte de dialogue
-        window.BabelFishAIUtils.ui.showTextInDialog(
+        globalThis.BabelFishAIUtils.ui.showTextInDialog(
             text,
             duration,
-            (errorMessage) => window.BabelFishAI.ui.showBanner(errorMessage, MESSAGE_TYPES.ERROR)
+            (errorMessage) => globalThis.BabelFishAI.ui.showBanner(errorMessage, MESSAGE_TYPES.ERROR)
         );
     }
 
@@ -234,18 +234,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function transcribeAudio(audioBlob) {
         try {
             // Utiliser resolveApiConfig pour obtenir la config multi-provider
-            const config = await window.BabelFishAIUtils.api.resolveApiConfig('transcription');
+            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
             if (!config.apiKey) {
                 const errorMsg = ERRORS.API_KEY_NOT_FOUND;
-                window.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
+                globalThis.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }
 
             console.log('[Display] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
-            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
+            const transcription = await globalThis.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 config.apiKey,
                 config.url,
@@ -270,4 +270,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         transcribeAudio
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

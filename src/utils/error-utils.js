@@ -1,5 +1,5 @@
 // Utilitaires de gestion d'erreurs pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
@@ -53,7 +53,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function areDependenciesAvailable() {
         // Utilisation du chaînage optionnel pour vérifier l'existence des propriétés imbriquées
-        return Boolean(window.BabelFishAIUtils?.i18n); // Convertit le résultat en booléen explicite
+        return Boolean(globalThis.BabelFishAIUtils?.i18n); // Convertit le résultat en booléen explicite
     }
 
     /**
@@ -62,7 +62,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function isUIAvailable() {
         // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
-        return typeof window.BabelFishAI?.ui?.showBanner === 'function';
+        return typeof globalThis.BabelFishAI?.ui?.showBanner === 'function';
     }
 
     /**
@@ -79,9 +79,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Référence aux constantes nécessaires
-            const MESSAGE_TYPES = window.BabelFishAIConstants?.MESSAGE_TYPES || { ERROR: 'error' };
-            const ACTIONS = window.BabelFishAIConstants?.ACTIONS || { ERROR: 'error' };
-            const CONFIG = window.BabelFishAIConstants?.CONFIG || { ERROR_BANNER_DURATION: 5000 };
+            const MESSAGE_TYPES = globalThis.BabelFishAIConstants?.MESSAGE_TYPES || { ERROR: 'error' };
+            const ACTIONS = globalThis.BabelFishAIConstants?.ACTIONS || { ERROR: 'error' };
+            const CONFIG = globalThis.BabelFishAIConstants?.CONFIG || { ERROR_BANNER_DURATION: 5000 };
 
             // Normaliser les paramètres pour gérer différents types d'entrées
             const { userMessage, technicalMessage } = normalizeError(displayMessage, errorMessage);
@@ -116,10 +116,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         let technicalMessage = '';
 
         if (displayMessage instanceof Error) {
-            userMessage = displayMessage.message || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            userMessage = displayMessage.message || globalThis.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
             technicalMessage = displayMessage.stack || displayMessage.message;
         } else {
-            userMessage = displayMessage || window.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            userMessage = displayMessage || globalThis.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
             technicalMessage = errorMessage || displayMessage;
         }
 
@@ -134,12 +134,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function showErrorBanner(userMessage, MESSAGE_TYPES, CONFIG) {
         try {
-            window.BabelFishAI.ui.showBanner(userMessage, MESSAGE_TYPES.ERROR);
+            globalThis.BabelFishAI.ui.showBanner(userMessage, MESSAGE_TYPES.ERROR);
 
             // Cacher automatiquement la bannière après un délai défini
             setTimeout(() => {
                 if (isUIAvailable()) {
-                    window.BabelFishAI.ui.hideBanner();
+                    globalThis.BabelFishAI.ui.hideBanner();
                 }
             }, CONFIG.ERROR_BANNER_DURATION);
         } catch (bannerError) {
@@ -178,7 +178,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             if (isBannerUtilsAvailable()) {
                 try {
                     // Obtenir la bannière depuis l'API de BabelFishAI si disponible
-                    const banner = window.BabelFishAI?.ui?.getBanner?.() || null;
+                    const banner = globalThis.BabelFishAI?.ui?.getBanner?.() || null;
 
                     if (banner) {
                         return showStatusViaBannerUtils(banner, text, type);
@@ -212,7 +212,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function isBannerUtilsAvailable() {
         // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
-        return typeof window.BabelFishAIUtils?.banner?.showStatus === 'function';
+        return typeof globalThis.BabelFishAIUtils?.banner?.showStatus === 'function';
     }
 
     /**
@@ -221,7 +221,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function isUIDirectlyAvailable() {
         // Utilisation du chaînage optionnel pour vérifier l'existence et le type de la fonction
-        return typeof window.BabelFishAI?.ui?.showStatus === 'function';
+        return typeof globalThis.BabelFishAI?.ui?.showStatus === 'function';
     }
 
     /**
@@ -232,7 +232,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'affichage a réussi, sinon false
      */
     function showStatusViaBannerUtils(banner, text, type) {
-        return window.BabelFishAIUtils.banner.showStatus(banner, text, type);
+        return globalThis.BabelFishAIUtils.banner.showStatus(banner, text, type);
     }
 
     /**
@@ -242,7 +242,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {boolean} - True si l'affichage a réussi, sinon false
      */
     function showStatusViaUI(text, type) {
-        return window.BabelFishAI.ui.showStatus(text, type);
+        return globalThis.BabelFishAI.ui.showStatus(text, type);
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
@@ -252,4 +252,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         showStatus
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

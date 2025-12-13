@@ -1,12 +1,12 @@
 // Utilitaires pour la gestion des API pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Constantes importées depuis l'espace global
-    const ERRORS = window.BabelFishAIConstants.ERRORS;
-    const API_CONFIG = window.BabelFishAIConstants.API_CONFIG;
+    const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
+    const API_CONFIG = globalThis.BabelFishAIConstants.API_CONFIG;
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
@@ -20,7 +20,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             if (apiKey) {
                 // Stocker la clé en mémoire pour les futures utilisations
-                window.BabelFishAI.apiKey = apiKey;
+                globalThis.BabelFishAI.apiKey = apiKey;
                 return apiKey;
             }
             return null; // Clé non trouvée dans le stockage
@@ -41,14 +41,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function getOrFetchApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
-        window.BabelFishAI = window.BabelFishAI || {};
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
 
         // Utiliser resolveApiConfig pour obtenir la clé du provider actif
         try {
             const config = await resolveApiConfig(serviceType);
             if (config.apiKey) {
                 // Mettre en cache pour compatibilité
-                window.BabelFishAI.apiKey = config.apiKey;
+                globalThis.BabelFishAI.apiKey = config.apiKey;
                 return config.apiKey;
             }
         } catch (error) {
@@ -74,14 +74,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     async function getApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
-        window.BabelFishAI = window.BabelFishAI || {};
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
 
         // Utiliser resolveApiConfig pour obtenir la clé du provider actif
         try {
             const config = await resolveApiConfig(serviceType);
             if (config.apiKey) {
                 // Mettre en cache pour compatibilité
-                window.BabelFishAI.apiKey = config.apiKey;
+                globalThis.BabelFishAI.apiKey = config.apiKey;
                 return config.apiKey;
             }
         } catch (error) {
@@ -174,7 +174,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         // Récupérer les définitions du provider depuis le registre
-        const Providers = window.BabelFishAIProviders;
+        const Providers = globalThis.BabelFishAIProviders;
         const providerDef = Providers ? Providers.getProvider(providerId) : null;
 
         // Debug sans exposer la clé API
@@ -371,7 +371,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     const errorData = await response.json();
                     errorMessage = errorData.error?.message || errorType;
                     console.error('API Error:', errorData);
-                } catch (parseError) {
+                } catch (jsonParseError) {
+                    // JSON parsing failed - log the parse error and use status code
+                    console.error('API Error (JSON parse failed):', jsonParseError.message);
                     errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
                     console.error('API Error (could not parse response):', response.status, response.statusText);
                 }
@@ -498,7 +500,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    function transcribeAudio(audioBlob, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
+    function transcribeAudio(audioBlob, apiKey, apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         // Déterminer le nom de fichier final
         const finalFilename = generateUniqueFilename
             // Générer un nom de fichier avec timestamp et élément aléatoire
@@ -537,4 +539,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         callApi
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

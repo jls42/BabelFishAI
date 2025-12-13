@@ -1,5 +1,5 @@
 // Utilitaires d'enregistrement audio pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
@@ -24,7 +24,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     // Note: API_CONFIG supprimé car non utilisé - la configuration est gérée par resolveApiConfig
 
     const CANCEL_MESSAGE = {
-        RECORDING_CANCELED: window.BabelFishAIUtils.i18n?.getMessage("recordingCanceled") || "Enregistrement annulé (touche Échap)."
+        RECORDING_CANCELED: globalThis.BabelFishAIUtils.i18n?.getMessage("recordingCanceled") || "Enregistrement annulé (touche Échap)."
     };
 
     const MESSAGE_TYPES = {
@@ -38,8 +38,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<string>} La clé API.
      */
     async function getApiKey() { // skipcq: JS-0116 - Garder async pour cohérence de l'interface (retourne toujours une promesse).
-        return window.BabelFishAIUtils.error.safeExecute(
-            () => window.BabelFishAIUtils.api.getApiKey(),
+        return globalThis.BabelFishAIUtils.error.safeExecute(
+            () => globalThis.BabelFishAIUtils.api.getApiKey(),
             "Erreur lors de la récupération de la clé API"
         );
     }
@@ -50,7 +50,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @returns {Promise<MediaStream>} Le flux audio.
      */
     async function requestMicrophoneAccess(audioConstraints) {
-        const stream = await window.BabelFishAIUtils.error.safeExecute(
+        const stream = await globalThis.BabelFishAIUtils.error.safeExecute(
             () => navigator.mediaDevices.getUserMedia(audioConstraints),
             "Erreur lors de l'accès au microphone"
         );
@@ -88,8 +88,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         const errorMessages = {
             [ERRORS.API_KEY_NOT_FOUND]: ERRORS.API_KEY_NOT_FOUND,
-            'NotAllowedError': window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
-            'PermissionDeniedError': window.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
+            'NotAllowedError': globalThis.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
+            'PermissionDeniedError': globalThis.BabelFishAIUtils.i18n.getMessage("bannerMicAccessError"),
             'NotFoundError': "Aucun microphone détecté sur cet appareil.",
             'NotReadableError': "Impossible d'accéder au microphone (périphérique occupé ou défaillant).",
             'AbortError': "Impossible d'accéder au microphone (périphérique occupé ou défaillant).",
@@ -98,12 +98,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         const errorMessage = errorMessages[error.name] || errorMessages[error.message] || errorMessages['default'];
 
-        window.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
+        globalThis.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
 
         isRecording = false;
 
         if (stream) {
-            window.BabelFishAIUtils.error.safeExecute(
+            globalThis.BabelFishAIUtils.error.safeExecute(
                 () => stream.getTracks().forEach(track => track.stop()),
                 "Erreur lors de la libération des ressources audio"
             );
@@ -152,11 +152,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             setupMediaRecorderEvents(stream);
             isRecording = true;
 
-            window.BabelFishAI.ui.showBanner(
-                window.BabelFishAIUtils.i18n.getMessage("bannerRecording")
+            globalThis.BabelFishAI.ui.showBanner(
+                globalThis.BabelFishAIUtils.i18n.getMessage("bannerRecording")
             );
 
-            window.BabelFishAIUtils.error.safeExecute(
+            globalThis.BabelFishAIUtils.error.safeExecute(
                 () => chrome.runtime.sendMessage({ action: ACTIONS.STARTED }),
                 "Impossible d'envoyer la notification de démarrage au background"
             );
@@ -248,7 +248,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             } catch (error) {
                 // Gérer les erreurs de createAndValidateAudioBlob et processRecordedAudio
                 console.error('Erreur lors du traitement de l\'enregistrement:', error);
-                window.BabelFishAI.ui.handleError(error);
+                globalThis.BabelFishAI.ui.handleError(error);
             } finally {
                 // Libération proactive des ressources pour éviter les fuites mémoire
                 // Même si audioBlob est null (erreur de création), la vérification est sûre
@@ -274,7 +274,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const errorMessage = error?.message || 'Erreur d\'enregistrement inconnue';
 
             // Afficher l'erreur à l'utilisateur
-            window.BabelFishAI.ui.handleError('Erreur d\'enregistrement', `${errorName}: ${errorMessage}`);
+            globalThis.BabelFishAI.ui.handleError('Erreur d\'enregistrement', `${errorName}: ${errorMessage}`);
 
             // Nettoyer immédiatement les ressources
             cleanupRecordingResources(stream);
@@ -314,7 +314,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (error.name === 'AbortError') {
             return "Traitement audio annulé";
         }
-        return window.BabelFishAIUtils.i18n.getMessage("bannerTranscriptionError") || "Erreur pendant la transcription";
+        return globalThis.BabelFishAIUtils.i18n.getMessage("bannerTranscriptionError") || "Erreur pendant la transcription";
     }
 
     /**
@@ -323,7 +323,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function displayErrorBanner(message) {
         try {
-            window.BabelFishAI.ui.showBanner(message, window.BabelFishAIConstants.MESSAGE_TYPES.ERROR);
+            globalThis.BabelFishAI.ui.showBanner(message, globalThis.BabelFishAIConstants.MESSAGE_TYPES.ERROR);
         } catch (e) {
             console.error("Erreur lors de l'affichage de la bannière d'erreur:", e);
         }
@@ -340,9 +340,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             validateAudioBlob(audioBlob);
 
             // 2. Informer l'utilisateur que la transcription est en cours
-            await window.BabelFishAIUtils.error.safeExecute(
-                () => window.BabelFishAI.ui.showBanner(
-                    window.BabelFishAIUtils.i18n.getMessage("bannerTranscribing")
+            await globalThis.BabelFishAIUtils.error.safeExecute(
+                () => globalThis.BabelFishAI.ui.showBanner(
+                    globalThis.BabelFishAIUtils.i18n.getMessage("bannerTranscribing")
                 ),
                 "Erreur lors de l'affichage de la bannière de transcription"
             );
@@ -358,7 +358,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const errorDetails = error.message || error.toString();
 
             // Gérer l'erreur (log interne, etc.)
-            window.BabelFishAI.ui.handleError(userMessage, errorDetails);
+            globalThis.BabelFishAI.ui.handleError(userMessage, errorDetails);
 
             // Afficher la bannière d'erreur à l'utilisateur
             displayErrorBanner(userMessage);
@@ -384,7 +384,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function transcribeAndDisplayText(audioBlob) {
 
         // 2. Transcrire l'audio avec une gestion optimisée des erreurs
-        const transcription = await window.BabelFishAIUtils.error.safeExecute(
+        const transcription = await globalThis.BabelFishAIUtils.error.safeExecute(
             () => transcribeAudio(audioBlob),
             "Erreur lors de la transcription audio"
         );
@@ -395,14 +395,14 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         // 3. Afficher la transcription (avec les éventuelles opérations de traduction/reformulation)
-        await window.BabelFishAIUtils.error.safeExecute(
-            () => window.BabelFishAI.ui.showTranscription(transcription),
+        await globalThis.BabelFishAIUtils.error.safeExecute(
+            () => globalThis.BabelFishAI.ui.showTranscription(transcription),
             "Erreur lors de l'affichage de la transcription"
         );
 
         // 4. Cacher la bannière une fois toutes les opérations terminées avec succès
-        await window.BabelFishAIUtils.error.safeExecute(
-            () => window.BabelFishAI.ui.hideBanner(),
+        await globalThis.BabelFishAIUtils.error.safeExecute(
+            () => globalThis.BabelFishAI.ui.hideBanner(),
             "Erreur lors de la dissimulation de la bannière"
         );
     }
@@ -417,7 +417,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         isRecording = false;
 
         // 1. Informer le background script - Opération asynchrone qui ne doit pas bloquer
-        window.BabelFishAIUtils.error.safeExecute(() => {
+        globalThis.BabelFishAIUtils.error.safeExecute(() => {
             chrome.runtime.sendMessage({
                 action: ACTIONS.STOPPED,
                 canceled: wasCanceled === true
@@ -450,7 +450,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     function stopRecording(cancelProcessing = false) {
         try {
             // Vérifier si le mediaRecorder existe et est en cours d'enregistrement
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
+            if (mediaRecorder?.state === 'recording') {
                 // Mettre à jour l'état d'enregistrement immédiatement
                 isRecording = false;
 
@@ -490,7 +490,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         } catch (error) {
             console.error("Error stopping recording:", error);
-            window.BabelFishAI.ui.handleError("Erreur lors de l'arrêt de l'enregistrement", error.message);
+            globalThis.BabelFishAI.ui.handleError("Erreur lors de l'arrêt de l'enregistrement", error.message);
             // Mettre à jour l'état d'enregistrement même en cas d'erreur
             isRecording = false;
             return false;
@@ -502,9 +502,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     */
     function showCancellationBanner() {
         // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction showBanner
-        if (typeof window.BabelFishAI?.ui?.showBanner === 'function') {
+        if (typeof globalThis.BabelFishAI?.ui?.showBanner === 'function') {
             // Utiliser la fonction showBanner exposée dans l'espace de noms global
-            window.BabelFishAI.ui.showBanner(CANCEL_MESSAGE.RECORDING_CANCELED, MESSAGE_TYPES.INFO);
+            globalThis.BabelFishAI.ui.showBanner(CANCEL_MESSAGE.RECORDING_CANCELED, MESSAGE_TYPES.INFO);
         } else {
             // Fallback si la fonction showBanner n'est pas disponible
             const recordingBanner = document.querySelector('#whisper-recording-banner');
@@ -530,7 +530,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             isRecordingCanceled = true;
 
             // Restaurer immédiatement le focus avant même d'arrêter l'enregistrement
-            window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
+            globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
 
             const result = stopRecording(true);
 
@@ -538,8 +538,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             setTimeout(() => {
                 // Utiliser la fonction hideBanner exposée dans l'espace de noms global si disponible
                 // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction hideBanner
-                if (typeof window.BabelFishAI?.ui?.hideBanner === 'function') {
-                    window.BabelFishAI.ui.hideBanner();
+                if (typeof globalThis.BabelFishAI?.ui?.hideBanner === 'function') {
+                    globalThis.BabelFishAI.ui.hideBanner();
                     console.log("Bandeau masqué après annulation d'enregistrement (via UI)"); // skipcq: JS-0002
                 } else {
                     // Fallback si la fonction hideBanner n'est pas disponible
@@ -552,7 +552,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
                 // S'assurer que le focus est toujours restauré après avoir caché la bannière
                 setTimeout(() => {
-                    window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
+                    globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
                 }, 100);
             }, 1000);
 
@@ -572,18 +572,18 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     async function transcribeAudio(audioBlob) {
         try {
             // Utiliser resolveApiConfig pour obtenir la config multi-provider
-            const config = await window.BabelFishAIUtils.api.resolveApiConfig('transcription');
+            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
             if (!config.apiKey) {
                 const errorMsg = ERRORS.API_KEY_NOT_FOUND;
-                window.BabelFishAI.ui.handleError(errorMsg, errorMsg);
+                globalThis.BabelFishAI.ui.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }
 
             console.log('[Recording] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
-            const transcription = await window.BabelFishAIUtils.api.transcribeAudio(
+            const transcription = await globalThis.BabelFishAIUtils.api.transcribeAudio(
                 audioBlob,
                 config.apiKey,
                 config.url,
@@ -623,4 +623,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         _cleanupRecordingResources: cleanupRecordingResources
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

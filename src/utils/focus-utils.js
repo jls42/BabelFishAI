@@ -1,5 +1,5 @@
 // Utilitaires de gestion du focus et de la sélection pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
@@ -26,7 +26,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
             // Pour les éléments contentEditable
             else if (storedActiveElement?.isContentEditable) { // Utilisation du chaînage optionnel
-                const selection = window.getSelection();
+                const selection = globalThis.getSelection();
                 if (selection?.rangeCount > 0) { // Chaînage optionnel aussi pour selection
                     storedNodeRange = selection.getRangeAt(0).cloneRange();
                     storedSelectionText = selection.toString();
@@ -118,7 +118,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         if (!storedActiveElement || !storedActiveElement.isContentEditable) return; // NOSONAR - S6582: La vérification avec || est idiomatique et sûre ici.
 
         try {
-            const selection = window.getSelection();
+            const selection = globalThis.getSelection();
 
             if (preventSelection || !storedNodeRange || storedSelectionText === '') {
                 // Placer le curseur à la fin du contenu
@@ -216,22 +216,22 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function normalizeText(text) {
         // Remplacer les sauts de ligne par des balises <br>
-        const textWithBr = text.replace(/\n/g, '<br>');
+        const textWithBr = text.replaceAll('\n', '<br>');
 
         // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
         // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction
-        if (typeof window.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function') {
-            return window.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
+        if (typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function') {
+            return globalThis.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
         }
 
         // Fallback si la fonction sanitizeHTML n'est pas disponible: échapper le HTML pour la sécurité
         console.warn('sanitizeHTML function not found. Falling back to basic HTML escaping.');
         const escapedText = textWithBr
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
         // Note: Les <br> seront aussi échappés, ce qui n'est pas idéal mais plus sûr.
         return escapedText;
     }
@@ -245,9 +245,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Le texte a déjà été sécurisé par normalizeText, mais on peut ajouter une vérification supplémentaire
         let safeText = processedText;
         // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction sanitizeHTML
-        if (typeof window.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function' &&
+        if (typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function' &&
             typeof processedText === 'string' && processedText.includes('<')) {
-            safeText = window.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
+            safeText = globalThis.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
 
         const tempDiv = document.createElement('div');
@@ -343,7 +343,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 processedText = normalizeText(text);
             }
 
-            const selection = window.getSelection();
+            const selection = globalThis.getSelection();
 
             if (selection.rangeCount > 0) {
                 insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
@@ -479,4 +479,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         insertTextInEditableElement
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

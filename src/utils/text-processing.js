@@ -1,5 +1,5 @@
 // Utilitaires de traitement de texte pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
@@ -53,7 +53,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Validation des paramètres
         if (!text) {
             console.error('Missing rephrase parameter:', { text });
-            throw new Error(window.BabelFishAIConstants.ERRORS.MISSING_REPHRASE_PARAMS);
+            throw new Error(globalThis.BabelFishAIConstants.ERRORS.MISSING_REPHRASE_PARAMS);
         }
 
         // Nettoyer le texte avant traitement
@@ -61,7 +61,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
-            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('chat');
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
@@ -91,12 +91,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
-            const response = await window.BabelFishAIUtils.api.callApi({
+            const response = await globalThis.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                errorType: window.BabelFishAIConstants.ERRORS.REPHRASE_ERROR,
+                errorType: globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR,
                 // Activer les tentatives de réessai
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
@@ -114,11 +114,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         } catch (error) {
             console.error('Rephrasing error:', error);
             // Si l'erreur est déjà formatée, la propager directement
-            if (error.message.includes(window.BabelFishAIConstants.ERRORS.REPHRASE_ERROR)) {
+            if (error.message.includes(globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR)) {
                 throw error;
             }
             // Sinon, la formater avec le préfixe REPHRASE_ERROR
-            throw new Error(`${window.BabelFishAIConstants.ERRORS.REPHRASE_ERROR}: ${error.message}`);
+            throw new Error(`${globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR}: ${error.message}`);
         }
     }
 
@@ -132,7 +132,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         // Validation des paramètres
         if (!text) {
             console.error('Missing correct parameter:', { text });
-            throw new Error(window.BabelFishAIConstants.ERRORS.MISSING_CORRECT_PARAMS || 'Paramètres de correction manquants');
+            throw new Error(globalThis.BabelFishAIConstants.ERRORS.MISSING_CORRECT_PARAMS || 'Paramètres de correction manquants');
         }
 
         // Nettoyer le texte avant traitement
@@ -140,7 +140,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
-            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('chat');
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: apiUrl, model: modelType, disableLogging } = config;
 
@@ -171,12 +171,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Appeler l'API
-            const response = await window.BabelFishAIUtils.api.callApi({
+            const response = await globalThis.BabelFishAIUtils.api.callApi({
                 url: apiUrl,
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                errorType: window.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
+                errorType: globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
                 retryOnFail: true
             });
 
@@ -189,7 +189,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
         } catch (error) {
             console.error('Correction error:', error);
-            throw new Error(`${window.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'}: ${error.message}`);
+            throw new Error(`${globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'}: ${error.message}`);
         }
     }
 
@@ -211,7 +211,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
-            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('chat');
             const effectiveApiKey = apiKey || config.apiKey;
             const { url: translationApiUrl, model: modelType, disableLogging } = config;
 
@@ -247,12 +247,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Utiliser l'API pour traduire le texte
-            const response = await window.BabelFishAIUtils.api.callApi({
+            const response = await globalThis.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                errorType: window.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,
+                errorType: globalThis.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,
                 // Activer les tentatives de réessai pour les traductions
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
@@ -291,10 +291,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Récupère la clé API ou lève une exception si elle n'est pas disponible
      * @returns {Promise<string>} - La clé API
      * @throws {Error} - Si la clé API n'est pas trouvée
-     * @deprecated Utiliser window.BabelFishAIUtils.api.getOrFetchApiKey à la place
+     * @deprecated Utiliser globalThis.BabelFishAIUtils.api.getOrFetchApiKey à la place
      */
     // La fonction locale getOrFetchApiKey a été supprimée car elle était obsolète.
-    // L'appel a été remplacé par window.BabelFishAIUtils.api.getOrFetchApiKey directement.
+    // L'appel a été remplacé par globalThis.BabelFishAIUtils.api.getOrFetchApiKey directement.
 
     /**
      * Reformule un texte sélectionné sans enregistrement audio
@@ -311,8 +311,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Informer l'utilisateur que la reformulation est en cours
-            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
-            window.BabelFishAI.ui.showBanner(message);
+            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
+            globalThis.BabelFishAI.ui.showBanner(message);
 
             // Reformuler le texte (la clé API est gérée par resolveApiConfig dans rephraseText)
             const rephrasedText = await rephraseText(text);
@@ -325,15 +325,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Cacher la bannière une fois l'opération terminée
-            window.BabelFishAI.ui.hideBanner();
+            globalThis.BabelFishAI.ui.hideBanner();
 
             return rephrasedText;
         } catch (error) {
             console.error('Erreur lors de la reformulation:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation";
-            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
+            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation";
+            globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
         }
@@ -354,8 +354,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Informer l'utilisateur que la correction est en cours
-            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerCorrecting") || "Correction en cours...";
-            window.BabelFishAI.ui.showBanner(message);
+            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerCorrecting") || "Correction en cours...";
+            globalThis.BabelFishAI.ui.showBanner(message);
 
             // Corriger le texte
             const correctedText = await correctText(text);
@@ -368,15 +368,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Cacher la bannière une fois l'opération terminée
-            window.BabelFishAI.ui.hideBanner();
+            globalThis.BabelFishAI.ui.hideBanner();
 
             return correctedText;
         } catch (error) {
             console.error('Erreur lors de la correction:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerCorrectionError") || "Erreur lors de la correction";
-            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
+            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerCorrectionError") || "Erreur lors de la correction";
+            globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
         }
@@ -399,8 +399,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Informer l'utilisateur que la traduction est en cours
-            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
-            window.BabelFishAI.ui.showBanner(message);
+            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
+            globalThis.BabelFishAI.ui.showBanner(message);
 
             // Déterminer les langues source et cible
             const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
@@ -416,15 +416,15 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Cacher la bannière une fois l'opération terminée
-            window.BabelFishAI.ui.hideBanner();
+            globalThis.BabelFishAI.ui.hideBanner();
 
             return translatedText;
         } catch (error) {
             console.error('Erreur lors de la traduction:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
-            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
+            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
+            globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
         }
@@ -443,4 +443,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         determineTranslationLanguages
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

@@ -1,7 +1,7 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
 
-window.BabelFishAIProviders = (function () {
+globalThis.BabelFishAIProviders = (function () {
     'use strict';
 
     /**
@@ -113,7 +113,7 @@ window.BabelFishAIProviders = (function () {
 
         return PROVIDER_ORDER.filter(providerId => {
             const config = providersConfig[providerId];
-            return config && config.enabled && config.apiKey;
+            return config?.enabled && config?.apiKey;
         });
     }
 
@@ -124,11 +124,11 @@ window.BabelFishAIProviders = (function () {
      * @returns {string} URL de transcription à utiliser
      */
     function getTranscriptionUrl(providerId, customUrl) {
-        if (customUrl && customUrl.trim()) {
+        if (customUrl?.trim()) {
             return customUrl.trim();
         }
         const provider = getProvider(providerId);
-        return provider ? provider.defaultUrls.transcription : PROVIDERS.openai.defaultUrls.transcription;
+        return provider?.defaultUrls.transcription ?? PROVIDERS.openai.defaultUrls.transcription;
     }
 
     /**
@@ -138,11 +138,11 @@ window.BabelFishAIProviders = (function () {
      * @returns {string} URL de chat à utiliser
      */
     function getChatUrl(providerId, customUrl) {
-        if (customUrl && customUrl.trim()) {
+        if (customUrl?.trim()) {
             return customUrl.trim();
         }
         const provider = getProvider(providerId);
-        return provider ? provider.defaultUrls.chat : PROVIDERS.openai.defaultUrls.chat;
+        return provider?.defaultUrls.chat ?? PROVIDERS.openai.defaultUrls.chat;
     }
 
     /**
@@ -162,7 +162,10 @@ window.BabelFishAIProviders = (function () {
             : provider.chatModels;
 
         const defaultModel = models.find(m => m.default);
-        return defaultModel ? defaultModel.id : (models[0] ? models[0].id : null);
+        if (defaultModel) {
+            return defaultModel.id;
+        }
+        return models[0]?.id ?? null;
     }
 
     /**

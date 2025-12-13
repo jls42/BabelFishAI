@@ -1,6 +1,6 @@
 (async function () {
-    if (window.__whisperContentScriptHasRun) return;
-    window.__whisperContentScriptHasRun = true;
+    if (globalThis.__whisperContentScriptHasRun) return;
+    globalThis.__whisperContentScriptHasRun = true;
 
     // Charger le script de langues partagées comme un script standard
     try {
@@ -28,13 +28,13 @@
         await import(chrome.runtime.getURL('src/utils/ui.js'));
         await import(chrome.runtime.getURL('src/utils/api-utils.js'));
         // Initialisation après l'importation
-        await window.BabelFishAIUtils.i18n.init();
+        await globalThis.BabelFishAIUtils.i18n.init();
 
         // Créer l'espace de noms BabelFishAI pour les fonctions principales
-        window.BabelFishAI = window.BabelFishAI || {};
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
 
         // Initialiser l'espace de noms UI (les fonctions seront exposées plus bas dans le code)
-        window.BabelFishAI.ui = {};
+        globalThis.BabelFishAI.ui = {};
 
         // Créer un événement personnalisé pour signaler que i18n est chargé
         const i18nLoadedEvent = new CustomEvent('babelfishai:i18n-loaded');
@@ -46,13 +46,13 @@
     // Content script de l'extension de transcription vocale
 
     // Utilisation directe des constantes globales depuis constants.js
-    const CONFIG = window.BabelFishAIConstants.CONFIG;
+    const CONFIG = globalThis.BabelFishAIConstants.CONFIG;
     // API_CONFIG n'est plus utilisé directement dans ce fichier après refactorisation
-    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
+    const UI_CONFIG = globalThis.BabelFishAIConstants.UI_CONFIG;
 
     // Utilisation des constantes globales pour les types de messages
     // ACTIONS n'est plus utilisé directement dans ce fichier après refactorisation
-    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
+    const MESSAGE_TYPES = globalThis.BabelFishAIConstants.MESSAGE_TYPES;
 
     // CANCEL_MESSAGE n'est plus utilisé directement dans ce fichier après refactorisation
 
@@ -89,7 +89,7 @@
     async function initializeExtensionOptions() {
         try {
             // Initialisation de la clé API (assignation supprimée car apiKey n'est plus utilisé globalement ici)
-            await window.BabelFishAIUtils.api.getApiKey();
+            await globalThis.BabelFishAIUtils.api.getApiKey();
             // Pas besoin d'afficher d'erreur ici si la clé est null,
             // car getApiKey() gère déjà l'affichage d'un message approprié
         } catch (error) {
@@ -99,7 +99,7 @@
 
         // Initialisation des options de couleur du bandeau en utilisant l'utilitaire
         try {
-            const result = await window.BabelFishAIUtils.api.getFromStorage({
+            const result = await globalThis.BabelFishAIUtils.api.getFromStorage({
                 bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
                 bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
                 bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
@@ -130,7 +130,7 @@
         if (!recordingBanner) return false;
 
         // Utiliser la fonction de l'utilitaire banner pour mettre à jour la couleur du bandeau
-        window.BabelFishAIUtils.banner.updateBannerColor(
+        globalThis.BabelFishAIUtils.banner.updateBannerColor(
             recordingBanner,
             bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
             bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
@@ -147,7 +147,7 @@
      */
     // Utilisation de la fonction startRecording depuis recording-utils.js
     function startRecording() {
-        return window.BabelFishAIUtils.recording.startRecording();
+        return globalThis.BabelFishAIUtils.recording.startRecording();
     }
 
     // La fonction processRecordedAudio a été déplacée vers recording-utils.js
@@ -163,7 +163,7 @@
      */
     function stopRecording(cancelProcessing = false) {
         // Utiliser la fonction stopRecording de recording-utils.js
-        return window.BabelFishAIUtils.recording.stopRecording(cancelProcessing);
+        return globalThis.BabelFishAIUtils.recording.stopRecording(cancelProcessing);
     }
 
     /**
@@ -172,7 +172,7 @@
      */
     function cancelRecording() {
         // Utiliser la fonction cancelRecording de recording-utils.js
-        return window.BabelFishAIUtils.recording.cancelRecording();
+        return globalThis.BabelFishAIUtils.recording.cancelRecording();
     }
 
 
@@ -182,7 +182,7 @@
      * @returns {Promise<string>} Le texte transcrit
      */
     // La fonction transcribeAudio locale a été supprimée car la logique est maintenant gérée
-    // par les modules utilitaires (e.g., window.BabelFishAIUtils.api.transcribeAudio)
+    // par les modules utilitaires (e.g., globalThis.BabelFishAIUtils.api.transcribeAudio)
 
     /**
      * Récupère les options d'affichage et de traduction depuis le stockage
@@ -190,14 +190,14 @@
      */
     function getDisplayOptions() {
         // Cette fonction a été migrée vers transcription-display.js
-        return window.BabelFishAIUtils.display.getDisplayOptions();
+        return globalThis.BabelFishAIUtils.display.getDisplayOptions();
     }
 
     // La fonction rephraseTextIfEnabled locale a été supprimée car la logique est maintenant gérée
-    // par les modules utilitaires (e.g., window.BabelFishAIUtils.textProcessing.handleTextRephrasing)
+    // par les modules utilitaires (e.g., globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing)
 
     // La fonction translateTextIfEnabled locale a été supprimée car la logique est maintenant gérée
-    // par les modules utilitaires (e.g., window.BabelFishAIUtils.textProcessing.handleTextTranslation)
+    // par les modules utilitaires (e.g., globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation)
 
     // La fonction displayTranscriptionText locale a été supprimée car la logique est maintenant gérée
     // par le module transcription-display.js
@@ -209,7 +209,7 @@
      */
     function showTranscription(text) {
         // Cette fonction a été migrée vers transcription-display.js
-        return window.BabelFishAIUtils.display.showTranscription(text);
+        return globalThis.BabelFishAIUtils.display.showTranscription(text);
     }
 
     /**
@@ -219,7 +219,7 @@
      */
     function isValidElementForInsertion(activeElement) {
         // Cette fonction a été migrée vers focus-utils.js
-        return window.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
+        return globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
     }
 
     // La fonction insertInContentEditable locale a été supprimée car la logique est maintenant gérée
@@ -238,7 +238,7 @@
      */
     function showTranscriptionDialog(text, duration) {
         // Cette fonction a été migrée vers transcription-display.js
-        return window.BabelFishAIUtils.display.showTranscriptionDialog(text, duration);
+        return globalThis.BabelFishAIUtils.display.showTranscriptionDialog(text, duration);
     }
 
     // Fonction de débogage supprimée - nous utilisons maintenant une approche directe
@@ -271,7 +271,7 @@
         }
 
         // Utiliser la fonction du module banner-utils pour créer la bannière
-        recordingBanner = window.BabelFishAIUtils.banner.initBanner();
+        recordingBanner = globalThis.BabelFishAIUtils.banner.initBanner();
 
         // Insérer la bannière dans le document
         if (document.body) {
@@ -301,11 +301,11 @@
      */
     function showBanner(text, type = MESSAGE_TYPES.INFO) {
         // Utiliser la fonction de l'utilitaire banner-utils pour afficher la bannière
-        return window.BabelFishAIUtils.banner.showBanner(
+        return globalThis.BabelFishAIUtils.banner.showBanner(
             recordingBanner,
             text,
             type,
-            window.BabelFishAIUtils.recording.isCurrentlyRecording(),
+            globalThis.BabelFishAIUtils.recording.isCurrentlyRecording(),
             updateBannerColor
         );
     }
@@ -315,11 +315,11 @@
      * @returns {boolean} - Indique si l'opération a réussi
      */
     function hideBanner() {
-        return window.BabelFishAIUtils.banner.toggleBannerVisibility(recordingBanner, false);
+        return globalThis.BabelFishAIUtils.banner.toggleBannerVisibility(recordingBanner, false);
     }
 
     // Les fonctions UI seront exposées plus bas dans le code
-    // dans l'objet window.BabelFishAI.ui
+    // dans l'objet globalThis.BabelFishAI.ui
 
     /**
      * Gère les erreurs de manière centralisée en affichant un message à l'utilisateur
@@ -329,7 +329,7 @@
      */
     function handleError(displayMessage, errorMessage) {
         // Utiliser la fonction du module error-utils
-        return window.BabelFishAIUtils.error.handleError(displayMessage, errorMessage);
+        return globalThis.BabelFishAIUtils.error.handleError(displayMessage, errorMessage);
     }
 
     /**
@@ -345,11 +345,11 @@
         }
 
         // Utiliser la fonction du module banner-utils
-        return window.BabelFishAIUtils.banner.showStatus(recordingBanner, text, type);
+        return globalThis.BabelFishAIUtils.banner.showStatus(recordingBanner, text, type);
     }
 
-    // Exposer les fonctions d'interface utilisateur dans l'espace de noms window.BabelFishAI.ui
-    window.BabelFishAI.ui = {
+    // Exposer les fonctions d'interface utilisateur dans l'espace de noms globalThis.BabelFishAI.ui
+    globalThis.BabelFishAI.ui = {
         showBanner,
         hideBanner,
         handleError,
@@ -359,20 +359,20 @@
         getBanner: () => recordingBanner
     };
 
-    // Exposer les fonctions d'enregistrement dans l'espace de noms window.BabelFishAI
-    window.BabelFishAI.startRecording = startRecording;
-    window.BabelFishAI.stopRecording = stopRecording;
-    window.BabelFishAI.cancelRecording = cancelRecording;
+    // Exposer les fonctions d'enregistrement dans l'espace de noms globalThis.BabelFishAI
+    globalThis.BabelFishAI.startRecording = startRecording;
+    globalThis.BabelFishAI.stopRecording = stopRecording;
+    globalThis.BabelFishAI.cancelRecording = cancelRecording;
 
-    // Exposer les fonctions de traitement de texte dans l'espace de noms window.BabelFishAI
-    window.BabelFishAI.handleTextRephrasing = handleTextRephrasing;
-    window.BabelFishAI.handleTextCorrection = handleTextCorrection;
-    window.BabelFishAI.handleTextTranslation = handleTextTranslation;
-    window.BabelFishAI.isValidInputText = isValidInputText;
+    // Exposer les fonctions de traitement de texte dans l'espace de noms globalThis.BabelFishAI
+    globalThis.BabelFishAI.handleTextRephrasing = handleTextRephrasing;
+    globalThis.BabelFishAI.handleTextCorrection = handleTextCorrection;
+    globalThis.BabelFishAI.handleTextTranslation = handleTextTranslation;
+    globalThis.BabelFishAI.isValidInputText = isValidInputText;
 
     // Exposer la fonction de mise à jour de la couleur du bandeau
     // Cette fonction est appelée depuis event-handlers.js lors des changements d'options
-    window.BabelFishAI.updateBannerColor = updateBannerColor;
+    globalThis.BabelFishAI.updateBannerColor = updateBannerColor;
 
     /**
      * Reformule un texte sélectionné sans enregistrement audio
@@ -386,7 +386,7 @@
      */
     function isValidInputText(text) {
         // Utiliser la fonction du module text-processing
-        return window.BabelFishAIUtils.textProcessing.isValidInputText(text);
+        return globalThis.BabelFishAIUtils.textProcessing.isValidInputText(text);
     }
 
     // La fonction getOrFetchApiKey locale a été supprimée car la logique est maintenant gérée
@@ -399,7 +399,7 @@
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertTextInEditableElement(activeElement, newText) {
-        return window.BabelFishAIUtils.focus.insertTextInEditableElement(activeElement, newText);
+        return globalThis.BabelFishAIUtils.focus.insertTextInEditableElement(activeElement, newText);
     }
 
     // La fonction insertInInputElement locale a été supprimée car la logique est maintenant gérée
@@ -415,10 +415,10 @@
     async function handleTextRephrasing(text) {
         try {
             // Stocker l'élément actif avant de commencer le traitement
-            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Utiliser la fonction du module text-processing pour la reformulation
-            const rephrasedText = await window.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
+            const rephrasedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
 
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
@@ -449,10 +449,10 @@
     async function handleTextCorrection(text) {
         try {
             // Stocker l'élément actif avant de commencer le traitement
-            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Utiliser la fonction du module text-processing pour la correction
-            const correctedText = await window.BabelFishAIUtils.textProcessing.handleTextCorrection(text);
+            const correctedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextCorrection(text);
 
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
@@ -493,13 +493,13 @@
     async function handleTextTranslation(text, specifiedTargetLanguage) {
         try {
             // Stocker l'élément actif avant de commencer le traitement
-            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Obtenir les options de traduction
             const options = await getDisplayOptions();
 
             // Utiliser la fonction du module text-processing pour la traduction
-            const translatedText = await window.BabelFishAIUtils.textProcessing.handleTextTranslation(text, options, specifiedTargetLanguage);
+            const translatedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(text, options, specifiedTargetLanguage);
 
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
@@ -522,19 +522,19 @@
     // La fonction handleBackgroundMessages a été déplacée vers event-handlers.js
 
     // Initialiser le module de gestion d'événements avec les références nécessaires
-    window.BabelFishAIUtils.events.init({
+    globalThis.BabelFishAIUtils.events.init({
         recordingBanner,
         bannerColorStart,
         bannerColorEnd
     });
 
     // Écouter les messages du background script en utilisant la fonction du module event-handlers.js
-    chrome.runtime.onMessage.addListener(window.BabelFishAIUtils.events.handleBackgroundMessages);
+    chrome.runtime.onMessage.addListener(globalThis.BabelFishAIUtils.events.handleBackgroundMessages);
 
     // La fonction handleKeyboardEvents a été déplacée vers event-handlers.js
 
     // Ajouter l'écouteur d'événement pour les touches du clavier en utilisant la fonction du module event-handlers.js
-    document.addEventListener('keydown', window.BabelFishAIUtils.events.handleKeyboardEvents);
+    document.addEventListener('keydown', globalThis.BabelFishAIUtils.events.handleKeyboardEvents);
 
     /**
      * Met à jour les options de couleur du bandeau
@@ -545,5 +545,5 @@
     // La fonction handleStorageChanges a été déplacée vers event-handlers.js
 
     // Écouter les changements dans les options en utilisant la fonction du module event-handlers.js
-    chrome.storage.onChanged.addListener(window.BabelFishAIUtils.events.handleStorageChanges);
+    chrome.storage.onChanged.addListener(globalThis.BabelFishAIUtils.events.handleStorageChanges);
 })();

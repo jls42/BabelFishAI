@@ -1,11 +1,11 @@
 // Utilitaires de gestion des événements pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Référence aux constantes globales
-    const ACTIONS = window.BabelFishAIConstants.ACTIONS;
+    const ACTIONS = globalThis.BabelFishAIConstants.ACTIONS;
 
     // Variables pour stocker les références aux fonctions externes
     let recordingBanner = null;
@@ -32,29 +32,29 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
                 // Utiliser la fonction isCurrentlyRecording de recording-utils.js pour vérifier l'état d'enregistrement
-                if (!window.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-                    window.BabelFishAI.startRecording();
+                if (!globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
+                    globalThis.BabelFishAI.startRecording();
                 } else {
-                    window.BabelFishAI.stopRecording();
+                    globalThis.BabelFishAI.stopRecording();
                 }
             },
             // Action pour la reformulation de texte sélectionné
             rephraseSelection: () => {
                 if (message.text) {
-                    window.BabelFishAI.handleTextRephrasing(message.text);
+                    globalThis.BabelFishAI.handleTextRephrasing(message.text);
                 }
             },
             // Action pour la traduction de texte sélectionné
             translateSelection: () => {
                 if (message.text) {
                     // Passer la langue cible spécifiée, si disponible
-                    window.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
+                    globalThis.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
                 }
             },
             // Action pour la correction orthographique de texte sélectionné
             correctSelection: () => {
                 if (message.text) {
-                    window.BabelFishAI.handleTextCorrection(message.text);
+                    globalThis.BabelFishAI.handleTextCorrection(message.text);
                 }
             }
         };
@@ -78,8 +78,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleKeyboardEvents(event) {
         // La touche Échap (code 27) pour annuler l'enregistrement
-        if (event.key === 'Escape' && window.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-            window.BabelFishAI.cancelRecording();
+        if (event.key === 'Escape' && globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
+            globalThis.BabelFishAI.cancelRecording();
             // Empêcher les gestionnaires d'événements par défaut et la propagation
             event.preventDefault();
             event.stopPropagation();
@@ -100,7 +100,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         if (hasColorChanges) {
-            window.BabelFishAI.updateBannerColor(true);
+            globalThis.BabelFishAI.updateBannerColor(true);
         }
     }
 
@@ -198,7 +198,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} enableTranslation - Indique si la traduction est activée
      */
     function updateTranslateButton(translateButton, enableTranslation) {
-        translateButton.setAttribute('data-active', String(enableTranslation));
+        translateButton.dataset.active = String(enableTranslation);
     }
 
     /**
@@ -298,7 +298,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const rephraseButton = recordingBanner?.querySelector('#whisper-rephrase-control');
             if (rephraseButton) {
                 // Mettre à jour l'attribut data-active pour changer l'état visuel du bouton
-                rephraseButton.setAttribute('data-active', String(changes.enableRephrase.newValue));
+                rephraseButton.dataset.active = String(changes.enableRephrase.newValue);
             }
         }
     }
@@ -344,4 +344,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         handleStorageChanges
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

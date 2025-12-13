@@ -1,7 +1,7 @@
 // Script de gestion des options
 document.addEventListener('DOMContentLoaded', async () => {
-    const i18n = window.BabelFishAIUtils.i18n;
-    const Providers = window.BabelFishAIProviders;
+    const i18n = globalThis.BabelFishAIUtils.i18n;
+    const Providers = globalThis.BabelFishAIProviders;
 
     // Éléments du DOM - Providers (nouveau design dropdown + panel)
     const providerSelector = document.getElementById('providerSelector');
@@ -182,7 +182,10 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function updateDropdownStatus() {
         const providers = ['mistral', 'openai', 'custom'];
-        let statusHtml = '';
+        const shortNames = { openai: 'OAI', mistral: 'Mis', custom: 'Cus' };
+
+        // Vider le contenu existant de manière sécurisée
+        dropdownStatus.textContent = '';
 
         providers.forEach(providerId => {
             const status = getProviderStatus(providerId);
@@ -199,12 +202,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 symbol = '○';
             }
 
-            // Nom court pour le badge
-            const shortNames = { openai: 'OAI', mistral: 'Mis', custom: 'Cus' };
-            statusHtml += `<span class="${cssClass}" title="${status.name}">${symbol} ${shortNames[providerId]}</span>`;
+            // Créer l'élément span de manière sécurisée (pas d'innerHTML)
+            const span = document.createElement('span');
+            span.className = cssClass;
+            span.title = status.name;
+            span.textContent = `${symbol} ${shortNames[providerId]}`;
+            dropdownStatus.appendChild(span);
         });
-
-        dropdownStatus.innerHTML = statusHtml;
     }
 
     /**
@@ -516,7 +520,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupProviderPasswordToggles() {
         document.querySelectorAll('.provider-card .toggle-password').forEach(button => {
             button.addEventListener('click', () => {
-                const targetId = button.getAttribute('data-target');
+                const targetId = button.dataset.target;
                 const input = document.getElementById(targetId);
                 if (input) {
                     input.type = input.type === 'password' ? 'text' : 'password';
@@ -559,9 +563,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Récupérer les modèles par défaut depuis providers.js
         const providerDef = Providers.getProvider(providerId);
-        const defaultModels = providerDef
-            ? (modelType === 'transcription' ? providerDef.transcriptionModels : providerDef.chatModels)
-            : [];
+        let defaultModels = [];
+        if (providerDef) {
+            defaultModels = modelType === 'transcription'
+                ? providerDef.transcriptionModels
+                : providerDef.chatModels;
+        }
 
         // Ajouter les modèles par défaut
         defaultModels.forEach(model => {
@@ -748,11 +755,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             apiKey: legacyApiKey,
             activeDisplay: activeDisplayCheckbox.checked,
             dialogDisplay: dialogDisplayCheckbox.checked,
-            dialogDuration: parseInt(dialogDurationInput.value),
+            dialogDuration: Number.parseInt(dialogDurationInput.value, 10),
             autoCopy: autoCopyCheckbox.checked,
             bannerColorStart: bannerColorStartInput.value,
             bannerColorEnd: bannerColorEndInput.value,
-            bannerOpacity: parseInt(bannerOpacityInput.value),
+            bannerOpacity: Number.parseInt(bannerOpacityInput.value, 10),
             enableRephrase: enableRephraseCheckbox.checked,
             enableTranslation: enableTranslationCheckbox.checked,
             sourceLanguage: sourceLanguageSelect.value,
@@ -827,12 +834,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const opacity = bannerOpacityInput.value / 100;
 
         try {
-            const startR = parseInt(startColor.substr(1, 2), 16);
-            const startG = parseInt(startColor.substr(3, 2), 16);
-            const startB = parseInt(startColor.substr(5, 2), 16);
-            const endR = parseInt(endColor.substr(1, 2), 16);
-            const endG = parseInt(endColor.substr(3, 2), 16);
-            const endB = parseInt(endColor.substr(5, 2), 16);
+            const startR = Number.parseInt(startColor.substr(1, 2), 16);
+            const startG = Number.parseInt(startColor.substr(3, 2), 16);
+            const startB = Number.parseInt(startColor.substr(5, 2), 16);
+            const endR = Number.parseInt(endColor.substr(1, 2), 16);
+            const endG = Number.parseInt(endColor.substr(3, 2), 16);
+            const endB = Number.parseInt(endColor.substr(5, 2), 16);
 
             colorPreview.style.background = `linear-gradient(45deg,
                 rgba(${startR}, ${startG}, ${startB}, ${opacity}),
