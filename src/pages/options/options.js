@@ -1,4 +1,5 @@
 // Script de gestion des options
+/* global chrome */ // Chrome extension API global
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
@@ -351,6 +352,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
+        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
         chrome.storage.sync.get({
             providers: null,
             transcriptionProvider: 'openai',
@@ -499,7 +501,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             enabledProviders
         });
 
-        // eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
         chrome.storage.sync.set({
             providers,
             transcriptionProvider,
@@ -507,9 +509,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Legacy keys pour rétrocompatibilité
             apiKey: legacyApiKey
         }, () => {
-            // eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
+            // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
             if (chrome.runtime.lastError) {
-                // eslint-disable-next-line no-undef -- 'chrome' is a global provided by Chrome extension environment
+                // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
                 console.error('[Options] Error saving:', chrome.runtime.lastError);
             } else {
                 console.log('[Options] Config saved successfully');
@@ -707,10 +709,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialiser la langue de l'interface
     const currentLang = await new Promise(resolve => {
+        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
         chrome.storage.sync.get({
             interfaceLanguage: null // On initialise à null pour vérifier si une valeur existe
         }, result => {
             // Si interfaceLanguage est null, on utilise la langue du navigateur
+            // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
             resolve(result.interfaceLanguage || chrome.i18n.getUILanguage());
         });
     });
@@ -719,6 +723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Charger les options sauvegardées
     function loadOptions() {
+        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
         chrome.storage.sync.get({
             apiKey: '',
             activeDisplay: true,
@@ -785,6 +790,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             )
         };
 
+        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
             if (scrollToStatus) {
@@ -947,6 +953,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Event listeners - Modèles pour tous les providers
     Object.keys(providerModelElements).forEach(providerId => {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId comes from Object.keys()
         const elements = providerModelElements[providerId];
         // Boutons d'ajout de modèles
         if (elements.addTranscriptionButton) {
