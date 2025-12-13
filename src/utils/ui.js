@@ -175,49 +175,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Affiche la bannière avec un message et accessibilité améliorée
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} text - Le message à afficher
-     * @param {string} type - Le type de message ('info' ou 'error')
-     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
-     * @param {Function} [updateColorCallback] - Callback pour mettre à jour la couleur du bandeau
-     * @returns {boolean} - Indique si l'affichage a réussi
-     */
-    // eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne
-    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) { // NOSONAR skipcq: JS-0128
-        // Vérifier si la bannière existe
-        if (!banner) {
-            console.warn('Banner element is null or undefined');
-            return false;
-        }
-
-        try {
-            // 1. Mettre à jour le texte
-            updateBannerText(banner, text);
-
-            // 2. Configurer les classes CSS
-            setBannerClasses(banner, type, isRecording);
-
-            // 3. Configurer l'accessibilité
-            setupBannerAccessibility(banner, type, isRecording, text);
-
-            // 4. Configurer l'animation
-            setupBannerAnimation(banner, type);
-
-            // 5. Rendre la bannière visible
-            showBannerElement(banner);
-
-            // 6. Mettre à jour la couleur si nécessaire
-            updateBannerColorIfNeeded(type, updateColorCallback);
-
-            return true;
-        } catch (error) {
-            console.error('Erreur lors de l\'affichage de la bannière:', error);
-            return false;
-        }
-    }
-
-    /**
      * Crée un bouton de copie pour le texte avec accessibilité améliorée
      * @param {string} text - Le texte à copier
      * @param {Function} onError - Fonction de callback en cas d'erreur
@@ -729,40 +686,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         return textElement;
     }
 
-    /**
-     * Cache la bannière en modifiant son style d'affichage
-     * @param {HTMLElement} banner - L'élément bannière à cacher
-     * @returns {boolean} - Indique si l'opération a réussi
-     */
-    // eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne
-    function hideBanner(banner) { // NOSONAR skipcq: JS-0128
-        try {
-            // Vérifier si la bannière existe
-            if (!banner) {
-                return false;
-            }
-
-            // Cacher la bannière en modifiant son style d'affichage
-            banner.style.display = 'none';
-
-            // Enlever le padding du body quand la bannière est cachée
-            if (document.body) {
-                document.body.style.paddingTop = '0';
-            }
-
-            return true;
-        } catch (error) {
-            console.error("Error hiding banner:", error);
-            return false;
-        }
-    }
-
-    // Note: La fonction createBannerButton a été déplacée vers banner-utils.js
+    // Note: Les fonctions createBannerButton, showBanner et hideBanner ont été déplacées vers banner-utils.js
 
     // Exporter uniquement les fonctions utilisées publiquement
-    // Les fonctions internes (createCopyButton, createTranscriptionContainer, removeTranscriptionElement,
-    // createTimerElements, createToggleElements, createControlsContainer, setupAutoRemoval,
-    // hideBanner, showBanner) restent disponibles en interne mais ne sont plus exposées
     exports.ui = {
         showTextInDialog,
         updateBannerColor

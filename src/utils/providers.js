@@ -1,81 +1,70 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
-/* eslint-disable max-lines-per-function -- Provider definitions require declarative config structure */
 
-globalThis.BabelFishAIProviders = (function () {
+/**
+ * Définition des providers IA disponibles
+ * Chaque provider contient ses URLs par défaut et ses modèles supportés
+ */
+const BABEL_PROVIDERS = {
+    openai: {
+        id: 'openai',
+        name: 'OpenAI',
+        defaultUrls: {
+            transcription: 'https://api.openai.com/v1/audio/transcriptions',
+            chat: 'https://api.openai.com/v1/chat/completions'
+        },
+        transcriptionModels: [
+            { id: 'whisper-1', name: 'whisper-1', default: true },
+            { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
+            { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' }
+        ],
+        chatModels: [
+            { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
+            { id: 'gpt-4o', name: 'gpt-4o' },
+            { id: 'gpt-4.1', name: 'gpt-4.1' },
+            { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
+            { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
+        ],
+        supportsNoLog: true
+    },
+    mistral: {
+        id: 'mistral',
+        name: 'Mistral AI',
+        defaultUrls: {
+            transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
+            chat: 'https://api.mistral.ai/v1/chat/completions'
+        },
+        transcriptionModels: [
+            { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true }
+        ],
+        chatModels: [
+            { id: 'mistral-small-latest', name: 'Mistral Small', default: true },
+            { id: 'mistral-medium-latest', name: 'Mistral Medium' },
+            { id: 'mistral-large-latest', name: 'Mistral Large' },
+            { id: 'codestral-latest', name: 'Codestral' }
+        ],
+        supportsNoLog: false
+    },
+    custom: {
+        id: 'custom',
+        name: 'Custom/LiteLLM',
+        defaultUrls: { transcription: '', chat: '' },
+        transcriptionModels: [
+            { id: 'whisper-1', name: 'whisper-1', default: true },
+            { id: 'whisper', name: 'whisper' }
+        ],
+        chatModels: [
+            { id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }
+        ],
+        supportsNoLog: true
+    }
+};
+
+/** Liste ordonnée des IDs de providers (pour l'affichage UI) */
+const BABEL_PROVIDER_ORDER = ['openai', 'mistral', 'custom'];
+
+globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
-
-    /**
-     * Définition des providers IA disponibles
-     * Chaque provider contient ses URLs par défaut et ses modèles supportés
-     */
-    const PROVIDERS = {
-        openai: {
-            id: 'openai',
-            name: 'OpenAI',
-            defaultUrls: {
-                transcription: 'https://api.openai.com/v1/audio/transcriptions',
-                chat: 'https://api.openai.com/v1/chat/completions'
-            },
-            transcriptionModels: [
-                { id: 'whisper-1', name: 'whisper-1', default: true },
-                { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
-                { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' }
-            ],
-            chatModels: [
-                { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
-                { id: 'gpt-4o', name: 'gpt-4o' },
-                { id: 'gpt-4.1', name: 'gpt-4.1' },
-                { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
-                { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
-            ],
-            // Supporte l'option NoLog via LiteLLM Proxy
-            supportsNoLog: true
-        },
-        mistral: {
-            id: 'mistral',
-            name: 'Mistral AI',
-            defaultUrls: {
-                transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
-                chat: 'https://api.mistral.ai/v1/chat/completions'
-            },
-            transcriptionModels: [
-                { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true }
-            ],
-            chatModels: [
-                { id: 'mistral-small-latest', name: 'Mistral Small', default: true },
-                { id: 'mistral-medium-latest', name: 'Mistral Medium' },
-                { id: 'mistral-large-latest', name: 'Mistral Large' },
-                { id: 'codestral-latest', name: 'Codestral' }
-            ],
-            // Mistral n'a pas besoin de l'option NoLog
-            supportsNoLog: false
-        },
-        custom: {
-            id: 'custom',
-            name: 'Custom/LiteLLM',
-            // URLs obligatoires - pas de défaut, l'utilisateur doit les configurer
-            defaultUrls: {
-                transcription: '',
-                chat: ''
-            },
-            // Modèles par défaut communs, l'utilisateur peut en ajouter
-            transcriptionModels: [
-                { id: 'whisper-1', name: 'whisper-1', default: true },
-                { id: 'whisper', name: 'whisper' }
-            ],
-            chatModels: [
-                { id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }
-            ],
-            // Supporte l'option NoLog (LiteLLM)
-            supportsNoLog: true
-        }
-    };
-
-    /**
-     * Liste ordonnée des IDs de providers (pour l'affichage UI)
-     */
-    const PROVIDER_ORDER = ['openai', 'mistral', 'custom'];
 
     /**
      * Récupère un provider par son ID
@@ -351,4 +340,4 @@ globalThis.BabelFishAIProviders = (function () {
         createDefaultProvidersConfig,
         isValidUrl
     };
-})();
+})(BABEL_PROVIDERS, BABEL_PROVIDER_ORDER);

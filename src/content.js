@@ -1,5 +1,5 @@
 /* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
-// eslint-disable-next-line unicorn/prefer-top-level-await -- IIFE required for Chrome extension content scripts isolation
+/* eslint-disable security/detect-non-literal-fs-filename -- chrome.runtime.getURL returns safe extension-internal URLs */
 (async function () {
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;

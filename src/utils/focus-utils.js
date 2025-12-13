@@ -210,32 +210,32 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Normalise le texte en remplaçant les sauts de ligne par des balises <br>.
-     * @param {string} text - Le texte à normaliser.
-     * @returns {string} - Le texte normalisé et sécurisé.
+     * Échappe les caractères HTML dangereux
+     * @param {string} text - Le texte à échapper
+     * @returns {string} - Le texte échappé
      */
-    function normalizeText(text) {
-        // Remplacer les sauts de ligne par des balises <br>
-        // skipcq: JS-0440 - False positive: static '<br>' string is safe, result is passed to sanitizeHTML() for XSS protection
-        // eslint-disable-next-line security/detect-non-literal-regexp -- False positive: static '<br>' string is safe, result sanitized
-        const textWithBr = text.replaceAll('\n', '<br>');
-
-        // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
-        // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction
-        if (typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function') {
-            return globalThis.BabelFishAIUtils.i18n.sanitizeHTML(textWithBr);
-        }
-
-        // Fallback si la fonction sanitizeHTML n'est pas disponible: échapper le HTML pour la sécurité
-        console.warn('sanitizeHTML function not found. Falling back to basic HTML escaping.');
-        const escapedText = textWithBr
+    function escapeHtml(text) {
+        return text
             .replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
             .replaceAll('>', '&gt;')
             .replaceAll('"', '&quot;')
             .replaceAll("'", '&#039;');
-        // Note: Les <br> seront aussi échappés, ce qui n'est pas idéal mais plus sûr.
-        return escapedText;
+    }
+
+    /**
+     * Normalise le texte en l'échappant puis en remplaçant les sauts de ligne par des balises <br>.
+     * L'ordre est important: d'abord échapper, puis ajouter les <br> pour éviter XSS.
+     * @param {string} text - Le texte à normaliser.
+     * @returns {string} - Le texte normalisé et sécurisé.
+     */
+    function normalizeText(text) {
+        // 1. D'abord échapper le HTML pour éviter XSS
+        const sanitize = globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML;
+        const escapedText = typeof sanitize === 'function' ? sanitize(text) : escapeHtml(text);
+
+        // 2. Ensuite remplacer les sauts de ligne par <br> (safe car le texte est déjà échappé)
+        return escapedText.replaceAll('\n', '<br>');
     }
 
     /**

@@ -151,7 +151,6 @@ Example: `globalThis.BabelFishAIUtils.recording.startRecording()` to call a reco
 
 ## Known Issues & Solutions
 
-- **Banner not disappearing on cancel**: Use `hideBanner` directly with reduced delay
 - **Code duplication**: Centralize function exposure in single block per module
 - **NoLog option**: Only for LiteLLM Proxy, causes errors with official OpenAI API
 

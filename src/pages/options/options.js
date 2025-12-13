@@ -1,6 +1,5 @@
 // Script de gestion des options
 /* global chrome */ // Chrome extension API global
-/* eslint-disable complexity, max-lines-per-function -- Options UI requires multi-provider handling with inherent complexity */
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
@@ -291,20 +290,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Vérifie si un provider standard (OpenAI/Mistral) est activé
+     * @param {HTMLInputElement} checkbox - Checkbox d'activation
+     * @param {HTMLInputElement} apiKeyInput - Input de la clé API
+     * @returns {boolean}
+     */
+    function isStandardProviderEnabled(checkbox, apiKeyInput) {
+        return checkbox.checked && Boolean(apiKeyInput.value.trim());
+    }
+
+    /**
+     * Vérifie si le provider custom est activé (nécessite URLs en plus)
+     * @returns {boolean}
+     */
+    function isCustomProviderEnabled() {
+        const hasApiKey = customEnabledCheckbox.checked && Boolean(customApiKeyInput.value.trim());
+        const hasUrls = Boolean(customTranscriptionUrlInput.value.trim()) && Boolean(customChatUrlInput.value.trim());
+        return hasApiKey && hasUrls;
+    }
+
+    /**
      * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom)
      * @returns {string[]} Liste des IDs
      */
     function getEnabledProviderIds() {
         const enabled = [];
-        if (mistralEnabledCheckbox.checked && mistralApiKeyInput.value.trim()) {
+        if (isStandardProviderEnabled(mistralEnabledCheckbox, mistralApiKeyInput)) {
             enabled.push('mistral');
         }
-        if (openaiEnabledCheckbox.checked && openaiApiKeyInput.value.trim()) {
+        if (isStandardProviderEnabled(openaiEnabledCheckbox, openaiApiKeyInput)) {
             enabled.push('openai');
         }
-        // Pour custom, vérifier aussi les URLs obligatoires
-        if (customEnabledCheckbox.checked && customApiKeyInput.value.trim() &&
-            customTranscriptionUrlInput.value.trim() && customChatUrlInput.value.trim()) {
+        if (isCustomProviderEnabled()) {
             enabled.push('custom');
         }
         return enabled;
@@ -350,6 +367,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Charge la configuration d'un provider standard (OpenAI/Mistral)
+     * @param {Object} config - Configuration du provider
+     * @param {HTMLInputElement} apiKeyInput - Input de la clé API
+     * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
+     */
+    function loadStandardProviderConfig(config, apiKeyInput, enabledCheckbox) {
+        apiKeyInput.value = config.apiKey || '';
+        enabledCheckbox.checked = config.enabled || false;
+    }
+
+    /**
+     * Charge la configuration du provider custom
+     * @param {Object} config - Configuration du provider custom
+     */
+    function loadCustomProviderConfig(config) {
+        customApiKeyInput.value = config.apiKey || '';
+        customEnabledCheckbox.checked = config.enabled || false;
+        customTranscriptionUrlInput.value = config.transcriptionUrl || '';
+        customChatUrlInput.value = config.chatUrl || '';
+    }
+
+    /**
+     * Peuple les sélecteurs de modèles pour tous les providers
+     * @param {Object} configs - Configurations des providers {openai, mistral, custom}
+     */
+    function populateAllModelSelects(configs) {
+        const providerIds = ['openai', 'mistral', 'custom'];
+        const modelTypes = ['transcription', 'chat'];
+
+        for (const providerId of providerIds) {
+            const config = configs[providerId] || {};
+            for (const modelType of modelTypes) {
+                const models = config[`${modelType}Models`] || [];
+                const selected = config[`selected${modelType.charAt(0).toUpperCase() + modelType.slice(1)}Model`];
+                populateProviderModelSelect(providerId, modelType, models, selected);
+            }
+        }
+    }
+
+    /**
+     * Met à jour l'affichage de tous les providers
+     */
+    function updateAllProviderDisplays() {
+        updateProviderDisplay('openai');
+        updateProviderDisplay('mistral');
+        updateProviderDisplay('custom');
+        updateDropdownStatus();
+        updatePanelBorder(providerSelector.value);
+    }
+
+    /**
+     * Restaure les sélecteurs de service si plusieurs providers sont actifs
+     * @param {Object} items - Items chargés du storage
+     */
+    function restoreServiceSelectors(items) {
+        const enabledProviders = getEnabledProviderIds();
+        if (enabledProviders.length <= 1) return;
+
+        populateServiceSelectors(enabledProviders);
+        if (enabledProviders.includes(items.transcriptionProvider)) {
+            transcriptionProviderSelect.value = items.transcriptionProvider;
+        }
+        if (enabledProviders.includes(items.chatProvider)) {
+            chatProviderSelect.value = items.chatProvider;
+        }
+    }
+
+    /**
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
@@ -358,71 +443,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             providers: null,
             transcriptionProvider: 'openai',
             chatProvider: 'openai',
-            // Legacy keys pour migration
-            apiKey: ''
+            apiKey: '' // Legacy key pour migration
         }, (items) => {
             // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
             console.log('[Options] Loading providers config:', items);
 
-            // Charger la configuration des providers
+            const configs = {
+                openai: items.providers?.openai || {},
+                mistral: items.providers?.mistral || {},
+                custom: items.providers?.custom || {}
+            };
+
             if (items.providers) {
                 // Mode multi-provider
-                const openaiConfig = items.providers.openai || {};
-                openaiApiKeyInput.value = openaiConfig.apiKey || '';
-                openaiEnabledCheckbox.checked = openaiConfig.enabled || false;
-
-                const mistralConfig = items.providers.mistral || {};
-                mistralApiKeyInput.value = mistralConfig.apiKey || '';
-                mistralEnabledCheckbox.checked = mistralConfig.enabled || false;
-
-                const customConfig = items.providers.custom || {};
-                customApiKeyInput.value = customConfig.apiKey || '';
-                customEnabledCheckbox.checked = customConfig.enabled || false;
-                customTranscriptionUrlInput.value = customConfig.transcriptionUrl || '';
-                customChatUrlInput.value = customConfig.chatUrl || '';
-
-                // Peupler les sélecteurs avec les modèles (par défaut + personnalisés)
-                populateProviderModelSelect('openai', 'transcription', openaiConfig.transcriptionModels || [], openaiConfig.selectedTranscriptionModel);
-                populateProviderModelSelect('openai', 'chat', openaiConfig.chatModels || [], openaiConfig.selectedChatModel);
-                populateProviderModelSelect('mistral', 'transcription', mistralConfig.transcriptionModels || [], mistralConfig.selectedTranscriptionModel);
-                populateProviderModelSelect('mistral', 'chat', mistralConfig.chatModels || [], mistralConfig.selectedChatModel);
-                populateProviderModelSelect('custom', 'transcription', customConfig.transcriptionModels || [], customConfig.selectedTranscriptionModel);
-                populateProviderModelSelect('custom', 'chat', customConfig.chatModels || [], customConfig.selectedChatModel);
+                loadStandardProviderConfig(configs.openai, openaiApiKeyInput, openaiEnabledCheckbox);
+                loadStandardProviderConfig(configs.mistral, mistralApiKeyInput, mistralEnabledCheckbox);
+                loadCustomProviderConfig(configs.custom);
             } else {
                 // Mode legacy : utiliser l'ancienne clé API pour OpenAI
                 openaiApiKeyInput.value = items.apiKey || '';
                 openaiEnabledCheckbox.checked = Boolean(items.apiKey);
                 mistralEnabledCheckbox.checked = false;
                 customEnabledCheckbox.checked = false;
-
-                // Peupler les sélecteurs avec les modèles par défaut
-                populateProviderModelSelect('openai', 'transcription', [], null);
-                populateProviderModelSelect('openai', 'chat', [], null);
-                populateProviderModelSelect('mistral', 'transcription', [], null);
-                populateProviderModelSelect('mistral', 'chat', [], null);
-                populateProviderModelSelect('custom', 'transcription', [], null);
-                populateProviderModelSelect('custom', 'chat', [], null);
             }
 
-            // Mettre à jour l'affichage des providers et des badges de statut
-            updateProviderDisplay('openai');
-            updateProviderDisplay('mistral');
-            updateProviderDisplay('custom');
-            updateDropdownStatus();
-            updatePanelBorder(providerSelector.value);
-
-            // Mettre à jour les sélecteurs de service après avoir chargé les providers
-            const enabledProviders = getEnabledProviderIds();
-            if (enabledProviders.length > 1) {
-                populateServiceSelectors(enabledProviders);
-                // Restaurer les valeurs sauvegardées
-                if (enabledProviders.includes(items.transcriptionProvider)) {
-                    transcriptionProviderSelect.value = items.transcriptionProvider;
-                }
-                if (enabledProviders.includes(items.chatProvider)) {
-                    chatProviderSelect.value = items.chatProvider;
-                }
-            }
+            populateAllModelSelects(configs);
+            updateAllProviderDisplays();
+            restoreServiceSelectors(items);
 
             // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
             console.log('[Options] Loaded - transcriptionProvider:', items.transcriptionProvider, 'chatProvider:', items.chatProvider);
@@ -646,54 +693,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Récupère les éléments DOM pour l'ajout de modèle
+     * @param {string} providerId - ID du provider
+     * @param {string} modelType - 'transcription' ou 'chat'
+     * @returns {{input: HTMLInputElement, select: HTMLSelectElement}|null}
+     */
+    function getModelAddElements(providerId, modelType) {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        const elements = providerModelElements[providerId];
+        if (!elements) return null;
+
+        const input = modelType === 'transcription' ? elements.newTranscriptionInput : elements.newChatInput;
+        const select = modelType === 'transcription' ? elements.transcriptionSelect : elements.chatSelect;
+        return (input && select) ? { input, select } : null;
+    }
+
+    /**
+     * Ajoute un modèle au cache s'il n'existe pas
+     * @param {string} providerId - ID du provider
+     * @param {string} modelType - Type de modèle
+     * @param {string} model - Nom du modèle
+     */
+    function addModelToCache(providerId, modelType, model) {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: controlled values
+        const cache = providerCustomModelsCache[providerId][modelType];
+        if (!cache.includes(model)) {
+            cache.push(model);
+        }
+    }
+
+    /**
      * Ajoute un modèle personnalisé à un provider
      * @param {string} providerId - ID du provider
      * @param {string} modelType - 'transcription' ou 'chat'
      */
     function addProviderModel(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
-        const elements = providerModelElements[providerId];
+        const elements = getModelAddElements(providerId, modelType);
         if (!elements) return;
 
-        const inputElement = modelType === 'transcription'
-            ? elements.newTranscriptionInput
-            : elements.newChatInput;
-        const selectElement = modelType === 'transcription'
-            ? elements.transcriptionSelect
-            : elements.chatSelect;
-
-        if (!inputElement || !selectElement) return;
-
-        const newModel = inputElement.value.trim();
+        const newModel = elements.input.value.trim();
         if (!newModel) return;
 
-        // Vérifier si le modèle existe déjà dans le select
-        const existingOptions = Array.from(selectElement.options).map(opt => opt.value);
+        const existingOptions = Array.from(elements.select.options).map(opt => opt.value);
         if (existingOptions.includes(newModel)) {
-            inputElement.value = '';
-            // Sélectionner le modèle existant
-            selectElement.value = newModel;
+            elements.input.value = '';
+            elements.select.value = newModel;
             return;
         }
 
-        // Ajouter au cache
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
-        if (!providerCustomModelsCache[providerId][modelType].includes(newModel)) {
-            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
-            providerCustomModelsCache[providerId][modelType].push(newModel);
-        }
+        addModelToCache(providerId, modelType, newModel);
 
-        // Ajouter au select
         const option = document.createElement('option');
         option.value = newModel;
         option.textContent = `${newModel} (custom)`;
         option.dataset.isCustom = 'true';
-        selectElement.appendChild(option);
+        elements.select.appendChild(option);
+        elements.select.value = newModel;
 
-        // Sélectionner le nouveau modèle
-        selectElement.value = newModel;
-
-        inputElement.value = '';
+        elements.input.value = '';
         debouncedSaveOptions();
     }
 
