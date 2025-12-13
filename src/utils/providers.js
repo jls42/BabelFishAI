@@ -82,6 +82,7 @@ globalThis.BabelFishAIProviders = (function () {
      * @returns {Object|null} Configuration du provider ou null si non trouvé
      */
     function getProvider(providerId) {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID ('openai'|'mistral'|'custom')
         return PROVIDERS[providerId] || null;
     }
 
@@ -112,6 +113,7 @@ globalThis.BabelFishAIProviders = (function () {
         }
 
         return PROVIDER_ORDER.filter(providerId => {
+            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is from PROVIDER_ORDER constant
             const config = providersConfig[providerId];
             return config?.enabled && config?.apiKey;
         });

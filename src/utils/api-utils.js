@@ -147,6 +147,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             : data.chatProvider;
 
         // Récupérer la configuration du provider (si multi-provider activé)
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID ('openai'|'mistral'|'custom')
         let providerConfig = data.providers?.[providerId];
 
         // Vérifier si le provider sélectionné a une configuration valide
@@ -266,6 +267,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Si un provider spécifique est demandé
         if (providerId && providerId !== config.providerId) {
             const data = await getFromStorage({ providers: null });
+            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
             return data.providers?.[providerId]?.apiKey || null;
         }
 
