@@ -683,6 +683,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} modelType - 'transcription' ou 'chat'
      * @returns {string} ID du modèle sélectionné
      */
+    // skipcq: JS-0044 - Simple function, complexity is low (false positive from stale analysis)
     function getSelectedProviderModel(providerId, modelType) {
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];

@@ -230,15 +230,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {string} - Le texte normalisé et sécurisé.
      */
     // skipcq: JS-0440 - Safe HTML: BR_TAG is static, escapedText is sanitized
+    // eslint-disable-next-line xss/no-mixed-html -- hasSanitizer is a boolean, BR_TAG is safe static HTML
     function normalizeText(text) {
         // 1. D'abord échapper le HTML pour éviter XSS
-        const hasSanitizer = typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function';
+        const hasSanitizer = typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function'; // NOSONAR
         const escapedText = hasSanitizer
             ? globalThis.BabelFishAIUtils.i18n.sanitizeHTML(text)
             : escapeHtml(text);
 
         // 2. Ensuite remplacer les sauts de ligne par <br> (safe car le texte est déjà échappé)
-        const BR_TAG = '<br>'; // skipcq: JS-0440
+        const BR_TAG = '<br>'; // NOSONAR skipcq: JS-0440
         return escapedText.replaceAll('\n', BR_TAG);
     }
 
