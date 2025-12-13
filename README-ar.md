@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **لاستخدام الإضافة، ستحتاج إلى مفتاح API من أحد المزودين المدعومين:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: لاستخدام نقاط نهاية API الخاصة بك
+
+| المزود | الحصول على مفتاح API |
+|:------:|:---------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: لاستخدام نقاط نهاية API الخاصة بك |
 
 Babel Fish AI هي إضافة Chrome مبتكرة مصممة لتوفير نسخ صوتي قوي مع دعم متعدد للمزودين. حوّل صوتك إلى نص بدقة ملحوظة باستخدام واجهات برمجة تطبيقات النسخ من Mistral AI (Voxtral) أو OpenAI (Whisper)، واستفد اختياريًا من الترجمة التلقائية في الوقت الفعلي. يمكنك استخدام Babel Fish AI حصريًا للنسخ أو تفعيل الترجمة الفورية حسب الحاجة.
 

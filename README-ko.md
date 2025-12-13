@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **확장 프로그램을 사용하려면 지원되는 제공업체 중 하나의 API 키가 필요합니다:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: 자체 API 엔드포인트를 사용하려는 경우
+
+| 제공업체 | API 키 받기 |
+|:--------:|:------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: 자체 API 엔드포인트를 사용하려는 경우 |
 
 Babel Fish AI는 다중 제공업체 지원을 통해 강력한 음성 전사를 제공하도록 설계된 혁신적인 Chrome 확장 프로그램입니다. Mistral AI (Voxtral) 또는 OpenAI (Whisper) 전사 API를 사용하여 놀라운 정확도로 음성을 텍스트로 변환하고, 선택적으로 실시간 자동 번역의 이점을 누릴 수 있습니다. 필요에 따라 Babel Fish AI를 전사 전용으로 사용하거나 즉시 번역을 활성화할 수 있습니다.
 

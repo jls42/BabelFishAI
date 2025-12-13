@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **拡張機能を使用するには、サポートされているプロバイダーのいずれかのAPIキーが必要です：**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: 独自のAPIエンドポイントを使用する場合
+
+| プロバイダー | APIキーを取得 |
+|:------------:|:--------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: 独自のAPIエンドポイントを使用する場合 |
 
 Babel Fish AIは、マルチプロバイダーサポートを備えた強力な音声転写を提供するために設計された革新的なChrome拡張機能です。Mistral AI (Voxtral) または OpenAI (Whisper) の転写APIを使用して、驚くべき精度で音声をテキストに変換し、オプションでリアルタイムの自動翻訳を利用できます。必要に応じて、Babel Fish AIを転写専用に使用することも、即座に翻訳を有効にすることもできます。
 

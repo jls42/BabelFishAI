@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **要使用该扩展程序，您需要一个受支持提供商的 API 密钥：**
-- **Mistral AI**：[console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**：[platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**：使用您自己的 API 端点
+
+| 提供商 | 获取 API 密钥 |
+|:------:|:--------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**：[console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**：[platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**：使用您自己的 API 端点 |
 
 Babel Fish AI 是一款创新的 Chrome 扩展程序，旨在提供具有多提供商支持的强大语音转录功能。借助 Mistral AI (Voxtral) 或 OpenAI (Whisper) 的转录 API，以惊人的准确性将您的语音转换为文本，并可选择利用实时自动翻译。您可以根据需要专门将 Babel Fish AI 用于转录或即时激活翻译。
 

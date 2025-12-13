@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Éléments du DOM - Providers (nouveau design dropdown + panel)
     const providerSelector = document.getElementById('providerSelector');
+    const providerLogo = document.getElementById('providerLogo');
     const dropdownStatus = document.getElementById('dropdownStatus');
     const providerConfigPanel = document.getElementById('providerConfigPanel');
 
@@ -191,6 +192,36 @@ document.addEventListener('DOMContentLoaded', async () => {
             'mistral': 'configMistral',
             'custom': 'configCustom'
         };
+
+        // Mapper providerId vers le logo
+        const logoMap = {
+            'openai': '../../../../images/openai-logo.png',
+            'mistral': '../../../../images/mistral-logo.png',
+            'custom': null // Emoji 🚅 pour LiteLLM
+        };
+
+        // Mettre à jour le logo à côté du dropdown
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        const logoSrc = logoMap[providerId];
+        if (logoSrc) {
+            providerLogo.src = logoSrc;
+            providerLogo.style.display = 'block';
+            // Masquer l'emoji si présent
+            const emojiEl = document.getElementById('providerLogoEmoji');
+            if (emojiEl) emojiEl.style.display = 'none';
+        } else {
+            // Pour Custom/LiteLLM, utiliser l'emoji train
+            providerLogo.style.display = 'none';
+            let emojiEl = document.getElementById('providerLogoEmoji');
+            if (!emojiEl) {
+                emojiEl = document.createElement('span');
+                emojiEl.id = 'providerLogoEmoji';
+                emojiEl.className = 'provider-selector-emoji';
+                providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
+            }
+            emojiEl.textContent = '🚅';
+            emojiEl.style.display = 'block';
+        }
 
         // Afficher le panel sélectionné
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')

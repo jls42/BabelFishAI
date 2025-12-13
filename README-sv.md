@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **För att använda tillägget behöver du en API-nyckel från en av de leverantörer som stöds:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: För att använda dina egna API-slutpunkter
+
+| Leverantör | Skaffa en API-nyckel |
+|:----------:|:---------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: För att använda dina egna API-slutpunkter |
 
 Babel Fish AI är ett innovativt Chrome-tillägg utformat för att erbjuda kraftfull rösttranskribering med stöd för flera leverantörer. Omvandla din röst till text med anmärkningsvärd precision tack vare transkriberings-API:er från Mistral AI (Voxtral) eller OpenAI (Whisper), och dra valfritt nytta av automatisk översättning i realtid. Du kan använda Babel Fish AI uteslutande för transkribering eller aktivera direktöversättning efter behov.
 

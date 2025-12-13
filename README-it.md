@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **Per utilizzare l'estensione, avrai bisogno di una chiave API di uno dei provider supportati:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: Per utilizzare i tuoi endpoint API
+
+| Provider | Ottieni una chiave API |
+|:--------:|:-----------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: Per utilizzare i tuoi endpoint API |
 
 Babel Fish AI è un'estensione Chrome innovativa progettata per offrire una potente trascrizione vocale con supporto multi-provider. Trasforma la tua voce in testo con una precisione notevole grazie alle API di trascrizione di Mistral AI (Voxtral) o OpenAI (Whisper), e beneficia opzionalmente di una traduzione automatica in tempo reale. Puoi utilizzare Babel Fish AI esclusivamente per la trascrizione o attivare la traduzione al volo secondo le tue esigenze.
 

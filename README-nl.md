@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **Om de extensie te gebruiken, heb je een API-sleutel nodig van een van de ondersteunde providers:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: Om je eigen API-endpoints te gebruiken
+
+| Provider | API-sleutel verkrijgen |
+|:--------:|:-----------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: Om je eigen API-endpoints te gebruiken |
 
 Babel Fish AI is een innovatieve Chrome-extensie die is ontworpen om krachtige spraaktranscriptie te bieden met ondersteuning voor meerdere providers. Zet uw stem om in tekst met opmerkelijke nauwkeurigheid dankzij de transcriptie-API's van Mistral AI (Voxtral) of OpenAI (Whisper), en profiteer optioneel van automatische realtime vertaling. U kunt Babel Fish AI uitsluitend gebruiken voor transcriptie of de directe vertaling activeren naar behoefte.
 

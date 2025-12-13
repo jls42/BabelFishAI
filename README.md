@@ -5,9 +5,12 @@
 [🇸🇦 العربية](README-ar.md) | [🇩🇪 Deutsch](README-de.md) | [🇺🇸 English](README-en.md) | [🇪🇸 Español](README-es.md) | [🇮🇳 हिन्दी](README-hi.md) | [🇮🇹 Italiano](README-it.md) | [🇯🇵 日本語](README-ja.md) | [🇰🇷 한국어](README-ko.md) | [🇳🇱 Nederlands](README-nl.md) | [🇵🇱 Polski](README-pl.md) | [🇵🇹 Português](README-pt.md) | [🇷🇴 Română](README-ro.md) | [🇸🇪 Svenska](README-sv.md) | [🇨🇳 中文](README-zh.md)
 
 **Pour utiliser l'extension, vous aurez besoin d'une clé API d'un des providers supportés :**
-- **Mistral AI** : [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI** : [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM** : Pour utiliser vos propres endpoints API
+
+| Provider | Obtenir une clé API |
+|:--------:|:--------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI** : [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI** : [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM** : Pour utiliser vos propres endpoints API |
 
 Babel Fish AI est une extension Chrome innovante conçue pour offrir une transcription vocale puissante avec support multi-provider. Transformez votre voix en texte avec une précision remarquable grâce aux API de transcription de Mistral AI (Voxtral) ou OpenAI (Whisper), et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
 

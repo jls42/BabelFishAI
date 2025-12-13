@@ -960,6 +960,22 @@ input[type="color"]:focus {
     animation: fadeIn var(--duration-fast) var(--ease-out);
 }
 
+/* Provider Selector Logo (next to dropdown) */
+.provider-selector-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.provider-selector-emoji {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+}
+
 .provider-config-body {
     padding: var(--space-5);
 }

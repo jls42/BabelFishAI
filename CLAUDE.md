@@ -149,6 +149,18 @@ Example: `globalThis.BabelFishAIUtils.recording.startRecording()` to call a reco
 - **Mistral API**: `https://api.mistral.ai/v1/chat/completions` (alternative provider)
 - All configurable via Expert mode for LiteLLM Proxy compatibility
 
+## Brand Assets
+
+Les logos des providers sont stockés dans `images/` :
+- `images/mistral-logo.png` - Logo Mistral AI (M arc-en-ciel)
+- `images/openai-logo.png` - Logo OpenAI (blossom)
+- Custom/LiteLLM utilise l'emoji 🚅 (pas de logo officiel)
+
+**Pages Brand officielles :**
+- **Mistral AI** : https://mistral.ai/brand
+- **OpenAI** : https://openai.com/brand/
+- **LiteLLM** : https://github.com/BerriAI/litellm (emoji 🚅 comme identité)
+
 ## Known Issues & Solutions
 
 - **Code duplication**: Centralize function exposure in single block per module

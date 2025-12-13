@@ -3,9 +3,12 @@
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
 **Pentru a utiliza extensia, veți avea nevoie de o cheie API de la unul dintre furnizorii acceptați:**
-- **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-- **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-- **Custom/LiteLLM**: Pentru a utiliza propriile puncte finale API
+
+| Furnizor | Obțineți o cheie API |
+|:--------:|:---------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM**: Pentru a utiliza propriile puncte finale API |
 
 Babel Fish AI este o extensie Chrome inovatoare concepută pentru a oferi o transcriere vocală puternică, cu suport multi-furnizor. Transformați-vă vocea în text cu o precizie remarcabilă datorită API-urilor de transcriere Mistral AI (Voxtral) sau OpenAI (Whisper) și beneficiați opțional de traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de nevoile dumneavoastră.
 
