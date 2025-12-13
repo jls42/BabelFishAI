@@ -91,14 +91,6 @@
         "message": "Wesprzyj projekt przez PayPal",
         "description": "Tekst linku do wsparcia PayPal"
     },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Domyślny adres URL interfejsu API Whisper"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Domyślny adres URL interfejsu API tłumaczenia"
-    },
     "displaySettingsTitle": {
         "message": "Ustawienia Wyświetlania",
         "description": "Tytuł ustawień wyświetlania"
@@ -207,50 +199,6 @@
         "message": "Zintegrowana funkcja tłumaczenia AI umożliwia uzyskanie automatycznego tłumaczenia transkrybowanego tekstu.<br>Aby to zrobić:<br><ul><li>Język źródłowy: wybierz język, którym mówisz do mikrofonu.</li><li>Język docelowy: wybierz język, na który chcesz przetłumaczyć tekst.</li></ul>Te ustawienia wpływają tylko na tłumaczenie, a nie na transkrypcję. Jeśli wyłączysz automatyczne tłumaczenie, transkrybowany tekst będzie w języku mówionym do mikrofonu.",
         "description": "Wyjaśnienie sekcji tłumaczenia"
     },
-    "expertModeTitle": {
-        "message": "Tryb Eksperta",
-        "description": "Tytuł trybu eksperta"
-    },
-    "enableExpertModeLabel": {
-        "message": "Włącz tryb eksperta",
-        "description": "Etykieta włączania trybu eksperta"
-    },
-    "enableExpertModeDescription": {
-        "message": "Odblokowuje zaawansowane opcje konfiguracji dla doświadczonych użytkowników.",
-        "description": "Opis opcji trybu eksperta"
-    },
-    "translationModelLabel": {
-        "message": "Model tłumaczenia:",
-        "description": "Etykieta modelu tłumaczenia"
-    },
-    "translationModelDescription": {
-        "message": "Wybierz model AI używany do tłumaczenia. `gpt-4o-mini` jest modelem domyślnym (najlepszy stosunek jakości do ceny). `gpt-4o` oferuje wyższą jakość, ale jest droższy.",
-        "description": "Opis modelu tłumaczenia"
-    },
-    "audioModelLabel": {
-        "message": "Model audio:",
-        "description": "Etykieta modelu audio"
-    },
-    "audioModelDescription": {
-        "message": "Wybierz model AI używany do transkrypcji audio. `whisper-1` jest modelem domyślnym.",
-        "description": "Opis modelu audio"
-    },
-    "whisperApiUrlLabel": {
-        "message": "Adres URL interfejsu API Whisper:",
-        "description": "Etykieta adresu URL interfejsu API Whisper"
-    },
-    "whisperApiUrlDescription": {
-        "message": "Umożliwia określenie niestandardowego adresu URL interfejsu API transkrypcji Whisper (dla zaawansowanych użytkowników).",
-        "description": "Opis adresu URL interfejsu API Whisper"
-    },
-    "translationApiUrlLabel": {
-        "message": "Adres URL interfejsu API tłumaczenia:",
-        "description": "Etykieta adresu URL interfejsu API tłumaczenia"
-    },
-    "translationApiUrlDescription": {
-        "message": "Umożliwia określenie niestandardowego adresu URL interfejsu API tłumaczenia (dla zaawansowanych użytkowników).",
-        "description": "Opis adresu URL interfejsu API tłumaczenia"
-    },
     "forcedDialogDomainsLabel": {
         "message": "Domeny z wymuszonym oknem dialogowym:",
         "description": "Etykieta wymuszonych domen"
@@ -266,10 +214,6 @@
     "addDomainButton": {
         "message": "Dodaj",
         "description": "Przycisk dodawania domeny"
-    },
-    "addDomainDescription": {
-        "message": "Dodaje domenę do listy.",
-        "description": "Opis dodawania domeny"
     },
     "forcedDialogInfo": {
         "message": "Na tych domenach transkrypcja zawsze pojawi się w oknie dialogowym",
@@ -295,17 +239,9 @@
         "message": "Deweloper i twórca BabelFishAI",
         "description": "Rola autora"
     },
-    "addModelPlaceholder": {
-        "message": "Dodaj model",
-        "description": "Symbol zastępczy dodawania modelu"
-    },
     "addModelButton": {
         "message": "Dodaj",
         "description": "Przycisk dodawania modelu"
-    },
-    "addModelDescription": {
-        "message": "Umożliwia dodanie niestandardowego modelu (dla zaawansowanych użytkowników).",
-        "description": "Opis dodawania modelu"
     },
     "noLogLabel": {
         "message": "NoLog (tylko LiteLLM)",
@@ -347,58 +283,6 @@
         "message": "Aby korzystać z BabelFish AI:<br><br>1. Przejdź do strony internetowej (na przykład swojej poczty internetowej lub strony czatu swojego ulubionego AI, takiej jak <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> lub <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Przypnij ikonę rozszerzenia, aby ułatwić dostęp.<br>3. Rozpocznij/zatrzymaj nagrywanie:<br>    * Kliknij ikonę rozszerzenia <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Mów do mikrofonu.<br>    * Kliknij ponownie ikonę <img src=\"../../../../images/icon32.png\" alt=\"Ikona rozszerzenia\" width=\"32\" height=\"32\"> lub użyj skrótu klawiaturowego.<br>    * Transkrypcja pojawi się w aktywnym obszarze tekstowym lub w oknie dialogowym.<br><br>Skróty klawiaturowe:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrukcje korzystania z rozszerzenia"
     },
-    "defaultWhisperApiUrl": {
-        "message": "Domyślny adres URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Domyślny adres URL interfejsu API Whisper"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "Domyślny adres URL: https://api.openai.com/v1/chat/completions",
-        "description": "Domyślny adres URL interfejsu API tłumaczenia"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "Klucz API nie został skonfigurowany. Skonfiguruj go w opcjach rozszerzenia.",
-        "description": "Komunikat błędu: brak klucza API"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "Błąd pamięci Chrome",
-        "description": "Komunikat błędu: problem z pamięcią"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "Błąd: mikrofon niedostępny.",
-        "description": "Komunikat błędu: dostęp do mikrofonu"
-    },
-    "API_ERROR": {
-        "message": "Błąd podczas wywołania API",
-        "description": "Komunikat błędu: ogólne wywołanie API"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "Błąd podczas transkrypcji",
-        "description": "Komunikat błędu: transkrypcja"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "Błąd podczas tłumaczenia",
-        "description": "Komunikat błędu: tłumaczenie"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "Nie znaleziono elementu edytowalnego",
-        "description": "Komunikat błędu: brak elementu edytowalnego"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Błąd podczas wstrzykiwania skryptu zawartości",
-        "description": "Komunikat błędu: wstrzykiwanie skryptu"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "Nie znaleziono aktywnej karty",
-        "description": "Komunikat błędu: brak aktywnej karty"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "Brakujące parametry tłumaczenia",
-        "description": "Komunikat błędu: parametry tłumaczenia"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Nieprawidłowy format odpowiedzi tłumaczenia",
-        "description": "Komunikat błędu: odpowiedź tłumaczenia"
-    },
     "bannerErrorGeneric": {
         "message": "Wystąpił błąd",
         "description": "Ogólny komunikat błędu"
@@ -406,10 +290,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ Rozszerzenia > ⌨️ Skróty klawiaturowe",
         "description": "Instrukcje dotyczące zmiany skrótu klawiaturowego"
-    },
-    "defaultModel": {
-        "message": "domyślny",
-        "description": "Wskazuje model domyślny"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -455,37 +335,9 @@
         "message": "Dostawcy AI",
         "description": "Tytuł sekcji dostawców"
     },
-    "providersDescription": {
-        "message": "Skonfiguruj jednego lub więcej dostawców transkrypcji i tłumaczenia.",
-        "description": "Opis sekcji dostawców"
-    },
-    "providerActive": {
-        "message": "Aktywny",
-        "description": "Status aktywnego dostawcy"
-    },
-    "providerInactive": {
-        "message": "Nieaktywny",
-        "description": "Status nieaktywnego dostawcy"
-    },
-    "providerMissingKey": {
-        "message": "Brak klucza",
-        "description": "Status gdy brakuje klucza API"
-    },
     "mistralApiKeyInfo": {
         "message": "Uzyskaj swój klucz API na",
         "description": "Informacja o uzyskaniu klucza API Mistral"
-    },
-    "advancedUrlsTitle": {
-        "message": "Niestandardowe adresy URL (zaawansowane)",
-        "description": "Tytuł dla niestandardowych adresów URL"
-    },
-    "transcriptionUrlLabel": {
-        "message": "URL transkrypcji:",
-        "description": "Etykieta dla URL transkrypcji"
-    },
-    "chatUrlLabel": {
-        "message": "URL czatu:",
-        "description": "Etykieta dla URL czatu"
     },
     "serviceSelectionTitle": {
         "message": "Wybór usług",
@@ -502,37 +354,5 @@
     "invalidUrlError": {
         "message": "Błąd: adresy URL muszą używać HTTPS.",
         "description": "Komunikat błędu dla nieprawidłowych adresów URL"
-    },
-    "displayError": {
-        "message": "Błąd wyświetlania",
-        "description": "Komunikat błędu podczas wyświetlania wyniku"
-    },
-    "invalidTextForProcessing": {
-        "message": "Nieprawidłowy tekst do przetworzenia",
-        "description": "Komunikat błędu gdy tekst jest nieprawidłowy"
-    },
-    "rephrasingComplete": {
-        "message": "Parafraza zakończona",
-        "description": "Komunikat sukcesu parafrazy"
-    },
-    "rephrasingError": {
-        "message": "Błąd podczas parafrazy",
-        "description": "Komunikat błędu parafrazy"
-    },
-    "rephrasingText": {
-        "message": "Parafrazowanie tekstu...",
-        "description": "Komunikat podczas parafrazy"
-    },
-    "translatingText": {
-        "message": "Tłumaczenie tekstu...",
-        "description": "Komunikat podczas tłumaczenia"
-    },
-    "translationComplete": {
-        "message": "Tłumaczenie zakończone",
-        "description": "Komunikat sukcesu tłumaczenia"
-    },
-    "translationError": {
-        "message": "Błąd podczas tłumaczenia",
-        "description": "Komunikat błędu tłumaczenia"
     }
 }

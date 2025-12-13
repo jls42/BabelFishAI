@@ -7,6 +7,10 @@
         "message": "Translate selection",
         "description": "Context menu option to translate the selected text"
     },
+    "contextMenuCorrect": {
+        "message": "Correct spelling",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Recording canceled (Esc key).",
         "description": "Message displayed when canceling the recording"
@@ -90,14 +94,6 @@
     "supportProject": {
         "message": "Support the project via PayPal",
         "description": "Text for the PayPal support link"
-    },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Default URL of the Whisper API"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Default URL of the translation API"
     },
     "displaySettingsTitle": {
         "message": "Display Settings",
@@ -199,6 +195,14 @@
         "message": "Error during rephrasing",
         "description": "Error message for rephrasing"
     },
+    "bannerCorrecting": {
+        "message": "Correcting in progress...",
+        "description": "Banner message during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Error during correction",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Error during transcription",
         "description": "Error message displayed when an error occurs during transcription"
@@ -206,50 +210,6 @@
     "translationExplanation": {
         "message": "The integrated AI translation feature allows you to get an automatic translation of your transcribed text.<br>To do this:<br><ul><li>Source language: select the language you speak into the microphone.</li><li>Target language: choose the language you want your text to be translated into.</li></ul>These settings only affect translation, not transcription. If you disable automatic translation, your transcribed text will be in the language spoken into the microphone.",
         "description": "Explanation of the translation section"
-    },
-    "expertModeTitle": {
-        "message": "Expert Mode",
-        "description": "Title of the expert mode"
-    },
-    "enableExpertModeLabel": {
-        "message": "Enable expert mode",
-        "description": "Label to enable expert mode"
-    },
-    "enableExpertModeDescription": {
-        "message": "Unlocks advanced configuration options for experienced users.",
-        "description": "Description of the expert mode option"
-    },
-    "translationModelLabel": {
-        "message": "Translation model:",
-        "description": "Label for the translation model"
-    },
-    "translationModelDescription": {
-        "message": "Choose the AI model used for translation. `gpt-4o-mini` is the default model (best quality/price ratio). `gpt-4o` offers higher quality but is more expensive.",
-        "description": "Description of the translation model"
-    },
-    "audioModelLabel": {
-        "message": "Audio model:",
-        "description": "Label for the audio model"
-    },
-    "audioModelDescription": {
-        "message": "Choose the AI model used for audio transcription. `whisper-1` is the default model.",
-        "description": "Description of the audio model"
-    },
-    "whisperApiUrlLabel": {
-        "message": "Whisper API URL:",
-        "description": "Label for the Whisper API URL"
-    },
-    "whisperApiUrlDescription": {
-        "message": "Allows specifying a custom URL for the Whisper transcription API (for advanced users).",
-        "description": "Description of the Whisper API URL"
-    },
-    "translationApiUrlLabel": {
-        "message": "Translation API URL:",
-        "description": "Label for the translation API URL"
-    },
-    "translationApiUrlDescription": {
-        "message": "Allows specifying a custom URL for the translation API (for advanced users).",
-        "description": "Description of the translation API URL"
     },
     "forcedDialogDomainsLabel": {
         "message": "Domains with forced dialog box:",
@@ -266,10 +226,6 @@
     "addDomainButton": {
         "message": "Add",
         "description": "Button to add a domain"
-    },
-    "addDomainDescription": {
-        "message": "Adds a domain to the list.",
-        "description": "Description of adding a domain"
     },
     "forcedDialogInfo": {
         "message": "On these domains, the transcription will always appear in a dialog box",
@@ -295,17 +251,9 @@
         "message": "Developer and creator of BabelFishAI",
         "description": "Author's role"
     },
-    "addModelPlaceholder": {
-        "message": "Add a model",
-        "description": "Placeholder for adding a model"
-    },
     "addModelButton": {
         "message": "Add",
         "description": "Button to add a model"
-    },
-    "addModelDescription": {
-        "message": "Allows adding a custom model (for advanced users).",
-        "description": "Description of adding a model"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM only)",
@@ -347,58 +295,6 @@
         "message": "To use BabelFish AI:<br><br>1. Go to a website (for example, your webmail or a chat site of your favorite AI, like <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> or <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Pin the extension icon for easy access.<br>3. Start/stop recording:<br>    * Click the extension icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> or use the keyboard shortcut.<br>    * Speak into your microphone.<br>    * Click the icon <img src=\"../../../../images/icon32.png\" alt=\"Extension icon\" width=\"32\" height=\"32\"> again or use the keyboard shortcut.<br>    * The transcription will appear in the active text area or in a dialog box.<br><br>Keyboard shortcuts:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instructions for using the extension"
     },
-    "defaultWhisperApiUrl": {
-        "message": "Default URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Default URL for the Whisper API"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "Default URL: https://api.openai.com/v1/chat/completions",
-        "description": "Default URL for the Translation API"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "API key not configured. Please configure it in the extension options.",
-        "description": "Error message: API key missing"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "Chrome storage error",
-        "description": "Error message: Storage problem"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "Error: microphone inaccessible.",
-        "description": "Error message: Microphone access"
-    },
-    "API_ERROR": {
-        "message": "Error during API call",
-        "description": "Error message: General API call"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "Error during transcription",
-        "description": "Error message: Transcription"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "Error during translation",
-        "description": "Error message: Translation"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "No editable element found",
-        "description": "Error message: No editable element"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Error injecting content script",
-        "description": "Error message: Script injection"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "No active tab found",
-        "description": "Error message: No active tab"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "Missing translation parameters",
-        "description": "Error message: Translation parameters"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Invalid translation response format",
-        "description": "Error message: Translation response"
-    },
     "bannerErrorGeneric": {
         "message": "An error occurred",
         "description": "Generic error message"
@@ -406,10 +302,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensions > ⌨️ Keyboard shortcuts",
         "description": "Instructions for changing the keyboard shortcut"
-    },
-    "defaultModel": {
-        "message": "default",
-        "description": "Indicates the default model"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -455,41 +347,9 @@
         "message": "AI Providers",
         "description": "Title of the providers section"
     },
-    "providersDescription": {
-        "message": "Configure one or more providers for transcription and translation.",
-        "description": "Description of the providers section"
-    },
-    "selectProviderLabel": {
-        "message": "Configure provider:",
-        "description": "Label for provider selector"
-    },
-    "providerActive": {
-        "message": "Active",
-        "description": "Status of an active provider"
-    },
-    "providerInactive": {
-        "message": "Inactive",
-        "description": "Status of an inactive provider"
-    },
-    "providerMissingKey": {
-        "message": "Missing key",
-        "description": "Status when the API key is missing"
-    },
     "mistralApiKeyInfo": {
         "message": "Get your API key at",
         "description": "Information for obtaining the Mistral API key"
-    },
-    "advancedUrlsTitle": {
-        "message": "Custom URLs (advanced)",
-        "description": "Title for custom URLs"
-    },
-    "transcriptionUrlLabel": {
-        "message": "Transcription URL:",
-        "description": "Label for the transcription URL"
-    },
-    "chatUrlLabel": {
-        "message": "Chat URL:",
-        "description": "Label for the chat URL"
     },
     "serviceSelectionTitle": {
         "message": "Service Selection",
@@ -527,44 +387,8 @@
         "message": "Chat model:",
         "description": "Label for the chat model"
     },
-    "addModelButton": {
-        "message": "Add",
-        "description": "Button to add a model"
-    },
     "invalidUrlError": {
         "message": "Error: URLs must use HTTPS.",
         "description": "Error message for invalid URLs"
-    },
-    "displayError": {
-        "message": "Display error",
-        "description": "Error message when displaying the result"
-    },
-    "invalidTextForProcessing": {
-        "message": "Invalid text for processing",
-        "description": "Error message when text is invalid"
-    },
-    "rephrasingComplete": {
-        "message": "Rephrasing complete",
-        "description": "Rephrasing success message"
-    },
-    "rephrasingError": {
-        "message": "Error during rephrasing",
-        "description": "Rephrasing error message"
-    },
-    "rephrasingText": {
-        "message": "Rephrasing text...",
-        "description": "Message during rephrasing"
-    },
-    "translatingText": {
-        "message": "Translating text...",
-        "description": "Message during translation"
-    },
-    "translationComplete": {
-        "message": "Translation complete",
-        "description": "Translation success message"
-    },
-    "translationError": {
-        "message": "Error during translation",
-        "description": "Translation error message"
     }
 }

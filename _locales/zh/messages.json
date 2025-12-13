@@ -91,14 +91,6 @@
         "message": "通过 PayPal 支持项目",
         "description": "PayPal 支持链接的文本"
     },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API 的默认 URL"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "翻译 API 的默认 URL"
-    },
     "displaySettingsTitle": {
         "message": "显示设置",
         "description": "显示设置的标题"
@@ -207,50 +199,6 @@
         "message": "集成的人工智能翻译功能允许您获得转录文本的自动翻译。<br>为此：<br><ul><li>源语言：选择您对着麦克风说话的语言。</li><li>目标语言：选择您希望将文本翻译成的语言。</li></ul>这些设置仅影响翻译，不影响转录。如果您禁用自动翻译，您的转录文本将使用对着麦克风说话的语言。",
         "description": "翻译部分的说明"
     },
-    "expertModeTitle": {
-        "message": "专家模式",
-        "description": "专家模式的标题"
-    },
-    "enableExpertModeLabel": {
-        "message": "启用专家模式",
-        "description": "启用专家模式的标签"
-    },
-    "enableExpertModeDescription": {
-        "message": "为有经验的用户解锁高级配置选项。",
-        "description": "专家模式选项的描述"
-    },
-    "translationModelLabel": {
-        "message": "翻译模型：",
-        "description": "翻译模型的标签"
-    },
-    "translationModelDescription": {
-        "message": "选择用于翻译的人工智能模型。`gpt-4o-mini` 是默认模型（最佳质量/价格比）。`gpt-4o` 提供更高的质量，但更昂贵。",
-        "description": "翻译模型的描述"
-    },
-    "audioModelLabel": {
-        "message": "音频模型：",
-        "description": "音频模型的标签"
-    },
-    "audioModelDescription": {
-        "message": "选择用于音频转录的人工智能模型。`whisper-1` 是默认模型。",
-        "description": "音频模型的描述"
-    },
-    "whisperApiUrlLabel": {
-        "message": "Whisper API URL：",
-        "description": "Whisper API URL 的标签"
-    },
-    "whisperApiUrlDescription": {
-        "message": "允许指定 Whisper 转录 API 的自定义 URL（适用于高级用户）。",
-        "description": "Whisper API URL 的描述"
-    },
-    "translationApiUrlLabel": {
-        "message": "翻译 API URL：",
-        "description": "翻译 API URL 的标签"
-    },
-    "translationApiUrlDescription": {
-        "message": "允许指定翻译 API 的自定义 URL（适用于高级用户）。",
-        "description": "翻译 API URL 的描述"
-    },
     "forcedDialogDomainsLabel": {
         "message": "强制对话框域：",
         "description": "强制域的标签"
@@ -266,10 +214,6 @@
     "addDomainButton": {
         "message": "添加",
         "description": "添加域的按钮"
-    },
-    "addDomainDescription": {
-        "message": "将域添加到列表。",
-        "description": "添加域的描述"
     },
     "forcedDialogInfo": {
         "message": "在这些域上，转录将始终显示在对话框中",
@@ -295,17 +239,9 @@
         "message": "BabelFishAI 的开发者和创建者",
         "description": "作者的角色"
     },
-    "addModelPlaceholder": {
-        "message": "添加模型",
-        "description": "添加模型的占位符"
-    },
     "addModelButton": {
         "message": "添加",
         "description": "添加模型的按钮"
-    },
-    "addModelDescription": {
-        "message": "允许添加自定义模型（适用于高级用户）。",
-        "description": "添加模型的描述"
     },
     "noLogLabel": {
         "message": "NoLog（仅限 LiteLLM）",
@@ -347,58 +283,6 @@
         "message": "要使用 BabelFish AI：<br><br>1. 访问一个网站（例如，您的网络邮件或您最喜欢的 AI 的聊天网站，例如 <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> 或 <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>）。<br>2. 固定扩展图标以便于访问。<br>3. 开始/停止录制：<br>    * 单击扩展图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br>    * 对着麦克风说话。<br>    * 再次单击图标 <img src=\"../../../../images/icon32.png\" alt=\"扩展图标\" width=\"32\" height=\"32\"> 或使用键盘快捷键。<br>    * 转录将出现在活动文本区域或对话框中。<br><br>键盘快捷键：<br><ul><li>Windows： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac： <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "使用扩展程序的说明"
     },
-    "defaultWhisperApiUrl": {
-        "message": "默认 URL：https://api.openai.com/v1/audio/transcriptions",
-        "description": "Whisper API 的默认 URL"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "默认 URL：https://api.openai.com/v1/chat/completions",
-        "description": "翻译 API 的默认 URL"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "未配置 API 密钥。请在扩展选项中进行配置。",
-        "description": "错误消息：缺少 API 密钥"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "Chrome 存储错误",
-        "description": "错误消息：存储问题"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "错误：麦克风无法访问。",
-        "description": "错误消息：麦克风访问"
-    },
-    "API_ERROR": {
-        "message": "API 调用期间出错",
-        "description": "错误消息：常规 API 调用"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "转录过程中出错",
-        "description": "错误消息：转录"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "翻译过程中出错",
-        "description": "错误消息：翻译"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "找不到可编辑元素",
-        "description": "错误消息：没有可编辑元素"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "注入内容脚本时出错",
-        "description": "错误消息：脚本注入"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "找不到活动标签页",
-        "description": "错误消息：没有活动标签页"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "缺少翻译参数",
-        "description": "错误消息：翻译参数"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "无效的翻译响应格式",
-        "description": "错误消息：翻译响应"
-    },
     "bannerErrorGeneric": {
         "message": "发生错误",
         "description": "通用错误消息"
@@ -406,10 +290,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ 扩展程序 > ⌨️ 键盘快捷键",
         "description": "更改键盘快捷键的说明"
-    },
-    "defaultModel": {
-        "message": "默认",
-        "description": "指示默认模型"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -455,37 +335,9 @@
         "message": "AI 提供商",
         "description": "提供商部分的标题"
     },
-    "providersDescription": {
-        "message": "配置一个或多个转录和翻译提供商。",
-        "description": "提供商部分的描述"
-    },
-    "providerActive": {
-        "message": "已激活",
-        "description": "活跃提供商的状态"
-    },
-    "providerInactive": {
-        "message": "未激活",
-        "description": "非活跃提供商的状态"
-    },
-    "providerMissingKey": {
-        "message": "缺少密钥",
-        "description": "当 API 密钥缺失时的状态"
-    },
     "mistralApiKeyInfo": {
         "message": "在此获取您的 API 密钥",
         "description": "获取 Mistral API 密钥的信息"
-    },
-    "advancedUrlsTitle": {
-        "message": "自定义 URL（高级）",
-        "description": "自定义 URL 的标题"
-    },
-    "transcriptionUrlLabel": {
-        "message": "转录 URL：",
-        "description": "转录 URL 的标签"
-    },
-    "chatUrlLabel": {
-        "message": "聊天 URL：",
-        "description": "聊天 URL 的标签"
     },
     "serviceSelectionTitle": {
         "message": "服务选择",
@@ -502,37 +354,5 @@
     "invalidUrlError": {
         "message": "错误：URL 必须使用 HTTPS。",
         "description": "无效 URL 的错误消息"
-    },
-    "displayError": {
-        "message": "显示错误",
-        "description": "显示结果时的错误消息"
-    },
-    "invalidTextForProcessing": {
-        "message": "无法处理的无效文本",
-        "description": "当文本无效时的错误消息"
-    },
-    "rephrasingComplete": {
-        "message": "改写完成",
-        "description": "改写成功消息"
-    },
-    "rephrasingError": {
-        "message": "改写时出错",
-        "description": "改写错误消息"
-    },
-    "rephrasingText": {
-        "message": "正在改写文本...",
-        "description": "改写期间的消息"
-    },
-    "translatingText": {
-        "message": "正在翻译文本...",
-        "description": "翻译期间的消息"
-    },
-    "translationComplete": {
-        "message": "翻译完成",
-        "description": "翻译成功消息"
-    },
-    "translationError": {
-        "message": "翻译时出错",
-        "description": "翻译错误消息"
     }
 }

@@ -74,6 +74,7 @@ Uses `chrome.storage.sync` for: API key, display preferences, language settings,
 4. **Expert mode**: Respect expert mode and advanced options as described in user documentation
 5. **Testing**: Always test after each function migration
 6. **i18n integrity**: Ensure integrity of internationalization files (`_locales/`)
+7. **i18n validation**: Run `./scripts/check-i18n.sh` after modifying translations or adding new i18n keys to detect missing translations and dead keys
 
 ### Refactoring Guidelines
 The project is undergoing modular refactoring from a monolithic `content.js`. When migrating code:

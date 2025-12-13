@@ -91,14 +91,6 @@
         "message": "Steun het project via PayPal",
         "description": "Tekst voor de PayPal-ondersteuningslink"
     },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "Standaard URL van de Whisper API"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "Standaard URL van de vertaal-API"
-    },
     "displaySettingsTitle": {
         "message": "Weergave-instellingen",
         "description": "Titel van de weergave-instellingen"
@@ -207,50 +199,6 @@
         "message": "Met de geïntegreerde AI-vertaalfunctie kunt u een automatische vertaling van uw getranscribeerde tekst krijgen.<br>Om dit te doen:<br><ul><li>Brontaal: selecteer de taal die u in de microfoon spreekt.</li><li>Doeltaal: kies de taal waarin u uw tekst wilt laten vertalen.</li></ul>Deze instellingen hebben alleen invloed op de vertaling, niet op de transcriptie. Als u automatische vertaling uitschakelt, wordt uw getranscribeerde tekst in de taal die in de microfoon wordt gesproken.",
         "description": "Uitleg van de vertaalsectie"
     },
-    "expertModeTitle": {
-        "message": "Expertmodus",
-        "description": "Titel van de expertmodus"
-    },
-    "enableExpertModeLabel": {
-        "message": "Expertmodus inschakelen",
-        "description": "Label om de expertmodus in te schakelen"
-    },
-    "enableExpertModeDescription": {
-        "message": "Ontgrendelt geavanceerde configuratieopties voor ervaren gebruikers.",
-        "description": "Beschrijving van de optie voor de expertmodus"
-    },
-    "translationModelLabel": {
-        "message": "Vertaalmodel:",
-        "description": "Label voor het vertaalmodel"
-    },
-    "translationModelDescription": {
-        "message": "Kies het AI-model dat wordt gebruikt voor de vertaling. `gpt-4o-mini` is het standaardmodel (beste prijs-kwaliteitverhouding). `gpt-4o` biedt een hogere kwaliteit, maar is duurder.",
-        "description": "Beschrijving van het vertaalmodel"
-    },
-    "audioModelLabel": {
-        "message": "Audiomodel:",
-        "description": "Label voor het audiomodel"
-    },
-    "audioModelDescription": {
-        "message": "Kies het AI-model dat wordt gebruikt voor audiotranscriptie. `whisper-1` is het standaardmodel.",
-        "description": "Beschrijving van het audiomodel"
-    },
-    "whisperApiUrlLabel": {
-        "message": "URL van de Whisper API:",
-        "description": "Label voor de URL van de Whisper API"
-    },
-    "whisperApiUrlDescription": {
-        "message": "Hiermee kunt u een aangepaste URL opgeven voor de Whisper-transcriptie-API (voor gevorderde gebruikers).",
-        "description": "Beschrijving van de URL van de Whisper API"
-    },
-    "translationApiUrlLabel": {
-        "message": "URL van de vertaal-API:",
-        "description": "Label voor de URL van de vertaal-API"
-    },
-    "translationApiUrlDescription": {
-        "message": "Hiermee kunt u een aangepaste URL opgeven voor de vertaal-API (voor gevorderde gebruikers).",
-        "description": "Beschrijving van de URL van de vertaal-API"
-    },
     "forcedDialogDomainsLabel": {
         "message": "Domeinen met geforceerd dialoogvenster:",
         "description": "Label voor geforceerde domeinen"
@@ -266,10 +214,6 @@
     "addDomainButton": {
         "message": "Toevoegen",
         "description": "Knop om een domein toe te voegen"
-    },
-    "addDomainDescription": {
-        "message": "Voegt een domein toe aan de lijst.",
-        "description": "Beschrijving van het toevoegen van een domein"
     },
     "forcedDialogInfo": {
         "message": "Op deze domeinen verschijnt de transcriptie altijd in een dialoogvenster",
@@ -295,17 +239,9 @@
         "message": "Ontwikkelaar en maker van BabelFishAI",
         "description": "Rol van de auteur"
     },
-    "addModelPlaceholder": {
-        "message": "Een model toevoegen",
-        "description": "Plaatsaanduiding voor het toevoegen van een model"
-    },
     "addModelButton": {
         "message": "Toevoegen",
         "description": "Knop om een model toe te voegen"
-    },
-    "addModelDescription": {
-        "message": "Hiermee kunt u een aangepast model toevoegen (voor gevorderde gebruikers).",
-        "description": "Beschrijving van het toevoegen van een model"
     },
     "noLogLabel": {
         "message": "NoLog (alleen LiteLLM)",
@@ -347,58 +283,6 @@
         "message": "Om BabelFish AI te gebruiken:<br><br>1. Ga naar een website (bijvoorbeeld uw webmail of een chatsite van uw favoriete AI, zoals <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> of <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Speld het extensiepictogram vast voor gemakkelijke toegang.<br>3. Opname starten/stoppen:<br>    * Klik op het extensiepictogram <img src=\"../../../../images/icon32.png\" alt=\"Extensiepictogram\" width=\"32\" height=\"32\"> of gebruik de sneltoets.<br>    * Spreek in uw microfoon.<br>    * Klik opnieuw op het pictogram <img src=\"../../../../images/icon32.png\" alt=\"Extensiepictogram\" width=\"32\" height=\"32\"> of gebruik de sneltoets.<br>    * De transcriptie verschijnt in het actieve tekstgebied of in een dialoogvenster.<br><br>Sneltoetsen:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instructies voor het gebruik van de extensie"
     },
-    "defaultWhisperApiUrl": {
-        "message": "Standaard URL: https://api.openai.com/v1/audio/transcriptions",
-        "description": "Standaard URL voor de Whisper API"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "Standaard URL: https://api.openai.com/v1/chat/completions",
-        "description": "Standaard URL voor de vertaal-API"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "API-sleutel niet geconfigureerd. Configureer deze in de extensie-opties.",
-        "description": "Foutbericht: API-sleutel ontbreekt"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "Chrome-opslagfout",
-        "description": "Foutbericht: opslagprobleem"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "Fout: microfoon niet toegankelijk.",
-        "description": "Foutbericht: microfoontoegang"
-    },
-    "API_ERROR": {
-        "message": "Fout tijdens API-aanroep",
-        "description": "Foutbericht: algemene API-aanroep"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "Fout tijdens de transcriptie",
-        "description": "Foutbericht: transcriptie"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "Fout tijdens de vertaling",
-        "description": "Foutbericht: vertaling"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "Geen bewerkbaar element gevonden",
-        "description": "Foutbericht: geen bewerkbaar element"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Fout bij het injecteren van het inhoudsscript",
-        "description": "Foutbericht: scriptinjectie"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "Geen actief tabblad gevonden",
-        "description": "Foutbericht: geen actief tabblad"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "Ontbrekende vertaalparameters",
-        "description": "Foutbericht: vertaalparameters"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Ongeldige vertaalantwoordindeling",
-        "description": "Foutbericht: vertaalantwoord"
-    },
     "bannerErrorGeneric": {
         "message": "Er is een fout opgetreden",
         "description": "Algemeen foutbericht"
@@ -406,10 +290,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensies > ⌨️ Sneltoetsen",
         "description": "Instructies voor het wijzigen van de sneltoets"
-    },
-    "defaultModel": {
-        "message": "standaard",
-        "description": "Geeft het standaardmodel aan"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -455,37 +335,9 @@
         "message": "AI-providers",
         "description": "Titel van de providersectie"
     },
-    "providersDescription": {
-        "message": "Configureer een of meer providers voor transcriptie en vertaling.",
-        "description": "Beschrijving van de providersectie"
-    },
-    "providerActive": {
-        "message": "Actief",
-        "description": "Status van een actieve provider"
-    },
-    "providerInactive": {
-        "message": "Inactief",
-        "description": "Status van een inactieve provider"
-    },
-    "providerMissingKey": {
-        "message": "Sleutel ontbreekt",
-        "description": "Status wanneer de API-sleutel ontbreekt"
-    },
     "mistralApiKeyInfo": {
         "message": "Verkrijg uw API-sleutel op",
         "description": "Informatie voor het verkrijgen van de Mistral API-sleutel"
-    },
-    "advancedUrlsTitle": {
-        "message": "Aangepaste URL's (geavanceerd)",
-        "description": "Titel voor aangepaste URL's"
-    },
-    "transcriptionUrlLabel": {
-        "message": "Transcriptie-URL:",
-        "description": "Label voor de transcriptie-URL"
-    },
-    "chatUrlLabel": {
-        "message": "Chat-URL:",
-        "description": "Label voor de chat-URL"
     },
     "serviceSelectionTitle": {
         "message": "Servicekeuze",
@@ -502,37 +354,5 @@
     "invalidUrlError": {
         "message": "Fout: URL's moeten HTTPS gebruiken.",
         "description": "Foutmelding voor ongeldige URL's"
-    },
-    "displayError": {
-        "message": "Weergavefout",
-        "description": "Foutmelding bij het weergeven van het resultaat"
-    },
-    "invalidTextForProcessing": {
-        "message": "Ongeldige tekst voor verwerking",
-        "description": "Foutmelding wanneer de tekst ongeldig is"
-    },
-    "rephrasingComplete": {
-        "message": "Herformulering voltooid",
-        "description": "Succesmelding voor herformulering"
-    },
-    "rephrasingError": {
-        "message": "Fout tijdens herformulering",
-        "description": "Foutmelding voor herformulering"
-    },
-    "rephrasingText": {
-        "message": "Tekst wordt hergeformuleerd...",
-        "description": "Bericht tijdens herformulering"
-    },
-    "translatingText": {
-        "message": "Tekst wordt vertaald...",
-        "description": "Bericht tijdens vertaling"
-    },
-    "translationComplete": {
-        "message": "Vertaling voltooid",
-        "description": "Succesmelding voor vertaling"
-    },
-    "translationError": {
-        "message": "Fout tijdens vertaling",
-        "description": "Foutmelding voor vertaling"
     }
 }
