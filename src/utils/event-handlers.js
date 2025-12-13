@@ -50,8 +50,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     // Passer la langue cible spécifiée, si disponible
                     window.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
                 }
+            },
+            // Action pour la correction orthographique de texte sélectionné
+            correctSelection: () => {
+                if (message.text) {
+                    window.BabelFishAI.handleTextCorrection(message.text);
+                }
             }
-            // Possibilité d'ajouter d'autres gestionnaires d'actions ici
         };
 
         // Exécuter le gestionnaire correspondant à l'action

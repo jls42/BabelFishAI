@@ -366,6 +366,7 @@
 
     // Exposer les fonctions de traitement de texte dans l'espace de noms window.BabelFishAI
     window.BabelFishAI.handleTextRephrasing = handleTextRephrasing;
+    window.BabelFishAI.handleTextCorrection = handleTextCorrection;
     window.BabelFishAI.handleTextTranslation = handleTextTranslation;
     window.BabelFishAI.isValidInputText = isValidInputText;
 
@@ -436,6 +437,40 @@
             }
         } catch (error) {
             console.error('Erreur lors de la reformulation dans content.js:', error);
+            // L'erreur a déjà été gérée dans le module text-processing
+        }
+    }
+
+    /**
+     * Corrige les fautes d'orthographe d'un texte sélectionné
+     * @param {string} text - Le texte à corriger
+     * @returns {Promise<void>}
+     */
+    async function handleTextCorrection(text) {
+        try {
+            // Stocker l'élément actif avant de commencer le traitement
+            window.BabelFishAIUtils.focus.storeFocusAndSelection();
+
+            // Utiliser la fonction du module text-processing pour la correction
+            const correctedText = await window.BabelFishAIUtils.textProcessing.handleTextCorrection(text);
+
+            // Obtenir les options d'affichage
+            const options = await getDisplayOptions();
+
+            // Vérifier si l'élément actif est une zone de texte éditable
+            const activeElement = document.activeElement;
+            let replacedInEditable = false;
+
+            if (isValidElementForInsertion(activeElement)) {
+                replacedInEditable = insertTextInEditableElement(activeElement, correctedText);
+            }
+
+            // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
+            if (!replacedInEditable) {
+                showTranscriptionDialog(correctedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la correction dans content.js:', error);
             // L'erreur a déjà été gérée dans le module text-processing
         }
     }

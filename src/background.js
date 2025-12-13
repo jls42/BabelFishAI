@@ -13,7 +13,8 @@ const SERVICE_WORKER_CONFIG = {
 // Actions spécifiques au menu contextuel
 const CONTEXT_MENU_ACTIONS = {
     REPHRASE_SELECTION: 'rephraseSelection',
-    TRANSLATE_SELECTION: 'translateSelection'
+    TRANSLATE_SELECTION: 'translateSelection',
+    CORRECT_SELECTION: 'correctSelection'
 };
 
 // Définition des constantes nécessaires pour le service worker
@@ -361,14 +362,21 @@ function createContextMenus() {
             title: chrome.i18n.getMessage("contextMenuRephrase") || "Rephrase selection",
             contexts: ["selection"],
         });
-        
+
+        // Créer le menu contextuel pour la correction orthographique
+        chrome.contextMenus.create({
+            id: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
+            title: chrome.i18n.getMessage("contextMenuCorrect") || "Correct spelling",
+            contexts: ["selection"],
+        });
+
         // Créer le menu parent pour la traduction
         chrome.contextMenus.create({
             id: 'translateMenu',
             title: chrome.i18n.getMessage("contextMenuTranslate") || "Translate selection",
             contexts: ["selection"],
         });
-        
+
         // Ajouter les langues comme sous-menus
         const languages = getTargetLanguageOptions();
         languages.forEach(lang => {
@@ -401,12 +409,20 @@ async function handleContextMenuClick(info, tab) {
         // Cas 1: Option de reformulation
         if (info.menuItemId === CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION) {
             // Envoyer le texte sélectionné au content script pour reformulation
-            await sendMessageToContentScript(tab, { 
-                action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION, 
-                text: selectedText 
+            await sendMessageToContentScript(tab, {
+                action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
+                text: selectedText
             });
-        } 
-        // Cas 2: Option de traduction avec langue spécifique
+        }
+        // Cas 2: Option de correction orthographique
+        else if (info.menuItemId === CONTEXT_MENU_ACTIONS.CORRECT_SELECTION) {
+            // Envoyer le texte sélectionné au content script pour correction
+            await sendMessageToContentScript(tab, {
+                action: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
+                text: selectedText
+            });
+        }
+        // Cas 3: Option de traduction avec langue spécifique
         else if (typeof info.menuItemId === 'string' && info.menuItemId.startsWith(`${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_`)) {
             // Extraire le code de langue du menuItemId (format: translateSelection_fr)
             const targetLanguage = info.menuItemId.split('_').pop();

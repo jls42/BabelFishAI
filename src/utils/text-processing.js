@@ -123,6 +123,76 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Corrige les fautes d'orthographe d'un texte en utilisant l'API
+     * @param {string} text - Le texte à corriger
+     * @param {string} apiKey - La clé API (optionnel)
+     * @returns {Promise<string>} - Le texte corrigé
+     */
+    async function correctText(text, apiKey) {
+        // Validation des paramètres
+        if (!text) {
+            console.error('Missing correct parameter:', { text });
+            throw new Error(window.BabelFishAIConstants.ERRORS.MISSING_CORRECT_PARAMS || 'Paramètres de correction manquants');
+        }
+
+        // Nettoyer le texte avant traitement
+        const cleanedText = cleanText(text);
+
+        try {
+            // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
+            const config = await window.BabelFishAIUtils.api.resolveApiConfig('chat');
+            const effectiveApiKey = apiKey || config.apiKey;
+            const { url: apiUrl, model: modelType, disableLogging } = config;
+
+            console.log('[TextProcessing] correctText using provider:', config.providerId, 'url:', apiUrl);
+
+            // Préparer les messages pour l'API
+            const messages = [
+                {
+                    role: "system",
+                    content: "Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires."
+                },
+                {
+                    role: "user",
+                    content: cleanedText
+                }
+            ];
+
+            // Préparer le payload pour l'API
+            const payload = {
+                model: modelType,
+                messages: messages,
+                temperature: 0.1 // Température basse pour des corrections précises
+            };
+
+            // Ajouter l'option no-log si demandé
+            if (disableLogging) {
+                payload["no-log"] = true;
+            }
+
+            // Appeler l'API
+            const response = await window.BabelFishAIUtils.api.callApi(apiUrl, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                apiKey: effectiveApiKey,
+                retryOnFail: true,
+                timeout: 20000
+            });
+
+            // Extraire et retourner le texte corrigé
+            if (response?.choices?.length > 0) {
+                const correctedText = response.choices[0].message.content.trim();
+                return correctedText;
+            } else {
+                throw new Error('Réponse API invalide');
+            }
+        } catch (error) {
+            console.error('Correction error:', error);
+            throw new Error(`${window.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'}: ${error.message}`);
+        }
+    }
+
+    /**
      * Traduit un texte en utilisant le provider de chat configuré (multi-provider)
      * @param {string} text - Le texte à traduire
      * @param {string} sourceLanguage - La langue source
@@ -269,6 +339,49 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     }
 
     /**
+     * Corrige les fautes d'orthographe d'un texte sélectionné
+     * @param {string} text - Le texte à corriger
+     * @returns {Promise<string>} - Le texte corrigé si tout s'est bien passé, sinon une erreur est levée
+     */
+    async function handleTextCorrection(text) {
+        // Vérifier le texte d'entrée
+        if (!isValidInputText(text)) {
+            const errorMessage = "Texte vide ou invalide pour la correction";
+            console.warn(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        try {
+            // Informer l'utilisateur que la correction est en cours
+            const message = window.BabelFishAIUtils.i18n?.getMessage("bannerCorrecting") || "Correction en cours...";
+            window.BabelFishAI.ui.showBanner(message);
+
+            // Corriger le texte
+            const correctedText = await correctText(text);
+
+            // Vérifier le résultat
+            if (!isValidInputText(correctedText)) {
+                const errorMessage = "Résultat de correction vide ou invalide";
+                console.warn(errorMessage);
+                throw new Error(errorMessage);
+            }
+
+            // Cacher la bannière une fois l'opération terminée
+            window.BabelFishAI.ui.hideBanner();
+
+            return correctedText;
+        } catch (error) {
+            console.error('Erreur lors de la correction:', error);
+
+            // Gérer l'erreur via l'API d'erreur
+            const errorMessage = window.BabelFishAIUtils.i18n?.getMessage("bannerCorrectionError") || "Erreur lors de la correction";
+            window.BabelFishAIUtils.error.handleError(errorMessage, error.message);
+
+            throw error;
+        }
+    }
+
+    /**
      * Gère la traduction d'un texte sélectionné sans enregistrement audio
      * @param {string} text - Le texte à traduire
      * @param {Object} options - Options de traduction
@@ -321,8 +434,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         isValidInputText,
         cleanText,
         rephraseText,
+        correctText,
         translateText,
         handleTextRephrasing, // NOSONAR - S1874: Faux positif, cette fonction est utilisée par d'autres modules.
+        handleTextCorrection,
         handleTextTranslation,
         determineTranslationLanguages
     };
