@@ -369,72 +369,74 @@ if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 
 ### Annotations pour Analyseurs Statiques (Faux Positifs)
 
-**IMPORTANT** : Différents analyseurs utilisent différents formats de commentaires :
-- **DeepSource** : `// skipcq: <code>` (format propriétaire)
-- **Codacy/SonarCloud** : `// skipcq: <code>` ET/OU `// eslint-disable-next-line <rule>`
-- **SonarQube** : `// NOSONAR` ou `// NOSONAR - justification`
+**Codacy/SonarCloud** utilisent ESLint. Utiliser la syntaxe ESLint pour ignorer les faux positifs.
 
-#### Format skipcq (DeepSource/Codacy) - À PRIVILÉGIER
-
-Le format `skipcq` est reconnu par DeepSource et Codacy. **Toujours placer le commentaire sur la ligne AVANT** le code concerné :
+#### Format ESLint - À UTILISER
 
 ```javascript
-// skipcq: JS-0128 - Fonction conservée pour usage interne potentiel
-function unusedButKept() { }
+// Ignorer une ligne
+// eslint-disable-next-line <rule> -- <justification>
+code;
 
-// skipcq: JS-0118 - 'use strict' inside IIFE is intentional
-'use strict';
+// Ignorer un bloc
+/* eslint-disable <rule> */
+code;
+/* eslint-enable <rule> */
 
-// skipcq: JS-0119 - Variables intentionally assigned in if/else blocks
-let a, b, c;
-
-// skipcq: JS-0377 - Regex patterns cannot use replaceAll
-text.replace(/\s+/g, ' ');
-
-// skipcq: JS-0440 - Static HTML string is safe, sanitized after
-text.replaceAll('\n', '<br>');
+// Ignorer tout le fichier (en haut du fichier)
+/* eslint-disable <rule> -- <justification> */
 ```
 
-#### Codes skipcq courants
-| Code | Description |
-|------|-------------|
-| `JS-0128` | Fonction/variable non utilisée mais conservée intentionnellement |
-| `JS-0118` | 'use strict' dans IIFE (intentionnel pour isolation) |
-| `JS-0119` | Variable non initialisée à la déclaration (assignée dans if/else) |
-| `JS-0377` | replace() avec regex au lieu de replaceAll() (patterns complexes) |
-| `JS-0440` | HTML passé à une fonction (contenu statique sûr) |
-
-#### Format ESLint (Codacy) - Quand skipcq ne suffit pas
-
-Certaines règles ESLint nécessitent le format ESLint. **Attention** : certaines règles comme `unicorn/prefer-string-replace-all` n'existent pas dans tous les analyseurs et causeront une erreur "Definition for rule not found".
+#### Exemples Courants dans ce Projet
 
 ```javascript
-// Pour le global 'chrome' dans les extensions Chrome
+// Global 'chrome' dans les extensions Chrome
 /* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
 
-// Pour les accès dynamiques avec clés contrôlées
-// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is controlled enum
+// Accès dynamique avec clés contrôlées
+// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is controlled enum ('openai'|'mistral'|'custom')
 const config = providers[providerId];
+
+// Fonction non utilisée mais conservée
+// eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne potentiel
+function unusedButKept() { }
+
+// innerHTML = '' pour vider (safe)
+// eslint-disable-next-line no-restricted-properties -- Safe: clearing with empty string, no injection risk
+element.innerHTML = '';
+
+// Console.log intentionnel (debug)
+// eslint-disable-next-line no-console -- Debug log for diagnostics
+console.log('[Module] debug info');
 ```
+
+#### Issues à Désactiver dans Codacy UI
+
+Certaines issues ne peuvent pas être ignorées avec des commentaires inline. Les désactiver dans **Repository → Code patterns** :
+
+| Issue | Raison |
+|-------|--------|
+| `Prefer replaceAll` | Regex patterns complexes ne peuvent pas utiliser replaceAll |
+| `Cyclomatic complexity` | UI complexe acceptable pour options.js |
+| `Method too long` | Définitions de config dans providers.js |
 
 #### Issues Acceptées (NE PAS CORRIGER)
 
-Ces issues sont des limitations connues acceptées dans le projet :
+Ces issues sont des limitations connues acceptées :
 
 | Fichier | Issue | Raison |
 |---------|-------|--------|
 | `options.js` | Cyclomatic complexity (9-23) | UI complexe avec multi-provider |
 | `providers.js` | Method too long (68 lines) | Définitions des providers |
-| `ui.js` | Unused functions (showBanner, hideBanner) | Conservées pour usage futur |
-| `focus-utils.js` | HTML in replaceAll | Contenu statique '<br>' sûr |
+| `ui.js` | Unused functions | Conservées pour usage futur |
 | `i18n.js`, `text-processing.js` | Prefer replaceAll | Regex patterns complexes |
 
-#### Stratégie de Gestion des Issues
+#### Règles Importantes
 
-1. **Faux positif évident** → Ajouter `// skipcq: <code> - justification`
-2. **Règle ESLint non reconnue** → Utiliser skipcq au lieu de eslint-disable
-3. **Complexité acceptée** → Documenter dans ce fichier, ne pas corriger
-4. **Vraie issue** → Refactorer si demandé explicitement
+1. **Toujours ajouter une justification** avec `--` expliquant pourquoi c'est sûr
+2. **Utiliser la portée la plus étroite** - préférer ligne > bloc > fichier
+3. **Ne pas utiliser de règles qui n'existent pas** (ex: `unicorn/prefer-string-replace-all` cause "Definition not found")
+4. **Si inline ne marche pas** → désactiver dans Codacy UI
 
 ## Developer Notes
 
