@@ -217,6 +217,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     function normalizeText(text) {
         // Remplacer les sauts de ligne par des balises <br>
         // skipcq: JS-0440 - False positive: static '<br>' string is safe, result is passed to sanitizeHTML() for XSS protection
+        // eslint-disable-next-line security/detect-non-literal-regexp -- False positive: static '<br>' string is safe, result sanitized
         const textWithBr = text.replaceAll('\n', '<br>');
 
         // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML
