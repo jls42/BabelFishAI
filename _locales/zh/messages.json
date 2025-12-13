@@ -7,6 +7,10 @@
         "message": "翻译所选内容",
         "description": "用于翻译所选文本的上下文菜单选项"
     },
+    "contextMenuCorrect": {
+        "message": "纠正拼写",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "录音已取消（Esc 键）。",
         "description": "取消录音时显示的消息"
@@ -20,7 +24,7 @@
         "description": "扩展程序描述"
     },
     "welcomeMessage": {
-        "message": "感谢您安装 BabelFishAI，这款扩展程序借助 OpenAI 的 Whisper API 将您的声音以卓越的准确性转换为文本，Whisper API 是当前语音转录的领导者。",
+        "message": "感谢安装 BabelFishAI，这款扩展程序可以将您的语音以卓越的精度转换为文本。兼容多个AI供应商，包括 Mistral AI，一个尖端的法国解决方案。",
         "description": "欢迎消息"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "改写时出错",
         "description": "改写的错误消息"
     },
+    "bannerCorrecting": {
+        "message": "正在纠正...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "纠正时出错",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "转录过程中出错",
         "description": "转录过程中发生错误时显示的错误消息"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "翻译/改写：",
         "description": "聊天提供商的标签"
+    },
+    "customProviderDescription": {
+        "message": "用于LiteLLM或其他代理的自定义供应商。需要配置URL。",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "转录URL（必填）:",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "聊天URL（必填）:",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "模型配置",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "转录模型：",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "聊天模型：",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "错误：Custom/LiteLLM供应商需要配置URL。",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "错误：URL 必须使用 HTTPS。",

@@ -24,7 +24,7 @@
         "description": "Description de l'extension"
     },
     "welcomeMessage": {
-        "message": "Merci d'avoir installé BabelFishAI, l'extension qui transforme votre voix en texte avec une précision exceptionnelle grâce à l'API Whisper d'OpenAI, le leader actuel de la transcription vocale.",
+        "message": "Merci d'avoir installé BabelFishAI, l'extension qui transforme votre voix en texte avec une précision exceptionnelle. Compatible avec plusieurs providers IA, dont Mistral AI, une solution française de pointe.",
         "description": "Message de bienvenue"
     },
     "essentialSettingsTitle": {

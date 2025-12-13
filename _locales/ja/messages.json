@@ -7,6 +7,10 @@
         "message": "選択範囲を翻訳",
         "description": "選択したテキストを翻訳するためのコンテキストメニューオプション"
     },
+    "contextMenuCorrect": {
+        "message": "スペルを修正",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "録音をキャンセルしました（Escキー）。",
         "description": "録音をキャンセルしたときに表示されるメッセージ"
@@ -20,7 +24,7 @@
         "description": "拡張機能の説明"
     },
     "welcomeMessage": {
-        "message": "BabelFishAIをインストールしていただきありがとうございます。この拡張機能は、OpenAIのWhisper APIにより、あなたの声を非常に正確なテキストに変換します。Whisper APIは、現在の音声文字起こしのリーダーです。",
+        "message": "BabelFishAIをインストールしていただきありがとうございます。このエクステンションは、あなたの声を卓越した精度でテキストに変換します。Mistral AIを含む複数のAIプロバイダーに対応しており、最先端のフランス製ソリューションです。",
         "description": "ウェルカムメッセージ"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "言い換え中にエラーが発生しました",
         "description": "言い換えのエラーメッセージ"
     },
+    "bannerCorrecting": {
+        "message": "修正中...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "修正中にエラー",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "文字起こし中にエラーが発生しました",
         "description": "文字起こし中にエラーが発生した場合に表示されるエラーメッセージ"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "翻訳/言い換え:",
         "description": "チャットプロバイダーのラベル"
+    },
+    "customProviderDescription": {
+        "message": "LiteLLMまたは他のプロキシ用のカスタムプロバイダー。URLは必須です。",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "文字起こしURL（必須）:",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "チャットURL（必須）:",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "モデル設定",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "文字起こしモデル:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "チャットモデル:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "エラー: Custom/LiteLLMプロバイダーにはURLの設定が必要です。",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "エラー: URLはHTTPSを使用する必要があります。",

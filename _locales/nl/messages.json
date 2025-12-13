@@ -7,6 +7,10 @@
         "message": "Selectie vertalen",
         "description": "Contextmenu-optie om de geselecteerde tekst te vertalen"
     },
+    "contextMenuCorrect": {
+        "message": "Spelling corrigeren",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Opname geannuleerd (Esc-toets).",
         "description": "Bericht weergegeven bij het annuleren van de opname"
@@ -20,7 +24,7 @@
         "description": "Beschrijving van de extensie"
     },
     "welcomeMessage": {
-        "message": "Bedankt voor het installeren van BabelFishAI, de extensie die uw stem met uitzonderlijke nauwkeurigheid omzet in tekst dankzij de Whisper API van OpenAI, de huidige leider in spraaktranscriptie.",
+        "message": "Bedankt voor het installeren van BabelFishAI, de extensie die uw stem omzet in tekst met uitzonderlijke precisie. Compatibel met meerdere AI-providers, waaronder Mistral AI, een geavanceerde Franse oplossing.",
         "description": "Welkomstbericht"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "Fout bij het herformuleren",
         "description": "Foutbericht voor herformuleren"
     },
+    "bannerCorrecting": {
+        "message": "Bezig met corrigeren...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Fout bij correctie",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Fout tijdens de transcriptie",
         "description": "Foutbericht dat wordt weergegeven wanneer er een fout optreedt tijdens de transcriptie"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "Vertaling/Herformulering:",
         "description": "Label voor de chatprovider"
+    },
+    "customProviderDescription": {
+        "message": "Aangepaste provider voor LiteLLM of andere proxies. URLs zijn verplicht.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "Transcriptie-URL (verplicht):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "Chat-URL (verplicht):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Modelconfiguratie",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Transcriptiemodel:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "Chatmodel:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "Fout: De Custom/LiteLLM-provider vereist geconfigureerde URLs.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "Fout: URL's moeten HTTPS gebruiken.",

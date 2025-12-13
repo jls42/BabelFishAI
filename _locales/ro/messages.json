@@ -7,6 +7,10 @@
         "message": "Tradu selecția",
         "description": "Opțiune din meniul contextual pentru a traduce textul selectat"
     },
+    "contextMenuCorrect": {
+        "message": "Corectează ortografia",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Înregistrare anulată (tasta Esc).",
         "description": "Mesaj afișat la anularea înregistrării"
@@ -20,7 +24,7 @@
         "description": "Descrierea extensiei"
     },
     "welcomeMessage": {
-        "message": "Vă mulțumim că ați instalat BabelFishAI, extensia care vă transformă vocea în text cu o precizie excepțională datorită API-ului Whisper de la OpenAI, liderul actual în transcrierea vocală.",
+        "message": "Vă mulțumim că ați instalat BabelFishAI, extensia care transformă vocea în text cu o precizie excepțională. Compatibilă cu mai mulți furnizori de IA, inclusiv Mistral AI, o soluție franceză de vârf.",
         "description": "Mesaj de bun venit"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "Eroare la reformulare",
         "description": "Mesaj de eroare pentru reformulare"
     },
+    "bannerCorrecting": {
+        "message": "Se corectează...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Eroare la corectare",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Eroare în timpul transcrierii",
         "description": "Mesaj de eroare afișat când apare o eroare în timpul transcrierii"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "Traducere/Reformulare:",
         "description": "Etichetă pentru furnizorul de chat"
+    },
+    "customProviderDescription": {
+        "message": "Furnizor personalizat pentru LiteLLM sau alte proxy-uri. URL-urile sunt obligatorii.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "URL transcriere (obligatoriu):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "URL chat (obligatoriu):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Configurare modele",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Model de transcriere:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "Model de chat:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "Eroare: Furnizorul Custom/LiteLLM necesită URL-uri configurate.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "Eroare: URL-urile trebuie să folosească HTTPS.",

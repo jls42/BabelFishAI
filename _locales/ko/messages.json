@@ -7,6 +7,10 @@
         "message": "선택 항목 번역",
         "description": "선택한 텍스트를 번역하기 위한 컨텍스트 메뉴 옵션"
     },
+    "contextMenuCorrect": {
+        "message": "맞춤법 수정",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "녹음이 취소되었습니다(Esc 키).",
         "description": "녹음을 취소할 때 표시되는 메시지"
@@ -20,7 +24,7 @@
         "description": "확장 프로그램 설명"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 현재 음성 텍스트 변환 분야의 선두 주자인 OpenAI의 Whisper API 덕분에 음성을 매우 정확하게 텍스트로 변환합니다.",
+        "message": "BabelFishAI를 설치해 주셔서 감사합니다. 이 확장 프로그램은 뛰어난 정확도로 음성을 텍스트로 변환합니다. 최첨단 프랑스 솔루션인 Mistral AI를 포함한 여러 AI 제공업체와 호환됩니다.",
         "description": "환영 메시지"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "바꾸어 쓰기 중 오류 발생",
         "description": "바꾸어 쓰기 오류 메시지"
     },
+    "bannerCorrecting": {
+        "message": "수정 중...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "수정 중 오류",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "음성 텍스트 변환 중 오류 발생",
         "description": "음성 텍스트 변환 중 오류가 발생하면 표시되는 오류 메시지"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "번역/다시 쓰기:",
         "description": "채팅 제공업체 레이블"
+    },
+    "customProviderDescription": {
+        "message": "LiteLLM 또는 기타 프록시를 위한 사용자 정의 제공업체. URL이 필요합니다.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "전사 URL (필수):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "채팅 URL (필수):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "모델 구성",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "전사 모델:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "채팅 모델:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "오류: Custom/LiteLLM 제공업체에는 구성된 URL이 필요합니다.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "오류: URL은 HTTPS를 사용해야 합니다.",

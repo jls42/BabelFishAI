@@ -7,6 +7,10 @@
         "message": "Traducir la selección",
         "description": "Opción del menú contextual para traducir el texto seleccionado"
     },
+    "contextMenuCorrect": {
+        "message": "Corregir ortografía",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Grabación cancelada (tecla Esc).",
         "description": "Mensaje mostrado al cancelar la grabación"
@@ -20,7 +24,7 @@
         "description": "Descripción de la extensión"
     },
     "welcomeMessage": {
-        "message": "Gracias por instalar BabelFishAI, la extensión que transforma tu voz en texto con una precisión excepcional gracias a la API Whisper de OpenAI, el líder actual en transcripción de voz.",
+        "message": "Gracias por instalar BabelFishAI, la extensión que transforma tu voz en texto con una precisión excepcional. Compatible con múltiples proveedores de IA, incluyendo Mistral AI, una solución francesa de vanguardia.",
         "description": "Mensaje de bienvenida"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "Error durante la reformulación",
         "description": "Mensaje de error para la reformulación"
     },
+    "bannerCorrecting": {
+        "message": "Corrigiendo...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Error durante la corrección",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Error durante la transcripción",
         "description": "Mensaje de error que se muestra cuando ocurre un error durante la transcripción"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "Traducción/Reformulación:",
         "description": "Etiqueta para el proveedor de chat"
+    },
+    "customProviderDescription": {
+        "message": "Proveedor personalizado para LiteLLM u otros proxies. Las URLs son obligatorias.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "URL de transcripción (obligatorio):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "URL de chat (obligatorio):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Configuración de modelos",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Modelo de transcripción:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "Modelo de chat:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "Error: El proveedor Custom/LiteLLM requiere URLs configuradas.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "Error: Las URLs deben usar HTTPS.",

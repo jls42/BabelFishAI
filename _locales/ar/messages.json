@@ -7,6 +7,10 @@
         "message": "ترجمة التحديد",
         "description": "خيار قائمة السياق لترجمة النص المحدد"
     },
+    "contextMenuCorrect": {
+        "message": "تصحيح الإملاء",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "تم إلغاء التسجيل (مفتاح Esc).",
         "description": "الرسالة المعروضة عند إلغاء التسجيل"
@@ -20,7 +24,7 @@
         "description": "وصف الإضافة"
     },
     "welcomeMessage": {
-        "message": "شكرًا لتثبيت BabelFishAI، الإضافة التي تحول صوتك إلى نص بدقة استثنائية بفضل واجهة برمجة تطبيقات Whisper من OpenAI، الرائدة حاليًا في النسخ الصوتي.",
+        "message": "شكراً لتثبيت BabelFishAI، الإضافة التي تحول صوتك إلى نص بدقة استثنائية. متوافقة مع عدة مزودي ذكاء اصطناعي، بما في ذلك Mistral AI، حل فرنسي متطور.",
         "description": "رسالة ترحيب"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "حدث خطأ أثناء إعادة الصياغة",
         "description": "رسالة خطأ في إعادة الصياغة"
     },
+    "bannerCorrecting": {
+        "message": "جارٍ التصحيح...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "خطأ أثناء التصحيح",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "حدث خطأ أثناء النسخ",
         "description": "رسالة خطأ تظهر عند حدوث خطأ أثناء النسخ"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "الترجمة/إعادة الصياغة:",
         "description": "تسمية لموفر الدردشة"
+    },
+    "customProviderDescription": {
+        "message": "مزود مخصص لـ LiteLLM أو وكلاء آخرين. عناوين URL مطلوبة.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "رابط النسخ (مطلوب):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "رابط المحادثة (مطلوب):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "تكوين النماذج",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "نموذج النسخ:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "نموذج المحادثة:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "خطأ: مزود Custom/LiteLLM يتطلب عناوين URL مُهيأة.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "خطأ: يجب أن تستخدم عناوين URL بروتوكول HTTPS.",

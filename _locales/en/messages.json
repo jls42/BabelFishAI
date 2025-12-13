@@ -24,7 +24,7 @@
         "description": "Extension description"
     },
     "welcomeMessage": {
-        "message": "Thank you for installing BabelFishAI, the extension that transforms your voice into text with exceptional accuracy thanks to the Whisper API from OpenAI, the current leader in voice transcription.",
+        "message": "Thank you for installing BabelFishAI, the extension that transforms your voice into text with exceptional precision. Compatible with multiple AI providers, including Mistral AI, a cutting-edge French solution.",
         "description": "Welcome message"
     },
     "essentialSettingsTitle": {
@@ -386,6 +386,10 @@
     "chatModelLabel": {
         "message": "Chat model:",
         "description": "Label for the chat model"
+    },
+    "customUrlRequiredError": {
+        "message": "Error: Custom/LiteLLM provider requires configured URLs.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "Error: URLs must use HTTPS.",

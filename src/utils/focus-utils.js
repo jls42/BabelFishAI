@@ -465,26 +465,17 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Exporter uniquement les fonctions utilisées publiquement
+    // Les fonctions internes (isStoredElementValid, restoreFocus, handleInputCursorPosition,
+    // findLastTextNode, handleContentEditableCursor, isValidInputType, normalizeText,
+    // insertNormalizedText, insertPlainText, insertNormalizedTextWithoutSelection,
+    // insertPlainTextWithoutSelection, insertTextWithSelection, insertInContentEditable,
+    // insertTextIntoInput) restent disponibles en interne mais ne sont plus exposées
     exports.focus = {
         storeFocusAndSelection,
-        isStoredElementValid,
-        restoreFocus,
-        handleInputCursorPosition,
-        findLastTextNode,
-        handleContentEditableCursor,
         restoreFocusAndSelection,
         isValidElementForInsertion,
-        isValidInputType,
-        normalizeText,
-        insertNormalizedText,
-        insertPlainText,
-        insertNormalizedTextWithoutSelection, // Ajoutée
-        insertPlainTextWithoutSelection,    // Ajoutée
-        insertTextWithSelection,
-        insertInContentEditable,
         handleActiveElementInsertion,
-        insertTextIntoInput,
         insertTextInEditableElement
     };
 

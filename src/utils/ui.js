@@ -757,19 +757,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     // Note: La fonction createBannerButton a été déplacée vers banner-utils.js
 
-    // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Exporter uniquement les fonctions utilisées publiquement
+    // Les fonctions internes (createCopyButton, createTranscriptionContainer, removeTranscriptionElement,
+    // createTimerElements, createToggleElements, createControlsContainer, setupAutoRemoval,
+    // hideBanner, showBanner) restent disponibles en interne mais ne sont plus exposées
     exports.ui = {
-        createCopyButton,
         showTextInDialog,
-        createTranscriptionContainer,
-        removeTranscriptionElement,
-        createTimerElements,
-        createToggleElements,
-        createControlsContainer,
-        setupAutoRemoval,
-        updateBannerColor,
-        hideBanner,
-        showBanner
+        updateBannerColor
     };
 
 })(window.BabelFishAIUtils);

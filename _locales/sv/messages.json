@@ -7,6 +7,10 @@
         "message": "Översätt markering",
         "description": "Alternativ i snabbmenyn för att översätta markerad text"
     },
+    "contextMenuCorrect": {
+        "message": "Korrigera stavning",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Inspelning avbruten (Esc-tangenten).",
         "description": "Meddelande som visas när inspelningen avbryts"
@@ -20,7 +24,7 @@
         "description": "Tilläggets beskrivning"
     },
     "welcomeMessage": {
-        "message": "Tack för att du installerade BabelFishAI, tillägget som förvandlar din röst till text med exceptionell noggrannhet tack vare Whisper API från OpenAI, den nuvarande ledaren inom rösttranskription.",
+        "message": "Tack för att du installerade BabelFishAI, tillägget som omvandlar din röst till text med exceptionell precision. Kompatibel med flera AI-leverantörer, inklusive Mistral AI, en banbrytande fransk lösning.",
         "description": "Välkomstmeddelande"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "Fel vid omformulering",
         "description": "Felmeddelande för omformulering"
     },
+    "bannerCorrecting": {
+        "message": "Korrigerar...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Fel vid korrigering",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Fel under transkriptionen",
         "description": "Felmeddelande som visas när ett fel uppstår under transkriptionen"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "Översättning/Omformulering:",
         "description": "Etikett för chattleverantör"
+    },
+    "customProviderDescription": {
+        "message": "Anpassad leverantör för LiteLLM eller andra proxies. URLs krävs.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "Transkriptions-URL (obligatorisk):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "Chatt-URL (obligatorisk):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Modellkonfiguration",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Transkriptionsmodell:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "Chattmodell:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "Fel: Custom/LiteLLM-leverantören kräver konfigurerade URLs.",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "Fel: URL:er måste använda HTTPS.",

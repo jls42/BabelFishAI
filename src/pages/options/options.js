@@ -104,16 +104,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, SAVE_DEBOUNCE_DELAY);
     }
 
-    // Fonction pour valider une URL HTTPS
-    function isValidHttpsUrl(string) {
-        try {
-            const url = new URL(string);
-            return url.protocol === 'https:';
-        } catch (_) {
-            return false;
-        }
-    }
-
     // ===== Gestion des Providers (nouveau design dropdown + panel) =====
 
     /**
@@ -873,21 +863,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Créer un élément de domaine avec son bouton de suppression
+    function createDomainItem(domain) {
+        const item = document.createElement('div');
+        item.className = 'domain-item';
+        item.textContent = domain;
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-domain-button';
+        removeButton.textContent = '×';
+        removeButton.onclick = () => item.remove();
+
+        item.appendChild(removeButton);
+        return item;
+    }
+
     // Afficher les domaines forcés
     function displayForcedDomains(domains) {
         domainsList.innerHTML = '';
         domains.forEach(domain => {
-            const item = document.createElement('div');
-            item.className = 'domain-item';
-            item.textContent = domain;
-
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-domain-button';
-            removeButton.textContent = '×';
-            removeButton.onclick = () => item.remove();
-
-            item.appendChild(removeButton);
-            domainsList.appendChild(item);
+            domainsList.appendChild(createDomainItem(domain));
         });
     }
 
@@ -895,17 +890,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function addDomain() {
         const domain = newDomainInput.value.trim();
         if (domain) {
-            const item = document.createElement('div');
-            item.className = 'domain-item';
-            item.textContent = domain;
-
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-domain-button';
-            removeButton.textContent = '×';
-            removeButton.onclick = () => item.remove();
-
-            item.appendChild(removeButton);
-            domainsList.appendChild(item);
+            domainsList.appendChild(createDomainItem(domain));
             newDomainInput.value = '';
         }
     }
@@ -992,7 +977,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     bannerColorEndInput.addEventListener('input', () => debouncedSaveOptions());
     bannerOpacityInput.addEventListener('input', () => debouncedSaveOptions());
     enableRephraseCheckbox.addEventListener('change', () => debouncedSaveOptions());
-    enableTranslationCheckbox.addEventListener('change', () => debouncedSaveOptions());
+    enableTranslationCheckbox.addEventListener('change', () => {
+        updateTranslationOptionsVisibility();
+        debouncedSaveOptions();
+    });
     sourceLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
     targetLanguageSelect.addEventListener('change', () => debouncedSaveOptions());
     disableLoggingCheckbox.addEventListener('change', () => debouncedSaveOptions());
@@ -1000,7 +988,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     saveButton.addEventListener('click', () => saveOptions(true));
     saveAdvancedButton.addEventListener('click', () => saveOptions(true));
     toggleApiKeyButton.addEventListener('click', toggleApiKeyVisibility);
-    enableTranslationCheckbox.addEventListener('change', updateTranslationOptionsVisibility);
     addDomainButton.addEventListener('click', addDomain);
     advancedHeader.addEventListener('click', toggleAdvancedSection);
 

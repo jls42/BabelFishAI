@@ -7,6 +7,10 @@
         "message": "चयन का अनुवाद करें",
         "description": "चयनित पाठ का अनुवाद करने के लिए संदर्भ मेनू विकल्प"
     },
+    "contextMenuCorrect": {
+        "message": "वर्तनी सुधारें",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "रिकॉर्डिंग रद्द की गई (Esc कुंजी)।",
         "description": "रिकॉर्डिंग रद्द करते समय प्रदर्शित संदेश"
@@ -20,7 +24,7 @@
         "description": "एक्सटेंशन विवरण"
     },
     "welcomeMessage": {
-        "message": "BabelFishAI इंस्टॉल करने के लिए धन्यवाद, वह एक्सटेंशन जो OpenAI के व्हिस्पर एपीआई की बदौलत आपकी आवाज़ को असाधारण सटीकता के साथ टेक्स्ट में बदल देता है, जो वर्तमान में वॉयस ट्रांसक्रिप्शन में अग्रणी है।",
+        "message": "BabelFishAI इंस्टॉल करने के लिए धन्यवाद, यह एक्सटेंशन आपकी आवाज़ को असाधारण सटीकता के साथ टेक्स्ट में बदलता है। Mistral AI सहित कई AI प्रदाताओं के साथ संगत, एक अत्याधुनिक फ्रांसीसी समाधान।",
         "description": "स्वागत संदेश"
     },
     "essentialSettingsTitle": {
@@ -191,6 +195,14 @@
         "message": "रीफ़्रेशिंग के दौरान त्रुटि",
         "description": "रीफ़्रेशिंग के लिए त्रुटि संदेश"
     },
+    "bannerCorrecting": {
+        "message": "सुधार हो रहा है...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "सुधार में त्रुटि",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "ट्रांसक्रिप्शन के दौरान त्रुटि",
         "description": "ट्रांसक्रिप्शन के दौरान कोई त्रुटि होने पर प्रदर्शित त्रुटि संदेश"
@@ -350,6 +362,34 @@
     "chatProviderLabel": {
         "message": "अनुवाद/रीफ़्रेशिंग:",
         "description": "चैट प्रदाता के लिए लेबल"
+    },
+    "customProviderDescription": {
+        "message": "LiteLLM या अन्य प्रॉक्सी के लिए कस्टम प्रदाता। URLs आवश्यक हैं।",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "ट्रांसक्रिप्शन URL (आवश्यक):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "चैट URL (आवश्यक):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "मॉडल कॉन्फ़िगरेशन",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "ट्रांसक्रिप्शन मॉडल:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "चैट मॉडल:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "त्रुटि: Custom/LiteLLM प्रदाता को कॉन्फ़िगर किए गए URLs की आवश्यकता है।",
+        "description": "Error message when custom provider URLs are not configured"
     },
     "invalidUrlError": {
         "message": "त्रुटि: URLs को HTTPS का उपयोग करना चाहिए।",

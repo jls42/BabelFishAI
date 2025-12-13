@@ -154,19 +154,21 @@ Example: `window.BabelFishAIUtils.recording.startRecording()` to call a recordin
 
 ## Technical Debt (Audit Dec 2025)
 
-### Files to Remove (~600 lines of dead code)
-1. `src/utils/api.js` - Completely deprecated, delegates to api-utils.js
-2. `src/utils/translation.js` - Duplicates text-processing.js
-3. `src/utils/text-translation.js` - Duplicates text-processing.js
+### Files to Remove - ✅ COMPLETED
+Les fichiers deprecated ont été supprimés :
+- ~~`src/utils/api.js`~~ - Supprimé
+- ~~`src/utils/translation.js`~~ - Supprimé
+- ~~`src/utils/text-translation.js`~~ - Supprimé
+- ~~`src/utils/languages.js`~~ - Supprimé
 
-### Duplications to Consolidate
-- Banner functions duplicated between `ui.js` and `banner-utils.js`
-- Language definitions exist in 4 places (consolidate to `languages-shared.js`)
-- ERRORS constants copied locally in some modules (should use `constants.js`)
+### Duplications Intentionnelles (NE PAS SUPPRIMER)
+- **`languages-data.js` / `languages-shared.js`** : Nécessaire car le Service Worker n'a pas accès à `window`
+- **Constantes dans `background.js`** : Nécessaire pour la même raison (STATES, ACTIONS, BADGES, ERRORS)
+- **Fallbacks langues dans `banner-utils.js`** : Nécessaire à cause d'une race condition au chargement
 
-### Over-exposed Internal Functions
-- `focus-utils.js` exports 17 functions (reduce to ~7 public ones)
-- `ui.js` exports helpers that should be private
+### Over-exposed Internal Functions - ✅ FIXED
+- `focus-utils.js` : Réduit de 17 à 5 fonctions publiques
+- `ui.js` : Réduit de 11 à 2 fonctions publiques
 
 ## Developer Notes
 
