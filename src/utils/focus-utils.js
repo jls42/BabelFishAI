@@ -216,7 +216,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function normalizeText(text) {
         // Remplacer les sauts de ligne par des balises <br>
-        // eslint-disable-next-line security/detect-unsafe-regex -- False positive: static string '<br>' replacement, followed by sanitizeHTML()
+        // Note: Static '<br>' string is safe, and result is passed to sanitizeHTML() for security
         const textWithBr = text.replaceAll('\n', '<br>');
 
         // Utiliser la fonction sanitizeHTML de i18n.js pour sécuriser le contenu HTML

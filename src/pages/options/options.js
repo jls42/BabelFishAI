@@ -644,6 +644,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} modelType - 'transcription' ou 'chat'
      */
     function addProviderModel(providerId, modelType) {
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return;
 
