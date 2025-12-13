@@ -187,8 +187,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {string} The escaped string.
      */
     function escapeRegExp(string) {
-        // skipcq: JS-0377 - Intentional: regex pattern escapes special chars, replaceAll not applicable
-        return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`); // $& means the whole matched string
+        // Intentional: regex pattern escapes special chars, replaceAll not applicable
+        return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`); // NOSONAR - $& means the whole matched string
     }
 
     /**

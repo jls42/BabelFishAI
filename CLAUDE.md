@@ -369,19 +369,27 @@ if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 
 ### Annotations pour Analyseurs Statiques (Faux Positifs)
 
-**Codacy/SonarCloud** utilisent ESLint. Utiliser la syntaxe ESLint pour ignorer les faux positifs.
+Différents analyseurs utilisent différents formats :
+- **Codacy (ESLint)** : `// eslint-disable-next-line <rule> -- justification`
+- **SonarCloud** : `// NOSONAR` ou `// NOSONAR - justification`
 
-#### Format ESLint - À UTILISER
+#### Format NOSONAR (SonarCloud) - Pour issues de style
+
+```javascript
+// NOSONAR à la fin de la ligne concernée
+code; // NOSONAR - justification
+
+// Exemples courants
+text.replace(/\s+/g, ' '); // NOSONAR - regex pattern, replaceAll not applicable
+function unused() { } // NOSONAR - Fonction conservée pour usage futur
+```
+
+#### Format ESLint (Codacy) - Pour issues de sécurité
 
 ```javascript
 // Ignorer une ligne
 // eslint-disable-next-line <rule> -- <justification>
 code;
-
-// Ignorer un bloc
-/* eslint-disable <rule> */
-code;
-/* eslint-enable <rule> */
 
 // Ignorer tout le fichier (en haut du fichier)
 /* eslint-disable <rule> -- <justification> */
@@ -394,16 +402,8 @@ code;
 /* eslint-disable no-undef -- 'chrome' is a global provided by Chrome extension environment */
 
 // Accès dynamique avec clés contrôlées
-// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is controlled enum ('openai'|'mistral'|'custom')
+// eslint-disable-next-line security/detect-object-injection -- False positive: providerId is controlled enum
 const config = providers[providerId];
-
-// Fonction non utilisée mais conservée
-// eslint-disable-next-line no-unused-vars -- Fonction conservée pour usage interne potentiel
-function unusedButKept() { }
-
-// innerHTML = '' pour vider (safe)
-// eslint-disable-next-line no-restricted-properties -- Safe: clearing with empty string, no injection risk
-element.innerHTML = '';
 
 // Console.log intentionnel (debug)
 // eslint-disable-next-line no-console -- Debug log for diagnostics
