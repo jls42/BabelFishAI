@@ -21,10 +21,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         MIC_ACCESS_ERROR: "Impossible d'accéder au microphone. Veuillez vérifier les permissions."
     };
 
-    const API_CONFIG = {
-        DEFAULT_WHISPER_API_URL: 'https://api.openai.com/v1/audio/transcriptions',
-        WHISPER_MODEL: 'whisper-1'
-    };
+    // Note: API_CONFIG supprimé car non utilisé - la configuration est gérée par resolveApiConfig
 
     const CANCEL_MESSAGE = {
         RECORDING_CANCELED: window.BabelFishAIUtils.i18n?.getMessage("recordingCanceled") || "Enregistrement annulé (touche Échap)."

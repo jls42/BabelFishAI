@@ -29,6 +29,9 @@ for arg in "$@"; do
         --clean)
             CLEAN=true
             ;;
+        *)
+            # Ignorer les arguments non reconnus
+            ;;
     esac
 done
 
@@ -41,7 +44,6 @@ echo ""
 
 # Collecter toutes les clés utilisées dans le code
 collect_keys() {
-    local keys=""
 
     # Clés data-i18n dans les fichiers HTML
     html_keys=$(grep -rhoP 'data-i18n="[^"]*"' "$PROJECT_DIR/src" 2>/dev/null | sed 's/data-i18n="//;s/"//' | sort -u || true)
@@ -60,6 +62,7 @@ collect_keys() {
 
     # Combiner et dédupliquer
     echo -e "$html_keys\n$placeholder_keys\n$js_keys\n$chrome_keys\n$manifest_keys" | grep -v '^$' | sort -u
+    return 0
 }
 
 # Vérifier si une clé existe dans un fichier de messages
@@ -67,6 +70,7 @@ key_exists() {
     local key="$1"
     local file="$2"
     grep -q "\"$key\":" "$file" 2>/dev/null
+    return $?
 }
 
 # Obtenir la valeur d'une clé depuis un fichier JSON
@@ -84,6 +88,7 @@ try:
 except:
     pass
 " 2>/dev/null
+    return 0
 }
 
 echo -e "${YELLOW}Collecte des clés utilisées dans le code...${NC}"
@@ -105,7 +110,7 @@ FR_FILE="$LOCALES_DIR/fr/messages.json"
 for locale in $locales; do
     messages_file="$LOCALES_DIR/$locale/messages.json"
 
-    if [ ! -f "$messages_file" ]; then
+    if [[ ! -f "$messages_file" ]]; then
         echo -e "${RED}✗ $locale: messages.json non trouvé${NC}"
         continue
     fi
@@ -123,11 +128,11 @@ for locale in $locales; do
     missing_per_locale[$locale]=$missing_count
     total_missing=$((total_missing + missing_count))
 
-    if [ $missing_count -eq 0 ]; then
+    if [[ $missing_count -eq 0 ]]; then
         echo -e "${GREEN}✓ $locale: Complet${NC}"
     else
         echo -e "${RED}✗ $locale: $missing_count clés manquantes${NC}"
-        if [ "$VERBOSE" == "true" ]; then
+        if [[ "$VERBOSE" == "true" ]]; then
             echo -e "$missing_keys" | grep -v '^$' | while read -r k; do
                 echo -e "    - $k"
             done
@@ -160,23 +165,23 @@ for key in $fr_keys; do
     # Vérifier si la clé est utilisée dans le code
     is_used=false
     for used_key in $all_keys; do
-        if [ "$key" == "$used_key" ]; then
+        if [[ "$key" == "$used_key" ]]; then
             is_used=true
             break
         fi
     done
 
-    if [ "$is_used" == "false" ]; then
+    if [[ "$is_used" == "false" ]]; then
         dead_keys="$dead_keys$key\n"
         ((dead_count++)) || true
     fi
 done
 
-if [ $dead_count -eq 0 ]; then
+if [[ $dead_count -eq 0 ]]; then
     echo -e "${GREEN}✓ Aucune clé morte détectée${NC}"
 else
     echo -e "${RED}✗ $dead_count clés mortes détectées (non utilisées dans le code)${NC}"
-    if [ "$VERBOSE" == "true" ]; then
+    if [[ "$VERBOSE" == "true" ]]; then
         echo -e "$dead_keys" | grep -v '^$' | while read -r k; do
             echo -e "    - $k"
         done
@@ -184,7 +189,7 @@ else
 fi
 
 # === Nettoyage des clés mortes ===
-if [ "$CLEAN" == "true" ] && [ $dead_count -gt 0 ]; then
+if [[ "$CLEAN" == "true" ]] && [[ $dead_count -gt 0 ]]; then
     echo ""
     echo -e "${YELLOW}=== Nettoyage des clés mortes ===${NC}"
     echo ""
@@ -195,7 +200,7 @@ if [ "$CLEAN" == "true" ] && [ $dead_count -gt 0 ]; then
     for locale in $locales; do
         messages_file="$LOCALES_DIR/$locale/messages.json"
 
-        if [ ! -f "$messages_file" ]; then
+        if [[ ! -f "$messages_file" ]]; then
             continue
         fi
 
@@ -234,13 +239,13 @@ echo -e "Locales vérifiées: $locale_count"
 
 exit_code=0
 
-if [ $total_missing -gt 0 ]; then
+if [[ $total_missing -gt 0 ]]; then
     echo -e "${RED}✗ $total_missing traductions manquantes au total${NC}"
     echo ""
     echo -e "${YELLOW}Clés manquantes par locale:${NC}"
     for locale in $locales; do
         count=${missing_per_locale[$locale]:-0}
-        if [ "$count" -gt 0 ]; then
+        if [[ "$count" -gt 0 ]]; then
             echo -e "  $locale: $count manquantes"
         fi
     done
@@ -249,7 +254,7 @@ else
     echo -e "${GREEN}✓ Toutes les traductions sont complètes!${NC}"
 fi
 
-if [ $dead_count -gt 0 ]; then
+if [[ $dead_count -gt 0 ]]; then
     echo -e "${RED}✗ $dead_count clés mortes à supprimer${NC}"
     exit_code=1
 else

@@ -171,12 +171,13 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             }
 
             // Appeler l'API
-            const response = await window.BabelFishAIUtils.api.callApi(apiUrl, {
-                method: 'POST',
-                body: JSON.stringify(payload),
+            const response = await window.BabelFishAIUtils.api.callApi({
+                url: apiUrl,
                 apiKey: effectiveApiKey,
-                retryOnFail: true,
-                timeout: 20000
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                errorType: window.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
+                retryOnFail: true
             });
 
             // Extraire et retourner le texte corrigé

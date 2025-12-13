@@ -10,17 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
     const openaiApiKeyInput = document.getElementById('openaiApiKey');
-    const configOpenAI = document.getElementById('configOpenAI');
 
     const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
     const mistralApiKeyInput = document.getElementById('mistralApiKey');
-    const configMistral = document.getElementById('configMistral');
 
     const customEnabledCheckbox = document.getElementById('customEnabled');
     const customApiKeyInput = document.getElementById('customApiKey');
     const customTranscriptionUrlInput = document.getElementById('customTranscriptionUrl');
     const customChatUrlInput = document.getElementById('customChatUrl');
-    const configCustom = document.getElementById('configCustom');
 
     // Éléments DOM pour les modèles de chaque provider
     const providerModelElements = {
@@ -301,24 +298,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             enabled.push('custom');
         }
         return enabled;
-    }
-
-    /**
-     * Récupère la liste des IDs de providers avec checkbox activée (même sans clé)
-     * @returns {string[]} Liste des IDs
-     */
-    function getCheckedProviderIds() {
-        const checked = [];
-        if (openaiEnabledCheckbox.checked) {
-            checked.push('openai');
-        }
-        if (mistralEnabledCheckbox.checked) {
-            checked.push('mistral');
-        }
-        if (customEnabledCheckbox.checked) {
-            checked.push('custom');
-        }
-        return checked;
     }
 
     /**

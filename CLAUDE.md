@@ -170,6 +170,67 @@ Les fichiers deprecated ont été supprimés :
 - `focus-utils.js` : Réduit de 17 à 5 fonctions publiques
 - `ui.js` : Réduit de 11 à 2 fonctions publiques
 
+## Code Quality - Linting Rules
+
+### Variables et Fonctions
+- **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
+- **Supprimer les fonctions inutilisées** ou ajouter `// skipcq: JS-0128` si conservées intentionnellement
+- **Éviter les constantes importées mais non utilisées** : Ne pas importer de constantes "au cas où"
+
+### Appels d'API (api-utils.js)
+La fonction `callApi` attend UN SEUL objet avec toutes les options :
+```javascript
+// ✅ CORRECT
+await window.BabelFishAIUtils.api.callApi({
+    url: apiUrl,
+    apiKey: effectiveApiKey,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    errorType: 'Error message',
+    retryOnFail: true
+});
+
+// ❌ INCORRECT (deux arguments)
+await window.BabelFishAIUtils.api.callApi(apiUrl, { ... });
+```
+
+### Scripts Shell (Bash)
+- **Toujours utiliser `[[` au lieu de `[`** pour les tests conditionnels (plus sûr et plus de fonctionnalités)
+- **Ajouter un cas par défaut `*)` dans les `case` statements**
+- **Ajouter `return` explicite** à la fin des fonctions
+- **Supprimer les variables locales non utilisées**
+
+Exemple :
+```bash
+# ✅ CORRECT
+if [[ $count -gt 0 ]]; then
+    echo "Found $count items"
+fi
+
+case $arg in
+    -v|--verbose)
+        VERBOSE=true
+        ;;
+    *)
+        # Cas par défaut
+        ;;
+esac
+
+my_function() {
+    # code
+    return 0
+}
+
+# ❌ INCORRECT
+if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
+```
+
+### Commentaires skipcq
+Pour les cas où le code est intentionnel mais flaggé par le linter :
+- `// skipcq: JS-0128` - Fonction/variable non utilisée mais conservée intentionnellement
+- `// skipcq: JS-0002` - Console.log intentionnel (debug)
+- `// skipcq: JS-0119` - Initialisation dans déclaration intentionnelle
+
 ## Developer Notes
 
 - Check `manifest.json` to understand extension structure
