@@ -6,7 +6,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     // Utilisation des constantes globales depuis constants.js
     const UI_CONFIG = globalThis.BabelFishAIConstants.UI_CONFIG;
-    const MESSAGE_TYPES = globalThis.BabelFishAIConstants.MESSAGE_TYPES;
     const CONFIG = globalThis.BabelFishAIConstants.CONFIG;
 
     /**
