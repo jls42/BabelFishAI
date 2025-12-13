@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage des status à côté du dropdown
      */
     function updateDropdownStatus() {
-        const providers = ['openai', 'mistral', 'custom'];
+        const providers = ['mistral', 'openai', 'custom'];
         let statusHtml = '';
 
         providers.forEach(providerId => {
@@ -299,11 +299,11 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function getEnabledProviderIds() {
         const enabled = [];
-        if (openaiEnabledCheckbox.checked && openaiApiKeyInput.value.trim()) {
-            enabled.push('openai');
-        }
         if (mistralEnabledCheckbox.checked && mistralApiKeyInput.value.trim()) {
             enabled.push('mistral');
+        }
+        if (openaiEnabledCheckbox.checked && openaiApiKeyInput.value.trim()) {
+            enabled.push('openai');
         }
         // Pour custom, vérifier aussi les URLs obligatoires
         if (customEnabledCheckbox.checked && customApiKeyInput.value.trim() &&
