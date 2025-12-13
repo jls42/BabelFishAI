@@ -1,5 +1,6 @@
 // Script de gestion des options
 /* global chrome */ // Chrome extension API global
+/* eslint-disable complexity, max-lines-per-function -- Options UI requires multi-provider handling with inherent complexity */
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;

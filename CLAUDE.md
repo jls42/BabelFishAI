@@ -372,6 +372,12 @@ if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 Différents analyseurs utilisent différents formats :
 - **Codacy (ESLint)** : `// eslint-disable-next-line <rule> -- justification`
 - **SonarCloud** : `// NOSONAR` ou `// NOSONAR - justification`
+- **DeepSource** : `// skipcq: JS-XXXX` ou `// skipcq: JS-XXXX - justification`
+
+Pour couvrir tous les analyseurs, combiner les formats sur une même ligne :
+```javascript
+code; // NOSONAR skipcq: JS-0128 - justification
+```
 
 #### Format NOSONAR (SonarCloud) - Pour issues de style
 
@@ -409,27 +415,6 @@ const config = providers[providerId];
 // eslint-disable-next-line no-console -- Debug log for diagnostics
 console.log('[Module] debug info');
 ```
-
-#### Issues à Désactiver dans Codacy UI
-
-Certaines issues ne peuvent pas être ignorées avec des commentaires inline. Les désactiver dans **Repository → Code patterns** :
-
-| Issue | Raison |
-|-------|--------|
-| `Prefer replaceAll` | Regex patterns complexes ne peuvent pas utiliser replaceAll |
-| `Cyclomatic complexity` | UI complexe acceptable pour options.js |
-| `Method too long` | Définitions de config dans providers.js |
-
-#### Issues Acceptées (NE PAS CORRIGER)
-
-Ces issues sont des limitations connues acceptées :
-
-| Fichier | Issue | Raison |
-|---------|-------|--------|
-| `options.js` | Cyclomatic complexity (9-23) | UI complexe avec multi-provider |
-| `providers.js` | Method too long (68 lines) | Définitions des providers |
-| `ui.js` | Unused functions | Conservées pour usage futur |
-| `i18n.js`, `text-processing.js` | Prefer replaceAll | Regex patterns complexes |
 
 #### Règles Importantes
 

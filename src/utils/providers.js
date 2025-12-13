@@ -1,5 +1,6 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
+/* eslint-disable max-lines-per-function -- Provider definitions require declarative config structure */
 
 globalThis.BabelFishAIProviders = (function () {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation

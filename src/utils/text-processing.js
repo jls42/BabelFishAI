@@ -31,7 +31,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Supprimer les espaces multiples et les sauts de ligne excessifs
         // Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
-        let cleanedText = text.trim().replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n\n'); // NOSONAR
+        let cleanedText = text.trim().replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n\n'); // NOSONAR skipcq: JS-0377
 
         // Limiter la taille du texte pour éviter les problèmes avec l'API
         if (cleanedText.length > TEXT_PROCESSING_CONFIG.MAX_TEXT_LENGTH) {
