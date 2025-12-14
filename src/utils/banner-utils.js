@@ -37,8 +37,8 @@
         let buttonText = defaultText;
 
         // Essayer d'utiliser la traduction si disponible
-        if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
-            const translated = window.BabelFishAIUtils.i18n.getMessage(i18nKey);
+        if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
+            const translated = globalThis.BabelFishAIUtils.i18n.getMessage(i18nKey);
             if (translated) buttonText = translated;
         }
 
@@ -79,8 +79,8 @@
 
         // Mettre à jour le libellé avec i18n
         const updateLabel = () => {
-            if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
-                const translated = window.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
+            if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
+                const translated = globalThis.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
                 if (translated) label.textContent = translated;
             }
         };
@@ -107,7 +107,7 @@
         if (!languageSelect) return;
 
         // Utiliser directement les langues disponibles définies dans languages-shared.js
-        const availableLanguages = window.BabelFishAI?.AVAILABLE_LANGUAGES || [
+        const availableLanguages = globalThis.BabelFishAI?.AVAILABLE_LANGUAGES || [
             { value: 'en', text: 'English (en)' },
             { value: 'fr', text: 'Français (fr)' },
             { value: 'es', text: 'Español (es)' },
@@ -180,7 +180,7 @@
                     populateLanguageSelect(select, options);
                 } else {
                     // Fallback: Utiliser les langues définies dans languages-shared.js
-                    const fallbackLanguages = window.BabelFishAI?.AVAILABLE_LANGUAGES || [
+                    const fallbackLanguages = globalThis.BabelFishAI?.AVAILABLE_LANGUAGES || [
                         { value: 'en', text: 'English (en)' },
                         { value: 'fr', text: 'Français (fr)' },
                         { value: 'es', text: 'Español (es)' },
@@ -232,13 +232,13 @@
      */
     function setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer) {
         // Événements pour le bouton de reformulation
-        rephraseButton.addEventListener('mousedown', window.BabelFishAIUtils.focus.storeFocusAndSelection);
+        rephraseButton.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
         rephraseButton.addEventListener('click', () => {
             const isActive = rephraseButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
             // Stocker la référence à la fonction avant d'utiliser setTimeout
-            const restoreFunction = window.BabelFishAIUtils.focus.restoreFocusAndSelection;
+            const restoreFunction = globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection;
 
             chrome.storage.sync.set({ enableRephrase: newState }, () => {
                 // Vérifier si la fonction existe toujours avant de l'appeler
@@ -253,13 +253,13 @@
         });
 
         // Événements pour le bouton de traduction
-        translateButton.addEventListener('mousedown', window.BabelFishAIUtils.focus.storeFocusAndSelection);
+        translateButton.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
         translateButton.addEventListener('click', () => {
             const isActive = translateButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
             // Stocker la référence à la fonction avant d'utiliser setTimeout
-            const restoreFunction = window.BabelFishAIUtils.focus.restoreFocusAndSelection;
+            const restoreFunction = globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection;
 
             chrome.storage.sync.set({ enableTranslation: newState }, () => {
                 // Vérifier si la fonction existe toujours avant de l'appeler
@@ -287,10 +287,10 @@
         });
 
         // Événements pour le sélecteur de langue
-        languageSelect.addEventListener('mousedown', window.BabelFishAIUtils.focus.storeFocusAndSelection);
+        languageSelect.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
         languageSelect.addEventListener('change', () => {
             chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
-                setTimeout(() => window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true), 300);
+                setTimeout(() => globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true), 300);
             });
         });
 
@@ -299,7 +299,7 @@
             setTimeout(() => {
                 // Appeler directement la fonction de restauration du focus
                 // sans vérifier lastFocusInfo qui n'est pas exporté
-                window.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
+                globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true);
             }, 300);
         });
 
@@ -359,8 +359,8 @@
             // Utiliser une valeur par défaut si la traduction n'est pas disponible
             textContainer.textContent = "Initialisation...";
             // Essayer d'utiliser la traduction si disponible
-            if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
-                const translated = window.BabelFishAIUtils.i18n.getMessage("bannerRecording");
+            if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
+                const translated = globalThis.BabelFishAIUtils.i18n.getMessage("bannerRecording");
                 if (translated) textContainer.textContent = translated;
             }
             bannerContent.appendChild(textContainer);
@@ -424,7 +424,7 @@
         };
 
         // Vérifier si les traductions sont déjà chargées
-        if (typeof window.BabelFishAIUtils?.i18n?.getMessage === 'function') {
+        if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
             // Si les traductions sont déjà chargées, initialiser immédiatement
             setupBannerContent();
         } else {
@@ -460,8 +460,8 @@
         }
 
         // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur avec le dégradé
-        if (typeof window.BabelFishAIUtils?.ui?.updateBannerColor === 'function') {
-            window.BabelFishAIUtils.ui.updateBannerColor(banner, startColor, endColor, opacity, force);
+        if (typeof globalThis.BabelFishAIUtils?.ui?.updateBannerColor === 'function') {
+            globalThis.BabelFishAIUtils.ui.updateBannerColor(banner, startColor, endColor, opacity, force);
         } else {
             console.warn('La fonction updateBannerColor de UI n\'est pas disponible');
         }
@@ -578,4 +578,4 @@
         toggleBannerVisibility
     };
 
-})(window.BabelFishAIUtils = window.BabelFishAIUtils || {});
+})(globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {});

@@ -1,11 +1,12 @@
 // Utilitaires pour la gestion des API pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Constantes importées depuis l'espace global
-    const ERRORS = window.BabelFishAIConstants.ERRORS;
+    const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
+    const API_CONFIG = globalThis.BabelFishAIConstants.API_CONFIG;
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
@@ -19,7 +20,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             if (apiKey) {
                 // Stocker la clé en mémoire pour les futures utilisations
-                window.BabelFishAI.apiKey = apiKey;
+                globalThis.BabelFishAI.apiKey = apiKey;
                 return apiKey;
             }
             return null; // Clé non trouvée dans le stockage
@@ -33,24 +34,31 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     /**
      * Récupère la clé API (depuis la mémoire ou le stockage) ou lève une exception si elle n'est pas disponible.
+     * Utilise le système multi-provider pour trouver une clé API valide.
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider
      * @returns {Promise<string>} - La clé API.
      * @throws {Error} - Si la clé API n'est pas trouvée.
      */
-    async function getOrFetchApiKey() {
+    async function getOrFetchApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
-        window.BabelFishAI = window.BabelFishAI || {};
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
 
-        // 1. Essayer la clé en mémoire
-        if (window.BabelFishAI.apiKey) {
-            return window.BabelFishAI.apiKey;
+        // Utiliser resolveApiConfig pour obtenir la clé du provider actif
+        try {
+            const config = await resolveApiConfig(serviceType);
+            if (config.apiKey) {
+                // Mettre en cache pour compatibilité
+                globalThis.BabelFishAI.apiKey = config.apiKey;
+                return config.apiKey;
+            }
+        } catch (error) {
+            console.warn("Erreur lors de la résolution de la config API:", error);
         }
 
-        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        // Fallback sur l'ancienne méthode
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
-        // 3. Vérifier le résultat et lever une erreur si nécessaire
         if (!apiKeyFromStorage) {
-            // L'erreur est levée ici pour correspondre au comportement original
             console.error("Erreur lors de la récupération de la clé API: Clé non trouvée.");
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
@@ -60,26 +68,34 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
     /**
      * Récupère la clé API (depuis la mémoire ou le stockage) sans lever d'exception.
+     * Utilise le système multi-provider pour trouver une clé API valide.
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider
      * @returns {Promise<string|null>} - La clé API ou null si non disponible.
      */
-    async function getApiKey() {
+    async function getApiKey(serviceType = 'transcription') {
         // S'assurer que l'espace de noms BabelFishAI existe
-        window.BabelFishAI = window.BabelFishAI || {};
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
 
-        // 1. Essayer la clé en mémoire
-        if (window.BabelFishAI.apiKey) {
-            return window.BabelFishAI.apiKey;
+        // Utiliser resolveApiConfig pour obtenir la clé du provider actif
+        try {
+            const config = await resolveApiConfig(serviceType);
+            if (config.apiKey) {
+                // Mettre en cache pour compatibilité
+                globalThis.BabelFishAI.apiKey = config.apiKey;
+                return config.apiKey;
+            }
+        } catch (error) {
+            console.warn("Erreur lors de la résolution de la config API:", error);
         }
 
-        // 2. Essayer de récupérer depuis le stockage (met en cache si trouvée)
+        // Fallback sur l'ancienne méthode si resolveApiConfig échoue
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
-        // 3. Afficher un avertissement si non trouvée et retourner le résultat (null si non trouvée)
         if (!apiKeyFromStorage) {
             console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
         }
 
-        return apiKeyFromStorage; // Retourne la clé ou null
+        return apiKeyFromStorage;
     }
 
 
@@ -104,6 +120,233 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
             }
         });
+    }
+
+    /**
+     * Vérifie si un provider a une configuration valide
+     * @param {string} id - ID du provider
+     * @param {Object} config - Configuration du provider
+     * @returns {boolean} True si valide
+     */
+    function isProviderValid(id, config) {
+        if (!config?.enabled || !config?.apiKey) return false;
+        // Pour le provider custom, les URLs sont obligatoires
+        if (id === 'custom') {
+            return Boolean(config.transcriptionUrl && config.chatUrl);
+        }
+        return true;
+    }
+
+    /**
+     * Résout l'URL pour un type de service
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {Object} providerDef - Définition du provider
+     * @param {string} providerId - ID du provider
+     * @returns {string} URL résolue
+     */
+    function resolveUrl(serviceType, providerConfig, providerDef, providerId) {
+        // Les URLs custom ne sont utilisées que pour le provider 'custom'
+        // OpenAI et Mistral utilisent toujours leurs URLs par défaut
+        const useCustomUrl = providerId === 'custom';
+
+        if (serviceType === 'transcription') {
+            return (useCustomUrl && providerConfig?.transcriptionUrl)
+                || providerDef?.defaultUrls.transcription
+                || API_CONFIG.DEFAULT_WHISPER_API_URL;
+        }
+        return (useCustomUrl && providerConfig?.chatUrl)
+            || providerDef?.defaultUrls.chat
+            || API_CONFIG.DEFAULT_GPT_API_URL;
+    }
+
+    /**
+     * Résout le modèle pour un type de service
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {Object} providerDef - Définition du provider
+     * @param {Object} Providers - Registre des providers
+     * @param {string} providerId - ID du provider
+     * @param {Object} data - Données de configuration legacy
+     * @returns {string} Modèle résolu
+     */
+    function resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data) {
+        const isTranscription = serviceType === 'transcription';
+        const selectedModel = isTranscription
+            ? providerConfig?.selectedTranscriptionModel
+            : providerConfig?.selectedChatModel;
+
+        if (selectedModel) return selectedModel;
+
+        if (providerDef && Providers) {
+            return Providers.getDefaultModel(providerId, serviceType);
+        }
+
+        return isTranscription
+            ? (data.audioModelType || API_CONFIG.WHISPER_MODEL)
+            : (data.modelType || API_CONFIG.GPT_MODEL);
+    }
+
+    /**
+     * Trouve un provider de fallback valide
+     * @param {Object} providers - Configuration des providers
+     * @param {string} currentProviderId - ID du provider actuel
+     * @returns {{providerId: string, providerConfig: Object}|null} Provider de fallback ou null
+     */
+    function findFallbackProvider(providers, currentProviderId) {
+        if (!providers) return null;
+
+        const availableProvider = Object.entries(providers).find(
+            ([id, config]) => isProviderValid(id, config)
+        );
+
+        if (availableProvider) {
+            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
+            console.log(`[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
+            return { providerId: availableProvider[0], providerConfig: availableProvider[1] };
+        }
+        return null;
+    }
+
+    /**
+     * Résout le provider actif avec fallback si nécessaire
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} data - Données du storage
+     * @returns {{providerId: string, providerConfig: Object|undefined}} Provider résolu
+     */
+    function resolveActiveProvider(serviceType, data) {
+        let providerId = serviceType === 'transcription'
+            ? data.transcriptionProvider
+            : data.chatProvider;
+
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
+        let providerConfig = data.providers?.[providerId];
+
+        // Si non valide, chercher un provider de fallback
+        if (data.providers && !isProviderValid(providerId, providerConfig)) {
+            const fallback = findFallbackProvider(data.providers, providerId);
+            if (fallback) {
+                providerId = fallback.providerId;
+                providerConfig = fallback.providerConfig;
+            }
+        }
+
+        return { providerId, providerConfig };
+    }
+
+    /**
+     * Résout la clé API pour un provider
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {string} providerId - ID du provider
+     * @param {string} legacyApiKey - Clé API legacy (pour rétrocompatibilité)
+     * @returns {string|null} Clé API résolue
+     */
+    function resolveApiKey(providerConfig, providerId, legacyApiKey) {
+        if (providerConfig?.apiKey) return providerConfig.apiKey;
+        if (providerId === 'openai') return legacyApiKey || null;
+        return null;
+    }
+
+    /**
+     * Résout le flag disableLogging selon le provider
+     * @param {Object} providerDef - Définition du provider
+     * @param {boolean} userPreference - Préférence utilisateur
+     * @returns {boolean} True si le logging doit être désactivé
+     */
+    function resolveDisableLogging(providerDef, userPreference) {
+        const supportsNoLog = providerDef?.supportsNoLog ?? false;
+        return supportsNoLog && userPreference;
+    }
+
+    /**
+     * Résout la configuration API pour un type de service donné
+     * Supporte le multi-provider avec fallback sur la configuration legacy
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @returns {Promise<Object>} Configuration API résolue
+     */
+    async function resolveApiConfig(serviceType) {
+        const data = await getFromStorage({
+            providers: null,
+            transcriptionProvider: 'openai',
+            chatProvider: 'openai',
+            apiKey: '',
+            audioModelType: API_CONFIG.WHISPER_MODEL,
+            modelType: API_CONFIG.GPT_MODEL,
+            disableLogging: false
+        });
+
+        // Résoudre le provider actif
+        const { providerId, providerConfig } = resolveActiveProvider(serviceType, data);
+
+        // Récupérer les définitions du provider depuis le registre
+        const Providers = globalThis.BabelFishAIProviders;
+        const providerDef = Providers?.getProvider(providerId) ?? null;
+
+        // Résoudre URL, clé API et modèle
+        const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
+        const apiKey = resolveApiKey(providerConfig, providerId, data.apiKey);
+        const model = resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data);
+        const disableLogging = resolveDisableLogging(providerDef, data.disableLogging);
+
+        return { apiKey, url, model, providerId, disableLogging };
+    }
+
+    /**
+     * Récupère la clé API pour un provider spécifique ou le provider actif
+     * @param {string} [providerId] - ID du provider (optionnel, utilise le provider par défaut si non spécifié)
+     * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider par défaut
+     * @returns {Promise<string|null>} La clé API ou null si non trouvée
+     */
+    async function getApiKeyForProvider(providerId, serviceType = 'transcription') {
+        const config = await resolveApiConfig(serviceType);
+
+        // Si un provider spécifique est demandé
+        if (providerId && providerId !== config.providerId) {
+            const data = await getFromStorage({ providers: null });
+            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
+            return data.providers?.[providerId]?.apiKey || null;
+        }
+
+        return config.apiKey || null;
+    }
+
+    /**
+     * Vérifie la connectivité réseau
+     * @returns {Promise<{online: boolean, message?: string}>} État de la connectivité
+     */
+    function checkNetworkConnection() {
+        return new Promise((resolve) => {
+            // Utiliser uniquement la propriété navigator.onLine, sans ping externe
+            if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+                resolve({
+                    online: false,
+                    message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
+                });
+            } else {
+                // Considérer l'appareil comme en ligne si navigator.onLine le dit
+                resolve({ online: true });
+            }
+        });
+    }
+
+    /**
+     * Effectue une pause avec setTimeout sous forme de promesse
+     * @param {number} ms - Durée de la pause en millisecondes
+     * @returns {Promise<void>}
+     */
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    /**
+     * Vérifie si l'erreur est liée au réseau
+     * @param {Error} error - L'erreur à vérifier
+     * @returns {boolean} True si c'est une erreur réseau
+     */
+    function isNetworkError(error) {
+        return error.name === 'TypeError' ||
+            error.message.includes('Timeout') ||
+            error.message.includes('connexion');
     }
 
     /**
@@ -139,25 +382,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         if (!url) {
             throw new Error('URL API manquante');
-        }
-
-        /**
-         * Vérifie la connectivité réseau
-         * @returns {Promise<{online: boolean, message?: string}>} État de la connectivité
-         */
-        function checkNetworkConnection() {
-            return new Promise((resolve) => {
-                // Utiliser uniquement la propriété navigator.onLine, sans ping externe
-                if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
-                    resolve({
-                        online: false,
-                        message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
-                    });
-                } else {
-                    // Considérer l'appareil comme en ligne si navigator.onLine le dit
-                    resolve({ online: true });
-                }
-            });
         }
 
         /**
@@ -203,7 +427,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                     const errorData = await response.json();
                     errorMessage = errorData.error?.message || errorType;
                     console.error('API Error:', errorData);
-                } catch (parseError) {
+                } catch (jsonParseError) {
+                    // JSON parsing failed - log the parse error and use status code
+                    console.error('API Error (JSON parse failed):', jsonParseError.message);
                     errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
                     console.error('API Error (could not parse response):', response.status, response.statusText);
                 }
@@ -241,26 +467,6 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             } else {
                 return defaultMessage;
             }
-        }
-
-        /**
-         * Effectue une pause avec setTimeout sous forme de promesse
-         * @param {number} ms - Durée de la pause en millisecondes
-         * @returns {Promise<void>}
-         */
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        /**
-         * Vérifie si l'erreur est liée au réseau
-         * @param {Error} error - L'erreur à vérifier
-         * @returns {boolean} True si c'est une erreur réseau
-         */
-        function isNetworkError(error) {
-            return error.name === 'TypeError' ||
-                error.message.includes('Timeout') ||
-                error.message.includes('connexion');
         }
 
         /**
@@ -330,7 +536,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    function transcribeAudio(audioBlob, apiKey, apiUrl = window.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = window.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
+    function transcribeAudio(audioBlob, apiKey, apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
         // Déterminer le nom de fichier final
         const finalFilename = generateUniqueFilename
             // Générer un nom de fichier avec timestamp et élément aléatoire
@@ -352,7 +558,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 // Nettoyer le texte transcrit pour éliminer les retours à la ligne superflus au début
                 let text = data.text || '';
                 text = text.trim();
-                return text;
+                // Ajouter un espace à la fin pour permettre de continuer à dicter
+                return `${text} `;
             }
         });
     }
@@ -361,9 +568,11 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
     exports.api = {
         getOrFetchApiKey,
         getApiKey,
+        getApiKeyForProvider,
         getFromStorage,
+        resolveApiConfig,
         transcribeAudio,
         callApi
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

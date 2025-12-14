@@ -2,17 +2,28 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
-**Pour utiliser l'extension, vous aurez besoin d'une clé API OpenAI (ou d'un fournisseur tiers si vous utilisez LiteLLM Proxy). Vous pouvez générer une clé API OpenAI ici : [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)**
+[🇸🇦 العربية](README-ar.md) | [🇩🇪 Deutsch](README-de.md) | [🇺🇸 English](README-en.md) | [🇪🇸 Español](README-es.md) | [🇮🇳 हिन्दी](README-hi.md) | [🇮🇹 Italiano](README-it.md) | [🇯🇵 日本語](README-ja.md) | [🇰🇷 한국어](README-ko.md) | [🇳🇱 Nederlands](README-nl.md) | [🇵🇱 Polski](README-pl.md) | [🇵🇹 Português](README-pt.md) | [🇷🇴 Română](README-ro.md) | [🇸🇪 Svenska](README-sv.md) | [🇨🇳 中文](README-zh.md)
 
-Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offrir une transcription vocale puissante. Transformez votre voix en texte avec une précision remarquable grâce à l'API Whisper d'OpenAI, et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
+**Pour utiliser l'extension, vous aurez besoin d'une clé API d'un des providers supportés :**
+
+| Provider | Obtenir une clé API |
+|:--------:|:--------------------|
+| <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI** : [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI** : [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+| 🚅 | **Custom/LiteLLM** : Pour utiliser vos propres endpoints API |
+
+Babel Fish AI est une extension Chrome innovante conçue pour offrir une transcription vocale puissante avec support multi-provider. Transformez votre voix en texte avec une précision remarquable grâce aux API de transcription de Mistral AI (Voxtral) ou OpenAI (Whisper), et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI)
 
 ## 🌟 Fonctionnalités
 
 - **Transcription Vocale Avancée**
   - Capture audio de haute qualité via le microphone de votre appareil.
-  - Transcription précise réalisée par l'API Whisper d'OpenAI.
+  - Transcription précise via les API Voxtral (Mistral AI) ou Whisper (OpenAI).
+  - Support multi-provider : choisissez librement entre Mistral AI, OpenAI ou un endpoint personnalisé.
   - Prise en charge multilingue pour la reconnaissance vocale et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d'afficher les résultats (transcription et traduction, si activée) dans la langue de votre choix.
   - Insertion automatique du texte dans le champ actif ou affichage dans une boîte de dialogue dédiée.
 
@@ -25,7 +36,8 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
 - **Menu Contextuel Puissant**
   - Option "Reformuler la sélection" pour améliorer instantanément vos textes sélectionnés.
   - Option "Traduire la sélection" avec sous-menu de toutes les langues disponibles.
-  - Remplacement direct du texte sélectionné par sa version traduite ou reformulée.
+  - Option "Corriger l'orthographe" pour corriger les fautes d'orthographe, grammaire et ponctuation.
+  - Remplacement direct du texte sélectionné par sa version traduite, reformulée ou corrigée.
   - Parfaite intégration dans l'interface utilisateur native de Chrome.
 
 - **Interface Utilisateur Intuitive et Personnalisable**
@@ -36,9 +48,10 @@ Babel Fish AI est une extension Chrome innovante conçue à l'origine pour offri
   - Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
 
 - **Options Avancées**
-    - Mode expert pour des configurations détaillées (URLs des API, configuration par domaine, etc.).
-    - Possibilité de personnaliser les modèles de transcription et de traduction.
-    - Compatibilité avec LiteLLM Proxy pour vous connecter à des modèles de langage alternatifs et désactiver la journalisation des requêtes.
+    - Support multi-provider : Mistral AI, OpenAI, et Custom/LiteLLM pour une flexibilité maximale.
+    - Possibilité de personnaliser les modèles de transcription et de traduction par provider.
+    - Sélection indépendante du provider pour la transcription et la traduction/reformulation.
+    - Compatibilité avec LiteLLM Proxy via le provider Custom pour vous connecter à des modèles alternatifs.
     - Gestion complète de l'internationalisation grâce aux fichiers de langue (_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
 
 ## 🌐 Langues Supportées
@@ -75,9 +88,13 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 
 ## ⚙️ Configuration
 
-1.  **Clé API OpenAI :**
+1.  **Configuration du Provider IA :**
     *   Cliquez sur l'icône de l'extension pour accéder aux options.
-    *   Entrez votre clé API OpenAI (disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)).
+    *   Sélectionnez votre provider dans le menu déroulant (Mistral AI, OpenAI ou Custom/LiteLLM).
+    *   Entrez votre clé API :
+        - **Mistral AI** : disponible sur [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
+        - **OpenAI** : disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
+    *   Activez le provider avec le toggle à côté du menu déroulant.
 
 2.  **Personnalisation des Options :**
     *   Choisissez le mode d'affichage (zone active ou boîte de dialogue).
@@ -85,26 +102,28 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
     *   Sélectionnez les langues pour la transcription (entrée vocale) et pour l'affichage du texte.
     *   Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
 
-3.  **(Optionnel) Utilisation avec LiteLLM Proxy :**
-    *   Activez le "Mode Expert" dans les options.
-    *   Dans la section "Configuration Avancée", modifiez **les deux URLs** des API (Whisper et Traduction) pour pointer vers votre instance LiteLLM Proxy. **Utilisez la même URL de base pour les deux.**
-    *   Cochez l'option "NoLog (LiteLLM uniquement)" si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
+3.  **(Optionnel) Configuration avancée des modèles :**
+    *   Dans les options de chaque provider, cliquez sur "Configuration des modèles" pour personnaliser les modèles utilisés.
+    *   Vous pouvez ajouter des modèles personnalisés pour la transcription et la traduction/reformulation.
+    *   Si plusieurs providers sont activés, vous pouvez choisir lequel utiliser pour chaque service (transcription et traduction).
 
-## 🚀 Utilisation avec LiteLLM Proxy
+## 🚀 Utilisation avec LiteLLM Proxy ou Endpoints Personnalisés
 
-Si vous souhaitez utiliser des modèles de langage autres qu'OpenAI, vous pouvez utiliser LiteLLM Proxy. Voici comment le configurer :
-
-Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/), qui permet d'utiliser des modèles de langage alternatifs avec une API compatible avec celle d'OpenAI.
+Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/) et d'autres proxies API compatibles OpenAI, permettant d'utiliser des modèles de langage alternatifs.
 
 ### Configuration
 
-1.  **Installez et configurez LiteLLM Proxy :** Suivez les instructions sur le site de LiteLLM.
+1.  **Installez et configurez votre proxy :** Suivez les instructions du service que vous utilisez (LiteLLM, etc.).
 2.  **Configurez l'extension Babel Fish AI :**
-    *   Dans les options de l'extension (clic droit sur l'icône > Options), activez le "Mode Expert".
-    *   Dans la section "Configuration Avancée", modifiez **les deux URLs** des API (Whisper et Traduction) pour pointer vers votre instance LiteLLM Proxy (par exemple, `http://localhost:4000/v1/audio/transcriptions` et `http://localhost:4000/v1/chat/completions`). **Utilisez la même URL de base pour les deux.**
-    *   Cochez l'option "NoLog (LiteLLM uniquement)" si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
+    *   Dans les options de l'extension, sélectionnez le provider **Custom/LiteLLM** dans le menu déroulant.
+    *   Entrez votre clé API (si nécessaire).
+    *   Configurez les URLs des API :
+        - **URL Transcription** : par exemple `http://localhost:4000/v1/audio/transcriptions`
+        - **URL Chat** : par exemple `http://localhost:4000/v1/chat/completions`
+    *   Activez le provider avec le toggle.
+    *   Cochez l'option **"NoLog"** si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
 
-**Important :** L'option "NoLog" est conçue **exclusivement** pour être utilisée avec LiteLLM Proxy. **Ne l'activez pas** si vous utilisez l'API OpenAI officielle, car cela entraînera une erreur et empêchera la traduction de fonctionner.
+**Important :** L'option "NoLog" est disponible **uniquement** dans le provider Custom/LiteLLM. Elle n'est pas compatible avec les API officielles d'OpenAI ou Mistral AI.
 
 ## 🛠️ Fonctionnement Technique
 
@@ -123,13 +142,11 @@ L'extension est composée de plusieurs fichiers JavaScript qui interagissent ent
 
 L'extension utilise une architecture modulaire avec plusieurs fichiers utilitaires spécialisés :
 
-##### Gestion des API et Traitement des Données
+##### Gestion des Providers et API
 
-*   **`src/utils/api.js`:** Contient les fonctions permettant d'interagir avec les API, notamment `transcribeAudio` pour appeler l'API Whisper d'OpenAI.
-*   **`src/utils/api-utils.js`:** Fonctions avancées pour l'interaction avec les API externes.
-*   **`src/utils/translation.js`:** Contient les fonctions `translateText` et `rephraseText` pour appeler l'API GPT d'OpenAI.
-*   **`src/utils/text-translation.js`:** Fonctions spécialisées pour la traduction et la reformulation de texte.
-*   **`src/utils/text-processing.js`:** Fonctions de traitement de texte générales.
+*   **`src/utils/providers.js`:** Registre des providers IA (Mistral AI, OpenAI, Custom/LiteLLM) avec leurs configurations, modèles et URLs par défaut.
+*   **`src/utils/api-utils.js`:** Fonctions pour l'interaction avec les API externes, résolution de la configuration multi-provider, et transcription audio.
+*   **`src/utils/text-processing.js`:** Fonctions de traitement de texte : traduction, reformulation, correction orthographique.
 
 ##### Interface Utilisateur et Interaction
 
@@ -162,19 +179,23 @@ L'extension utilise une architecture modulaire avec plusieurs fichiers utilitair
 
 1.  **Démarrage de l'Enregistrement :** L'utilisateur démarre l'enregistrement en cliquant sur l'icône de l'extension ou en utilisant le raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac). Le `background script` envoie un message au `content script` pour démarrer l'enregistrement.
 2.  **Capture Audio :** Le `content script` utilise l'API `navigator.mediaDevices.getUserMedia` pour accéder au microphone et enregistrer l'audio via l'API MediaRecorder.
-3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api.js`) pour envoyer l'audio à l'API Whisper d'OpenAI. L'API renvoie le texte transcrit.
-4.  **Traduction ou Reformulation (Optionnelle) :** 
-   - Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/translation.js`) pour envoyer le texte transcrit à l'API GPT d'OpenAI.
+3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api-utils.js`) pour envoyer l'audio à l'API de transcription du provider configuré (Voxtral pour Mistral AI, Whisper pour OpenAI). L'API renvoie le texte transcrit.
+4.  **Traduction ou Reformulation (Optionnelle) :**
+   - Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/text-processing.js`) pour envoyer le texte transcrit à l'API de chat du provider configuré.
    - Si l'option de reformulation est activée, la fonction `rephraseText` est utilisée pour améliorer le texte transcrit.
 5.  **Affichage :** Le `content script` affiche le texte traité soit dans l'élément actif de la page (si c'est un champ de texte ou un élément éditable), soit dans une boîte de dialogue personnalisée.
 
 #### Fonctionnalité de menu contextuel
 
 1. **Sélection de Texte :** L'utilisateur sélectionne du texte sur une page web.
-2. **Menu Contextuel :** Un clic droit affiche les options "Reformuler la sélection" ou "Traduire la sélection" avec un sous-menu des langues disponibles.
+2. **Menu Contextuel :** Un clic droit affiche les options :
+   - "Reformuler la sélection" pour améliorer le style et la clarté
+   - "Traduire la sélection" avec un sous-menu des langues disponibles
+   - "Corriger l'orthographe" pour corriger les fautes
 3. **Traitement :** Selon l'option choisie :
    - Le texte est envoyé pour reformulation via la fonction `rephraseText`
    - Le texte est envoyé pour traduction via la fonction `translateText` avec la langue cible sélectionnée
+   - Le texte est envoyé pour correction via la fonction `correctText`
 4. **Affichage :** Le résultat remplace la sélection d'origine dans l'élément où se trouve le texte sélectionné.
 
 ### Communication
@@ -185,14 +206,14 @@ La communication entre le `background script` et le `content script` se fait via
 
 L'extension utilise `chrome.storage.sync` pour stocker :
 
-*   La clé API OpenAI (`apiKey`).
+*   La configuration des providers IA (clés API, modèles sélectionnés, URLs personnalisées).
 *   Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
 *   Les préférences de langue pour la traduction.
 
 Ces données sont stockées localement sur votre ordinateur, dans le stockage de l'extension Chrome.
 
 ### Gestion des Erreurs
-Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont définies dans le fichier `constants.js`. Les fonctions `api.js` et `translation.js` gèrent les erreurs potentielles des appels API. Le `content.js` affiche les messages d'erreur à l'utilisateur via une bannière en haut de la page.
+Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont définies dans le fichier `constants.js`. Les fonctions `api-utils.js` et `text-processing.js` gèrent les erreurs potentielles des appels API avec des messages améliorés selon le code HTTP. Le `content.js` affiche les messages d'erreur à l'utilisateur via une bannière en bas de la page.
 
 
 ## 🛡️ Sécurité et Confidentialité

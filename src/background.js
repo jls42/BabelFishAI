@@ -13,37 +13,38 @@ const SERVICE_WORKER_CONFIG = {
 // Actions spécifiques au menu contextuel
 const CONTEXT_MENU_ACTIONS = {
     REPHRASE_SELECTION: 'rephraseSelection',
-    TRANSLATE_SELECTION: 'translateSelection'
+    TRANSLATE_SELECTION: 'translateSelection',
+    CORRECT_SELECTION: 'correctSelection'
 };
 
 // Définition des constantes nécessaires pour le service worker
 // IMPORTANT: Ces constantes sont dupliquées intentionnellement car le service worker
-// n'a pas accès à window.BabelFishAIConstants en raison des limitations des service workers
+// n'a pas accès à globalThis.BabelFishAIConstants en raison des limitations des service workers
 // de Chrome. Assurez-vous que ces valeurs correspondent à celles définies dans constants.js.
 //
 // Si vous modifiez ces constantes, vous DEVEZ également mettre à jour leurs équivalents dans constants.js:
-// - STATES correspond à window.BabelFishAIConstants.STATES
-// - ACTIONS correspond à window.BabelFishAIConstants.ACTIONS
-// - BADGES correspond à window.BabelFishAIConstants.BADGES
-// - ERRORS est un sous-ensemble de window.BabelFishAIConstants.ERRORS
+// - STATES correspond à globalThis.BabelFishAIConstants.STATES
+// - ACTIONS correspond à globalThis.BabelFishAIConstants.ACTIONS
+// - BADGES correspond à globalThis.BabelFishAIConstants.BADGES
+// - ERRORS est un sous-ensemble de globalThis.BabelFishAIConstants.ERRORS
 
 const STATES = {
-    RECORDING: 'recording',  // Doit correspondre à window.BabelFishAIConstants.STATES.RECORDING
-    STOPPED: 'stopped',      // Doit correspondre à window.BabelFishAIConstants.STATES.STOPPED
-    ERROR: 'error'           // Doit correspondre à window.BabelFishAIConstants.STATES.ERROR
+    RECORDING: 'recording',  // Doit correspondre à globalThis.BabelFishAIConstants.STATES.RECORDING
+    STOPPED: 'stopped',      // Doit correspondre à globalThis.BabelFishAIConstants.STATES.STOPPED
+    ERROR: 'error'           // Doit correspondre à globalThis.BabelFishAIConstants.STATES.ERROR
 };
 
 const ACTIONS = {
-    TOGGLE: 'toggleRecording',    // Doit correspondre à window.BabelFishAIConstants.ACTIONS.TOGGLE
-    STARTED: 'recordingStarted',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STARTED
-    STOPPED: 'recordingStopped',  // Doit correspondre à window.BabelFishAIConstants.ACTIONS.STOPPED
-    ERROR: 'recordingError'       // Doit correspondre à window.BabelFishAIConstants.ACTIONS.ERROR
+    TOGGLE: 'toggleRecording',    // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.TOGGLE
+    STARTED: 'recordingStarted',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STARTED
+    STOPPED: 'recordingStopped',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STOPPED
+    ERROR: 'recordingError'       // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.ERROR
 };
 
 const BADGES = {
-    RECORDING: '⏺',  // Doit correspondre à window.BabelFishAIConstants.BADGES.RECORDING
-    STOPPED: '',      // Doit correspondre à window.BabelFishAIConstants.BADGES.STOPPED
-    ERROR: '!'        // Doit correspondre à window.BabelFishAIConstants.BADGES.ERROR
+    RECORDING: '⏺',  // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
+    STOPPED: '',      // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
+    ERROR: '!'        // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
 };
 
 const ERRORS = {
@@ -76,11 +77,10 @@ async function injectContentScript(tab) {
             target: { tabId: tab.id },
             files: [
                 'src/constants.js',
+                'src/utils/providers.js',
                 'src/utils/ui.js',
                 'src/utils/banner-utils.js',
-                'src/utils/api.js',
-                'src/utils/translation.js',
-                'src/utils/languages.js',
+                'src/utils/api-utils.js',
                 'src/utils/i18n.js',
                 'src/content.js'
             ]
@@ -107,9 +107,9 @@ async function sendMessageToContentScript(tab, message) {
     try {
         // Tenter d'envoyer le message directement
         await chrome.tabs.sendMessage(tab.id, message);
-    } catch (error) {
+    } catch (sendError) {
         // Si le content script n'est pas prêt, tenter de l'injecter
-        debug("Content script not ready, attempting to inject it");
+        debug("Content script not ready, attempting to inject it:", sendError.message);
 
         try {
             // Injecter le content script
@@ -215,36 +215,7 @@ async function handleCommand(command) {
     }
 }
 
-/**
- * Gère les messages reçus du content script
- * @param {Object} message - Le message reçu
- * @param {Object} sender - L'expéditeur du message
- * @param {Function} sendResponse - Fonction pour envoyer une réponse
- */
-function handleContentScriptMessage(message) {
-    debug("Message received:", message);
-
-    // Mapping des actions aux états correspondants
-    const actionStateMap = {
-        [ACTIONS.STARTED]: STATES.RECORDING,
-        [ACTIONS.STOPPED]: STATES.STOPPED,
-        [ACTIONS.ERROR]: STATES.ERROR
-    };
-
-    // Vérifier si l'action est connue
-    if (actionStateMap[message.action]) {
-        // Mettre à jour l'état en fonction de l'action
-        updateRecordingState(
-            actionStateMap[message.action],
-            message.action === ACTIONS.ERROR ? message.error : ''
-        );
-    } else {
-        debug("Unknown action:", message.action);
-    }
-}
-
-// Enregistrer le gestionnaire d'événements pour les messages du content script
-chrome.runtime.onMessage.addListener(handleContentScriptMessage);
+// Note: Les messages du content script sont gérés par handleMessage (unique listener centralisé)
 
 /**
  * Gère le clic sur l'icône de l'extension
@@ -271,11 +242,92 @@ chrome.action.onClicked.addListener(handleExtensionIconClick);
 chrome.commands.onCommand.addListener(handleCommand);
 
 /**
+ * URLs par défaut pour la migration (dupliquées depuis constants.js car non accessible dans le service worker)
+ */
+const DEFAULT_URLS = {
+    WHISPER: 'https://api.openai.com/v1/audio/transcriptions',
+    GPT: 'https://api.openai.com/v1/chat/completions'
+};
+
+/**
+ * Migre la configuration existante vers le nouveau schéma multi-provider
+ * Cette migration est transparente et préserve la rétrocompatibilité
+ * @returns {Promise<void>}
+ */
+async function migrateToMultiProvider() {
+    try {
+        // Récupérer la configuration actuelle
+        const data = await chrome.storage.sync.get(null);
+
+        // Vérifier si la migration est nécessaire
+        if (data.providers) {
+            debug('Migration multi-provider déjà effectuée');
+            return;
+        }
+
+        debug('Début de la migration vers le schéma multi-provider');
+
+        // Détecter si des URLs custom sont configurées (mode LiteLLM)
+        const hasCustomTranscriptionUrl = data.apiUrl && data.apiUrl !== DEFAULT_URLS.WHISPER;
+        const hasCustomChatUrl = data.translationApiUrl && data.translationApiUrl !== DEFAULT_URLS.GPT;
+        const hasCustomUrls = hasCustomTranscriptionUrl || hasCustomChatUrl;
+
+        // Créer la nouvelle structure providers
+        // Si URLs custom : la clé était pour le proxy, pas pour OpenAI
+        const providers = {
+            openai: {
+                apiKey: hasCustomUrls ? '' : (data.apiKey || ''),
+                enabled: hasCustomUrls ? false : Boolean(data.apiKey),
+                transcriptionUrl: '',
+                chatUrl: ''
+            },
+            mistral: {
+                apiKey: '',
+                enabled: false,
+                transcriptionUrl: '',
+                chatUrl: ''
+            }
+        };
+
+        // Ajouter le provider custom seulement si des URLs personnalisées sont détectées
+        if (hasCustomUrls) {
+            providers.custom = {
+                apiKey: data.apiKey || '',
+                enabled: Boolean(data.apiKey),
+                transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
+                chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
+            };
+        }
+
+        // Déterminer le provider actif
+        const activeProvider = hasCustomUrls ? 'custom' : 'openai';
+
+        // Sauvegarder la nouvelle configuration
+        await chrome.storage.sync.set({
+            providers,
+            transcriptionProvider: activeProvider,
+            chatProvider: activeProvider
+        });
+
+        debug('Migration multi-provider terminée avec succès', {
+            hasApiKey: Boolean(data.apiKey),
+            hasCustomUrls,
+            activeProvider
+        });
+    } catch (error) {
+        console.error('Erreur lors de la migration multi-provider:', error);
+    }
+}
+
+/**
  * Gère les événements d'installation ou de mise à jour de l'extension
  * @param {Object} details - Détails de l'événement d'installation
  */
-function handleExtensionInstalled(details) {
+async function handleExtensionInstalled(details) {
     debug(`Extension ${details.reason} event detected`);
+
+    // Effectuer la migration multi-provider si nécessaire
+    await migrateToMultiProvider();
 
     // Ouvrir la page des options uniquement lors de l'installation initiale
     if (details.reason === 'install') {
@@ -293,7 +345,7 @@ chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
  */
 function getTargetLanguageOptions() {
     // Utiliser la liste centralisée, si disponible
-    return self.AVAILABLE_LANGUAGES || [
+    return globalThis.AVAILABLE_LANGUAGES || [
         { value: 'en', text: 'English (en)' },
         { value: 'fr', text: 'Français (fr)' },
         { value: 'es', text: 'Español (es)' },
@@ -324,14 +376,21 @@ function createContextMenus() {
             title: chrome.i18n.getMessage("contextMenuRephrase") || "Rephrase selection",
             contexts: ["selection"],
         });
-        
+
+        // Créer le menu contextuel pour la correction orthographique
+        chrome.contextMenus.create({
+            id: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
+            title: chrome.i18n.getMessage("contextMenuCorrect") || "Correct spelling",
+            contexts: ["selection"],
+        });
+
         // Créer le menu parent pour la traduction
         chrome.contextMenus.create({
             id: 'translateMenu',
             title: chrome.i18n.getMessage("contextMenuTranslate") || "Translate selection",
             contexts: ["selection"],
         });
-        
+
         // Ajouter les langues comme sous-menus
         const languages = getTargetLanguageOptions();
         languages.forEach(lang => {
@@ -364,12 +423,20 @@ async function handleContextMenuClick(info, tab) {
         // Cas 1: Option de reformulation
         if (info.menuItemId === CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION) {
             // Envoyer le texte sélectionné au content script pour reformulation
-            await sendMessageToContentScript(tab, { 
-                action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION, 
-                text: selectedText 
+            await sendMessageToContentScript(tab, {
+                action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
+                text: selectedText
             });
-        } 
-        // Cas 2: Option de traduction avec langue spécifique
+        }
+        // Cas 2: Option de correction orthographique
+        else if (info.menuItemId === CONTEXT_MENU_ACTIONS.CORRECT_SELECTION) {
+            // Envoyer le texte sélectionné au content script pour correction
+            await sendMessageToContentScript(tab, {
+                action: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
+                text: selectedText
+            });
+        }
+        // Cas 3: Option de traduction avec langue spécifique
         else if (typeof info.menuItemId === 'string' && info.menuItemId.startsWith(`${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_`)) {
             // Extraire le code de langue du menuItemId (format: translateSelection_fr)
             const targetLanguage = info.menuItemId.split('_').pop();
@@ -399,26 +466,42 @@ chrome.runtime.onStartup.addListener(createContextMenus);
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
- * Gère les messages du content script
+ * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
  * @param {Object} sender - L'expéditeur du message
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
 function handleMessage(message, sender, sendResponse) {
-    debug("Message received from content script:", message);
+    debug("Message received:", message);
+
+    // Mapping des actions d'état aux états correspondants
+    const actionStateMap = {
+        [ACTIONS.STARTED]: STATES.RECORDING,
+        [ACTIONS.STOPPED]: STATES.STOPPED,
+        [ACTIONS.ERROR]: STATES.ERROR
+    };
+
+    // Gestion des notifications d'état d'enregistrement
+    if (message.action && actionStateMap[message.action]) {
+        updateRecordingState(
+            actionStateMap[message.action],
+            message.action === ACTIONS.ERROR ? message.error : ''
+        );
+        sendResponse({});
+        return false;
+    }
 
     // Gestion des demandes d'options de langues
     if (message.action === 'getTargetLanguageOptions') {
-        // Récupérer les options de langues cibles disponibles
-        // Utiliser la liste centralisée, si disponible
         const targetLanguageOptions = getTargetLanguageOptions();
-        
         sendResponse({ options: targetLanguageOptions });
-        return false; // La réponse est envoyée de manière synchrone
+        return false;
     }
 
-    return false; // La réponse est envoyée de manière synchrone
+    // Message non reconnu - répondre quand même pour fermer proprement le port
+    sendResponse({});
+    return false;
 }
 
 // Enregistrer le gestionnaire d'événements pour la réception de messages

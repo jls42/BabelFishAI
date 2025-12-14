@@ -7,6 +7,10 @@
         "message": "Traducir la selección",
         "description": "Opción del menú contextual para traducir el texto seleccionado"
     },
+    "contextMenuCorrect": {
+        "message": "Corregir ortografía",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "Grabación cancelada (tecla Esc).",
         "description": "Mensaje mostrado al cancelar la grabación"
@@ -20,7 +24,7 @@
         "description": "Descripción de la extensión"
     },
     "welcomeMessage": {
-        "message": "Gracias por instalar BabelFishAI, la extensión que transforma tu voz en texto con una precisión excepcional gracias a la API Whisper de OpenAI, el líder actual en transcripción de voz.",
+        "message": "Gracias por instalar BabelFishAI, la extensión que transforma tu voz en texto con una precisión excepcional. Compatible con múltiples proveedores de IA, incluyendo Mistral AI, una solución francesa de vanguardia.",
         "description": "Mensaje de bienvenida"
     },
     "essentialSettingsTitle": {
@@ -90,14 +94,6 @@
     "supportProject": {
         "message": "Apoyar el proyecto a través de PayPal",
         "description": "Texto para el enlace de soporte de PayPal"
-    },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "URL predeterminada de la API Whisper"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "URL predeterminada de la API de traducción"
     },
     "displaySettingsTitle": {
         "message": "Ajustes de Visualización",
@@ -199,6 +195,14 @@
         "message": "Error durante la reformulación",
         "description": "Mensaje de error para la reformulación"
     },
+    "bannerCorrecting": {
+        "message": "Corrigiendo...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "Error durante la corrección",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "Error durante la transcripción",
         "description": "Mensaje de error que se muestra cuando ocurre un error durante la transcripción"
@@ -206,50 +210,6 @@
     "translationExplanation": {
         "message": "La función de traducción IA integrada te permite obtener una traducción automática de tu texto transcrito.<br>Para ello:<br><ul><li>Idioma de origen: selecciona el idioma que hablas en el micrófono.</li><li>Idioma de destino: elige el idioma al que quieres que se traduzca tu texto.</li></ul>Estos ajustes solo afectan a la traducción, no a la transcripción. Si desactivas la traducción automática, tu texto transcrito estará en el idioma hablado en el micrófono.",
         "description": "Explicación de la sección de traducción"
-    },
-    "expertModeTitle": {
-        "message": "Modo Experto",
-        "description": "Título del modo experto"
-    },
-    "enableExpertModeLabel": {
-        "message": "Activar el modo experto",
-        "description": "Etiqueta para activar el modo experto"
-    },
-    "enableExpertModeDescription": {
-        "message": "Desbloquea opciones de configuración avanzadas para usuarios experimentados.",
-        "description": "Descripción de la opción del modo experto"
-    },
-    "translationModelLabel": {
-        "message": "Modelo de traducción:",
-        "description": "Etiqueta para el modelo de traducción"
-    },
-    "translationModelDescription": {
-        "message": "Elige el modelo de IA utilizado para la traducción. `gpt-4o-mini` es el modelo predeterminado (mejor relación calidad/precio). `gpt-4o` ofrece una calidad superior pero es más caro.",
-        "description": "Descripción del modelo de traducción"
-    },
-    "audioModelLabel": {
-        "message": "Modelo de audio:",
-        "description": "Etiqueta para el modelo de audio"
-    },
-    "audioModelDescription": {
-        "message": "Elige el modelo de IA utilizado para la transcripción de audio. `whisper-1` es el modelo predeterminado.",
-        "description": "Descripción del modelo de audio"
-    },
-    "whisperApiUrlLabel": {
-        "message": "URL de la API Whisper:",
-        "description": "Etiqueta para la URL de la API Whisper"
-    },
-    "whisperApiUrlDescription": {
-        "message": "Permite especificar una URL personalizada para la API de transcripción Whisper (para usuarios avanzados).",
-        "description": "Descripción de la URL de la API Whisper"
-    },
-    "translationApiUrlLabel": {
-        "message": "URL de la API de traducción:",
-        "description": "Etiqueta para la URL de la API de traducción"
-    },
-    "translationApiUrlDescription": {
-        "message": "Permite especificar una URL personalizada para la API de traducción (para usuarios avanzados).",
-        "description": "Descripción de la URL de la API de traducción"
     },
     "forcedDialogDomainsLabel": {
         "message": "Dominios con cuadro de diálogo forzado:",
@@ -266,10 +226,6 @@
     "addDomainButton": {
         "message": "Agregar",
         "description": "Botón para agregar un dominio"
-    },
-    "addDomainDescription": {
-        "message": "Agrega un dominio a la lista.",
-        "description": "Descripción de agregar un dominio"
     },
     "forcedDialogInfo": {
         "message": "En estos dominios, la transcripción siempre aparecerá en un cuadro de diálogo",
@@ -295,17 +251,9 @@
         "message": "Desarrollador y creador de BabelFishAI",
         "description": "Rol del autor"
     },
-    "addModelPlaceholder": {
-        "message": "Agregar un modelo",
-        "description": "Marcador de posición para agregar un modelo"
-    },
     "addModelButton": {
         "message": "Agregar",
         "description": "Botón para agregar un modelo"
-    },
-    "addModelDescription": {
-        "message": "Permite agregar un modelo personalizado (para usuarios avanzados).",
-        "description": "Descripción de agregar un modelo"
     },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
@@ -347,58 +295,6 @@
         "message": "Para usar BabelFish AI:<br><br>1. Ve a un sitio web (por ejemplo, tu correo web o un sitio de chat de tu IA favorita, como <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> o <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. Ancla el icono de la extensión para un acceso fácil.<br>3. Iniciar/detener la grabación:<br>    * Haz clic en el icono de la extensión <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> o usa el atajo de teclado.<br>    * Habla en tu micrófono.<br>    * Haz clic en el icono <img src=\"../../../../images/icon32.png\" alt=\"Icono de la extensión\" width=\"32\" height=\"32\"> de nuevo o usa el atajo de teclado.<br>    * La transcripción aparecerá en el área de texto activa o en un cuadro de diálogo.<br><br>Atajos de teclado:<br><ul><li>Windows: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac: <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "Instrucciones para usar la extensión"
     },
-    "defaultWhisperApiUrl": {
-        "message": "URL predeterminada: https://api.openai.com/v1/audio/transcriptions",
-        "description": "URL predeterminada para la API de Whisper"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "URL predeterminada: https://api.openai.com/v1/chat/completions",
-        "description": "URL predeterminada para la API de traducción"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "Clave API no configurada. Por favor, configúrala en las opciones de la extensión.",
-        "description": "Mensaje de error: clave API faltante"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "Error de almacenamiento de Chrome",
-        "description": "Mensaje de error: problema de almacenamiento"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "Error: micrófono inaccesible.",
-        "description": "Mensaje de error: acceso al micrófono"
-    },
-    "API_ERROR": {
-        "message": "Error durante la llamada a la API",
-        "description": "Mensaje de error: llamada a la API general"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "Error durante la transcripción",
-        "description": "Mensaje de error: transcripción"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "Error durante la traducción",
-        "description": "Mensaje de error: traducción"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "No se encontró ningún elemento editable",
-        "description": "Mensaje de error: no hay elemento editable"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "Error al inyectar el script de contenido",
-        "description": "Mensaje de error: inyección de script"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "No se encontró ninguna pestaña activa",
-        "description": "Mensaje de error: no hay pestaña activa"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "Faltan parámetros de traducción",
-        "description": "Mensaje de error: parámetros de traducción"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "Formato de respuesta de traducción inválido",
-        "description": "Mensaje de error: respuesta de traducción"
-    },
     "bannerErrorGeneric": {
         "message": "Se produjo un error",
         "description": "Mensaje de error genérico"
@@ -406,10 +302,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ Extensiones > ⌨️ Atajos de teclado",
         "description": "Instrucciones para cambiar el atajo de teclado"
-    },
-    "defaultModel": {
-        "message": "predeterminado",
-        "description": "Indica el modelo predeterminado"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -450,5 +342,57 @@
     "autoCopyDescription": {
         "message": "Si está activado, el resultado se copiará automáticamente en el portapapeles y el cuadro de diálogo ya no aparecerá para la transcripción.",
         "description": "Descripción de la opción de copia automática"
+    },
+    "providersTitle": {
+        "message": "Proveedores de IA",
+        "description": "Título de la sección de proveedores"
+    },
+    "mistralApiKeyInfo": {
+        "message": "Obtén tu clave API en",
+        "description": "Información para obtener la clave API de Mistral"
+    },
+    "serviceSelectionTitle": {
+        "message": "Selección de servicios",
+        "description": "Título para la selección de servicios"
+    },
+    "transcriptionProviderLabel": {
+        "message": "Transcripción:",
+        "description": "Etiqueta para el proveedor de transcripción"
+    },
+    "chatProviderLabel": {
+        "message": "Traducción/Reformulación:",
+        "description": "Etiqueta para el proveedor de chat"
+    },
+    "customProviderDescription": {
+        "message": "Proveedor personalizado para LiteLLM u otros proxies. Las URLs son obligatorias.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "URL de transcripción (obligatorio):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "URL de chat (obligatorio):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "Configuración de modelos",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "Modelo de transcripción:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "Modelo de chat:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "Error: El proveedor Custom/LiteLLM requiere URLs configuradas.",
+        "description": "Error message when custom provider URLs are not configured"
+    },
+    "invalidUrlError": {
+        "message": "Error: Las URLs deben usar HTTPS.",
+        "description": "Mensaje de error para URLs inválidas"
     }
 }

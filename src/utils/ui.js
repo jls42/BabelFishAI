@@ -1,13 +1,12 @@
 // Utilitaires UI pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Utilisation des constantes globales depuis constants.js
-    const UI_CONFIG = window.BabelFishAIConstants.UI_CONFIG;
-    const MESSAGE_TYPES = window.BabelFishAIConstants.MESSAGE_TYPES;
-    const CONFIG = window.BabelFishAIConstants.CONFIG;
+    const UI_CONFIG = globalThis.BabelFishAIConstants.UI_CONFIG;
+    const CONFIG = globalThis.BabelFishAIConstants.CONFIG;
 
     /**
      * Met à jour la couleur du bandeau avec un dégradé
@@ -35,12 +34,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         try {
             // Convertir les couleurs hex en RGB
-            const startR = parseInt(start.substr(1, 2), 16);
-            const startG = parseInt(start.substr(3, 2), 16);
-            const startB = parseInt(start.substr(5, 2), 16);
-            const endR = parseInt(end.substr(1, 2), 16);
-            const endG = parseInt(end.substr(3, 2), 16);
-            const endB = parseInt(end.substr(5, 2), 16);
+            const startR = Number.parseInt(start.substring(1, 3), 16);
+            const startG = Number.parseInt(start.substring(3, 5), 16);
+            const startB = Number.parseInt(start.substring(5, 7), 16);
+            const endR = Number.parseInt(end.substring(1, 3), 16);
+            const endG = Number.parseInt(end.substring(3, 5), 16);
+            const endB = Number.parseInt(end.substring(5, 7), 16);
 
             const gradient = `linear-gradient(45deg,
                 rgba(${startR}, ${startG}, ${startB}, ${opacityValue}),
@@ -56,165 +55,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
     }
 
-    // La fonction showStatus locale a été supprimée car elle n'était pas utilisée.
-    // La logique d'affichage de statut est gérée par banner-utils.js via content.js.
-
-    // Suppression complète des notifications sonores
-
-    /**
-     * Configure le contenu textuel de la bannière
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} text - Le message à afficher
-     * @returns {HTMLElement|null} - Le conteneur de texte mis à jour ou null
-     */
-    function updateBannerText(banner, text) {
-        // Trouver le conteneur de texte
-        const statusTextContainer = banner.querySelector('.whisper-status-text');
-        if (statusTextContainer) {
-            statusTextContainer.textContent = text;
-
-            // Adapter le style du texte en fonction du contenu et des contrôles
-            const controlsContainer = banner.querySelector('.whisper-controls-container');
-            if (controlsContainer && controlsContainer.offsetWidth > 0) {
-                // Si les contrôles sont visibles, limiter la largeur du texte
-                statusTextContainer.style.maxWidth = `${Math.max(200, window.innerWidth - controlsContainer.offsetWidth - 80)}px`;
-
-                // Gérer l'overflow du texte s'il est trop long
-                if (text.length > 50) {
-                    statusTextContainer.style.textOverflow = 'ellipsis';
-                    statusTextContainer.style.overflow = 'hidden';
-                    statusTextContainer.style.whiteSpace = 'nowrap';
-                }
-            } else {
-                // Si les contrôles ne sont pas visibles, pas de limite de largeur
-                statusTextContainer.style.maxWidth = 'none';
-            }
-            return statusTextContainer;
-        } else {
-            // Si le conteneur n'existe pas (ancien format de bannière), utiliser la bannière directement
-            banner.textContent = text;
-            return null;
-        }
-    }
-
-    /**
-     * Configure les attributs d'accessibilité de la bannière
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} type - Le type de message ('info' ou 'error')
-     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
-     * @param {string} text - Le message affiché
-     */
-    function setupBannerAccessibility(banner, type, isRecording, text) {
-        // Définir les attributs ARIA pour l'accessibilité
-        banner.setAttribute('role', type === MESSAGE_TYPES.ERROR ? 'alert' : 'status');
-        banner.setAttribute('aria-live', type === MESSAGE_TYPES.ERROR ? 'assertive' : 'polite');
-
-        // Appliquer les attributs spécifiques au type
-        if (type === MESSAGE_TYPES.ERROR) {
-            banner.setAttribute('aria-atomic', 'true');
-        } else if (isRecording) {
-            banner.setAttribute('aria-label', `Enregistrement en cours: ${text}`);
-        }
-    }
-
-    /**
-     * Configure les classes CSS de la bannière en fonction du type
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} type - Le type de message ('info' ou 'error')
-     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
-     */
-    function setBannerClasses(banner, type, isRecording) {
-        // Réinitialiser les classes
-        banner.className = 'whisper-status-banner';
-
-        // Appliquer les classes spécifiques
-        if (type === MESSAGE_TYPES.ERROR) {
-            banner.classList.add('error');
-        } else if (isRecording) {
-            banner.classList.add('recording');
-        }
-    }
-
-    /**
-     * Configure l'animation de la bannière
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} type - Le type de message
-     */
-    function setupBannerAnimation(banner, type) {
-        banner.style.animation = 'none';
-        // Forcer un reflow pour réinitialiser l'animation
-        void banner.offsetWidth; // skipcq: JS-0098
-        banner.style.animation = type === MESSAGE_TYPES.ERROR ?
-            'bannerPulse 0.5s ease-in-out' :
-            'bannerFadeIn 0.3s ease-in-out';
-    }
-
-    /**
-     * Rend la bannière visible et ajuste le layout de la page
-     * @param {HTMLElement} banner - L'élément bannière
-     */
-    function showBannerElement(banner) {
-        // Rendre la bannière visible
-        banner.style.display = 'flex';
-
-        // Ajouter le padding au body pour éviter le chevauchement
-        if (document.body) {
-            document.body.style.paddingTop = '35px';
-        }
-    }
-
-    /**
-     * Met à jour la couleur de la bannière si nécessaire
-     * @param {string} type - Le type de message
-     * @param {Function} [updateColorCallback] - Callback pour la mise à jour
-     */
-    function updateBannerColorIfNeeded(type, updateColorCallback) {
-        if (type !== MESSAGE_TYPES.ERROR && typeof updateColorCallback === 'function') {
-            updateColorCallback();
-        }
-    }
-
-    /**
-     * Affiche la bannière avec un message et accessibilité améliorée
-     * @param {HTMLElement} banner - L'élément bannière
-     * @param {string} text - Le message à afficher
-     * @param {string} type - Le type de message ('info' ou 'error')
-     * @param {boolean} isRecording - Indique si l'enregistrement est en cours
-     * @param {Function} [updateColorCallback] - Callback pour mettre à jour la couleur du bandeau
-     * @returns {boolean} - Indique si l'affichage a réussi
-     */
-    function showBanner(banner, text, type = MESSAGE_TYPES.INFO, isRecording = false, updateColorCallback = null) {
-        // Vérifier si la bannière existe
-        if (!banner) {
-            console.warn('Banner element is null or undefined');
-            return false;
-        }
-
-        try {
-            // 1. Mettre à jour le texte
-            updateBannerText(banner, text);
-
-            // 2. Configurer les classes CSS
-            setBannerClasses(banner, type, isRecording);
-
-            // 3. Configurer l'accessibilité
-            setupBannerAccessibility(banner, type, isRecording, text);
-
-            // 4. Configurer l'animation
-            setupBannerAnimation(banner, type);
-
-            // 5. Rendre la bannière visible
-            showBannerElement(banner);
-
-            // 6. Mettre à jour la couleur si nécessaire
-            updateBannerColorIfNeeded(type, updateColorCallback);
-
-            return true;
-        } catch (error) {
-            console.error('Erreur lors de l\'affichage de la bannière:', error);
-            return false;
-        }
-    }
+    // Note: Les fonctions de gestion de bannière (showBanner, hideBanner, etc.) sont dans banner-utils.js
 
     /**
      * Crée un bouton de copie pour le texte avec accessibilité améliorée
@@ -224,9 +65,9 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function createCopyButton(text, onError) {
         const copyButton = document.createElement('button');
-        const buttonText = window.BabelFishAIUtils.i18n?.getMessage("copyButton") || 'Copier';
-        const successText = window.BabelFishAIUtils.i18n?.getMessage("copySuccess") || 'Copié !';
-        const errorText = window.BabelFishAIUtils.i18n?.getMessage("copyError") || 'Erreur lors de la copie du texte';
+        const buttonText = globalThis.BabelFishAIUtils.i18n?.getMessage("copyButton") || 'Copier';
+        const successText = globalThis.BabelFishAIUtils.i18n?.getMessage("copySuccess") || 'Copié !';
+        const errorText = globalThis.BabelFishAIUtils.i18n?.getMessage("copyError") || 'Erreur lors de la copie du texte';
 
         copyButton.textContent = buttonText;
         copyButton.className = 'whisper-copy-button';
@@ -354,7 +195,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const title = document.createElement('div');
         title.id = 'whisper-dialog-title';
         title.className = 'whisper-dialog-title';
-        title.textContent = window.BabelFishAIUtils.i18n?.getMessage("dialogTitle") || 'Transcription';
+        title.textContent = globalThis.BabelFishAIUtils.i18n?.getMessage("dialogTitle") || 'Transcription';
         title.setAttribute('role', 'heading');
         title.setAttribute('aria-level', '2');
 
@@ -362,8 +203,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         const closeButton = document.createElement('button');
         closeButton.textContent = '×';
         closeButton.className = 'whisper-close-button';
-        closeButton.title = window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer';
-        closeButton.setAttribute('aria-label', window.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer la boîte de dialogue');
+        closeButton.title = globalThis.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer';
+        closeButton.setAttribute('aria-label', globalThis.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer la boîte de dialogue');
 
         // Améliorer l'expérience de fermeture
         closeButton.onkeydown = (e) => {
@@ -380,7 +221,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 container.classList.add('closing');
                 setTimeout(() => {
                     if (container.parentNode) {
-                        document.body.removeChild(container);
+                        container.remove();
                     }
                 }, 300); // Correspond à la durée de l'animation
             }
@@ -472,7 +313,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         try {
             // Vérifier si l'élément existe toujours et est valide avant de le supprimer
             try {
-                transcriptionElement?.parentNode?.removeChild(transcriptionElement);
+                transcriptionElement?.remove();
             } catch (e) {
                 console.warn("Erreur lors de la suppression de l'élément:", e);
             }
@@ -484,7 +325,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
                 // Si le conteneur est vide (ne contient que le bouton de fermeture) ou n'a plus d'enfants, on le supprime
                 if (currentContainer && (currentContainer.children.length <= 1 || currentContainer.children.length === 0)) {
                     if (document.body.contains(currentContainer)) {
-                        document.body.removeChild(currentContainer);
+                        currentContainer.remove();
                     }
                 }
             } catch (e) {
@@ -538,7 +379,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
         const toggleText = document.createElement('span');
         toggleText.className = 'whisper-autoclose-label';
-        toggleText.textContent = window.BabelFishAIUtils.i18n?.getMessage("keepOpen") || 'Keep open';
+        toggleText.textContent = globalThis.BabelFishAIUtils.i18n?.getMessage("keepOpen") || 'Keep open';
 
         toggleLabel.appendChild(toggleInput);
         toggleLabel.appendChild(toggleSwitch);
@@ -573,7 +414,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function setupAutoRemoval(textElement, duration, toggleInput, timerProgressDiv, timerTextSpan) {
         const timerId = `dialog_${Date.now()}`;
-        const timers = window.BabelFishAIUtils.timers = window.BabelFishAIUtils.timers || {};
+        const timers = globalThis.BabelFishAIUtils.timers = globalThis.BabelFishAIUtils.timers || {};
 
         if (timers[timerId]) {
             clearTimeout(timers[timerId]);
@@ -585,8 +426,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
          */
         const scheduleRemoval = () => {
             try {
-                if ('requestIdleCallback' in window) {
-                    window.requestIdleCallback(() => {
+                if ('requestIdleCallback' in globalThis) {
+                    globalThis.requestIdleCallback(() => {
                         try {
                             removeTranscriptionElement(textElement);
                         } catch (e) {
@@ -667,10 +508,10 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
 
             const currentTimer = timers[timerId];
             if (currentTimer) {
-                window.clearTimeout(currentTimer);
+                globalThis.clearTimeout(currentTimer);
             }
 
-            const newTimer = window.setTimeout(scheduleRemoval, duration * 1000);
+            const newTimer = globalThis.setTimeout(scheduleRemoval, duration * 1000);
             timers[timerId] = newTimer;
         };
 
@@ -728,48 +569,12 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         return textElement;
     }
 
-    /**
-     * Cache la bannière en modifiant son style d'affichage
-     * @param {HTMLElement} banner - L'élément bannière à cacher
-     * @returns {boolean} - Indique si l'opération a réussi
-     */
-    function hideBanner(banner) {
-        try {
-            // Vérifier si la bannière existe
-            if (!banner) {
-                return false;
-            }
+    // Note: Les fonctions createBannerButton, showBanner et hideBanner ont été déplacées vers banner-utils.js
 
-            // Cacher la bannière en modifiant son style d'affichage
-            banner.style.display = 'none';
-
-            // Enlever le padding du body quand la bannière est cachée
-            if (document.body) {
-                document.body.style.paddingTop = '0';
-            }
-
-            return true;
-        } catch (error) {
-            console.error("Error hiding banner:", error);
-            return false;
-        }
-    }
-
-    // Note: La fonction createBannerButton a été déplacée vers banner-utils.js
-
-    // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Exporter uniquement les fonctions utilisées publiquement
     exports.ui = {
-        createCopyButton,
         showTextInDialog,
-        createTranscriptionContainer,
-        removeTranscriptionElement,
-        createTimerElements,
-        createToggleElements,
-        createControlsContainer,
-        setupAutoRemoval,
-        updateBannerColor,
-        hideBanner,
-        showBanner
+        updateBannerColor
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

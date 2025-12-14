@@ -4,8 +4,8 @@
  */
 
 // Définition exportée pour les pages web
-window.BabelFishAI = window.BabelFishAI || {};
-window.BabelFishAI.AVAILABLE_LANGUAGES = [
+globalThis.BabelFishAI = globalThis.BabelFishAI || {};
+globalThis.BabelFishAI.AVAILABLE_LANGUAGES = [
     { value: 'en', text: 'English (en)' },
     { value: 'fr', text: 'Français (fr)' },
     { value: 'es', text: 'Español (es)' },

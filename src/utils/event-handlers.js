@@ -1,11 +1,11 @@
 // Utilitaires de gestion des événements pour l'extension BabelFishAI
-window.BabelFishAIUtils = window.BabelFishAIUtils || {};
+globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
     'use strict';
 
     // Référence aux constantes globales
-    const ACTIONS = window.BabelFishAIConstants.ACTIONS;
+    const ACTIONS = globalThis.BabelFishAIConstants.ACTIONS;
 
     // Variables pour stocker les références aux fonctions externes
     let recordingBanner = null;
@@ -24,39 +24,52 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * Gère les messages provenant du script d'arrière-plan
      * @param {Object} message - Le message reçu
      * @param {Object} sender - L'expéditeur du message
-     * @param {Function} callback - Fonction de callback pour répondre au message
+     * @param {Function} sendResponse - Fonction de callback pour répondre au message
+     * @returns {boolean} false pour indiquer une réponse synchrone
      */
-    function handleBackgroundMessages(message) {
+    function handleBackgroundMessages(message, sender, sendResponse) {
         // Mapper les actions aux fonctions correspondantes
         const actionHandlers = {
             [ACTIONS.TOGGLE]: () => {
                 // Utiliser la fonction isCurrentlyRecording de recording-utils.js pour vérifier l'état d'enregistrement
-                if (!window.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-                    window.BabelFishAI.startRecording();
+                if (globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
+                    globalThis.BabelFishAI.stopRecording();
                 } else {
-                    window.BabelFishAI.stopRecording();
+                    globalThis.BabelFishAI.startRecording();
                 }
             },
             // Action pour la reformulation de texte sélectionné
             rephraseSelection: () => {
                 if (message.text) {
-                    window.BabelFishAI.handleTextRephrasing(message.text);
+                    globalThis.BabelFishAI.handleTextRephrasing(message.text);
                 }
             },
             // Action pour la traduction de texte sélectionné
             translateSelection: () => {
                 if (message.text) {
                     // Passer la langue cible spécifiée, si disponible
-                    window.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
+                    globalThis.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
+                }
+            },
+            // Action pour la correction orthographique de texte sélectionné
+            correctSelection: () => {
+                if (message.text) {
+                    globalThis.BabelFishAI.handleTextCorrection(message.text);
                 }
             }
-            // Possibilité d'ajouter d'autres gestionnaires d'actions ici
         };
 
         // Exécuter le gestionnaire correspondant à l'action
         if (message.action && actionHandlers[message.action]) {
             actionHandlers[message.action]();
         }
+
+        // Toujours envoyer une réponse pour fermer proprement le port
+        // Même si l'action n'est pas gérée, on répond pour éviter le warning
+        sendResponse({});
+
+        // Retourner false pour indiquer une réponse synchrone
+        return false;
     }
 
     /**
@@ -65,8 +78,8 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      */
     function handleKeyboardEvents(event) {
         // La touche Échap (code 27) pour annuler l'enregistrement
-        if (event.key === 'Escape' && window.BabelFishAIUtils.recording.isCurrentlyRecording()) {
-            window.BabelFishAI.cancelRecording();
+        if (event.key === 'Escape' && globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
+            globalThis.BabelFishAI.cancelRecording();
             // Empêcher les gestionnaires d'événements par défaut et la propagation
             event.preventDefault();
             event.stopPropagation();
@@ -87,7 +100,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         }
 
         if (hasColorChanges) {
-            window.BabelFishAI.updateBannerColor(true);
+            globalThis.BabelFishAI.updateBannerColor(true);
         }
     }
 
@@ -185,7 +198,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
      * @param {boolean} enableTranslation - Indique si la traduction est activée
      */
     function updateTranslateButton(translateButton, enableTranslation) {
-        translateButton.setAttribute('data-active', String(enableTranslation));
+        translateButton.dataset.active = String(enableTranslation);
     }
 
     /**
@@ -285,7 +298,7 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
             const rephraseButton = recordingBanner?.querySelector('#whisper-rephrase-control');
             if (rephraseButton) {
                 // Mettre à jour l'attribut data-active pour changer l'état visuel du bouton
-                rephraseButton.setAttribute('data-active', String(changes.enableRephrase.newValue));
+                rephraseButton.dataset.active = String(changes.enableRephrase.newValue);
             }
         }
     }
@@ -331,4 +344,4 @@ window.BabelFishAIUtils = window.BabelFishAIUtils || {};
         handleStorageChanges
     };
 
-})(window.BabelFishAIUtils);
+})(globalThis.BabelFishAIUtils);

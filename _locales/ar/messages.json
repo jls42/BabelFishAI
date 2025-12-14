@@ -7,6 +7,10 @@
         "message": "ترجمة التحديد",
         "description": "خيار قائمة السياق لترجمة النص المحدد"
     },
+    "contextMenuCorrect": {
+        "message": "تصحيح الإملاء",
+        "description": "Context menu option to correct spelling errors"
+    },
     "recordingCanceled": {
         "message": "تم إلغاء التسجيل (مفتاح Esc).",
         "description": "الرسالة المعروضة عند إلغاء التسجيل"
@@ -20,7 +24,7 @@
         "description": "وصف الإضافة"
     },
     "welcomeMessage": {
-        "message": "شكرًا لتثبيت BabelFishAI، الإضافة التي تحول صوتك إلى نص بدقة استثنائية بفضل واجهة برمجة تطبيقات Whisper من OpenAI، الرائدة حاليًا في النسخ الصوتي.",
+        "message": "شكراً لتثبيت BabelFishAI، الإضافة التي تحول صوتك إلى نص بدقة استثنائية. متوافقة مع عدة مزودي ذكاء اصطناعي، بما في ذلك Mistral AI، حل فرنسي متطور.",
         "description": "رسالة ترحيب"
     },
     "essentialSettingsTitle": {
@@ -90,14 +94,6 @@
     "supportProject": {
         "message": "دعم المشروع عبر PayPal",
         "description": "نص لرابط دعم PayPal"
-    },
-    "whisperApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/audio/transcriptions",
-        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات Whisper"
-    },
-    "translationApiUrlPlaceholder": {
-        "message": "https://api.openai.com/v1/chat/completions",
-        "description": "عنوان URL الافتراضي لواجهة برمجة تطبيقات الترجمة"
     },
     "displaySettingsTitle": {
         "message": "إعدادات العرض",
@@ -199,6 +195,14 @@
         "message": "حدث خطأ أثناء إعادة الصياغة",
         "description": "رسالة خطأ في إعادة الصياغة"
     },
+    "bannerCorrecting": {
+        "message": "جارٍ التصحيح...",
+        "description": "Message displayed during spelling correction"
+    },
+    "bannerCorrectionError": {
+        "message": "خطأ أثناء التصحيح",
+        "description": "Error message for spelling correction"
+    },
     "bannerTranscriptionError": {
         "message": "حدث خطأ أثناء النسخ",
         "description": "رسالة خطأ تظهر عند حدوث خطأ أثناء النسخ"
@@ -206,50 +210,6 @@
     "translationExplanation": {
         "message": "تتيح لك ميزة الترجمة المتكاملة بالذكاء الاصطناعي الحصول على ترجمة تلقائية للنص المنسوخ.<br>للقيام بذلك:<br><ul><li>اللغة المصدر: حدد اللغة التي تتحدث بها في الميكروفون.</li><li>اللغة الهدف: اختر اللغة التي تريد ترجمة النص إليها.</li></ul>لا تؤثر هذه الإعدادات إلا على الترجمة، وليس النسخ. إذا قمت بتعطيل الترجمة التلقائية، فسيتم نسخ النص باللغة التي تتحدث بها في الميكروفون.",
         "description": "شرح قسم الترجمة"
-    },
-    "expertModeTitle": {
-        "message": "وضع الخبير",
-        "description": "عنوان وضع الخبير"
-    },
-    "enableExpertModeLabel": {
-        "message": "تمكين وضع الخبير",
-        "description": "تسمية لتمكين وضع الخبير"
-    },
-    "enableExpertModeDescription": {
-        "message": "يفتح خيارات التكوين المتقدمة للمستخدمين ذوي الخبرة.",
-        "description": "وصف خيار وضع الخبير"
-    },
-    "translationModelLabel": {
-        "message": "نموذج الترجمة:",
-        "description": "تسمية نموذج الترجمة"
-    },
-    "translationModelDescription": {
-        "message": "اختر نموذج الذكاء الاصطناعي المستخدم للترجمة. `gpt-4o-mini` هو النموذج الافتراضي (أفضل نسبة جودة/سعر). يوفر `gpt-4o` جودة أعلى ولكنه أكثر تكلفة.",
-        "description": "وصف نموذج الترجمة"
-    },
-    "audioModelLabel": {
-        "message": "نموذج الصوت:",
-        "description": "تسمية نموذج الصوت"
-    },
-    "audioModelDescription": {
-        "message": "اختر نموذج الذكاء الاصطناعي المستخدم للنسخ الصوتي. `whisper-1` هو النموذج الافتراضي.",
-        "description": "وصف نموذج الصوت"
-    },
-    "whisperApiUrlLabel": {
-        "message": "عنوان URL لواجهة برمجة تطبيقات Whisper:",
-        "description": "تسمية عنوان URL لواجهة برمجة تطبيقات Whisper"
-    },
-    "whisperApiUrlDescription": {
-        "message": "يسمح بتحديد عنوان URL مخصص لواجهة برمجة تطبيقات النسخ Whisper (للمستخدمين المتقدمين).",
-        "description": "وصف عنوان URL لواجهة برمجة تطبيقات Whisper"
-    },
-    "translationApiUrlLabel": {
-        "message": "عنوان URL لواجهة برمجة تطبيقات الترجمة:",
-        "description": "تسمية عنوان URL لواجهة برمجة تطبيقات الترجمة"
-    },
-    "translationApiUrlDescription": {
-        "message": "يسمح بتحديد عنوان URL مخصص لواجهة برمجة تطبيقات الترجمة (للمستخدمين المتقدمين).",
-        "description": "وصف عنوان URL لواجهة برمجة تطبيقات الترجمة"
     },
     "forcedDialogDomainsLabel": {
         "message": "المجالات ذات مربع الحوار القسري:",
@@ -266,10 +226,6 @@
     "addDomainButton": {
         "message": "إضافة",
         "description": "زر لإضافة مجال"
-    },
-    "addDomainDescription": {
-        "message": "إضافة مجال إلى القائمة.",
-        "description": "وصف إضافة المجال"
     },
     "forcedDialogInfo": {
         "message": "في هذه المجالات، سيظهر النسخ دائمًا في مربع حوار",
@@ -295,17 +251,9 @@
         "message": "مطور ومنشئ BabelFishAI",
         "description": "دور المؤلف"
     },
-    "addModelPlaceholder": {
-        "message": "إضافة نموذج",
-        "description": "Placeholder for adding a model"
-    },
     "addModelButton": {
         "message": "إضافة",
         "description": "Button to add a model"
-    },
-    "addModelDescription": {
-        "message": "يسمح بإضافة نموذج مخصص (للمستخدمين المتقدمين).",
-        "description": "Description of adding a model"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM فقط)",
@@ -347,58 +295,6 @@
         "message": "لاستخدام BabelFish AI:<br><br>1. انتقل إلى موقع ويب (على سبيل المثال، بريدك الإلكتروني على الويب أو موقع دردشة الذكاء الاصطناعي المفضل لديك، مثل <a href=\"https://chat.mistral.ai/\" target=\"_blank\">Le Chat de Mistral AI</a> أو <a href=\"https://chatgpt.com/\" target=\"_blank\">ChatGPT</a>).<br>2. قم بتثبيت أيقونة الإضافة لسهولة الوصول إليها.<br>3. بدء/إيقاف التسجيل:<br>    * انقر على أيقونة الإضافة <img src=\"../../../../images/icon32.png\" alt=\"أيقونة الإضافة\" width=\"32\" height=\"32\"> أو استخدم اختصار لوحة المفاتيح.<br>    * تحدث في الميكروفون الخاص بك.<br>    * انقر على الأيقونة <img src=\"../../../../images/icon32.png\" alt=\"أيقونة الإضافة\" width=\"32\" height=\"32\"> مرة أخرى أو استخدم اختصار لوحة المفاتيح.<br>    * سيظهر النص في مربع النص النشط أو في مربع حوار.<br><br>اختصارات لوحة المفاتيح:<br><ul><li>Windows : <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">Ctrl+Shift+1</span></li><li>Mac : <span style=\"background-color: #684054; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-weight: bold; margin: 0 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\">⌘+Shift+1</span></li></ul>",
         "description": "تعليمات استخدام الإضافة"
     },
-    "defaultWhisperApiUrl": {
-        "message": "الرابط الافتراضي: https://api.openai.com/v1/audio/transcriptions",
-        "description": "الرابط الافتراضي لـ Whisper API"
-    },
-    "defaultTranslationApiUrl": {
-        "message": "الرابط الافتراضي: https://api.openai.com/v1/chat/completions",
-        "description": "الرابط الافتراضي لـ Translation API"
-    },
-    "API_KEY_NOT_FOUND": {
-        "message": "لم يتم تكوين مفتاح API. يرجى تكوينه في خيارات الإضافة.",
-        "description": "رسالة خطأ: مفتاح API مفقود"
-    },
-    "CHROME_STORAGE_ERROR": {
-        "message": "خطأ في تخزين Chrome",
-        "description": "رسالة خطأ: مشكلة في التخزين"
-    },
-    "MIC_ACCESS_ERROR": {
-        "message": "خطأ: الميكروفون غير متاح.",
-        "description": "رسالة خطأ: الوصول إلى الميكروفون"
-    },
-    "API_ERROR": {
-        "message": "خطأ أثناء استدعاء واجهة برمجة التطبيقات",
-        "description": "رسالة خطأ: استدعاء API عام"
-    },
-    "TRANSCRIPTION_ERROR": {
-        "message": "خطأ أثناء النسخ",
-        "description": "رسالة خطأ: النسخ"
-    },
-    "TRANSLATION_ERROR": {
-        "message": "خطأ أثناء الترجمة",
-        "description": "رسالة خطأ: الترجمة"
-    },
-    "NO_EDITABLE_ELEMENT": {
-        "message": "لم يتم العثور على عنصر قابل للتحرير",
-        "description": "رسالة خطأ: لا يوجد عنصر قابل للتحرير"
-    },
-    "CONTENT_SCRIPT_INJECTION_ERROR": {
-        "message": "خطأ أثناء حقن البرنامج النصي للمحتوى",
-        "description": "رسالة خطأ: حقن البرنامج النصي"
-    },
-    "NO_ACTIVE_TAB": {
-        "message": "لم يتم العثور على علامة تبويب نشطة",
-        "description": "رسالة خطأ: لا توجد علامة تبويب نشطة"
-    },
-    "MISSING_TRANSLATION_PARAMS": {
-        "message": "معلمات الترجمة مفقودة",
-        "description": "رسالة خطأ: معلمات الترجمة"
-    },
-    "INVALID_TRANSLATION_RESPONSE": {
-        "message": "تنسيق استجابة الترجمة غير صالح",
-        "description": "رسالة خطأ: استجابة الترجمة"
-    },
     "bannerErrorGeneric": {
         "message": "حدث خطأ",
         "description": "رسالة خطأ عامة"
@@ -406,10 +302,6 @@
     "shortcutChangeInstructions": {
         "message": "⚙️ الإضافات > ⌨️ اختصارات لوحة المفاتيح",
         "description": "تعليمات لتغيير اختصار لوحة المفاتيح"
-    },
-    "defaultModel": {
-        "message": "افتراضي",
-        "description": "يشير إلى النموذج الافتراضي"
     },
     "defaultAudioModel": {
         "message": "whisper-1",
@@ -450,5 +342,57 @@
     "autoCopyDescription": {
         "message": "إذا تم تمكينه، فسيتم نسخ النتيجة تلقائيًا إلى الحافظة ولن يظهر مربع الحوار بعد ذلك للنسخ.",
         "description": "وصف خيار النسخ التلقائي"
+    },
+    "providersTitle": {
+        "message": "موفرو الذكاء الاصطناعي",
+        "description": "عنوان قسم الموفرين"
+    },
+    "mistralApiKeyInfo": {
+        "message": "احصل على مفتاح API الخاص بك على",
+        "description": "معلومات للحصول على مفتاح API لـ Mistral"
+    },
+    "serviceSelectionTitle": {
+        "message": "اختيار الخدمة",
+        "description": "عنوان اختيار الخدمة"
+    },
+    "transcriptionProviderLabel": {
+        "message": "النسخ:",
+        "description": "تسمية لموفر النسخ"
+    },
+    "chatProviderLabel": {
+        "message": "الترجمة/إعادة الصياغة:",
+        "description": "تسمية لموفر الدردشة"
+    },
+    "customProviderDescription": {
+        "message": "مزود مخصص لـ LiteLLM أو وكلاء آخرين. عناوين URL مطلوبة.",
+        "description": "Description of custom provider"
+    },
+    "customTranscriptionUrlLabel": {
+        "message": "رابط النسخ (مطلوب):",
+        "description": "Label for custom provider transcription URL"
+    },
+    "customChatUrlLabel": {
+        "message": "رابط المحادثة (مطلوب):",
+        "description": "Label for custom provider chat URL"
+    },
+    "modelsConfigTitle": {
+        "message": "تكوين النماذج",
+        "description": "Title for models configuration section"
+    },
+    "transcriptionModelLabel": {
+        "message": "نموذج النسخ:",
+        "description": "Label for transcription model selector"
+    },
+    "chatModelLabel": {
+        "message": "نموذج المحادثة:",
+        "description": "Label for chat model selector"
+    },
+    "customUrlRequiredError": {
+        "message": "خطأ: مزود Custom/LiteLLM يتطلب عناوين URL مُهيأة.",
+        "description": "Error message when custom provider URLs are not configured"
+    },
+    "invalidUrlError": {
+        "message": "خطأ: يجب أن تستخدم عناوين URL بروتوكول HTTPS.",
+        "description": "رسالة خطأ لعناوين URL غير صالحة"
     }
 }
