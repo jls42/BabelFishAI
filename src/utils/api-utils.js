@@ -209,6 +209,56 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Résout le provider actif avec fallback si nécessaire
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {Object} data - Données du storage
+     * @returns {{providerId: string, providerConfig: Object|undefined}} Provider résolu
+     */
+    function resolveActiveProvider(serviceType, data) {
+        let providerId = serviceType === 'transcription'
+            ? data.transcriptionProvider
+            : data.chatProvider;
+
+        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
+        let providerConfig = data.providers?.[providerId];
+
+        // Si non valide, chercher un provider de fallback
+        if (data.providers && !isProviderValid(providerId, providerConfig)) {
+            const fallback = findFallbackProvider(data.providers, providerId);
+            if (fallback) {
+                providerId = fallback.providerId;
+                providerConfig = fallback.providerConfig;
+            }
+        }
+
+        return { providerId, providerConfig };
+    }
+
+    /**
+     * Résout la clé API pour un provider
+     * @param {Object} providerConfig - Configuration du provider
+     * @param {string} providerId - ID du provider
+     * @param {string} legacyApiKey - Clé API legacy (pour rétrocompatibilité)
+     * @returns {string|null} Clé API résolue
+     */
+    function resolveApiKey(providerConfig, providerId, legacyApiKey) {
+        if (providerConfig?.apiKey) return providerConfig.apiKey;
+        if (providerId === 'openai') return legacyApiKey || null;
+        return null;
+    }
+
+    /**
+     * Résout le flag disableLogging selon le provider
+     * @param {Object} providerDef - Définition du provider
+     * @param {boolean} userPreference - Préférence utilisateur
+     * @returns {boolean} True si le logging doit être désactivé
+     */
+    function resolveDisableLogging(providerDef, userPreference) {
+        const supportsNoLog = providerDef?.supportsNoLog ?? false;
+        return supportsNoLog && userPreference;
+    }
+
+    /**
      * Résout la configuration API pour un type de service donné
      * Supporte le multi-provider avec fallback sur la configuration legacy
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
@@ -225,22 +275,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             disableLogging: false
         });
 
-        // Déterminer le provider à utiliser
-        let providerId = serviceType === 'transcription'
-            ? data.transcriptionProvider
-            : data.chatProvider;
-
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID ('openai'|'mistral'|'custom')
-        let providerConfig = data.providers?.[providerId];
-
-        // Si non valide, chercher un provider de fallback
-        if (data.providers && !isProviderValid(providerId, providerConfig)) {
-            const fallback = findFallbackProvider(data.providers, providerId);
-            if (fallback) {
-                providerId = fallback.providerId;
-                providerConfig = fallback.providerConfig;
-            }
-        }
+        // Résoudre le provider actif
+        const { providerId, providerConfig } = resolveActiveProvider(serviceType, data);
 
         // Récupérer les définitions du provider depuis le registre
         const Providers = globalThis.BabelFishAIProviders;
@@ -248,12 +284,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
-        const apiKey = providerConfig?.apiKey || (providerId === 'openai' ? data.apiKey : null);
+        const apiKey = resolveApiKey(providerConfig, providerId, data.apiKey);
         const model = resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data);
-
-        // Vérifier si NoLog est supporté et activé
-        const supportsNoLog = providerDef?.supportsNoLog ?? (providerId === 'openai');
-        const disableLogging = supportsNoLog && data.disableLogging;
+        const disableLogging = resolveDisableLogging(providerDef, data.disableLogging);
 
         return { apiKey, url, model, providerId, disableLogging };
     }
