@@ -93,7 +93,7 @@ body {
     background: linear-gradient(to right,
             rgba(255, 255, 255, 0) 35%,
             white 55%),
-        url('../../../../images/background.webp') left center/contain no-repeat fixed;
+        url('../../../images/background.webp') left center/contain no-repeat fixed;
     background-color: var(--gray-50);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1272,7 +1272,7 @@ input[type="color"]:focus {
         background: linear-gradient(to bottom,
                 rgba(255, 255, 255, 0) 250px,
                 white 350px),
-            url('../../../../images/background.webp') top center/auto 250px no-repeat;
+            url('../../../images/background.webp') top center/auto 250px no-repeat;
         background-color: var(--gray-50);
     }
 

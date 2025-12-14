@@ -195,8 +195,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Mapper providerId vers le logo
         const logoMap = {
-            'openai': '../../../../images/openai-logo.png',
-            'mistral': '../../../../images/mistral-logo.png',
+            'openai': '../../../images/openai-logo.png',
+            'mistral': '../../../images/mistral-logo.png',
             'custom': null // Emoji 🚅 pour LiteLLM
         };
 
