@@ -3,17 +3,15 @@
 ## Commande de création du ZIP
 
 ```bash
-cd ~/git/ai/google_extension/BabelFishAI
-zip -r ../BabelFishAI-1.1.18.zip . \
-  -x "*.git*" \
-  -x ".claude/*" \
-  -x "CLAUDE.md" \
-  -x "AGENTS.md" \
-  -x "GEMINI.md" \
-  -x "README-*-o3-mini.md" \
-  -x "scripts/*" \
-  -x ".deepsource.toml" \
-  -x "*.zip"
+zip -r BabelFishAI-1.1.18.zip BabelFishAI \
+  -x "BabelFishAI/.git/*" \
+  -x "BabelFishAI/.claude/*" \
+  -x "BabelFishAI/CLAUDE.md" \
+  -x "BabelFishAI/AGENTS.md" \
+  -x "BabelFishAI/GEMINI.md" \
+  -x "BabelFishAI/scripts/*" \
+  -x "BabelFishAI/.deepsource.toml" \
+  -x "BabelFishAI/.github/*"
 ```
 
 ## Fichiers exclus du ZIP
