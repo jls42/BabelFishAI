@@ -270,15 +270,16 @@ async function migrateToMultiProvider() {
         // Détecter si des URLs custom sont configurées (mode LiteLLM)
         const hasCustomTranscriptionUrl = data.apiUrl && data.apiUrl !== DEFAULT_URLS.WHISPER;
         const hasCustomChatUrl = data.translationApiUrl && data.translationApiUrl !== DEFAULT_URLS.GPT;
+        const hasCustomUrls = hasCustomTranscriptionUrl || hasCustomChatUrl;
 
         // Créer la nouvelle structure providers
+        // Si URLs custom : la clé était pour le proxy, pas pour OpenAI
         const providers = {
             openai: {
-                apiKey: data.apiKey || '',
-                enabled: Boolean(data.apiKey),
-                // Préserver les URLs custom si configurées
-                transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
-                chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
+                apiKey: hasCustomUrls ? '' : (data.apiKey || ''),
+                enabled: hasCustomUrls ? false : Boolean(data.apiKey),
+                transcriptionUrl: '',
+                chatUrl: ''
             },
             mistral: {
                 apiKey: '',
@@ -288,17 +289,30 @@ async function migrateToMultiProvider() {
             }
         };
 
+        // Ajouter le provider custom seulement si des URLs personnalisées sont détectées
+        if (hasCustomUrls) {
+            providers.custom = {
+                apiKey: data.apiKey || '',
+                enabled: Boolean(data.apiKey),
+                transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
+                chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
+            };
+        }
+
+        // Déterminer le provider actif
+        const activeProvider = hasCustomUrls ? 'custom' : 'openai';
+
         // Sauvegarder la nouvelle configuration
-        // Les anciennes clés sont préservées pour la rétrocompatibilité
         await chrome.storage.sync.set({
             providers,
-            transcriptionProvider: 'openai',
-            chatProvider: 'openai'
+            transcriptionProvider: activeProvider,
+            chatProvider: activeProvider
         });
 
         debug('Migration multi-provider terminée avec succès', {
             hasApiKey: Boolean(data.apiKey),
-            hasCustomUrls: hasCustomTranscriptionUrl || hasCustomChatUrl
+            hasCustomUrls,
+            activeProvider
         });
     } catch (error) {
         console.error('Erreur lors de la migration multi-provider:', error);
