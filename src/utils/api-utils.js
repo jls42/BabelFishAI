@@ -142,15 +142,20 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @param {Object} providerConfig - Configuration du provider
      * @param {Object} providerDef - Définition du provider
+     * @param {string} providerId - ID du provider
      * @returns {string} URL résolue
      */
-    function resolveUrl(serviceType, providerConfig, providerDef) {
+    function resolveUrl(serviceType, providerConfig, providerDef, providerId) {
+        // Les URLs custom ne sont utilisées que pour le provider 'custom'
+        // OpenAI et Mistral utilisent toujours leurs URLs par défaut
+        const useCustomUrl = providerId === 'custom';
+
         if (serviceType === 'transcription') {
-            return providerConfig?.transcriptionUrl
+            return (useCustomUrl && providerConfig?.transcriptionUrl)
                 || providerDef?.defaultUrls.transcription
                 || API_CONFIG.DEFAULT_WHISPER_API_URL;
         }
-        return providerConfig?.chatUrl
+        return (useCustomUrl && providerConfig?.chatUrl)
             || providerDef?.defaultUrls.chat
             || API_CONFIG.DEFAULT_GPT_API_URL;
     }
@@ -242,7 +247,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const providerDef = Providers?.getProvider(providerId) ?? null;
 
         // Résoudre URL, clé API et modèle
-        const url = resolveUrl(serviceType, providerConfig, providerDef);
+        const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
         const apiKey = providerConfig?.apiKey || (providerId === 'openai' ? data.apiKey : null);
         const model = resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data);
 

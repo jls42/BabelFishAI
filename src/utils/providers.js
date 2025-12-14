@@ -25,7 +25,7 @@ const BABEL_PROVIDERS = {
             { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
             { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
         ],
-        supportsNoLog: true
+        supportsNoLog: false  // NoLog est uniquement pour LiteLLM, pas OpenAI
     },
     mistral: {
         id: 'mistral',

@@ -1045,6 +1045,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         debouncedSaveOptions();
     });
     openaiApiKeyInput.addEventListener('input', () => {
+        // Activer automatiquement le provider si une clé est saisie
+        if (openaiApiKeyInput.value.trim()) {
+            openaiEnabledCheckbox.checked = true;
+        }
         updateProviderDisplay('openai');
         debouncedSaveOptions();
     });
@@ -1054,6 +1058,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         debouncedSaveOptions();
     });
     mistralApiKeyInput.addEventListener('input', () => {
+        // Activer automatiquement le provider si une clé est saisie
+        if (mistralApiKeyInput.value.trim()) {
+            mistralEnabledCheckbox.checked = true;
+        }
         updateProviderDisplay('mistral');
         debouncedSaveOptions();
     });
@@ -1064,6 +1072,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         debouncedSaveOptions();
     });
     customApiKeyInput.addEventListener('input', () => {
+        // Activer automatiquement le provider si une clé est saisie
+        if (customApiKeyInput.value.trim()) {
+            customEnabledCheckbox.checked = true;
+        }
         updateProviderDisplay('custom');
         debouncedSaveOptions();
     });
