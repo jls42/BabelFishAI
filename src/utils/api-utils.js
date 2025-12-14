@@ -241,9 +241,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const Providers = globalThis.BabelFishAIProviders;
         const providerDef = Providers?.getProvider(providerId) ?? null;
 
-        // eslint-disable-next-line no-console -- Debug log for provider config diagnostics
-        console.log('[resolveApiConfig]', serviceType, '- providerId:', providerId, '- hasProviderConfig:', Boolean(providerConfig), '- providerDef:', providerDef?.name);
-
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef);
         const apiKey = providerConfig?.apiKey || (providerId === 'openai' ? data.apiKey : null);
@@ -252,9 +249,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Vérifier si NoLog est supporté et activé
         const supportsNoLog = providerDef?.supportsNoLog ?? (providerId === 'openai');
         const disableLogging = supportsNoLog && data.disableLogging;
-
-        // eslint-disable-next-line no-console -- Debug log for provider config result
-        console.log('[resolveApiConfig] Result:', { providerId, url, model, hasApiKey: Boolean(apiKey) });
 
         return { apiKey, url, model, providerId, disableLogging };
     }
