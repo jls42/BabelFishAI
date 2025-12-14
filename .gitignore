@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code local config
+.claude/
+
+# Chrome extension build artifacts
+*.zip
+*.crx
+*.pem
+
+# Node (si ajouté plus tard)
+node_modules/
+
+# Logs
+*.log
+
+# AI IDE instructions (local only)
+.github/instructions/
