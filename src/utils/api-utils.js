@@ -97,13 +97,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         // Créer un objet réponse compatible avec le flux existant
+        // Les méthodes json/text retournent des Promises pour matcher l'interface Response
         return {
             ok: result.status >= 200 && result.status < 300,
             status: result.status,
             statusText: result.statusText,
             headers: new Headers(result.headers || {}),
-            json: async () => result.data,
-            text: async () => (typeof result.data === 'string' ? result.data : JSON.stringify(result.data))
+            json: () => Promise.resolve(result.data),
+            text: () => Promise.resolve(typeof result.data === 'string' ? result.data : JSON.stringify(result.data))
         };
     }
 

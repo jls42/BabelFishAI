@@ -479,7 +479,8 @@ function decodeBase64ToBlob(field) {
     const byteNumbers = new Array(byteCharacters.length);
     // charCodeAt est approprié ici car Base64 décodé produit des octets 0-255 (ASCII)
     for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i); // NOSONAR skipcq: JS-0242 - i is reassigned by loop
+        // eslint-disable-next-line security/detect-object-injection -- i is a controlled loop index
+        byteNumbers[i] = byteCharacters.charCodeAt(i); // NOSONAR skipcq: JS-0242
     }
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: field.type });
@@ -511,7 +512,8 @@ function reconstructFormData(formDataFields) {
 function captureResponseHeaders(response) {
     const headers = {};
     response.headers.forEach((value, key) => {
-        headers[key] = value; // NOSONAR - key comes from browser's Headers API, not user input
+        // eslint-disable-next-line security/detect-object-injection -- key from browser's Headers API
+        headers[key] = value; // NOSONAR
     });
     return headers;
 }
@@ -538,7 +540,8 @@ async function proxyFetch(request) {
         }
 
         // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire
-        const response = await fetch(url, fetchOptions); // NOSONAR - URL is from extension's API config, not arbitrary user input
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- URL from extension's API config
+        const response = await fetch(url, fetchOptions); // NOSONAR
         const contentType = response.headers.get('content-type') || '';
 
         const data = contentType.includes('application/json')
