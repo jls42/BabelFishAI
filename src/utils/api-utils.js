@@ -3,7 +3,7 @@
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
-    'use strict';
+    'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
     // Constantes importées depuis l'espace global
     const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
