@@ -65,7 +65,7 @@ let isRecording = false;
  */
 function debug(...args) {
     if (SERVICE_WORKER_CONFIG.DEBUG) {
-        console.log('[Background]', ...args);
+        console.log('[Background]', ...args); // skipcq: JS-0002 - Debug function, only active when DEBUG=true
     }
 }
 
