@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**Site oficial: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **Pentru a utiliza extensia, veți avea nevoie de o cheie API de la unul dintre furnizorii acceptați:**
 
 | Furnizor | Obțineți o cheie API |
@@ -74,15 +76,27 @@ Iată lista limbilor acceptate de Babel Fish AI, cu link-uri către videoclipuri
 
 ## 🚀 Instalare
 
+### Chrome
+
 1.  **Descărcare și Instalare:**
     - Clonați acest depozit de pe GitHub sau descărcați manual dosarul extensiei.
     - **Sau instalați direct extensia din [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
     - Deschideți Chrome și accesați `chrome://extensions/`.
-    - Activați „Modul dezvoltator” în dreapta sus.
-    - Faceți clic pe „Încărcați extensia neîmpachetată” și selectați dosarul Babel Fish AI.
+    - Activați „Modul dezvoltator" în dreapta sus.
+    - Faceți clic pe „Încărcați extensia neîmpachetată" și selectați dosarul Babel Fish AI.
 
 2.  **Verificare:**
     - Asigurați-vă că extensia apare în bara de instrumente Chrome cu pictograma personalizată.
+
+### Firefox
+
+1.  **Instalare din magazin:**
+    - Extensia va fi disponibilă în curând pe [Firefox Add-ons](https://addons.mozilla.org/).
+
+2.  **Instalare temporară (dezvoltare):**
+    - Deschideți Firefox și accesați `about:debugging#/runtime/this-firefox`.
+    - Faceți clic pe „Încarcă supliment temporar...".
+    - Selectați fișierul `manifest.firefox.json` din rădăcina proiectului.
 
 ## ⚙️ Configurare
 

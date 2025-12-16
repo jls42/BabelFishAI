@@ -2,7 +2,11 @@
 /* global chrome, importScripts */
 
 // Importer la définition des langues disponibles
-importScripts('utils/languages-data.js'); // skipcq: JS-0103
+// Note: importScripts n'existe que dans les Service Workers (Chrome).
+// Sur Firefox, les scripts sont chargés via le manifest background.scripts.
+if (typeof importScripts === 'function') {
+    importScripts('utils/languages-data.js'); // skipcq: JS-0103
+}
 
 // Configuration spécifique au service worker
 const SERVICE_WORKER_CONFIG = {
@@ -466,6 +470,102 @@ chrome.runtime.onStartup.addListener(createContextMenus);
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
+ * Décode une chaîne Base64 en Blob
+ * @param {Object} field - Champ contenant les données Base64
+ * @returns {Blob} Le Blob reconstruit
+ */
+function decodeBase64ToBlob(field) {
+    const byteCharacters = atob(field.data);
+    const byteNumbers = new Array(byteCharacters.length);
+    // charCodeAt est approprié ici car Base64 décodé produit des octets 0-255 (ASCII)
+    for (let i = 0; i < byteCharacters.length; i++) {
+        // eslint-disable-next-line security/detect-object-injection -- i is a controlled loop index
+        byteNumbers[i] = byteCharacters.charCodeAt(i); // NOSONAR skipcq: JS-0242
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: field.type });
+}
+
+/**
+ * Reconstruit un FormData depuis les champs sérialisés
+ * @param {Array} formDataFields - Tableau de champs sérialisés
+ * @returns {FormData} Le FormData reconstruit
+ */
+function reconstructFormData(formDataFields) {
+    const formData = new FormData();
+    for (const field of formDataFields) {
+        if (field.isFile) {
+            const blob = decodeBase64ToBlob(field);
+            formData.append(field.name, blob, field.filename);
+        } else {
+            formData.append(field.name, field.value);
+        }
+    }
+    return formData;
+}
+
+/**
+ * Capture les headers de la réponse dans un objet simple
+ * @param {Response} response - La réponse fetch
+ * @returns {Object} Les headers capturés
+ */
+function captureResponseHeaders(response) {
+    const headers = {};
+    response.headers.forEach((value, key) => {
+        // eslint-disable-next-line security/detect-object-injection -- key from browser's Headers API
+        headers[key] = value; // NOSONAR
+    });
+    return headers;
+}
+
+/**
+ * Proxy fetch pour contourner les restrictions CSP sur Firefox
+ * Le background script n'est pas soumis aux CSP des pages web
+ * @param {Object} request - La requête à effectuer
+ * @returns {Promise<Object>} Le résultat de la requête
+ */
+async function proxyFetch(request) {
+    const { url, options, formDataFields } = request;
+
+    try {
+        const fetchOptions = { ...options };
+
+        // Si on a des champs FormData (pour l'upload audio)
+        if (formDataFields) {
+            fetchOptions.body = reconstructFormData(formDataFields);
+            // Ne pas définir Content-Type pour FormData (le navigateur le fait)
+            if (fetchOptions.headers) {
+                delete fetchOptions.headers['Content-Type'];
+            }
+        }
+
+        // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- URL from extension's API config
+        const response = await fetch(url, fetchOptions); // NOSONAR
+        const contentType = response.headers.get('content-type') || '';
+
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : await response.text();
+
+        return {
+            success: true,
+            status: response.status,
+            statusText: response.statusText,
+            headers: captureResponseHeaders(response),
+            data,
+            contentType
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message,
+            errorName: error.name
+        };
+    }
+}
+
+/**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
  * @param {Object} sender - L'expéditeur du message
@@ -497,6 +597,14 @@ function handleMessage(message, sender, sendResponse) {
         const targetLanguageOptions = getTargetLanguageOptions();
         sendResponse({ options: targetLanguageOptions });
         return false;
+    }
+
+    // Gestion du proxy fetch pour Firefox (contournement CSP)
+    if (message.action === 'proxyFetch') {
+        proxyFetch(message.request)
+            .then(result => sendResponse(result))
+            .catch(error => sendResponse({ success: false, error: error.message }));
+        return true; // Indique une réponse asynchrone
     }
 
     // Message non reconnu - répondre quand même pour fermer proprement le port

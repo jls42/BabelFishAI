@@ -1,4 +1,5 @@
 // Utilitaires pour la gestion des API pour l'extension BabelFishAI
+/* global chrome */
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
@@ -7,6 +8,105 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     // Constantes importées depuis l'espace global
     const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
     const API_CONFIG = globalThis.BabelFishAIConstants.API_CONFIG;
+
+    /**
+     * Détecte si le navigateur est Firefox
+     * @returns {boolean} true si Firefox
+     */
+    function isFirefox() {
+        return typeof navigator !== 'undefined' && navigator.userAgent.includes('Firefox');
+    }
+
+    /**
+     * Convertit un FormData en tableau de champs sérialisables pour le proxy
+     * @param {FormData} formData - Le FormData à convertir
+     * @returns {Promise<Array>} Tableau de champs sérialisables
+     */
+    async function formDataToSerializable(formData) {
+        const fields = [];
+        const entries = [];
+
+        // Collecter les entrées avec forEach (plus compatible que for...of sur entries())
+        formData.forEach((value, name) => {
+            entries.push({ name, value });
+        });
+
+        // Traiter chaque entrée
+        for (const entry of entries) {
+            const { name, value } = entry;
+            if (value instanceof Blob) {
+                // Convertir le Blob en Base64 (plus efficace que Array.from pour la sérialisation)
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.readAsDataURL(value);
+                });
+                fields.push({
+                    name,
+                    isFile: true,
+                    data: base64,
+                    type: value.type,
+                    filename: value.name || 'file'
+                });
+            } else {
+                fields.push({
+                    name,
+                    isFile: false,
+                    value: String(value)
+                });
+            }
+        }
+
+        return fields;
+    }
+
+    /**
+     * Effectue une requête fetch via le background script (proxy pour Firefox)
+     * Contourne les restrictions CSP des pages web
+     * @param {string} url - URL de la requête
+     * @param {Object} options - Options fetch (method, headers, body)
+     * @returns {Promise<Object>} Réponse simulée compatible avec le flux existant
+     */
+    async function fetchViaProxy(url, options) {
+        const request = {
+            url,
+            options: {
+                method: options.method,
+                headers: options.headers
+            }
+        };
+
+        // Gérer le body selon son type
+        // Utiliser duck typing car instanceof FormData peut échouer entre contextes
+        if (options.body && typeof options.body.entries === 'function' && typeof options.body.append === 'function') {
+            request.formDataFields = await formDataToSerializable(options.body);
+        } else if (options.body) {
+            request.options.body = options.body;
+        }
+
+        // Envoyer la requête au background script
+        const result = await chrome.runtime.sendMessage({
+            action: 'proxyFetch',
+            request
+        });
+
+        if (!result.success) {
+            const error = new Error(result.error);
+            error.name = result.errorName || 'Error';
+            throw error;
+        }
+
+        // Créer un objet réponse compatible avec le flux existant
+        // Les méthodes json/text retournent des Promises pour matcher l'interface Response
+        return {
+            ok: result.status >= 200 && result.status < 300,
+            status: result.status,
+            statusText: result.statusText,
+            headers: new Headers(result.headers || {}),
+            json: () => Promise.resolve(result.data),
+            text: () => Promise.resolve(typeof result.data === 'string' ? result.data : JSON.stringify(result.data))
+        };
+    }
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
@@ -485,7 +585,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         async function performApiCall(isRetry) {
             await checkConnectionBeforeFetch(isRetry);
             const requestOptions = prepareRequestOptions();
-            const response = await fetch(url, requestOptions);
+            // Sur Firefox, utiliser le proxy via background script pour contourner les CSP
+            const response = isFirefox()
+                ? await fetchViaProxy(url, requestOptions)
+                : await fetch(url, requestOptions);
             await handleHttpErrors(response);
             const data = await response.json();
             return responseProcessor(data);

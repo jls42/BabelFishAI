@@ -4,17 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BabelFishAI is a Chrome extension (Manifest V3) for AI-powered voice transcription and translation. It uses OpenAI's Whisper API for transcription and GPT models for translation/rephrasing. Supports 15 languages and LiteLLM Proxy for alternative AI providers.
+BabelFishAI is a browser extension (Manifest V3) for AI-powered voice transcription and translation. Supports **Chrome** and **Firefox** from the same codebase. Uses OpenAI's Whisper API for transcription and GPT models for translation/rephrasing. Supports 15 languages and LiteLLM Proxy for alternative AI providers.
 
 **Primary Language:** French (for comments, documentation, and user-facing messages)
 
 ## Development Workflow
 
 **No build system** - Pure JavaScript with ES6 modules. Development is straightforward:
+
+### Chrome (développement direct)
 1. Edit source files directly
 2. Go to `chrome://extensions/` → Enable Developer mode
 3. Click "Load unpacked" and select this folder (or click reload if already loaded)
 4. Test changes in browser
+
+### Firefox (développement direct)
+1. Edit source files directly
+2. Go to `about:debugging#/runtime/this-firefox`
+3. Click "Load Temporary Add-on..." and select `manifest.firefox.json`
+4. Test changes in browser
+
+### Build multi-navigateur (pour publication)
+```bash
+./scripts/build.sh chrome   # Build Chrome uniquement
+./scripts/build.sh firefox  # Build Firefox uniquement
+./scripts/build.sh all      # Build les deux
+```
+Les archives ZIP sont générées dans `dist/`.
 
 ## Architecture
 
@@ -27,10 +43,94 @@ BabelFishAI is a Chrome extension (Manifest V3) for AI-powered voice transcripti
 **Note**: Utiliser `globalThis` au lieu de `window` pour la portabilité ES2020+.
 
 ### Key Files
-- `manifest.json` - Extension configuration (Manifest V3)
-- `src/background.js` - Service worker handling events, icon clicks, keyboard shortcuts, context menu
+- `manifest.json` - Chrome configuration (Manifest V3, Service Worker)
+- `manifest.firefox.json` - Firefox configuration (Manifest V3, background scripts)
+- `src/background.js` - Background script handling events, icon clicks, keyboard shortcuts, context menu
 - `src/content.js` - Main script injected into pages, coordinates all modules
 - `src/constants.js` - Global constants (errors, states, actions)
+- `src/lib/browser-polyfill.min.js` - webextension-polyfill pour compatibilité cross-browser
+
+### Différences Chrome/Firefox
+
+| Aspect | Chrome | Firefox |
+|--------|--------|---------|
+| Background | Service Worker (`service_worker`) | Scripts classiques (`scripts`) |
+| Manifest | `manifest.json` | `manifest.firefox.json` |
+| `importScripts()` | Supporté (Service Worker) | Non supporté (chargé via manifest) |
+| CSP des pages | Content scripts exempts | Content scripts soumis aux CSP |
+| `fetch()` depuis content script | Utilise permissions extension | Bloqué par `connect-src` de la page |
+
+#### Gestion de `importScripts()` (background.js)
+
+Le code utilise une vérification conditionnelle car Firefox ne supporte pas `importScripts()` dans les background scripts classiques :
+```javascript
+if (typeof importScripts === 'function') {
+    importScripts('utils/languages-data.js');
+}
+```
+
+#### Proxy fetch pour Firefox (CRITIQUE)
+
+**Problème** : Sur Firefox, les requêtes `fetch()` depuis un content script sont soumises aux CSP de la page web. Les sites avec CSP stricte (comme ChatGPT) bloquent les requêtes vers les APIs externes via `connect-src`.
+
+**Solution** : Les requêtes API passent par le background script sur Firefox (qui n'est pas soumis aux CSP des pages).
+
+```javascript
+// api-utils.js - Détection et routage automatique
+function isFirefox() {
+    return navigator.userAgent.includes('Firefox');
+}
+
+// Dans performApiCall()
+const response = isFirefox()
+    ? await fetchViaProxy(url, requestOptions)  // Via background
+    : await fetch(url, requestOptions);          // Direct
+```
+
+**Architecture du proxy** (`background.js` → `proxyFetch()`) :
+1. Le content script envoie un message `proxyFetch` avec les paramètres
+2. Le background script effectue le `fetch()` (non soumis aux CSP)
+3. Le résultat est renvoyé au content script
+
+**Sérialisation FormData** : Les `FormData` (pour l'upload audio) ne peuvent pas être envoyés via messaging. Ils sont convertis en tableau d'objets avec les blobs en `Uint8Array`.
+
+```javascript
+// Conversion FormData → tableau sérialisable
+formData.forEach((value, name) => {
+    if (value instanceof Blob) {
+        // Blob → ArrayBuffer → Uint8Array → Array
+        fields.push({ name, isFile: true, data: Array.from(uint8Array), ... });
+    } else {
+        fields.push({ name, isFile: false, value: String(value) });
+    }
+});
+```
+
+#### Compatibilité FormData
+
+**IMPORTANT** : Sur Firefox, `for...of` sur `formData.entries()` peut échouer dans certains contextes. Utiliser `forEach()` :
+
+```javascript
+// ✅ CORRECT (compatible Firefox)
+formData.forEach((value, name) => { ... });
+
+// ❌ PEUT ÉCHOUER sur Firefox
+for (const [name, value] of formData.entries()) { ... }
+```
+
+#### Duck typing pour FormData
+
+`instanceof FormData` peut échouer entre contextes d'exécution. Utiliser le duck typing :
+
+```javascript
+// ✅ CORRECT
+if (body && typeof body.entries === 'function' && typeof body.append === 'function') {
+    // C'est un FormData
+}
+
+// ❌ PEUT ÉCHOUER entre contextes
+if (body instanceof FormData) { ... }
+```
 
 ### Utility Modules (`src/utils/`)
 
@@ -165,6 +265,9 @@ Les logos des providers sont stockés dans `images/` :
 
 - **Code duplication**: Centralize function exposure in single block per module
 - **NoLog option**: Only for LiteLLM Proxy, causes errors with official OpenAI API
+- **Firefox CSP blocking API calls**: Résolu via proxy fetch dans background script (voir section "Proxy fetch pour Firefox")
+- **`formData.entries()` not iterable on Firefox**: Utiliser `forEach()` au lieu de `for...of`
+- **`instanceof FormData` fails cross-context**: Utiliser duck typing (`typeof body.append === 'function'`)
 
 ## Technical Debt (Audit Dec 2025)
 
@@ -436,10 +539,25 @@ console.log('[Module] debug info');
 
 ## Developer Notes
 
-- Check `manifest.json` to understand extension structure
-- Use Chrome debugging tools to test changes
+### Debugging
+- **Chrome** : `chrome://extensions/` → clic sur "Service Worker" pour voir les logs du background
+- **Firefox** : `about:debugging#/runtime/this-firefox` → clic sur "Inspect" pour les logs
 - Check console logs to identify potential issues
-- Refactoring aims to improve maintainability without changing extension behavior
+
+### Testing cross-browser
+1. Toujours tester sur Chrome ET Firefox après modifications de `api-utils.js` ou `background.js`
+2. Tester sur des sites avec CSP stricte (ex: chatgpt.com) pour vérifier le proxy Firefox
+3. Tester sur des sites sans CSP (ex: chat.mistral.ai) pour vérifier le flux normal
+
+### Structure des manifests
+- `manifest.json` : Source principale pour Chrome (Service Worker)
+- `manifest.firefox.json` : Adapté pour Firefox (background scripts)
+- Garder les deux synchronisés (version, permissions, etc.)
+
+### Publication
+- **Chrome** : `./scripts/build.sh chrome` → upload sur Chrome Web Store
+- **Firefox** : `./scripts/build.sh firefox` → upload sur Firefox Add-ons (AMO)
+- L'ID Firefox (`babelfishai@jls42.org`) dans `browser_specific_settings.gecko.id` doit rester constant
 
 ## Git Workflow
 

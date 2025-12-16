@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**Sitio web oficial: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **Para utilizar la extensión, necesitará una clave API de uno de los proveedores soportados:**
 
 | Proveedor | Obtener una clave API |
@@ -74,6 +76,8 @@ Aquí está la lista de idiomas soportados por Babel Fish AI, con enlaces a vide
 
 ## 🚀 Instalación
 
+### Chrome
+
 1.  **Descarga e Instalación:**
     - Clone este repositorio desde GitHub o descargue manualmente la carpeta de la extensión.
     - **O instale directamente la extensión desde la [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
@@ -83,6 +87,16 @@ Aquí está la lista de idiomas soportados por Babel Fish AI, con enlaces a vide
 
 2.  **Verificación:**
     - Asegúrese de que la extensión aparece en la barra de herramientas de Chrome con el icono personalizado.
+
+### Firefox
+
+1.  **Instalación desde la tienda:**
+    - La extensión estará pronto disponible en [Firefox Add-ons](https://addons.mozilla.org/).
+
+2.  **Instalación temporal (desarrollo):**
+    - Abra Firefox y vaya a `about:debugging#/runtime/this-firefox`.
+    - Haga clic en "Cargar complemento temporal...".
+    - Seleccione el archivo `manifest.firefox.json` en la raíz del proyecto.
 
 ## ⚙️ Configuración
 

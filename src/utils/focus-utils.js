@@ -259,8 +259,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             safeText = globalThis.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
 
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = safeText;
+        // Utiliser DOMParser au lieu de innerHTML pour la sécurité
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${safeText}</div>`, 'text/html');
+        const tempDiv = doc.body.firstChild;
 
         const fragment = document.createDocumentFragment();
         while (tempDiv.firstChild) {
@@ -289,9 +291,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} processedText - Le texte normalisé (sécurisé) à insérer.
      */
     function insertNormalizedTextWithoutSelection(element, processedText) {
-        // Utiliser innerHTML pour le texte normalisé (avec balises HTML)
+        // Utiliser DOMParser au lieu de innerHTML pour la sécurité
         // Le texte est supposé avoir été sécurisé en amont (par normalizeText)
-        element.innerHTML += processedText;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${processedText}</div>`, 'text/html');
+        const tempDiv = doc.body.firstChild;
+
+        while (tempDiv.firstChild) {
+            element.appendChild(tempDiv.firstChild);
+        }
     }
 
     /**
@@ -329,6 +337,24 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Effectue l'insertion du texte selon le contexte de sélection
+     * @param {HTMLElement} element - L'élément contentEditable
+     * @param {string} processedText - Le texte traité à insérer
+     * @param {boolean} shouldNormalizeText - Indique si le texte doit être normalisé
+     */
+    function performTextInsertion(element, processedText, shouldNormalizeText) {
+        const selection = globalThis.getSelection();
+
+        if (selection.rangeCount > 0) {
+            insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
+        } else if (shouldNormalizeText) {
+            insertNormalizedTextWithoutSelection(element, processedText);
+        } else {
+            insertPlainTextWithoutSelection(element, processedText);
+        }
+    }
+
+    /**
      * Insère du texte dans un élément contentEditable avec robustesse
      * @param {HTMLElement} element - L'élément contentEditable
      * @param {string} text - Le texte à insérer
@@ -340,31 +366,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     function insertInContentEditable(element, text, options = {}) {
         const { ensureFocus = true, shouldNormalizeText = true } = options;
 
-        if (!element || !element.isContentEditable) return false; // NOSONAR - S6582: La vérification avec || est idiomatique et sûre ici.
+        if (!element?.isContentEditable) return false;
 
         try {
             if (ensureFocus && document.activeElement !== element) {
                 element.focus();
             }
 
-            let processedText = text;
-            if (shouldNormalizeText) {
-                processedText = normalizeText(text);
-            }
+            const processedText = shouldNormalizeText ? normalizeText(text) : text;
+            performTextInsertion(element, processedText, shouldNormalizeText);
 
-            const selection = globalThis.getSelection();
-
-            if (selection.rangeCount > 0) {
-                insertTextWithSelection(element, selection, processedText, shouldNormalizeText);
-            } else if (shouldNormalizeText) { // Fusionné avec else if
-                insertNormalizedTextWithoutSelection(element, processedText);
-            } else {
-                insertPlainTextWithoutSelection(element, processedText);
-            }
-
-            const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-            element.dispatchEvent(inputEvent);
-
+            element.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
             return true;
         } catch (error) {
             console.error('Error inserting text into contentEditable:', error);

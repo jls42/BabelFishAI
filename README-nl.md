@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**Officiële website: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **Om de extensie te gebruiken, heb je een API-sleutel nodig van een van de ondersteunde providers:**
 
 | Provider | API-sleutel verkrijgen |
@@ -74,6 +76,8 @@ Hier is de lijst met talen die worden ondersteund door Babel Fish AI, met links 
 
 ## 🚀 Installatie
 
+### Chrome
+
 1.  **Downloaden en Installatie:**
     - Kloon deze repository van GitHub of download de extensiemap handmatig.
     - **Of installeer de extensie rechtstreeks vanuit de [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
@@ -83,6 +87,16 @@ Hier is de lijst met talen die worden ondersteund door Babel Fish AI, met links 
 
 2.  **Verificatie:**
     - Zorg ervoor dat de extensie in de Chrome-werkbalk verschijnt met het aangepaste pictogram.
+
+### Firefox
+
+1.  **Installatie vanuit de store:**
+    - De extensie zal binnenkort beschikbaar zijn op [Firefox Add-ons](https://addons.mozilla.org/).
+
+2.  **Tijdelijke installatie (ontwikkeling):**
+    - Open Firefox en ga naar `about:debugging#/runtime/this-firefox`.
+    - Klik op "Tijdelijke add-on laden...".
+    - Selecteer het `manifest.firefox.json` bestand in de projectroot.
 
 ## ⚙️ Configuratie
 
