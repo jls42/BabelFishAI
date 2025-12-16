@@ -2,7 +2,11 @@
 /* global chrome, importScripts */
 
 // Importer la définition des langues disponibles
-importScripts('utils/languages-data.js'); // skipcq: JS-0103
+// Note: importScripts n'existe que dans les Service Workers (Chrome).
+// Sur Firefox, les scripts sont chargés via le manifest background.scripts.
+if (typeof importScripts === 'function') {
+    importScripts('utils/languages-data.js'); // skipcq: JS-0103
+}
 
 // Configuration spécifique au service worker
 const SERVICE_WORKER_CONFIG = {
@@ -466,6 +470,66 @@ chrome.runtime.onStartup.addListener(createContextMenus);
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
+ * Proxy fetch pour contourner les restrictions CSP sur Firefox
+ * Le background script n'est pas soumis aux CSP des pages web
+ * @param {Object} request - La requête à effectuer
+ * @returns {Promise<Object>} Le résultat de la requête
+ */
+async function proxyFetch(request) {
+    const { url, options, formDataFields } = request;
+
+    try {
+        let fetchOptions = { ...options };
+
+        // Si on a des champs FormData (pour l'upload audio)
+        if (formDataFields) {
+            const formData = new FormData();
+
+            for (const field of formDataFields) {
+                if (field.isFile) {
+                    // Reconstruire le Blob depuis l'ArrayBuffer
+                    const arrayBuffer = new Uint8Array(field.data).buffer;
+                    const blob = new Blob([arrayBuffer], { type: field.type });
+                    formData.append(field.name, blob, field.filename);
+                } else {
+                    formData.append(field.name, field.value);
+                }
+            }
+
+            fetchOptions.body = formData;
+            // Ne pas définir Content-Type pour FormData (le navigateur le fait)
+            if (fetchOptions.headers) {
+                delete fetchOptions.headers['Content-Type'];
+            }
+        }
+
+        const response = await fetch(url, fetchOptions);
+        const contentType = response.headers.get('content-type') || '';
+
+        let data;
+        if (contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            data = await response.text();
+        }
+
+        return {
+            success: true,
+            status: response.status,
+            statusText: response.statusText,
+            data,
+            contentType
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message,
+            errorName: error.name
+        };
+    }
+}
+
+/**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
  * @param {Object} sender - L'expéditeur du message
@@ -497,6 +561,14 @@ function handleMessage(message, sender, sendResponse) {
         const targetLanguageOptions = getTargetLanguageOptions();
         sendResponse({ options: targetLanguageOptions });
         return false;
+    }
+
+    // Gestion du proxy fetch pour Firefox (contournement CSP)
+    if (message.action === 'proxyFetch') {
+        proxyFetch(message.request)
+            .then(result => sendResponse(result))
+            .catch(error => sendResponse({ success: false, error: error.message }));
+        return true; // Indique une réponse asynchrone
     }
 
     // Message non reconnu - répondre quand même pour fermer proprement le port

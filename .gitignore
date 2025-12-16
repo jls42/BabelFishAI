@@ -9,10 +9,12 @@ Thumbs.db
 # Claude Code local config
 .claude/
 
-# Chrome extension build artifacts
+# Build outputs
+dist/
 *.zip
 *.crx
 *.pem
+*.xpi
 
 # Node (si ajouté plus tard)
 node_modules/

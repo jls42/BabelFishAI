@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**公式サイト: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **拡張機能を使用するには、サポートされているプロバイダーのいずれかのAPIキーが必要です：**
 
 | プロバイダー | APIキーを取得 |
@@ -74,6 +76,8 @@ Babel Fish AIがサポートしている言語のリストと、デモンスト�
 
 ## 🚀 インストール
 
+### Chrome
+
 1.  **ダウンロードとインストール：**
     - GitHubからこのリポジトリをクローンするか、拡張機能フォルダーを手動でダウンロードします。
     - **または、[Chromeウェブストア](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)から拡張機能を直接インストールします**
@@ -83,6 +87,16 @@ Babel Fish AIがサポートしている言語のリストと、デモンスト�
 
 2.  **確認：**
     - 拡張機能がカスタムアイコンとともにChromeツールバーに表示されることを確認します。
+
+### Firefox
+
+1.  **ストアからのインストール：**
+    - 拡張機能は間もなく[Firefox Add-ons](https://addons.mozilla.org/)で利用可能になります。
+
+2.  **一時的なインストール（開発）：**
+    - Firefoxを開き、`about:debugging#/runtime/this-firefox`に移動します。
+    - 「一時的なアドオンを読み込む...」をクリックします。
+    - プロジェクトルートにある`manifest.firefox.json`ファイルを選択します。
 
 ## ⚙️ 構成
 

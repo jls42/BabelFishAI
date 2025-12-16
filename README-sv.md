@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**Officiell webbplats: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **För att använda tillägget behöver du en API-nyckel från en av de leverantörer som stöds:**
 
 | Leverantör | Skaffa en API-nyckel |
@@ -74,6 +76,8 @@ Här är listan över språk som stöds av Babel Fish AI, med länkar till demon
 
 ## 🚀 Installation
 
+### Chrome
+
 1.  **Nedladdning och installation:**
     - Klona detta arkiv från GitHub eller ladda ner tilläggsmappen manuellt.
     - **Eller installera tillägget direkt från [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
@@ -83,6 +87,16 @@ Här är listan över språk som stöds av Babel Fish AI, med länkar till demon
 
 2.  **Verifiering:**
     - Se till att tillägget visas i Chromes verktygsfält med den anpassade ikonen.
+
+### Firefox
+
+1.  **Installation från butiken:**
+    - Tillägget kommer snart att finnas tillgängligt på [Firefox Add-ons](https://addons.mozilla.org/).
+
+2.  **Tillfällig installation (utveckling):**
+    - Öppna Firefox och gå till `about:debugging#/runtime/this-firefox`.
+    - Klicka på "Ladda tillfälligt tillägg...".
+    - Välj filen `manifest.firefox.json` i projektets rotkatalog.
 
 ## ⚙️ Konfiguration
 

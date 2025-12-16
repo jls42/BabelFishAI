@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**공식 웹사이트: [babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **확장 프로그램을 사용하려면 지원되는 제공업체 중 하나의 API 키가 필요합니다:**
 
 | 제공업체 | API 키 받기 |
@@ -74,6 +76,8 @@ Babel Fish AI는 다중 제공업체 지원을 통해 강력한 음성 전사를
 
 ## 🚀 설치
 
+### Chrome
+
 1.  **다운로드 및 설치:**
     - GitHub에서 이 리포지토리를 복제하거나 확장 프로그램 폴더를 수동으로 다운로드합니다.
     - **또는 [Chrome 웹 스토어](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)에서 확장 프로그램을 직접 설치합니다**
@@ -83,6 +87,16 @@ Babel Fish AI는 다중 제공업체 지원을 통해 강력한 음성 전사를
 
 2.  **확인:**
     - 확장 프로그램이 사용자 정의 아이콘과 함께 Chrome 도구 모음에 나타나는지 확인합니다.
+
+### Firefox
+
+1.  **스토어에서 설치:**
+    - 확장 프로그램은 곧 [Firefox Add-ons](https://addons.mozilla.org/)에서 사용할 수 있습니다.
+
+2.  **임시 설치(개발):**
+    - Firefox를 열고 `about:debugging#/runtime/this-firefox`로 이동합니다.
+    - "임시 추가 기능 로드..."를 클릭합니다.
+    - 프로젝트 루트에 있는 `manifest.firefox.json` 파일을 선택합니다.
 
 ## ⚙️ 구성
 

@@ -2,6 +2,8 @@
 
 <img src="images/icon128.png" alt="Babel Fish AI Icon" width="128" height="128">
 
+**官方网站：[babelfishai.jls42.org](https://babelfishai.jls42.org/)**
+
 **要使用该扩展程序，您需要一个受支持提供商的 API 密钥：**
 
 | 提供商 | 获取 API 密钥 |
@@ -74,15 +76,27 @@ Babel Fish AI 是一款创新的 Chrome 扩展程序，旨在提供具有多提�
 
 ## 🚀 安装
 
+### Chrome
+
 1.  **下载和安装：**
     - 从 GitHub 克隆此存储库或手动下载扩展程序文件夹。
     - **或者直接从 [Chrome 网上应用店](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk) 安装扩展程序**
     - 打开 Chrome 并转到 `chrome://extensions/`。
-    - 在右上角启用“开发者模式”。
-    - 单击“加载已解压的扩展程序”并选择 Babel Fish AI 文件夹。
+    - 在右上角启用"开发者模式"。
+    - 单击"加载已解压的扩展程序"并选择 Babel Fish AI 文件夹。
 
 2.  **验证：**
     - 确保扩展程序以自定义图标出现在 Chrome 工具栏中。
+
+### Firefox
+
+1.  **从商店安装：**
+    - 该扩展程序即将在 [Firefox Add-ons](https://addons.mozilla.org/) 上提供。
+
+2.  **临时安装（开发）：**
+    - 打开 Firefox 并转到 `about:debugging#/runtime/this-firefox`。
+    - 单击"加载临时附加组件..."。
+    - 选择项目根目录中的 `manifest.firefox.json` 文件。
 
 ## ⚙️ 配置
 

@@ -1,0 +1,80 @@
+{
+    "manifest_version": 3,
+    "name": "__MSG_extensionName__",
+    "version": "1.1.18",
+    "description": "__MSG_extensionDescription__",
+    "author": "Julien LS",
+    "default_locale": "fr",
+
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "babelfishai@jls42.org",
+            "strict_min_version": "109.0"
+        }
+    },
+
+    "permissions": [
+        "activeTab",
+        "storage",
+        "scripting",
+        "contextMenus"
+    ],
+
+    "icons": {
+        "16": "images/icon16.png",
+        "32": "images/icon32.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+
+    "background": {
+        "scripts": [
+            "src/lib/browser-polyfill.min.js",
+            "src/utils/languages-data.js",
+            "src/background.js"
+        ]
+    },
+
+    "action": {
+        "default_icon": {
+            "16": "images/icon16.png",
+            "32": "images/icon32.png",
+            "48": "images/icon48.png",
+            "128": "images/icon128.png"
+        },
+        "default_title": "__MSG_extensionName__"
+    },
+
+    "options_ui": {
+        "page": "src/pages/options/options.html",
+        "open_in_tab": true
+    },
+
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+1",
+                "mac": "Command+Shift+1"
+            },
+            "description": "Start/Stop Recording"
+        }
+    },
+
+    "homepage_url": "https://jls42.org/",
+
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "src/*.js",
+                "src/utils/*.js",
+                "src/lib/*.js",
+                "_locales/*/*.json",
+                "images/*",
+                "src/styles/content.css"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
+}
