@@ -1,4 +1,5 @@
 // Utilitaires pour la gestion des API pour l'extension BabelFishAI
+/* global chrome */
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {

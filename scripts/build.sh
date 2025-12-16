@@ -41,6 +41,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 DIST_DIR="$PROJECT_ROOT/dist"
 
+# Constantes pour les noms de navigateurs (évite la répétition de littéraux)
+readonly BROWSER_CHROME="chrome"
+readonly BROWSER_FIREFOX="firefox"
+
 # Couleurs pour les messages
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -84,20 +88,20 @@ copy_common_files() {
 
 build_chrome() {
     echo -e "${GREEN}=== Build Chrome ===${NC}"
-    clean_dist "chrome"
-    copy_common_files "chrome"
+    clean_dist "$BROWSER_CHROME"
+    copy_common_files "$BROWSER_CHROME"
 
     # Copier le manifest Chrome
-    cp "$PROJECT_ROOT/manifest.json" "$DIST_DIR/chrome/manifest.json"
+    cp "$PROJECT_ROOT/manifest.json" "$DIST_DIR/$BROWSER_CHROME/manifest.json"
 
-    echo -e "${GREEN}✓ Build Chrome terminé : dist/chrome/${NC}"
+    echo -e "${GREEN}✓ Build Chrome terminé : dist/$BROWSER_CHROME/${NC}"
     return 0
 }
 
 build_firefox() {
     echo -e "${GREEN}=== Build Firefox ===${NC}"
-    clean_dist "firefox"
-    copy_common_files "firefox"
+    clean_dist "$BROWSER_FIREFOX"
+    copy_common_files "$BROWSER_FIREFOX"
 
     # Vérifier que le manifest Firefox existe
     if [[ ! -f "$PROJECT_ROOT/manifest.firefox.json" ]]; then
@@ -106,9 +110,9 @@ build_firefox() {
     fi
 
     # Copier le manifest Firefox (renommé en manifest.json)
-    cp "$PROJECT_ROOT/manifest.firefox.json" "$DIST_DIR/firefox/manifest.json"
+    cp "$PROJECT_ROOT/manifest.firefox.json" "$DIST_DIR/$BROWSER_FIREFOX/manifest.json"
 
-    echo -e "${GREEN}✓ Build Firefox terminé : dist/firefox/${NC}"
+    echo -e "${GREEN}✓ Build Firefox terminé : dist/$BROWSER_FIREFOX/${NC}"
     return 0
 }
 
@@ -134,19 +138,19 @@ main() {
     local target=${1:-all}
 
     case $target in
-        chrome)
+        "$BROWSER_CHROME")
             build_chrome
-            create_zip "chrome"
+            create_zip "$BROWSER_CHROME"
             ;;
-        firefox)
+        "$BROWSER_FIREFOX")
             build_firefox
-            create_zip "firefox"
+            create_zip "$BROWSER_FIREFOX"
             ;;
         all)
             build_chrome
             build_firefox
-            create_zip "chrome"
-            create_zip "firefox"
+            create_zip "$BROWSER_CHROME"
+            create_zip "$BROWSER_FIREFOX"
             ;;
         -h|--help)
             usage

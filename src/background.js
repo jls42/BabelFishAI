@@ -470,6 +470,53 @@ chrome.runtime.onStartup.addListener(createContextMenus);
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 
 /**
+ * Décode une chaîne Base64 en Blob
+ * @param {Object} field - Champ contenant les données Base64
+ * @returns {Blob} Le Blob reconstruit
+ */
+function decodeBase64ToBlob(field) {
+    const byteCharacters = atob(field.data);
+    const byteNumbers = new Array(byteCharacters.length);
+    // charCodeAt est approprié ici car Base64 décodé produit des octets 0-255 (ASCII)
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i); // NOSONAR skipcq: JS-0242 - i is reassigned by loop
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: field.type });
+}
+
+/**
+ * Reconstruit un FormData depuis les champs sérialisés
+ * @param {Array} formDataFields - Tableau de champs sérialisés
+ * @returns {FormData} Le FormData reconstruit
+ */
+function reconstructFormData(formDataFields) {
+    const formData = new FormData();
+    for (const field of formDataFields) {
+        if (field.isFile) {
+            const blob = decodeBase64ToBlob(field);
+            formData.append(field.name, blob, field.filename);
+        } else {
+            formData.append(field.name, field.value);
+        }
+    }
+    return formData;
+}
+
+/**
+ * Capture les headers de la réponse dans un objet simple
+ * @param {Response} response - La réponse fetch
+ * @returns {Object} Les headers capturés
+ */
+function captureResponseHeaders(response) {
+    const headers = {};
+    response.headers.forEach((value, key) => {
+        headers[key] = value; // NOSONAR - key comes from browser's Headers API, not user input
+    });
+    return headers;
+}
+
+/**
  * Proxy fetch pour contourner les restrictions CSP sur Firefox
  * Le background script n'est pas soumis aux CSP des pages web
  * @param {Object} request - La requête à effectuer
@@ -479,56 +526,30 @@ async function proxyFetch(request) {
     const { url, options, formDataFields } = request;
 
     try {
-        let fetchOptions = { ...options };
+        const fetchOptions = { ...options };
 
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {
-            const formData = new FormData();
-
-            for (const field of formDataFields) {
-                if (field.isFile) {
-                    // Reconstruire le Blob depuis la chaîne Base64
-                    const byteCharacters = atob(field.data);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    const byteArray = new Uint8Array(byteNumbers);
-                    const blob = new Blob([byteArray], { type: field.type });
-                    formData.append(field.name, blob, field.filename);
-                } else {
-                    formData.append(field.name, field.value);
-                }
-            }
-
-            fetchOptions.body = formData;
+            fetchOptions.body = reconstructFormData(formDataFields);
             // Ne pas définir Content-Type pour FormData (le navigateur le fait)
             if (fetchOptions.headers) {
                 delete fetchOptions.headers['Content-Type'];
             }
         }
 
-        const response = await fetch(url, fetchOptions);
+        // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire
+        const response = await fetch(url, fetchOptions); // NOSONAR - URL is from extension's API config, not arbitrary user input
         const contentType = response.headers.get('content-type') || '';
 
-        let data;
-        if (contentType.includes('application/json')) {
-            data = await response.json();
-        } else {
-            data = await response.text();
-        }
-
-        // Capturer les headers pour les renvoyer au content script
-        const responseHeaders = {};
-        response.headers.forEach((value, key) => {
-            responseHeaders[key] = value;
-        });
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : await response.text();
 
         return {
             success: true,
             status: response.status,
             statusText: response.statusText,
-            headers: responseHeaders,
+            headers: captureResponseHeaders(response),
             data,
             contentType
         };
