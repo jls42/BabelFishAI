@@ -259,8 +259,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             safeText = globalThis.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
 
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = safeText;
+        // Utiliser DOMParser au lieu de innerHTML pour la sécurité
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${safeText}</div>`, 'text/html');
+        const tempDiv = doc.body.firstChild;
 
         const fragment = document.createDocumentFragment();
         while (tempDiv.firstChild) {
@@ -289,9 +291,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} processedText - Le texte normalisé (sécurisé) à insérer.
      */
     function insertNormalizedTextWithoutSelection(element, processedText) {
-        // Utiliser innerHTML pour le texte normalisé (avec balises HTML)
+        // Utiliser DOMParser au lieu de innerHTML pour la sécurité
         // Le texte est supposé avoir été sécurisé en amont (par normalizeText)
-        element.innerHTML += processedText;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${processedText}</div>`, 'text/html');
+        const tempDiv = doc.body.firstChild;
+
+        while (tempDiv.firstChild) {
+            element.appendChild(tempDiv.firstChild);
+        }
     }
 
     /**
