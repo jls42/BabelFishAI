@@ -487,9 +487,14 @@ async function proxyFetch(request) {
 
             for (const field of formDataFields) {
                 if (field.isFile) {
-                    // Reconstruire le Blob depuis l'ArrayBuffer
-                    const arrayBuffer = new Uint8Array(field.data).buffer;
-                    const blob = new Blob([arrayBuffer], { type: field.type });
+                    // Reconstruire le Blob depuis la chaîne Base64
+                    const byteCharacters = atob(field.data);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: field.type });
                     formData.append(field.name, blob, field.filename);
                 } else {
                     formData.append(field.name, field.value);
@@ -513,10 +518,17 @@ async function proxyFetch(request) {
             data = await response.text();
         }
 
+        // Capturer les headers pour les renvoyer au content script
+        const responseHeaders = {};
+        response.headers.forEach((value, key) => {
+            responseHeaders[key] = value;
+        });
+
         return {
             success: true,
             status: response.status,
             statusText: response.statusText,
+            headers: responseHeaders,
             data,
             contentType
         };

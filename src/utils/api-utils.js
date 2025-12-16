@@ -34,13 +34,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         for (const entry of entries) {
             const { name, value } = entry;
             if (value instanceof Blob) {
-                // Convertir le Blob en ArrayBuffer puis en tableau d'octets
-                const arrayBuffer = await value.arrayBuffer();
-                const uint8Array = new Uint8Array(arrayBuffer);
+                // Convertir le Blob en Base64 (plus efficace que Array.from pour la sérialisation)
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.readAsDataURL(value);
+                });
                 fields.push({
                     name,
                     isFile: true,
-                    data: Array.from(uint8Array),
+                    data: base64,
                     type: value.type,
                     filename: value.name || 'file'
                 });
@@ -97,6 +100,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             ok: result.status >= 200 && result.status < 300,
             status: result.status,
             statusText: result.statusText,
+            headers: new Headers(result.headers || {}),
             json: async () => result.data,
             text: async () => (typeof result.data === 'string' ? result.data : JSON.stringify(result.data))
         };
