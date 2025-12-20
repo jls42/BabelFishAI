@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: To use your own API endpoints |
 
-Babel Fish AI is an innovative Chrome extension designed to offer powerful voice transcription with multi-provider support. Transform your voice into text with remarkable accuracy using Mistral AI (Voxtral) or OpenAI (Whisper) transcription APIs, and optionally benefit from real-time automatic translation. You can use Babel Fish AI exclusively for transcription or enable on-the-fly translation as needed.
+Babel Fish AI is an innovative browser extension designed to offer powerful voice transcription with multi-provider support. Transform your voice into text with remarkable accuracy using Mistral AI (Voxtral) or OpenAI (Whisper) transcription APIs, and optionally benefit from real-time automatic translation. You can use Babel Fish AI exclusively for transcription or enable on-the-fly translation as needed.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI is an innovative Chrome extension designed to offer powerful voice
   - "Translate selection" option with a submenu of all available languages.
   - "Correct spelling" option to correct spelling, grammar, and punctuation errors.
   - Direct replacement of selected text with its translated, rephrased, or corrected version.
-  - Seamless integration into the native Chrome user interface.
+  - Seamless integration into the native browser user interface.
 
 - **Intuitive and Customizable User Interface**
   - Flexible display mode: active input area or floating dialog window.
@@ -86,17 +86,19 @@ Here is the list of languages supported by Babel Fish AI, with links to demonstr
     - Click "Load unpacked" and select the Babel Fish AI folder.
 
 2.  **Verification:**
-    - Ensure the extension appears in the Chrome toolbar with the custom icon.
+    - Ensure the extension appears in the browser toolbar with the custom icon.
 
 ### Firefox
 
-1.  **Install from store:**
-    - The extension will soon be available on [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Temporary installation (development):**
+1.  **Download and Installation:**
+    - **Install the extension directly from [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Or for manual installation: clone this repository from GitHub.
     - Open Firefox and go to `about:debugging#/runtime/this-firefox`.
     - Click "Load Temporary Add-on...".
     - Select the `manifest.firefox.json` file at the project root.
+
+2.  **Verification:**
+    - Ensure the extension appears in the Firefox toolbar with the custom icon.
 
 ## ⚙️ Configuration
 
@@ -222,7 +224,7 @@ The extension uses `chrome.storage.sync` to store:
 *   Extension options (display, translation, banner colors, etc.).
 *   Language preferences for translation.
 
-These data are stored locally on your computer, in the Chrome extension storage.
+These data are stored locally on your computer, in the browser extension storage.
 
 ### Error Handling
 Possible errors (missing API key, transcription error, etc.) are defined in the `constants.js` file. The `api-utils.js` and `text-processing.js` functions handle potential API call errors with improved messages based on the HTTP code. The `content.js` displays error messages to the user via a banner at the bottom of the page.
@@ -231,7 +233,7 @@ Possible errors (missing API key, transcription error, etc.) are defined in the 
 ## 🛡️ Security and Privacy
 
 - **Data Protection:**
-  - The API key is securely stored in Chrome.
+  - The API key is securely stored in the browser.
   - The extension does not keep your audio data; all processing is done in real-time.
   - Communication with APIs is done via secure HTTPS connections.
 
@@ -240,13 +242,13 @@ For complete information on how BabelFishAI handles your data, please consult ou
 ## 🔧 Troubleshooting
 
 - **Microphone Issues:**
-  - Check microphone access permissions in Chrome.
+  - Check microphone access permissions in your browser.
   - Ensure no other application is using the microphone simultaneously.
 
 - **Transcription/Translation Errors:**
   - Check that the API key is valid and active.
   - Ensure you have a stable internet connection.
-  - Consult the Chrome console for detailed logs in case of errors.
+  - Consult the browser console for detailed logs in case of errors.
 
 ## 🤝 Contribution
 

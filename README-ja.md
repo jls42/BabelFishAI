@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: 独自のAPIエンドポイントを使用する場合 |
 
-Babel Fish AIは、マルチプロバイダーサポートを備えた強力な音声転写を提供するために設計された革新的なChrome拡張機能です。Mistral AI (Voxtral) または OpenAI (Whisper) の転写APIを使用して、驚くべき精度で音声をテキストに変換し、オプションでリアルタイムの自動翻訳を利用できます。必要に応じて、Babel Fish AIを転写専用に使用することも、即座に翻訳を有効にすることもできます。
+Babel Fish AIは、マルチプロバイダーサポートを備えた強力な音声転写を提供するために設計された革新的なブラウザ拡張機能です。Mistral AI (Voxtral) または OpenAI (Whisper) の転写APIを使用して、驚くべき精度で音声をテキストに変換し、オプションでリアルタイムの自動翻訳を利用できます。必要に応じて、Babel Fish AIを転写専用に使用することも、即座に翻訳を有効にすることもできます。
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AIは、マルチプロバイダーサポートを備えた強力な�
   - 利用可能なすべての言語のサブメニューを備えた「選択範囲を翻訳」オプション。
   - スペル、文法、句読点のエラーを修正する「スペルを修正」オプション。
   - 選択したテキストを、翻訳、リフレーズ、または修正されたバージョンに直接置き換えます。
-  - Chromeのネイティブユーザーインターフェースへのシームレスな統合。
+  - ブラウザのネイティブユーザーインターフェースへのシームレスな統合。
 
 - **直感的でカスタマイズ可能なユーザーインターフェース**
   - 柔軟な表示モード：アクティブな入力エリアまたはフローティングダイアログウィンドウ。
@@ -86,17 +86,19 @@ Babel Fish AIがサポートしている言語のリストと、デモンスト�
     - 「パッケージ化されていない拡張機能を読み込む」をクリックし、Babel Fish AIフォルダーを選択します。
 
 2.  **確認：**
-    - 拡張機能がカスタムアイコンとともにChromeツールバーに表示されることを確認します。
+    - 拡張機能がカスタムアイコンとともにブラウザツールバーに表示されることを確認します。
 
 ### Firefox
 
-1.  **ストアからのインストール：**
-    - 拡張機能は間もなく[Firefox Add-ons](https://addons.mozilla.org/)で利用可能になります。
-
-2.  **一時的なインストール（開発）：**
+1.  **ダウンロードとインストール：**
+    - **[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)から拡張機能を直接インストールします**
+    - または手動インストールの場合：GitHubからこのリポジトリをクローンします。
     - Firefoxを開き、`about:debugging#/runtime/this-firefox`に移動します。
     - 「一時的なアドオンを読み込む...」をクリックします。
     - プロジェクトルートにある`manifest.firefox.json`ファイルを選択します。
+
+2.  **確認：**
+    - 拡張機能がカスタムアイコンとともにFirefoxツールバーに表示されることを確認します。
 
 ## ⚙️ 構成
 
@@ -222,7 +224,7 @@ Babel Fish AIは、[LiteLLM Proxy](https://litellm.ai/)およびその他のOpen
 *   拡張機能オプション（表示、翻訳、バナーの色など）。
 *   翻訳の言語設定。
 
-これらのデータは、コンピューターのChrome拡張機能ストレージにローカルに保存されます。
+これらのデータは、コンピューターのブラウザ拡張機能ストレージにローカルに保存されます。
 
 ### エラー処理
 考えられるエラー（APIキーの欠落、転写エラーなど）は、`constants.js`ファイルで定義されています。`api-utils.js`および`text-processing.js`関数は、HTTPコードに基づいて改善されたメッセージで潜在的なAPI呼び出しエラーを処理します。`content.js`は、ページ下部のバナーを介してユーザーにエラーメッセージを表示します。
@@ -231,7 +233,7 @@ Babel Fish AIは、[LiteLLM Proxy](https://litellm.ai/)およびその他のOpen
 ## 🛡️ セキュリティとプライバシー
 
 - **データ保護：**
-  - APIキーはChromeに安全に保存されます。
+  - APIキーはブラウザに安全に保存されます。
   - 拡張機能はオーディオデータを保持しません。すべての処理はリアルタイムで行われます。
   - APIとの通信は、安全なHTTPS接続を介して行われます。
 
@@ -240,13 +242,13 @@ BabelFishAIがデータを管理する方法の詳細については、[プラ�
 ## 🔧 トラブルシューティング
 
 - **マイクの問題：**
-  - Chromeでのマイクアクセス権限を確認してください。
+  - ブラウザでのマイクアクセス権限を確認してください。
   - 他のアプリケーションが同時にマイクを使用していないことを確認してください。
 
 - **転写/翻訳エラー：**
   - APIキーが有効でアクティブであることを確認してください。
   - 安定したインターネット接続があることを確認してください。
-  - エラーが発生した場合の詳細なログについては、Chromeコンソールを参照してください。
+  - エラーが発生した場合の詳細なログについては、ブラウザコンソールを参照してください。
 
 ## 🤝 貢献
 
