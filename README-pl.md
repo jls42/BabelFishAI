@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: Aby używać własnych punktów końcowych API |
 
-Babel Fish AI to innowacyjne rozszerzenie Chrome zaprojektowane, aby oferować potężną transkrypcję głosu z obsługą wielu dostawców. Przekształć swój głos w tekst z niezwykłą dokładnością dzięki interfejsom API transkrypcji Mistral AI (Voxtral) lub OpenAI (Whisper) i opcjonalnie korzystaj z automatycznego tłumaczenia w czasie rzeczywistym. Możesz używać Babel Fish AI wyłącznie do transkrypcji lub aktywować tłumaczenie w locie w zależności od potrzeb.
+Babel Fish AI to innowacyjne rozszerzenie przeglądarki zaprojektowane, aby oferować potężną transkrypcję głosu z obsługą wielu dostawców. Przekształć swój głos w tekst z niezwykłą dokładnością dzięki interfejsom API transkrypcji Mistral AI (Voxtral) lub OpenAI (Whisper) i opcjonalnie korzystaj z automatycznego tłumaczenia w czasie rzeczywistym. Możesz używać Babel Fish AI wyłącznie do transkrypcji lub aktywować tłumaczenie w locie w zależności od potrzeb.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI to innowacyjne rozszerzenie Chrome zaprojektowane, aby oferować p
   - Opcja „Tłumacz zaznaczenie” z podmenu wszystkich dostępnych języków.
   - Opcja „Popraw pisownię”, aby poprawić błędy ortograficzne, gramatyczne i interpunkcyjne.
   - Bezpośrednia zamiana zaznaczonego tekstu na jego przetłumaczoną, sparafrazowaną lub poprawioną wersję.
-  - Bezproblemowa integracja z natywnym interfejsem użytkownika Chrome.
+  - Bezproblemowa integracja z natywnym interfejsem użytkownika przeglądarki.
 
 - **Intuicyjny i konfigurowalny interfejs użytkownika**
   - Elastyczny tryb wyświetlania: aktywny obszar wprowadzania lub pływające okno dialogowe.
@@ -86,17 +86,19 @@ Oto lista języków obsługiwanych przez Babel Fish AI wraz z linkami do filmów
     - Kliknij „Załaduj rozpakowane" i wybierz folder Babel Fish AI.
 
 2.  **Weryfikacja:**
-    - Upewnij się, że rozszerzenie pojawia się na pasku narzędzi Chrome z niestandardową ikoną.
+    - Upewnij się, że rozszerzenie pojawia się na pasku narzędzi przeglądarki z niestandardową ikoną.
 
 ### Firefox
 
-1.  **Instalacja ze sklepu:**
-    - Rozszerzenie będzie wkrótce dostępne w [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Tymczasowa instalacja (rozwój):**
+1.  **Pobieranie i instalacja:**
+    - **Zainstaluj rozszerzenie bezpośrednio z [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Lub do instalacji ręcznej: sklonuj to repozytorium z GitHub.
     - Otwórz Firefox i przejdź do `about:debugging#/runtime/this-firefox`.
     - Kliknij „Załaduj tymczasowy dodatek...".
     - Wybierz plik `manifest.firefox.json` w katalogu głównym projektu.
+
+2.  **Weryfikacja:**
+    - Upewnij się, że rozszerzenie pojawia się na pasku narzędzi Firefox z niestandardową ikoną.
 
 ## ⚙️ Konfiguracja
 
@@ -222,7 +224,7 @@ Rozszerzenie używa `chrome.storage.sync` do przechowywania:
 *   Opcji rozszerzenia (wyświetlanie, tłumaczenie, kolory banerów itp.).
 *   Preferencji językowych dla tłumaczenia.
 
-Dane te są przechowywane lokalnie na komputerze w pamięci rozszerzenia Chrome.
+Dane te są przechowywane lokalnie na komputerze w pamięci rozszerzenia przeglądarki.
 
 ### Obsługa błędów
 Możliwe błędy (brak klucza API, błąd transkrypcji itp.) są zdefiniowane w pliku `constants.js`. Funkcje `api-utils.js` i `text-processing.js` obsługują potencjalne błędy wywołań API za pomocą ulepszonych komunikatów opartych na kodzie HTTP. `content.js` wyświetla komunikaty o błędach użytkownikowi za pośrednictwem banera na dole strony.
@@ -231,7 +233,7 @@ Możliwe błędy (brak klucza API, błąd transkrypcji itp.) są zdefiniowane w 
 ## 🛡️ Bezpieczeństwo i prywatność
 
 - **Ochrona danych:**
-  - Klucz API jest bezpiecznie przechowywany w Chrome.
+  - Klucz API jest bezpiecznie przechowywany w przeglądarce.
   - Rozszerzenie nie przechowuje danych audio; wszystkie przetwarzanie odbywa się w czasie rzeczywistym.
   - Komunikacja z interfejsami API odbywa się za pośrednictwem bezpiecznych połączeń HTTPS.
 
@@ -240,13 +242,13 @@ Aby uzyskać pełne informacje na temat sposobu zarządzania danymi przez BabelF
 ## 🔧 Rozwiązywanie problemów
 
 - **Problemy z mikrofonem:**
-  - Sprawdź uprawnienia dostępu do mikrofonu w Chrome.
+  - Sprawdź uprawnienia dostępu do mikrofonu w przeglądarce.
   - Upewnij się, że żadna inna aplikacja nie używa jednocześnie mikrofonu.
 
 - **Błędy transkrypcji/tłumaczenia:**
   - Sprawdź, czy klucz API jest ważny i aktywny.
   - Upewnij się, że masz stabilne połączenie internetowe.
-  - Sprawdź konsolę Chrome, aby uzyskać szczegółowe dzienniki w przypadku błędów.
+  - Sprawdź konsolę przeglądarki, aby uzyskać szczegółowe dzienniki w przypadku błędów.
 
 ## 🤝 Wkład
 

@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**：[platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**：使用您自己的 API 端点 |
 
-Babel Fish AI 是一款创新的 Chrome 扩展程序，旨在提供具有多提供商支持的强大语音转录功能。借助 Mistral AI (Voxtral) 或 OpenAI (Whisper) 的转录 API，以惊人的准确性将您的语音转换为文本，并可选择利用实时自动翻译。您可以根据需要专门将 Babel Fish AI 用于转录或即时激活翻译。
+Babel Fish AI 是一款创新的浏览器扩展程序，旨在提供具有多提供商支持的强大语音转录功能。借助 Mistral AI (Voxtral) 或 OpenAI (Whisper) 的转录 API，以惊人的准确性将您的语音转换为文本，并可选择利用实时自动翻译。您可以根据需要专门将 Babel Fish AI 用于转录或即时激活翻译。
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI 是一款创新的 Chrome 扩展程序，旨在提供具有多提�
   - “翻译所选内容”选项，带有所有可用语言的子菜单。
   - “拼写更正”选项可更正拼写、语法和标点符号错误。
   - 用翻译、改写或更正的版本直接替换所选文本。
-  - 无缝集成到 Chrome 的原生用户界面中。
+  - 无缝集成到浏览器的原生用户界面中。
 
 - **直观且可自定义的用户界面**
   - 灵活的显示模式：活动输入区域或浮动对话框窗口。
@@ -86,17 +86,19 @@ Babel Fish AI 是一款创新的 Chrome 扩展程序，旨在提供具有多提�
     - 单击"加载已解压的扩展程序"并选择 Babel Fish AI 文件夹。
 
 2.  **验证：**
-    - 确保扩展程序以自定义图标出现在 Chrome 工具栏中。
+    - 确保扩展程序以自定义图标出现在浏览器工具栏中。
 
 ### Firefox
 
-1.  **从商店安装：**
-    - 该扩展程序即将在 [Firefox Add-ons](https://addons.mozilla.org/) 上提供。
-
-2.  **临时安装（开发）：**
+1.  **下载和安装：**
+    - **直接从 [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/) 安装扩展程序**
+    - 或者进行手动安装：从 GitHub 克隆此存储库。
     - 打开 Firefox 并转到 `about:debugging#/runtime/this-firefox`。
     - 单击"加载临时附加组件..."。
     - 选择项目根目录中的 `manifest.firefox.json` 文件。
+
+2.  **验证：**
+    - 确保扩展程序以自定义图标出现在 Firefox 工具栏中。
 
 ## ⚙️ 配置
 
@@ -222,7 +224,7 @@ Babel Fish AI 与 [LiteLLM Proxy](https://litellm.ai/) 和其他 OpenAI 兼容�
 *   扩展程序选项（显示、翻译、横幅颜色等）。
 *   翻译的语言首选项。
 
-这些数据本地存储在您的计算机上的 Chrome 扩展程序存储中。
+这些数据本地存储在您的计算机上的浏览器扩展程序存储中。
 
 ### 错误处理
 可能的错误（缺少 API 密钥、转录错误等）在 `constants.js` 文件中定义。`api-utils.js` 和 `text-processing.js` 函数根据 HTTP 代码使用改进的消息处理潜在的 API 调用错误。`content.js` 通过页面底部的横幅向用户显示错误消息。
@@ -231,7 +233,7 @@ Babel Fish AI 与 [LiteLLM Proxy](https://litellm.ai/) 和其他 OpenAI 兼容�
 ## 🛡️ 安全和隐私
 
 - **数据保护：**
-  - API 密钥安全地存储在 Chrome 中。
+  - API 密钥安全地存储在浏览器中。
   - 该扩展程序不保留您的音频数据；所有处理都是实时完成的。
   - 与 API 的通信是通过安全的 HTTPS 连接完成的。
 
@@ -240,13 +242,13 @@ Babel Fish AI 与 [LiteLLM Proxy](https://litellm.ai/) 和其他 OpenAI 兼容�
 ## 🔧 故障排除
 
 - **麦克风问题：**
-  - 检查 Chrome 中的麦克风访问权限。
+  - 检查浏览器中的麦克风访问权限。
   - 确保没有其他应用程序同时使用麦克风。
 
 - **转录/翻译错误：**
   - 检查 API 密钥是否有效且处于活动状态。
   - 确保您有稳定的互联网连接。
-  - 如有错误，请查阅 Chrome 控制台以获取详细日志。
+  - 如有错误，请查阅浏览器控制台以获取详细日志。
 
 ## 🤝 贡献
 

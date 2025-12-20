@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: För att använda dina egna API-slutpunkter |
 
-Babel Fish AI är ett innovativt Chrome-tillägg utformat för att erbjuda kraftfull rösttranskribering med stöd för flera leverantörer. Omvandla din röst till text med anmärkningsvärd precision tack vare transkriberings-API:er från Mistral AI (Voxtral) eller OpenAI (Whisper), och dra valfritt nytta av automatisk översättning i realtid. Du kan använda Babel Fish AI uteslutande för transkribering eller aktivera direktöversättning efter behov.
+Babel Fish AI är ett innovativt webbläsartillägg utformat för att erbjuda kraftfull rösttranskribering med stöd för flera leverantörer. Omvandla din röst till text med anmärkningsvärd precision tack vare transkriberings-API:er från Mistral AI (Voxtral) eller OpenAI (Whisper), och dra valfritt nytta av automatisk översättning i realtid. Du kan använda Babel Fish AI uteslutande för transkribering eller aktivera direktöversättning efter behov.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI är ett innovativt Chrome-tillägg utformat för att erbjuda kraft
   - Alternativet "Översätt markering" med undermeny för alla tillgängliga språk.
   - Alternativet "Rätta stavning" för att korrigera stavfel, grammatik och interpunktion.
   - Direkt ersättning av den markerade texten med dess översatta, omformulerade eller korrigerade version.
-  - Sömlös integration i Chromes inbyggda användargränssnitt.
+  - Sömlös integration i webbläsarens inbyggda användargränssnitt.
 
 - **Intuitivt och anpassningsbart användargränssnitt**
   - Flexibelt visningsläge: aktivt inmatningsområde eller flytande dialogfönster.
@@ -86,17 +86,19 @@ Här är listan över språk som stöds av Babel Fish AI, med länkar till demon
     - Klicka på "Ladda uppackat tillägg" och välj mappen Babel Fish AI.
 
 2.  **Verifiering:**
-    - Se till att tillägget visas i Chromes verktygsfält med den anpassade ikonen.
+    - Se till att tillägget visas i webbläsarens verktygsfält med den anpassade ikonen.
 
 ### Firefox
 
-1.  **Installation från butiken:**
-    - Tillägget kommer snart att finnas tillgängligt på [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Tillfällig installation (utveckling):**
+1.  **Nedladdning och installation:**
+    - **Installera tillägget direkt från [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Eller för manuell installation: klona detta arkiv från GitHub.
     - Öppna Firefox och gå till `about:debugging#/runtime/this-firefox`.
     - Klicka på "Ladda tillfälligt tillägg...".
     - Välj filen `manifest.firefox.json` i projektets rotkatalog.
+
+2.  **Verifiering:**
+    - Se till att tillägget visas i Firefox verktygsfält med den anpassade ikonen.
 
 ## ⚙️ Konfiguration
 
@@ -222,7 +224,7 @@ Tillägget använder `chrome.storage.sync` för att lagra:
 *   Tilläggsalternativ (visning, översättning, bannerfärger, etc.).
 *   Språkinställningar för översättning.
 
-Dessa data lagras lokalt på din dator, i Chrome-tilläggets lagring.
+Dessa data lagras lokalt på din dator, i webbläsartilläggets lagring.
 
 ### Felhantering
 Möjliga fel (saknad API-nyckel, transkriberingsfel, etc.) definieras i filen `constants.js`. Funktionerna `api-utils.js` och `text-processing.js` hanterar potentiella API-anropsfel med förbättrade meddelanden baserat på HTTP-koden. `content.js` visar felmeddelanden för användaren via en banner längst ner på sidan.
@@ -231,7 +233,7 @@ Möjliga fel (saknad API-nyckel, transkriberingsfel, etc.) definieras i filen `c
 ## 🛡️ Säkerhet och integritet
 
 - **Dataskydd:**
-  - API-nyckeln lagras säkert i Chrome.
+  - API-nyckeln lagras säkert i webbläsaren.
   - Tillägget sparar inte dina ljuddata; all behandling sker i realtid.
   - Kommunikation med API:erna sker via säkra HTTPS-anslutningar.
 
@@ -240,13 +242,13 @@ För fullständig information om hur BabelFishAI hanterar dina data, se vår [In
 ## 🔧 Felsökning
 
 - **Mikrofonproblem:**
-  - Kontrollera behörigheter för mikrofonåtkomst i Chrome.
+  - Kontrollera behörigheter för mikrofonåtkomst i din webbläsare.
   - Se till att inget annat program använder mikrofonen samtidigt.
 
 - **Transkriberings-/översättningsfel:**
   - Kontrollera att API-nyckeln är giltig och aktiv.
   - Se till att du har en stabil internetanslutning.
-  - Se Chrome-konsolen för detaljerade loggar vid fel.
+  - Se webbläsarkonsolen för detaljerade loggar vid fel.
 
 ## 🤝 Bidrag
 

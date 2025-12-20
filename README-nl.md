@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: Om je eigen API-endpoints te gebruiken |
 
-Babel Fish AI is een innovatieve Chrome-extensie die is ontworpen om krachtige spraaktranscriptie te bieden met ondersteuning voor meerdere providers. Zet uw stem om in tekst met opmerkelijke nauwkeurigheid dankzij de transcriptie-API's van Mistral AI (Voxtral) of OpenAI (Whisper), en profiteer optioneel van automatische realtime vertaling. U kunt Babel Fish AI uitsluitend gebruiken voor transcriptie of de directe vertaling activeren naar behoefte.
+Babel Fish AI is een innovatieve browserextensie die is ontworpen om krachtige spraaktranscriptie te bieden met ondersteuning voor meerdere providers. Zet uw stem om in tekst met opmerkelijke nauwkeurigheid dankzij de transcriptie-API's van Mistral AI (Voxtral) of OpenAI (Whisper), en profiteer optioneel van automatische realtime vertaling. U kunt Babel Fish AI uitsluitend gebruiken voor transcriptie of de directe vertaling activeren naar behoefte.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI is een innovatieve Chrome-extensie die is ontworpen om krachtige s
   - Optie "Selectie vertalen" met submenu van alle beschikbare talen.
   - Optie "Spelling corrigeren" om spel-, grammatica- en interpunctiefouten te corrigeren.
   - Directe vervanging van de geselecteerde tekst door de vertaalde, geherformuleerde of gecorrigeerde versie.
-  - Naadloze integratie in de native gebruikersinterface van Chrome.
+  - Naadloze integratie in de native gebruikersinterface van de browser.
 
 - **Intuïtieve en Aanpasbare Gebruikersinterface**
   - Flexibele weergavemodus: actief invoergebied of zwevend dialoogvenster.
@@ -86,17 +86,19 @@ Hier is de lijst met talen die worden ondersteund door Babel Fish AI, met links 
     - Klik op "Uitgepakte extensie laden" en selecteer de map van Babel Fish AI.
 
 2.  **Verificatie:**
-    - Zorg ervoor dat de extensie in de Chrome-werkbalk verschijnt met het aangepaste pictogram.
+    - Zorg ervoor dat de extensie in de browserwerkbalk verschijnt met het aangepaste pictogram.
 
 ### Firefox
 
-1.  **Installatie vanuit de store:**
-    - De extensie zal binnenkort beschikbaar zijn op [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Tijdelijke installatie (ontwikkeling):**
+1.  **Downloaden en Installatie:**
+    - **Installeer de extensie rechtstreeks vanuit [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Of voor handmatige installatie: kloon deze repository van GitHub.
     - Open Firefox en ga naar `about:debugging#/runtime/this-firefox`.
     - Klik op "Tijdelijke add-on laden...".
     - Selecteer het `manifest.firefox.json` bestand in de projectroot.
+
+2.  **Verificatie:**
+    - Zorg ervoor dat de extensie in de Firefox-werkbalk verschijnt met het aangepaste pictogram.
 
 ## ⚙️ Configuratie
 
@@ -222,7 +224,7 @@ De extensie gebruikt `chrome.storage.sync` om het volgende op te slaan:
 *   Extensie-opties (weergave, vertaling, bannerkleuren, enz.).
 *   Taalvoorkeuren voor vertaling.
 
-Deze gegevens worden lokaal op uw computer opgeslagen, in de opslag van de Chrome-extensie.
+Deze gegevens worden lokaal op uw computer opgeslagen, in de opslag van de browserextensie.
 
 ### Foutafhandeling
 Mogelijke fouten (ontbrekende API-sleutel, transcriptiefout, enz.) zijn gedefinieerd in het bestand `constants.js`. De functies `api-utils.js` en `text-processing.js` behandelen potentiële API-aanroepfouten met verbeterde berichten op basis van de HTTP-code. Het `content.js` toont foutmeldingen aan de gebruiker via een banner onderaan de pagina.
@@ -231,7 +233,7 @@ Mogelijke fouten (ontbrekende API-sleutel, transcriptiefout, enz.) zijn gedefini
 ## 🛡️ Beveiliging en Privacy
 
 - **Gegevensbescherming:**
-  - De API-sleutel wordt veilig opgeslagen in Chrome.
+  - De API-sleutel wordt veilig opgeslagen in de browser.
   - De extensie bewaart uw audiogegevens niet; alle verwerkingen gebeuren in realtime.
   - De communicatie met de API's verloopt via beveiligde HTTPS-verbindingen.
 
@@ -240,13 +242,13 @@ Raadpleeg ons [Privacybeleid](PRIVACY.md) voor volledige informatie over hoe Bab
 ## 🔧 Probleemoplossing
 
 - **Microfoonproblemen:**
-  - Controleer de machtigingen voor microfoontoegang in Chrome.
+  - Controleer de machtigingen voor microfoontoegang in uw browser.
   - Zorg ervoor dat geen enkele andere applicatie de microfoon tegelijkertijd gebruikt.
 
 - **Transcriptie-/Vertaalfouten:**
   - Controleer of de API-sleutel geldig en actief is.
   - Zorg ervoor dat u een stabiele internetverbinding hebt.
-  - Raadpleeg de Chrome-console voor gedetailleerde logboeken in geval van fouten.
+  - Raadpleeg de browserconsole voor gedetailleerde logboeken in geval van fouten.
 
 ## 🤝 Bijdrage
 

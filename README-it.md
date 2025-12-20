@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: Per utilizzare i tuoi endpoint API |
 
-Babel Fish AI è un'estensione Chrome innovativa progettata per offrire una potente trascrizione vocale con supporto multi-provider. Trasforma la tua voce in testo con una precisione notevole grazie alle API di trascrizione di Mistral AI (Voxtral) o OpenAI (Whisper), e beneficia opzionalmente di una traduzione automatica in tempo reale. Puoi utilizzare Babel Fish AI esclusivamente per la trascrizione o attivare la traduzione al volo secondo le tue esigenze.
+Babel Fish AI è un'estensione del browser innovativa progettata per offrire una potente trascrizione vocale con supporto multi-provider. Trasforma la tua voce in testo con una precisione notevole grazie alle API di trascrizione di Mistral AI (Voxtral) o OpenAI (Whisper), e beneficia opzionalmente di una traduzione automatica in tempo reale. Puoi utilizzare Babel Fish AI esclusivamente per la trascrizione o attivare la traduzione al volo secondo le tue esigenze.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI è un'estensione Chrome innovativa progettata per offrire una pote
   - Opzione "Traduci la selezione" con sottomenu di tutte le lingue disponibili.
   - Opzione "Correggi l'ortografia" per correggere errori di ortografia, grammatica e punteggiatura.
   - Sostituzione diretta del testo selezionato con la sua versione tradotta, riformulata o corretta.
-  - Perfetta integrazione nell'interfaccia utente nativa di Chrome.
+  - Perfetta integrazione nell'interfaccia utente nativa del browser.
 
 - **Interfaccia Utente Intuitiva e Personalizzabile**
   - Modalità di visualizzazione flessibile: area di input attiva o finestra di dialogo fluttuante.
@@ -86,17 +86,19 @@ Ecco l'elenco delle lingue supportate da Babel Fish AI, con link a video dimostr
     - Clicca su "Carica estensione non pacchettizzata" e seleziona la cartella di Babel Fish AI.
 
 2.  **Verifica:**
-    - Assicurati che l'estensione appaia nella barra degli strumenti di Chrome con l'icona personalizzata.
+    - Assicurati che l'estensione appaia nella barra degli strumenti del browser con l'icona personalizzata.
 
 ### Firefox
 
-1.  **Installazione dallo store:**
-    - L'estensione sarà presto disponibile su [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Installazione temporanea (sviluppo):**
+1.  **Download e Installazione:**
+    - **Installa direttamente l'estensione da [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Oppure per l'installazione manuale: clona questo repository da GitHub.
     - Apri Firefox e vai a `about:debugging#/runtime/this-firefox`.
     - Clicca su "Carica componente aggiuntivo temporaneo...".
     - Seleziona il file `manifest.firefox.json` nella radice del progetto.
+
+2.  **Verifica:**
+    - Assicurati che l'estensione appaia nella barra degli strumenti di Firefox con l'icona personalizzata.
 
 ## ⚙️ Configurazione
 
@@ -222,7 +224,7 @@ L'estensione utilizza `chrome.storage.sync` per archiviare:
 *   Le opzioni dell'estensione (visualizzazione, traduzione, colori del banner, ecc.).
 *   Le preferenze di lingua per la traduzione.
 
-Questi dati sono archiviati localmente sul tuo computer, nell'archivio dell'estensione Chrome.
+Questi dati sono archiviati localmente sul tuo computer, nell'archivio dell'estensione del browser.
 
 ### Gestione degli Errori
 I possibili errori (chiave API mancante, errore di trascrizione, ecc.) sono definiti nel file `constants.js`. Le funzioni `api-utils.js` e `text-processing.js` gestiscono i potenziali errori di chiamata API con messaggi migliorati in base al codice HTTP. Il `content.js` visualizza i messaggi di errore all'utente tramite un banner in fondo alla pagina.
@@ -231,7 +233,7 @@ I possibili errori (chiave API mancante, errore di trascrizione, ecc.) sono defi
 ## 🛡️ Sicurezza e Privacy
 
 - **Protezione dei Dati:**
-  - La chiave API è archiviata in modo sicuro in Chrome.
+  - La chiave API è archiviata in modo sicuro nel browser.
   - L'estensione non conserva i tuoi dati audio; tutte le elaborazioni vengono effettuate in tempo reale.
   - La comunicazione con le API avviene tramite connessioni HTTPS sicure.
 
@@ -240,13 +242,13 @@ Per informazioni complete su come BabelFishAI gestisce i tuoi dati, consulta la 
 ## 🔧 Risoluzione dei Problemi
 
 - **Problemi del Microfono:**
-  - Verifica i permessi di accesso al microfono in Chrome.
+  - Verifica i permessi di accesso al microfono nel tuo browser.
   - Assicurati che nessun'altra applicazione stia utilizzando il microfono contemporaneamente.
 
 - **Errori di Trascrizione/Traduzione:**
   - Verifica che la chiave API sia valida e attiva.
   - Assicurati di avere una connessione internet stabile.
-  - Consulta la console di Chrome per ottenere log dettagliati in caso di errore.
+  - Consulta la console del browser per ottenere log dettagliati in caso di errore.
 
 ## 🤝 Contributo
 

@@ -12,7 +12,7 @@
 | <img src="images/openai-logo.png" alt="OpenAI" height="30"> | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
 | 🚅 | **Custom/LiteLLM**: Pentru a utiliza propriile puncte finale API |
 
-Babel Fish AI este o extensie Chrome inovatoare concepută pentru a oferi o transcriere vocală puternică, cu suport multi-furnizor. Transformați-vă vocea în text cu o precizie remarcabilă datorită API-urilor de transcriere Mistral AI (Voxtral) sau OpenAI (Whisper) și beneficiați opțional de traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de nevoile dumneavoastră.
+Babel Fish AI este o extensie de browser inovatoare concepută pentru a oferi o transcriere vocală puternică, cu suport multi-furnizor. Transformați-vă vocea în text cu o precizie remarcabilă datorită API-urilor de transcriere Mistral AI (Voxtral) sau OpenAI (Whisper) și beneficiați opțional de traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de nevoile dumneavoastră.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -38,7 +38,7 @@ Babel Fish AI este o extensie Chrome inovatoare concepută pentru a oferi o tran
   - Opțiunea „Traduce selecția” cu submeniu pentru toate limbile disponibile.
   - Opțiunea „Corectează ortografia” pentru a corecta greșelile de ortografie, gramatică și punctuație.
   - Înlocuirea directă a textului selectat cu versiunea sa tradusă, reformulată sau corectată.
-  - Integrare perfectă în interfața de utilizator nativă Chrome.
+  - Integrare perfectă în interfața de utilizator nativă a browserului.
 
 - **Interfață Utilizator Intuitivă și Personalizabilă**
   - Mod de afișare flexibil: zonă de introducere activă sau fereastră de dialog plutitoare.
@@ -86,17 +86,19 @@ Iată lista limbilor acceptate de Babel Fish AI, cu link-uri către videoclipuri
     - Faceți clic pe „Încărcați extensia neîmpachetată" și selectați dosarul Babel Fish AI.
 
 2.  **Verificare:**
-    - Asigurați-vă că extensia apare în bara de instrumente Chrome cu pictograma personalizată.
+    - Asigurați-vă că extensia apare în bara de instrumente a browserului cu pictograma personalizată.
 
 ### Firefox
 
-1.  **Instalare din magazin:**
-    - Extensia va fi disponibilă în curând pe [Firefox Add-ons](https://addons.mozilla.org/).
-
-2.  **Instalare temporară (dezvoltare):**
+1.  **Descărcare și Instalare:**
+    - **Instalați extensia direct din [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Sau pentru instalare manuală: clonați acest depozit de pe GitHub.
     - Deschideți Firefox și accesați `about:debugging#/runtime/this-firefox`.
     - Faceți clic pe „Încarcă supliment temporar...".
     - Selectați fișierul `manifest.firefox.json` din rădăcina proiectului.
+
+2.  **Verificare:**
+    - Asigurați-vă că extensia apare în bara de instrumente Firefox cu pictograma personalizată.
 
 ## ⚙️ Configurare
 
@@ -222,7 +224,7 @@ Extensia utilizează `chrome.storage.sync` pentru a stoca:
 *   Opțiunile extensiei (afișare, traducere, culori banner etc.).
 *   Preferințele de limbă pentru traducere.
 
-Aceste date sunt stocate local pe computerul dumneavoastră, în stocarea extensiei Chrome.
+Aceste date sunt stocate local pe computerul dumneavoastră, în stocarea extensiei browserului.
 
 ### Gestionarea Erorilor
 Erorile posibile (cheie API lipsă, eroare de transcriere etc.) sunt definite în fișierul `constants.js`. Funcțiile `api-utils.js` și `text-processing.js` gestionează erorile potențiale de apel API cu mesaje îmbunătățite pe baza codului HTTP. `content.js` afișează mesajele de eroare utilizatorului printr-un banner în partea de jos a paginii.
@@ -231,7 +233,7 @@ Erorile posibile (cheie API lipsă, eroare de transcriere etc.) sunt definite î
 ## 🛡️ Securitate și Confidențialitate
 
 - **Protecția Datelor:**
-  - Cheia API este stocată în siguranță în Chrome.
+  - Cheia API este stocată în siguranță în browser.
   - Extensia nu păstrează datele dumneavoastră audio; toate procesările se efectuează în timp real.
   - Comunicarea cu API-urile se face prin conexiuni HTTPS securizate.
 
@@ -240,13 +242,13 @@ Pentru informații complete despre modul în care BabelFishAI vă gestionează d
 ## 🔧 Depanare
 
 - **Probleme cu Microfonul:**
-  - Verificați permisiunile de acces la microfon în Chrome.
+  - Verificați permisiunile de acces la microfon în browserul dumneavoastră.
   - Asigurați-vă că nicio altă aplicație nu utilizează microfonul simultan.
 
 - **Erori de Transcriere/Traducere:**
   - Verificați dacă cheia API este validă și activă.
   - Asigurați-vă că aveți o conexiune la internet stabilă.
-  - Consultați consola Chrome pentru jurnale detaliate în caz de eroare.
+  - Consultați consola browserului pentru jurnale detaliate în caz de eroare.
 
 ## 🤝 Contribuție
 
