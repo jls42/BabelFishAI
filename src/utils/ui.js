@@ -254,7 +254,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         document.body.appendChild(container);
 
         // Forcer un reflow avant d'ajouter la classe d'animation
-        void container.offsetWidth; // skipcq: JS-0098
+        // skipcq: JS-0098 - Lecture intentionnelle pour forcer le reflow du navigateur
+        container.offsetWidth;
         container.classList.add('visible');
 
         // Ajouter du CSS dynamiquement pour les animations si nécessaire

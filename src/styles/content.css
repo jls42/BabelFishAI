@@ -211,8 +211,8 @@
 .whisper-language-select {
     font-size: 11px;
     padding: 2px 10px;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
@@ -252,7 +252,7 @@
 }
 
 .whisper-language-select option {
-    background: #009688; /* Vert turquoise assorti aux boutons activés */
+    background: #00695c; /* Vert turquoise foncé pour meilleur contraste WCAG */
     color: white;
     padding: 8px;
     font-size: 12px;
