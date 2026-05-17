@@ -8,6 +8,89 @@ BabelFishAI is a browser extension (Manifest V3) for AI-powered voice transcript
 
 **Primary Language:** French (for comments, documentation, and user-facing messages)
 
+## Claude Code Workflow
+
+-   **Commits** : utiliser le skill `/helping-with-commits` pour tous les commits (règle projet, OBLIGATOIRE — ne JAMAIS faire de `git commit` direct ni d'ajouter de mention "Co-Authored-By: Claude").
+-   **Recherche web** : utiliser l'agent `web-research-specialist:web-research-specialist` pour les recherches de documentation (évite de polluer le contexte principal).
+-   **Après chaque `git push`** (sur une PR, jamais `main`) : surveiller les checks externes jusqu'à résolution.
+    1. Attendre ~60-90s que SonarCloud, Codacy, CodeFactor, DeepSource terminent leur scan initial. Aucun workflow GH Actions n'est versionné dans ce repo — les analyses passent par les intégrations natives (GitHub Apps).
+    2. `gh pr checks <num>` pour lire l'état des checks GitHub.
+    3. Si tous `pass` → **toujours** requêter l'API publique Sonar des issues ouvertes en complément (cf. piège ci-dessous), puis signaler à l'utilisateur et stop.
+    4. Si un check est `pending` → re-check dans 60-90s (utiliser `ScheduleWakeup` pour ne pas bloquer le main thread).
+    5. Si un check est `fail` :
+        - Récupérer les détails via l'URL Sonar/Codacy/DeepSource dans la colonne `link` de `gh pr checks`.
+        - **Reproduire localement AVANT de proposer un fix** (règle "mesurer > deviner") :
+            - SonarCloud : la finding peut souvent être reproduite avec `pre-commit run --hook-stage pre-push --all-files` (Lizard CCN, Opengrep SAST). Pour règles Sonar spécifiques (`javascript:S1234`), consulter directement l'URL Sonar du finding.
+            - DeepSource : `.deepsource.toml` (analyseur `javascript`) — voir l'URL pour la query rule.
+            - Codacy : ESLint via Codacy UI — pas de config locale, faire confiance à l'URL.
+        - Appliquer le fix → `pre-commit run --all-files && pre-commit run --hook-stage pre-push --all-files` verts → skill `/helping-with-commits` → `git push`.
+    6. Reboucler jusqu'à tous verts ou finding non-trivial (dans ce cas stop et demander aide).
+    7. **Pièges connus** :
+        - **`gh pr checks <num>` ne reflète QUE le quality gate Sonar, pas les issues ouvertes**. Un Major Code Smell qui ne fait pas tomber le gate apparaîtra `pass` côté GitHub mais reste à traiter. Après chaque push, requêter en plus l'API publique Sonar :
+            ```bash
+            curl -s "https://sonarcloud.io/api/issues/search?componentKeys=jls42_BabelFishAI&pullRequest=<num>&resolved=false&ps=50" \
+              | python3 -c "import json,sys; d=json.load(sys.stdin); print('total:', d.get('total', 0)); [print(f\"  [{i['severity']}] {i['type']} {i['rule']} {i['component'].split(':')[-1]}:{i.get('line','?')} - {i['message']}\") for i in d.get('issues', [])]"
+            ```
+            Délai d'indexation Sonar : ~60-90s après le push (ré-exécuter si `total` reflète encore l'ancien commit).
+        - **`detect-secrets`** régénère parfois `.secrets.baseline` en pre-commit ; bien `git add` la baseline AVANT le commit suivant (sinon le hook re-mute la baseline en boucle).
+        - Le pre-commit `prettier` peut reformater des fichiers en cascade lors de la première exécution sur une nouvelle branche → si le commit fail avec "files were modified by this hook", refaire `git add` et re-commiter.
+
+## SonarCloud / DeepSource Conventions
+
+**IMPORTANT** : ne JAMAIS désactiver globalement des règles SonarCloud / DeepSource dans un fichier de configuration versionné (pas de `disable_rules:` global). Utiliser des commentaires inline uniquement, avec justification précise :
+
+```javascript
+// NOSONAR javascript:S2245 - Math.random pour unicité de filename, pas usage cryptographique
+const filename = `audio_${Date.now()}_${Math.random().toString(36).slice(2)}.webm`;
+
+// skipcq: JS-0128 - Fonction conservée pour usage futur (extension Live Translation)
+function reservedHandler() {
+    /* ... */
+}
+```
+
+Cela évite de masquer de vrais positifs futurs sur le même type de règle. Format général : `// NOSONAR <rule-id> - <pourquoi c'est sûr>` ou `// skipcq: <code> - <raison>`.
+
+## Quality / pre-commit (workflow)
+
+Le projet utilise [`pre-commit`](https://pre-commit.com) avec un setup local minimal (pas de workflow GH Actions, les analyseurs cloud natifs couvrent la couche CI).
+
+### Bootstrap (une fois après clone)
+
+```bash
+pipx install pre-commit                     # ou: pip install pre-commit
+pre-commit install                          # hooks pre-commit (rapides)
+pre-commit install --hook-type pre-push     # hooks pre-push (SAST, complexité)
+```
+
+Le premier `pre-commit run --all-files` télécharge les environnements des hooks (~30-60s, cache après).
+
+### Hooks actifs
+
+| Stage      | Hook                           | Rôle                                                                        |
+| ---------- | ------------------------------ | --------------------------------------------------------------------------- |
+| pre-commit | shellcheck                     | Lint `.sh` (`--severity=warning`, info SC2317/SC2012 écartés)               |
+| pre-commit | prettier                       | Format JSON/YAML/MD/HTML/CSS/JS (`src/lib/`, `_locales/`, README-\* exclus) |
+| pre-commit | pre-commit-hooks v5            | trailing-whitespace, EOF, check-yaml/json, large-files 500KB, shebang       |
+| pre-commit | detect-secrets                 | Détection fuites de clés API (baseline = 1 faux positif i18n connu)         |
+| pre-push   | check-security-sast (Opengrep) | SAST `p/javascript` + `p/security-audit` + `p/default`, severity ERROR      |
+| pre-push   | check-complexity (Lizard)      | CCN ≤ 20, length ≤ 1500 lignes (durcissables par PR dédiée)                 |
+
+### Lancer manuellement
+
+```bash
+pre-commit run --all-files                            # tous les hooks pre-commit
+pre-commit run --hook-stage pre-push --all-files      # tous les hooks pre-push
+pre-commit run prettier --all-files                   # un hook précis
+```
+
+### Échappatoires (à utiliser sciemment uniquement)
+
+```bash
+git commit --no-verify   # skip les hooks pre-commit
+git push --no-verify     # skip les hooks pre-push
+```
+
 ## Development Workflow
 
 **No build system** - Pure JavaScript with ES6 modules. Development is straightforward:
