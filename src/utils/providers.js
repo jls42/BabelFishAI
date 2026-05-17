@@ -21,9 +21,13 @@ const BABEL_PROVIDERS = {
         chatModels: [
             { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
             { id: 'gpt-4o', name: 'gpt-4o' },
-            { id: 'gpt-4.1', name: 'gpt-4.1' },
+            { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' },
             { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
-            { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
+            { id: 'gpt-4.1', name: 'gpt-4.1' },
+            { id: 'gpt-5.4-nano', name: 'gpt-5.4-nano' },
+            { id: 'gpt-5.4-mini', name: 'gpt-5.4-mini' },
+            { id: 'gpt-5.4', name: 'gpt-5.4' },
+            { id: 'gpt-5.5', name: 'gpt-5.5' }
         ],
         supportsNoLog: false  // NoLog est uniquement pour LiteLLM, pas OpenAI
     },

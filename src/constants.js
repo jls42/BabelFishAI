@@ -50,11 +50,7 @@ globalThis.BabelFishAIConstants = {
         WHISPER_MODEL: 'whisper-1',
         GPT_MODEL: 'gpt-4o-mini',
         VOXTRAL_MODEL: 'voxtral-mini-latest',
-        MISTRAL_CHAT_MODEL: 'mistral-small-latest',
-        // Liste des modèles audio (OpenAI + Mistral)
-        AUDIO_MODELS: ['whisper-1', 'whisper', 'gpt-4o-mini-transcribe', 'gpt-4o-transcribe', 'voxtral-mini-latest'],
-        // Liste des modèles chat (OpenAI + Mistral)
-        CHAT_MODELS: ['gpt-4o-mini', 'gpt-4o', 'mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest', 'codestral-latest']
+        MISTRAL_CHAT_MODEL: 'mistral-small-latest'
     },
 
     // Configuration des providers
