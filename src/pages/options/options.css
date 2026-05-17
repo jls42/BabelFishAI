@@ -45,7 +45,8 @@
     --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 
     /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', sans-serif;
     --font-mono: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', monospace;
 
     /* Font sizes */
@@ -90,9 +91,8 @@ body {
     line-height: 1.6;
     color: var(--gray-800);
     min-height: 100vh;
-    background: linear-gradient(to right,
-            rgba(255, 255, 255, 0) 35%,
-            white 55%),
+    background:
+        linear-gradient(to right, rgba(255, 255, 255, 0) 35%, white 55%),
         url('../../../images/background.webp') left center/contain no-repeat fixed;
     background-color: var(--gray-50);
     -webkit-font-smoothing: antialiased;
@@ -133,7 +133,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -228,8 +228,8 @@ body {
 }
 
 /* Hide default checkbox */
-.feature-toggle input[type="checkbox"],
-input[type="checkbox"] {
+.feature-toggle input[type='checkbox'],
+input[type='checkbox'] {
     position: relative;
     width: 44px;
     height: 24px;
@@ -242,8 +242,8 @@ input[type="checkbox"] {
     flex-shrink: 0;
 }
 
-.feature-toggle input[type="checkbox"]::before,
-input[type="checkbox"]::before {
+.feature-toggle input[type='checkbox']::before,
+input[type='checkbox']::before {
     content: '';
     position: absolute;
     top: 2px;
@@ -256,27 +256,27 @@ input[type="checkbox"]::before {
     transition: transform var(--duration-normal) var(--ease-bounce);
 }
 
-.feature-toggle input[type="checkbox"]:checked,
-input[type="checkbox"]:checked {
+.feature-toggle input[type='checkbox']:checked,
+input[type='checkbox']:checked {
     background: var(--primary-gradient);
 }
 
-.feature-toggle input[type="checkbox"]:checked::before,
-input[type="checkbox"]:checked::before {
+.feature-toggle input[type='checkbox']:checked::before,
+input[type='checkbox']:checked::before {
     transform: translateX(20px);
 }
 
 /* Focus state for accessibility */
-.feature-toggle input[type="checkbox"]:focus-visible,
-input[type="checkbox"]:focus-visible {
+.feature-toggle input[type='checkbox']:focus-visible,
+input[type='checkbox']:focus-visible {
     outline: 2px solid var(--primary-color-2);
     outline-offset: 2px;
 }
 
 /* ===== Modern Inputs ===== */
-input[type="text"],
-input[type="password"],
-input[type="number"],
+input[type='text'],
+input[type='password'],
+input[type='number'],
 select {
     width: 100%;
     padding: var(--space-3) var(--space-4);
@@ -290,17 +290,17 @@ select {
     box-sizing: border-box;
 }
 
-input[type="text"]:hover,
-input[type="password"]:hover,
-input[type="number"]:hover,
+input[type='text']:hover,
+input[type='password']:hover,
+input[type='number']:hover,
 select:hover {
     border-color: var(--gray-300);
     background: white;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
 select:focus {
     outline: none;
     background: white;
@@ -313,12 +313,12 @@ input::placeholder {
 }
 
 /* Input type number - hide spinners */
-input[type="number"] {
+input[type='number'] {
     -moz-appearance: textfield;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -355,7 +355,7 @@ button {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transform: translateX(-100%);
     transition: transform 0.5s;
 }
@@ -417,8 +417,12 @@ button {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .success {
@@ -456,10 +460,19 @@ button {
 .language-selector select {
     flex: 1;
     max-width: 300px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        'Noto Sans', 'Noto Sans CJK JP', 'Noto Sans CJK KR',
-        'Noto Sans CJK SC', 'Noto Sans CJK TC',
-        'Noto Sans Arabic', 'Noto Sans Hebrew', sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        'Noto Sans',
+        'Noto Sans CJK JP',
+        'Noto Sans CJK KR',
+        'Noto Sans CJK SC',
+        'Noto Sans CJK TC',
+        'Noto Sans Arabic',
+        'Noto Sans Hebrew',
+        sans-serif;
     unicode-bidi: plaintext;
 }
 
@@ -580,7 +593,9 @@ button {
     padding: var(--space-4);
     background: var(--gray-50);
     border-radius: var(--radius-md);
-    transition: opacity var(--duration-normal), max-height var(--duration-normal);
+    transition:
+        opacity var(--duration-normal),
+        max-height var(--duration-normal);
 }
 
 /* ===== Advanced Section ===== */
@@ -625,7 +640,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform var(--duration-normal) var(--ease-out), background var(--duration-fast);
+    transition:
+        transform var(--duration-normal) var(--ease-out),
+        background var(--duration-fast);
 }
 
 .toggle-advanced:hover {
@@ -638,7 +655,9 @@ button {
 
 #advancedOptions {
     overflow: hidden;
-    transition: max-height var(--duration-slow) var(--ease-out), opacity var(--duration-normal);
+    transition:
+        max-height var(--duration-slow) var(--ease-out),
+        opacity var(--duration-normal);
     max-height: 0;
     opacity: 0;
     margin-top: var(--space-4);
@@ -686,7 +705,7 @@ button {
     margin-bottom: var(--space-2);
 }
 
-input[type="color"] {
+input[type='color'] {
     width: 100%;
     height: 44px;
     padding: var(--space-1);
@@ -697,11 +716,11 @@ input[type="color"] {
     transition: border-color var(--duration-fast);
 }
 
-input[type="color"]:hover {
+input[type='color']:hover {
     border-color: var(--gray-300);
 }
 
-input[type="color"]:focus {
+input[type='color']:focus {
     outline: none;
     border-color: var(--primary-color-2);
 }
@@ -1277,9 +1296,8 @@ input[type="color"]:focus {
 
 @media screen and (max-width: 900px) {
     body {
-        background: linear-gradient(to bottom,
-                rgba(255, 255, 255, 0) 250px,
-                white 350px),
+        background:
+            linear-gradient(to bottom, rgba(255, 255, 255, 0) 250px, white 350px),
             url('../../../images/background.webp') top center/auto 250px no-repeat;
         background-color: var(--gray-50);
     }

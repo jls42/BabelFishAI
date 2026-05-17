@@ -17,12 +17,7 @@
         }
     },
 
-    "permissions": [
-        "activeTab",
-        "storage",
-        "scripting",
-        "contextMenus"
-    ],
+    "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
 
     "icons": {
         "16": "images/icon16.png",
@@ -76,9 +71,7 @@
                 "images/*",
                 "src/styles/content.css"
             ],
-            "matches": [
-                "<all_urls>"
-            ]
+            "matches": ["<all_urls>"]
         }
     ]
 }

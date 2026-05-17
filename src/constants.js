@@ -6,14 +6,14 @@ globalThis.BabelFishAIConstants = {
         COPY_FEEDBACK_DURATION: 2000,
         ERROR_BANNER_DURATION: 5000,
         DEFAULT_DIALOG_DURATION: 15,
-        DEFAULT_FORCED_DIALOG_DOMAINS: ['chat.google.com']
+        DEFAULT_FORCED_DIALOG_DOMAINS: ['chat.google.com'],
     },
 
     // États de l'enregistrement
     STATES: {
         RECORDING: 'recording',
         STOPPED: 'stopped',
-        ERROR: 'error'
+        ERROR: 'error',
     },
 
     // Actions disponibles
@@ -21,20 +21,20 @@ globalThis.BabelFishAIConstants = {
         TOGGLE: 'toggleRecording',
         STARTED: 'recordingStarted',
         STOPPED: 'recordingStopped',
-        ERROR: 'recordingError'
+        ERROR: 'recordingError',
     },
 
     // Types de messages
     MESSAGE_TYPES: {
         INFO: 'info',
-        ERROR: 'error'
+        ERROR: 'error',
     },
 
     // Configuration de l'interface utilisateur
     UI_CONFIG: {
         DEFAULT_BANNER_COLOR_START: '#684054',
         DEFAULT_BANNER_COLOR_END: '#4c7b8d',
-        DEFAULT_BANNER_OPACITY: 80
+        DEFAULT_BANNER_OPACITY: 80,
         // Note: COPY_FEEDBACK_DURATION est défini dans CONFIG.COPY_FEEDBACK_DURATION
     },
 
@@ -50,36 +50,37 @@ globalThis.BabelFishAIConstants = {
         WHISPER_MODEL: 'whisper-1',
         GPT_MODEL: 'gpt-4o-mini',
         VOXTRAL_MODEL: 'voxtral-mini-latest',
-        MISTRAL_CHAT_MODEL: 'mistral-small-latest'
+        MISTRAL_CHAT_MODEL: 'mistral-small-latest',
     },
 
     // Configuration des providers
     PROVIDERS: {
         DEFAULT_PROVIDER: 'openai',
-        AVAILABLE: ['openai', 'mistral']
+        AVAILABLE: ['openai', 'mistral'],
     },
 
     // Messages d'erreur
     ERRORS: {
-        API_KEY_NOT_FOUND: "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-        CHROME_STORAGE_ERROR: "Erreur de stockage Chrome",
-        MIC_ACCESS_ERROR: "Erreur : microphone inaccessible.",
+        API_KEY_NOT_FOUND:
+            "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+        CHROME_STORAGE_ERROR: 'Erreur de stockage Chrome',
+        MIC_ACCESS_ERROR: 'Erreur : microphone inaccessible.',
         API_ERROR: "Erreur lors de l'appel à l'API",
-        TRANSCRIPTION_ERROR: "Erreur lors de la transcription",
-        TRANSLATION_ERROR: "Erreur lors de la traduction",
-        REPHRASE_ERROR: "Erreur lors de la reformulation",
-        NO_EDITABLE_ELEMENT: "Aucun élément éditable trouvé",
+        TRANSCRIPTION_ERROR: 'Erreur lors de la transcription',
+        TRANSLATION_ERROR: 'Erreur lors de la traduction',
+        REPHRASE_ERROR: 'Erreur lors de la reformulation',
+        NO_EDITABLE_ELEMENT: 'Aucun élément éditable trouvé',
         CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",
-        NO_ACTIVE_TAB: "Aucun onglet actif trouvé",
-        MISSING_TRANSLATION_PARAMS: "Paramètres de traduction manquants",
-        INVALID_TRANSLATION_RESPONSE: "Format de réponse de traduction invalide",
-        MISSING_REPHRASE_PARAMS: "Paramètres de reformulation manquants"
+        NO_ACTIVE_TAB: 'Aucun onglet actif trouvé',
+        MISSING_TRANSLATION_PARAMS: 'Paramètres de traduction manquants',
+        INVALID_TRANSLATION_RESPONSE: 'Format de réponse de traduction invalide',
+        MISSING_REPHRASE_PARAMS: 'Paramètres de reformulation manquants',
     },
 
     // Configuration des badges
     BADGES: {
         RECORDING: '⏺',
         STOPPED: '',
-        ERROR: '!'
-    }
+        ERROR: '!',
+    },
 };

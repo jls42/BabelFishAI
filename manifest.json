@@ -5,13 +5,7 @@
     "description": "__MSG_extensionDescription__",
     "author": "Julien LS",
     "default_locale": "fr",
-    "permissions": [
-        "activeTab",
-        "storage",
-        "commands",
-        "scripting",
-        "contextMenus"
-    ],
+    "permissions": ["activeTab", "storage", "commands", "scripting", "contextMenus"],
     "icons": {
         "16": "images/icon16.png",
         "32": "images/icon32.png",
@@ -53,9 +47,7 @@
                 "images/*",
                 "src/styles/content.css"
             ],
-            "matches": [
-                "<all_urls>"
-            ]
+            "matches": ["<all_urls>"]
         }
     ]
 }

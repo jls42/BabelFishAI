@@ -13,56 +13,63 @@ BabelFishAI is a browser extension (Manifest V3) for AI-powered voice transcript
 **No build system** - Pure JavaScript with ES6 modules. Development is straightforward:
 
 ### Chrome (développement direct)
+
 1. Edit source files directly
 2. Go to `chrome://extensions/` → Enable Developer mode
 3. Click "Load unpacked" and select this folder (or click reload if already loaded)
 4. Test changes in browser
 
 ### Firefox (développement direct)
+
 1. Edit source files directly
 2. Go to `about:debugging#/runtime/this-firefox`
 3. Click "Load Temporary Add-on..." and select `manifest.firefox.json`
 4. Test changes in browser
 
 ### Build multi-navigateur (pour publication)
+
 ```bash
 ./scripts/build.sh chrome   # Build Chrome uniquement
 ./scripts/build.sh firefox  # Build Firefox uniquement
 ./scripts/build.sh all      # Build les deux
 ```
+
 Les archives ZIP sont générées dans `dist/`.
 
 ## Architecture
 
 ### Global Namespaces
-- `globalThis.BabelFishAIConstants` - Configuration constants
-- `globalThis.BabelFishAIUtils` - Utility functions (recording, text, UI, etc.)
-- `globalThis.BabelFishAI` - Main application state
-- `globalThis.BabelFishAIProviders` - AI provider registry
+
+-   `globalThis.BabelFishAIConstants` - Configuration constants
+-   `globalThis.BabelFishAIUtils` - Utility functions (recording, text, UI, etc.)
+-   `globalThis.BabelFishAI` - Main application state
+-   `globalThis.BabelFishAIProviders` - AI provider registry
 
 **Note**: Utiliser `globalThis` au lieu de `window` pour la portabilité ES2020+.
 
 ### Key Files
-- `manifest.json` - Chrome configuration (Manifest V3, Service Worker)
-- `manifest.firefox.json` - Firefox configuration (Manifest V3, background scripts)
-- `src/background.js` - Background script handling events, icon clicks, keyboard shortcuts, context menu
-- `src/content.js` - Main script injected into pages, coordinates all modules
-- `src/constants.js` - Global constants (errors, states, actions)
-- `src/lib/browser-polyfill.min.js` - webextension-polyfill pour compatibilité cross-browser
+
+-   `manifest.json` - Chrome configuration (Manifest V3, Service Worker)
+-   `manifest.firefox.json` - Firefox configuration (Manifest V3, background scripts)
+-   `src/background.js` - Background script handling events, icon clicks, keyboard shortcuts, context menu
+-   `src/content.js` - Main script injected into pages, coordinates all modules
+-   `src/constants.js` - Global constants (errors, states, actions)
+-   `src/lib/browser-polyfill.min.js` - webextension-polyfill pour compatibilité cross-browser
 
 ### Différences Chrome/Firefox
 
-| Aspect | Chrome | Firefox |
-|--------|--------|---------|
-| Background | Service Worker (`service_worker`) | Scripts classiques (`scripts`) |
-| Manifest | `manifest.json` | `manifest.firefox.json` |
-| `importScripts()` | Supporté (Service Worker) | Non supporté (chargé via manifest) |
-| CSP des pages | Content scripts exempts | Content scripts soumis aux CSP |
-| `fetch()` depuis content script | Utilise permissions extension | Bloqué par `connect-src` de la page |
+| Aspect                          | Chrome                            | Firefox                             |
+| ------------------------------- | --------------------------------- | ----------------------------------- |
+| Background                      | Service Worker (`service_worker`) | Scripts classiques (`scripts`)      |
+| Manifest                        | `manifest.json`                   | `manifest.firefox.json`             |
+| `importScripts()`               | Supporté (Service Worker)         | Non supporté (chargé via manifest)  |
+| CSP des pages                   | Content scripts exempts           | Content scripts soumis aux CSP      |
+| `fetch()` depuis content script | Utilise permissions extension     | Bloqué par `connect-src` de la page |
 
 #### Gestion de `importScripts()` (background.js)
 
 Le code utilise une vérification conditionnelle car Firefox ne supporte pas `importScripts()` dans les background scripts classiques :
+
 ```javascript
 if (typeof importScripts === 'function') {
     importScripts('utils/languages-data.js');
@@ -83,11 +90,12 @@ function isFirefox() {
 
 // Dans performApiCall()
 const response = isFirefox()
-    ? await fetchViaProxy(url, requestOptions)  // Via background
-    : await fetch(url, requestOptions);          // Direct
+    ? await fetchViaProxy(url, requestOptions) // Via background
+    : await fetch(url, requestOptions); // Direct
 ```
 
 **Architecture du proxy** (`background.js` → `proxyFetch()`) :
+
 1. Le content script envoie un message `proxyFetch` avec les paramètres
 2. Le background script effectue le `fetch()` (non soumis aux CSP)
 3. Le résultat est renvoyé au content script
@@ -160,17 +168,20 @@ if (body instanceof FormData) { ... }
 | `languages.js` | Use `languages-shared.js` instead |
 
 ### Communication Flow
+
 1. User clicks icon or uses `Ctrl+Shift+1` / `⌘+Shift+1`
 2. `background.js` receives event, injects content script if needed
 3. `content.js` records audio, calls APIs, displays results
 4. Context menu actions handled similarly for text selection
 
 ### Data Storage
+
 Uses `chrome.storage.sync` for: API key, display preferences, language settings, UI customization.
 
 ## Critical Development Rules
 
 ### General Rules
+
 1. **Primary language**: French for comments and user-facing messages
 2. **Security**: NEVER expose API keys or sensitive URLs directly
 3. **Documentation**: Document all feature changes in `README.md`
@@ -180,6 +191,7 @@ Uses `chrome.storage.sync` for: API key, display preferences, language settings,
 7. **i18n validation**: Run `./scripts/check-i18n.sh` after modifying translations or adding new i18n keys to detect missing translations and dead keys
 
 ### Refactoring Guidelines
+
 The project is undergoing modular refactoring from a monolithic `content.js`. When migrating code:
 
 1. **NEVER modify business logic** during migration
@@ -195,6 +207,7 @@ The project is undergoing modular refactoring from a monolithic `content.js`. Wh
 11. **Verify original code** before migrating to preserve all edge cases and conditions
 
 ### Migration Procedure
+
 1. **Preliminary analysis**: Examine function dependencies, global variables, usage context
 2. **Identify dependencies**: List all variables, constants, and helper functions used
 3. **Progressive extraction**: Migrate one function, verify references in content.js are updated
@@ -205,31 +218,35 @@ The project is undergoing modular refactoring from a monolithic `content.js`. Wh
 8. **Integration test**: Verify integration with rest of code works correctly
 
 ### Errors to Avoid
-- Do NOT modify API prompts (OpenAI, Whisper, etc.)
-- Do NOT change configuration object structure or parameters
-- Do NOT alter error handling or error messages
-- Do NOT remove or modify explanatory comments
-- Do NOT add unrequested features or optimizations
-- Do NOT rename functions or variables to "improve" them
-- Do NOT reorder function parameters
-- Do NOT modify UI animation/transition behavior (especially language selector)
-- Do NOT alter show/hide logic for UI elements like language container
-- Do NOT invent new parameters or options that didn't exist in original code
+
+-   Do NOT modify API prompts (OpenAI, Whisper, etc.)
+-   Do NOT change configuration object structure or parameters
+-   Do NOT alter error handling or error messages
+-   Do NOT remove or modify explanatory comments
+-   Do NOT add unrequested features or optimizations
+-   Do NOT rename functions or variables to "improve" them
+-   Do NOT reorder function parameters
+-   Do NOT modify UI animation/transition behavior (especially language selector)
+-   Do NOT alter show/hide logic for UI elements like language container
+-   Do NOT invent new parameters or options that didn't exist in original code
 
 ### CSS Class Names (must be exact)
-- `whisper-toggle-button` (not `whisper-control-button`)
-- `whisper-button-icon`
-- `whisper-button-text`
-- `whisper-language-container`
-- Use `data-active="true"/"false"` for button states
-- Prefer external CSS (in `content.css`) over inline styles in JavaScript
+
+-   `whisper-toggle-button` (not `whisper-control-button`)
+-   `whisper-button-icon`
+-   `whisper-button-text`
+-   `whisper-language-container`
+-   Use `data-active="true"/"false"` for button states
+-   Prefer external CSS (in `content.css`) over inline styles in JavaScript
 
 ### Translation Files
-- Update French (`_locales/fr/messages.json`) first for new features
-- Other languages only when explicitly requested
-- 15 supported locales: ar, de, en, es, fr, hi, it, ja, ko, nl, pl, pt, ro, sv, zh
+
+-   Update French (`_locales/fr/messages.json`) first for new features
+-   Other languages only when explicitly requested
+-   15 supported locales: ar, de, en, es, fr, hi, it, ja, ko, nl, pl, pt, ro, sv, zh
 
 ### Module Exposure Pattern
+
 ```javascript
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 globalThis.BabelFishAIUtils.moduleName = {
@@ -239,53 +256,60 @@ globalThis.BabelFishAIUtils.moduleName = {
 ```
 
 ### Inter-module Communication
+
 Modules communicate via global namespaces (`globalThis.BabelFishAI` and `globalThis.BabelFishAIUtils`).
 Example: `globalThis.BabelFishAIUtils.recording.startRecording()` to call a recording module function.
 
 ## APIs Used
 
-- **Whisper API**: `https://api.openai.com/v1/audio/transcriptions` (transcription)
-- **GPT API**: `https://api.openai.com/v1/chat/completions` (translation/rephrasing, model: gpt-4o-mini)
-- **Mistral API**: `https://api.mistral.ai/v1/chat/completions` (alternative provider)
-- All configurable via Expert mode for LiteLLM Proxy compatibility
+-   **Whisper API**: `https://api.openai.com/v1/audio/transcriptions` (transcription)
+-   **GPT API**: `https://api.openai.com/v1/chat/completions` (translation/rephrasing, model: gpt-4o-mini)
+-   **Mistral API**: `https://api.mistral.ai/v1/chat/completions` (alternative provider)
+-   All configurable via Expert mode for LiteLLM Proxy compatibility
 
 ## Brand Assets
 
 Les logos des providers sont stockés dans `images/` :
-- `images/mistral-logo.png` - Logo Mistral AI (M arc-en-ciel)
-- `images/openai-logo.png` - Logo OpenAI (blossom)
-- Custom/LiteLLM utilise l'emoji 🚅 (pas de logo officiel)
+
+-   `images/mistral-logo.png` - Logo Mistral AI (M arc-en-ciel)
+-   `images/openai-logo.png` - Logo OpenAI (blossom)
+-   Custom/LiteLLM utilise l'emoji 🚅 (pas de logo officiel)
 
 **Pages Brand officielles :**
-- **Mistral AI** : https://mistral.ai/brand
-- **OpenAI** : https://openai.com/brand/
-- **LiteLLM** : https://github.com/BerriAI/litellm (emoji 🚅 comme identité)
+
+-   **Mistral AI** : https://mistral.ai/brand
+-   **OpenAI** : https://openai.com/brand/
+-   **LiteLLM** : https://github.com/BerriAI/litellm (emoji 🚅 comme identité)
 
 ## Known Issues & Solutions
 
-- **Code duplication**: Centralize function exposure in single block per module
-- **NoLog option**: Only for LiteLLM Proxy, causes errors with official OpenAI API
-- **Firefox CSP blocking API calls**: Résolu via proxy fetch dans background script (voir section "Proxy fetch pour Firefox")
-- **`formData.entries()` not iterable on Firefox**: Utiliser `forEach()` au lieu de `for...of`
-- **`instanceof FormData` fails cross-context**: Utiliser duck typing (`typeof body.append === 'function'`)
+-   **Code duplication**: Centralize function exposure in single block per module
+-   **NoLog option**: Only for LiteLLM Proxy, causes errors with official OpenAI API
+-   **Firefox CSP blocking API calls**: Résolu via proxy fetch dans background script (voir section "Proxy fetch pour Firefox")
+-   **`formData.entries()` not iterable on Firefox**: Utiliser `forEach()` au lieu de `for...of`
+-   **`instanceof FormData` fails cross-context**: Utiliser duck typing (`typeof body.append === 'function'`)
 
 ## Technical Debt (Audit Dec 2025)
 
 ### Files to Remove - ✅ COMPLETED
+
 Les fichiers deprecated ont été supprimés :
-- ~~`src/utils/api.js`~~ - Supprimé
-- ~~`src/utils/translation.js`~~ - Supprimé
-- ~~`src/utils/text-translation.js`~~ - Supprimé
-- ~~`src/utils/languages.js`~~ - Supprimé
+
+-   ~~`src/utils/api.js`~~ - Supprimé
+-   ~~`src/utils/translation.js`~~ - Supprimé
+-   ~~`src/utils/text-translation.js`~~ - Supprimé
+-   ~~`src/utils/languages.js`~~ - Supprimé
 
 ### Duplications Intentionnelles (NE PAS SUPPRIMER)
-- **`languages-data.js` / `languages-shared.js`** : Nécessaire car le Service Worker n'a pas accès à `window`
-- **Constantes dans `background.js`** : Nécessaire pour la même raison (STATES, ACTIONS, BADGES, ERRORS)
-- **Fallbacks langues dans `banner-utils.js`** : Nécessaire à cause d'une race condition au chargement
+
+-   **`languages-data.js` / `languages-shared.js`** : Nécessaire car le Service Worker n'a pas accès à `window`
+-   **Constantes dans `background.js`** : Nécessaire pour la même raison (STATES, ACTIONS, BADGES, ERRORS)
+-   **Fallbacks langues dans `banner-utils.js`** : Nécessaire à cause d'une race condition au chargement
 
 ### Over-exposed Internal Functions - ✅ FIXED
-- `focus-utils.js` : Réduit de 17 à 5 fonctions publiques
-- `ui.js` : Réduit de 11 à 2 fonctions publiques
+
+-   `focus-utils.js` : Réduit de 17 à 5 fonctions publiques
+-   `ui.js` : Réduit de 11 à 2 fonctions publiques
 
 ## Code Quality - Linting Rules
 
@@ -294,6 +318,7 @@ Les fichiers deprecated ont été supprimés :
 **IMPORTANT** : Ces règles sont obligatoires pour éviter les warnings des analyseurs (SonarQube, Codacy, etc.)
 
 #### 1. Utiliser `globalThis` au lieu de `window` ou `self`
+
 ```javascript
 // ✅ CORRECT
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
@@ -306,6 +331,7 @@ self.AVAILABLE_LANGUAGES = [...];
 ```
 
 #### 2. Utiliser `Number.parseInt()` au lieu de `parseInt()`
+
 ```javascript
 // ✅ CORRECT
 const value = Number.parseInt(input.value, 10);
@@ -316,36 +342,42 @@ const value = parseInt(input.value);
 ```
 
 #### 2b. Utiliser `substring()` au lieu de `substr()` (deprecated)
+
 ```javascript
 // ✅ CORRECT
-const hex = color.substring(1, 3);  // De l'index 1 à 3 (exclu)
+const hex = color.substring(1, 3); // De l'index 1 à 3 (exclu)
 
 // ❌ INCORRECT (deprecated)
-const hex = color.substr(1, 2);  // De l'index 1, longueur 2
+const hex = color.substr(1, 2); // De l'index 1, longueur 2
 ```
 
 #### 3. Utiliser `replaceAll()` au lieu de `replace()` avec regex globale (quand applicable)
+
 ```javascript
 // ✅ CORRECT (pour remplacements simples)
 const escaped = text.replaceAll('<', '&lt;');
 
 // ✅ CORRECT (regex complexes - garder replace)
-const cleaned = text.replace(/\s+/g, ' ');  // Pattern complexe, OK
+const cleaned = text.replace(/\s+/g, ' '); // Pattern complexe, OK
 ```
 
 #### 4. Utiliser Optional Chaining (`?.`) et Nullish Coalescing (`??`)
+
 ```javascript
 // ✅ CORRECT
-if (mediaRecorder?.state === 'recording') { }
+if (mediaRecorder?.state === 'recording') {
+}
 const url = provider?.defaultUrls.chat ?? DEFAULT_URL;
 return config?.enabled && config?.apiKey;
 
 // ❌ INCORRECT
-if (mediaRecorder && mediaRecorder.state === 'recording') { }
+if (mediaRecorder && mediaRecorder.state === 'recording') {
+}
 return provider ? provider.defaultUrls.chat : DEFAULT_URL;
 ```
 
-#### 5. Utiliser `.dataset` au lieu de `getAttribute/setAttribute` pour data-*
+#### 5. Utiliser `.dataset` au lieu de `getAttribute/setAttribute` pour data-\*
+
 ```javascript
 // ✅ CORRECT
 button.dataset.active = 'true';
@@ -357,6 +389,7 @@ const target = button.getAttribute('data-target');
 ```
 
 #### 6. Utiliser `element.remove()` au lieu de `parentNode.removeChild()`
+
 ```javascript
 // ✅ CORRECT
 element.remove();
@@ -366,22 +399,24 @@ element.parentNode.removeChild(element);
 ```
 
 #### 7. Éviter les ternaires imbriquées
+
 ```javascript
 // ✅ CORRECT
 let models = [];
 if (providerDef) {
-    models = type === 'transcription'
-        ? providerDef.transcriptionModels
-        : providerDef.chatModels;
+    models = type === 'transcription' ? providerDef.transcriptionModels : providerDef.chatModels;
 }
 
 // ❌ INCORRECT
 const models = providerDef
-    ? (type === 'transcription' ? providerDef.transcriptionModels : providerDef.chatModels)
+    ? type === 'transcription'
+        ? providerDef.transcriptionModels
+        : providerDef.chatModels
     : [];
 ```
 
 #### 8. Toujours utiliser les exceptions attrapées
+
 ```javascript
 // ✅ CORRECT
 } catch (error) {
@@ -396,6 +431,7 @@ const models = providerDef
 ```
 
 #### 9. Éviter innerHTML pour la sécurité (XSS)
+
 ```javascript
 // ✅ CORRECT (créer des éléments DOM)
 const span = document.createElement('span');
@@ -408,33 +444,33 @@ container.innerHTML = `<span class="status">${text}</span>`;
 ```
 
 #### 10. Accessibilité (a11y)
+
 ```html
 <!-- ✅ CORRECT - Labels avec aria-label pour les toggles sans texte visible -->
 <label class="provider-toggle" aria-label="Enable OpenAI provider">
-    <input type="checkbox" id="openaiEnabled" aria-label="Enable OpenAI">
+    <input type="checkbox" id="openaiEnabled" aria-label="Enable OpenAI" />
     <span class="toggle-slider"></span>
 </label>
 
 <!-- ✅ CORRECT - Contraste suffisant (texte blanc sur fond sombre) -->
-.toggle-advanced {
-    background: rgba(0, 0, 0, 0.3);  /* Fond sombre */
-    color: white;  /* Bon contraste */
-}
+.toggle-advanced { background: rgba(0, 0, 0, 0.3); /* Fond sombre */ color: white; /* Bon contraste
+*/ }
 
 <!-- ❌ INCORRECT - Mauvais contraste -->
-.toggle-advanced {
-    background: rgba(255, 255, 255, 0.2);  /* Fond clair */
-    color: white;  /* Mauvais contraste */
-}
+.toggle-advanced { background: rgba(255, 255, 255, 0.2); /* Fond clair */ color: white; /* Mauvais
+contraste */ }
 ```
 
 ### Variables et Fonctions
-- **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
-- **Supprimer les fonctions inutilisées** ou ajouter `// skipcq: JS-0128` si conservées intentionnellement
-- **Éviter les constantes importées mais non utilisées** : Ne pas importer de constantes "au cas où"
+
+-   **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
+-   **Supprimer les fonctions inutilisées** ou ajouter `// skipcq: JS-0128` si conservées intentionnellement
+-   **Éviter les constantes importées mais non utilisées** : Ne pas importer de constantes "au cas où"
 
 ### Appels d'API (api-utils.js)
+
 La fonction `callApi` attend UN SEUL objet avec toutes les options :
+
 ```javascript
 // ✅ CORRECT
 await globalThis.BabelFishAIUtils.api.callApi({
@@ -451,12 +487,14 @@ await globalThis.BabelFishAIUtils.api.callApi(apiUrl, { ... });
 ```
 
 ### Scripts Shell (Bash)
-- **Toujours utiliser `[[` au lieu de `[`** pour les tests conditionnels (plus sûr et plus de fonctionnalités)
-- **Ajouter un cas par défaut `*)` dans les `case` statements**
-- **Ajouter `return` explicite** à la fin des fonctions
-- **Supprimer les variables locales non utilisées**
+
+-   **Toujours utiliser `[[` au lieu de `[`** pour les tests conditionnels (plus sûr et plus de fonctionnalités)
+-   **Ajouter un cas par défaut `*)` dans les `case` statements**
+-   **Ajouter `return` explicite** à la fin des fonctions
+-   **Supprimer les variables locales non utilisées**
 
 Exemple :
+
 ```bash
 # ✅ CORRECT
 if [[ $count -gt 0 ]]; then
@@ -484,11 +522,13 @@ if [ $count -gt 0 ]; then  # Utiliser [[ au lieu de [
 ### Annotations pour Analyseurs Statiques (Faux Positifs)
 
 Différents analyseurs utilisent différents formats :
-- **Codacy (ESLint)** : `// eslint-disable-next-line <rule> -- justification`
-- **SonarCloud** : `// NOSONAR` ou `// NOSONAR - justification`
-- **DeepSource** : `// skipcq: JS-XXXX` ou `// skipcq: JS-XXXX - justification`
+
+-   **Codacy (ESLint)** : `// eslint-disable-next-line <rule> -- justification`
+-   **SonarCloud** : `// NOSONAR` ou `// NOSONAR - justification`
+-   **DeepSource** : `// skipcq: JS-XXXX` ou `// skipcq: JS-XXXX - justification`
 
 Pour couvrir tous les analyseurs, combiner les formats sur une même ligne :
+
 ```javascript
 code; // NOSONAR skipcq: JS-0128 - justification
 ```
@@ -501,7 +541,7 @@ code; // NOSONAR - justification
 
 // Exemples courants
 text.replace(/\s+/g, ' '); // NOSONAR - regex pattern, replaceAll not applicable
-function unused() { } // NOSONAR - Fonction conservée pour usage futur
+function unused() {} // NOSONAR - Fonction conservée pour usage futur
 ```
 
 #### Format ESLint (Codacy) - Pour issues de sécurité
@@ -540,24 +580,28 @@ console.log('[Module] debug info');
 ## Developer Notes
 
 ### Debugging
-- **Chrome** : `chrome://extensions/` → clic sur "Service Worker" pour voir les logs du background
-- **Firefox** : `about:debugging#/runtime/this-firefox` → clic sur "Inspect" pour les logs
-- Check console logs to identify potential issues
+
+-   **Chrome** : `chrome://extensions/` → clic sur "Service Worker" pour voir les logs du background
+-   **Firefox** : `about:debugging#/runtime/this-firefox` → clic sur "Inspect" pour les logs
+-   Check console logs to identify potential issues
 
 ### Testing cross-browser
+
 1. Toujours tester sur Chrome ET Firefox après modifications de `api-utils.js` ou `background.js`
 2. Tester sur des sites avec CSP stricte (ex: chatgpt.com) pour vérifier le proxy Firefox
 3. Tester sur des sites sans CSP (ex: chat.mistral.ai) pour vérifier le flux normal
 
 ### Structure des manifests
-- `manifest.json` : Source principale pour Chrome (Service Worker)
-- `manifest.firefox.json` : Adapté pour Firefox (background scripts)
-- Garder les deux synchronisés (version, permissions, etc.)
+
+-   `manifest.json` : Source principale pour Chrome (Service Worker)
+-   `manifest.firefox.json` : Adapté pour Firefox (background scripts)
+-   Garder les deux synchronisés (version, permissions, etc.)
 
 ### Publication
-- **Chrome** : `./scripts/build.sh chrome` → upload sur Chrome Web Store
-- **Firefox** : `./scripts/build.sh firefox` → upload sur Firefox Add-ons (AMO)
-- L'ID Firefox (`babelfishai@jls42.org`) dans `browser_specific_settings.gecko.id` doit rester constant
+
+-   **Chrome** : `./scripts/build.sh chrome` → upload sur Chrome Web Store
+-   **Firefox** : `./scripts/build.sh firefox` → upload sur Firefox Add-ons (AMO)
+-   L'ID Firefox (`babelfishai@jls42.org`) dans `browser_specific_settings.gecko.id` doit rester constant
 
 ## Git Workflow
 

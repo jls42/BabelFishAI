@@ -19,15 +19,24 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             storedActiveElement = document.activeElement;
 
             // Pour les éléments input et textarea
-            if (storedActiveElement && (storedActiveElement.tagName === 'INPUT' || storedActiveElement.tagName === 'TEXTAREA')) {
+            if (
+                storedActiveElement &&
+                (storedActiveElement.tagName === 'INPUT' ||
+                    storedActiveElement.tagName === 'TEXTAREA')
+            ) {
                 storedSelectionStart = storedActiveElement.selectionStart;
                 storedSelectionEnd = storedActiveElement.selectionEnd;
-                storedSelectionText = storedActiveElement.value.substring(storedSelectionStart, storedSelectionEnd);
+                storedSelectionText = storedActiveElement.value.substring(
+                    storedSelectionStart,
+                    storedSelectionEnd,
+                );
             }
             // Pour les éléments contentEditable
-            else if (storedActiveElement?.isContentEditable) { // Utilisation du chaînage optionnel
+            else if (storedActiveElement?.isContentEditable) {
+                // Utilisation du chaînage optionnel
                 const selection = globalThis.getSelection();
-                if (selection?.rangeCount > 0) { // Chaînage optionnel aussi pour selection
+                if (selection?.rangeCount > 0) {
+                    // Chaînage optionnel aussi pour selection
                     storedNodeRange = selection.getRangeAt(0).cloneRange();
                     storedSelectionText = selection.toString();
                 }
@@ -98,7 +107,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         // Parcourir les enfants en ordre inverse pour trouver le dernier nœud de texte
-        if (node?.childNodes?.length > 0) { // Utilisation du chaînage optionnel
+        if (node?.childNodes?.length > 0) {
+            // Utilisation du chaînage optionnel
             for (let i = node.childNodes.length - 1; i >= 0; i--) {
                 const textNode = findLastTextNode(node.childNodes[i]);
                 if (textNode) {
@@ -180,7 +190,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         if (!activeElement) return false;
 
         // Vérifier si c'est un élément input ou textarea
-        const isInputOrTextarea = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+        const isInputOrTextarea =
+            activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
 
         // Vérifier si c'est un élément input qui accepte du texte
         const isValidInput = activeElement.tagName !== 'INPUT' || isValidInputType(activeElement);
@@ -200,13 +211,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {boolean} - True si le type d'input est valide, sinon false
      */
     function isValidInputType(activeElement) {
-        return activeElement.type !== 'button' &&
+        return (
+            activeElement.type !== 'button' &&
             activeElement.type !== 'checkbox' &&
             activeElement.type !== 'radio' &&
             activeElement.type !== 'file' &&
             activeElement.type !== 'image' &&
             activeElement.type !== 'reset' &&
-            activeElement.type !== 'submit';
+            activeElement.type !== 'submit'
+        );
     }
 
     /**
@@ -254,8 +267,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Le texte a déjà été sécurisé par normalizeText, mais on peut ajouter une vérification supplémentaire
         let safeText = processedText;
         // Utilisation du chaînage optionnel pour vérifier l'existence de la fonction sanitizeHTML
-        if (typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function' &&
-            typeof processedText === 'string' && processedText.includes('<')) {
+        if (
+            typeof globalThis.BabelFishAIUtils?.i18n?.sanitizeHTML === 'function' &&
+            typeof processedText === 'string' &&
+            processedText.includes('<')
+        ) {
             safeText = globalThis.BabelFishAIUtils.i18n.sanitizeHTML(processedText);
         }
 
@@ -311,7 +327,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Utiliser textContent pour le texte brut
         element.textContent += processedText;
     }
-
 
     /**
      * Insère du texte dans un élément contentEditable lorsqu'il y a une sélection.
@@ -431,7 +446,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const selEnd = element.selectionEnd || 0;
 
             // Optimisation pour les grands volumes de texte
-            const newValue = originalValue.substring(0, selStart) + text + originalValue.substring(selEnd);
+            const newValue =
+                originalValue.substring(0, selStart) + text + originalValue.substring(selEnd);
 
             // Mettre à jour la valeur
             element.value = newValue;
@@ -473,15 +489,20 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Restaurer le focus
             restoreFocus();
 
-            if ((activeElement.tagName === 'TEXTAREA') ||
-                (activeElement.tagName === 'INPUT' && activeElement.type === 'text')) {
+            if (
+                activeElement.tagName === 'TEXTAREA' ||
+                (activeElement.tagName === 'INPUT' && activeElement.type === 'text')
+            ) {
                 return insertTextIntoInput(activeElement, newText);
             } else if (activeElement.isContentEditable) {
-                return insertInContentEditable(activeElement, newText, { ensureFocus: false, shouldNormalizeText: false });
+                return insertInContentEditable(activeElement, newText, {
+                    ensureFocus: false,
+                    shouldNormalizeText: false,
+                });
             }
             return false;
         } catch (e) {
-            console.warn("Erreur lors du remplacement du texte:", e);
+            console.warn('Erreur lors du remplacement du texte:', e);
             return false;
         }
     }
@@ -497,7 +518,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         restoreFocusAndSelection,
         isValidElementForInsertion,
         handleActiveElementInsertion,
-        insertTextInEditableElement
+        insertTextInEditableElement,
     };
-
 })(globalThis.BabelFishAIUtils);

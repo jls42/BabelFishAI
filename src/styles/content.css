@@ -26,7 +26,9 @@
 .whisper-status-banner {
     display: none; /* Par défaut caché, sera modifié en 'flex' par JS */
     padding: 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(104, 64, 84, 0.3);
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba(104, 64, 84, 0.3);
     overflow: hidden; /* Pour les animations */
     position: fixed; /* Pour le garder visible */
     left: 0;
@@ -138,16 +140,18 @@
 }
 
 /* État désactivé (par défaut) - foncé avec bordure légère pour tous les fonds */
-.whisper-toggle-button[data-active="false"] {
+.whisper-toggle-button[data-active='false'] {
     background: rgba(0, 0, 0, 0.3);
     opacity: 0.85;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* État activé - clair avec halo brillant */
-.whisper-toggle-button[data-active="true"] {
+.whisper-toggle-button[data-active='true'] {
     background: rgba(0, 150, 136, 0.7); /* Vert turquoise qui se démarque bien */
-    box-shadow: 0 0 10px rgba(0, 150, 136, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 0 10px rgba(0, 150, 136, 0.5),
+        0 2px 8px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.6);
     opacity: 1;
     transform: scale(1.03);
@@ -171,7 +175,9 @@
     background: rgba(0, 150, 136, 0.7); /* Même couleur que les boutons activés */
     padding: 3px 8px;
     border-radius: 14px;
-    box-shadow: 0 0 10px rgba(0, 150, 136, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 0 10px rgba(0, 150, 136, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     margin-left: 2px;
     animation: slideInFade 0.3s ease-in-out;
@@ -182,21 +188,29 @@
     border: 1px solid rgba(255, 255, 255, 0.6); /* Bordure plus visible */
 }
 
-.whisper-language-container[style*="display: flex"] {
+.whisper-language-container[style*='display: flex'] {
     opacity: 1;
     max-height: 30px;
     overflow: visible;
 }
 
 @keyframes slideInFade {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .whisper-language-container:hover {
     background: rgba(0, 150, 136, 0.85);
     transform: translateY(-1px);
-    box-shadow: 0 0 12px rgba(0, 150, 136, 0.6), 0 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 0 12px rgba(0, 150, 136, 0.6),
+        0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
 .whisper-language-label {
@@ -221,17 +235,17 @@
     min-width: 90px;
     max-width: 130px;
     max-height: 300px;
-    
+
     /* Personnaliser l'apparence du sélecteur pour supprimer l'icône par défaut */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    
+
     overflow-y: auto;
     text-align: center;
     outline: none;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    
+
     /* Ajouter notre propre flèche personnalisée */
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -247,7 +261,9 @@
 }
 
 .whisper-language-select:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 8px rgba(0, 150, 136, 0.4);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.5),
+        0 0 8px rgba(0, 150, 136, 0.4);
     border-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -264,7 +280,7 @@
     .whisper-language-select option:focus,
     .whisper-language-select option:active,
     .whisper-language-select option:checked {
-        background: #00BFA5 !important; /* Vert turquoise plus clair pour l'état survolé/sélectionné */
+        background: #00bfa5 !important; /* Vert turquoise plus clair pour l'état survolé/sélectionné */
         box-shadow: 0 0 10px #009688;
     }
 }
@@ -325,7 +341,9 @@
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
     flex-shrink: 0;
     font-size: 11px;
     line-height: 1.2;
@@ -339,24 +357,46 @@
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(20px); }
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 }
 
 @keyframes bannerPulse {
-    0% { opacity: 0.7; }
-    50% { opacity: 1; }
-    100% { opacity: 0.7; }
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.7;
+    }
 }
 
 @keyframes bannerFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Élément de transcription */
@@ -396,7 +436,7 @@
 /* Ajustements spécifiques pour les contrôles en haut */
 .whisper-dialog-controls-top {
     border-top: none;
-    border-bottom: 1px solid #eee; 
+    border-bottom: 1px solid #eee;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
