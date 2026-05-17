@@ -1,0 +1,15 @@
+# Vendor libs (not maintained by us)
+src/lib/
+*.min.js
+
+# Build artifacts
+dist/
+
+# Dependencies (none currently, future-proof)
+node_modules/
+
+# Chrome i18n locales (strict structure expected by browser)
+_locales/
+
+# Translated README files (out of scope until next localization cycle)
+README-*.md
