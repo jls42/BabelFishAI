@@ -8,10 +8,49 @@ BabelFishAI is a browser extension (Manifest V3) for AI-powered voice transcript
 
 **Primary Language:** French (for comments, documentation, and user-facing messages)
 
+## Principes méta (anti-hallucination)
+
+Ces deux règles sont **OBLIGATOIRES** et s'appliquent transversalement à tout le travail sur ce projet. Elles priment sur les conventions locales en cas de conflit. (Inspirées des CLAUDE.md d'EurekAI et de jls42-astro — voir leçon `c6c282e` PR #29 GPT-5.4/5.5 : un flag basé sur la mémoire au lieu d'une mesure a coûté un aller-retour utilisateur inutile.)
+
+### Mesurer > deviner
+
+**Dès qu'un fait est mesurable factuellement, mesurer AVANT de raisonner dessus.** Ne jamais estimer/supposer quand une vérification coûte quelques secondes. L'intuition est souvent fausse et les itérations basées sur elle coûtent 10× plus cher que la mesure directe.
+
+Cas concrets (non exhaustif) :
+
+-   **Calcul / comptage** : `wc -l`, `grep -c`, `.length`, bash/python — jamais "à peu près N" ni à la tête.
+-   **Contenu fichier / comportement code** : lire le fichier, `grep`, lancer le test, jamais depuis la mémoire.
+-   **Catalogues externes** (modèles IA OpenAI/Mistral/Anthropic, endpoints API, versions de packages, syntaxes Sonar/Codacy/DeepSource) : **fetch la doc officielle**, jamais depuis la mémoire d'entraînement — les catalogues évoluent en permanence et la connaissance de Claude coupe à une date fixe. Cas typique : avant d'ajouter ou de flagger un modèle dans `src/utils/providers.js`, vérifier sur la page de pricing officielle du provider (`https://developers.openai.com/api/docs/pricing`, équivalents Mistral / Anthropic) qu'il existe au catalogue public.
+-   **Outils statiques** (Sonar CCN, Codacy ESLint, DeepSource finding) : reproduire localement (`pre-commit run --all-files`, `pre-commit run --hook-stage pre-push --all-files`) pour voir ce que l'outil voit, jamais deviner la cause d'un flag.
+-   **Dates relatives** : convertir en absolu via le contexte date, jamais extrapoler mentalement.
+
+**Anti-pattern à éviter** : itérer à l'aveugle sur un signal d'outil externe ou sur sa propre mémoire. 30 secondes de mesure factuelle = jours d'itérations économisées.
+
+### Ne JAMAIS inventer
+
+**INTERDIT** : inventer des URLs, identifiants, chiffres, IDs de modèle, noms de règles Sonar/Codacy/DeepSource, signatures d'API ou toute information factuelle.
+
+**OBLIGATOIRE** :
+
+-   Extraire les faits depuis la source officielle (doc, page de pricing, code source) — **jamais depuis la mémoire**.
+-   Copier les URLs / identifiants exacts depuis le navigateur ou le fichier, pas les reconstruire de tête.
+-   En cas de doute : **demander à l'utilisateur ou omettre l'information** — ne jamais combler les trous.
+
+Cas de figure fréquents où l'invention surgit :
+
+-   "Le modèle `gpt-X.Y` existe / n'existe pas" → vérifier sur la page de pricing OpenAI **avant** d'affirmer.
+-   "La syntaxe Codacy est `// codacy:ignore-next-line`" → **n'existe pas**, c'est une invention LLM. Codacy s'est aligné sur Opengrep depuis 2026-02 : syntaxe correcte = `// nosemgrep: <rule-id> -- <raison>` (cf. section SonarCloud / DeepSource Conventions ci-dessous).
+-   "L'option `--foo` de la commande X fait Y" → `man`, `--help` ou doc officielle avant d'affirmer.
+
 ## Claude Code Workflow
 
 -   **Commits** : utiliser le skill `/helping-with-commits` pour tous les commits (règle projet, OBLIGATOIRE — ne JAMAIS faire de `git commit` direct ni d'ajouter de mention "Co-Authored-By: Claude").
 -   **Recherche web** : utiliser l'agent `web-research-specialist:web-research-specialist` pour les recherches de documentation (évite de polluer le contexte principal).
+-   **Tâches complexes (refacto modulaire, migration, nouvelle feature transverse)** : commencer en **Plan mode**, itérer sur le plan avec l'utilisateur, puis seulement implémenter. Évite les rework massifs sur un mauvais design.
+-   **Vérification visuelle UI obligatoire** après toute modification de banner, options, popup, ou injection content script : ouvrir l'extension dans Chrome (ou via Claude in Chrome MCP `mcp__claude-in-chrome__*`) et tester le golden path **avant** de reporter la tâche comme faite. Le type-check + pre-commit ne valident pas le rendu visuel.
+-   **Validation utilisateur avant build / publication** : ne JAMAIS lancer `./scripts/build.sh` ni proposer un upload Chrome Web Store / Firefox AMO tant que l'utilisateur n'a pas validé les changements en dev (chargement non packagé). Exception : si l'utilisateur demande explicitement un build.
+-   **Avant d'ajouter ou flagger un modèle dans `src/utils/providers.js`** : appliquer la règle « Mesurer > deviner » (ci-dessus) — fetch la page de pricing officielle du provider et confirmer l'existence du modèle au catalogue public. Ne jamais se fier à la mémoire d'entraînement pour les IDs de modèle, ils évoluent constamment.
+-   **Méta-règle d'auto-amélioration** : quand une erreur, une mauvaise approche ou une convention oubliée est identifiée pendant le travail, **ajouter une règle dans ce `CLAUDE.md`** (ou un fichier dédié sous `.claude/`) avant de clore la session. Le but est que la même erreur ne se reproduise pas dans une session future avec un contexte vide. Mentionner si possible le commit ou la PR qui a déclenché la leçon.
 -   **Après chaque `git push`** (sur une PR, jamais `main`) : surveiller les checks externes jusqu'à résolution.
     1. Attendre ~60-90s que SonarCloud, Codacy, CodeFactor, DeepSource terminent leur scan initial. Aucun workflow GH Actions n'est versionné dans ce repo — les analyses passent par les intégrations natives (GitHub Apps).
     2. `gh pr checks <num>` pour lire l'état des checks GitHub.
@@ -50,6 +89,12 @@ function reservedHandler() {
 ```
 
 Cela évite de masquer de vrais positifs futurs sur le même type de règle. Format général : `// NOSONAR <rule-id> - <pourquoi c'est sûr>` ou `// skipcq: <code> - <raison>`.
+
+### Pièges connus (analyseurs statiques)
+
+-   **`// codacy:ignore-next-line` N'EXISTE PAS** (invention LLM fréquente). Codacy a migré de Semgrep vers Opengrep en février 2026 ; il ne supporte **aucun** skip inline propre côté plateforme. Pour ignorer un finding Codacy inline : utiliser la syntaxe Opengrep / Semgrep `// nosemgrep: <rule-id> -- <raison>` (ou `// nosemgrep` seul) immédiatement au-dessus de la ligne flaggée, ou en fin de ligne (`<code>; // nosemgrep: <rule-id>`). Skip tags via message de commit (`[ci skip]`, `[codacy skip]`) sont les seuls "skip Codacy natifs" qui existent.
+-   **Effet secondaire subtil d'un cleanup de dead code** : retirer un `export` ou supprimer une fonction "inutilisée" peut faire ré-évaluer le graphe de taint par Codacy / Opengrep / DeepSource et **réactiver des findings dormants** (acceptés sur un commit antérieur). Quand un finding SAST apparaît après un commit "inoffensif" (suppression d'export, knip, refacto), vérifier en priorité s'il n'a pas modifié la surface d'exports d'un fichier impliqué — avant de soupçonner un bug récent.
+-   **Avant d'ajouter un ignore (inline ou global)** : **mesurer** en lançant `pre-commit run --hook-stage pre-push --all-files` localement pour reproduire avec Opengrep. Ne jamais ignorer à l'aveugle un finding cloud sans tenter de reproduire localement d'abord (principe « Mesurer > deviner »). Note : certaines règles LGPL utilisées par Codacy ne sont PAS dans les packs locaux Opengrep — dans ce cas, opengrep local ne reproduit pas, et le seul moyen de valider un fix est le rescan Codacy post-push.
 
 ## Quality / pre-commit (workflow)
 
