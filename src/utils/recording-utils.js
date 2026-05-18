@@ -431,6 +431,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // 1. Informer le background script - Opération asynchrone qui ne doit pas bloquer
         globalThis.BabelFishAIUtils.error.safeExecute(
             () => {
+                // skipcq: JS-0125 - 'chrome' is a global provided by the Chrome/Firefox extension runtime
                 chrome.runtime.sendMessage({
                     action: ACTIONS.STOPPED,
                     canceled: wasCanceled === true,
