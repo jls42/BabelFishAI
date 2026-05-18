@@ -201,6 +201,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     defaultAudioModel: getMessage('defaultAudioModel'),
                     defaultTranslationModel: getMessage('defaultTranslationModel'),
                 };
+                // eslint-disable-next-line security/detect-object-injection -- key comes from for...in over translations, guarded by hasOwnProperty
                 translations[key].message = replacePlaceholders(
                     translations[key].message,
                     placeholders,
@@ -277,7 +278,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             });
 
             // Add element-specific attributes
+            // eslint-disable-next-line security/detect-object-injection -- tagName comes from DOM node.tagName, allowedAttributes is a static whitelist
             if (allowedAttributes[tagName]) {
+                // eslint-disable-next-line security/detect-object-injection -- tagName is whitelisted (see check above)
                 allowedAttributes[tagName].forEach((attr) => {
                     if (node.hasAttribute(attr)) {
                         // Special handling for links

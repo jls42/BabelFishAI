@@ -6,6 +6,7 @@
 // Définition pour le service worker (sans référence à window)
 // Cette variable est utilisée par le service worker via importScripts
 // skipcq: JS-0128 - exposé globalement et consommé par importScripts dans le service worker
+// eslint-disable-next-line no-unused-vars -- AVAILABLE_LANGUAGES is consumed by the service worker via importScripts (cannot reference window)
 const AVAILABLE_LANGUAGES = [
     { value: 'en', text: 'English (en)' },
     { value: 'fr', text: 'Français (fr)' },
