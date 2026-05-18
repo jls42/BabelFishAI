@@ -73,8 +73,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<Object|boolean>} Une promesse qui se résout avec un objet `{ success: boolean, method: string }` indiquant le succès et la méthode d'affichage, ou `false` en cas d'échec.
      */
     async function showTranscription(text) {
+        // NOSONAR javascript:S6544 - validateInputText is synchronous and returns a boolean.
         if (!validateInputText(text)) {
-            // NOSONAR - S6544: Faux positif, validateInputText est synchrone et retourne un booléen.
             return false;
         }
 

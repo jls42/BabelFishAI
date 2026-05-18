@@ -31,7 +31,7 @@ else
     exit 0
 fi
 
-echo "[info] Running SAST with $TOOL (severity ERROR)"
+echo "[info] Running SAST with $TOOL (severity ERROR)" >&2
 
 # Move to repo root (script can be called from anywhere)
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
