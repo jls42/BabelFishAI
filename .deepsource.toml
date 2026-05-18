@@ -2,3 +2,11 @@ version = 1
 
 [[analyzers]]
 name = "javascript"
+
+  [analyzers.meta]
+  environment = [
+    "browser",
+    "webextensions",
+    "es2020",
+  ]
+  plugins = []

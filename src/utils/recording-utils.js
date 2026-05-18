@@ -39,8 +39,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * Récupère la clé API de manière asynchrone.
      * @returns {Promise<string>} La clé API.
      */
+    // skipcq: JS-0116 - garder async pour cohérence d'interface (retourne toujours une promesse)
     async function getApiKey() {
-        // skipcq: JS-0116 - Garder async pour cohérence de l'interface (retourne toujours une promesse).
         return globalThis.BabelFishAIUtils.error.safeExecute(
             () => globalThis.BabelFishAIUtils.api.getApiKey(),
             'Erreur lors de la récupération de la clé API',
@@ -104,7 +104,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         };
 
         const errorMessage =
-            errorMessages[error.name] || errorMessages[error.message] || errorMessages['default'];
+            errorMessages[error.name] || errorMessages[error.message] || errorMessages.default;
 
         globalThis.BabelFishAI.ui.handleError(errorMessage, error.message || error.toString());
 

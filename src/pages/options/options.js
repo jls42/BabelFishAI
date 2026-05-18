@@ -542,6 +542,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 apiKey: '', // Legacy key pour migration
             },
             (items) => {
+                // skipcq: JS-0002 - debug log for options loading diagnostics (extension legitimate console use)
                 // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
                 console.log('[Options] Loading providers config:', items);
 
@@ -576,6 +577,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 updateAllProviderDisplays();
                 restoreServiceSelectors(items);
 
+                // skipcq: JS-0002 - debug log for options loading diagnostics
                 // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
                 console.log(
                     '[Options] Loaded - transcriptionProvider:',
@@ -638,6 +640,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // eslint-disable-next-line security/detect-object-injection -- False positive: transcriptionProvider is a controlled provider ID
         const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
 
+        // skipcq: JS-0002 - debug log for options saving diagnostics
         // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
         console.log('[Options] Saving providers config:', {
             transcriptionProvider,
@@ -660,6 +663,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
                     console.error('[Options] Error saving:', chrome.runtime.lastError);
                 } else {
+                    // skipcq: JS-0002 - debug log for options saving success
                     // eslint-disable-next-line no-console -- Debug log for options saving success
                     console.log('[Options] Config saved successfully');
                 }

@@ -5,8 +5,8 @@
 
 // Définition pour le service worker (sans référence à window)
 // Cette variable est utilisée par le service worker via importScripts
+// skipcq: JS-0128 - exposé globalement et consommé par importScripts dans le service worker
 const AVAILABLE_LANGUAGES = [
-    // skipcq: JS-0128
     { value: 'en', text: 'English (en)' },
     { value: 'fr', text: 'Français (fr)' },
     { value: 'es', text: 'Español (es)' },

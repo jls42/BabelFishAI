@@ -276,6 +276,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 throw new Error(errorMsg);
             }
 
+            // skipcq: JS-0002 - debug log for provider diagnostics
             // eslint-disable-next-line no-console -- Debug log for provider diagnostics
             console.log(
                 '[Display] Using transcription provider:',

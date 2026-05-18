@@ -318,6 +318,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         );
 
         if (availableProvider) {
+            // skipcq: JS-0002 - debug log for provider fallback diagnostics
             // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
             console.log(
                 `[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`,
