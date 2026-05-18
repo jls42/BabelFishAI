@@ -9,9 +9,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
 
     /**
-     * Affiche la transcription selon les options configurées
-     * @param {string} text - Le texte à afficher
-     * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
+     * Valide le texte d'entrée pour la transcription
+     * @param {string} text - Le texte à valider
+     * @returns {boolean} true si valide, false sinon (et signale l'erreur à l'utilisateur)
      */
     function validateInputText(text) {
         if (!globalThis.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
@@ -73,7 +73,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<Object|boolean>} Une promesse qui se résout avec un objet `{ success: boolean, method: string }` indiquant le succès et la méthode d'affichage, ou `false` en cas d'échec.
      */
     async function showTranscription(text) {
-        // NOSONAR javascript:S6544 - validateInputText is synchronous and returns a boolean.
         if (!validateInputText(text)) {
             return false;
         }
