@@ -201,11 +201,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     defaultAudioModel: getMessage('defaultAudioModel'),
                     defaultTranslationModel: getMessage('defaultTranslationModel'),
                 };
-                // eslint-disable-next-line security/detect-object-injection -- key comes from for...in over translations, guarded by hasOwnProperty
-                translations[key].message = replacePlaceholders(
-                    translations[key].message,
-                    placeholders,
-                );
+                // Extract entry into a local to avoid a second indexed access
+                // that confuses generic-object-injection analyzers (the bracket
+                // access is already safe: key comes from for...in + hasOwnProperty).
+                // eslint-disable-next-line security/detect-object-injection -- key owned by translations (hasOwnProperty guard above)
+                const entry = translations[key];
+                entry.message = replacePlaceholders(entry.message, placeholders);
             }
         }
     }

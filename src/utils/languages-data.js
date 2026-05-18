@@ -3,10 +3,10 @@
  * Cette variable est délibérément exposée globalement pour être utilisée par le service worker.
  */
 
-// Définition pour le service worker (sans référence à window)
-// Cette variable est utilisée par le service worker via importScripts
-// skipcq: JS-0128 - exposé globalement et consommé par importScripts dans le service worker
-// eslint-disable-next-line no-unused-vars -- AVAILABLE_LANGUAGES is consumed by the service worker via importScripts (cannot reference window)
+// Définition pour le service worker (sans référence à window).
+// L'assignation explicite à globalThis ci-dessous rend la consommation explicite
+// (background.js lit `globalThis.AVAILABLE_LANGUAGES`) et évite les warnings
+// "unused variable" des analyseurs statiques.
 const AVAILABLE_LANGUAGES = [
     { value: 'en', text: 'English (en)' },
     { value: 'fr', text: 'Français (fr)' },
@@ -24,3 +24,7 @@ const AVAILABLE_LANGUAGES = [
     { value: 'ja', text: '日本語 (ja)' },
     { value: 'ko', text: '한국어 (ko)' },
 ];
+
+// Expose to the service worker global scope (background.js reads
+// globalThis.AVAILABLE_LANGUAGES, see src/background.js).
+globalThis.AVAILABLE_LANGUAGES = AVAILABLE_LANGUAGES;
