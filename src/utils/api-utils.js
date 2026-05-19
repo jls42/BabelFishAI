@@ -46,13 +46,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     isFile: true,
                     data: base64,
                     type: value.type,
-                    filename: value.name || 'file'
+                    filename: value.name || 'file',
                 });
             } else {
                 fields.push({
                     name,
                     isFile: false,
-                    value: String(value)
+                    value: String(value),
                 });
             }
         }
@@ -72,13 +72,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             url,
             options: {
                 method: options.method,
-                headers: options.headers
-            }
+                headers: options.headers,
+            },
         };
 
         // Gérer le body selon son type
         // Utiliser duck typing car instanceof FormData peut échouer entre contextes
-        if (options.body && typeof options.body.entries === 'function' && typeof options.body.append === 'function') {
+        if (
+            options.body &&
+            typeof options.body.entries === 'function' &&
+            typeof options.body.append === 'function'
+        ) {
             request.formDataFields = await formDataToSerializable(options.body);
         } else if (options.body) {
             request.options.body = options.body;
@@ -87,7 +91,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Envoyer la requête au background script
         const result = await chrome.runtime.sendMessage({
             action: 'proxyFetch',
-            request
+            request,
         });
 
         if (!result.success) {
@@ -104,7 +108,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             statusText: result.statusText,
             headers: new Headers(result.headers || {}),
             json: () => Promise.resolve(result.data),
-            text: () => Promise.resolve(typeof result.data === 'string' ? result.data : JSON.stringify(result.data))
+            text: () =>
+                Promise.resolve(
+                    typeof result.data === 'string' ? result.data : JSON.stringify(result.data),
+                ),
         };
     }
 
@@ -114,6 +121,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @private
      */
     async function _fetchAndCacheApiKeyFromStorage() {
+        // S'assurer que l'espace de noms BabelFishAI existe avant l'écriture en cache
+        // (cold-start sur content script injecté dynamiquement : voir background.js:121)
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
         try {
             const result = await chrome.storage.sync.get(['apiKey']);
             const apiKey = result.apiKey;
@@ -125,12 +135,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             }
             return null; // Clé non trouvée dans le stockage
         } catch (error) {
-            console.error("Erreur lors de la récupération de la clé API depuis le stockage:", error);
+            console.error(
+                'Erreur lors de la récupération de la clé API depuis le stockage:',
+                error,
+            );
             // En cas d'erreur de stockage, on considère que la clé n'est pas disponible
             return null;
         }
     }
-
 
     /**
      * Récupère la clé API (depuis la mémoire ou le stockage) ou lève une exception si elle n'est pas disponible.
@@ -152,14 +164,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 return config.apiKey;
             }
         } catch (error) {
-            console.warn("Erreur lors de la résolution de la config API:", error);
+            console.warn('Erreur lors de la résolution de la config API:', error);
         }
 
         // Fallback sur l'ancienne méthode
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
         if (!apiKeyFromStorage) {
-            console.error("Erreur lors de la récupération de la clé API: Clé non trouvée.");
+            console.error('Erreur lors de la récupération de la clé API: Clé non trouvée.');
             throw new Error(ERRORS.API_KEY_NOT_FOUND);
         }
 
@@ -185,19 +197,20 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 return config.apiKey;
             }
         } catch (error) {
-            console.warn("Erreur lors de la résolution de la config API:", error);
+            console.warn('Erreur lors de la résolution de la config API:', error);
         }
 
         // Fallback sur l'ancienne méthode si resolveApiConfig échoue
         const apiKeyFromStorage = await _fetchAndCacheApiKeyFromStorage();
 
         if (!apiKeyFromStorage) {
-            console.warn("Clé API non configurée. Veuillez la configurer dans les options de l'extension.");
+            console.warn(
+                "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            );
         }
 
         return apiKeyFromStorage;
     }
-
 
     /**
      * Récupère des données depuis le stockage Chrome
@@ -209,7 +222,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             try {
                 chrome.storage.sync.get(defaults, (items) => {
                     if (chrome.runtime.lastError) {
-                        console.error("Erreur lors de la récupération depuis le stockage:", chrome.runtime.lastError);
+                        console.error(
+                            'Erreur lors de la récupération depuis le stockage:',
+                            chrome.runtime.lastError,
+                        );
                         reject(new Error(ERRORS.CHROME_STORAGE_ERROR));
                     } else {
                         resolve(items);
@@ -251,13 +267,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const useCustomUrl = providerId === 'custom';
 
         if (serviceType === 'transcription') {
-            return (useCustomUrl && providerConfig?.transcriptionUrl)
-                || providerDef?.defaultUrls.transcription
-                || API_CONFIG.DEFAULT_WHISPER_API_URL;
+            return (
+                (useCustomUrl && providerConfig?.transcriptionUrl) ||
+                providerDef?.defaultUrls.transcription ||
+                API_CONFIG.DEFAULT_WHISPER_API_URL
+            );
         }
-        return (useCustomUrl && providerConfig?.chatUrl)
-            || providerDef?.defaultUrls.chat
-            || API_CONFIG.DEFAULT_GPT_API_URL;
+        return (
+            (useCustomUrl && providerConfig?.chatUrl) ||
+            providerDef?.defaultUrls.chat ||
+            API_CONFIG.DEFAULT_GPT_API_URL
+        );
     }
 
     /**
@@ -283,8 +303,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         return isTranscription
-            ? (data.audioModelType || API_CONFIG.WHISPER_MODEL)
-            : (data.modelType || API_CONFIG.GPT_MODEL);
+            ? data.audioModelType || API_CONFIG.WHISPER_MODEL
+            : data.modelType || API_CONFIG.GPT_MODEL;
     }
 
     /**
@@ -296,13 +316,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     function findFallbackProvider(providers, currentProviderId) {
         if (!providers) return null;
 
-        const availableProvider = Object.entries(providers).find(
-            ([id, config]) => isProviderValid(id, config)
+        const availableProvider = Object.entries(providers).find(([id, config]) =>
+            isProviderValid(id, config),
         );
 
         if (availableProvider) {
+            // skipcq: JS-0002 - debug log for provider fallback diagnostics
             // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
-            console.log(`[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`);
+            console.log(
+                `[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`,
+            );
             return { providerId: availableProvider[0], providerConfig: availableProvider[1] };
         }
         return null;
@@ -315,9 +338,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {{providerId: string, providerConfig: Object|undefined}} Provider résolu
      */
     function resolveActiveProvider(serviceType, data) {
-        let providerId = serviceType === 'transcription'
-            ? data.transcriptionProvider
-            : data.chatProvider;
+        let providerId =
+            serviceType === 'transcription' ? data.transcriptionProvider : data.chatProvider;
 
         // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
         let providerConfig = data.providers?.[providerId];
@@ -372,7 +394,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             apiKey: '',
             audioModelType: API_CONFIG.WHISPER_MODEL,
             modelType: API_CONFIG.GPT_MODEL,
-            disableLogging: false
+            disableLogging: false,
         });
 
         // Résoudre le provider actif
@@ -385,7 +407,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
         const apiKey = resolveApiKey(providerConfig, providerId, data.apiKey);
-        const model = resolveModel(serviceType, providerConfig, providerDef, Providers, providerId, data);
+        const model = resolveModel(
+            serviceType,
+            providerConfig,
+            providerDef,
+            Providers,
+            providerId,
+            data,
+        );
         const disableLogging = resolveDisableLogging(providerDef, data.disableLogging);
 
         return { apiKey, url, model, providerId, disableLogging };
@@ -420,7 +449,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
                 resolve({
                     online: false,
-                    message: "Aucune connexion Internet détectée. Veuillez vous connecter et réessayer."
+                    message:
+                        'Aucune connexion Internet détectée. Veuillez vous connecter et réessayer.',
                 });
             } else {
                 // Considérer l'appareil comme en ligne si navigator.onLine le dit
@@ -435,7 +465,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<void>}
      */
     function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     /**
@@ -444,9 +474,100 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {boolean} True si c'est une erreur réseau
      */
     function isNetworkError(error) {
-        return error.name === 'TypeError' ||
+        return (
+            error.name === 'TypeError' ||
             error.message.includes('Timeout') ||
-            error.message.includes('connexion');
+            error.message.includes('connexion')
+        );
+    }
+
+    /**
+     * Parse une URL en URL object, retourne null si invalide
+     * @param {string} url - URL à parser
+     * @returns {URL|null}
+     */
+    function parseUrl(url) {
+        try {
+            return new URL(url);
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Ajoute le hostname d'une URL au set cible (silencieux si URL invalide)
+     * @param {string} url - URL source
+     * @param {Set<string>} targetSet - Set destinataire
+     */
+    function addHostname(url, targetSet) {
+        if (!url) return;
+        const parsed = parseUrl(url);
+        if (parsed) targetSet.add(parsed.hostname);
+    }
+
+    /**
+     * Vérifie si le protocole est autorisé : HTTPS partout, HTTP uniquement
+     * pour localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM).
+     * @param {URL} target - URL parsée
+     * @returns {boolean}
+     */
+    function isProtocolAllowed(target) {
+        if (target.protocol === 'https:') return true;
+        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+        return target.protocol === 'http:' && isLocalhost;
+    }
+
+    /**
+     * Extrait l'allowlist des hostnames par défaut depuis le registre providers
+     * (source unique de vérité : ajouter un provider dans providers.js le propage ici).
+     * @returns {Set<string>}
+     */
+    function getDefaultAllowedHosts() {
+        const hosts = new Set();
+        const registry = globalThis.BabelFishAIProviders?.PROVIDERS ?? {};
+        for (const provider of Object.values(registry)) {
+            for (const defaultUrl of Object.values(provider.defaultUrls ?? {})) {
+                addHostname(defaultUrl, hosts);
+            }
+        }
+        return hosts;
+    }
+
+    /**
+     * Extrait l'allowlist des hostnames custom (mode LiteLLM) depuis la config
+     * utilisateur, relue à chaque appel pour suivre les changements sans cache.
+     * @returns {Promise<Set<string>>}
+     */
+    async function getCustomAllowedHosts() {
+        const hosts = new Set();
+        const { providers } = await chrome.storage.sync.get('providers');
+        const custom = providers?.custom;
+        if (!custom?.enabled) return hosts;
+        addHostname(custom.transcriptionUrl, hosts);
+        addHostname(custom.chatUrl, hosts);
+        return hosts;
+    }
+
+    /**
+     * Vérifie si l'URL cible appartient à l'allowlist des providers connus.
+     * Défense en profondeur contre une fuite de clé API vers un hôte arbitraire
+     * (cf. SECURITY.md scope "API key leakage"). L'allowlist est dérivée
+     * dynamiquement du registre providers et de la config utilisateur — pas
+     * de duplication, si on ajoute un provider dans providers.js il est suivi
+     * automatiquement ici. Mode LiteLLM/custom respecté via providers.custom.
+     * @param {string} url - URL à valider
+     * @returns {Promise<boolean>} True si l'URL est autorisée
+     */
+    async function isUrlAllowed(url) {
+        const target = parseUrl(url);
+        if (!target) return false;
+        if (!isProtocolAllowed(target)) return false;
+
+        const defaults = getDefaultAllowedHosts();
+        if (defaults.has(target.hostname)) return true;
+
+        const customHosts = await getCustomAllowedHosts();
+        return customHosts.has(target.hostname);
     }
 
     /**
@@ -484,6 +605,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             throw new Error('URL API manquante');
         }
 
+        // Allowlist d'hôtes : bloque toute fuite potentielle de la clé API vers un
+        // hôte hors registre providers / config utilisateur (defense in depth).
+        if (!(await isUrlAllowed(url))) {
+            throw new Error(
+                `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
+            );
+        }
+
         /**
          * Vérifie la connexion réseau avant de faire l'appel API
          * @param {boolean} isRetry - Indique s'il s'agit d'une tentative de réessai
@@ -504,14 +633,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          */
         function prepareRequestOptions() {
             const requestHeaders = {
-                'Authorization': `Bearer ${apiKey}`,
-                ...headers
+                Authorization: `Bearer ${apiKey}`,
+                ...headers,
             };
 
             return {
                 method,
                 headers: requestHeaders,
-                body
+                body,
             };
         }
 
@@ -531,7 +660,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     // JSON parsing failed - log the parse error and use status code
                     console.error('API Error (JSON parse failed):', jsonParseError.message);
                     errorMessage = `${errorType}: ${response.status} ${response.statusText}`;
-                    console.error('API Error (could not parse response):', response.status, response.statusText);
+                    console.error(
+                        'API Error (could not parse response):',
+                        response.status,
+                        response.statusText,
+                    );
                 }
 
                 // Message d'erreur amélioré avec suggestion de résolution
@@ -559,7 +692,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 500: `${errorType}: Erreur serveur. Le service est peut-être temporairement indisponible.`,
                 502: `${errorType}: Service indisponible. Réessayez plus tard.`,
                 503: `${errorType}: Service surchargé. Réessayez plus tard.`,
-                504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`
+                504: `${errorType}: Délai d'attente serveur dépassé. Réessayez plus tard.`,
             };
 
             if (Object.hasOwn(errorMessages, statusCode)) {
@@ -574,7 +707,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          * @returns {never} Lance toujours une erreur
          */
         function handleFailedToFetch() {
-            throw new Error(`${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`);
+            throw new Error(
+                `${errorType}: Impossible de contacter le serveur. Vérifiez votre connexion Internet.`,
+            );
         }
 
         /**
@@ -639,11 +774,18 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
      * @returns {Promise<string>} Le texte transcrit
      */
-    function transcribeAudio(audioBlob, apiKey, apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL, modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL, filename = null, generateUniqueFilename = false) {
+    function transcribeAudio(
+        audioBlob,
+        apiKey,
+        apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
+        modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
+        filename = null,
+        generateUniqueFilename = false,
+    ) {
         // Déterminer le nom de fichier final
         const finalFilename = generateUniqueFilename
-            // Générer un nom de fichier avec timestamp et élément aléatoire
-            ? `audio-${Date.now()}-${Math.random().toString(36).substring(2, 10)}.webm` // NOSONAR javascript:S2245 - Math.random() pour unicité pratique.
+            ? // Générer un nom de fichier avec timestamp et élément aléatoire
+              `audio-${Date.now()}-${Math.random().toString(36).substring(2, 10)}.webm` // NOSONAR javascript:S2245 - Math.random() pour unicité pratique.
             : filename || 'audio.webm';
 
         // Préparer le FormData pour l'envoi du fichier audio
@@ -663,7 +805,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 text = text.trim();
                 // Ajouter un espace à la fin pour permettre de continuer à dicter
                 return `${text} `;
-            }
+            },
         });
     }
 
@@ -675,7 +817,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         getFromStorage,
         resolveApiConfig,
         transcribeAudio,
-        callApi
+        callApi,
     };
-
 })(globalThis.BabelFishAIUtils);

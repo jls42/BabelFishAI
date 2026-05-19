@@ -11,14 +11,14 @@ if (typeof importScripts === 'function') {
 // Configuration spécifique au service worker
 const SERVICE_WORKER_CONFIG = {
     DEBUG: false,
-    INIT_DELAY: 500
+    INIT_DELAY: 500,
 };
 
 // Actions spécifiques au menu contextuel
 const CONTEXT_MENU_ACTIONS = {
     REPHRASE_SELECTION: 'rephraseSelection',
     TRANSLATE_SELECTION: 'translateSelection',
-    CORRECT_SELECTION: 'correctSelection'
+    CORRECT_SELECTION: 'correctSelection',
 };
 
 // Définition des constantes nécessaires pour le service worker
@@ -33,27 +33,27 @@ const CONTEXT_MENU_ACTIONS = {
 // - ERRORS est un sous-ensemble de globalThis.BabelFishAIConstants.ERRORS
 
 const STATES = {
-    RECORDING: 'recording',  // Doit correspondre à globalThis.BabelFishAIConstants.STATES.RECORDING
-    STOPPED: 'stopped',      // Doit correspondre à globalThis.BabelFishAIConstants.STATES.STOPPED
-    ERROR: 'error'           // Doit correspondre à globalThis.BabelFishAIConstants.STATES.ERROR
+    RECORDING: 'recording', // Doit correspondre à globalThis.BabelFishAIConstants.STATES.RECORDING
+    STOPPED: 'stopped', // Doit correspondre à globalThis.BabelFishAIConstants.STATES.STOPPED
+    ERROR: 'error', // Doit correspondre à globalThis.BabelFishAIConstants.STATES.ERROR
 };
 
 const ACTIONS = {
-    TOGGLE: 'toggleRecording',    // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.TOGGLE
-    STARTED: 'recordingStarted',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STARTED
-    STOPPED: 'recordingStopped',  // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STOPPED
-    ERROR: 'recordingError'       // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.ERROR
+    TOGGLE: 'toggleRecording', // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.TOGGLE
+    STARTED: 'recordingStarted', // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STARTED
+    STOPPED: 'recordingStopped', // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.STOPPED
+    ERROR: 'recordingError', // Doit correspondre à globalThis.BabelFishAIConstants.ACTIONS.ERROR
 };
 
 const BADGES = {
-    RECORDING: '⏺',  // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
-    STOPPED: '',      // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
-    ERROR: '!'        // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
+    RECORDING: '⏺', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
+    STOPPED: '', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
+    ERROR: '!', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
 };
 
 const ERRORS = {
-    CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script",  // Spécifique au service worker
-    NO_ACTIVE_TAB: "Aucun onglet actif trouvé"                                       // Spécifique au service worker
+    CONTENT_SCRIPT_INJECTION_ERROR: "Erreur lors de l'injection du content script", // Spécifique au service worker
+    NO_ACTIVE_TAB: 'Aucun onglet actif trouvé', // Spécifique au service worker
 };
 
 // État global
@@ -86,17 +86,17 @@ async function injectContentScript(tab) {
                 'src/utils/banner-utils.js',
                 'src/utils/api-utils.js',
                 'src/utils/i18n.js',
-                'src/content.js'
-            ]
+                'src/content.js',
+            ],
         });
         await chrome.scripting.insertCSS({
             target: { tabId: tab.id },
-            files: ['src/styles/content.css']
+            files: ['src/styles/content.css'],
         });
-        debug("Content script injected successfully");
+        debug('Content script injected successfully');
         return true;
     } catch (error) {
-        console.error("Error injecting content script:", error);
+        console.error('Error injecting content script:', error);
         throw new Error(ERRORS.CONTENT_SCRIPT_INJECTION_ERROR);
     }
 }
@@ -113,7 +113,7 @@ async function sendMessageToContentScript(tab, message) {
         await chrome.tabs.sendMessage(tab.id, message);
     } catch (sendError) {
         // Si le content script n'est pas prêt, tenter de l'injecter
-        debug("Content script not ready, attempting to inject it:", sendError.message);
+        debug('Content script not ready, attempting to inject it:', sendError.message);
 
         try {
             // Injecter le content script
@@ -121,7 +121,9 @@ async function sendMessageToContentScript(tab, message) {
 
             if (injected) {
                 // Attendre un court délai pour que le script s'initialise
-                await new Promise(resolve => setTimeout(resolve, SERVICE_WORKER_CONFIG.INIT_DELAY));
+                await new Promise((resolve) =>
+                    setTimeout(resolve, SERVICE_WORKER_CONFIG.INIT_DELAY),
+                );
 
                 // Réessayer d'envoyer le message après l'injection
                 await chrome.tabs.sendMessage(tab.id, message);
@@ -144,24 +146,24 @@ function updateRecordingState(state, errorMessage = '') {
         [STATES.RECORDING]: {
             isRecording: true,
             badgeText: BADGES.RECORDING,
-            badgeColor: '#FF0000'
+            badgeColor: '#FF0000',
         },
         [STATES.STOPPED]: {
             isRecording: false,
             badgeText: BADGES.STOPPED,
-            badgeColor: '#808080'
+            badgeColor: '#808080',
         },
         [STATES.ERROR]: {
             isRecording: false, // En cas d'erreur, on considère que l'enregistrement est arrêté
             badgeText: BADGES.ERROR,
             badgeColor: '#FF0000',
-            logError: true
-        }
+            logError: true,
+        },
     };
 
     // Vérifier si l'état est valide
     if (!stateConfig[state]) {
-        console.error("Unknown state:", state);
+        console.error('Unknown state:', state);
         return;
     }
 
@@ -177,7 +179,7 @@ function updateRecordingState(state, errorMessage = '') {
 
     // Journaliser l'erreur si nécessaire
     if (config.logError && errorMessage) {
-        console.error("Recording error:", errorMessage);
+        console.error('Recording error:', errorMessage);
     }
 }
 
@@ -186,11 +188,11 @@ function updateRecordingState(state, errorMessage = '') {
  * @param {string} command - La commande reçue
  */
 async function handleCommand(command) {
-    debug("Command received:", command);
+    debug('Command received:', command);
 
     // Ne traiter que la commande _execute_action (raccourci clavier principal)
     if (command !== '_execute_action') {
-        debug("Ignoring unknown command:", command);
+        debug('Ignoring unknown command:', command);
         return;
     }
 
@@ -206,11 +208,11 @@ async function handleCommand(command) {
         // Envoyer la commande de basculement au content script
         await sendMessageToContentScript(tab, { action: ACTIONS.TOGGLE });
     } catch (error) {
-        console.error("Command handling error:", error);
+        console.error('Command handling error:', error);
 
         // Si aucun enregistrement n'est en cours, on peut ignorer certaines erreurs
         if (!isRecording) {
-            console.log("Ignoring command error because no recording is in progress");
+            console.log('Ignoring command error because no recording is in progress');
             return;
         }
 
@@ -226,13 +228,13 @@ async function handleCommand(command) {
  * @param {chrome.tabs.Tab} tab - L'onglet actif lors du clic
  */
 async function handleExtensionIconClick(tab) {
-    debug("Extension icon clicked!");
+    debug('Extension icon clicked!');
 
     try {
         // Envoyer la commande de basculement au content script
         await sendMessageToContentScript(tab, { action: ACTIONS.TOGGLE });
     } catch (error) {
-        console.error("Click handling error:", error);
+        console.error('Click handling error:', error);
 
         // Mettre à jour l'état pour indiquer une erreur
         updateRecordingState(STATES.ERROR, error.message);
@@ -250,7 +252,7 @@ chrome.commands.onCommand.addListener(handleCommand);
  */
 const DEFAULT_URLS = {
     WHISPER: 'https://api.openai.com/v1/audio/transcriptions',
-    GPT: 'https://api.openai.com/v1/chat/completions'
+    GPT: 'https://api.openai.com/v1/chat/completions',
 };
 
 /**
@@ -273,24 +275,25 @@ async function migrateToMultiProvider() {
 
         // Détecter si des URLs custom sont configurées (mode LiteLLM)
         const hasCustomTranscriptionUrl = data.apiUrl && data.apiUrl !== DEFAULT_URLS.WHISPER;
-        const hasCustomChatUrl = data.translationApiUrl && data.translationApiUrl !== DEFAULT_URLS.GPT;
+        const hasCustomChatUrl =
+            data.translationApiUrl && data.translationApiUrl !== DEFAULT_URLS.GPT;
         const hasCustomUrls = hasCustomTranscriptionUrl || hasCustomChatUrl;
 
         // Créer la nouvelle structure providers
         // Si URLs custom : la clé était pour le proxy, pas pour OpenAI
         const providers = {
             openai: {
-                apiKey: hasCustomUrls ? '' : (data.apiKey || ''),
+                apiKey: hasCustomUrls ? '' : data.apiKey || '',
                 enabled: hasCustomUrls ? false : Boolean(data.apiKey),
                 transcriptionUrl: '',
-                chatUrl: ''
+                chatUrl: '',
             },
             mistral: {
                 apiKey: '',
                 enabled: false,
                 transcriptionUrl: '',
-                chatUrl: ''
-            }
+                chatUrl: '',
+            },
         };
 
         // Ajouter le provider custom seulement si des URLs personnalisées sont détectées
@@ -299,7 +302,7 @@ async function migrateToMultiProvider() {
                 apiKey: data.apiKey || '',
                 enabled: Boolean(data.apiKey),
                 transcriptionUrl: hasCustomTranscriptionUrl ? data.apiUrl : '',
-                chatUrl: hasCustomChatUrl ? data.translationApiUrl : ''
+                chatUrl: hasCustomChatUrl ? data.translationApiUrl : '',
             };
         }
 
@@ -310,13 +313,13 @@ async function migrateToMultiProvider() {
         await chrome.storage.sync.set({
             providers,
             transcriptionProvider: activeProvider,
-            chatProvider: activeProvider
+            chatProvider: activeProvider,
         });
 
         debug('Migration multi-provider terminée avec succès', {
             hasApiKey: Boolean(data.apiKey),
             hasCustomUrls,
-            activeProvider
+            activeProvider,
         });
     } catch (error) {
         console.error('Erreur lors de la migration multi-provider:', error);
@@ -349,23 +352,25 @@ chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
  */
 function getTargetLanguageOptions() {
     // Utiliser la liste centralisée, si disponible
-    return globalThis.AVAILABLE_LANGUAGES || [
-        { value: 'en', text: 'English (en)' },
-        { value: 'fr', text: 'Français (fr)' },
-        { value: 'es', text: 'Español (es)' },
-        { value: 'pt', text: 'Português (pt)' },
-        { value: 'zh', text: '中文 (zh)' },
-        { value: 'hi', text: 'हिंदी (hi)' },
-        { value: 'ar', text: 'العربية (ar)' },
-        { value: 'it', text: 'Italiano (it)' },
-        { value: 'de', text: 'Deutsch (de)' },
-        { value: 'sv', text: 'Svenska (sv)' },
-        { value: 'pl', text: 'Polski (pl)' },
-        { value: 'nl', text: 'Nederlands (nl)' },
-        { value: 'ro', text: 'Română (ro)' },
-        { value: 'ja', text: '日本語 (ja)' },
-        { value: 'ko', text: '한국어 (ko)' }
-    ];
+    return (
+        globalThis.AVAILABLE_LANGUAGES || [
+            { value: 'en', text: 'English (en)' },
+            { value: 'fr', text: 'Français (fr)' },
+            { value: 'es', text: 'Español (es)' },
+            { value: 'pt', text: 'Português (pt)' },
+            { value: 'zh', text: '中文 (zh)' },
+            { value: 'hi', text: 'हिंदी (hi)' },
+            { value: 'ar', text: 'العربية (ar)' },
+            { value: 'it', text: 'Italiano (it)' },
+            { value: 'de', text: 'Deutsch (de)' },
+            { value: 'sv', text: 'Svenska (sv)' },
+            { value: 'pl', text: 'Polski (pl)' },
+            { value: 'nl', text: 'Nederlands (nl)' },
+            { value: 'ro', text: 'Română (ro)' },
+            { value: 'ja', text: '日本語 (ja)' },
+            { value: 'ko', text: '한국어 (ko)' },
+        ]
+    );
 }
 
 /**
@@ -377,32 +382,32 @@ function createContextMenus() {
         // Créer le menu contextuel pour la reformulation
         chrome.contextMenus.create({
             id: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
-            title: chrome.i18n.getMessage("contextMenuRephrase") || "Rephrase selection",
-            contexts: ["selection"],
+            title: chrome.i18n.getMessage('contextMenuRephrase') || 'Rephrase selection',
+            contexts: ['selection'],
         });
 
         // Créer le menu contextuel pour la correction orthographique
         chrome.contextMenus.create({
             id: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
-            title: chrome.i18n.getMessage("contextMenuCorrect") || "Correct spelling",
-            contexts: ["selection"],
+            title: chrome.i18n.getMessage('contextMenuCorrect') || 'Correct spelling',
+            contexts: ['selection'],
         });
 
         // Créer le menu parent pour la traduction
         chrome.contextMenus.create({
             id: 'translateMenu',
-            title: chrome.i18n.getMessage("contextMenuTranslate") || "Translate selection",
-            contexts: ["selection"],
+            title: chrome.i18n.getMessage('contextMenuTranslate') || 'Translate selection',
+            contexts: ['selection'],
         });
 
         // Ajouter les langues comme sous-menus
         const languages = getTargetLanguageOptions();
-        languages.forEach(lang => {
+        languages.forEach((lang) => {
             chrome.contextMenus.create({
                 id: `${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_${lang.value}`,
                 parentId: 'translateMenu',
                 title: lang.text,
-                contexts: ["selection"],
+                contexts: ['selection'],
             });
         });
     });
@@ -414,22 +419,22 @@ function createContextMenus() {
  * @param {Object} tab - L'onglet actif
  */
 async function handleContextMenuClick(info, tab) {
-    debug("Context menu clicked:", info.menuItemId);
+    debug('Context menu clicked:', info.menuItemId);
 
     // Récupérer le texte sélectionné
     const selectedText = info.selectionText;
-    
+
     if (!selectedText) {
         return; // Sortir si aucun texte n'est sélectionné
     }
-    
+
     try {
         // Cas 1: Option de reformulation
         if (info.menuItemId === CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION) {
             // Envoyer le texte sélectionné au content script pour reformulation
             await sendMessageToContentScript(tab, {
                 action: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
-                text: selectedText
+                text: selectedText,
             });
         }
         // Cas 2: Option de correction orthographique
@@ -437,26 +442,29 @@ async function handleContextMenuClick(info, tab) {
             // Envoyer le texte sélectionné au content script pour correction
             await sendMessageToContentScript(tab, {
                 action: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
-                text: selectedText
+                text: selectedText,
             });
         }
         // Cas 3: Option de traduction avec langue spécifique
-        else if (typeof info.menuItemId === 'string' && info.menuItemId.startsWith(`${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_`)) {
+        else if (
+            typeof info.menuItemId === 'string' &&
+            info.menuItemId.startsWith(`${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_`)
+        ) {
             // Extraire le code de langue du menuItemId (format: translateSelection_fr)
             const targetLanguage = info.menuItemId.split('_').pop();
-            
+
             if (targetLanguage) {
                 // Envoyer le texte sélectionné au content script pour traduction avec langue cible spécifique
-                await sendMessageToContentScript(tab, { 
-                    action: CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION, 
+                await sendMessageToContentScript(tab, {
+                    action: CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION,
                     text: selectedText,
-                    targetLanguage 
+                    targetLanguage,
                 });
             }
         }
     } catch (error) {
-        console.error("Error handling context menu click:", error);
-        
+        console.error('Error handling context menu click:', error);
+
         // Mettre à jour l'état pour indiquer une erreur
         updateRecordingState(STATES.ERROR, error.message);
     }
@@ -533,9 +541,16 @@ async function proxyFetch(request) {
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {
             fetchOptions.body = reconstructFormData(formDataFields);
-            // Ne pas définir Content-Type pour FormData (le navigateur le fait)
+            // Ne pas définir Content-Type pour FormData (le navigateur doit le faire
+            // lui-même pour inclure le boundary). Filtrage case-insensitive via
+            // Object.entries/fromEntries pour éviter un `delete` à clé dynamique
+            // (règle Codacy "no dynamic delete").
             if (fetchOptions.headers) {
-                delete fetchOptions.headers['Content-Type'];
+                fetchOptions.headers = Object.fromEntries(
+                    Object.entries(fetchOptions.headers).filter(
+                        ([name]) => name.toLowerCase() !== 'content-type',
+                    ),
+                );
             }
         }
 
@@ -554,13 +569,13 @@ async function proxyFetch(request) {
             statusText: response.statusText,
             headers: captureResponseHeaders(response),
             data,
-            contentType
+            contentType,
         };
     } catch (error) {
         return {
             success: false,
             error: error.message,
-            errorName: error.name
+            errorName: error.name,
         };
     }
 }
@@ -568,25 +583,25 @@ async function proxyFetch(request) {
 /**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
- * @param {Object} sender - L'expéditeur du message
+ * @param {Object} _sender - L'expéditeur du message (réservé : signature imposée par chrome.runtime.onMessage)
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
-function handleMessage(message, sender, sendResponse) {
-    debug("Message received:", message);
+function handleMessage(message, _sender, sendResponse) {
+    debug('Message received:', message);
 
     // Mapping des actions d'état aux états correspondants
     const actionStateMap = {
         [ACTIONS.STARTED]: STATES.RECORDING,
         [ACTIONS.STOPPED]: STATES.STOPPED,
-        [ACTIONS.ERROR]: STATES.ERROR
+        [ACTIONS.ERROR]: STATES.ERROR,
     };
 
     // Gestion des notifications d'état d'enregistrement
     if (message.action && actionStateMap[message.action]) {
         updateRecordingState(
             actionStateMap[message.action],
-            message.action === ACTIONS.ERROR ? message.error : ''
+            message.action === ACTIONS.ERROR ? message.error : '',
         );
         sendResponse({});
         return false;
@@ -602,8 +617,8 @@ function handleMessage(message, sender, sendResponse) {
     // Gestion du proxy fetch pour Firefox (contournement CSP)
     if (message.action === 'proxyFetch') {
         proxyFetch(message.request)
-            .then(result => sendResponse(result))
-            .catch(error => sendResponse({ success: false, error: error.message }));
+            .then((result) => sendResponse(result))
+            .catch((error) => sendResponse({ success: false, error: error.message }));
         return true; // Indique une réponse asynchrone
     }
 
@@ -615,4 +630,4 @@ function handleMessage(message, sender, sendResponse) {
 // Enregistrer le gestionnaire d'événements pour la réception de messages
 chrome.runtime.onMessage.addListener(handleMessage);
 
-debug("Background script started");
+debug('Background script started');

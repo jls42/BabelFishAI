@@ -7,7 +7,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     // Constantes pour les options de traitement de texte
     const TEXT_PROCESSING_CONFIG = {
         MAX_TEXT_LENGTH: 32000, // Limite de caractères pour l'API OpenAI
-        DEFAULT_TIMEOUT: 60000  // Timeout par défaut pour les requêtes (60 secondes)
+        DEFAULT_TIMEOUT: 60000, // Timeout par défaut pour les requêtes (60 secondes)
     };
 
     /**
@@ -29,9 +29,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             return '';
         }
 
-        // Supprimer les espaces multiples et les sauts de ligne excessifs
-        // Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
-        let cleanedText = text.trim().replace(/\s+/g, ' ').replace(/\n\s*\n/g, '\n\n'); // NOSONAR skipcq: JS-0377
+        // Aplatir tout l'espace blanc (espaces, tabulations, sauts de ligne) en
+        // espace unique. Pattern regex, replaceAll non applicable.
+        // NOSONAR javascript:S6582 skipcq: JS-0377 - regex pattern \s+, replaceAll inapplicable
+        let cleanedText = text.trim().replace(/\s+/g, ' ');
 
         // Limiter la taille du texte pour éviter les problèmes avec l'API
         if (cleanedText.length > TEXT_PROCESSING_CONFIG.MAX_TEXT_LENGTH) {
@@ -67,24 +68,25 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Préparer les messages pour l'API
             const messages = [
                 {
-                    role: "system",
-                    content: "You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text."
+                    role: 'system',
+                    content:
+                        'You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.',
                 },
                 {
-                    role: "user",
-                    content: `Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: ${cleanedText}`
-                }
+                    role: 'user',
+                    content: `Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: ${cleanedText}`,
+                },
             ];
 
             // Préparer la charge utile pour l'API
             const payload = {
                 model: modelType,
-                messages
+                messages,
             };
 
             // Ajouter l'option no-log si demandé
             if (disableLogging) {
-                payload["no-log"] = true;
+                payload['no-log'] = true;
             }
 
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
@@ -97,7 +99,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 // Activer les tentatives de réessai
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
-                timeout: 20000
+                timeout: 20000,
             });
 
             // Extraire et retourner le texte reformulé
@@ -115,7 +117,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 throw error;
             }
             // Sinon, la formater avec le préfixe REPHRASE_ERROR
-            throw new Error(`${globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR}: ${error.message}`);
+            throw new Error(
+                `${globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR}: ${error.message}`,
+            );
         }
     }
 
@@ -129,7 +133,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // Validation des paramètres
         if (!text) {
             console.error('Missing correct parameter:', { text });
-            throw new Error(globalThis.BabelFishAIConstants.ERRORS.MISSING_CORRECT_PARAMS || 'Paramètres de correction manquants');
+            throw new Error(
+                globalThis.BabelFishAIConstants.ERRORS.MISSING_CORRECT_PARAMS ||
+                    'Paramètres de correction manquants',
+            );
         }
 
         // Nettoyer le texte avant traitement
@@ -144,25 +151,26 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Préparer les messages pour l'API
             const messages = [
                 {
-                    role: "system",
-                    content: "Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires."
+                    role: 'system',
+                    content:
+                        "Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.",
                 },
                 {
-                    role: "user",
-                    content: cleanedText
-                }
+                    role: 'user',
+                    content: cleanedText,
+                },
             ];
 
             // Préparer le payload pour l'API
             const payload = {
                 model: modelType,
                 messages,
-                temperature: 0.1 // Température basse pour des corrections précises
+                temperature: 0.1, // Température basse pour des corrections précises
             };
 
             // Ajouter l'option no-log si demandé
             if (disableLogging) {
-                payload["no-log"] = true;
+                payload['no-log'] = true;
             }
 
             // Appeler l'API
@@ -171,8 +179,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-                errorType: globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
-                retryOnFail: true
+                errorType:
+                    globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
+                retryOnFail: true,
             });
 
             // Extraire et retourner le texte corrigé
@@ -184,7 +193,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             }
         } catch (error) {
             console.error('Correction error:', error);
-            throw new Error(`${globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'}: ${error.message}`);
+            throw new Error(
+                `${
+                    globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'
+                }: ${error.message}`,
+            );
         }
     }
 
@@ -217,26 +230,28 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Préparer les messages pour l'API avec la logique originale pour les deux cas
             const messages = [
                 {
-                    role: "system",
-                    content: "You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language."
+                    role: 'system',
+                    content:
+                        'You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.',
                 },
                 {
-                    role: "user",
-                    content: sourceLanguage === 'auto'
-                        ? `Translate the following text to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`
-                        : `Perform a direct translation from ${sourceLanguage} to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`
-                }
+                    role: 'user',
+                    content:
+                        sourceLanguage === 'auto'
+                            ? `Translate the following text to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`
+                            : `Perform a direct translation from ${sourceLanguage} to ${targetLanguage}, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: ${cleanedText}`,
+                },
             ];
 
             // Préparer la charge utile pour l'API
             const payload = {
                 model: modelType,
-                messages
+                messages,
             };
 
             // Ajouter l'option no-log si demandé
             if (disableLogging) {
-                payload["no-log"] = true;
+                payload['no-log'] = true;
             }
 
             // Utiliser l'API pour traduire le texte
@@ -249,7 +264,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 // Activer les tentatives de réessai pour les traductions
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
-                timeout: 20000
+                timeout: 20000,
             });
 
             // Extraire et retourner le texte traduit
@@ -274,8 +289,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function determineTranslationLanguages(options, specifiedTargetLanguage) {
         const sourceLanguage = options.enableTranslation ? options.sourceLanguage : 'auto';
-        const targetLanguage = specifiedTargetLanguage ||
-            (options.enableTranslation ? options.targetLanguage : 'en');
+        const targetLanguage =
+            specifiedTargetLanguage || (options.enableTranslation ? options.targetLanguage : 'en');
 
         return { sourceLanguage, targetLanguage };
     }
@@ -297,14 +312,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     async function handleTextRephrasing(text) {
         // Combiner les vérifications du texte d'entrée et de sortie
         if (!isValidInputText(text)) {
-            const errorMessage = "Texte vide ou invalide pour la reformulation";
+            const errorMessage = 'Texte vide ou invalide pour la reformulation';
             console.warn(errorMessage);
             throw new Error(errorMessage);
         }
 
         try {
             // Informer l'utilisateur que la reformulation est en cours
-            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerRephrasing") || "Reformulation en cours...";
+            const message =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerRephrasing') ||
+                'Reformulation en cours...';
             globalThis.BabelFishAI.ui.showBanner(message);
 
             // Reformuler le texte (la clé API est gérée par resolveApiConfig dans rephraseText)
@@ -312,7 +329,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(rephrasedText)) {
-                const errorMessage = "Résultat de reformulation vide ou invalide";
+                const errorMessage = 'Résultat de reformulation vide ou invalide';
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
             }
@@ -325,7 +342,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             console.error('Erreur lors de la reformulation:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerRephrasingError") || "Erreur lors de la reformulation";
+            const errorMessage =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerRephrasingError') ||
+                'Erreur lors de la reformulation';
             globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
@@ -340,14 +359,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     async function handleTextCorrection(text) {
         // Vérifier le texte d'entrée
         if (!isValidInputText(text)) {
-            const errorMessage = "Texte vide ou invalide pour la correction";
+            const errorMessage = 'Texte vide ou invalide pour la correction';
             console.warn(errorMessage);
             throw new Error(errorMessage);
         }
 
         try {
             // Informer l'utilisateur que la correction est en cours
-            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerCorrecting") || "Correction en cours...";
+            const message =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerCorrecting') ||
+                'Correction en cours...';
             globalThis.BabelFishAI.ui.showBanner(message);
 
             // Corriger le texte
@@ -355,7 +376,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Vérifier le résultat
             if (!isValidInputText(correctedText)) {
-                const errorMessage = "Résultat de correction vide ou invalide";
+                const errorMessage = 'Résultat de correction vide ou invalide';
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
             }
@@ -368,7 +389,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             console.error('Erreur lors de la correction:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerCorrectionError") || "Erreur lors de la correction";
+            const errorMessage =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerCorrectionError') ||
+                'Erreur lors de la correction';
             globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
@@ -385,25 +408,30 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     async function handleTextTranslation(text, options, specifiedTargetLanguage) {
         // Combiner les vérifications du texte d'entrée et de sortie
         if (!isValidInputText(text)) {
-            const errorMessage = "Texte vide ou invalide pour la traduction";
+            const errorMessage = 'Texte vide ou invalide pour la traduction';
             console.warn(errorMessage);
             throw new Error(errorMessage);
         }
 
         try {
             // Informer l'utilisateur que la traduction est en cours
-            const message = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerTranslating") || "Traduction en cours...";
+            const message =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerTranslating') ||
+                'Traduction en cours...';
             globalThis.BabelFishAI.ui.showBanner(message);
 
             // Déterminer les langues source et cible
-            const { sourceLanguage, targetLanguage } = determineTranslationLanguages(options, specifiedTargetLanguage);
+            const { sourceLanguage, targetLanguage } = determineTranslationLanguages(
+                options,
+                specifiedTargetLanguage,
+            );
 
             // Traduire le texte (la clé API est gérée par resolveApiConfig dans translateText)
             const translatedText = await translateText(text, sourceLanguage, targetLanguage);
 
             // Combiner les vérifications du texte d'entrée et de sortie
             if (!isValidInputText(translatedText)) {
-                const errorMessage = "Résultat de traduction vide ou invalide";
+                const errorMessage = 'Résultat de traduction vide ou invalide';
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
             }
@@ -416,7 +444,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             console.error('Erreur lors de la traduction:', error);
 
             // Gérer l'erreur via l'API d'erreur
-            const errorMessage = globalThis.BabelFishAIUtils.i18n?.getMessage("bannerTranslationError") || "Erreur lors de la traduction";
+            const errorMessage =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerTranslationError') ||
+                'Erreur lors de la traduction';
             globalThis.BabelFishAIUtils.error.handleError(errorMessage, error.message);
 
             throw error;
@@ -433,7 +463,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         handleTextRephrasing, // NOSONAR - S1874: Faux positif, cette fonction est utilisée par d'autres modules.
         handleTextCorrection,
         handleTextTranslation,
-        determineTranslationLanguages
+        determineTranslationLanguages,
     };
-
 })(globalThis.BabelFishAIUtils);

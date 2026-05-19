@@ -1,0 +1,89 @@
+# Pre-commit hooks configuration for BabelFishAI (Chrome/Firefox extension).
+# Install:
+#   pipx install pre-commit         # or `pip install pre-commit`
+#   pre-commit install                          # commit-time hooks
+#   pre-commit install --hook-type pre-push     # heavy gates (SAST, complexity)
+# Manual run:
+#   pre-commit run --all-files                            # all commit-time hooks
+#   pre-commit run --hook-stage pre-push --all-files      # all pre-push hooks
+
+repos:
+    # Shellcheck — bash linter (Python wrapper, no Docker required)
+    - repo: https://github.com/shellcheck-py/shellcheck-py
+      rev: v0.10.0.1
+      hooks:
+          - id: shellcheck
+            # severity=warning: info-level findings (SC2317, SC2012) are often
+            # false positives or stylistic nits unrelated to correctness.
+            args: ['--severity=warning', '-x']
+
+    # Prettier — formatting for JSON/YAML/MD/HTML/CSS/JS
+    - repo: https://github.com/pre-commit/mirrors-prettier
+      rev: v3.1.0
+      hooks:
+          - id: prettier
+            files: \.(json|yaml|yml|md|html|css|js)$
+            # Mirrors .prettierignore but expressed as regex (pre-commit limitation).
+            exclude: |
+                (?x)^(
+                  src/lib/.*|
+                  dist/.*|
+                  _locales/.*|
+                  node_modules/.*|
+                  README-[a-z]{2}\.md|
+                  .*\.min\.js
+                )$
+
+    # pre-commit/pre-commit-hooks — basic hygiene checks
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
+      hooks:
+          - id: trailing-whitespace
+            exclude: \.md$
+          - id: end-of-file-fixer
+            exclude: \.md$
+          - id: check-yaml
+          - id: check-json
+            exclude: |
+                (?x)^(
+                  _locales/.*\.json|
+                  \.secrets\.baseline
+                )$
+          - id: check-added-large-files
+            args: ['--maxkb=500']
+          - id: check-merge-conflict
+          - id: mixed-line-ending
+          - id: check-executables-have-shebangs
+          - id: check-shebang-scripts-are-executable
+
+    # Yelp/detect-secrets — block accidental API key / token leaks
+    - repo: https://github.com/Yelp/detect-secrets
+      rev: v1.5.0
+      hooks:
+          - id: detect-secrets
+            args: ['--baseline', '.secrets.baseline']
+            # MUST match the --exclude-files used to generate .secrets.baseline.
+            exclude: |
+                (?x)^(
+                  src/lib/browser-polyfill\.min\.js|
+                  \.secrets\.baseline
+                )$
+
+    # Local hooks — heavy gates (SAST, complexity) run only on pre-push.
+    - repo: local
+      hooks:
+          # Opengrep/Semgrep SAST scan (~30s). Skip gracefully if tool absent locally.
+          - id: check-security-sast
+            name: Opengrep/Semgrep SAST scan
+            entry: scripts/check-security-sast.sh
+            language: system
+            pass_filenames: false
+            stages: [pre-push]
+
+          # Lizard cyclomatic complexity + length thresholds.
+          - id: check-complexity
+            name: Lizard complexity gate (CCN <= 20, length <= 1500)
+            entry: scripts/check-complexity.sh
+            language: system
+            pass_filenames: false
+            stages: [pre-push]
