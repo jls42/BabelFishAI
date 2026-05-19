@@ -482,6 +482,73 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Parse une URL en URL object, retourne null si invalide
+     * @param {string} url - URL à parser
+     * @returns {URL|null}
+     */
+    function parseUrl(url) {
+        try {
+            return new URL(url);
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Ajoute le hostname d'une URL au set cible (silencieux si URL invalide)
+     * @param {string} url - URL source
+     * @param {Set<string>} targetSet - Set destinataire
+     */
+    function addHostname(url, targetSet) {
+        if (!url) return;
+        const parsed = parseUrl(url);
+        if (parsed) targetSet.add(parsed.hostname);
+    }
+
+    /**
+     * Vérifie si le protocole est autorisé : HTTPS partout, HTTP uniquement
+     * pour localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM).
+     * @param {URL} target - URL parsée
+     * @returns {boolean}
+     */
+    function isProtocolAllowed(target) {
+        if (target.protocol === 'https:') return true;
+        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+        return target.protocol === 'http:' && isLocalhost;
+    }
+
+    /**
+     * Extrait l'allowlist des hostnames par défaut depuis le registre providers
+     * (source unique de vérité : ajouter un provider dans providers.js le propage ici).
+     * @returns {Set<string>}
+     */
+    function getDefaultAllowedHosts() {
+        const hosts = new Set();
+        const registry = globalThis.BabelFishAIProviders?.PROVIDERS ?? {};
+        for (const provider of Object.values(registry)) {
+            for (const defaultUrl of Object.values(provider.defaultUrls ?? {})) {
+                addHostname(defaultUrl, hosts);
+            }
+        }
+        return hosts;
+    }
+
+    /**
+     * Extrait l'allowlist des hostnames custom (mode LiteLLM) depuis la config
+     * utilisateur, relue à chaque appel pour suivre les changements sans cache.
+     * @returns {Promise<Set<string>>}
+     */
+    async function getCustomAllowedHosts() {
+        const hosts = new Set();
+        const { providers } = await chrome.storage.sync.get('providers');
+        const custom = providers?.custom;
+        if (!custom?.enabled) return hosts;
+        addHostname(custom.transcriptionUrl, hosts);
+        addHostname(custom.chatUrl, hosts);
+        return hosts;
+    }
+
+    /**
      * Vérifie si l'URL cible appartient à l'allowlist des providers connus.
      * Défense en profondeur contre une fuite de clé API vers un hôte arbitraire
      * (cf. SECURITY.md scope "API key leakage"). L'allowlist est dérivée
@@ -492,49 +559,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<boolean>} True si l'URL est autorisée
      */
     async function isUrlAllowed(url) {
-        let target;
-        try {
-            target = new URL(url);
-        } catch {
-            return false;
-        }
+        const target = parseUrl(url);
+        if (!target) return false;
+        if (!isProtocolAllowed(target)) return false;
 
-        // HTTPS sauf localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM)
-        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-        if (target.protocol !== 'https:' && !(target.protocol === 'http:' && isLocalhost)) {
-            return false;
-        }
+        const defaults = getDefaultAllowedHosts();
+        if (defaults.has(target.hostname)) return true;
 
-        // Hosts par défaut extraits du registre providers (source unique de vérité)
-        const allowedHosts = new Set();
-        const registry = globalThis.BabelFishAIProviders?.PROVIDERS ?? {};
-        for (const provider of Object.values(registry)) {
-            for (const defaultUrl of Object.values(provider.defaultUrls ?? {})) {
-                if (!defaultUrl) continue;
-                try {
-                    allowedHosts.add(new URL(defaultUrl).hostname);
-                } catch {
-                    /* URL par défaut invalide ignorée (cas théorique pour OpenAI/Mistral) */
-                }
-            }
-        }
-        if (allowedHosts.has(target.hostname)) return true;
-
-        // Hosts custom (mode LiteLLM) lus à la volée depuis la config utilisateur
-        const { providers } = await chrome.storage.sync.get('providers');
-        const custom = providers?.custom;
-        if (custom?.enabled) {
-            for (const customUrl of [custom.transcriptionUrl, custom.chatUrl]) {
-                if (!customUrl) continue;
-                try {
-                    if (new URL(customUrl).hostname === target.hostname) return true;
-                } catch {
-                    /* URL custom invalide ignorée */
-                }
-            }
-        }
-
-        return false;
+        const customHosts = await getCustomAllowedHosts();
+        return customHosts.has(target.hostname);
     }
 
     /**
