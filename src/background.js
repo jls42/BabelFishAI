@@ -542,15 +542,15 @@ async function proxyFetch(request) {
         if (formDataFields) {
             fetchOptions.body = reconstructFormData(formDataFields);
             // Ne pas définir Content-Type pour FormData (le navigateur doit le faire
-            // lui-même pour inclure le boundary). Matching case-insensitive : un appelant
-            // amont peut passer 'content-type' ou 'CONTENT-TYPE'.
+            // lui-même pour inclure le boundary). Filtrage case-insensitive via
+            // Object.entries/fromEntries pour éviter un `delete` à clé dynamique
+            // (règle Codacy "no dynamic delete").
             if (fetchOptions.headers) {
-                for (const headerName of Object.keys(fetchOptions.headers)) {
-                    if (headerName.toLowerCase() === 'content-type') {
-                        // eslint-disable-next-line security/detect-object-injection -- headerName vient de Object.keys() du même objet, clé contrôlée
-                        delete fetchOptions.headers[headerName];
-                    }
-                }
+                fetchOptions.headers = Object.fromEntries(
+                    Object.entries(fetchOptions.headers).filter(
+                        ([name]) => name.toLowerCase() !== 'content-type',
+                    ),
+                );
             }
         }
 
