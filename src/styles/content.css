@@ -246,8 +246,10 @@
     outline: none;
     border: 1px solid rgba(255, 255, 255, 0.5);
 
-    /* Ajouter notre propre flèche personnalisée */
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    /* Flèche personnalisée — stroke #1a1a1a (URL-encoded %231a1a1a) pour rester
+       visible sur le background rgba(255,255,255,0.95) du select, en cohérence
+       avec la couleur du texte. Un stroke='white' historique disparaissait. */
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 6px center;
     background-size: 12px;
