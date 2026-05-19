@@ -195,16 +195,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * Traite les placeholders dans les messages de traduction
      */
     function processTranslationPlaceholders() {
+        // Calculer les placeholders une seule fois, pas à chaque itération
+        const placeholders = {
+            defaultAudioModel: getMessage('defaultAudioModel'),
+            defaultTranslationModel: getMessage('defaultTranslationModel'),
+        };
         for (const key in translations) {
             if (Object.prototype.hasOwnProperty.call(translations, key)) {
-                const placeholders = {
-                    defaultAudioModel: getMessage('defaultAudioModel'),
-                    defaultTranslationModel: getMessage('defaultTranslationModel'),
-                };
-                // Extract entry into a local to avoid a second indexed access
-                // that confuses generic-object-injection analyzers (the bracket
-                // access is already safe: key comes from for...in + hasOwnProperty).
-                // eslint-disable-next-line security/detect-object-injection -- key owned by translations (hasOwnProperty guard above)
+                // Extraire l'entrée dans une variable locale pour éviter un second
+                // accès indexé qui pourrait confondre les analyseurs generic-object-injection
+                // (l'accès par crochets est sûr ici : key vient de for...in + hasOwnProperty).
+                // eslint-disable-next-line security/detect-object-injection -- key garanti par hasOwnProperty
                 const entry = translations[key];
                 entry.message = replacePlaceholders(entry.message, placeholders);
             }

@@ -176,13 +176,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     /**
      * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
-     * @param {string} text - Le texte à afficher
+     * @param {string} _text - Le texte à afficher (réservé : conservé pour la cohérence d'interface)
      * @param {Object} options - Les options d'affichage
      * @param {boolean} autoCopy - Indique si la copie automatique est activée
      * @param {string} currentDomain - Le domaine actuel
      * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
      */
-    function determineDisplayMethod(text, options, autoCopy, currentDomain) {
+    function determineDisplayMethod(_text, options, autoCopy, currentDomain) {
         const isDialogForced =
             Array.isArray(options.forcedDialogDomains) &&
             options.forcedDialogDomains.some((domain) => currentDomain.includes(domain));

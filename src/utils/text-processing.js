@@ -29,12 +29,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             return '';
         }
 
-        // Supprimer les espaces multiples et les sauts de ligne excessifs
-        // Intentional: regex patterns /\s+/ and /\n\s*\n/ cannot use replaceAll
-        let cleanedText = text
-            .trim()
-            .replace(/\s+/g, ' ')
-            .replace(/\n\s*\n/g, '\n\n'); // NOSONAR skipcq: JS-0377
+        // Aplatir tout l'espace blanc (espaces, tabulations, sauts de ligne) en
+        // espace unique. Pattern regex, replaceAll non applicable.
+        // NOSONAR javascript:S6582 skipcq: JS-0377 - regex pattern \s+, replaceAll inapplicable
+        let cleanedText = text.trim().replace(/\s+/g, ' ');
 
         // Limiter la taille du texte pour éviter les problèmes avec l'API
         if (cleanedText.length > TEXT_PROCESSING_CONFIG.MAX_TEXT_LENGTH) {

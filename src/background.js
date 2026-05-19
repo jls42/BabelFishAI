@@ -583,11 +583,11 @@ async function proxyFetch(request) {
 /**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
- * @param {Object} sender - L'expéditeur du message
+ * @param {Object} _sender - L'expéditeur du message (réservé : signature imposée par chrome.runtime.onMessage)
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
-function handleMessage(message, sender, sendResponse) {
+function handleMessage(message, _sender, sendResponse) {
     debug('Message received:', message);
 
     // Mapping des actions d'état aux états correspondants

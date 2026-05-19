@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 # Cyclomatic complexity + function length gate via Lizard.
+#
 # Baseline thresholds (hardenable later via dedicated PR):
 #   - CCN ≤ 20
-#   - Function length ≤ 1500 lines (current max in src/: ~1076 = options.js IIFE)
+#   - Function length ≤ 1500 lines
+#
+# Rationale length=1500 : current max in src/ is ~1076 (options.js IIFE).
+# Le seuil 1500 (= +40% headroom) sert d'alarme régression future, pas de gate
+# strict. Pour durcir : refacto options.js IIFE en sous-modules, puis descendre
+# le seuil à 1200, 1000, etc. dans une PR dédiée (mesurer max avant chaque
+# baisse via : lizard -l javascript src --sort length | head).
 # Gates:
 #   - local + tool absent → skip with warning (exit 0)
 #   - local + tool present + findings → fail (exit 1)
