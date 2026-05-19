@@ -7,6 +7,20 @@
 #   - CI (CI or GITHUB_ACTIONS set) + tool absent → fail (exit 1)
 #   - CI + findings → fail (exit 1)
 # Severity threshold: ERROR.
+#
+# Environment expectations (must hold when the scanner runs):
+#   - $HOME writable (Opengrep/Semgrep create per-version caches under
+#     $XDG_CACHE_HOME, defaulting to $HOME/.cache/opengrep/).
+#   - $XDG_CONFIG_HOME (if set) MUST point to an existing, writable
+#     directory — Opengrep reads it at startup via Semgrep_envvars and
+#     aborts with a Fatal error if the path is missing. Leave the variable
+#     unset on workstations where $HOME/.config doesn't pre-exist.
+# Known limitation: if the scanner aborts at startup (read-only HOME or
+# invalid XDG_CONFIG_HOME), this hook surfaces exit 1 indistinguishable
+# from "findings detected". Currently acceptable because this repo has no
+# sandboxed CI runner exercising the hook — it runs only on developer
+# machines and via the local pre-push hook. Revisit if a devcontainer or
+# CI sandbox is introduced.
 
 set -euo pipefail
 
