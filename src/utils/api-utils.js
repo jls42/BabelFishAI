@@ -482,6 +482,62 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Vérifie si l'URL cible appartient à l'allowlist des providers connus.
+     * Défense en profondeur contre une fuite de clé API vers un hôte arbitraire
+     * (cf. SECURITY.md scope "API key leakage"). L'allowlist est dérivée
+     * dynamiquement du registre providers et de la config utilisateur — pas
+     * de duplication, si on ajoute un provider dans providers.js il est suivi
+     * automatiquement ici. Mode LiteLLM/custom respecté via providers.custom.
+     * @param {string} url - URL à valider
+     * @returns {Promise<boolean>} True si l'URL est autorisée
+     */
+    async function isUrlAllowed(url) {
+        let target;
+        try {
+            target = new URL(url);
+        } catch {
+            return false;
+        }
+
+        // HTTPS sauf localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM)
+        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+        if (target.protocol !== 'https:' && !(target.protocol === 'http:' && isLocalhost)) {
+            return false;
+        }
+
+        // Hosts par défaut extraits du registre providers (source unique de vérité)
+        const allowedHosts = new Set();
+        const registry = globalThis.BabelFishAIProviders?.PROVIDERS ?? {};
+        for (const provider of Object.values(registry)) {
+            for (const defaultUrl of Object.values(provider.defaultUrls ?? {})) {
+                if (!defaultUrl) continue;
+                try {
+                    allowedHosts.add(new URL(defaultUrl).hostname);
+                } catch {
+                    /* URL par défaut invalide ignorée (cas théorique pour OpenAI/Mistral) */
+                }
+            }
+        }
+        if (allowedHosts.has(target.hostname)) return true;
+
+        // Hosts custom (mode LiteLLM) lus à la volée depuis la config utilisateur
+        const { providers } = await chrome.storage.sync.get('providers');
+        const custom = providers?.custom;
+        if (custom?.enabled) {
+            for (const customUrl of [custom.transcriptionUrl, custom.chatUrl]) {
+                if (!customUrl) continue;
+                try {
+                    if (new URL(customUrl).hostname === target.hostname) return true;
+                } catch {
+                    /* URL custom invalide ignorée */
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Effectue un appel API générique avec gestion d'erreur standardisée.
      * Cette fonction centralise tous les appels API et uniformise la gestion des erreurs.
      * @param {Object} options - Options pour l'appel API
@@ -514,6 +570,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         if (!url) {
             throw new Error('URL API manquante');
+        }
+
+        // Allowlist d'hôtes : bloque toute fuite potentielle de la clé API vers un
+        // hôte hors registre providers / config utilisateur (defense in depth).
+        if (!(await isUrlAllowed(url))) {
+            throw new Error(
+                `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
+            );
         }
 
         /**
