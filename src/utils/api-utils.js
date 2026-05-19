@@ -121,6 +121,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @private
      */
     async function _fetchAndCacheApiKeyFromStorage() {
+        // S'assurer que l'espace de noms BabelFishAI existe avant l'écriture en cache
+        // (cold-start sur content script injecté dynamiquement : voir background.js:121)
+        globalThis.BabelFishAI = globalThis.BabelFishAI || {};
         try {
             const result = await chrome.storage.sync.get(['apiKey']);
             const apiKey = result.apiKey;

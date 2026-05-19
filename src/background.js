@@ -541,9 +541,16 @@ async function proxyFetch(request) {
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {
             fetchOptions.body = reconstructFormData(formDataFields);
-            // Ne pas définir Content-Type pour FormData (le navigateur le fait)
+            // Ne pas définir Content-Type pour FormData (le navigateur doit le faire
+            // lui-même pour inclure le boundary). Matching case-insensitive : un appelant
+            // amont peut passer 'content-type' ou 'CONTENT-TYPE'.
             if (fetchOptions.headers) {
-                delete fetchOptions.headers['Content-Type'];
+                for (const headerName of Object.keys(fetchOptions.headers)) {
+                    if (headerName.toLowerCase() === 'content-type') {
+                        // eslint-disable-next-line security/detect-object-injection -- headerName vient de Object.keys() du même objet, clé contrôlée
+                        delete fetchOptions.headers[headerName];
+                    }
+                }
             }
         }
 
