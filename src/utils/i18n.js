@@ -279,10 +279,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 }
             });
 
-            // Add element-specific attributes
-            // eslint-disable-next-line security/detect-object-injection -- tagName comes from DOM node.tagName, allowedAttributes is a static whitelist
+            // Ajouter les attributs spécifiques à l'élément
+            // eslint-disable-next-line security/detect-object-injection -- tagName provient de node.tagName (DOM), allowedAttributes est une whitelist statique
             if (allowedAttributes[tagName]) {
-                // eslint-disable-next-line security/detect-object-injection -- tagName is whitelisted (see check above)
+                // eslint-disable-next-line security/detect-object-injection -- tagName est dans la whitelist (vérification ci-dessus)
                 allowedAttributes[tagName].forEach((attr) => {
                     if (node.hasAttribute(attr)) {
                         // Special handling for links

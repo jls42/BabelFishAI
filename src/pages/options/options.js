@@ -1,5 +1,5 @@
 // Script de gestion des options
-/* global chrome */ // Chrome extension API global
+/* global chrome */ // Global de l'API d'extension Chrome
 
 /**
  * Vérifie si un provider standard (OpenAI/Mistral) est activé
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         // Mettre à jour le logo à côté du dropdown
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
         const logoSrc = logoMap[providerId];
         if (logoSrc) {
             providerLogo.src = logoSrc;
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Afficher le panel sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const targetConfig = document.getElementById(panelIdMap[providerId]);
         if (targetConfig) {
             targetConfig.style.display = 'block';
@@ -262,9 +262,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Afficher le toggle du provider sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         if (toggles[providerId]) {
-            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
             toggles[providerId].style.display = 'inline-block';
         }
     }
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const span = document.createElement('span');
             span.className = cssClass;
             span.title = status.name;
-            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is from controlled providers array
+            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient d'un tableau de providers contrôlé
             span.textContent = `${symbol} ${shortNames[providerId]}`;
             dropdownStatus.appendChild(span);
         });
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Object} Statut du provider
      */
     function getProviderStatus(providerId) {
-        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables intentionally assigned in if/else blocks
+        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables assignées intentionnellement dans des blocs if/else
 
         if (providerId === 'openai') {
             enabledCheckbox = openaiEnabledCheckbox;
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modelTypes = ['transcription', 'chat'];
 
         for (const providerId of providerIds) {
-            // eslint-disable-next-line security/detect-object-injection -- providerId from constant array
+            // eslint-disable-next-line security/detect-object-injection -- providerId provient d'un tableau constant
             const config = configs[providerId] || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.get(
             {
                 providers: null,
@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité
         // Utiliser la clé du provider de transcription actif
-        // eslint-disable-next-line security/detect-object-injection -- False positive: transcriptionProvider is a controlled provider ID
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : transcriptionProvider est un ID de provider contrôlé
         const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
 
         // skipcq: JS-0002 - debug log for options saving diagnostics
@@ -648,7 +648,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             enabledProviders,
         });
 
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.set(
             {
                 providers,
@@ -658,9 +658,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 apiKey: legacyApiKey,
             },
             () => {
-                // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
                 if (chrome.runtime.lastError) {
-                    // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+                    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
                     console.error('[Options] Error saving:', chrome.runtime.lastError);
                 } else {
                     // skipcq: JS-0002 - debug log for options saving success
@@ -714,7 +714,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         customModels = [],
         selectedModel = null,
     ) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return;
 
@@ -724,7 +724,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!selectElement) return;
 
         // Sauvegarder les modèles personnalisés dans le cache
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
         providerCustomModelsCache[providerId][modelType] = [...customModels];
 
         selectElement.innerHTML = '';
@@ -775,7 +775,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string[]} Liste des modèles personnalisés
      */
     function getProviderCustomModels(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
         return providerCustomModelsCache[providerId]?.[modelType] || [];
     }
 
@@ -786,7 +786,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     function getSelectedProviderModel(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return null;
 
@@ -803,7 +803,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {{input: HTMLInputElement, select: HTMLSelectElement}|null}
      */
     function getModelAddElements(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
         const elements = providerModelElements[providerId];
         if (!elements) return null;
 
@@ -821,7 +821,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} model - Nom du modèle
      */
     function addModelToCache(providerId, modelType, model) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : valeurs contrôlées
         const cache = providerCustomModelsCache[providerId][modelType];
         if (!cache.includes(model)) {
             cache.push(model);
@@ -877,14 +877,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialiser la langue de l'interface
     const currentLang = await new Promise((resolve) => {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.get(
             {
                 interfaceLanguage: null, // On initialise à null pour vérifier si une valeur existe
             },
             (result) => {
                 // Si interfaceLanguage est null, on utilise la langue du navigateur
-                // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
                 resolve(result.interfaceLanguage || chrome.i18n.getUILanguage());
             },
         );
@@ -894,7 +894,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Charger les options sauvegardées
     function loadOptions() {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.get(
             {
                 apiKey: '',
@@ -964,7 +964,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ),
         };
 
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
             if (scrollToStatus) {
@@ -1139,7 +1139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Event listeners - Modèles pour tous les providers
     Object.keys(providerModelElements).forEach((providerId) => {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId comes from Object.keys()
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient de Object.keys()
         const elements = providerModelElements[providerId];
         // Boutons d'ajout de modèles
         if (elements.addTranscriptionButton) {

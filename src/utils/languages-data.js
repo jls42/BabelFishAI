@@ -25,6 +25,6 @@ const AVAILABLE_LANGUAGES = [
     { value: 'ko', text: '한국어 (ko)' },
 ];
 
-// Expose to the service worker global scope (background.js reads
-// globalThis.AVAILABLE_LANGUAGES, see src/background.js).
+// Exposition au scope global du service worker (background.js lit
+// globalThis.AVAILABLE_LANGUAGES, cf. src/background.js).
 globalThis.AVAILABLE_LANGUAGES = AVAILABLE_LANGUAGES;
