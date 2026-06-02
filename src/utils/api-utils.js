@@ -117,6 +117,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // exactement comme un vrai Response — donc un body non-JSON ou vide
         // fait rejeter avec SyntaxError (pas de bug silencieux possible).
         const rawText = typeof result.rawText === 'string' ? result.rawText : '';
+        /**
+         * Construit un Blob à partir du body brut (pour blob()/arrayBuffer()).
+         * @returns {Blob}
+         */
         const buildBlob = () =>
             new Blob([rawText], { type: result.contentType || 'application/octet-stream' });
         const fakeResponse = {

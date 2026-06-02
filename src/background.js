@@ -597,8 +597,8 @@ async function getBgCustomAllowedHosts() {
     const hosts = new Set();
     try {
         const stored = await chrome.storage.sync.get('providers');
-        const custom = stored.providers && stored.providers.custom;
-        if (!custom || !custom.enabled) return hosts;
+        const custom = stored.providers?.custom;
+        if (!custom?.enabled) return hosts;
         addBgHost(hosts, custom.transcriptionUrl);
         addBgHost(hosts, custom.chatUrl);
     } catch (error) {
