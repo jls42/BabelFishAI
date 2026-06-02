@@ -374,27 +374,41 @@ function getTargetLanguageOptions() {
 }
 
 /**
+ * Crée un menu contextuel en silencant les erreurs "duplicate id" qui peuvent
+ * survenir si createContextMenus est invoquée en concurrence (event reload
+ * dev mode qui fire onInstalled deux fois).
+ * @param {Object} props - Propriétés du menu (id, title, contexts...)
+ */
+function createContextMenuSafe(props) {
+    chrome.contextMenus.create(props, () => {
+        if (chrome.runtime.lastError) {
+            debug('contextMenu create ignored:', chrome.runtime.lastError.message);
+        }
+    });
+}
+
+/**
  * Crée les menus contextuels de l'extension
  */
 function createContextMenus() {
     // Vérifier si les menus contextuels existent déjà et les supprimer
     chrome.contextMenus.removeAll(() => {
         // Créer le menu contextuel pour la reformulation
-        chrome.contextMenus.create({
+        createContextMenuSafe({
             id: CONTEXT_MENU_ACTIONS.REPHRASE_SELECTION,
             title: chrome.i18n.getMessage('contextMenuRephrase') || 'Rephrase selection',
             contexts: ['selection'],
         });
 
         // Créer le menu contextuel pour la correction orthographique
-        chrome.contextMenus.create({
+        createContextMenuSafe({
             id: CONTEXT_MENU_ACTIONS.CORRECT_SELECTION,
             title: chrome.i18n.getMessage('contextMenuCorrect') || 'Correct spelling',
             contexts: ['selection'],
         });
 
         // Créer le menu parent pour la traduction
-        chrome.contextMenus.create({
+        createContextMenuSafe({
             id: 'translateMenu',
             title: chrome.i18n.getMessage('contextMenuTranslate') || 'Translate selection',
             contexts: ['selection'],
@@ -403,7 +417,7 @@ function createContextMenus() {
         // Ajouter les langues comme sous-menus
         const languages = getTargetLanguageOptions();
         languages.forEach((lang) => {
-            chrome.contextMenus.create({
+            createContextMenuSafe({
                 id: `${CONTEXT_MENU_ACTIONS.TRANSLATE_SELECTION}_${lang.value}`,
                 parentId: 'translateMenu',
                 title: lang.text,
@@ -470,9 +484,12 @@ async function handleContextMenuClick(info, tab) {
     }
 }
 
-// Créer les menus contextuels lors de l'installation ou du démarrage
+// Créer les menus contextuels uniquement à l'installation/mise à jour.
+// Les menus contextuels Chrome/Firefox sont persistants entre sessions du
+// navigateur, donc onStartup est superflu et causait des "duplicate id" au
+// reload dev mode (deux listeners firaient createContextMenus en concurrence
+// avant que removeAll() de l'un n'ait fini, cf. bug pré-existant 9a780854).
 chrome.runtime.onInstalled.addListener(createContextMenus);
-chrome.runtime.onStartup.addListener(createContextMenus);
 
 // Écouter les clics sur les menus contextuels
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
