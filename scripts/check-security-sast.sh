@@ -30,9 +30,10 @@ set -euo pipefail
 # (true, 1, jenkins, gitlab-runner...) active le mode CI strict.
 # Portable bash 3.2+ : pas de ${var,,} (bash 4+), on passe par tr.
 is_ci_value() {
-    local v
-    v="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
-    case "$v" in
+    local value="$1"
+    local normalized
+    normalized="$(printf '%s' "$value" | tr '[:upper:]' '[:lower:]')"
+    case "$normalized" in
         ""|false|0|no) return 1 ;;
         *) return 0 ;;
     esac
