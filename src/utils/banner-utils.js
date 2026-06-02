@@ -74,13 +74,14 @@
         // Créer le libellé
         const label = document.createElement('span'); // Utiliser span pour la compatibilité
         label.className = 'whisper-language-label';
-        label.textContent = 'Langue cible:';  // Texte par défaut
+        label.textContent = 'Langue cible:'; // Texte par défaut
         container.appendChild(label);
 
         // Mettre à jour le libellé avec i18n
         const updateLabel = () => {
             if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
-                const translated = globalThis.BabelFishAIUtils.i18n.getMessage("targetLanguageLabel");
+                const translated =
+                    globalThis.BabelFishAIUtils.i18n.getMessage('targetLanguageLabel');
                 if (translated) label.textContent = translated;
             }
         };
@@ -122,7 +123,7 @@
             { value: 'nl', text: 'Nederlands (nl)' },
             { value: 'ro', text: 'Română (ro)' },
             { value: 'ja', text: '日本語 (ja)' },
-            { value: 'ko', text: '한국어 (ko)' }
+            { value: 'ko', text: '한국어 (ko)' },
         ];
 
         // Remplir le sélecteur avec les langues disponibles
@@ -141,7 +142,7 @@
         // Récupérer la langue cible actuelle
         chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
             // Ajouter chaque option
-            options.forEach(option => {
+            options.forEach((option) => {
                 const optElement = document.createElement('option');
                 // Gérer les deux formats possibles (code/value et name/text)
                 optElement.value = option.code || option.value;
@@ -155,7 +156,7 @@
 
             // Reconstruire le sélecteur avec les options triées
             select.innerHTML = '';
-            sortedOptions.forEach(option => select.appendChild(option));
+            sortedOptions.forEach((option) => select.appendChild(option));
 
             // Sélectionner la langue active
             select.value = items.targetLanguage;
@@ -170,11 +171,14 @@
         try {
             // Essayer d'abord de récupérer les langues depuis le stockage
             chrome.storage.local.get(['availableLanguages'], (storageResult) => {
-                if (storageResult.availableLanguages && Array.isArray(storageResult.availableLanguages)) {
+                if (
+                    storageResult.availableLanguages &&
+                    Array.isArray(storageResult.availableLanguages)
+                ) {
                     // Formater les langues pour le sélecteur
-                    const options = storageResult.availableLanguages.map(lang => ({
+                    const options = storageResult.availableLanguages.map((lang) => ({
                         code: lang.code,
-                        name: lang.name || lang.code.toUpperCase()
+                        name: lang.name || lang.code.toUpperCase(),
                     }));
 
                     populateLanguageSelect(select, options);
@@ -195,11 +199,11 @@
                         { value: 'nl', text: 'Nederlands (nl)' },
                         { value: 'ro', text: 'Română (ro)' },
                         { value: 'ja', text: '日本語 (ja)' },
-                        { value: 'ko', text: '한국어 (ko)' }
+                        { value: 'ko', text: '한국어 (ko)' },
                     ];
-                    const options = fallbackLanguages.map(lang => ({
+                    const options = fallbackLanguages.map((lang) => ({
                         code: lang.value,
-                        name: lang.text
+                        name: lang.text,
                     }));
 
                     populateLanguageSelect(select, options);
@@ -230,9 +234,17 @@
      * @param {HTMLSelectElement} languageSelect - Sélecteur de langue
      * @param {HTMLElement} languageContainer - Conteneur du sélecteur de langue
      */
-    function setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer) {
+    function setupBannerEventListeners(
+        rephraseButton,
+        translateButton,
+        languageSelect,
+        languageContainer,
+    ) {
         // Événements pour le bouton de reformulation
-        rephraseButton.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
+        rephraseButton.addEventListener(
+            'mousedown',
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
+        );
         rephraseButton.addEventListener('click', () => {
             const isActive = rephraseButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
@@ -253,7 +265,10 @@
         });
 
         // Événements pour le bouton de traduction
-        translateButton.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
+        translateButton.addEventListener(
+            'mousedown',
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
+        );
         translateButton.addEventListener('click', () => {
             const isActive = translateButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
@@ -287,10 +302,16 @@
         });
 
         // Événements pour le sélecteur de langue
-        languageSelect.addEventListener('mousedown', globalThis.BabelFishAIUtils.focus.storeFocusAndSelection);
+        languageSelect.addEventListener(
+            'mousedown',
+            globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
+        );
         languageSelect.addEventListener('change', () => {
             chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
-                setTimeout(() => globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true), 300);
+                setTimeout(
+                    () => globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true),
+                    300,
+                );
             });
         });
 
@@ -323,7 +344,10 @@
             }
 
             if (changes.enableRephrase) {
-                rephraseButton.setAttribute('data-active', changes.enableRephrase.newValue.toString());
+                rephraseButton.setAttribute(
+                    'data-active',
+                    changes.enableRephrase.newValue.toString(),
+                );
             }
         });
     }
@@ -347,7 +371,6 @@
 
         // Fonction pour configurer le contenu de la bannière une fois les traductions chargées
         const setupBannerContent = () => {
-
             // Créer le conteneur pour tous les éléments (whisper-banner-content)
             const bannerContent = document.createElement('div');
             bannerContent.className = 'whisper-banner-content';
@@ -357,10 +380,10 @@
             const textContainer = document.createElement('div');
             textContainer.className = 'whisper-status-text';
             // Utiliser une valeur par défaut si la traduction n'est pas disponible
-            textContainer.textContent = "Initialisation...";
+            textContainer.textContent = 'Initialisation...';
             // Essayer d'utiliser la traduction si disponible
             if (typeof globalThis.BabelFishAIUtils?.i18n?.getMessage === 'function') {
-                const translated = globalThis.BabelFishAIUtils.i18n.getMessage("bannerRecording");
+                const translated = globalThis.BabelFishAIUtils.i18n.getMessage('bannerRecording');
                 if (translated) textContainer.textContent = translated;
             }
             bannerContent.appendChild(textContainer);
@@ -374,8 +397,8 @@
             const rephraseButton = createBannerButton(
                 'whisper-rephrase-control',
                 '✨',
-                'Reformuler',  // Texte par défaut en français
-                'rephraseLabel'  // Clé correcte du fichier de traduction
+                'Reformuler', // Texte par défaut en français
+                'rephraseLabel', // Clé correcte du fichier de traduction
             );
             controlsContainer.appendChild(rephraseButton);
 
@@ -383,20 +406,26 @@
             const translateButton = createBannerButton(
                 'whisper-translate-control',
                 '🌐',
-                'Traduire',  // Texte par défaut en français
-                'enableTranslationLabel'  // Clé correcte du fichier de traduction
+                'Traduire', // Texte par défaut en français
+                'enableTranslationLabel', // Clé correcte du fichier de traduction
             );
             controlsContainer.appendChild(translateButton);
 
             // Créer le sélecteur de langue
-            const { container: languageContainer, select: languageSelect } = createLanguageSelector();
+            const { container: languageContainer, select: languageSelect } =
+                createLanguageSelector();
             controlsContainer.appendChild(languageContainer);
 
             // Initialiser le sélecteur de langues
             initializeLanguageSelector(languageSelect);
 
             // Configurer les gestionnaires d'événements
-            setupBannerEventListeners(rephraseButton, translateButton, languageSelect, languageContainer);
+            setupBannerEventListeners(
+                rephraseButton,
+                translateButton,
+                languageSelect,
+                languageContainer,
+            );
 
             // Récupérer les préférences de l'utilisateur pour l'état initial des boutons
             chrome.storage.sync.get(['enableRephrase', 'enableTranslation'], (result) => {
@@ -429,7 +458,9 @@
             setupBannerContent();
         } else {
             // Sinon, attendre l'événement de chargement des traductions
-            document.addEventListener('babelfishai:i18n-loaded', setupBannerContent, { once: true });
+            document.addEventListener('babelfishai:i18n-loaded', setupBannerContent, {
+                once: true,
+            });
         }
 
         // Ne pas ajouter de styles CSS ici car ils sont déjà définis dans content.css
@@ -450,7 +481,11 @@
         if (!banner) return;
 
         // Si le deuxième paramètre est une chaîne courte, c'est probablement un type et non une couleur
-        if (typeof startColor === 'string' && startColor.length < 10 && !startColor.startsWith('#')) {
+        if (
+            typeof startColor === 'string' &&
+            startColor.length < 10 &&
+            !startColor.startsWith('#')
+        ) {
             // Mode compatibilité avec l'ancienne fonction : startColor est utilisé comme type
             const type = startColor;
 
@@ -461,9 +496,15 @@
 
         // Utiliser la fonction de l'utilitaire UI pour mettre à jour la couleur avec le dégradé
         if (typeof globalThis.BabelFishAIUtils?.ui?.updateBannerColor === 'function') {
-            globalThis.BabelFishAIUtils.ui.updateBannerColor(banner, startColor, endColor, opacity, force);
+            globalThis.BabelFishAIUtils.ui.updateBannerColor(
+                banner,
+                startColor,
+                endColor,
+                opacity,
+                force,
+            );
         } else {
-            console.warn('La fonction updateBannerColor de UI n\'est pas disponible');
+            console.warn("La fonction updateBannerColor de UI n'est pas disponible");
         }
     }
 
@@ -495,7 +536,7 @@
         if (textContainer) {
             textContainer.textContent = text;
         } else {
-            console.warn("Message text container not found in banner", banner);
+            console.warn('Message text container not found in banner', banner);
         }
     }
 
@@ -536,7 +577,7 @@
 
             return true;
         } catch (error) {
-            console.error("Error showing banner:", error);
+            console.error('Error showing banner:', error);
             return false;
         }
     }
@@ -557,7 +598,7 @@
             toggleBannerVisibility(banner, true);
             return true;
         } catch (error) {
-            console.error("Error showing status:", error);
+            console.error('Error showing status:', error);
             return false;
         }
     }
@@ -575,7 +616,6 @@
         updateBannerText,
         showBanner,
         showStatus,
-        toggleBannerVisibility
+        toggleBannerVisibility,
     };
-
-})(globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {});
+})((globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {}));

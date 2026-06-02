@@ -48,7 +48,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             translateSelection: () => {
                 if (message.text) {
                     // Passer la langue cible spécifiée, si disponible
-                    globalThis.BabelFishAI.handleTextTranslation(message.text, message.targetLanguage);
+                    globalThis.BabelFishAI.handleTextTranslation(
+                        message.text,
+                        message.targetLanguage,
+                    );
                 }
             },
             // Action pour la correction orthographique de texte sélectionné
@@ -56,7 +59,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 if (message.text) {
                     globalThis.BabelFishAI.handleTextCorrection(message.text);
                 }
-            }
+            },
         };
 
         // Exécuter le gestionnaire correspondant à l'action
@@ -78,7 +81,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function handleKeyboardEvents(event) {
         // La touche Échap (code 27) pour annuler l'enregistrement
-        if (event.key === 'Escape' && globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()) {
+        if (
+            event.key === 'Escape' &&
+            globalThis.BabelFishAIUtils.recording.isCurrentlyRecording()
+        ) {
             globalThis.BabelFishAI.cancelRecording();
             // Empêcher les gestionnaires d'événements par défaut et la propagation
             event.preventDefault();
@@ -152,11 +158,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             'gptModel',
             'disableLogging',
             'dialogDuration',
-            'maxRetries'
+            'maxRetries',
         ];
 
         // Vérifier si des options avancées ont été modifiées
-        const hasAdvancedChanges = advancedOptionKeys.some(key => key in changes);
+        const hasAdvancedChanges = advancedOptionKeys.some((key) => key in changes);
 
         if (hasAdvancedChanges) {
             // Si le mode expert est activé/désactivé, mettre à jour l'interface
@@ -165,7 +171,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
                 // Mettre à jour les éléments de l'interface qui dépendent du mode expert
                 const expertElements = document.querySelectorAll('.whisper-expert-only');
-                expertElements.forEach(el => {
+                expertElements.forEach((el) => {
                     el.style.display = expertMode ? 'block' : 'none';
                 });
             }
@@ -177,14 +183,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {Object} changes - Les changements détectés
      */
     function handleDisplayOptionChanges(changes) {
-        const displayOptionKeys = [
-            'activeDisplay',
-            'autoCopy',
-            'forcedDialogDomains'
-        ];
+        const displayOptionKeys = ['activeDisplay', 'autoCopy', 'forcedDialogDomains'];
 
         // Vérifier si des options d'affichage ont été modifiées
-        const hasDisplayChanges = displayOptionKeys.some(key => key in changes);
+        const hasDisplayChanges = displayOptionKeys.some((key) => key in changes);
 
         if (hasDisplayChanges) {
             // Mettre à jour les comportements d'affichage en fonction des nouvelles options
@@ -253,14 +255,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {Object} changes - Les changements détectés
      */
     function handleTranslationOptionChanges(changes) {
-        const translationOptionKeys = [
-            'enableTranslation',
-            'sourceLanguage',
-            'targetLanguage'
-        ];
+        const translationOptionKeys = ['enableTranslation', 'sourceLanguage', 'targetLanguage'];
 
         // Vérifier si des options de traduction ont été modifiées
-        const hasTranslationChanges = translationOptionKeys.some(key => key in changes);
+        const hasTranslationChanges = translationOptionKeys.some((key) => key in changes);
 
         if (hasTranslationChanges) {
             // Mettre à jour l'interface de traduction si nécessaire
@@ -341,7 +339,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         init,
         handleBackgroundMessages,
         handleKeyboardEvents,
-        handleStorageChanges
+        handleStorageChanges,
     };
-
 })(globalThis.BabelFishAIUtils);

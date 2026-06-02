@@ -9,15 +9,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
 
     /**
-     * Affiche la transcription selon les options configurées
-     * @param {string} text - Le texte à afficher
-     * @returns {Promise<Object|boolean>} - Un objet indiquant si l'affichage a réussi et la méthode utilisée, ou false en cas d'échec
+     * Valide le texte d'entrée pour la transcription
+     * @param {string} text - Le texte à valider
+     * @returns {boolean} true si valide, false sinon (et signale l'erreur à l'utilisateur)
      */
     function validateInputText(text) {
         if (!globalThis.BabelFishAIUtils.textProcessing.isValidInputText(text)) {
-            const errorMsg = "Texte de transcription invalide";
+            const errorMsg = 'Texte de transcription invalide';
             console.error(`${errorMsg}:`, text);
-            globalThis.BabelFishAIUtils.error.handleError(errorMsg, "Invalid transcription text");
+            globalThis.BabelFishAIUtils.error.handleError(errorMsg, 'Invalid transcription text');
             return false;
         }
         return true;
@@ -30,13 +30,21 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {boolean} isActiveElementValid - Si l'élément actif est valide pour l'insertion.
      * @param {boolean} autoCopyEnabled - Si l'option autoCopy est activée.
      */
-    async function handleAutoCopy(textToCopy, displayResult, isActiveElementValid, autoCopyEnabled) {
+    async function handleAutoCopy(
+        textToCopy,
+        displayResult,
+        isActiveElementValid,
+        autoCopyEnabled,
+    ) {
         // Copier dans le presse-papiers si autoCopy est activé et:
         // - soit nous sommes en mode "clipboard" (pas d'affichage visuel, juste copie)
         // - soit en mode "dialog" et l'élément actif n'est PAS un élément d'entrée valide
-        if (autoCopyEnabled && displayResult &&
+        if (
+            autoCopyEnabled &&
+            displayResult &&
             (displayResult.method === 'clipboard' ||
-                (displayResult.method === 'dialog' && !isActiveElementValid))) {
+                (displayResult.method === 'dialog' && !isActiveElementValid))
+        ) {
             try {
                 await navigator.clipboard.writeText(textToCopy);
             } catch (err) {
@@ -52,7 +60,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     async function getAllOptions() {
         const displayOpts = await getDisplayOptions();
-        const { autoCopy } = await globalThis.BabelFishAIUtils.api.getFromStorage({ autoCopy: false });
+        const { autoCopy } = await globalThis.BabelFishAIUtils.api.getFromStorage({
+            autoCopy: false,
+        });
         return { ...displayOpts, autoCopy };
     }
 
@@ -63,7 +73,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<Object|boolean>} Une promesse qui se résout avec un objet `{ success: boolean, method: string }` indiquant le succès et la méthode d'affichage, ou `false` en cas d'échec.
      */
     async function showTranscription(text) {
-        if (!validateInputText(text)) { // NOSONAR - S6544: Faux positif, validateInputText est synchrone et retourne un booléen.
+        if (!validateInputText(text)) {
             return false;
         }
 
@@ -71,7 +81,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         try {
             // Informer l'utilisateur que le traitement est en cours
-            globalThis.BabelFishAI.ui.showBanner(globalThis.BabelFishAIUtils.i18n.getMessage("bannerProcessing"));
+            globalThis.BabelFishAI.ui.showBanner(
+                globalThis.BabelFishAIUtils.i18n.getMessage('bannerProcessing'),
+            );
 
             // Récupérer toutes les options
             const options = await getAllOptions();
@@ -83,25 +95,38 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Étape 2: Afficher le texte selon les options configurées
-            displayResult = await displayTranscriptionText(processedText, options, options.autoCopy);
+            displayResult = await displayTranscriptionText(
+                processedText,
+                options,
+                options.autoCopy,
+            );
 
             // Attendre un court délai pour les opérations DOM
-            await new Promise(resolve => setTimeout(resolve, 10));
+            await new Promise((resolve) => setTimeout(resolve, 10));
 
             // Restaurer le focus sans sélection
             globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true);
 
             // Vérifier la validité de l'élément actif après restauration
-            const isActiveElementValid = globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(document.activeElement);
+            const isActiveElementValid =
+                globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(
+                    document.activeElement,
+                );
 
             // Étape 3: Gérer la copie automatique
-            await handleAutoCopy(processedText, displayResult, isActiveElementValid, options.autoCopy);
+            await handleAutoCopy(
+                processedText,
+                displayResult,
+                isActiveElementValid,
+                options.autoCopy,
+            );
 
             return displayResult; // Retourner le résultat de l'affichage
-
         } catch (error) {
             console.error('Error displaying transcription:', error);
-            globalThis.BabelFishAIUtils.error.handleError(error instanceof Error ? error : "Erreur d'affichage de la transcription");
+            globalThis.BabelFishAIUtils.error.handleError(
+                error instanceof Error ? error : "Erreur d'affichage de la transcription",
+            );
             return false; // Retourner false en cas d'erreur
         } finally {
             // Cacher la bannière de traitement dans tous les cas (succès ou erreur)
@@ -110,18 +135,24 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-    * Traite le texte en fonction des options de reformulation et de traduction
-    * @param {string} text - Le texte initial
-    * @param {Object} options - Les options de configuration
-    * @returns {Promise<string>} - Le texte traité
-    */
+     * Traite le texte en fonction des options de reformulation et de traduction
+     * @param {string} text - Le texte initial
+     * @param {Object} options - Les options de configuration
+     * @returns {Promise<string>} - Le texte traité
+     */
     async function processText(text, options) {
         let processedText = text;
         if (options.enableRephrase) {
-            processedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(processedText);
+            processedText =
+                await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(
+                    processedText,
+                );
         }
         if (options.enableTranslation) {
-            processedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(processedText, options);
+            processedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(
+                processedText,
+                options,
+            );
         }
         return processedText;
     }
@@ -139,24 +170,26 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             enableTranslation: false,
             sourceLanguage: 'fr',
             targetLanguage: 'en',
-            forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS
+            forcedDialogDomains: CONFIG.DEFAULT_FORCED_DIALOG_DOMAINS,
         });
     }
 
     /**
-      * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
-      * @param {string} text - Le texte à afficher
-      * @param {Object} options - Les options d'affichage
-      * @param {boolean} autoCopy - Indique si la copie automatique est activée
-      * @param {string} currentDomain - Le domaine actuel
-      * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
-      */
-    function determineDisplayMethod(text, options, autoCopy, currentDomain) {
-        const isDialogForced = Array.isArray(options.forcedDialogDomains) &&
-            options.forcedDialogDomains.some(domain => currentDomain.includes(domain));
+     * Détermine la méthode d'affichage à utiliser en fonction des options et du contexte
+     * @param {string} _text - Le texte à afficher (réservé : conservé pour la cohérence d'interface)
+     * @param {Object} options - Les options d'affichage
+     * @param {boolean} autoCopy - Indique si la copie automatique est activée
+     * @param {string} currentDomain - Le domaine actuel
+     * @returns {string|null} - La méthode d'affichage à utiliser, ou null si aucune méthode n'est applicable
+     */
+    function determineDisplayMethod(_text, options, autoCopy, currentDomain) {
+        const isDialogForced =
+            Array.isArray(options.forcedDialogDomains) &&
+            options.forcedDialogDomains.some((domain) => currentDomain.includes(domain));
 
         const activeElement = document.activeElement;
-        const isValidForInsertion = globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
+        const isValidForInsertion =
+            globalThis.BabelFishAIUtils.focus.isValidElementForInsertion(activeElement);
 
         // 1. Si l'élément actif est valide et l'option activeDisplay est activée, utiliser activeElement
         if (options.activeDisplay && isValidForInsertion) {
@@ -192,7 +225,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Afficher le texte en fonction de la méthode déterminée
             if (displayMethod === 'dialog') {
-                showTranscriptionDialog(text, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+                showTranscriptionDialog(
+                    text,
+                    options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION,
+                );
             } else if (displayMethod === 'activeElement') {
                 // Inserer le texte dans l'élément actif
                 globalThis.BabelFishAIUtils.focus.handleActiveElementInsertion(text);
@@ -202,7 +238,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             return {
                 success: true,
-                method: displayMethod
+                method: displayMethod,
             };
         } catch (error) {
             console.error("Erreur lors de l'affichage du texte:", error);
@@ -218,10 +254,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function showTranscriptionDialog(text, duration) {
         // Utiliser la fonction utilitaire pour afficher le texte dans une boîte de dialogue
-        globalThis.BabelFishAIUtils.ui.showTextInDialog(
-            text,
-            duration,
-            (errorMessage) => globalThis.BabelFishAI.ui.showBanner(errorMessage, MESSAGE_TYPES.ERROR)
+        globalThis.BabelFishAIUtils.ui.showTextInDialog(text, duration, (errorMessage) =>
+            globalThis.BabelFishAI.ui.showBanner(errorMessage, MESSAGE_TYPES.ERROR),
         );
     }
 
@@ -242,8 +276,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 throw new Error(errorMsg);
             }
 
+            // skipcq: JS-0002 - debug log for provider diagnostics
             // eslint-disable-next-line no-console -- Debug log for provider diagnostics
-            console.log('[Display] Using transcription provider:', config.providerId, 'model:', config.model, 'url:', config.url);
+            console.log(
+                '[Display] Using transcription provider:',
+                config.providerId,
+                'model:',
+                config.model,
+                'url:',
+                config.url,
+            );
 
             // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
             const transcription = await globalThis.BabelFishAIUtils.api.transcribeAudio(
@@ -252,7 +294,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 config.url,
                 config.model,
                 null, // Pas de nom de fichier spécifique
-                true  // Générer un nom de fichier unique avec timestamp et partie aléatoire
+                true, // Générer un nom de fichier unique avec timestamp et partie aléatoire
             );
 
             return transcription;
@@ -268,7 +310,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         displayTranscriptionText,
         showTranscriptionDialog,
         getDisplayOptions,
-        transcribeAudio
+        transcribeAudio,
     };
-
 })(globalThis.BabelFishAIUtils);

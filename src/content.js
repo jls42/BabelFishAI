@@ -15,7 +15,7 @@
         };
         (document.head || document.documentElement).appendChild(script);
     } catch (error) {
-        console.error("Failed to load languages-shared.js:", error);
+        console.error('Failed to load languages-shared.js:', error);
     }
 
     // Importer les utilitaires dynamiquement et s'assurer qu'ils sont initialisés correctement
@@ -44,7 +44,7 @@
         const i18nLoadedEvent = new CustomEvent('babelfishai:i18n-loaded');
         document.dispatchEvent(i18nLoadedEvent);
     } catch (error) {
-        console.error("Failed to import utility scripts:", error);
+        console.error('Failed to import utility scripts:', error);
     }
 
     // Content script de l'extension de transcription vocale
@@ -98,7 +98,7 @@
             // car getApiKey() gère déjà l'affichage d'un message approprié
         } catch (error) {
             // Seulement afficher une erreur si c'est une exception inattendue
-            console.error("Erreur inattendue lors du chargement de la clé API:", error);
+            console.error('Erreur inattendue lors du chargement de la clé API:', error);
         }
 
         // Initialisation des options de couleur du bandeau en utilisant l'utilitaire
@@ -106,7 +106,7 @@
             const result = await globalThis.BabelFishAIUtils.api.getFromStorage({
                 bannerColorStart: UI_CONFIG.DEFAULT_BANNER_COLOR_START,
                 bannerColorEnd: UI_CONFIG.DEFAULT_BANNER_COLOR_END,
-                bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY
+                bannerOpacity: UI_CONFIG.DEFAULT_BANNER_OPACITY,
             });
 
             bannerColorStart = result.bannerColorStart;
@@ -117,7 +117,7 @@
                 updateBannerColor();
             }
         } catch (error) {
-            console.error("Erreur lors du chargement des couleurs de la bannière:", error);
+            console.error('Erreur lors du chargement des couleurs de la bannière:', error);
         }
     }
 
@@ -139,7 +139,7 @@
             bannerColorStart || UI_CONFIG.DEFAULT_BANNER_COLOR_START,
             bannerColorEnd || UI_CONFIG.DEFAULT_BANNER_COLOR_END,
             bannerOpacity,
-            force
+            force,
         );
 
         return true;
@@ -178,7 +178,6 @@
         // Utiliser la fonction cancelRecording de recording-utils.js
         return globalThis.BabelFishAIUtils.recording.cancelRecording();
     }
-
 
     /**
      * Transcrit l'audio en texte via l'API Whisper en utilisant la fonction de l'API
@@ -310,7 +309,7 @@
             text,
             type,
             globalThis.BabelFishAIUtils.recording.isCurrentlyRecording(),
-            updateBannerColor
+            updateBannerColor,
         );
     }
 
@@ -360,7 +359,7 @@
         showStatus,
         showTranscription, // Cette fonction sera définie plus bas dans le code
         // Ajouter une fonction pour obtenir la bannière (utilisée par error-utils)
-        getBanner: () => recordingBanner
+        getBanner: () => recordingBanner,
     };
 
     // Exposer les fonctions d'enregistrement dans l'espace de noms globalThis.BabelFishAI
@@ -403,7 +402,10 @@
      * @returns {boolean} - True si l'insertion a réussi
      */
     function insertTextInEditableElement(activeElement, newText) {
-        return globalThis.BabelFishAIUtils.focus.insertTextInEditableElement(activeElement, newText);
+        return globalThis.BabelFishAIUtils.focus.insertTextInEditableElement(
+            activeElement,
+            newText,
+        );
     }
 
     // La fonction insertInInputElement locale a été supprimée car la logique est maintenant gérée
@@ -422,7 +424,8 @@
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Utiliser la fonction du module text-processing pour la reformulation
-            const rephrasedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
+            const rephrasedText =
+                await globalThis.BabelFishAIUtils.textProcessing.handleTextRephrasing(text);
 
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
@@ -437,7 +440,10 @@
 
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
-                showTranscriptionDialog(rephrasedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+                showTranscriptionDialog(
+                    rephrasedText,
+                    options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION,
+                );
             }
         } catch (error) {
             console.error('Erreur lors de la reformulation dans content.js:', error);
@@ -456,7 +462,8 @@
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection();
 
             // Utiliser la fonction du module text-processing pour la correction
-            const correctedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextCorrection(text);
+            const correctedText =
+                await globalThis.BabelFishAIUtils.textProcessing.handleTextCorrection(text);
 
             // Obtenir les options d'affichage
             const options = await getDisplayOptions();
@@ -471,7 +478,10 @@
 
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
-                showTranscriptionDialog(correctedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+                showTranscriptionDialog(
+                    correctedText,
+                    options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION,
+                );
             }
         } catch (error) {
             console.error('Erreur lors de la correction dans content.js:', error);
@@ -492,8 +502,8 @@
      * Gère la traduction d'un texte sélectionné sans enregistrement audio
      * @param {string} text - Le texte à traduire
      * @param {string} [specifiedTargetLanguage] - Langue cible spécifiée (remplace celle des options)
-    * @returns {Promise<void>}
-    */
+     * @returns {Promise<void>}
+     */
     async function handleTextTranslation(text, specifiedTargetLanguage) {
         try {
             // Stocker l'élément actif avant de commencer le traitement
@@ -503,7 +513,12 @@
             const options = await getDisplayOptions();
 
             // Utiliser la fonction du module text-processing pour la traduction
-            const translatedText = await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(text, options, specifiedTargetLanguage);
+            const translatedText =
+                await globalThis.BabelFishAIUtils.textProcessing.handleTextTranslation(
+                    text,
+                    options,
+                    specifiedTargetLanguage,
+                );
 
             // Vérifier si l'élément actif est une zone de texte éditable
             const activeElement = document.activeElement;
@@ -515,7 +530,10 @@
 
             // Si le remplacement n'a pas fonctionné, afficher dans une boîte de dialogue
             if (!replacedInEditable) {
-                showTranscriptionDialog(translatedText, options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION);
+                showTranscriptionDialog(
+                    translatedText,
+                    options.dialogDuration || CONFIG.DEFAULT_DIALOG_DURATION,
+                );
             }
         } catch (error) {
             console.error('Erreur lors de la traduction dans content.js:', error);
@@ -529,11 +547,13 @@
     globalThis.BabelFishAIUtils.events.init({
         recordingBanner,
         bannerColorStart,
-        bannerColorEnd
+        bannerColorEnd,
     });
 
     // Écouter les messages du background script en utilisant la fonction du module event-handlers.js
-    chrome.runtime.onMessage.addListener(globalThis.BabelFishAIUtils.events.handleBackgroundMessages);
+    chrome.runtime.onMessage.addListener(
+        globalThis.BabelFishAIUtils.events.handleBackgroundMessages,
+    );
 
     // La fonction handleKeyboardEvents a été déplacée vers event-handlers.js
 
