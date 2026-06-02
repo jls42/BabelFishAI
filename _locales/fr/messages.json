@@ -275,6 +275,10 @@
         "message": "Transcription en cours...",
         "description": "Message du bandeau pendant la transcription"
     },
+    "bannerNoSpeech": {
+        "message": "Aucune voix détectée. Vérifiez votre microphone et réessayez.",
+        "description": "Message info quand l'API renvoie une transcription vide (silence, audio trop court)"
+    },
     "bannerTranslating": {
         "message": "Traduction en cours...",
         "description": "Message du bandeau pendant la traduction"

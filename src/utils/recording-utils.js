@@ -401,9 +401,27 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             'Erreur lors de la transcription audio',
         );
 
-        // Vérification rapide du résultat avant de continuer
+        // Cas légitime : l'API a répondu OK mais n'a détecté aucune voix
+        // (audio trop court, silence, micro coupé). Ce n'est PAS une erreur
+        // extension : afficher un message info dans la bannière SANS badge
+        // rouge ni handleError, puis auto-hide. L'utilisateur comprend
+        // qu'il doit réessayer sans penser à un bug.
         if (!transcription || typeof transcription !== 'string' || transcription.trim() === '') {
-            throw new Error('Résultat de transcription vide ou invalide');
+            const noSpeechMsg =
+                globalThis.BabelFishAIUtils.i18n?.getMessage('bannerNoSpeech') ||
+                'Aucune voix détectée. Vérifiez votre microphone et réessayez.';
+            globalThis.BabelFishAIUtils.error.safeExecute(
+                () => globalThis.BabelFishAI.ui.showBanner(noSpeechMsg),
+                "Erreur lors de l'affichage de la bannière info no-speech",
+            );
+            // Auto-hide après 3s pour laisser le temps de lire.
+            setTimeout(() => {
+                globalThis.BabelFishAIUtils.error.safeExecute(
+                    () => globalThis.BabelFishAI.ui.hideBanner(),
+                    'Erreur lors de la dissimulation de la bannière',
+                );
+            }, 3000);
+            return;
         }
 
         // 3. Afficher la transcription (avec les éventuelles opérations de traduction/reformulation)
