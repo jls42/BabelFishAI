@@ -552,43 +552,74 @@ function captureResponseHeaders(response) {
 const BG_DEFAULT_ALLOWED_HOSTS = new Set(['api.openai.com', 'api.mistral.ai']);
 
 /**
+ * Parse une URL, retourne null si invalide (évite un try/catch inline chez
+ * les appelants et réduit leur complexité cyclomatique).
+ * @param {string} url - URL à parser
+ * @returns {URL|null}
+ */
+function parseUrlOrNull(url) {
+    try {
+        return new URL(url);
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Protocole autorisé : HTTPS partout, HTTP uniquement pour localhost
+ * (cohérent avec api-utils.js:isProtocolAllowed, mode dev LiteLLM).
+ * @param {URL} target - URL parsée
+ * @returns {boolean}
+ */
+function isBgProtocolAllowed(target) {
+    if (target.protocol === 'https:') return true;
+    const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+    return target.protocol === 'http:' && isLocalhost;
+}
+
+/**
+ * Ajoute le hostname d'une URL au set (silencieux si URL absente/invalide).
+ * @param {Set<string>} hosts - Set destinataire
+ * @param {string} url - URL source
+ */
+function addBgHost(hosts, url) {
+    if (!url) return;
+    const parsed = parseUrlOrNull(url);
+    if (parsed) hosts.add(parsed.hostname);
+}
+
+/**
+ * Récupère les hosts custom (mode LiteLLM) autorisés depuis la config
+ * utilisateur. Erreur de stockage = aucun host custom (fail closed).
+ * @returns {Promise<Set<string>>}
+ */
+async function getBgCustomAllowedHosts() {
+    const hosts = new Set();
+    try {
+        const stored = await chrome.storage.sync.get('providers');
+        const custom = stored.providers && stored.providers.custom;
+        if (!custom || !custom.enabled) return hosts;
+        addBgHost(hosts, custom.transcriptionUrl);
+        addBgHost(hosts, custom.chatUrl);
+    } catch (error) {
+        console.error('getBgCustomAllowedHosts: storage error', error);
+    }
+    return hosts;
+}
+
+/**
  * Vérifie l'URL côté background : défense en profondeur contre un content
  * script compromis qui enverrait une URL hors allowlist.
  * @param {string} url - URL à valider
  * @returns {Promise<boolean>}
  */
 async function isUrlAllowedInBackground(url) {
-    let target;
-    try {
-        target = new URL(url);
-    } catch {
-        return false;
-    }
-
-    const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-    const protocolOk = target.protocol === 'https:' || (target.protocol === 'http:' && isLocalhost);
-    if (!protocolOk) return false;
-
+    const target = parseUrlOrNull(url);
+    if (!target) return false;
+    if (!isBgProtocolAllowed(target)) return false;
     if (BG_DEFAULT_ALLOWED_HOSTS.has(target.hostname)) return true;
-
-    try {
-        const { providers } = await chrome.storage.sync.get('providers');
-        const custom = providers?.custom;
-        if (!custom?.enabled) return false;
-        const customHosts = new Set();
-        for (const candidate of [custom.transcriptionUrl, custom.chatUrl]) {
-            if (!candidate) continue;
-            try {
-                customHosts.add(new URL(candidate).hostname);
-            } catch {
-                /* ignore URL invalide en config */
-            }
-        }
-        return customHosts.has(target.hostname);
-    } catch (error) {
-        console.error('isUrlAllowedInBackground: storage error', error);
-        return false;
-    }
+    const customHosts = await getBgCustomAllowedHosts();
+    return customHosts.has(target.hostname);
 }
 
 /**
