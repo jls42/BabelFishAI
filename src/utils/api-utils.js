@@ -94,25 +94,51 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             request,
         });
 
+        // F3 : valider l'enveloppe avant tout déréférencement. Si le background
+        // est en train de redémarrer ou ne répond pas correctement, sendMessage
+        // peut fulfill avec undefined ou un payload malformé.
+        if (!result || typeof result.success !== 'boolean') {
+            const error = new Error(
+                'Réponse invalide du background script (proxyFetch) : impossible de contacter le serveur.',
+            );
+            error.name = 'BackgroundProxyError';
+            throw error;
+        }
+
         if (!result.success) {
             const error = new Error(result.error);
             error.name = result.errorName || 'Error';
             throw error;
         }
 
-        // Créer un objet réponse compatible avec le flux existant
-        // Les méthodes json/text retournent des Promises pour matcher l'interface Response
-        return {
+        // F10 : créer un objet réponse plus complet pour matcher l'interface
+        // Fetch Response. Le rawText brut est transporté depuis le background
+        // et le parsing JSON est fait paresseusement à l'appel de .json(),
+        // exactement comme un vrai Response — donc un body non-JSON ou vide
+        // fait rejeter avec SyntaxError (pas de bug silencieux possible).
+        const rawText = typeof result.rawText === 'string' ? result.rawText : '';
+        const buildBlob = () =>
+            new Blob([rawText], { type: result.contentType || 'application/octet-stream' });
+        const fakeResponse = {
             ok: result.status >= 200 && result.status < 300,
             status: result.status,
             statusText: result.statusText,
+            url,
+            redirected: false,
             headers: new Headers(result.headers || {}),
-            json: () => Promise.resolve(result.data),
-            text: () =>
-                Promise.resolve(
-                    typeof result.data === 'string' ? result.data : JSON.stringify(result.data),
-                ),
+            json: () => {
+                try {
+                    return Promise.resolve(JSON.parse(rawText));
+                } catch (parseError) {
+                    return Promise.reject(parseError);
+                }
+            },
+            text: () => Promise.resolve(rawText),
+            blob: () => Promise.resolve(buildBlob()),
+            arrayBuffer: () => buildBlob().arrayBuffer(),
         };
+        fakeResponse.clone = () => ({ ...fakeResponse });
+        return fakeResponse;
     }
 
     /**
@@ -350,6 +376,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             if (fallback) {
                 providerId = fallback.providerId;
                 providerConfig = fallback.providerConfig;
+            } else {
+                // F8 : aucun fallback valide. Invalider la config pour que callApi
+                // échoue tôt sur "clé API manquante" plutôt que de renvoyer
+                // l'utilisateur sur la fausse piste "URL non autorisée" via
+                // isUrlAllowed (cas typique : tous les providers désactivés mais
+                // l'un d'eux reste sélectionné comme actif).
+                providerConfig = undefined;
             }
         }
 
@@ -469,15 +502,21 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Vérifie si l'erreur est liée au réseau
+     * Vérifie si l'erreur est liée au réseau.
+     * Couvre les messages FR ("connexion") et EN ("connection") car
+     * chrome.runtime.sendMessage rejette en anglais sur Firefox quand le
+     * background n'est pas joignable ("Could not establish connection...").
      * @param {Error} error - L'erreur à vérifier
      * @returns {boolean} True si c'est une erreur réseau
      */
     function isNetworkError(error) {
+        const msg = error.message || '';
         return (
             error.name === 'TypeError' ||
-            error.message.includes('Timeout') ||
-            error.message.includes('connexion')
+            error.name === 'BackgroundProxyError' ||
+            msg.includes('Timeout') ||
+            msg.includes('connexion') ||
+            msg.includes('connection')
         );
     }
 
@@ -736,8 +775,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          * @returns {Promise<any>} Résultat après tentative de récupération
          */
         async function handleApiErrors(error, isRetry) {
-            // Gérer les erreurs "Failed to fetch" spécifiquement
-            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+            // Couvrir les variantes d'erreurs de connexion (F4) :
+            // - Chrome direct fetch : TypeError "Failed to fetch"
+            // - Firefox via proxy : Error "Could not establish connection..."
+            //   ou BackgroundProxyError (envelope manquante côté background)
+            const msg = error.message || '';
+            const isConnectionFailure =
+                (error.name === 'TypeError' && msg.includes('Failed to fetch')) ||
+                msg.includes('Could not establish connection') ||
+                error.name === 'BackgroundProxyError';
+            if (isConnectionFailure) {
                 handleFailedToFetch();
             }
 

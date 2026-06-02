@@ -527,6 +527,79 @@ function captureResponseHeaders(response) {
 }
 
 /**
+ * Hôtes par défaut autorisés côté background (defense-in-depth F7).
+ * Dupliqué intentionnellement depuis providers.js car le background script
+ * Firefox (scripts classiques) n'a pas accès à globalThis.BabelFishAIProviders.
+ * Garder synchronisé avec src/utils/providers.js:BABEL_PROVIDERS.defaultUrls.
+ */
+const BG_DEFAULT_ALLOWED_HOSTS = new Set(['api.openai.com', 'api.mistral.ai']);
+
+/**
+ * Vérifie l'URL côté background : défense en profondeur contre un content
+ * script compromis qui enverrait une URL hors allowlist.
+ * @param {string} url - URL à valider
+ * @returns {Promise<boolean>}
+ */
+async function isUrlAllowedInBackground(url) {
+    let target;
+    try {
+        target = new URL(url);
+    } catch {
+        return false;
+    }
+
+    const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+    const protocolOk = target.protocol === 'https:' || (target.protocol === 'http:' && isLocalhost);
+    if (!protocolOk) return false;
+
+    if (BG_DEFAULT_ALLOWED_HOSTS.has(target.hostname)) return true;
+
+    try {
+        const { providers } = await chrome.storage.sync.get('providers');
+        const custom = providers?.custom;
+        if (!custom?.enabled) return false;
+        const customHosts = new Set();
+        for (const candidate of [custom.transcriptionUrl, custom.chatUrl]) {
+            if (!candidate) continue;
+            try {
+                customHosts.add(new URL(candidate).hostname);
+            } catch {
+                /* ignore URL invalide en config */
+            }
+        }
+        return customHosts.has(target.hostname);
+    } catch (error) {
+        console.error('isUrlAllowedInBackground: storage error', error);
+        return false;
+    }
+}
+
+/**
+ * Récupère le body brut de la réponse sans tenter de parser. Le parsing JSON
+ * est délégué au caller (fakeResponse.json côté content script) pour coller
+ * au vrai comportement Fetch — `Response.json()` parse toujours le body,
+ * indépendamment du Content-Type. Cela évite tout bug silencieux où un body
+ * non-JSON (HTML d'erreur, "Service unavailable" en text/plain, body vide)
+ * serait passé tel quel au responseProcessor (cf. F2 et ses régressions
+ * heuristiques successives).
+ *
+ * @param {Response} response - La réponse fetch déjà reçue
+ * @returns {Promise<{rawText:string, contentType:string}>}
+ */
+async function safeParseResponseBody(response) {
+    const contentType = response.headers.get('content-type') || '';
+    try {
+        const rawText = await response.text();
+        return { rawText, contentType };
+    } catch {
+        // Body illisible (abort mid-stream, etc.). On garde rawText vide
+        // pour que le caller continue d'utiliser status/headers, et .json()
+        // rejettera proprement avec SyntaxError sur input vide.
+        return { rawText: '', contentType };
+    }
+}
+
+/**
  * Proxy fetch pour contourner les restrictions CSP sur Firefox
  * Le background script n'est pas soumis aux CSP des pages web
  * @param {Object} request - La requête à effectuer
@@ -534,6 +607,16 @@ function captureResponseHeaders(response) {
  */
 async function proxyFetch(request) {
     const { url, options, formDataFields } = request;
+
+    // F7 : revérifier l'allowlist côté background même si le content script
+    // a déjà vérifié — defense in depth contre un content script compromis.
+    if (!(await isUrlAllowedInBackground(url))) {
+        return {
+            success: false,
+            error: 'URL non autorisée côté background (defense-in-depth).',
+            errorName: 'UrlNotAllowedError',
+        };
+    }
 
     try {
         const fetchOptions = { ...options };
@@ -557,21 +640,23 @@ async function proxyFetch(request) {
         // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- URL from extension's API config
         const response = await fetch(url, fetchOptions); // NOSONAR
-        const contentType = response.headers.get('content-type') || '';
 
-        const data = contentType.includes('application/json')
-            ? await response.json()
-            : await response.text();
+        // F1/F2 : capturer status/headers AVANT le parse du body. On transporte
+        // le rawText brut et on délègue le JSON.parse au fakeResponse.json()
+        // côté caller, pour coller au vrai comportement Fetch (parse toujours,
+        // rejette sur invalide).
+        const { rawText, contentType } = await safeParseResponseBody(response);
 
         return {
             success: true,
             status: response.status,
             statusText: response.statusText,
             headers: captureResponseHeaders(response),
-            data,
+            rawText,
             contentType,
         };
     } catch (error) {
+        // Vraie erreur réseau (fetch a échoué avant d'obtenir une réponse)
         return {
             success: false,
             error: error.message,
