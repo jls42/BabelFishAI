@@ -24,8 +24,21 @@
 
 set -euo pipefail
 
-# Determine CI mode (any non-empty CI or GITHUB_ACTIONS = CI)
-if [[ -n "${CI:-}${GITHUB_ACTIONS:-}" ]]; then
+# Determine CI mode
+# Une variable CI/GITHUB_ACTIONS valant "false", "0", "no" ou vide signifie
+# explicitement "non-CI" (convention CRA/Vercel). Tout autre contenu non vide
+# (true, 1, jenkins, gitlab-runner...) active le mode CI strict.
+# Portable bash 3.2+ : pas de ${var,,} (bash 4+), on passe par tr.
+is_ci_value() {
+    local v
+    v="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+    case "$v" in
+        ""|false|0|no) return 1 ;;
+        *) return 0 ;;
+    esac
+}
+
+if is_ci_value "${CI:-}" || is_ci_value "${GITHUB_ACTIONS:-}"; then
     IS_CI=1
 else
     IS_CI=0
