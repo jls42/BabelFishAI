@@ -326,11 +326,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             ? providerConfig?.selectedTranscriptionModel
             : providerConfig?.selectedChatModel;
 
-        if (selectedModel) return selectedModel;
-
         if (providerDef && Providers) {
+            // Un modèle sauvegardé qui n'est plus proposé (retiré de providers.js et absent
+            // des modèles personnalisés) est ignoré au profit du modèle par défaut du provider
+            const customModels = isTranscription
+                ? providerConfig?.transcriptionModels
+                : providerConfig?.chatModels;
+            if (Providers.isModelAvailable(providerId, serviceType, selectedModel, customModels)) {
+                return selectedModel;
+            }
             return Providers.getDefaultModel(providerId, serviceType);
         }
+
+        if (selectedModel) return selectedModel;
 
         return isTranscription
             ? data.audioModelType || API_CONFIG.WHISPER_MODEL

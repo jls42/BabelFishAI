@@ -162,6 +162,33 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
     }
 
     /**
+     * Indique si un modèle est encore proposé pour un provider : liste de ce registre
+     * ou modèles personnalisés de l'utilisateur. Un modèle retiré de la liste n'est plus proposé.
+     * @param {string} providerId - ID du provider
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {string} modelId - ID du modèle à vérifier
+     * @param {string[]} [customModels] - Modèles personnalisés ajoutés par l'utilisateur
+     * @returns {boolean} true si le modèle est proposé
+     */
+    function isModelAvailable(providerId, serviceType, modelId, customModels = []) {
+        if (!modelId) {
+            return false;
+        }
+        if (Array.isArray(customModels) && customModels.includes(modelId)) {
+            return true;
+        }
+
+        const provider = getProvider(providerId);
+        if (!provider) {
+            return false;
+        }
+
+        const models =
+            serviceType === 'transcription' ? provider.transcriptionModels : provider.chatModels;
+        return models.some((m) => m.id === modelId);
+    }
+
+    /**
      * Récupère tous les modèles disponibles pour un type de service
      * Combine les modèles de tous les providers activés + modèles custom
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
@@ -335,6 +362,7 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
         getTranscriptionUrl,
         getChatUrl,
         getDefaultModel,
+        isModelAvailable,
         getAllModels,
 
         // Utilitaires

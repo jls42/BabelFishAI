@@ -739,12 +739,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     : providerDef.chatModels;
         }
 
+        // Un modèle sauvegardé qui n'est plus proposé (retiré de providers.js) est ignoré :
+        // on présélectionne alors le modèle par défaut au lieu de laisser la liste vide
+        const isSelectedModelAvailable = Providers.isModelAvailable(
+            providerId,
+            modelType,
+            selectedModel,
+            customModels,
+        );
+
         // Ajouter les modèles par défaut
         defaultModels.forEach((model) => {
             const option = document.createElement('option');
             option.value = model.id;
             option.textContent = model.id; // Nom technique
-            if (model.default && !selectedModel) {
+            if (model.default && !isSelectedModelAvailable) {
                 option.selected = true;
             }
             selectElement.appendChild(option);
@@ -763,7 +772,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Sélectionner le modèle sauvegardé si présent
-        if (selectedModel) {
+        if (isSelectedModelAvailable) {
             selectElement.value = selectedModel;
         }
     }
