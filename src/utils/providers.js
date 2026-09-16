@@ -17,17 +17,19 @@ const BABEL_PROVIDERS = {
             { id: 'whisper-1', name: 'whisper-1', default: true },
             { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
             { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' },
+            { id: 'gpt-transcribe', name: 'gpt-transcribe' },
         ],
+        // Modèles retirés : gpt-4.1-nano et gpt-4o (réglages migrés par background.js)
         chatModels: [
             { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
-            { id: 'gpt-4o', name: 'gpt-4o' },
-            { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' },
             { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
             { id: 'gpt-4.1', name: 'gpt-4.1' },
             { id: 'gpt-5.4-nano', name: 'gpt-5.4-nano' },
             { id: 'gpt-5.4-mini', name: 'gpt-5.4-mini' },
             { id: 'gpt-5.4', name: 'gpt-5.4' },
-            { id: 'gpt-5.5', name: 'gpt-5.5' },
+            { id: 'gpt-5.6-luna', name: 'gpt-5.6-luna' },
+            { id: 'gpt-5.6-terra', name: 'gpt-5.6-terra' },
+            { id: 'gpt-5.6-sol', name: 'gpt-5.6-sol' },
         ],
         supportsNoLog: false, // NoLog est uniquement pour LiteLLM, pas OpenAI
     },

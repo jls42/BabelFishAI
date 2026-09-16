@@ -56,7 +56,8 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
 -   **Options Avancées**
     -   Support multi-provider : Mistral AI, OpenAI, et Custom/LiteLLM pour une flexibilité maximale.
     -   Possibilité de personnaliser les modèles de transcription et de traduction par provider.
-    -   Modèles OpenAI disponibles : familles GPT-4o, GPT-4.1, **GPT-5.4 (nano/mini/standard)** et **GPT-5.5**.
+    -   Modèles OpenAI disponibles : GPT-4o mini (par défaut), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** et **GPT-5.6 (luna/terra/sol)**. Transcription : whisper-1 (par défaut), gpt-4o-mini-transcribe, gpt-4o-transcribe et **gpt-transcribe**.
+    -   Les réglages qui utilisaient gpt-4.1-nano (arrêt de l'API OpenAI le 23/10/2026) ou gpt-4o passent automatiquement sur gpt-5.6-luna et gpt-4.1 lors de la mise à jour.
     -   Sélection indépendante du provider pour la transcription et la traduction/reformulation.
     -   Compatibilité avec LiteLLM Proxy via le provider Custom pour vous connecter à des modèles alternatifs.
     -   Gestion complète de l'internationalisation grâce aux fichiers de langue (\_locales), offrant une interface et une prise en charge vocale en plusieurs langues.

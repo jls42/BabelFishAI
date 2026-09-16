@@ -327,6 +327,37 @@ async function migrateToMultiProvider() {
 }
 
 /**
+ * Modèles de chat OpenAI retirés de la liste (src/utils/providers.js) et leur remplaçant.
+ * - gpt-4.1-nano : arrêt de l'API OpenAI le 2026-10-23, remplaçant officiel gpt-5.6-luna
+ * - gpt-4o : retiré car plus cher que gpt-4.1 (2,50/10 $ contre 2/8 $ par million de tokens)
+ */
+const RETIRED_OPENAI_CHAT_MODELS = new Map([
+    ['gpt-4.1-nano', 'gpt-5.6-luna'],
+    ['gpt-4o', 'gpt-4.1'],
+]);
+
+/**
+ * Remplace le modèle de chat OpenAI sauvegardé s'il a été retiré de la liste.
+ * Ne touche pas aux providers Mistral et Custom : un proxy LiteLLM peut
+ * associer ces noms de modèles à d'autres backends.
+ * @returns {Promise<void>}
+ */
+async function migrateRetiredOpenAIModels() {
+    try {
+        const { providers } = await chrome.storage.sync.get('providers');
+        const selectedModel = providers?.openai?.selectedChatModel;
+        const replacement = RETIRED_OPENAI_CHAT_MODELS.get(selectedModel);
+        if (!replacement) return;
+
+        providers.openai.selectedChatModel = replacement;
+        await chrome.storage.sync.set({ providers });
+        debug(`Modèle OpenAI retiré migré : ${selectedModel} -> ${replacement}`);
+    } catch (error) {
+        console.error('Erreur lors de la migration des modèles OpenAI retirés:', error);
+    }
+}
+
+/**
  * Gère les événements d'installation ou de mise à jour de l'extension
  * @param {Object} details - Détails de l'événement d'installation
  */
@@ -335,6 +366,9 @@ async function handleExtensionInstalled(details) {
 
     // Effectuer la migration multi-provider si nécessaire
     await migrateToMultiProvider();
+
+    // Remplacer les modèles OpenAI retirés de la liste dans les réglages sauvegardés
+    await migrateRetiredOpenAIModels();
 
     // Ouvrir la page des options uniquement lors de l'installation initiale
     if (details.reason === 'install') {
