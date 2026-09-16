@@ -706,7 +706,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 try {
                     const errorData = await response.json();
                     errorMessage = errorData.error?.message || errorType;
-                    console.error('API Error:', errorData);
+                    // Message de l'API en texte : l'objet seul s'affiche replié dans la console
+                    console.error(
+                        `API Error (HTTP ${response.status}): ${errorMessage}`,
+                        errorData,
+                    );
                 } catch (jsonParseError) {
                     // JSON parsing failed - log the parse error and use status code
                     console.error('API Error (JSON parse failed):', jsonParseError.message);
@@ -720,7 +724,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
                 // Message d'erreur amélioré avec suggestion de résolution
                 const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
-                throw new Error(userFriendlyMessage);
+                const httpError = new Error(userFriendlyMessage);
+                // Code HTTP conservé pour que l'appelant puisse adapter sa requête (ex. 400)
+                httpError.status = response.status;
+                throw httpError;
             }
         }
 

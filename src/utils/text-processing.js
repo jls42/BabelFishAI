@@ -10,6 +10,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         DEFAULT_TIMEOUT: 60000, // Timeout par défaut pour les requêtes (60 secondes)
     };
 
+    // Modèles ayant refusé le paramètre temperature (HTTP 400) pendant cette session
+    const modelsRejectingTemperature = new Set();
+
     /**
      * Vérifie si le texte d'entrée est valide pour le traitement
      * @param {string} text - Le texte à vérifier
@@ -124,6 +127,72 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Construit le payload de la requête de correction orthographique
+     * @param {string} modelType - Modèle à utiliser
+     * @param {Array<Object>} messages - Messages envoyés à l'API
+     * @param {boolean} disableLogging - Ajoute l'option no-log (LiteLLM)
+     * @param {boolean} withTemperature - Inclut le paramètre temperature
+     * @returns {Object} Payload prêt à être sérialisé
+     */
+    function buildCorrectionPayload(modelType, messages, disableLogging, withTemperature) {
+        const payload = {
+            model: modelType,
+            messages,
+        };
+        if (withTemperature) {
+            payload.temperature = 0.1; // Température basse pour des corrections précises
+        }
+
+        // Ajouter l'option no-log si demandé
+        if (disableLogging) {
+            payload['no-log'] = true;
+        }
+
+        return payload;
+    }
+
+    /**
+     * Appelle l'API de correction. Certains modèles qui raisonnent (ex. gpt-5.6-luna,
+     * effort « medium » par défaut) refusent temperature avec une erreur HTTP 400 :
+     * on réessaie alors une fois sans ce paramètre, et on le retient pour la session.
+     * @param {Object} apiOptions - Options de callApi, sans le body
+     * @param {string} modelType - Modèle à utiliser
+     * @param {Array<Object>} messages - Messages envoyés à l'API
+     * @param {boolean} disableLogging - Ajoute l'option no-log (LiteLLM)
+     * @returns {Promise<Object>} Réponse de l'API
+     */
+    async function callCorrectionApi(apiOptions, modelType, messages, disableLogging) {
+        /**
+         * Envoie la requête avec ou sans temperature
+         * @param {boolean} withTemperature - Inclut le paramètre temperature
+         * @returns {Promise<Object>} Réponse de l'API
+         */
+        const callWith = (withTemperature) =>
+            globalThis.BabelFishAIUtils.api.callApi({
+                ...apiOptions,
+                body: JSON.stringify(
+                    buildCorrectionPayload(modelType, messages, disableLogging, withTemperature),
+                ),
+            });
+
+        if (modelsRejectingTemperature.has(modelType)) {
+            return callWith(false);
+        }
+
+        try {
+            return await callWith(true);
+        } catch (error) {
+            if (error.status !== 400) {
+                throw error;
+            }
+            console.warn(`[correctText] HTTP 400 avec ${modelType}, nouvel essai sans temperature`);
+            const response = await callWith(false);
+            modelsRejectingTemperature.add(modelType);
+            return response;
+        }
+    }
+
+    /**
      * Corrige les fautes d'orthographe d'un texte en utilisant l'API
      * @param {string} text - Le texte à corriger
      * @param {string} apiKey - La clé API (optionnel)
@@ -161,28 +230,21 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 },
             ];
 
-            // Préparer le payload pour l'API
-            const payload = {
-                model: modelType,
+            // Appeler l'API (payload construit par buildCorrectionPayload)
+            const response = await callCorrectionApi(
+                {
+                    url: apiUrl,
+                    apiKey: effectiveApiKey,
+                    headers: { 'Content-Type': 'application/json' },
+                    errorType:
+                        globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR ||
+                        'Erreur de correction',
+                    retryOnFail: true,
+                },
+                modelType,
                 messages,
-                temperature: 0.1, // Température basse pour des corrections précises
-            };
-
-            // Ajouter l'option no-log si demandé
-            if (disableLogging) {
-                payload['no-log'] = true;
-            }
-
-            // Appeler l'API
-            const response = await globalThis.BabelFishAIUtils.api.callApi({
-                url: apiUrl,
-                apiKey: effectiveApiKey,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                errorType:
-                    globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction',
-                retryOnFail: true,
-            });
+                disableLogging,
+            );
 
             // Extraire et retourner le texte corrigé
             if (response?.choices?.length > 0) {
