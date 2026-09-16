@@ -365,7 +365,8 @@ async function migrateRetiredOpenAIModels() {
  * combinaison à l'extension.
  */
 const SHORTCUT_GUARD_SCRIPT_ID = 'babelfishai-shortcut-guard';
-const SHORTCUT_GUARD_ORIGINS = ['<all_urls>'];
+// Pages web HTTP(S) et WebSocket uniquement (moindre privilège, sans file://, ftp:// ni data:)
+const SHORTCUT_GUARD_ORIGINS = ['*://*/*'];
 
 /**
  * Indique si le navigateur est Firefox. Dupliqué depuis api-utils.js car le background

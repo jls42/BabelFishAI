@@ -12,6 +12,14 @@ function isStandardProviderEnabled(enabledCheckbox, keyInput) {
 }
 
 /**
+ * Journalise une erreur du raccourci prioritaire Firefox
+ * @param {Error} error - Erreur de l'API permissions
+ */
+function logShortcutGuardError(error) {
+    console.error('Erreur du raccourci prioritaire:', error);
+}
+
+/**
  * Charge la configuration d'un provider standard (OpenAI/Mistral)
  * @param {Object} config - Configuration du provider
  * @param {HTMLInputElement} keyInput - Input de la clé API
@@ -678,8 +686,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ===== Raccourci clavier sous Firefox =====
 
-    // Permission optionnelle demandée pour le raccourci prioritaire (voir src/shortcut-guard.js)
-    const SHORTCUT_GUARD_ORIGINS = ['<all_urls>'];
+    // Permission optionnelle demandée pour le raccourci prioritaire (voir src/shortcut-guard.js) :
+    // pages web HTTP(S) et WebSocket uniquement, par moindre privilège
+    const SHORTCUT_GUARD_ORIGINS = ['*://*/*'];
 
     /**
      * Affiche le bouton et le statut du raccourci prioritaire selon la permission accordée
@@ -688,19 +697,15 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Promise<void>}
      */
     async function renderShortcutGuard(denied = false) {
-        const granted = await chrome.permissions.contains({ origins: SHORTCUT_GUARD_ORIGINS });
-        document.getElementById('shortcutGuardEnableButton').hidden = granted;
-        document.getElementById('shortcutGuardDisableButton').hidden = !granted;
-        document.getElementById('shortcutGuardEnabledStatus').hidden = !granted;
-        document.getElementById('shortcutGuardDeniedStatus').hidden = granted || !denied;
-    }
-
-    /**
-     * Journalise une erreur du raccourci prioritaire
-     * @param {Error} error - Erreur de l'API permissions
-     */
-    function logShortcutGuardError(error) {
-        console.error('Erreur du raccourci prioritaire:', error);
+        try {
+            const granted = await chrome.permissions.contains({ origins: SHORTCUT_GUARD_ORIGINS });
+            document.getElementById('shortcutGuardEnableButton').hidden = granted;
+            document.getElementById('shortcutGuardDisableButton').hidden = !granted;
+            document.getElementById('shortcutGuardEnabledStatus').hidden = !granted;
+            document.getElementById('shortcutGuardDeniedStatus').hidden = granted || !denied;
+        } catch (error) {
+            logShortcutGuardError(error);
+        }
     }
 
     /**

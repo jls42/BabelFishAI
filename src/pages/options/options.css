@@ -567,7 +567,8 @@ button {
 }
 
 /* Raccourci Firefox : bouton des raccourcis et raccourci prioritaire (src/shortcut-guard.js).
-   Pas de propriété display sur ces classes, pour que l'attribut hidden reste effectif. */
+   Pas de propriété display sur les éléments masqués via l'attribut hidden (boutons, messages),
+   pour qu'il reste effectif. */
 .shortcut-button {
     padding: var(--space-2) var(--space-4);
     background: var(--primary-color-2);
@@ -594,6 +595,7 @@ button {
 }
 
 .shortcut-guard-status {
+    display: block;
     font-size: var(--text-sm);
     margin: var(--space-2) 0 0;
 }

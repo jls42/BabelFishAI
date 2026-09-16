@@ -18,7 +18,7 @@
     },
 
     "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
-    "optional_host_permissions": ["<all_urls>"],
+    "optional_host_permissions": ["*://*/*"],
 
     "icons": {
         "16": "images/icon16.png",
