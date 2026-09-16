@@ -79,6 +79,10 @@
         "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Plaatsaanduiding voor de API-sleutel"
     },
+    "apiKeyInputLabel": {
+        "message": "API-sleutel",
+        "description": "Toegankelijk (visueel verborgen) label voor het API-sleutelveld van de providers Mistral en Custom"
+    },
     "apiKeyInfo": {
         "message": "Haal uw API-sleutel op",
         "description": "Informatie over het verkrijgen van de API-sleutel"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Toevoegen",
         "description": "Knop om een model toe te voegen"
+    },
+    "addModelInputLabel": {
+        "message": "Nieuw aangepast model",
+        "description": "Toegankelijk (visueel verborgen) label voor het invoerveld om een aangepast model toe te voegen"
     },
     "noLogLabel": {
         "message": "NoLog (alleen LiteLLM)",

@@ -79,6 +79,10 @@
         "message": "आपकी OpenAI API कुंजी (sk-...)",
         "description": "API कुंजी के लिए प्लेसहोल्डर"
     },
+    "apiKeyInputLabel": {
+        "message": "API कुंजी",
+        "description": "Mistral और Custom प्रदाताओं के API कुंजी फ़ील्ड के लिए सुलभ (दृश्य रूप से छिपा) लेबल"
+    },
     "apiKeyInfo": {
         "message": "अपनी API कुंजी यहां प्राप्त करें",
         "description": "API कुंजी प्राप्त करने की जानकारी"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "जोड़ें",
         "description": "मॉडल जोड़ने के लिए बटन"
+    },
+    "addModelInputLabel": {
+        "message": "नया कस्टम मॉडल",
+        "description": "कस्टम मॉडल जोड़ने वाले इनपुट फ़ील्ड के लिए सुलभ (दृश्य रूप से छिपा) लेबल"
     },
     "noLogLabel": {
         "message": "NoLog (केवल LiteLLM)",

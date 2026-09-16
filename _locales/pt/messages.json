@@ -79,6 +79,10 @@
         "message": "Sua chave API OpenAI (sk-...)",
         "description": "Espaço reservado para a chave API"
     },
+    "apiKeyInputLabel": {
+        "message": "Chave API",
+        "description": "Rótulo acessível (oculto visualmente) do campo de chave API dos provedores Mistral e Custom"
+    },
     "apiKeyInfo": {
         "message": "Obtenha sua chave API em",
         "description": "Informações sobre como obter a chave API"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Adicionar",
         "description": "Botão para adicionar um modelo"
+    },
+    "addModelInputLabel": {
+        "message": "Novo modelo personalizado",
+        "description": "Rótulo acessível (oculto visualmente) do campo para adicionar um modelo personalizado"
     },
     "noLogLabel": {
         "message": "NoLog (somente LiteLLM)",

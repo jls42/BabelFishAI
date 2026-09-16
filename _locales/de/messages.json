@@ -79,6 +79,10 @@
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"
     },
+    "apiKeyInputLabel": {
+        "message": "API-Schlüssel",
+        "description": "Barrierefreie (visuell ausgeblendete) Beschriftung des API-Schlüssel-Felds der Provider Mistral und Custom"
+    },
     "apiKeyInfo": {
         "message": "Holen Sie sich Ihren API-Schlüssel unter",
         "description": "Informationen zum Abrufen des API-Schlüssels"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Hinzufügen",
         "description": "Schaltfläche zum Hinzufügen eines Modells"
+    },
+    "addModelInputLabel": {
+        "message": "Neues benutzerdefiniertes Modell",
+        "description": "Barrierefreie (visuell ausgeblendete) Beschriftung des Eingabefelds zum Hinzufügen eines benutzerdefinierten Modells"
     },
     "noLogLabel": {
         "message": "NoLog (nur LiteLLM)",

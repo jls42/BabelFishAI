@@ -79,6 +79,10 @@
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"
     },
+    "apiKeyInputLabel": {
+        "message": "API-nyckel",
+        "description": "Tillgänglig (visuellt dold) etikett för API-nyckelfältet hos leverantörerna Mistral och Custom"
+    },
     "apiKeyInfo": {
         "message": "Hämta din API-nyckel på",
         "description": "Information om hur du hämtar API-nyckeln"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Lägg till",
         "description": "Knapp för att lägga till en modell"
+    },
+    "addModelInputLabel": {
+        "message": "Ny anpassad modell",
+        "description": "Tillgänglig (visuellt dold) etikett för fältet för att lägga till en anpassad modell"
     },
     "noLogLabel": {
         "message": "NoLog (endast LiteLLM)",

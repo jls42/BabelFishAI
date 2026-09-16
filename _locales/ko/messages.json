@@ -79,6 +79,10 @@
         "message": "OpenAI API 키 (sk-...)",
         "description": "API 키 자리 표시자"
     },
+    "apiKeyInputLabel": {
+        "message": "API 키",
+        "description": "Mistral 및 Custom 제공업체의 API 키 입력란에 대한 접근성 레이블(시각적으로 숨김)"
+    },
     "apiKeyInfo": {
         "message": "API 키 받기",
         "description": "API 키 획득에 대한 정보"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "추가",
         "description": "모델 추가 버튼"
+    },
+    "addModelInputLabel": {
+        "message": "새 사용자 정의 모델",
+        "description": "사용자 정의 모델을 추가하는 입력란의 접근성 레이블(시각적으로 숨김)"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM 전용)",

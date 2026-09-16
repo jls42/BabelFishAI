@@ -33,6 +33,12 @@
                             id="providerLogo"
                             class="provider-selector-logo"
                         />
+                        <label
+                            for="providerSelector"
+                            class="visually-hidden"
+                            data-i18n="providersTitle"
+                            >Providers IA</label
+                        >
                         <select id="providerSelector" class="provider-dropdown">
                             <option value="mistral">Mistral AI</option>
                             <option value="openai">OpenAI</option>
@@ -86,6 +92,12 @@
                         <div class="provider-config" id="configOpenAI" data-provider="openai">
                             <div class="provider-config-body">
                                 <div class="api-key-container">
+                                    <label
+                                        for="openaiApiKey"
+                                        class="visually-hidden"
+                                        data-i18n="apiKeyConfigTitle"
+                                        >Clé API OpenAI</label
+                                    >
                                     <input
                                         type="password"
                                         id="openaiApiKey"
@@ -125,6 +137,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newOpenaiTranscriptionModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newOpenaiTranscriptionModel"
@@ -148,6 +166,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newOpenaiChatModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newOpenaiChatModel"
@@ -176,6 +200,12 @@
                         >
                             <div class="provider-config-body">
                                 <div class="api-key-container">
+                                    <label
+                                        for="mistralApiKey"
+                                        class="visually-hidden"
+                                        data-i18n="apiKeyInputLabel"
+                                        >Clé API</label
+                                    >
                                     <input
                                         type="password"
                                         id="mistralApiKey"
@@ -217,6 +247,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newMistralTranscriptionModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newMistralTranscriptionModel"
@@ -240,6 +276,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newMistralChatModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newMistralChatModel"
@@ -268,6 +310,12 @@
                         >
                             <div class="provider-config-body">
                                 <div class="api-key-container">
+                                    <label
+                                        for="customApiKey"
+                                        class="visually-hidden"
+                                        data-i18n="apiKeyInputLabel"
+                                        >Clé API</label
+                                    >
                                     <input
                                         type="password"
                                         id="customApiKey"
@@ -332,6 +380,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newCustomTranscriptionModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newCustomTranscriptionModel"
@@ -355,6 +409,12 @@
                                                 class="model-select"
                                             ></select>
                                             <div class="model-input-container">
+                                                <label
+                                                    for="newCustomChatModel"
+                                                    class="visually-hidden"
+                                                    data-i18n="addModelInputLabel"
+                                                    >Nouveau modèle personnalisé</label
+                                                >
                                                 <input
                                                     type="text"
                                                     id="newCustomChatModel"
@@ -426,6 +486,9 @@
                         </div>
                     </div>
                     <div class="api-key-container">
+                        <label for="apiKey" class="visually-hidden" data-i18n="apiKeyConfigTitle"
+                            >Clé API OpenAI</label
+                        >
                         <input
                             type="password"
                             id="apiKey"
@@ -644,6 +707,12 @@
                                     ></p>
                                 </div>
                                 <div class="opacity-group">
+                                    <label
+                                        for="bannerOpacity"
+                                        class="visually-hidden"
+                                        data-i18n="opacityLabel"
+                                        >% Opacité</label
+                                    >
                                     <input
                                         type="number"
                                         id="bannerOpacity"
@@ -676,6 +745,12 @@
                         ></p>
                         <div class="domains-list" id="domainsList"></div>
                         <div class="domain-input-container">
+                            <label
+                                for="newDomain"
+                                class="visually-hidden"
+                                data-i18n="forcedDialogDomainsLabel"
+                                >Domaines avec boîte de dialogue forcée :</label
+                            >
                             <input
                                 type="text"
                                 id="newDomain"

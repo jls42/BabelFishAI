@@ -79,6 +79,10 @@
         "message": "あなたのOpenAI APIキー（sk-...）",
         "description": "APIキーのプレースホルダー"
     },
+    "apiKeyInputLabel": {
+        "message": "APIキー",
+        "description": "Mistral および Custom プロバイダーの API キー入力欄のアクセシブルなラベル（視覚的に非表示）"
+    },
     "apiKeyInfo": {
         "message": "APIキーを取得する",
         "description": "APIキーの取得に関する情報"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "追加",
         "description": "モデルを追加するボタン"
+    },
+    "addModelInputLabel": {
+        "message": "新しいカスタムモデル",
+        "description": "カスタムモデルを追加する入力欄のアクセシブルなラベル（視覚的に非表示）"
     },
     "noLogLabel": {
         "message": "NoLog（LiteLLMのみ）",

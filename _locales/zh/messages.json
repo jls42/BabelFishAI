@@ -79,6 +79,10 @@
         "message": "您的 OpenAI API 密钥（sk-...）",
         "description": "API 密钥的占位符"
     },
+    "apiKeyInputLabel": {
+        "message": "API 密钥",
+        "description": "Mistral 和 Custom 提供商 API 密钥输入框的无障碍标签（视觉上隐藏）"
+    },
     "apiKeyInfo": {
         "message": "获取您的 API 密钥",
         "description": "有关获取 API 密钥的信息"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "添加",
         "description": "添加模型的按钮"
+    },
+    "addModelInputLabel": {
+        "message": "新的自定义模型",
+        "description": "用于添加自定义模型的输入框的无障碍标签（视觉上隐藏）"
     },
     "noLogLabel": {
         "message": "NoLog（仅限 LiteLLM）",

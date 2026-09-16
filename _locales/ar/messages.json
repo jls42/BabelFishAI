@@ -79,6 +79,10 @@
         "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
         "description": "العنصر النائب لمفتاح واجهة برمجة التطبيقات"
     },
+    "apiKeyInputLabel": {
+        "message": "مفتاح واجهة برمجة التطبيقات",
+        "description": "تسمية يسهل الوصول إليها (مخفية بصرياً) لحقل مفتاح API لمزودي Mistral وCustom"
+    },
     "apiKeyInfo": {
         "message": "احصل على مفتاح واجهة برمجة التطبيقات الخاص بك على",
         "description": "معلومات حول الحصول على مفتاح واجهة برمجة التطبيقات"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "إضافة",
         "description": "Button to add a model"
+    },
+    "addModelInputLabel": {
+        "message": "نموذج مخصص جديد",
+        "description": "تسمية يسهل الوصول إليها (مخفية بصرياً) لحقل إضافة نموذج مخصص"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM فقط)",

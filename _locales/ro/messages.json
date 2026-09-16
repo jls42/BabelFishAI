@@ -79,6 +79,10 @@
         "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"
     },
+    "apiKeyInputLabel": {
+        "message": "Cheie API",
+        "description": "Etichetă accesibilă (ascunsă vizual) pentru câmpul cheii API al furnizorilor Mistral și Custom"
+    },
     "apiKeyInfo": {
         "message": "Obțineți cheia API la",
         "description": "Informații despre obținerea cheii API"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Adaugă",
         "description": "Buton pentru adăugarea unui model"
+    },
+    "addModelInputLabel": {
+        "message": "Model personalizat nou",
+        "description": "Etichetă accesibilă (ascunsă vizual) pentru câmpul de adăugare a unui model personalizat"
     },
     "noLogLabel": {
         "message": "NoLog (doar LiteLLM)",

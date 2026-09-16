@@ -79,6 +79,10 @@
         "message": "Your OpenAI API key (sk-...)",
         "description": "Placeholder for the API key"
     },
+    "apiKeyInputLabel": {
+        "message": "API key",
+        "description": "Accessible (visually hidden) label for the API key field of the Mistral and Custom providers"
+    },
     "apiKeyInfo": {
         "message": "Get your API key at",
         "description": "Information on obtaining the API key"
@@ -254,6 +258,10 @@
     "addModelButton": {
         "message": "Add",
         "description": "Button to add a model"
+    },
+    "addModelInputLabel": {
+        "message": "New custom model",
+        "description": "Accessible (visually hidden) label for the input used to add a custom model"
     },
     "noLogLabel": {
         "message": "NoLog (LiteLLM only)",
