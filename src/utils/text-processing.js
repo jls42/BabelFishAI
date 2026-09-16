@@ -185,7 +185,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             if (error.status !== 400) {
                 throw error;
             }
-            console.warn(`[correctText] HTTP 400 avec ${modelType}, nouvel essai sans temperature`);
             const response = await callWith(false);
             modelsRejectingTemperature.add(modelType);
             return response;
