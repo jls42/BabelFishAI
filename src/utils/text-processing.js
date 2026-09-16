@@ -14,6 +14,29 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     const modelsRejectingTemperature = new Set();
 
     /**
+     * Extrait le texte de la réponse d'une API chat/completions. Le contenu est une chaîne ou,
+     * pour les modèles Mistral qui raisonnent, une liste de blocs : seuls les blocs de texte
+     * (TextChunk) sont gardés, la réflexion (ThinkChunk, type "thinking") est ignorée
+     * (https://docs.mistral.ai/studio/conversations/reasoning).
+     * @param {Object} response - Réponse JSON de l'API
+     * @returns {string} Texte de la réponse sans espaces superflus, chaîne vide si absent
+     */
+    function extractMessageText(response) {
+        const content = response.choices[0].message?.content;
+        if (typeof content === 'string') {
+            return content.trim();
+        }
+        if (Array.isArray(content)) {
+            return content
+                .filter((chunk) => chunk?.type !== 'thinking' && typeof chunk?.text === 'string')
+                .map((chunk) => chunk.text)
+                .join('')
+                .trim();
+        }
+        return '';
+    }
+
+    /**
      * Vérifie si le texte d'entrée est valide pour le traitement
      * @param {string} text - Le texte à vérifier
      * @returns {boolean} - True si le texte est valide, False sinon
@@ -108,7 +131,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte reformulé
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const rephrasedText = response.choices[0].message.content.trim();
+                const rephrasedText = extractMessageText(response);
                 return rephrasedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -247,7 +270,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Extraire et retourner le texte corrigé
             if (response?.choices?.length > 0) {
-                const correctedText = response.choices[0].message.content.trim();
+                const correctedText = extractMessageText(response);
                 return correctedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -331,7 +354,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte traduit
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const translatedText = response.choices[0].message.content.trim();
+                const translatedText = extractMessageText(response);
                 return translatedText;
             } else {
                 throw new Error('Réponse API invalide');
