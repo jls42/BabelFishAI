@@ -21,6 +21,8 @@ Cas concrets (non exhaustif) :
 -   **Calcul / comptage** : `wc -l`, `grep -c`, `.length`, bash/python — jamais "à peu près N" ni à la tête.
 -   **Contenu fichier / comportement code** : lire le fichier, `grep`, lancer le test, jamais depuis la mémoire.
 -   **Catalogues externes** (modèles IA OpenAI/Mistral/Anthropic, endpoints API, versions de packages, syntaxes Sonar/Codacy/DeepSource) : **fetch la doc officielle**, jamais depuis la mémoire d'entraînement — les catalogues évoluent en permanence et la connaissance de Claude coupe à une date fixe. Cas typique : avant d'ajouter ou de flagger un modèle dans `src/utils/providers.js`, vérifier sur la page de pricing officielle du provider (`https://developers.openai.com/api/docs/pricing`, équivalents Mistral / Anthropic) qu'il existe au catalogue public.
+    -   **Lire le markdown brut, pas un résumé** : les pages de developers.openai.com existent en `.md` (`https://developers.openai.com/api/docs/pricing.md`, `https://developers.openai.com/api/docs/deprecations.md`, index `https://developers.openai.com/api/docs/llms.txt`). Faire `curl -sL <url>.md | grep <id>` plutôt qu'un WebFetch résumé par un modèle : lors de la vérification du 2026-09-16, une lecture résumée a donné `gpt-5.6-astra` (le vrai ID est `gpt-6-astra`) et a manqué les dépréciations de `whisper-1` et `gpt-4.1-nano`.
+    -   **Lire aussi `deprecations.md`** lors d'un refresh de modèles : la page de pricing liste des modèles qui ont déjà une date d'arrêt annoncée (ex. `gpt-4.1-nano`, arrêt le 2026-10-23).
 -   **Outils statiques** (Sonar CCN, Codacy ESLint, DeepSource finding) : reproduire localement (`pre-commit run --all-files`, `pre-commit run --hook-stage pre-push --all-files`) pour voir ce que l'outil voit, jamais deviner la cause d'un flag.
 -   **Dates relatives** : convertir en absolu via le contexte date, jamais extrapoler mentalement.
 
@@ -373,6 +375,8 @@ The project is undergoing modular refactoring from a monolithic `content.js`. Wh
 -   Update French (`_locales/fr/messages.json`) first for new features
 -   Other languages only when explicitly requested
 -   15 supported locales: ar, de, en, es, fr, hi, it, ja, ko, nl, pl, pt, ro, sv, zh
+-   **Piège runtime (leçon PR #29, commit `066c4fe`)** : `BabelFishAIUtils.i18n.getMessage()` renvoie **le nom de la clé** quand elle manque dans la locale chargée (`src/utils/i18n.js`). Cette chaîne n'est pas vide, donc un fallback `getMessage('cle') || 'texte'` ne s'applique jamais : un utilisateur en interface `en`, `de`… voit `cle` à l'écran. Une clé ajoutée en `fr` seul est donc un bug pour les 14 autres locales : avant merge, la traduire partout ou signaler explicitement le manque à l'utilisateur.
+-   **Avant tout merge** : relancer `./scripts/check-i18n.sh` (code de sortie 0 attendu) au lieu de se fier à un test plan déjà coché. La PR #29 annonçait « 99/99 clés » alors qu'un commit plus récent avait ajouté `bannerNoSpeech` en `fr` seulement.
 
 ### Module Exposure Pattern
 
