@@ -420,9 +420,9 @@
     padding: 8px;
     padding-top: 2px;
     padding-bottom: 5px;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
+    /* Équivalent standard du mot-clé déprécié word-break: break-word (cf. MDN) */
+    overflow-wrap: anywhere;
+    word-break: normal;
 }
 
 /* Conteneur de contrôles pour la boîte de dialogue */
