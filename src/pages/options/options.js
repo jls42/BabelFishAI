@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Gère le clic sur les boutons toggle password des providers
      */
     function setupProviderPasswordToggles() {
-        document.querySelectorAll('.provider-card .toggle-password').forEach((button) => {
+        document.querySelectorAll('.provider-config .toggle-password').forEach((button) => {
             button.addEventListener('click', () => {
                 const targetId = button.dataset.target;
                 const input = document.getElementById(targetId);
