@@ -50,6 +50,7 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
     -   Mode d'affichage flexible : zone de saisie active ou fenêtre de dialogue flottante.
     -   Bandeau de statut configurable avec choix des couleurs, de l'opacité et de la durée d'affichage.
     -   Raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac) pour démarrer/arrêter l'enregistrement.
+    -   Sous Firefox, « raccourci prioritaire » facultatif pour les sites dont l'éditeur intercepte la combinaison (ex. chatgpt.com) : activé depuis les options, il demande la permission d'accès aux sites (voir [PRIVACY.md](PRIVACY.md)).
     -   Option "Garder ouvert" pour contrôler la durée d'affichage des résultats.
     -   Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
 
@@ -102,10 +103,10 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 1.  **Téléchargement et Installation :**
 
     -   **Installez directement l'extension depuis [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
-    -   Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub.
-    -   Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox`.
+    -   Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub, puis lancez `./scripts/build.sh firefox`, qui prépare `dist/firefox/` avec le manifest Firefox renommé en `manifest.json`.
+    -   Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox` (et non « Installer un module depuis un fichier » dans `about:addons`, réservé aux extensions signées).
     -   Cliquez sur « Charger un module complémentaire temporaire... ».
-    -   Sélectionnez le fichier `manifest.firefox.json` à la racine du projet.
+    -   Sélectionnez le fichier `dist/firefox/manifest.json`.
 
 2.  **Vérification :**
     -   Assurez-vous que l'extension apparaît dans la barre d'outils de Firefox avec l'icône personnalisée.
