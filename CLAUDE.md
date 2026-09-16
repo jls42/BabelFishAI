@@ -100,6 +100,11 @@ Cela évite de masquer de vrais positifs futurs sur le même type de règle. For
 
 -   **`// codacy:ignore-next-line` N'EXISTE PAS** (invention LLM fréquente). Codacy a migré de Semgrep vers Opengrep en février 2026 ; il ne supporte **aucun** skip inline propre côté plateforme. Pour ignorer un finding Codacy inline : utiliser la syntaxe Opengrep / Semgrep `// nosemgrep: <rule-id> -- <raison>` (ou `// nosemgrep` seul) immédiatement au-dessus de la ligne flaggée, ou en fin de ligne (`<code>; // nosemgrep: <rule-id>`). Skip tags via message de commit (`[ci skip]`, `[codacy skip]`) sont les seuls "skip Codacy natifs" qui existent.
 -   **Effet secondaire subtil d'un cleanup de dead code** : retirer un `export` ou supprimer une fonction "inutilisée" peut faire ré-évaluer le graphe de taint par Codacy / Opengrep / DeepSource et **réactiver des findings dormants** (acceptés sur un commit antérieur). Quand un finding SAST apparaît après un commit "inoffensif" (suppression d'export, knip, refacto), vérifier en priorité s'il n'a pas modifié la surface d'exports d'un fichier impliqué — avant de soupçonner un bug récent.
+-   **Faux positifs rencontrés sur la PR #29 (2026-09-17), corrigés sans ignore** :
+    -   DeepSource `JS-W1042` (« redundant undefined ») signale tout `undefined` passé explicitement en argument, même `Set.has(undefined)` qui a un sens : tester l'appartenance autrement (ex. `map.has(name)` avant `map.get(name)`).
+    -   Codacy `xss/no-mixed-html` (High) prend pour du HTML toute chaîne contenant `<...>` stockée dans une variable, ex. `['<all_urls>']` : préférer un motif sans chevrons quand il suffit (`*://*/*`, moindre privilège).
+    -   Codacy `detect-unhandled-async-errors` (High) : une fonction `async` appelée depuis un écouteur d'événement sans `catch` doit gérer ses erreurs elle-même (`try/catch` interne).
+    -   Sonar `Web:S6819` : `<output>` (rôle implicite `status`) plutôt que `role="status"` ; `javascript:S7721` : sortir au niveau du module une fonction imbriquée qui ne capture aucune variable.
 -   **Avant d'ajouter un ignore (inline ou global)** : **mesurer** en lançant `pre-commit run --hook-stage pre-push --all-files` localement pour reproduire avec Opengrep. Ne jamais ignorer à l'aveugle un finding cloud sans tenter de reproduire localement d'abord (principe « Mesurer > deviner »). Note : certaines règles LGPL utilisées par Codacy ne sont PAS dans les packs locaux Opengrep — dans ce cas, opengrep local ne reproduit pas, et le seul moyen de valider un fix est le rescan Codacy post-push.
 
 ## Quality / pre-commit (workflow)
@@ -624,6 +629,8 @@ await globalThis.BabelFishAIUtils.api.callApi({
 // ❌ INCORRECT (deux arguments)
 await globalThis.BabelFishAIUtils.api.callApi(apiUrl, { ... });
 ```
+
+Pour lire la réponse d'une API chat/completions, passer par `extractMessageText(response)` (`text-processing.js`), jamais par `response.choices[0].message.content.trim()` : les modèles Mistral qui raisonnent (Small 4, Medium 3.5) peuvent renvoyer `content` sous forme de liste de blocs (`TextChunk` `{type: "text", text}` et `ThinkChunk` `{type: "thinking", thinking}`), et seule la réponse doit être insérée (https://docs.mistral.ai/studio/conversations/reasoning).
 
 ### Scripts Shell (Bash)
 
