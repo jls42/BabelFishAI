@@ -55,6 +55,34 @@
         "message": "Then:<br>1. Find BabelFishAI in the list<br>2. Click on the current shortcut field<br>3. Press the new key combination",
         "description": "Steps to change the shortcut"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "In Firefox: about:addons → ⚙️ → “Manage Extension Shortcuts”, then enter the new key combination for BabelFishAI.",
+        "description": "Firefox instructions to change the keyboard shortcut"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Open shortcut settings",
+        "description": "Firefox button that opens the extension shortcut settings"
+    },
+    "shortcutGuardDescription": {
+        "message": "On some websites (e.g. chatgpt.com), the editor uses the same key combination and Firefox no longer triggers BabelFishAI. The priority shortcut asks for access to all websites to add a small script that reserves only this key combination for the extension, without reading or sending any other data.",
+        "description": "Explanation of the Firefox priority shortcut and of the requested permission"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Enable priority shortcut",
+        "description": "Button that requests the website access permission for the priority shortcut"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Disable priority shortcut",
+        "description": "Button that removes the website access permission of the priority shortcut"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Priority shortcut enabled. Reload tabs that are already open to apply it.",
+        "description": "Status shown when the priority shortcut is active"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permission denied: the priority shortcut stays disabled.",
+        "description": "Status shown when the user denies the permission"
+    },
     "optionsTitle": {
         "message": "BabelFishAI Configuration",
         "description": "Title of the options page"

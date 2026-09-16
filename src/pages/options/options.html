@@ -505,18 +505,66 @@
                     </p>
                     <div class="shortcut-info">
                         <p data-i18n="shortcutInstructions"></p>
-                        <p>
-                            <span data-i18n="shortcutOption1"></span>
-                            <br />
-                            <span data-i18n="shortcutChangeInstructions"></span>
-                        </p>
-                        <p>
-                            <span data-i18n="shortcutOption2"></span>
-                            <br />
-                            <span class="keyboard-shortcut">chrome://extensions/shortcuts</span>
-                        </p>
-                        <div class="shortcut-steps">
-                            <p data-i18n="shortcutSteps"></p>
+                        <!-- Instructions Chrome (masquées sous Firefox par options.js) -->
+                        <div id="shortcutChromeInstructions">
+                            <p>
+                                <span data-i18n="shortcutOption1"></span>
+                                <br />
+                                <span data-i18n="shortcutChangeInstructions"></span>
+                            </p>
+                            <p>
+                                <span data-i18n="shortcutOption2"></span>
+                                <br />
+                                <span class="keyboard-shortcut">chrome://extensions/shortcuts</span>
+                            </p>
+                            <div class="shortcut-steps">
+                                <p data-i18n="shortcutSteps"></p>
+                            </div>
+                        </div>
+                        <!-- Instructions et raccourci prioritaire Firefox (affichés par options.js) -->
+                        <div id="shortcutFirefoxInstructions" hidden>
+                            <p data-i18n="shortcutFirefoxInstructions"></p>
+                            <button
+                                type="button"
+                                id="openShortcutSettings"
+                                class="shortcut-button"
+                                data-i18n="shortcutFirefoxOpenButton"
+                                hidden
+                            ></button>
+                            <div id="shortcutGuard" class="shortcut-guard" hidden>
+                                <p
+                                    class="option-description"
+                                    data-i18n="shortcutGuardDescription"
+                                ></p>
+                                <button
+                                    type="button"
+                                    id="shortcutGuardEnableButton"
+                                    class="shortcut-button"
+                                    data-i18n="shortcutGuardEnableButton"
+                                    hidden
+                                ></button>
+                                <button
+                                    type="button"
+                                    id="shortcutGuardDisableButton"
+                                    class="shortcut-button"
+                                    data-i18n="shortcutGuardDisableButton"
+                                    hidden
+                                ></button>
+                                <div role="status">
+                                    <p
+                                        id="shortcutGuardEnabledStatus"
+                                        class="shortcut-guard-status"
+                                        data-i18n="shortcutGuardEnabledStatus"
+                                        hidden
+                                    ></p>
+                                    <p
+                                        id="shortcutGuardDeniedStatus"
+                                        class="shortcut-guard-status"
+                                        data-i18n="shortcutGuardDeniedStatus"
+                                        hidden
+                                    ></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

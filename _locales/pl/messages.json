@@ -55,6 +55,34 @@
         "message": "Następnie:<br>1. Znajdź BabelFishAI na liście<br>2. Kliknij pole bieżącego skrótu<br>3. Naciśnij nową kombinację klawiszy",
         "description": "Kroki, aby zmienić skrót"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "W Firefoksie: about:addons → ⚙️ → „Zarządzaj skrótami rozszerzeń”, a następnie wprowadź nową kombinację dla BabelFishAI.",
+        "description": "Instrukcje Firefoksa dotyczące zmiany skrótu klawiszowego"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Otwórz zarządzanie skrótami",
+        "description": "Przycisk Firefoksa otwierający zarządzanie skrótami rozszerzeń"
+    },
+    "shortcutGuardDescription": {
+        "message": "Na niektórych stronach (np. chatgpt.com) edytor używa tej samej kombinacji klawiszy i Firefox nie uruchamia już BabelFishAI. Priorytetowy skrót wymaga dostępu do wszystkich stron, aby dodać mały skrypt, który rezerwuje tylko tę kombinację dla rozszerzenia, bez odczytywania ani wysyłania żadnych innych danych.",
+        "description": "Wyjaśnienie priorytetowego skrótu w Firefoksie i wymaganego uprawnienia"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Włącz priorytetowy skrót",
+        "description": "Przycisk, który prosi o uprawnienie dostępu do stron dla priorytetowego skrótu"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Wyłącz priorytetowy skrót",
+        "description": "Przycisk, który usuwa uprawnienie dostępu do stron priorytetowego skrótu"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Priorytetowy skrót włączony. Odśwież już otwarte karty, aby go zastosować.",
+        "description": "Status wyświetlany, gdy priorytetowy skrót jest aktywny"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Odmowa uprawnień: priorytetowy skrót pozostaje wyłączony.",
+        "description": "Status wyświetlany, gdy użytkownik odmówi uprawnienia"
+    },
     "optionsTitle": {
         "message": "Konfiguracja BabelFishAI",
         "description": "Tytuł strony opcji"

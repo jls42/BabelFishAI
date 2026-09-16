@@ -55,6 +55,34 @@
         "message": "그런 다음:<br>1. 목록에서 BabelFishAI 찾기<br>2. 현재 단축키 필드 클릭<br>3. 새 키 조합 누르기",
         "description": "단축키를 변경하는 단계"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "Firefox의 경우: about:addons → ⚙️ → '확장 기능 단축키 관리'에서 BabelFishAI의 새 키 조합을 입력하십시오.",
+        "description": "단축키를 변경하기 위한 Firefox 안내"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "단축키 관리 열기",
+        "description": "확장 기능 단축키 관리를 여는 Firefox 버튼"
+    },
+    "shortcutGuardDescription": {
+        "message": "일부 사이트(예: chatgpt.com)에서는 편집기가 같은 키 조합을 사용하여 Firefox에서 BabelFishAI가 더 이상 실행되지 않습니다. 우선 단축키는 모든 사이트에 대한 접근 권한을 요청하여, 이 조합만 확장 기능에 예약하는 작은 스크립트를 추가합니다. 다른 데이터는 읽거나 전송하지 않습니다.",
+        "description": "Firefox 우선 단축키와 요청되는 권한에 대한 설명"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "우선 단축키 사용",
+        "description": "우선 단축키를 위해 사이트 접근 권한을 요청하는 버튼"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "우선 단축키 사용 중지",
+        "description": "우선 단축키의 사이트 접근 권한을 제거하는 버튼"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "우선 단축키가 활성화되었습니다. 이미 열려 있는 탭을 새로 고치면 적용됩니다.",
+        "description": "우선 단축키가 활성화되었을 때 표시되는 상태"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "권한이 거부되었습니다. 우선 단축키는 비활성화된 상태로 유지됩니다.",
+        "description": "사용자가 권한을 거부했을 때 표시되는 상태"
+    },
     "optionsTitle": {
         "message": "BabelFishAI 구성",
         "description": "옵션 페이지 제목"

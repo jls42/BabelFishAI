@@ -566,6 +566,38 @@ button {
     box-shadow: 0 2px 0 var(--gray-900);
 }
 
+/* Raccourci Firefox : bouton des raccourcis et raccourci prioritaire (src/shortcut-guard.js).
+   Pas de propriété display sur ces classes, pour que l'attribut hidden reste effectif. */
+.shortcut-button {
+    padding: var(--space-2) var(--space-4);
+    background: var(--primary-color-2);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.shortcut-button:hover {
+    background: var(--primary-color-1);
+}
+
+.shortcut-guard {
+    margin-top: var(--space-4);
+}
+
+/* gray-700 : 8.96:1 sur le fond de .shortcut-info (gray-500 n'y atteint que 4.14:1) */
+.shortcut-guard .option-description,
+.shortcut-guard-status {
+    color: var(--gray-700);
+}
+
+.shortcut-guard-status {
+    font-size: var(--text-sm);
+    margin: var(--space-2) 0 0;
+}
+
 .highlighted-label {
     font-size: var(--text-lg);
     color: var(--primary-color-1);

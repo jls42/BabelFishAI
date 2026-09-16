@@ -55,6 +55,34 @@
         "message": "Apoi:<br>1. Găsiți BabelFishAI în listă<br>2. Faceți clic pe câmpul comenzii rapide curente<br>3. Apăsați noua combinație de taste",
         "description": "Pași pentru a schimba comanda rapidă"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "În Firefox: about:addons → ⚙️ → „Gestionează comenzile rapide ale extensiilor”, apoi introduceți noua combinație pentru BabelFishAI.",
+        "description": "Instrucțiuni Firefox pentru schimbarea comenzii rapide"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Deschideți gestionarea comenzilor rapide",
+        "description": "Buton Firefox care deschide gestionarea comenzilor rapide ale extensiilor"
+    },
+    "shortcutGuardDescription": {
+        "message": "Pe unele site-uri (de ex. chatgpt.com), editorul folosește aceeași combinație de taste, iar Firefox nu mai declanșează BabelFishAI. Comanda rapidă prioritară solicită acces la toate site-urile pentru a adăuga un mic script care rezervă doar această combinație pentru extensie, fără a citi sau trimite alte date.",
+        "description": "Explicația comenzii rapide prioritare din Firefox și a permisiunii solicitate"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Activați comanda rapidă prioritară",
+        "description": "Buton care solicită permisiunea de acces la site-uri pentru comanda rapidă prioritară"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Dezactivați comanda rapidă prioritară",
+        "description": "Buton care retrage permisiunea de acces la site-uri a comenzii rapide prioritare"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Comanda rapidă prioritară este activată. Reîncărcați filele deja deschise pentru a o aplica.",
+        "description": "Stare afișată când comanda rapidă prioritară este activă"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permisiune refuzată: comanda rapidă prioritară rămâne dezactivată.",
+        "description": "Stare afișată când utilizatorul refuză permisiunea"
+    },
     "optionsTitle": {
         "message": "Configurare BabelFishAI",
         "description": "Titlul paginii de opțiuni"

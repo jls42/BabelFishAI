@@ -55,6 +55,34 @@
         "message": "Quindi:<br>1. Trova BabelFishAI nell'elenco<br>2. Clicca sul campo della scorciatoia corrente<br>3. Premi la nuova combinazione di tasti",
         "description": "Passaggi per cambiare la scorciatoia"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "In Firefox: about:addons → ⚙️ → «Gestisci scorciatoie da tastiera», poi inserisci la nuova combinazione per BabelFishAI.",
+        "description": "Istruzioni di Firefox per cambiare la scorciatoia da tastiera"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Apri la gestione delle scorciatoie",
+        "description": "Pulsante di Firefox che apre la gestione delle scorciatoie delle estensioni"
+    },
+    "shortcutGuardDescription": {
+        "message": "Su alcuni siti (ad es. chatgpt.com), l'editor usa la stessa combinazione di tasti e Firefox non attiva più BabelFishAI. La scorciatoia prioritaria richiede l'accesso a tutti i siti per aggiungere un piccolo script che riserva solo questa combinazione all'estensione, senza leggere né inviare altri dati.",
+        "description": "Spiegazione della scorciatoia prioritaria di Firefox e del permesso richiesto"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Attiva la scorciatoia prioritaria",
+        "description": "Pulsante che richiede il permesso di accesso ai siti per la scorciatoia prioritaria"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Disattiva la scorciatoia prioritaria",
+        "description": "Pulsante che rimuove il permesso di accesso ai siti della scorciatoia prioritaria"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Scorciatoia prioritaria attivata. Ricarica le schede già aperte per applicarla.",
+        "description": "Stato mostrato quando la scorciatoia prioritaria è attiva"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permesso negato: la scorciatoia prioritaria resta disattivata.",
+        "description": "Stato mostrato quando l'utente nega il permesso"
+    },
     "optionsTitle": {
         "message": "Configurazione di BabelFishAI",
         "description": "Titolo della pagina delle opzioni"

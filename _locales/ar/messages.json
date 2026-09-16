@@ -55,6 +55,34 @@
         "message": "ثم:<br>1. ابحث عن BabelFishAI في القائمة<br>2. انقر على حقل الاختصار الحالي<br>3. اضغط على مجموعة المفاتيح الجديدة",
         "description": "خطوات تغيير الاختصار"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "في Firefox: about:addons ← ⚙️ ← «أدِر اختصارات الامتدادات»، ثم أدخل تركيبة المفاتيح الجديدة لـ BabelFishAI.",
+        "description": "تعليمات Firefox لتغيير اختصار لوحة المفاتيح"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "فتح إدارة الاختصارات",
+        "description": "زر Firefox الذي يفتح إدارة اختصارات الامتدادات"
+    },
+    "shortcutGuardDescription": {
+        "message": "في بعض المواقع (مثل chatgpt.com)، يستخدم المحرر تركيبة المفاتيح نفسها فلا يعود Firefox يشغّل BabelFishAI. يطلب الاختصار ذو الأولوية إذن الوصول إلى جميع المواقع لإضافة نص برمجي صغير يحجز هذه التركيبة فقط للإضافة، دون قراءة أو إرسال أي بيانات أخرى.",
+        "description": "شرح الاختصار ذي الأولوية في Firefox والإذن المطلوب"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "تفعيل الاختصار ذي الأولوية",
+        "description": "زر يطلب إذن الوصول إلى المواقع للاختصار ذي الأولوية"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "إلغاء تفعيل الاختصار ذي الأولوية",
+        "description": "زر يزيل إذن الوصول إلى المواقع الخاص بالاختصار ذي الأولوية"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "تم تفعيل الاختصار ذي الأولوية. أعد تحميل علامات التبويب المفتوحة لتطبيقه.",
+        "description": "الحالة المعروضة عند تفعيل الاختصار ذي الأولوية"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "تم رفض الإذن: يبقى الاختصار ذو الأولوية معطلاً.",
+        "description": "الحالة المعروضة عند رفض المستخدم للإذن"
+    },
     "optionsTitle": {
         "message": "تكوين BabelFishAI",
         "description": "عنوان صفحة الخيارات"

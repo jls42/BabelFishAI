@@ -55,6 +55,34 @@
         "message": "然后：<br>1. 在列表中找到 BabelFishAI<br>2. 单击当前快捷方式字段<br>3. 按下新的组合键",
         "description": "更改快捷方式的步骤"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "在 Firefox 中：about:addons → ⚙️ →“管理扩展快捷键”，然后为 BabelFishAI 输入新的组合键。",
+        "description": "在 Firefox 中更改快捷键的说明"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "打开快捷键管理",
+        "description": "打开扩展快捷键管理的 Firefox 按钮"
+    },
+    "shortcutGuardDescription": {
+        "message": "在某些网站（例如 chatgpt.com）上，编辑器使用相同的组合键，导致 Firefox 不再触发 BabelFishAI。优先快捷键会请求访问所有网站的权限，以添加一个仅为扩展保留此组合键的小脚本，不会读取或发送任何其他数据。",
+        "description": "Firefox 优先快捷键及所请求权限的说明"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "启用优先快捷键",
+        "description": "为优先快捷键请求网站访问权限的按钮"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "停用优先快捷键",
+        "description": "移除优先快捷键网站访问权限的按钮"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "优先快捷键已启用。请重新加载已打开的标签页以使其生效。",
+        "description": "优先快捷键启用时显示的状态"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "权限被拒绝：优先快捷键保持停用状态。",
+        "description": "用户拒绝权限时显示的状态"
+    },
     "optionsTitle": {
         "message": "BabelFishAI 配置",
         "description": "选项页面的标题"

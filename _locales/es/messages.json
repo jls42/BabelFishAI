@@ -55,6 +55,34 @@
         "message": "Luego:<br>1. Encuentra BabelFishAI en la lista<br>2. Haz clic en el campo del atajo actual<br>3. Presiona la nueva combinación de teclas",
         "description": "Pasos para cambiar el atajo"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "En Firefox: about:addons → ⚙️ → «Administrar atajos de extensiones» y luego introduce la nueva combinación para BabelFishAI.",
+        "description": "Instrucciones de Firefox para cambiar el atajo de teclado"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Abrir la gestión de atajos",
+        "description": "Botón de Firefox que abre la gestión de atajos de extensiones"
+    },
+    "shortcutGuardDescription": {
+        "message": "En algunos sitios (p. ej., chatgpt.com), el editor usa la misma combinación de teclas y Firefox ya no activa BabelFishAI. El atajo prioritario solicita acceso a todos los sitios para añadir un pequeño script que reserva solo esta combinación para la extensión, sin leer ni enviar ningún otro dato.",
+        "description": "Explicación del atajo prioritario de Firefox y del permiso solicitado"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Activar el atajo prioritario",
+        "description": "Botón que solicita el permiso de acceso a los sitios para el atajo prioritario"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Desactivar el atajo prioritario",
+        "description": "Botón que retira el permiso de acceso a los sitios del atajo prioritario"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Atajo prioritario activado. Recarga las pestañas ya abiertas para aplicarlo.",
+        "description": "Estado mostrado cuando el atajo prioritario está activo"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permiso denegado: el atajo prioritario sigue desactivado.",
+        "description": "Estado mostrado cuando el usuario deniega el permiso"
+    },
     "optionsTitle": {
         "message": "Configuración de BabelFishAI",
         "description": "Título de la página de opciones"

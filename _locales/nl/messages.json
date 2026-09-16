@@ -55,6 +55,34 @@
         "message": "Vervolgens:<br>1. Zoek BabelFishAI in de lijst<br>2. Klik op het veld van de huidige sneltoets<br>3. Druk op de nieuwe toetsencombinatie",
         "description": "Stappen om de sneltoets te wijzigen"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "In Firefox: about:addons → ⚙️ → ‘Extensiesneltoetsen beheren’ en voer daarna de nieuwe toetscombinatie voor BabelFishAI in.",
+        "description": "Firefox-instructies om de sneltoets te wijzigen"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Sneltoetsbeheer openen",
+        "description": "Firefox-knop die het beheer van extensiesneltoetsen opent"
+    },
+    "shortcutGuardDescription": {
+        "message": "Op sommige websites (bijv. chatgpt.com) gebruikt de editor dezelfde toetscombinatie en activeert Firefox BabelFishAI niet meer. De voorrangssneltoets vraagt toegang tot alle websites om er een klein script toe te voegen dat alleen deze toetscombinatie voor de extensie reserveert, zonder andere gegevens te lezen of te verzenden.",
+        "description": "Uitleg over de voorrangssneltoets in Firefox en de gevraagde toestemming"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Voorrangssneltoets inschakelen",
+        "description": "Knop die toestemming voor toegang tot websites vraagt voor de voorrangssneltoets"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Voorrangssneltoets uitschakelen",
+        "description": "Knop die de toestemming voor toegang tot websites van de voorrangssneltoets intrekt"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Voorrangssneltoets ingeschakeld. Herlaad reeds geopende tabbladen om deze toe te passen.",
+        "description": "Status wanneer de voorrangssneltoets actief is"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Toestemming geweigerd: de voorrangssneltoets blijft uitgeschakeld.",
+        "description": "Status wanneer de gebruiker de toestemming weigert"
+    },
     "optionsTitle": {
         "message": "Configuratie van BabelFishAI",
         "description": "Titel van de optiepagina"

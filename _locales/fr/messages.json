@@ -55,6 +55,34 @@
         "message": "Puis :<br>1. Trouvez BabelFishAI dans la liste<br>2. Cliquez sur le champ du raccourci actuel<br>3. Appuyez sur la nouvelle combinaison de touches",
         "description": "Étapes pour changer le raccourci"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "Dans Firefox : about:addons → ⚙️ → « Gérer les raccourcis d’extensions », puis saisissez la nouvelle combinaison pour BabelFishAI.",
+        "description": "Instructions Firefox pour changer le raccourci clavier"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Ouvrir la gestion des raccourcis",
+        "description": "Bouton Firefox qui ouvre la gestion des raccourcis d'extensions"
+    },
+    "shortcutGuardDescription": {
+        "message": "Sur certains sites (ex. chatgpt.com), l'éditeur utilise la même combinaison de touches et Firefox ne déclenche plus BabelFishAI. Le raccourci prioritaire demande l'accès à tous les sites pour y ajouter un petit script qui réserve uniquement cette combinaison à l'extension, sans lire ni envoyer aucune autre donnée.",
+        "description": "Explication du raccourci prioritaire Firefox et de la permission demandée"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Activer le raccourci prioritaire",
+        "description": "Bouton qui demande la permission d'accès aux sites pour le raccourci prioritaire"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Désactiver le raccourci prioritaire",
+        "description": "Bouton qui retire la permission d'accès aux sites du raccourci prioritaire"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Raccourci prioritaire activé. Rechargez les onglets déjà ouverts pour l'appliquer.",
+        "description": "Statut affiché quand le raccourci prioritaire est actif"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permission refusée : le raccourci prioritaire reste désactivé.",
+        "description": "Statut affiché quand l'utilisateur refuse la permission"
+    },
     "optionsTitle": {
         "message": "Configuration de BabelFishAI",
         "description": "Titre de la page d'options"

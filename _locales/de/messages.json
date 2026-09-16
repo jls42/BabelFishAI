@@ -55,6 +55,34 @@
         "message": "Dann:<br>1. Suchen Sie BabelFishAI in der Liste<br>2. Klicken Sie auf das Feld für die aktuelle Tastenkombination<br>3. Drücken Sie die neue Tastenkombination",
         "description": "Schritte zum Ändern der Tastenkombination"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "In Firefox: about:addons → ⚙️ → „Tastenkombinationen von Erweiterungen verwalten“, dann geben Sie die neue Tastenkombination für BabelFishAI ein.",
+        "description": "Firefox-Anleitung zum Ändern der Tastenkombination"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Tastenkombinationen verwalten",
+        "description": "Firefox-Schaltfläche, die die Verwaltung der Tastenkombinationen öffnet"
+    },
+    "shortcutGuardDescription": {
+        "message": "Auf manchen Websites (z. B. chatgpt.com) verwendet der Editor dieselbe Tastenkombination, und Firefox löst BabelFishAI nicht mehr aus. Die vorrangige Tastenkombination benötigt Zugriff auf alle Websites, um dort ein kleines Skript einzufügen, das nur diese Kombination für die Erweiterung reserviert, ohne andere Daten zu lesen oder zu senden.",
+        "description": "Erklärung der vorrangigen Tastenkombination in Firefox und der angeforderten Berechtigung"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Vorrangige Tastenkombination aktivieren",
+        "description": "Schaltfläche, die die Berechtigung für den Zugriff auf Websites anfordert"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Vorrangige Tastenkombination deaktivieren",
+        "description": "Schaltfläche, die die Berechtigung für den Zugriff auf Websites entfernt"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Vorrangige Tastenkombination aktiviert. Laden Sie bereits geöffnete Tabs neu, damit sie wirksam wird.",
+        "description": "Status bei aktiver vorrangiger Tastenkombination"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Berechtigung verweigert: Die vorrangige Tastenkombination bleibt deaktiviert.",
+        "description": "Status, wenn die Berechtigung verweigert wird"
+    },
     "optionsTitle": {
         "message": "Konfiguration von BabelFishAI",
         "description": "Titel der Optionsseite"

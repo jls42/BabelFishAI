@@ -55,6 +55,34 @@
         "message": "Em seguida:<br>1. Encontre o BabelFishAI na lista<br>2. Clique no campo do atalho atual<br>3. Pressione a nova combinação de teclas",
         "description": "Passos para alterar o atalho"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "No Firefox: about:addons → ⚙️ → “Gerenciar atalhos de extensões” e depois digite a nova combinação para o BabelFishAI.",
+        "description": "Instruções do Firefox para alterar o atalho de teclado"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Abrir o gerenciamento de atalhos",
+        "description": "Botão do Firefox que abre o gerenciamento de atalhos de extensões"
+    },
+    "shortcutGuardDescription": {
+        "message": "Em alguns sites (por exemplo, chatgpt.com), o editor usa a mesma combinação de teclas e o Firefox não aciona mais o BabelFishAI. O atalho prioritário solicita acesso a todos os sites para adicionar um pequeno script que reserva apenas essa combinação para a extensão, sem ler nem enviar nenhum outro dado.",
+        "description": "Explicação do atalho prioritário do Firefox e da permissão solicitada"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Ativar o atalho prioritário",
+        "description": "Botão que solicita a permissão de acesso aos sites para o atalho prioritário"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Desativar o atalho prioritário",
+        "description": "Botão que remove a permissão de acesso aos sites do atalho prioritário"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Atalho prioritário ativado. Recarregue as abas já abertas para aplicá-lo.",
+        "description": "Status exibido quando o atalho prioritário está ativo"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permissão negada: o atalho prioritário continua desativado.",
+        "description": "Status exibido quando o usuário nega a permissão"
+    },
     "optionsTitle": {
         "message": "Configuração do BabelFishAI",
         "description": "Título da página de opções"

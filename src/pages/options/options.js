@@ -676,6 +676,95 @@ document.addEventListener('DOMContentLoaded', async () => {
         return true;
     }
 
+    // ===== Raccourci clavier sous Firefox =====
+
+    // Permission optionnelle demandée pour le raccourci prioritaire (voir src/shortcut-guard.js)
+    const SHORTCUT_GUARD_ORIGINS = ['<all_urls>'];
+
+    /**
+     * Affiche le bouton et le statut du raccourci prioritaire selon la permission accordée
+     * (textes traduits via data-i18n dans options.html)
+     * @param {boolean} [denied=false] - true si l'utilisateur vient de refuser la permission
+     * @returns {Promise<void>}
+     */
+    async function renderShortcutGuard(denied = false) {
+        const granted = await chrome.permissions.contains({ origins: SHORTCUT_GUARD_ORIGINS });
+        document.getElementById('shortcutGuardEnableButton').hidden = granted;
+        document.getElementById('shortcutGuardDisableButton').hidden = !granted;
+        document.getElementById('shortcutGuardEnabledStatus').hidden = !granted;
+        document.getElementById('shortcutGuardDeniedStatus').hidden = granted || !denied;
+    }
+
+    /**
+     * Journalise une erreur du raccourci prioritaire
+     * @param {Error} error - Erreur de l'API permissions
+     */
+    function logShortcutGuardError(error) {
+        console.error('Erreur du raccourci prioritaire:', error);
+    }
+
+    /**
+     * Demande la permission d'accès aux sites. background.js enregistre alors
+     * src/shortcut-guard.js (permissions.onAdded).
+     */
+    function enableShortcutGuard() {
+        // Appel direct dans le gestionnaire de clic : attendre une promesse avant
+        // permissions.request() ferait perdre le statut d'action utilisateur (MDN)
+        chrome.permissions
+            .request({ origins: SHORTCUT_GUARD_ORIGINS })
+            .then((granted) => renderShortcutGuard(!granted))
+            .catch(logShortcutGuardError);
+    }
+
+    /**
+     * Retire la permission d'accès aux sites. background.js désenregistre alors
+     * src/shortcut-guard.js (permissions.onRemoved).
+     */
+    function disableShortcutGuard() {
+        chrome.permissions
+            .remove({ origins: SHORTCUT_GUARD_ORIGINS })
+            .then(() => renderShortcutGuard())
+            .catch(logShortcutGuardError);
+    }
+
+    /**
+     * Firefox : remplace les instructions Chrome de changement de raccourci et propose le
+     * raccourci prioritaire pour les sites qui interceptent la combinaison (ex. chatgpt.com)
+     * @returns {Promise<void>}
+     */
+    async function setupFirefoxShortcutSettings() {
+        if (!navigator.userAgent.includes('Firefox')) return;
+
+        document.getElementById('shortcutChromeInstructions').hidden = true;
+        document.getElementById('shortcutFirefoxInstructions').hidden = false;
+
+        // commands.openShortcutSettings() n'existe qu'à partir de Firefox 137
+        if (typeof chrome.commands?.openShortcutSettings === 'function') {
+            const openButton = document.getElementById('openShortcutSettings');
+            openButton.hidden = false;
+            openButton.addEventListener('click', () => {
+                chrome.commands.openShortcutSettings().catch((error) => {
+                    console.error('Erreur à l’ouverture de la gestion des raccourcis:', error);
+                });
+            });
+        }
+
+        // optional_host_permissions n'est pris en charge qu'à partir de Firefox 128
+        const browserInfo = await chrome.runtime.getBrowserInfo?.();
+        if (!browserInfo || Number.parseInt(browserInfo.version, 10) < 128) return;
+
+        document.getElementById('shortcutGuard').hidden = false;
+        document
+            .getElementById('shortcutGuardEnableButton')
+            .addEventListener('click', enableShortcutGuard);
+        document
+            .getElementById('shortcutGuardDisableButton')
+            .addEventListener('click', disableShortcutGuard);
+        chrome.permissions.onAdded.addListener(() => renderShortcutGuard());
+        chrome.permissions.onRemoved.addListener(() => renderShortcutGuard());
+        await renderShortcutGuard();
+    }
+
     /**
      * Gère le clic sur les boutons toggle password des providers
      */
@@ -1207,4 +1296,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser le nouveau design dropdown + panel
     showProviderConfig(providerSelector.value);
     updateDropdownStatus();
+
+    // Firefox : instructions de raccourci et raccourci prioritaire (sans bloquer le reste)
+    setupFirefoxShortcutSettings().catch((error) => {
+        console.error('Erreur lors de la configuration du raccourci Firefox:', error);
+    });
 });
