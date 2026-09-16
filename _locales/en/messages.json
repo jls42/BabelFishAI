@@ -275,6 +275,10 @@
         "message": "Transcribing...",
         "description": "Banner message during transcription"
     },
+    "bannerNoSpeech": {
+        "message": "No speech detected. Check your microphone and try again.",
+        "description": "Info message when the API returns an empty transcription (silence, audio too short)"
+    },
     "bannerTranslating": {
         "message": "Translating...",
         "description": "Banner message during translation"

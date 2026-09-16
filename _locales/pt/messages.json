@@ -275,6 +275,10 @@
         "message": "Transcrição em andamento...",
         "description": "Mensagem do banner durante a transcrição"
     },
+    "bannerNoSpeech": {
+        "message": "Nenhuma voz detectada. Verifique seu microfone e tente novamente.",
+        "description": "Mensagem informativa quando a API retorna uma transcrição vazia (silêncio, áudio muito curto)"
+    },
     "bannerTranslating": {
         "message": "Tradução em andamento...",
         "description": "Mensagem do banner durante a tradução"

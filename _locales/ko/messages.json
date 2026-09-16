@@ -275,6 +275,10 @@
         "message": "음성 텍스트 변환 중...",
         "description": "음성 텍스트 변환 중 배너 메시지"
     },
+    "bannerNoSpeech": {
+        "message": "음성이 감지되지 않았습니다. 마이크를 확인한 후 다시 시도하십시오.",
+        "description": "API가 빈 텍스트 변환 결과를 반환할 때 표시되는 안내 메시지 (무음, 너무 짧은 오디오)"
+    },
     "bannerTranslating": {
         "message": "번역 중...",
         "description": "번역 중 배너 메시지"

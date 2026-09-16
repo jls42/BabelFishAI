@@ -275,6 +275,10 @@
         "message": "Transkriberar...",
         "description": "Bannermeddelande under transkription"
     },
+    "bannerNoSpeech": {
+        "message": "Inget tal upptäcktes. Kontrollera mikrofonen och försök igen.",
+        "description": "Informationsmeddelande när API:et returnerar en tom transkription (tystnad, för kort ljud)"
+    },
     "bannerTranslating": {
         "message": "Översätter...",
         "description": "Bannermeddelande under översättning"

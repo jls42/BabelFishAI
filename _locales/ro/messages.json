@@ -275,6 +275,10 @@
         "message": "Transcriere în curs...",
         "description": "Mesaj de banner în timpul transcrierii"
     },
+    "bannerNoSpeech": {
+        "message": "Nu a fost detectată nicio voce. Verificați microfonul și încercați din nou.",
+        "description": "Mesaj informativ când API-ul returnează o transcriere goală (liniște, audio prea scurt)"
+    },
     "bannerTranslating": {
         "message": "Traducere în curs...",
         "description": "Mesaj de banner în timpul traducerii"

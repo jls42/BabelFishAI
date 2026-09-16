@@ -275,6 +275,10 @@
         "message": "Trwa transkrypcja...",
         "description": "Komunikat banera podczas transkrypcji"
     },
+    "bannerNoSpeech": {
+        "message": "Nie wykryto głosu. Sprawdź mikrofon i spróbuj ponownie.",
+        "description": "Komunikat informacyjny, gdy API zwraca pustą transkrypcję (cisza, zbyt krótkie nagranie)"
+    },
     "bannerTranslating": {
         "message": "Trwa tłumaczenie...",
         "description": "Komunikat banera podczas tłumaczenia"

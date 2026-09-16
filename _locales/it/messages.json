@@ -275,6 +275,10 @@
         "message": "Trascrizione in corso...",
         "description": "Messaggio del banner durante la trascrizione"
     },
+    "bannerNoSpeech": {
+        "message": "Nessuna voce rilevata. Controlla il microfono e riprova.",
+        "description": "Messaggio informativo quando l'API restituisce una trascrizione vuota (silenzio, audio troppo breve)"
+    },
     "bannerTranslating": {
         "message": "Traduzione in corso...",
         "description": "Messaggio del banner durante la traduzione"

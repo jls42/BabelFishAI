@@ -275,6 +275,10 @@
         "message": "Transcribiendo...",
         "description": "Mensaje del banner durante la transcripción"
     },
+    "bannerNoSpeech": {
+        "message": "No se detectó ninguna voz. Comprueba tu micrófono e inténtalo de nuevo.",
+        "description": "Mensaje informativo cuando la API devuelve una transcripción vacía (silencio, audio demasiado corto)"
+    },
     "bannerTranslating": {
         "message": "Traduciendo...",
         "description": "Mensaje del banner durante la traducción"

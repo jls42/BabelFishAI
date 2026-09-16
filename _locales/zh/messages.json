@@ -275,6 +275,10 @@
         "message": "正在转录...",
         "description": "转录期间的横幅消息"
     },
+    "bannerNoSpeech": {
+        "message": "未检测到语音。请检查您的麦克风并重试。",
+        "description": "当 API 返回空转录结果时的提示消息（静音、音频过短）"
+    },
     "bannerTranslating": {
         "message": "正在翻译...",
         "description": "翻译期间的横幅消息"

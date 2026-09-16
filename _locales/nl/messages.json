@@ -275,6 +275,10 @@
         "message": "Transcriptie bezig...",
         "description": "Bannerbericht tijdens de transcriptie"
     },
+    "bannerNoSpeech": {
+        "message": "Geen spraak gedetecteerd. Controleer uw microfoon en probeer het opnieuw.",
+        "description": "Infobericht wanneer de API een lege transcriptie retourneert (stilte, audio te kort)"
+    },
     "bannerTranslating": {
         "message": "Vertaling bezig...",
         "description": "Bannerbericht tijdens de vertaling"

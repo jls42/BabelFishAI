@@ -275,6 +275,10 @@
         "message": "Transkription läuft...",
         "description": "Bannermeldung während der Transkription"
     },
+    "bannerNoSpeech": {
+        "message": "Keine Sprache erkannt. Überprüfen Sie Ihr Mikrofon und versuchen Sie es erneut.",
+        "description": "Infomeldung, wenn die API eine leere Transkription zurückgibt (Stille, Audio zu kurz)"
+    },
     "bannerTranslating": {
         "message": "Übersetzung läuft...",
         "description": "Bannermeldung während der Übersetzung"
