@@ -54,10 +54,10 @@
         }
         const parts = shortcut.split('+');
         const key = parts.pop();
-        const modifiers = new Set(parts.map((name) => MODIFIER_PROPERTIES.get(name)));
-        if (modifiers.has(undefined)) {
+        if (!parts.every((name) => MODIFIER_PROPERTIES.has(name))) {
             return null;
         }
+        const modifiers = new Set(parts.map((name) => MODIFIER_PROPERTIES.get(name)));
         return {
             ctrl: modifiers.has('ctrl'),
             alt: modifiers.has('alt'),
