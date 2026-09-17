@@ -157,7 +157,4 @@ if __name__ == "__main__":
     log(f"serveur factice à l'écoute sur {BASE_URL}")
     log(f"  chat          : {BASE_URL}/v1/chat/completions")
     log(f"  transcription : {BASE_URL}/v1/audio/transcriptions")
-    server = ThreadingHTTPServer(  # NOSONAR python:S5332 - écoute liée à 127.0.0.1, pas au réseau
-        ("127.0.0.1", PORT), Handler
-    )
-    server.serve_forever()
+    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()  # NOSONAR python:S5332
