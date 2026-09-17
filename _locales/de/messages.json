@@ -64,7 +64,7 @@
         "description": "Firefox-Schaltfläche, die die Verwaltung der Tastenkombinationen öffnet"
     },
     "shortcutGuardDescription": {
-        "message": "Auf manchen Websites (z. B. chatgpt.com) verwendet der Editor dieselbe Tastenkombination, und Firefox löst BabelFishAI nicht mehr aus. Die vorrangige Tastenkombination benötigt Zugriff auf alle Websites, um dort ein kleines Skript einzufügen, das nur diese Kombination für die Erweiterung reserviert, ohne andere Daten zu lesen oder zu senden.",
+        "message": "Auf manchen Websites (ChatGPT, Notion …) verwendet der Editor der Seite dieselbe Tastenkombination, und Firefox löst BabelFishAI nicht mehr aus. Die vorrangige Tastenkombination fügt ein kleines Skript ein, das nur diese Kombination für die Erweiterung reserviert, ohne andere Daten zu lesen oder zu senden. Sie nutzt den bei der Installation erteilten Website-Zugriff und kann unten deaktiviert oder wieder aktiviert werden.",
         "description": "Erklärung der vorrangigen Tastenkombination in Firefox und der angeforderten Berechtigung"
     },
     "shortcutGuardEnableButton": {

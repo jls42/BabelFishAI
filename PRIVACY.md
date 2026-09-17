@@ -14,7 +14,7 @@ Lorsque vous utilisez BabelFishAI, les informations suivantes _transitent_ par l
 -   **Vos clés API :** Selon le provider que vous utilisez (Mistral AI, OpenAI), vous devez fournir votre clé API. Ces clés sont stockées localement sur votre ordinateur et ne sont _transmises_ qu'au provider correspondant.
 -   **Vos paramètres :** Vos préférences (providers, modèles, langues, couleurs, etc.) sont stockées localement sur votre ordinateur.
 -   **Insertion dans le champ de texte actif :** Si vous choisissez d'insérer la transcription/traduction, nous _insérons directement_ le texte dans le champ actif, _sans stockage ni analyse intermédiaire_.
--   **Raccourci prioritaire (Firefox, facultatif) :** Sur certains sites (par exemple chatgpt.com), l'éditeur intercepte la combinaison de touches du raccourci de l'extension. Si vous activez le « raccourci prioritaire » dans les options, Firefox vous demande la permission d'accès à tous les sites. L'extension ajoute alors aux pages un petit script qui examine uniquement les touches pressées pour reconnaître la combinaison du raccourci et empêcher la page de l'intercepter. Ce script ne lit pas le contenu des pages, ne stocke rien et n'envoie aucune donnée. Cette permission n'est demandée qu'à votre initiative et n'existe pas dans la version Chrome.
+-   **Raccourci prioritaire (Firefox) :** Sur certains sites (par exemple ChatGPT ou Notion), l'éditeur de la page intercepte la combinaison de touches du raccourci de l'extension. Pour l'éviter, la version Firefox ajoute aux pages web un petit script qui examine uniquement les touches pressées pour reconnaître la combinaison du raccourci et empêcher la page de l'intercepter. Ce script ne lit pas le contenu des pages, ne stocke rien et n'envoie aucune donnée. Firefox vous demande l'accès aux sites lors de l'installation ; vous pouvez le retirer à tout moment depuis les options de l'extension, ce qui désactive ce script. Ce mécanisme n'existe pas dans la version Chrome.
 
 ## 2. Utilisation des Informations
 
@@ -43,7 +43,7 @@ Les informations qui _transitent_ par BabelFishAI sont utilisées _uniquement_ p
 -   Vous pouvez désactiver la traduction dans les paramètres de l'extension.
 -   Vous pouvez supprimer vos clés API (Mistral AI, OpenAI) des paramètres de l'extension.
 -   Vous pouvez choisir le provider IA que vous souhaitez utiliser (Mistral AI, OpenAI, ou service personnalisé). Vérifiez _attentivement_ leurs politiques de confidentialité et assurez-vous qu'ils utilisent HTTPS et offrent des garanties de sécurité suffisantes.
--   Sous Firefox, vous pouvez activer ou désactiver le raccourci prioritaire dans les options de l'extension, ou retirer la permission d'accès aux sites depuis l'onglet Permissions du gestionnaire de modules complémentaires.
+-   Sous Firefox, vous pouvez désactiver ou réactiver le raccourci prioritaire dans les options de l'extension, ou retirer l'accès aux sites depuis l'onglet Permissions du gestionnaire de modules complémentaires.
 -   Vous pouvez désinstaller l'extension à tout moment.
 
 ## 6. Base Juridique du Traitement

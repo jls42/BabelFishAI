@@ -64,7 +64,7 @@
         "description": "Pulsante di Firefox che apre la gestione delle scorciatoie delle estensioni"
     },
     "shortcutGuardDescription": {
-        "message": "Su alcuni siti (ad es. chatgpt.com), l'editor usa la stessa combinazione di tasti e Firefox non attiva più BabelFishAI. La scorciatoia prioritaria richiede l'accesso a tutti i siti per aggiungere un piccolo script che riserva solo questa combinazione all'estensione, senza leggere né inviare altri dati.",
+        "message": "Su alcuni siti (ChatGPT, Notion…), l'editor della pagina usa la stessa combinazione di tasti e Firefox non attiva più BabelFishAI. La scorciatoia prioritaria aggiunge un piccolo script che riserva questa combinazione all'estensione, senza leggere né inviare altri dati. Si basa sull'accesso ai siti concesso durante l'installazione e può essere disattivata o riattivata qui sotto.",
         "description": "Spiegazione della scorciatoia prioritaria di Firefox e del permesso richiesto"
     },
     "shortcutGuardEnableButton": {

@@ -18,7 +18,15 @@
     },
 
     "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
-    "optional_host_permissions": ["*://*/*"],
+
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["src/shortcut-guard.js"],
+            "run_at": "document_start",
+            "all_frames": true
+        }
+    ],
 
     "icons": {
         "16": "images/icon16.png",

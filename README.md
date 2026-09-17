@@ -50,7 +50,7 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
     -   Mode d'affichage flexible : zone de saisie active ou fenêtre de dialogue flottante.
     -   Bandeau de statut configurable avec choix des couleurs, de l'opacité et de la durée d'affichage.
     -   Raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac) pour démarrer/arrêter l'enregistrement.
-    -   Sous Firefox, « raccourci prioritaire » facultatif pour les sites dont l'éditeur intercepte la combinaison (ex. chatgpt.com) : activé depuis les options, il demande la permission d'accès aux sites (voir [PRIVACY.md](PRIVACY.md)).
+    -   Sous Firefox, « raccourci prioritaire » pour les sites dont l'éditeur de page intercepte la combinaison (ChatGPT, Notion…) : actif dès l'installation, désactivable depuis les options (voir [PRIVACY.md](PRIVACY.md)).
     -   Option "Garder ouvert" pour contrôler la durée d'affichage des résultats.
     -   Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
 

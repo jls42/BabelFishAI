@@ -64,7 +64,7 @@
         "description": "Firefox button that opens the extension shortcut settings"
     },
     "shortcutGuardDescription": {
-        "message": "On some websites (e.g. chatgpt.com), the editor uses the same key combination and Firefox no longer triggers BabelFishAI. The priority shortcut asks for access to all websites to add a small script that reserves only this key combination for the extension, without reading or sending any other data.",
+        "message": "On some websites (ChatGPT, Notion…), the page editor uses the same key combination and Firefox no longer triggers BabelFishAI. The priority shortcut adds a small script that reserves this combination for the extension, without reading or sending any other data. It relies on the website access granted at install time and can be turned off or back on below.",
         "description": "Explanation of the Firefox priority shortcut and of the requested permission"
     },
     "shortcutGuardEnableButton": {

@@ -64,7 +64,7 @@
         "description": "Botón de Firefox que abre la gestión de atajos de extensiones"
     },
     "shortcutGuardDescription": {
-        "message": "En algunos sitios (p. ej., chatgpt.com), el editor usa la misma combinación de teclas y Firefox ya no activa BabelFishAI. El atajo prioritario solicita acceso a todos los sitios para añadir un pequeño script que reserva solo esta combinación para la extensión, sin leer ni enviar ningún otro dato.",
+        "message": "En algunos sitios (ChatGPT, Notion…), el editor de la página usa la misma combinación de teclas y Firefox ya no activa BabelFishAI. El atajo prioritario añade un pequeño script que reserva esta combinación para la extensión, sin leer ni enviar ningún otro dato. Se basa en el acceso a los sitios concedido durante la instalación y puede desactivarse o volver a activarse abajo.",
         "description": "Explicación del atajo prioritario de Firefox y del permiso solicitado"
     },
     "shortcutGuardEnableButton": {

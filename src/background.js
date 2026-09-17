@@ -357,16 +357,12 @@ async function migrateRetiredOpenAIModels() {
     }
 }
 
-/**
- * Raccourci prioritaire (Firefox uniquement) : sur certains sites, l'éditeur intercepte la
- * combinaison du raccourci et Firefox ne l'exécute plus (bug Mozilla 1555620). Quand
- * l'utilisateur accorde la permission optionnelle d'accès aux sites depuis la page des
- * options, src/shortcut-guard.js est enregistré sur les pages pour réserver cette
- * combinaison à l'extension.
- */
-const SHORTCUT_GUARD_SCRIPT_ID = 'babelfishai-shortcut-guard';
-// Pages web HTTP(S) et WebSocket uniquement (moindre privilège, sans file://, ftp:// ni data:)
-const SHORTCUT_GUARD_ORIGINS = ['*://*/*'];
+// Raccourci prioritaire (Firefox uniquement) : sur certains sites, l'éditeur de la page
+// intercepte la combinaison du raccourci et Firefox ne l'exécute plus (bug Mozilla 1555620).
+// src/shortcut-guard.js, déclaré dans content_scripts de manifest.firefox.json sur les pages
+// web HTTP(S) et WebSocket (moindre privilège, sans file://, ftp:// ni data:), réserve cette
+// combinaison à l'extension. Firefox accorde l'accès aux sites à l'installation et
+// l'utilisateur peut le retirer depuis la page des options.
 
 /**
  * Indique si le navigateur est Firefox. Dupliqué depuis api-utils.js car le background
@@ -393,38 +389,6 @@ async function syncExecuteActionShortcut() {
 }
 
 /**
- * Enregistre src/shortcut-guard.js si la permission optionnelle d'accès aux sites est
- * accordée, et le retire sinon. Appelé au démarrage, à l'installation ou mise à jour (qui
- * efface les scripts enregistrés) et quand la permission est accordée ou retirée.
- * @returns {Promise<void>}
- */
-async function syncShortcutGuard() {
-    try {
-        const granted = await chrome.permissions.contains({ origins: SHORTCUT_GUARD_ORIGINS });
-        const registered = await chrome.scripting.getRegisteredContentScripts({
-            ids: [SHORTCUT_GUARD_SCRIPT_ID],
-        });
-        if (granted && registered.length === 0) {
-            await chrome.scripting.registerContentScripts([
-                {
-                    id: SHORTCUT_GUARD_SCRIPT_ID,
-                    js: ['src/shortcut-guard.js'],
-                    matches: SHORTCUT_GUARD_ORIGINS,
-                    runAt: 'document_start',
-                    allFrames: true,
-                },
-            ]);
-            debug('Raccourci prioritaire activé');
-        } else if (!granted && registered.length > 0) {
-            await chrome.scripting.unregisterContentScripts({ ids: [SHORTCUT_GUARD_SCRIPT_ID] });
-            debug('Raccourci prioritaire désactivé');
-        }
-    } catch (error) {
-        console.error('Erreur lors de la mise à jour du raccourci prioritaire:', error);
-    }
-}
-
-/**
  * Gère les événements d'installation ou de mise à jour de l'extension
  * @param {Object} details - Détails de l'événement d'installation
  */
@@ -437,10 +401,9 @@ async function handleExtensionInstalled(details) {
     // Remplacer les modèles OpenAI retirés de la liste dans les réglages sauvegardés
     await migrateRetiredOpenAIModels();
 
-    // Firefox : restaurer le raccourci prioritaire (une mise à jour efface les scripts enregistrés)
+    // Firefox : publier le raccourci courant pour le raccourci prioritaire
     if (isFirefoxBrowser()) {
         await syncExecuteActionShortcut();
-        await syncShortcutGuard();
     }
 
     // Ouvrir la page des options uniquement lors de l'installation initiale
@@ -453,15 +416,10 @@ async function handleExtensionInstalled(details) {
 // Enregistrer le gestionnaire d'événements pour l'installation
 chrome.runtime.onInstalled.addListener(handleExtensionInstalled);
 
-// Firefox : raccourci prioritaire suivi au démarrage, sur changement de permission ou de
-// raccourci (commands.onChanged n'existe qu'à partir de Firefox 115)
+// Firefox : tenir à jour le raccourci lu par le raccourci prioritaire, au démarrage et quand
+// l'utilisateur le modifie (commands.onChanged n'existe qu'à partir de Firefox 115)
 if (isFirefoxBrowser()) {
-    chrome.runtime.onStartup.addListener(() => {
-        syncExecuteActionShortcut();
-        syncShortcutGuard();
-    });
-    chrome.permissions.onAdded.addListener(syncShortcutGuard);
-    chrome.permissions.onRemoved.addListener(syncShortcutGuard);
+    chrome.runtime.onStartup.addListener(syncExecuteActionShortcut);
     chrome.commands.onChanged?.addListener(syncExecuteActionShortcut);
 }
 

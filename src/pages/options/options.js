@@ -686,8 +686,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ===== Raccourci clavier sous Firefox =====
 
-    // Permission optionnelle demandée pour le raccourci prioritaire (voir src/shortcut-guard.js) :
-    // pages web HTTP(S) et WebSocket uniquement, par moindre privilège
+    // Accès aux sites du raccourci prioritaire (voir src/shortcut-guard.js), déclaré dans
+    // content_scripts de manifest.firefox.json : pages web HTTP(S) et WebSocket uniquement,
+    // par moindre privilège. En MV3, Firefox permet de retirer puis redemander ces origines.
     const SHORTCUT_GUARD_ORIGINS = ['*://*/*'];
 
     /**
@@ -709,8 +710,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Demande la permission d'accès aux sites. background.js enregistre alors
-     * src/shortcut-guard.js (permissions.onAdded).
+     * Demande l'accès aux sites. Firefox injecte alors src/shortcut-guard.js dans les pages
+     * chargées ensuite. Utile après une mise à jour, qui n'accorde pas les nouvelles origines.
      */
     function enableShortcutGuard() {
         // Appel direct dans le gestionnaire de clic : attendre une promesse avant
@@ -722,8 +723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Retire la permission d'accès aux sites. background.js désenregistre alors
-     * src/shortcut-guard.js (permissions.onRemoved).
+     * Retire l'accès aux sites. Firefox cesse alors d'injecter src/shortcut-guard.js.
      */
     function disableShortcutGuard() {
         chrome.permissions
@@ -754,9 +754,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
-        // optional_host_permissions n'est pris en charge qu'à partir de Firefox 128
+        // Firefox n'affiche et n'accorde les permissions d'hôte du manifest à l'installation
+        // qu'à partir de la version 127 (MDN, manifest.json/host_permissions)
         const browserInfo = await chrome.runtime.getBrowserInfo?.();
-        if (!browserInfo || Number.parseInt(browserInfo.version, 10) < 128) return;
+        if (!browserInfo || Number.parseInt(browserInfo.version, 10) < 127) return;
 
         document.getElementById('shortcutGuard').hidden = false;
         document

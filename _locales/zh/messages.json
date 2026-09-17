@@ -64,7 +64,7 @@
         "description": "打开扩展快捷键管理的 Firefox 按钮"
     },
     "shortcutGuardDescription": {
-        "message": "在某些网站（例如 chatgpt.com）上，编辑器使用相同的组合键，导致 Firefox 不再触发 BabelFishAI。优先快捷键会请求访问所有网站的权限，以添加一个仅为扩展保留此组合键的小脚本，不会读取或发送任何其他数据。",
+        "message": "在某些网站（ChatGPT、Notion 等）上，页面编辑器使用相同的组合键，Firefox 将不再触发 BabelFishAI。优先快捷键会添加一个小脚本，仅为本扩展保留该组合键，不会读取或发送任何其他数据。它使用安装时授予的网站访问权限，可在下方关闭或重新开启。",
         "description": "Firefox 优先快捷键及所请求权限的说明"
     },
     "shortcutGuardEnableButton": {

@@ -64,7 +64,7 @@
         "description": "Firefox-knapp som öppnar hanteringen av genvägar för tillägg"
     },
     "shortcutGuardDescription": {
-        "message": "På vissa webbplatser (t.ex. chatgpt.com) använder redigeraren samma tangentkombination och Firefox utlöser inte längre BabelFishAI. Den prioriterade genvägen begär åtkomst till alla webbplatser för att lägga till ett litet skript som endast reserverar denna kombination för tillägget, utan att läsa eller skicka några andra data.",
+        "message": "På vissa webbplatser (ChatGPT, Notion…) använder sidans redigerare samma tangentkombination och Firefox utlöser inte längre BabelFishAI. Den prioriterade genvägen lägger till ett litet skript som reserverar den här kombinationen för tillägget, utan att läsa eller skicka några andra uppgifter. Den bygger på den webbplatsåtkomst som beviljats vid installationen och kan stängas av eller slås på igen nedan.",
         "description": "Förklaring av den prioriterade genvägen i Firefox och den begärda behörigheten"
     },
     "shortcutGuardEnableButton": {

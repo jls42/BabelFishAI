@@ -64,7 +64,7 @@
         "description": "Przycisk Firefoksa otwierający zarządzanie skrótami rozszerzeń"
     },
     "shortcutGuardDescription": {
-        "message": "Na niektórych stronach (np. chatgpt.com) edytor używa tej samej kombinacji klawiszy i Firefox nie uruchamia już BabelFishAI. Priorytetowy skrót wymaga dostępu do wszystkich stron, aby dodać mały skrypt, który rezerwuje tylko tę kombinację dla rozszerzenia, bez odczytywania ani wysyłania żadnych innych danych.",
+        "message": "Na niektórych stronach (ChatGPT, Notion…) edytor strony używa tej samej kombinacji klawiszy i Firefox przestaje uruchamiać BabelFishAI. Priorytetowy skrót dodaje niewielki skrypt, który rezerwuje tę kombinację dla rozszerzenia, bez odczytywania ani wysyłania jakichkolwiek innych danych. Korzysta z dostępu do stron przyznanego podczas instalacji i można go poniżej wyłączyć lub ponownie włączyć.",
         "description": "Wyjaśnienie priorytetowego skrótu w Firefoksie i wymaganego uprawnienia"
     },
     "shortcutGuardEnableButton": {

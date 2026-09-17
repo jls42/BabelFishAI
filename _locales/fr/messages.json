@@ -64,7 +64,7 @@
         "description": "Bouton Firefox qui ouvre la gestion des raccourcis d'extensions"
     },
     "shortcutGuardDescription": {
-        "message": "Sur certains sites (ex. chatgpt.com), l'éditeur utilise la même combinaison de touches et Firefox ne déclenche plus BabelFishAI. Le raccourci prioritaire demande l'accès à tous les sites pour y ajouter un petit script qui réserve uniquement cette combinaison à l'extension, sans lire ni envoyer aucune autre donnée.",
+        "message": "Sur certains sites (ChatGPT, Notion…), l'éditeur de la page utilise la même combinaison de touches et Firefox ne déclenche plus BabelFishAI. Le raccourci prioritaire ajoute un petit script qui réserve cette combinaison à l'extension, sans lire ni envoyer aucune autre donnée. Il s'appuie sur l'accès aux sites accordé à l'installation et peut être désactivé ou réactivé ci-dessous.",
         "description": "Explication du raccourci prioritaire Firefox et de la permission demandée"
     },
     "shortcutGuardEnableButton": {

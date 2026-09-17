@@ -64,7 +64,7 @@
         "description": "Firefox-knop die het beheer van extensiesneltoetsen opent"
     },
     "shortcutGuardDescription": {
-        "message": "Op sommige websites (bijv. chatgpt.com) gebruikt de editor dezelfde toetscombinatie en activeert Firefox BabelFishAI niet meer. De voorrangssneltoets vraagt toegang tot alle websites om er een klein script toe te voegen dat alleen deze toetscombinatie voor de extensie reserveert, zonder andere gegevens te lezen of te verzenden.",
+        "message": "Op sommige websites (ChatGPT, Notion…) gebruikt de editor van de pagina dezelfde toetsencombinatie en activeert Firefox BabelFishAI niet meer. De prioritaire sneltoets voegt een klein script toe dat deze combinatie voorbehoudt aan de extensie, zonder andere gegevens te lezen of te versturen. Het gebruikt de bij de installatie verleende toegang tot websites en kan hieronder worden uitgeschakeld of weer ingeschakeld.",
         "description": "Uitleg over de voorrangssneltoets in Firefox en de gevraagde toestemming"
     },
     "shortcutGuardEnableButton": {
