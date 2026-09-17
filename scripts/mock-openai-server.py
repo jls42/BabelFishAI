@@ -151,9 +151,13 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    # NOSONAR python:S5332 - HTTP en clair assumé : écoute sur la boucle locale uniquement
-    BASE_URL = f"http://localhost:{PORT}"  # NOSONAR python:S5332
+    # HTTP en clair assumé : outil de test qui n'écoute que sur la boucle locale, et que
+    # l'extension n'accepte d'ailleurs en HTTP que sur localhost (providers.js:isValidUrl)
+    BASE_URL = f"http://localhost:{PORT}"  # NOSONAR python:S5332 - boucle locale uniquement
     log(f"serveur factice à l'écoute sur {BASE_URL}")
     log(f"  chat          : {BASE_URL}/v1/chat/completions")
     log(f"  transcription : {BASE_URL}/v1/audio/transcriptions")
-    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
+    server = ThreadingHTTPServer(  # NOSONAR python:S5332 - écoute liée à 127.0.0.1, pas au réseau
+        ("127.0.0.1", PORT), Handler
+    )
+    server.serve_forever()
