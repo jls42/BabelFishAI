@@ -739,6 +739,21 @@ console.log('[Module] debug info');
 2. Tester sur des sites avec CSP stricte (ex: chatgpt.com) pour vérifier le proxy Firefox
 3. Tester sur des sites sans CSP (ex: chat.mistral.ai) pour vérifier le flux normal
 
+### Tester le provider Custom/LiteLLM sans serveur distant
+
+`scripts/mock-openai-server.py` (Python 3, sans dépendance) simule un serveur compatible OpenAI sur `http://localhost:8765` : il répond instantanément sur `/v1/audio/transcriptions` et `/v1/chat/completions`, et **journalise ce que l'extension envoie vraiment** (champs multipart, nom et taille du fichier audio, modèle, présence de `temperature`, entête `Authorization`).
+
+```bash
+python3 scripts/mock-openai-server.py          # port 8765 par défaut
+python3 scripts/mock-openai-server.py 9000     # autre port
+```
+
+Dans les options, provider Custom/LiteLLM : URL de transcription `http://localhost:8765/v1/audio/transcriptions`, URL de chat `http://localhost:8765/v1/chat/completions`, clé API quelconque. La validation d'URL accepte HTTP uniquement sur `localhost` / `127.0.0.1` (`providers.js:isValidUrl`, `api-utils.js:isProtocolAllowed`), donc n'importe quel port local convient.
+
+Une transcription doit insérer la phrase renvoyée par le serveur, et les actions texte un résultat préfixé par `[serveur local]`. C'est le seul moyen simple de vérifier le chemin `FormData` du proxy Firefox (sérialisation en `Uint8Array` dans le content script, reconstruction dans le background) sans dépendre d'une API payante. Validé ainsi le 2026-09-17 : transcription d'un `.webm` de 40 Ko et traduction, sous Firefox.
+
+Ollama ne remplace pas ce serveur : sa route `/v1/audio/transcriptions` existe mais le registre public n'expose aucun modèle de transcription (`whisper`, `faster-whisper`, `voxtral` renvoient tous HTTP 404 le 2026-09-17). Son endpoint `/v1/chat/completions` convient en revanche pour un test de chat réel, à condition d'utiliser un petit modèle.
+
 ### Structure des manifests
 
 -   `manifest.json` : Source principale pour Chrome (Service Worker)
