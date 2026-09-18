@@ -11,39 +11,46 @@ const BABEL_PROVIDERS = {
         name: 'OpenAI',
         defaultUrls: {
             transcription: 'https://api.openai.com/v1/audio/transcriptions',
-            chat: 'https://api.openai.com/v1/chat/completions'
+            chat: 'https://api.openai.com/v1/chat/completions',
         },
         transcriptionModels: [
             { id: 'whisper-1', name: 'whisper-1', default: true },
             { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
-            { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' }
+            { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' },
+            { id: 'gpt-transcribe', name: 'gpt-transcribe' },
         ],
+        // Modèles retirés : gpt-4.1-nano et gpt-4o (réglages migrés par background.js)
         chatModels: [
             { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
-            { id: 'gpt-4o', name: 'gpt-4o' },
-            { id: 'gpt-4.1', name: 'gpt-4.1' },
             { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
-            { id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' }
+            { id: 'gpt-4.1', name: 'gpt-4.1' },
+            { id: 'gpt-5.4-nano', name: 'gpt-5.4-nano' },
+            { id: 'gpt-5.4-mini', name: 'gpt-5.4-mini' },
+            { id: 'gpt-5.4', name: 'gpt-5.4' },
+            { id: 'gpt-5.6-luna', name: 'gpt-5.6-luna' },
+            { id: 'gpt-5.6-terra', name: 'gpt-5.6-terra' },
+            { id: 'gpt-5.6-sol', name: 'gpt-5.6-sol' },
         ],
-        supportsNoLog: false  // NoLog est uniquement pour LiteLLM, pas OpenAI
+        supportsNoLog: false, // NoLog est uniquement pour LiteLLM, pas OpenAI
     },
     mistral: {
         id: 'mistral',
         name: 'Mistral AI',
         defaultUrls: {
             transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
-            chat: 'https://api.mistral.ai/v1/chat/completions'
+            chat: 'https://api.mistral.ai/v1/chat/completions',
         },
-        transcriptionModels: [
-            { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true }
-        ],
+        transcriptionModels: [{ id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true }],
         chatModels: [
             { id: 'mistral-small-latest', name: 'Mistral Small', default: true },
             { id: 'mistral-medium-latest', name: 'Mistral Medium' },
             { id: 'mistral-large-latest', name: 'Mistral Large' },
-            { id: 'codestral-latest', name: 'Codestral' }
+            { id: 'codestral-latest', name: 'Codestral' },
+            { id: 'ministral-3b-latest', name: 'Ministral 3B' },
+            { id: 'ministral-8b-latest', name: 'Ministral 8B' },
+            { id: 'ministral-14b-latest', name: 'Ministral 14B' },
         ],
-        supportsNoLog: false
+        supportsNoLog: false,
     },
     custom: {
         id: 'custom',
@@ -51,13 +58,11 @@ const BABEL_PROVIDERS = {
         defaultUrls: { transcription: '', chat: '' },
         transcriptionModels: [
             { id: 'whisper-1', name: 'whisper-1', default: true },
-            { id: 'whisper', name: 'whisper' }
+            { id: 'whisper', name: 'whisper' },
         ],
-        chatModels: [
-            { id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }
-        ],
-        supportsNoLog: true
-    }
+        chatModels: [{ id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }],
+        supportsNoLog: true,
+    },
 };
 
 /** Liste ordonnée des IDs de providers (pour l'affichage UI) */
@@ -102,7 +107,7 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
             return ['openai']; // Fallback par défaut
         }
 
-        return PROVIDER_ORDER.filter(providerId => {
+        return PROVIDER_ORDER.filter((providerId) => {
             // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is from PROVIDER_ORDER constant
             const config = providersConfig[providerId];
             return config?.enabled && config?.apiKey;
@@ -149,15 +154,41 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
             return null;
         }
 
-        const models = serviceType === 'transcription'
-            ? provider.transcriptionModels
-            : provider.chatModels;
+        const models =
+            serviceType === 'transcription' ? provider.transcriptionModels : provider.chatModels;
 
-        const defaultModel = models.find(m => m.default);
+        const defaultModel = models.find((m) => m.default);
         if (defaultModel) {
             return defaultModel.id;
         }
         return models[0]?.id ?? null;
+    }
+
+    /**
+     * Indique si un modèle est encore proposé pour un provider : liste de ce registre
+     * ou modèles personnalisés de l'utilisateur. Un modèle retiré de la liste n'est plus proposé.
+     * @param {string} providerId - ID du provider
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @param {string} modelId - ID du modèle à vérifier
+     * @param {string[]} [customModels] - Modèles personnalisés ajoutés par l'utilisateur
+     * @returns {boolean} true si le modèle est proposé
+     */
+    function isModelAvailable(providerId, serviceType, modelId, customModels = []) {
+        if (!modelId) {
+            return false;
+        }
+        if (Array.isArray(customModels) && customModels.includes(modelId)) {
+            return true;
+        }
+
+        const provider = getProvider(providerId);
+        if (!provider) {
+            return false;
+        }
+
+        const models =
+            serviceType === 'transcription' ? provider.transcriptionModels : provider.chatModels;
+        return models.some((m) => m.id === modelId);
     }
 
     /**
@@ -172,15 +203,16 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
         const models = [];
 
         // Ajouter les modèles de chaque provider activé
-        enabledProviderIds.forEach(providerId => {
+        enabledProviderIds.forEach((providerId) => {
             const provider = getProvider(providerId);
             if (!provider) return;
 
-            const providerModels = serviceType === 'transcription'
-                ? provider.transcriptionModels
-                : provider.chatModels;
+            const providerModels =
+                serviceType === 'transcription'
+                    ? provider.transcriptionModels
+                    : provider.chatModels;
 
-            providerModels.forEach(model => {
+            providerModels.forEach((model) => {
                 // Format préfixé si plusieurs providers, sinon juste l'ID
                 const displayPrefix = enabledProviderIds.length > 1 ? `${provider.name}: ` : '';
                 models.push({
@@ -188,20 +220,20 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
                     name: `${displayPrefix}${model.name}`,
                     providerId,
                     fullId: `${providerId}/${model.id}`,
-                    isDefault: model.default
+                    isDefault: model.default,
                 });
             });
         });
 
         // Ajouter les modèles custom (toujours associés au provider actif ou OpenAI)
         if (customModels && customModels.length > 0) {
-            customModels.forEach(customModel => {
+            customModels.forEach((customModel) => {
                 models.push({
                     id: customModel,
                     name: `Custom: ${customModel}`,
                     providerId: 'custom',
                     fullId: `custom/${customModel}`,
-                    isDefault: false
+                    isDefault: false,
                 });
             });
         }
@@ -239,12 +271,14 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
         const modelLower = modelId.toLowerCase();
 
         // Modèles Mistral
-        if (modelLower.includes('mistral') ||
+        if (
+            modelLower.includes('mistral') ||
             modelLower.includes('voxtral') ||
             modelLower.includes('codestral') ||
             modelLower.includes('ministral') ||
             modelLower.includes('magistral') ||
-            modelLower.includes('devstral')) {
+            modelLower.includes('devstral')
+        ) {
             return 'mistral';
         }
 
@@ -272,13 +306,13 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
                 apiKey: '',
                 enabled: false,
                 transcriptionModels: [],
-                chatModels: []
+                chatModels: [],
             },
             mistral: {
                 apiKey: '',
                 enabled: false,
                 transcriptionModels: [],
-                chatModels: []
+                chatModels: [],
             },
             custom: {
                 apiKey: '',
@@ -286,8 +320,8 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
                 transcriptionUrl: '',
                 chatUrl: '',
                 transcriptionModels: [],
-                chatModels: []
-            }
+                chatModels: [],
+            },
         };
     }
 
@@ -331,6 +365,7 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
         getTranscriptionUrl,
         getChatUrl,
         getDefaultModel,
+        isModelAvailable,
         getAllModels,
 
         // Utilitaires
@@ -338,6 +373,6 @@ globalThis.BabelFishAIProviders = (function (PROVIDERS, PROVIDER_ORDER) {
         detectProviderFromModel,
         supportsNoLog,
         createDefaultProvidersConfig,
-        isValidUrl
+        isValidUrl,
     };
 })(BABEL_PROVIDERS, BABEL_PROVIDER_ORDER);

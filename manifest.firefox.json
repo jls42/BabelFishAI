@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "__MSG_extensionName__",
-    "version": "1.1.19",
+    "version": "1.1.20",
     "description": "__MSG_extensionDescription__",
     "author": "Julien LS",
     "default_locale": "fr",
@@ -17,11 +17,15 @@
         }
     },
 
-    "permissions": [
-        "activeTab",
-        "storage",
-        "scripting",
-        "contextMenus"
+    "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
+
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["src/shortcut-guard.js"],
+            "run_at": "document_start",
+            "all_frames": true
+        }
     ],
 
     "icons": {
@@ -76,9 +80,7 @@
                 "images/*",
                 "src/styles/content.css"
             ],
-            "matches": [
-                "<all_urls>"
-            ]
+            "matches": ["<all_urls>"]
         }
     ]
 }

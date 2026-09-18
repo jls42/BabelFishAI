@@ -55,6 +55,34 @@
         "message": "Luego:<br>1. Encuentra BabelFishAI en la lista<br>2. Haz clic en el campo del atajo actual<br>3. Presiona la nueva combinación de teclas",
         "description": "Pasos para cambiar el atajo"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "En Firefox: about:addons → ⚙️ → «Administrar atajos de extensiones» y luego introduce la nueva combinación para BabelFishAI.",
+        "description": "Instrucciones de Firefox para cambiar el atajo de teclado"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Abrir la gestión de atajos",
+        "description": "Botón de Firefox que abre la gestión de atajos de extensiones"
+    },
+    "shortcutGuardDescription": {
+        "message": "En algunos sitios (ChatGPT, Notion…), el editor de la página usa la misma combinación de teclas y Firefox ya no activa BabelFishAI. El atajo prioritario añade un pequeño script que reserva esta combinación para la extensión, sin leer ni enviar ningún otro dato. Se basa en el acceso a los sitios concedido durante la instalación y puede desactivarse o volver a activarse abajo.",
+        "description": "Explicación del atajo prioritario de Firefox y del permiso solicitado"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Activar el atajo prioritario",
+        "description": "Botón que solicita el permiso de acceso a los sitios para el atajo prioritario"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Desactivar el atajo prioritario",
+        "description": "Botón que retira el permiso de acceso a los sitios del atajo prioritario"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Atajo prioritario activado. Recarga las pestañas ya abiertas para aplicarlo.",
+        "description": "Estado mostrado cuando el atajo prioritario está activo"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permiso denegado: el atajo prioritario sigue desactivado.",
+        "description": "Estado mostrado cuando el usuario deniega el permiso"
+    },
     "optionsTitle": {
         "message": "Configuración de BabelFishAI",
         "description": "Título de la página de opciones"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "Tu clave API OpenAI (sk-...)",
         "description": "Marcador de posición para la clave API"
+    },
+    "apiKeyInputLabel": {
+        "message": "Clave API",
+        "description": "Etiqueta accesible (oculta visualmente) del campo de clave API de los proveedores Mistral y Custom"
     },
     "apiKeyInfo": {
         "message": "Obtén tu clave API en",
@@ -255,6 +287,10 @@
         "message": "Agregar",
         "description": "Botón para agregar un modelo"
     },
+    "addModelInputLabel": {
+        "message": "Nuevo modelo personalizado",
+        "description": "Etiqueta accesible (oculta visualmente) del campo para agregar un modelo personalizado"
+    },
     "noLogLabel": {
         "message": "NoLog (solo LiteLLM)",
         "description": "Etiqueta para la opción NoLog"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "Transcribiendo...",
         "description": "Mensaje del banner durante la transcripción"
+    },
+    "bannerNoSpeech": {
+        "message": "No se detectó ninguna voz. Comprueba tu micrófono e inténtalo de nuevo.",
+        "description": "Mensaje informativo cuando la API devuelve una transcripción vacía (silencio, audio demasiado corto)"
     },
     "bannerTranslating": {
         "message": "Traduciendo...",

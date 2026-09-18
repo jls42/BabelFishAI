@@ -1,5 +1,5 @@
 // Script de gestion des options
-/* global chrome */ // Chrome extension API global
+/* global chrome */ // Global de l'API d'extension Chrome
 
 /**
  * Vérifie si un provider standard (OpenAI/Mistral) est activé
@@ -9,6 +9,14 @@
  */
 function isStandardProviderEnabled(enabledCheckbox, keyInput) {
     return enabledCheckbox.checked && Boolean(keyInput.value.trim());
+}
+
+/**
+ * Journalise une erreur du raccourci prioritaire Firefox
+ * @param {Error} error - Erreur de l'API permissions
+ */
+function logShortcutGuardError(error) {
+    console.error('Erreur du raccourci prioritaire:', error);
 }
 
 /**
@@ -36,11 +44,19 @@ function validateCustomProviderUrls(customConfig, showStatus, i18n, Providers) {
     const urls = [customConfig.transcriptionUrl, customConfig.chatUrl];
     for (const url of urls) {
         if (!url) {
-            showStatus(i18n.getMessage('customUrlRequiredError') || 'Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.', 'error');
+            showStatus(
+                i18n.getMessage('customUrlRequiredError') ||
+                    'Erreur : Le provider Custom/LiteLLM nécessite des URLs configurées.',
+                'error',
+            );
             return false;
         }
         if (!Providers.isValidUrl(url, true)) {
-            showStatus(i18n.getMessage('invalidUrlError') || 'Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).', 'error');
+            showStatus(
+                i18n.getMessage('invalidUrlError') ||
+                    'Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).',
+                'error',
+            );
             return false;
         }
     }
@@ -58,13 +74,13 @@ function determineActiveProviders(enabledProviders, transcriptionSelect, chatSel
     if (enabledProviders.length > 1) {
         return {
             transcriptionProvider: transcriptionSelect.value || enabledProviders[0],
-            chatProvider: chatSelect.value || enabledProviders[0]
+            chatProvider: chatSelect.value || enabledProviders[0],
         };
     }
     if (enabledProviders.length === 1) {
         return {
             transcriptionProvider: enabledProviders[0],
-            chatProvider: enabledProviders[0]
+            chatProvider: enabledProviders[0],
         };
     }
     return { transcriptionProvider: 'openai', chatProvider: 'openai' };
@@ -99,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             newTranscriptionInput: document.getElementById('newOpenaiTranscriptionModel'),
             newChatInput: document.getElementById('newOpenaiChatModel'),
             addTranscriptionButton: document.getElementById('addOpenaiTranscriptionModel'),
-            addChatButton: document.getElementById('addOpenaiChatModel')
+            addChatButton: document.getElementById('addOpenaiChatModel'),
         },
         mistral: {
             transcriptionSelect: document.getElementById('mistralTranscriptionModel'),
@@ -107,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             newTranscriptionInput: document.getElementById('newMistralTranscriptionModel'),
             newChatInput: document.getElementById('newMistralChatModel'),
             addTranscriptionButton: document.getElementById('addMistralTranscriptionModel'),
-            addChatButton: document.getElementById('addMistralChatModel')
+            addChatButton: document.getElementById('addMistralChatModel'),
         },
         custom: {
             transcriptionSelect: document.getElementById('customTranscriptionModel'),
@@ -115,8 +131,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             newTranscriptionInput: document.getElementById('newCustomTranscriptionModel'),
             newChatInput: document.getElementById('newCustomChatModel'),
             addTranscriptionButton: document.getElementById('addCustomTranscriptionModel'),
-            addChatButton: document.getElementById('addCustomChatModel')
-        }
+            addChatButton: document.getElementById('addCustomChatModel'),
+        },
     };
 
     const providerServices = document.getElementById('providerServices');
@@ -182,26 +198,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     function showProviderConfig(providerId) {
         // Masquer tous les panels
         const allConfigs = providerConfigPanel.querySelectorAll('.provider-config');
-        allConfigs.forEach(config => {
+        allConfigs.forEach((config) => {
             config.style.display = 'none';
         });
 
         // Mapper providerId vers l'ID du panel HTML
         const panelIdMap = {
-            'openai': 'configOpenAI',
-            'mistral': 'configMistral',
-            'custom': 'configCustom'
+            openai: 'configOpenAI',
+            mistral: 'configMistral',
+            custom: 'configCustom',
         };
 
         // Mapper providerId vers le logo
         const logoMap = {
-            'openai': '../../../images/openai-logo.png',
-            'mistral': '../../../images/mistral-logo.png',
-            'custom': null // Emoji 🚅 pour LiteLLM
+            openai: '../../../images/openai-logo.png',
+            mistral: '../../../images/mistral-logo.png',
+            custom: null, // Emoji 🚅 pour LiteLLM
         };
 
         // Mettre à jour le logo à côté du dropdown
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
         const logoSrc = logoMap[providerId];
         if (logoSrc) {
             providerLogo.src = logoSrc;
@@ -224,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Afficher le panel sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const targetConfig = document.getElementById(panelIdMap[providerId]);
         if (targetConfig) {
             targetConfig.style.display = 'block';
@@ -243,20 +259,20 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function showProviderToggle(providerId) {
         const toggles = {
-            'openai': document.getElementById('toggleOpenAI'),
-            'mistral': document.getElementById('toggleMistral'),
-            'custom': document.getElementById('toggleCustom')
+            openai: document.getElementById('toggleOpenAI'),
+            mistral: document.getElementById('toggleMistral'),
+            custom: document.getElementById('toggleCustom'),
         };
 
         // Masquer tous les toggles
-        Object.values(toggles).forEach(toggle => {
+        Object.values(toggles).forEach((toggle) => {
             if (toggle) toggle.style.display = 'none';
         });
 
         // Afficher le toggle du provider sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         if (toggles[providerId]) {
-            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
             toggles[providerId].style.display = 'inline-block';
         }
     }
@@ -292,7 +308,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Vider le contenu existant de manière sécurisée
         dropdownStatus.textContent = '';
 
-        providers.forEach(providerId => {
+        providers.forEach((providerId) => {
             const status = getProviderStatus(providerId);
             let cssClass = 'status-dot';
             let symbol = '';
@@ -311,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const span = document.createElement('span');
             span.className = cssClass;
             span.title = status.name;
-            // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is from controlled providers array
+            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient d'un tableau de providers contrôlé
             span.textContent = `${symbol} ${shortNames[providerId]}`;
             dropdownStatus.appendChild(span);
         });
@@ -323,7 +339,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Object} Statut du provider
      */
     function getProviderStatus(providerId) {
-        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables intentionally assigned in if/else blocks
+        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables assignées intentionnellement dans des blocs if/else
 
         if (providerId === 'openai') {
             enabledCheckbox = openaiEnabledCheckbox;
@@ -347,14 +363,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Pour le provider custom, vérifier aussi les URLs
         let hasRequiredUrls = true;
         if (providerId === 'custom') {
-            hasRequiredUrls = customTranscriptionUrlInput.value.trim().length > 0 &&
+            hasRequiredUrls =
+                customTranscriptionUrlInput.value.trim().length > 0 &&
                 customChatUrlInput.value.trim().length > 0;
         }
 
         return {
             enabled: isEnabled,
             configured: hasApiKey && (providerId !== 'custom' || hasRequiredUrls),
-            name
+            name,
         };
     }
 
@@ -396,7 +413,9 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function isCustomProviderEnabled() {
         const hasApiKey = customEnabledCheckbox.checked && Boolean(customApiKeyInput.value.trim());
-        const hasUrls = Boolean(customTranscriptionUrlInput.value.trim()) && Boolean(customChatUrlInput.value.trim());
+        const hasUrls =
+            Boolean(customTranscriptionUrlInput.value.trim()) &&
+            Boolean(customChatUrlInput.value.trim());
         return hasApiKey && hasUrls;
     }
 
@@ -431,7 +450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         transcriptionProviderSelect.innerHTML = '';
         chatProviderSelect.innerHTML = '';
 
-        enabledProviders.forEach(providerId => {
+        enabledProviders.forEach((providerId) => {
             const provider = Providers.getProvider(providerId);
             if (!provider) return;
 
@@ -477,11 +496,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modelTypes = ['transcription', 'chat'];
 
         for (const providerId of providerIds) {
-            // eslint-disable-next-line security/detect-object-injection -- providerId from constant array
+            // eslint-disable-next-line security/detect-object-injection -- providerId provient d'un tableau constant
             const config = configs[providerId] || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];
-                const selected = config[`selected${modelType.charAt(0).toUpperCase() + modelType.slice(1)}Model`];
+                const selected =
+                    config[
+                        `selected${modelType.charAt(0).toUpperCase() + modelType.slice(1)}Model`
+                    ];
                 populateProviderModelSelect(providerId, modelType, models, selected);
             }
         }
@@ -519,42 +541,60 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-        chrome.storage.sync.get({
-            providers: null,
-            transcriptionProvider: 'openai',
-            chatProvider: 'openai',
-            apiKey: '' // Legacy key pour migration
-        }, (items) => {
-            // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
-            console.log('[Options] Loading providers config:', items);
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get(
+            {
+                providers: null,
+                transcriptionProvider: 'openai',
+                chatProvider: 'openai',
+                apiKey: '', // Legacy key pour migration
+            },
+            (items) => {
+                // skipcq: JS-0002 - debug log for options loading diagnostics (extension legitimate console use)
+                // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
+                console.log('[Options] Loading providers config:', items);
 
-            const configs = {
-                openai: items.providers?.openai || {},
-                mistral: items.providers?.mistral || {},
-                custom: items.providers?.custom || {}
-            };
+                const configs = {
+                    openai: items.providers?.openai || {},
+                    mistral: items.providers?.mistral || {},
+                    custom: items.providers?.custom || {},
+                };
 
-            if (items.providers) {
-                // Mode multi-provider
-                loadStandardProviderConfig(configs.openai, openaiApiKeyInput, openaiEnabledCheckbox);
-                loadStandardProviderConfig(configs.mistral, mistralApiKeyInput, mistralEnabledCheckbox);
-                loadCustomProviderConfig(configs.custom);
-            } else {
-                // Mode legacy : utiliser l'ancienne clé API pour OpenAI
-                openaiApiKeyInput.value = items.apiKey || '';
-                openaiEnabledCheckbox.checked = Boolean(items.apiKey);
-                mistralEnabledCheckbox.checked = false;
-                customEnabledCheckbox.checked = false;
-            }
+                if (items.providers) {
+                    // Mode multi-provider
+                    loadStandardProviderConfig(
+                        configs.openai,
+                        openaiApiKeyInput,
+                        openaiEnabledCheckbox,
+                    );
+                    loadStandardProviderConfig(
+                        configs.mistral,
+                        mistralApiKeyInput,
+                        mistralEnabledCheckbox,
+                    );
+                    loadCustomProviderConfig(configs.custom);
+                } else {
+                    // Mode legacy : utiliser l'ancienne clé API pour OpenAI
+                    openaiApiKeyInput.value = items.apiKey || '';
+                    openaiEnabledCheckbox.checked = Boolean(items.apiKey);
+                    mistralEnabledCheckbox.checked = false;
+                    customEnabledCheckbox.checked = false;
+                }
 
-            populateAllModelSelects(configs);
-            updateAllProviderDisplays();
-            restoreServiceSelectors(items);
+                populateAllModelSelects(configs);
+                updateAllProviderDisplays();
+                restoreServiceSelectors(items);
 
-            // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
-            console.log('[Options] Loaded - transcriptionProvider:', items.transcriptionProvider, 'chatProvider:', items.chatProvider);
-        });
+                // skipcq: JS-0002 - debug log for options loading diagnostics
+                // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
+                console.log(
+                    '[Options] Loaded - transcriptionProvider:',
+                    items.transcriptionProvider,
+                    'chatProvider:',
+                    items.chatProvider,
+                );
+            },
+        );
     }
 
     /**
@@ -568,7 +608,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 transcriptionModels: getProviderCustomModels('openai', 'transcription'),
                 chatModels: getProviderCustomModels('openai', 'chat'),
                 selectedTranscriptionModel: getSelectedProviderModel('openai', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('openai', 'chat')
+                selectedChatModel: getSelectedProviderModel('openai', 'chat'),
             },
             mistral: {
                 apiKey: mistralApiKeyInput.value.trim(),
@@ -576,7 +616,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 transcriptionModels: getProviderCustomModels('mistral', 'transcription'),
                 chatModels: getProviderCustomModels('mistral', 'chat'),
                 selectedTranscriptionModel: getSelectedProviderModel('mistral', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('mistral', 'chat')
+                selectedChatModel: getSelectedProviderModel('mistral', 'chat'),
             },
             custom: {
                 apiKey: customApiKeyInput.value.trim(),
@@ -586,8 +626,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 transcriptionModels: getProviderCustomModels('custom', 'transcription'),
                 chatModels: getProviderCustomModels('custom', 'chat'),
                 selectedTranscriptionModel: getSelectedProviderModel('custom', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('custom', 'chat')
-            }
+                selectedChatModel: getSelectedProviderModel('custom', 'chat'),
+            },
         };
 
         // Valider les URLs du provider custom
@@ -600,50 +640,142 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { transcriptionProvider, chatProvider } = determineActiveProviders(
             enabledProviders,
             transcriptionProviderSelect,
-            chatProviderSelect
+            chatProviderSelect,
         );
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité
         // Utiliser la clé du provider de transcription actif
-        // eslint-disable-next-line security/detect-object-injection -- False positive: transcriptionProvider is a controlled provider ID
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : transcriptionProvider est un ID de provider contrôlé
         const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
 
+        // skipcq: JS-0002 - debug log for options saving diagnostics
         // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
         console.log('[Options] Saving providers config:', {
             transcriptionProvider,
             chatProvider,
-            enabledProviders
+            enabledProviders,
         });
 
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-        chrome.storage.sync.set({
-            providers,
-            transcriptionProvider,
-            chatProvider,
-            // Legacy keys pour rétrocompatibilité
-            apiKey: legacyApiKey
-        }, () => {
-            // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-            if (chrome.runtime.lastError) {
-                // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-                console.error('[Options] Error saving:', chrome.runtime.lastError);
-            } else {
-                // eslint-disable-next-line no-console -- Debug log for options saving success
-                console.log('[Options] Config saved successfully');
-            }
-            updateProviderDisplay('openai');
-            updateProviderDisplay('mistral');
-            updateProviderDisplay('custom');
-        });
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.set(
+            {
+                providers,
+                transcriptionProvider,
+                chatProvider,
+                // Legacy keys pour rétrocompatibilité
+                apiKey: legacyApiKey,
+            },
+            () => {
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+                if (chrome.runtime.lastError) {
+                    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+                    console.error('[Options] Error saving:', chrome.runtime.lastError);
+                } else {
+                    // skipcq: JS-0002 - debug log for options saving success
+                    // eslint-disable-next-line no-console -- Debug log for options saving success
+                    console.log('[Options] Config saved successfully');
+                }
+                updateProviderDisplay('openai');
+                updateProviderDisplay('mistral');
+                updateProviderDisplay('custom');
+            },
+        );
 
         return true;
+    }
+
+    // ===== Raccourci clavier sous Firefox =====
+
+    // Accès aux sites du raccourci prioritaire (voir src/shortcut-guard.js), déclaré dans
+    // content_scripts de manifest.firefox.json : pages web HTTP(S) et WebSocket uniquement,
+    // par moindre privilège. En MV3, Firefox permet de retirer puis redemander ces origines.
+    const SHORTCUT_GUARD_ORIGINS = ['*://*/*'];
+
+    /**
+     * Affiche le bouton et le statut du raccourci prioritaire selon la permission accordée
+     * (textes traduits via data-i18n dans options.html)
+     * @param {boolean} [denied=false] - true si l'utilisateur vient de refuser la permission
+     * @returns {Promise<void>}
+     */
+    async function renderShortcutGuard(denied = false) {
+        try {
+            const granted = await chrome.permissions.contains({ origins: SHORTCUT_GUARD_ORIGINS });
+            document.getElementById('shortcutGuardEnableButton').hidden = granted;
+            document.getElementById('shortcutGuardDisableButton').hidden = !granted;
+            document.getElementById('shortcutGuardEnabledStatus').hidden = !granted;
+            document.getElementById('shortcutGuardDeniedStatus').hidden = granted || !denied;
+        } catch (error) {
+            logShortcutGuardError(error);
+        }
+    }
+
+    /**
+     * Demande l'accès aux sites. Firefox injecte alors src/shortcut-guard.js dans les pages
+     * chargées ensuite. Utile après une mise à jour, qui n'accorde pas les nouvelles origines.
+     */
+    function enableShortcutGuard() {
+        // Appel direct dans le gestionnaire de clic : attendre une promesse avant
+        // permissions.request() ferait perdre le statut d'action utilisateur (MDN)
+        chrome.permissions
+            .request({ origins: SHORTCUT_GUARD_ORIGINS })
+            .then((granted) => renderShortcutGuard(!granted))
+            .catch(logShortcutGuardError);
+    }
+
+    /**
+     * Retire l'accès aux sites. Firefox cesse alors d'injecter src/shortcut-guard.js.
+     */
+    function disableShortcutGuard() {
+        chrome.permissions
+            .remove({ origins: SHORTCUT_GUARD_ORIGINS })
+            .then(() => renderShortcutGuard())
+            .catch(logShortcutGuardError);
+    }
+
+    /**
+     * Firefox : remplace les instructions Chrome de changement de raccourci et propose le
+     * raccourci prioritaire pour les sites qui interceptent la combinaison (ex. chatgpt.com)
+     * @returns {Promise<void>}
+     */
+    async function setupFirefoxShortcutSettings() {
+        if (!navigator.userAgent.includes('Firefox')) return;
+
+        document.getElementById('shortcutChromeInstructions').hidden = true;
+        document.getElementById('shortcutFirefoxInstructions').hidden = false;
+
+        // commands.openShortcutSettings() n'existe qu'à partir de Firefox 137
+        if (typeof chrome.commands?.openShortcutSettings === 'function') {
+            const openButton = document.getElementById('openShortcutSettings');
+            openButton.hidden = false;
+            openButton.addEventListener('click', () => {
+                chrome.commands.openShortcutSettings().catch((error) => {
+                    console.error('Erreur à l’ouverture de la gestion des raccourcis:', error);
+                });
+            });
+        }
+
+        // Firefox n'affiche et n'accorde les permissions d'hôte du manifest à l'installation
+        // qu'à partir de la version 127 (MDN, manifest.json/host_permissions)
+        const browserInfo = await chrome.runtime.getBrowserInfo?.();
+        if (!browserInfo || Number.parseInt(browserInfo.version, 10) < 127) return;
+
+        document.getElementById('shortcutGuard').hidden = false;
+        document
+            .getElementById('shortcutGuardEnableButton')
+            .addEventListener('click', enableShortcutGuard);
+        document
+            .getElementById('shortcutGuardDisableButton')
+            .addEventListener('click', disableShortcutGuard);
+        chrome.permissions.onAdded.addListener(() => renderShortcutGuard());
+        chrome.permissions.onRemoved.addListener(() => renderShortcutGuard());
+        await renderShortcutGuard();
     }
 
     /**
      * Gère le clic sur les boutons toggle password des providers
      */
     function setupProviderPasswordToggles() {
-        document.querySelectorAll('.provider-card .toggle-password').forEach(button => {
+        document.querySelectorAll('.provider-config .toggle-password').forEach((button) => {
             button.addEventListener('click', () => {
                 const targetId = button.dataset.target;
                 const input = document.getElementById(targetId);
@@ -661,7 +793,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const providerCustomModelsCache = {
         openai: { transcription: [], chat: [] },
         mistral: { transcription: [], chat: [] },
-        custom: { transcription: [], chat: [] }
+        custom: { transcription: [], chat: [] },
     };
 
     /**
@@ -671,19 +803,23 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string[]} customModels - Liste des modèles personnalisés
      * @param {string} selectedModel - Modèle actuellement sélectionné
      */
-    function populateProviderModelSelect(providerId, modelType, customModels = [], selectedModel = null) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+    function populateProviderModelSelect(
+        providerId,
+        modelType,
+        customModels = [],
+        selectedModel = null,
+    ) {
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return;
 
-        const selectElement = modelType === 'transcription'
-            ? elements.transcriptionSelect
-            : elements.chatSelect;
+        const selectElement =
+            modelType === 'transcription' ? elements.transcriptionSelect : elements.chatSelect;
 
         if (!selectElement) return;
 
         // Sauvegarder les modèles personnalisés dans le cache
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
         providerCustomModelsCache[providerId][modelType] = [...customModels];
 
         selectElement.innerHTML = '';
@@ -692,26 +828,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         const providerDef = Providers.getProvider(providerId);
         let defaultModels = [];
         if (providerDef) {
-            defaultModels = modelType === 'transcription'
-                ? providerDef.transcriptionModels
-                : providerDef.chatModels;
+            defaultModels =
+                modelType === 'transcription'
+                    ? providerDef.transcriptionModels
+                    : providerDef.chatModels;
         }
 
+        // Un modèle sauvegardé qui n'est plus proposé (retiré de providers.js) est ignoré :
+        // on présélectionne alors le modèle par défaut au lieu de laisser la liste vide
+        const isSelectedModelAvailable = Providers.isModelAvailable(
+            providerId,
+            modelType,
+            selectedModel,
+            customModels,
+        );
+
         // Ajouter les modèles par défaut
-        defaultModels.forEach(model => {
+        defaultModels.forEach((model) => {
             const option = document.createElement('option');
             option.value = model.id;
             option.textContent = model.id; // Nom technique
-            if (model.default && !selectedModel) {
+            if (model.default && !isSelectedModelAvailable) {
                 option.selected = true;
             }
             selectElement.appendChild(option);
         });
 
         // Ajouter les modèles personnalisés
-        customModels.forEach(modelId => {
+        customModels.forEach((modelId) => {
             // Ne pas ajouter si c'est déjà un modèle par défaut
-            if (defaultModels.some(m => m.id === modelId)) return;
+            if (defaultModels.some((m) => m.id === modelId)) return;
 
             const option = document.createElement('option');
             option.value = modelId;
@@ -721,7 +867,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Sélectionner le modèle sauvegardé si présent
-        if (selectedModel) {
+        if (isSelectedModelAvailable) {
             selectElement.value = selectedModel;
         }
     }
@@ -733,7 +879,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string[]} Liste des modèles personnalisés
      */
     function getProviderCustomModels(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId and modelType are controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
         return providerCustomModelsCache[providerId]?.[modelType] || [];
     }
 
@@ -744,13 +890,12 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     function getSelectedProviderModel(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum ('openai'|'mistral'|'custom')
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
         const elements = providerModelElements[providerId];
         if (!elements) return null;
 
-        const selectElement = modelType === 'transcription'
-            ? elements.transcriptionSelect
-            : elements.chatSelect;
+        const selectElement =
+            modelType === 'transcription' ? elements.transcriptionSelect : elements.chatSelect;
 
         return selectElement?.value || null;
     }
@@ -762,13 +907,15 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {{input: HTMLInputElement, select: HTMLSelectElement}|null}
      */
     function getModelAddElements(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled enum
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
         const elements = providerModelElements[providerId];
         if (!elements) return null;
 
-        const input = modelType === 'transcription' ? elements.newTranscriptionInput : elements.newChatInput;
-        const select = modelType === 'transcription' ? elements.transcriptionSelect : elements.chatSelect;
-        return (input && select) ? { input, select } : null;
+        const input =
+            modelType === 'transcription' ? elements.newTranscriptionInput : elements.newChatInput;
+        const select =
+            modelType === 'transcription' ? elements.transcriptionSelect : elements.chatSelect;
+        return input && select ? { input, select } : null;
     }
 
     /**
@@ -778,7 +925,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} model - Nom du modèle
      */
     function addModelToCache(providerId, modelType, model) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: controlled values
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : valeurs contrôlées
         const cache = providerCustomModelsCache[providerId][modelType];
         if (!cache.includes(model)) {
             cache.push(model);
@@ -797,7 +944,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const newModel = elements.input.value.trim();
         if (!newModel) return;
 
-        const existingOptions = Array.from(elements.select.options).map(opt => opt.value);
+        const existingOptions = Array.from(elements.select.options).map((opt) => opt.value);
         if (existingOptions.includes(newModel)) {
             elements.input.value = '';
             elements.select.value = newModel;
@@ -833,57 +980,63 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Initialiser la langue de l'interface
-    const currentLang = await new Promise(resolve => {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-        chrome.storage.sync.get({
-            interfaceLanguage: null // On initialise à null pour vérifier si une valeur existe
-        }, result => {
-            // Si interfaceLanguage est null, on utilise la langue du navigateur
-            // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-            resolve(result.interfaceLanguage || chrome.i18n.getUILanguage());
-        });
+    const currentLang = await new Promise((resolve) => {
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get(
+            {
+                interfaceLanguage: null, // On initialise à null pour vérifier si une valeur existe
+            },
+            (result) => {
+                // Si interfaceLanguage est null, on utilise la langue du navigateur
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+                resolve(result.interfaceLanguage || chrome.i18n.getUILanguage());
+            },
+        );
     });
 
     interfaceLanguageSelect.value = currentLang;
 
     // Charger les options sauvegardées
     function loadOptions() {
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
-        chrome.storage.sync.get({
-            apiKey: '',
-            activeDisplay: true,
-            dialogDisplay: false,
-            dialogDuration: 15,
-            autoCopy: false,
-            disableLogging: true,
-            bannerColorStart: '#684054',
-            bannerColorEnd: '#4c7b8d',
-            bannerOpacity: 80,
-            enableRephrase: false,
-            enableTranslation: false,
-            sourceLanguage: 'auto',
-            targetLanguage: 'en',
-            forcedDialogDomains: ['chat.google.com']
-        }, (items) => {
-            apiKeyInput.value = items.apiKey;
-            activeDisplayCheckbox.checked = items.activeDisplay;
-            dialogDisplayCheckbox.checked = items.dialogDisplay;
-            dialogDurationInput.value = items.dialogDuration;
-            autoCopyCheckbox.checked = items.autoCopy;
-            bannerColorStartInput.value = items.bannerColorStart;
-            bannerColorEndInput.value = items.bannerColorEnd;
-            bannerOpacityInput.value = items.bannerOpacity;
-            enableRephraseCheckbox.checked = items.enableRephrase;
-            enableTranslationCheckbox.checked = items.enableTranslation;
-            sourceLanguageSelect.value = items.sourceLanguage || 'auto';
-            targetLanguageSelect.value = items.targetLanguage;
-            disableLoggingCheckbox.checked = items.disableLogging;
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get(
+            {
+                apiKey: '',
+                activeDisplay: true,
+                dialogDisplay: false,
+                dialogDuration: 15,
+                autoCopy: false,
+                disableLogging: true,
+                bannerColorStart: '#684054',
+                bannerColorEnd: '#4c7b8d',
+                bannerOpacity: 80,
+                enableRephrase: false,
+                enableTranslation: false,
+                sourceLanguage: 'auto',
+                targetLanguage: 'en',
+                forcedDialogDomains: ['chat.google.com'],
+            },
+            (items) => {
+                apiKeyInput.value = items.apiKey;
+                activeDisplayCheckbox.checked = items.activeDisplay;
+                dialogDisplayCheckbox.checked = items.dialogDisplay;
+                dialogDurationInput.value = items.dialogDuration;
+                autoCopyCheckbox.checked = items.autoCopy;
+                bannerColorStartInput.value = items.bannerColorStart;
+                bannerColorEndInput.value = items.bannerColorEnd;
+                bannerOpacityInput.value = items.bannerOpacity;
+                enableRephraseCheckbox.checked = items.enableRephrase;
+                enableTranslationCheckbox.checked = items.enableTranslation;
+                sourceLanguageSelect.value = items.sourceLanguage || 'auto';
+                targetLanguageSelect.value = items.targetLanguage;
+                disableLoggingCheckbox.checked = items.disableLogging;
 
-            // Mettre à jour les états dépendants
-            updateTranslationOptionsVisibility();
-            updateColorPreview();
-            displayForcedDomains(items.forcedDialogDomains);
-        });
+                // Mettre à jour les états dépendants
+                updateTranslationOptionsVisibility();
+                updateColorPreview();
+                displayForcedDomains(items.forcedDialogDomains);
+            },
+        );
     }
 
     // Sauvegarder les options
@@ -910,12 +1063,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             sourceLanguage: sourceLanguageSelect.value,
             targetLanguage: targetLanguageSelect.value,
             disableLogging: disableLoggingCheckbox.checked,
-            forcedDialogDomains: Array.from(domainsList.children).map(item =>
-                item.textContent.replace('×', '').trim()
-            )
+            forcedDialogDomains: Array.from(domainsList.children).map((item) =>
+                item.textContent.replace('×', '').trim(),
+            ),
         };
 
-        // eslint-disable-next-line no-undef -- chrome is a global provided by Chrome extension environment
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.set(options, () => {
             showStatus(i18n.getMessage('savedMessage'), 'success');
             if (scrollToStatus) {
@@ -1013,7 +1166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Afficher les domaines forcés
     function displayForcedDomains(domains) {
         domainsList.innerHTML = '';
-        domains.forEach(domain => {
+        domains.forEach((domain) => {
             domainsList.appendChild(createDomainItem(domain));
         });
     }
@@ -1089,15 +1242,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Event listeners - Modèles pour tous les providers
-    Object.keys(providerModelElements).forEach(providerId => {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId comes from Object.keys()
+    Object.keys(providerModelElements).forEach((providerId) => {
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient de Object.keys()
         const elements = providerModelElements[providerId];
         // Boutons d'ajout de modèles
         if (elements.addTranscriptionButton) {
-            elements.addTranscriptionButton.addEventListener('click', () => addProviderModel(providerId, 'transcription'));
+            elements.addTranscriptionButton.addEventListener('click', () =>
+                addProviderModel(providerId, 'transcription'),
+            );
         }
         if (elements.addChatButton) {
-            elements.addChatButton.addEventListener('click', () => addProviderModel(providerId, 'chat'));
+            elements.addChatButton.addEventListener('click', () =>
+                addProviderModel(providerId, 'chat'),
+            );
         }
         // Sélecteurs de modèles
         if (elements.transcriptionSelect) {
@@ -1145,4 +1302,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser le nouveau design dropdown + panel
     showProviderConfig(providerSelector.value);
     updateDropdownStatus();
+
+    // Firefox : instructions de raccourci et raccourci prioritaire (sans bloquer le reste)
+    setupFirefoxShortcutSettings().catch((error) => {
+        console.error('Erreur lors de la configuration du raccourci Firefox:', error);
+    });
 });

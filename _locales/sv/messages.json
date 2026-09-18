@@ -55,6 +55,34 @@
         "message": "Sedan:<br>1. Hitta BabelFishAI i listan<br>2. Klicka på fältet för det aktuella kortkommandot<br>3. Tryck på den nya tangentkombinationen",
         "description": "Steg för att ändra kortkommandot"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "I Firefox: about:addons → ⚙️ → ”Hantera genvägar för tillägg” och ange sedan den nya kombinationen för BabelFishAI.",
+        "description": "Firefox-instruktioner för att ändra kortkommandot"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Öppna hantering av genvägar",
+        "description": "Firefox-knapp som öppnar hanteringen av genvägar för tillägg"
+    },
+    "shortcutGuardDescription": {
+        "message": "På vissa webbplatser (ChatGPT, Notion…) använder sidans redigerare samma tangentkombination och Firefox utlöser inte längre BabelFishAI. Den prioriterade genvägen lägger till ett litet skript som reserverar den här kombinationen för tillägget, utan att läsa eller skicka några andra uppgifter. Den bygger på den webbplatsåtkomst som beviljats vid installationen och kan stängas av eller slås på igen nedan.",
+        "description": "Förklaring av den prioriterade genvägen i Firefox och den begärda behörigheten"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Aktivera prioriterad genväg",
+        "description": "Knapp som begär behörighet till webbplatser för den prioriterade genvägen"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Inaktivera prioriterad genväg",
+        "description": "Knapp som tar bort behörigheten till webbplatser för den prioriterade genvägen"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Prioriterad genväg aktiverad. Läs in redan öppna flikar igen för att tillämpa den.",
+        "description": "Status som visas när den prioriterade genvägen är aktiv"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Behörighet nekad: den prioriterade genvägen förblir inaktiverad.",
+        "description": "Status som visas när användaren nekar behörigheten"
+    },
     "optionsTitle": {
         "message": "Konfiguration av BabelFishAI",
         "description": "Titel på alternativsidan"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"
+    },
+    "apiKeyInputLabel": {
+        "message": "API-nyckel",
+        "description": "Tillgänglig (visuellt dold) etikett för API-nyckelfältet hos leverantörerna Mistral och Custom"
     },
     "apiKeyInfo": {
         "message": "Hämta din API-nyckel på",
@@ -255,6 +287,10 @@
         "message": "Lägg till",
         "description": "Knapp för att lägga till en modell"
     },
+    "addModelInputLabel": {
+        "message": "Ny anpassad modell",
+        "description": "Tillgänglig (visuellt dold) etikett för fältet för att lägga till en anpassad modell"
+    },
     "noLogLabel": {
         "message": "NoLog (endast LiteLLM)",
         "description": "Etikett för NoLog-alternativet"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "Transkriberar...",
         "description": "Bannermeddelande under transkription"
+    },
+    "bannerNoSpeech": {
+        "message": "Inget tal upptäcktes. Kontrollera mikrofonen och försök igen.",
+        "description": "Informationsmeddelande när API:et returnerar en tom transkription (tystnad, för kort ljud)"
     },
     "bannerTranslating": {
         "message": "Översätter...",

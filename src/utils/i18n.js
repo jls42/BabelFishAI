@@ -77,7 +77,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Traduire les éléments avec data-i18n
         const elements = root.querySelectorAll('[data-i18n]');
-        elements.forEach(element => {
+        elements.forEach((element) => {
             const key = element.dataset.i18n;
             const translated = getMessage(key);
             if (translated) {
@@ -85,7 +85,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(sanitized, 'text/html');
                 const fragment = document.createDocumentFragment();
-                doc.body.childNodes.forEach(node => {
+                doc.body.childNodes.forEach((node) => {
                     fragment.appendChild(node.cloneNode(true));
                 });
                 element.replaceChildren(fragment);
@@ -94,7 +94,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Traduire les placeholders avec data-i18n-placeholder
         const placeholders = root.querySelectorAll('[data-i18n-placeholder]');
-        placeholders.forEach(element => {
+        placeholders.forEach((element) => {
             const key = element.dataset.i18nPlaceholder;
             const translated = getMessage(key);
             if (translated) {
@@ -104,7 +104,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Traduire les titres avec data-i18n-title
         const titles = root.querySelectorAll('[data-i18n-title]');
-        titles.forEach(element => {
+        titles.forEach((element) => {
             const key = element.dataset.i18nTitle;
             const translated = getMessage(key);
             if (translated) {
@@ -114,8 +114,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Traduire les options des select
         const selects = root.querySelectorAll('select[data-i18n-options]');
-        selects.forEach(select => {
-            Array.from(select.options).forEach(option => {
+        selects.forEach((select) => {
+            Array.from(select.options).forEach((option) => {
                 const key = option.dataset.i18n;
                 if (key) {
                     option.text = getMessage(key);
@@ -165,11 +165,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         return element;
     }
     /**
-         * Remplace les placeholders dans un message
-         * @param {string} message - Le message original
-         * @param {Object} placeholders - Un objet contenant les placeholders et leurs valeurs
-         * @returns {string} Le message avec les placeholders remplacés
-         */
+     * Remplace les placeholders dans un message
+     * @param {string} message - Le message original
+     * @param {Object} placeholders - Un objet contenant les placeholders et leurs valeurs
+     * @returns {string} Le message avec les placeholders remplacés
+     */
     function replacePlaceholders(message, placeholders) {
         let newMessage = message;
         for (const key in placeholders) {
@@ -195,13 +195,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * Traite les placeholders dans les messages de traduction
      */
     function processTranslationPlaceholders() {
+        // Calculer les placeholders une seule fois, pas à chaque itération
+        const placeholders = {
+            defaultAudioModel: getMessage('defaultAudioModel'),
+            defaultTranslationModel: getMessage('defaultTranslationModel'),
+        };
         for (const key in translations) {
             if (Object.prototype.hasOwnProperty.call(translations, key)) {
-                const placeholders = {
-                    defaultAudioModel: getMessage('defaultAudioModel'),
-                    defaultTranslationModel: getMessage('defaultTranslationModel')
-                };
-                translations[key].message = replacePlaceholders(translations[key].message, placeholders);
+                // Extraire l'entrée dans une variable locale pour éviter un second
+                // accès indexé qui pourrait confondre les analyseurs generic-object-injection
+                // (l'accès par crochets est sûr ici : key vient de for...in + hasOwnProperty).
+                // eslint-disable-next-line security/detect-object-injection -- key garanti par hasOwnProperty
+                const entry = translations[key];
+                entry.message = replacePlaceholders(entry.message, placeholders);
             }
         }
     }
@@ -220,7 +226,21 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const container = doc.body.firstChild;
 
         // Define allowed tags and attributes
-        const allowedTags = new Set(['a', 'b', 'i', 'strong', 'em', 'br', 'span', 'p', 'ul', 'ol', 'li', 'img', 'div']);
+        const allowedTags = new Set([
+            'a',
+            'b',
+            'i',
+            'strong',
+            'em',
+            'br',
+            'span',
+            'p',
+            'ul',
+            'ol',
+            'li',
+            'img',
+            'div',
+        ]);
         const allowedAttributes = {
             // Global attributes allowed on any element
             all: ['class', 'id', 'style', 'title'],
@@ -253,21 +273,27 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const newElement = document.createElement(tagName);
 
             // Add allowed global attributes
-            allowedAttributes.all.forEach(attr => {
+            allowedAttributes.all.forEach((attr) => {
                 if (node.hasAttribute(attr)) {
                     newElement.setAttribute(attr, node.getAttribute(attr));
                 }
             });
 
-            // Add element-specific attributes
+            // Ajouter les attributs spécifiques à l'élément
+            // eslint-disable-next-line security/detect-object-injection -- tagName provient de node.tagName (DOM), allowedAttributes est une whitelist statique
             if (allowedAttributes[tagName]) {
-                allowedAttributes[tagName].forEach(attr => {
+                // eslint-disable-next-line security/detect-object-injection -- tagName est dans la whitelist (vérification ci-dessus)
+                allowedAttributes[tagName].forEach((attr) => {
                     if (node.hasAttribute(attr)) {
                         // Special handling for links
                         if (tagName === 'a' && attr === 'href') {
                             const href = node.getAttribute(attr);
                             // Only allow http, https, and mailto protocols
-                            if (href.startsWith('http:') || href.startsWith('https:') || href.startsWith('mailto:')) {
+                            if (
+                                href.startsWith('http:') ||
+                                href.startsWith('https:') ||
+                                href.startsWith('mailto:')
+                            ) {
                                 newElement.setAttribute(attr, href);
                             }
                         } else {
@@ -278,12 +304,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             }
 
             // If it's an anchor, ensure it has noopener
-            if (tagName === 'a' && newElement.hasAttribute('target') && newElement.getAttribute('target') === '_blank') {
+            if (
+                tagName === 'a' &&
+                newElement.hasAttribute('target') &&
+                newElement.getAttribute('target') === '_blank'
+            ) {
                 newElement.setAttribute('rel', 'noopener noreferrer');
             }
 
             // Recursively sanitize child nodes
-            Array.from(node.childNodes).forEach(child => {
+            Array.from(node.childNodes).forEach((child) => {
                 const sanitizedChild = sanitizeNode(child);
                 newElement.appendChild(sanitizedChild);
             });
@@ -293,7 +323,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Process all nodes in the container
         const fragment = document.createDocumentFragment();
-        Array.from(container.childNodes).forEach(child => {
+        Array.from(container.childNodes).forEach((child) => {
             fragment.appendChild(sanitizeNode(child));
         });
 
@@ -340,7 +370,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         observer.observe(document.body, {
             childList: true,
-            subtree: true
+            subtree: true,
         });
     }
 
@@ -353,7 +383,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         createTranslatedElement,
         sanitizeHTML,
         init,
-        getCurrentLanguage: () => currentLanguage
+        getCurrentLanguage: () => currentLanguage,
     };
 
     // Initialiser l'internationalisation au chargement
@@ -362,5 +392,4 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     } else {
         init();
     }
-
 })(globalThis.BabelFishAIUtils);

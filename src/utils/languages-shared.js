@@ -20,5 +20,5 @@ globalThis.BabelFishAI.AVAILABLE_LANGUAGES = [
     { value: 'nl', text: 'Nederlands (nl)' },
     { value: 'ro', text: 'Română (ro)' },
     { value: 'ja', text: '日本語 (ja)' },
-    { value: 'ko', text: '한국어 (ko)' }
+    { value: 'ko', text: '한국어 (ko)' },
 ];

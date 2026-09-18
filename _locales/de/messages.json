@@ -55,6 +55,34 @@
         "message": "Dann:<br>1. Suchen Sie BabelFishAI in der Liste<br>2. Klicken Sie auf das Feld für die aktuelle Tastenkombination<br>3. Drücken Sie die neue Tastenkombination",
         "description": "Schritte zum Ändern der Tastenkombination"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "In Firefox: about:addons → ⚙️ → „Tastenkombinationen von Erweiterungen verwalten“, dann geben Sie die neue Tastenkombination für BabelFishAI ein.",
+        "description": "Firefox-Anleitung zum Ändern der Tastenkombination"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Tastenkombinationen verwalten",
+        "description": "Firefox-Schaltfläche, die die Verwaltung der Tastenkombinationen öffnet"
+    },
+    "shortcutGuardDescription": {
+        "message": "Auf manchen Websites (ChatGPT, Notion …) verwendet der Editor der Seite dieselbe Tastenkombination, und Firefox löst BabelFishAI nicht mehr aus. Die vorrangige Tastenkombination fügt ein kleines Skript ein, das nur diese Kombination für die Erweiterung reserviert, ohne andere Daten zu lesen oder zu senden. Sie nutzt den bei der Installation erteilten Website-Zugriff und kann unten deaktiviert oder wieder aktiviert werden.",
+        "description": "Erklärung der vorrangigen Tastenkombination in Firefox und der angeforderten Berechtigung"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Vorrangige Tastenkombination aktivieren",
+        "description": "Schaltfläche, die die Berechtigung für den Zugriff auf Websites anfordert"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Vorrangige Tastenkombination deaktivieren",
+        "description": "Schaltfläche, die die Berechtigung für den Zugriff auf Websites entfernt"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Vorrangige Tastenkombination aktiviert. Laden Sie bereits geöffnete Tabs neu, damit sie wirksam wird.",
+        "description": "Status bei aktiver vorrangiger Tastenkombination"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Berechtigung verweigert: Die vorrangige Tastenkombination bleibt deaktiviert.",
+        "description": "Status, wenn die Berechtigung verweigert wird"
+    },
     "optionsTitle": {
         "message": "Konfiguration von BabelFishAI",
         "description": "Titel der Optionsseite"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"
+    },
+    "apiKeyInputLabel": {
+        "message": "API-Schlüssel",
+        "description": "Barrierefreie (visuell ausgeblendete) Beschriftung des API-Schlüssel-Felds der Provider Mistral und Custom"
     },
     "apiKeyInfo": {
         "message": "Holen Sie sich Ihren API-Schlüssel unter",
@@ -255,6 +287,10 @@
         "message": "Hinzufügen",
         "description": "Schaltfläche zum Hinzufügen eines Modells"
     },
+    "addModelInputLabel": {
+        "message": "Neues benutzerdefiniertes Modell",
+        "description": "Barrierefreie (visuell ausgeblendete) Beschriftung des Eingabefelds zum Hinzufügen eines benutzerdefinierten Modells"
+    },
     "noLogLabel": {
         "message": "NoLog (nur LiteLLM)",
         "description": "Beschriftung für die NoLog-Option"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "Transkription läuft...",
         "description": "Bannermeldung während der Transkription"
+    },
+    "bannerNoSpeech": {
+        "message": "Keine Sprache erkannt. Überprüfen Sie Ihr Mikrofon und versuchen Sie es erneut.",
+        "description": "Infomeldung, wenn die API eine leere Transkription zurückgibt (Stille, Audio zu kurz)"
     },
     "bannerTranslating": {
         "message": "Übersetzung läuft...",

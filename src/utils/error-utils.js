@@ -15,10 +15,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function safeExecute(fn, errorMsg, options = {}) {
         // Valeurs par défaut des options
-        const {
-            propagateError = true,
-            isAsync = true
-        } = options;
+        const { propagateError = true, isAsync = true } = options;
 
         try {
             // Exécuter la fonction de manière asynchrone ou synchrone selon les options
@@ -26,7 +23,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Si c'est une fonction asynchrone, attendre le résultat
             if (isAsync && result instanceof Promise) {
-                return result.catch(e => {
+                return result.catch((e) => {
                     console.warn(errorMsg, e);
                     if (propagateError) {
                         throw e; // Propager l'erreur pour la gestion centralisée
@@ -74,20 +71,27 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         try {
             // Vérifier si les dépendances nécessaires sont disponibles
             if (!areDependenciesAvailable()) {
-                console.error("Erreur: BabelFishAIUtils ou i18n n'est pas disponible", displayMessage);
+                console.error(
+                    "Erreur: BabelFishAIUtils ou i18n n'est pas disponible",
+                    displayMessage,
+                );
                 return;
             }
 
             // Référence aux constantes nécessaires
-            const MESSAGE_TYPES = globalThis.BabelFishAIConstants?.MESSAGE_TYPES || { ERROR: 'error' };
+            const MESSAGE_TYPES = globalThis.BabelFishAIConstants?.MESSAGE_TYPES || {
+                ERROR: 'error',
+            };
             const ACTIONS = globalThis.BabelFishAIConstants?.ACTIONS || { ERROR: 'error' };
-            const CONFIG = globalThis.BabelFishAIConstants?.CONFIG || { ERROR_BANNER_DURATION: 5000 };
+            const CONFIG = globalThis.BabelFishAIConstants?.CONFIG || {
+                ERROR_BANNER_DURATION: 5000,
+            };
 
             // Normaliser les paramètres pour gérer différents types d'entrées
             const { userMessage, technicalMessage } = normalizeError(displayMessage, errorMessage);
 
             // Logger l'erreur technique pour le débogage
-            console.error("Erreur technique:", technicalMessage);
+            console.error('Erreur technique:', technicalMessage);
 
             // Afficher le message d'erreur à l'utilisateur via la bannière
             if (isUIAvailable()) {
@@ -98,10 +102,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Informer le background script de l'erreur pour mise à jour du badge
             notifyBackgroundOnError(technicalMessage, ACTIONS);
-
         } catch (fatalError) {
             // Gestion des erreurs critiques dans la fonction handleError elle-même
-            console.error("Erreur fatale dans handleError:", fatalError, "\nMessage original:", displayMessage);
+            console.error(
+                'Erreur fatale dans handleError:',
+                fatalError,
+                '\nMessage original:',
+                displayMessage,
+            );
         }
     }
 
@@ -116,10 +124,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         let technicalMessage = '';
 
         if (displayMessage instanceof Error) {
-            userMessage = displayMessage.message || globalThis.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            userMessage =
+                displayMessage.message ||
+                globalThis.BabelFishAIUtils.i18n.getMessage('bannerErrorGeneric') ||
+                'Erreur générique';
             technicalMessage = displayMessage.stack || displayMessage.message;
         } else {
-            userMessage = displayMessage || globalThis.BabelFishAIUtils.i18n.getMessage("bannerErrorGeneric") || "Erreur générique";
+            userMessage =
+                displayMessage ||
+                globalThis.BabelFishAIUtils.i18n.getMessage('bannerErrorGeneric') ||
+                'Erreur générique';
             technicalMessage = errorMessage || displayMessage;
         }
 
@@ -158,7 +172,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             if (typeof chrome?.runtime?.sendMessage === 'function') {
                 chrome.runtime.sendMessage({
                     action: ACTIONS.ERROR,
-                    error: technicalMessage
+                    error: technicalMessage,
                 });
             }
         } catch (e) {
@@ -184,7 +198,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                         return showStatusViaBannerUtils(banner, text, type);
                     }
                 } catch (bannerError) {
-                    console.warn("Erreur lors de l'accès à la bannière via l'API banner-utils:", bannerError);
+                    console.warn(
+                        "Erreur lors de l'accès à la bannière via l'API banner-utils:",
+                        bannerError,
+                    );
                 }
             }
 
@@ -193,7 +210,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 try {
                     return showStatusViaUI(text, type);
                 } catch (uiError) {
-                    console.warn("Erreur lors de l'utilisation de l'API UI pour afficher le statut:", uiError);
+                    console.warn(
+                        "Erreur lors de l'utilisation de l'API UI pour afficher le statut:",
+                        uiError,
+                    );
                 }
             }
 
@@ -201,7 +221,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             return false;
         } catch (fatalError) {
             // Gestion des erreurs critiques dans la fonction showStatus elle-même
-            console.error("Erreur fatale dans showStatus:", fatalError, "\nMessage original:", text);
+            console.error(
+                'Erreur fatale dans showStatus:',
+                fatalError,
+                '\nMessage original:',
+                text,
+            );
             return false;
         }
     }
@@ -249,7 +274,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     exports.error = {
         safeExecute,
         handleError,
-        showStatus
+        showStatus,
     };
-
 })(globalThis.BabelFishAIUtils);

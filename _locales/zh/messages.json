@@ -55,6 +55,34 @@
         "message": "然后：<br>1. 在列表中找到 BabelFishAI<br>2. 单击当前快捷方式字段<br>3. 按下新的组合键",
         "description": "更改快捷方式的步骤"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "在 Firefox 中：about:addons → ⚙️ →“管理扩展快捷键”，然后为 BabelFishAI 输入新的组合键。",
+        "description": "在 Firefox 中更改快捷键的说明"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "打开快捷键管理",
+        "description": "打开扩展快捷键管理的 Firefox 按钮"
+    },
+    "shortcutGuardDescription": {
+        "message": "在某些网站（ChatGPT、Notion 等）上，页面编辑器使用相同的组合键，Firefox 将不再触发 BabelFishAI。优先快捷键会添加一个小脚本，仅为本扩展保留该组合键，不会读取或发送任何其他数据。它使用安装时授予的网站访问权限，可在下方关闭或重新开启。",
+        "description": "Firefox 优先快捷键及所请求权限的说明"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "启用优先快捷键",
+        "description": "为优先快捷键请求网站访问权限的按钮"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "停用优先快捷键",
+        "description": "移除优先快捷键网站访问权限的按钮"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "优先快捷键已启用。请重新加载已打开的标签页以使其生效。",
+        "description": "优先快捷键启用时显示的状态"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "权限被拒绝：优先快捷键保持停用状态。",
+        "description": "用户拒绝权限时显示的状态"
+    },
     "optionsTitle": {
         "message": "BabelFishAI 配置",
         "description": "选项页面的标题"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥（sk-...）",
         "description": "API 密钥的占位符"
+    },
+    "apiKeyInputLabel": {
+        "message": "API 密钥",
+        "description": "Mistral 和 Custom 提供商 API 密钥输入框的无障碍标签（视觉上隐藏）"
     },
     "apiKeyInfo": {
         "message": "获取您的 API 密钥",
@@ -255,6 +287,10 @@
         "message": "添加",
         "description": "添加模型的按钮"
     },
+    "addModelInputLabel": {
+        "message": "新的自定义模型",
+        "description": "用于添加自定义模型的输入框的无障碍标签（视觉上隐藏）"
+    },
     "noLogLabel": {
         "message": "NoLog（仅限 LiteLLM）",
         "description": "NoLog 选项的标签"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "正在转录...",
         "description": "转录期间的横幅消息"
+    },
+    "bannerNoSpeech": {
+        "message": "未检测到语音。请检查您的麦克风并重试。",
+        "description": "当 API 返回空转录结果时的提示消息（静音、音频过短）"
     },
     "bannerTranslating": {
         "message": "正在翻译...",

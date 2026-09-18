@@ -55,6 +55,34 @@
         "message": "Apoi:<br>1. Găsiți BabelFishAI în listă<br>2. Faceți clic pe câmpul comenzii rapide curente<br>3. Apăsați noua combinație de taste",
         "description": "Pași pentru a schimba comanda rapidă"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "În Firefox: about:addons → ⚙️ → „Gestionează comenzile rapide ale extensiilor”, apoi introduceți noua combinație pentru BabelFishAI.",
+        "description": "Instrucțiuni Firefox pentru schimbarea comenzii rapide"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Deschideți gestionarea comenzilor rapide",
+        "description": "Buton Firefox care deschide gestionarea comenzilor rapide ale extensiilor"
+    },
+    "shortcutGuardDescription": {
+        "message": "Pe unele site-uri (ChatGPT, Notion…), editorul paginii folosește aceeași combinație de taste, iar Firefox nu mai declanșează BabelFishAI. Scurtătura prioritară adaugă un mic script care rezervă această combinație pentru extensie, fără a citi sau a trimite alte date. Se bazează pe accesul la site-uri acordat la instalare și poate fi dezactivată sau reactivată mai jos.",
+        "description": "Explicația comenzii rapide prioritare din Firefox și a permisiunii solicitate"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Activați comanda rapidă prioritară",
+        "description": "Buton care solicită permisiunea de acces la site-uri pentru comanda rapidă prioritară"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Dezactivați comanda rapidă prioritară",
+        "description": "Buton care retrage permisiunea de acces la site-uri a comenzii rapide prioritare"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Comanda rapidă prioritară este activată. Reîncărcați filele deja deschise pentru a o aplica.",
+        "description": "Stare afișată când comanda rapidă prioritară este activă"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Permisiune refuzată: comanda rapidă prioritară rămâne dezactivată.",
+        "description": "Stare afișată când utilizatorul refuză permisiunea"
+    },
     "optionsTitle": {
         "message": "Configurare BabelFishAI",
         "description": "Titlul paginii de opțiuni"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"
+    },
+    "apiKeyInputLabel": {
+        "message": "Cheie API",
+        "description": "Etichetă accesibilă (ascunsă vizual) pentru câmpul cheii API al furnizorilor Mistral și Custom"
     },
     "apiKeyInfo": {
         "message": "Obțineți cheia API la",
@@ -255,6 +287,10 @@
         "message": "Adaugă",
         "description": "Buton pentru adăugarea unui model"
     },
+    "addModelInputLabel": {
+        "message": "Model personalizat nou",
+        "description": "Etichetă accesibilă (ascunsă vizual) pentru câmpul de adăugare a unui model personalizat"
+    },
     "noLogLabel": {
         "message": "NoLog (doar LiteLLM)",
         "description": "Etichetă pentru opțiunea NoLog"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "Transcriere în curs...",
         "description": "Mesaj de banner în timpul transcrierii"
+    },
+    "bannerNoSpeech": {
+        "message": "Nu a fost detectată nicio voce. Verificați microfonul și încercați din nou.",
+        "description": "Mesaj informativ când API-ul returnează o transcriere goală (liniște, audio prea scurt)"
     },
     "bannerTranslating": {
         "message": "Traducere în curs...",

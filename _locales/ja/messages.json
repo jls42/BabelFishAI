@@ -55,6 +55,34 @@
         "message": "次に:<br>1. リストからBabelFishAIを見つけます<br>2. 現在のショートカットフィールドをクリックします<br>3. 新しいキーの組み合わせを押します",
         "description": "ショートカットを変更する手順"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "Firefox の場合：about:addons → ⚙️ →「拡張機能のショートカットキーの管理」を開き、BabelFishAI の新しいキーの組み合わせを入力してください。",
+        "description": "ショートカットキーを変更するための Firefox の手順"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "ショートカットキーの管理を開く",
+        "description": "拡張機能のショートカットキーの管理を開く Firefox のボタン"
+    },
+    "shortcutGuardDescription": {
+        "message": "一部のサイト（ChatGPT、Notion など）では、ページのエディターが同じキーの組み合わせを使うため、Firefox が BabelFishAI を起動しなくなります。優先ショートカットは、この組み合わせだけを拡張機能のために確保する小さなスクリプトを追加し、ほかのデータを読み取ったり送信したりすることはありません。インストール時に許可されたサイトへのアクセスを利用しており、下のボタンで無効化または再有効化できます。",
+        "description": "Firefox の優先ショートカットと要求される許可の説明"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "優先ショートカットを有効にする",
+        "description": "優先ショートカットのためにサイトへのアクセス許可を求めるボタン"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "優先ショートカットを無効にする",
+        "description": "優先ショートカットのサイトへのアクセス許可を取り消すボタン"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "優先ショートカットが有効になりました。すでに開いているタブを再読み込みすると適用されます。",
+        "description": "優先ショートカットが有効なときに表示される状態"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "許可が拒否されました：優先ショートカットは無効のままです。",
+        "description": "ユーザーが許可を拒否したときに表示される状態"
+    },
     "optionsTitle": {
         "message": "BabelFishAIの設定",
         "description": "オプションページのタイトル"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "あなたのOpenAI APIキー（sk-...）",
         "description": "APIキーのプレースホルダー"
+    },
+    "apiKeyInputLabel": {
+        "message": "APIキー",
+        "description": "Mistral および Custom プロバイダーの API キー入力欄のアクセシブルなラベル（視覚的に非表示）"
     },
     "apiKeyInfo": {
         "message": "APIキーを取得する",
@@ -255,6 +287,10 @@
         "message": "追加",
         "description": "モデルを追加するボタン"
     },
+    "addModelInputLabel": {
+        "message": "新しいカスタムモデル",
+        "description": "カスタムモデルを追加する入力欄のアクセシブルなラベル（視覚的に非表示）"
+    },
     "noLogLabel": {
         "message": "NoLog（LiteLLMのみ）",
         "description": "NoLogオプションのラベル"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "文字起こし中...",
         "description": "文字起こし中のバナーメッセージ"
+    },
+    "bannerNoSpeech": {
+        "message": "音声が検出されませんでした。マイクを確認して、もう一度お試しください。",
+        "description": "APIが空の文字起こしを返した場合の情報メッセージ（無音、音声が短すぎる）"
     },
     "bannerTranslating": {
         "message": "翻訳中...",

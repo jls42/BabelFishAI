@@ -55,6 +55,34 @@
         "message": "फिर:<br>1. सूची में BabelFishAI खोजें<br>2. वर्तमान शॉर्टकट फ़ील्ड पर क्लिक करें<br>3. नई कुंजी संयोजन दबाएं",
         "description": "शॉर्टकट बदलने के चरण"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "Firefox में: about:addons → ⚙️ → “एक्सटेंशन शॉर्टकट प्रबंधित करें”, फिर BabelFishAI के लिए नया कुंजी संयोजन दर्ज करें।",
+        "description": "कीबोर्ड शॉर्टकट बदलने के लिए Firefox निर्देश"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "शॉर्टकट प्रबंधन खोलें",
+        "description": "एक्सटेंशन शॉर्टकट प्रबंधन खोलने वाला Firefox बटन"
+    },
+    "shortcutGuardDescription": {
+        "message": "कुछ साइटों (ChatGPT, Notion आदि) पर पेज का संपादक वही कुंजी संयोजन इस्तेमाल करता है और Firefox BabelFishAI को शुरू नहीं करता। प्राथमिक शॉर्टकट एक छोटी स्क्रिप्ट जोड़ता है जो केवल यह संयोजन एक्सटेंशन के लिए सुरक्षित रखती है, और कोई अन्य डेटा न पढ़ती है न भेजती है। यह इंस्टॉल के समय दी गई साइट पहुँच का उपयोग करता है और इसे नीचे बंद या दोबारा चालू किया जा सकता है।",
+        "description": "Firefox प्राथमिकता शॉर्टकट और मांगी गई अनुमति का विवरण"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "प्राथमिकता शॉर्टकट चालू करें",
+        "description": "प्राथमिकता शॉर्टकट के लिए वेबसाइट पहुंच की अनुमति मांगने वाला बटन"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "प्राथमिकता शॉर्टकट बंद करें",
+        "description": "प्राथमिकता शॉर्टकट की वेबसाइट पहुंच अनुमति हटाने वाला बटन"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "प्राथमिकता शॉर्टकट चालू है। इसे लागू करने के लिए पहले से खुले टैब फिर से लोड करें।",
+        "description": "प्राथमिकता शॉर्टकट सक्रिय होने पर दिखने वाली स्थिति"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "अनुमति अस्वीकृत: प्राथमिकता शॉर्टकट बंद ही रहेगा।",
+        "description": "उपयोगकर्ता द्वारा अनुमति अस्वीकार करने पर दिखने वाली स्थिति"
+    },
     "optionsTitle": {
         "message": "BabelFishAI कॉन्फ़िगरेशन",
         "description": "विकल्प पृष्ठ का शीर्षक"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "आपकी OpenAI API कुंजी (sk-...)",
         "description": "API कुंजी के लिए प्लेसहोल्डर"
+    },
+    "apiKeyInputLabel": {
+        "message": "API कुंजी",
+        "description": "Mistral और Custom प्रदाताओं के API कुंजी फ़ील्ड के लिए सुलभ (दृश्य रूप से छिपा) लेबल"
     },
     "apiKeyInfo": {
         "message": "अपनी API कुंजी यहां प्राप्त करें",
@@ -255,6 +287,10 @@
         "message": "जोड़ें",
         "description": "मॉडल जोड़ने के लिए बटन"
     },
+    "addModelInputLabel": {
+        "message": "नया कस्टम मॉडल",
+        "description": "कस्टम मॉडल जोड़ने वाले इनपुट फ़ील्ड के लिए सुलभ (दृश्य रूप से छिपा) लेबल"
+    },
     "noLogLabel": {
         "message": "NoLog (केवल LiteLLM)",
         "description": "NoLog विकल्प के लिए लेबल"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "ट्रांसक्राइबिंग...",
         "description": "ट्रांसक्रिप्शन के दौरान बैनर संदेश"
+    },
+    "bannerNoSpeech": {
+        "message": "कोई आवाज़ नहीं मिली। अपना माइक्रोफ़ोन जांचें और फिर से प्रयास करें।",
+        "description": "जब API खाली ट्रांसक्रिप्शन लौटाता है तब दिखाया जाने वाला सूचना संदेश (मौन, बहुत छोटा ऑडियो)"
     },
     "bannerTranslating": {
         "message": "अनुवाद...",

@@ -55,6 +55,34 @@
         "message": "Następnie:<br>1. Znajdź BabelFishAI na liście<br>2. Kliknij pole bieżącego skrótu<br>3. Naciśnij nową kombinację klawiszy",
         "description": "Kroki, aby zmienić skrót"
     },
+    "shortcutFirefoxInstructions": {
+        "message": "W Firefoksie: about:addons → ⚙️ → „Zarządzaj skrótami rozszerzeń”, a następnie wprowadź nową kombinację dla BabelFishAI.",
+        "description": "Instrukcje Firefoksa dotyczące zmiany skrótu klawiszowego"
+    },
+    "shortcutFirefoxOpenButton": {
+        "message": "Otwórz zarządzanie skrótami",
+        "description": "Przycisk Firefoksa otwierający zarządzanie skrótami rozszerzeń"
+    },
+    "shortcutGuardDescription": {
+        "message": "Na niektórych stronach (ChatGPT, Notion…) edytor strony używa tej samej kombinacji klawiszy i Firefox przestaje uruchamiać BabelFishAI. Priorytetowy skrót dodaje niewielki skrypt, który rezerwuje tę kombinację dla rozszerzenia, bez odczytywania ani wysyłania jakichkolwiek innych danych. Korzysta z dostępu do stron przyznanego podczas instalacji i można go poniżej wyłączyć lub ponownie włączyć.",
+        "description": "Wyjaśnienie priorytetowego skrótu w Firefoksie i wymaganego uprawnienia"
+    },
+    "shortcutGuardEnableButton": {
+        "message": "Włącz priorytetowy skrót",
+        "description": "Przycisk, który prosi o uprawnienie dostępu do stron dla priorytetowego skrótu"
+    },
+    "shortcutGuardDisableButton": {
+        "message": "Wyłącz priorytetowy skrót",
+        "description": "Przycisk, który usuwa uprawnienie dostępu do stron priorytetowego skrótu"
+    },
+    "shortcutGuardEnabledStatus": {
+        "message": "Priorytetowy skrót włączony. Odśwież już otwarte karty, aby go zastosować.",
+        "description": "Status wyświetlany, gdy priorytetowy skrót jest aktywny"
+    },
+    "shortcutGuardDeniedStatus": {
+        "message": "Odmowa uprawnień: priorytetowy skrót pozostaje wyłączony.",
+        "description": "Status wyświetlany, gdy użytkownik odmówi uprawnienia"
+    },
     "optionsTitle": {
         "message": "Konfiguracja BabelFishAI",
         "description": "Tytuł strony opcji"
@@ -78,6 +106,10 @@
     "apiKeyPlaceholder": {
         "message": "Twój klucz API OpenAI (sk-...)",
         "description": "Symbol zastępczy klucza API"
+    },
+    "apiKeyInputLabel": {
+        "message": "Klucz API",
+        "description": "Dostępna (ukryta wizualnie) etykieta pola klucza API dostawców Mistral i Custom"
     },
     "apiKeyInfo": {
         "message": "Uzyskaj swój klucz API na",
@@ -255,6 +287,10 @@
         "message": "Dodaj",
         "description": "Przycisk dodawania modelu"
     },
+    "addModelInputLabel": {
+        "message": "Nowy model niestandardowy",
+        "description": "Dostępna (ukryta wizualnie) etykieta pola do dodawania modelu niestandardowego"
+    },
     "noLogLabel": {
         "message": "NoLog (tylko LiteLLM)",
         "description": "Etykieta opcji NoLog"
@@ -274,6 +310,10 @@
     "bannerTranscribing": {
         "message": "Trwa transkrypcja...",
         "description": "Komunikat banera podczas transkrypcji"
+    },
+    "bannerNoSpeech": {
+        "message": "Nie wykryto głosu. Sprawdź mikrofon i spróbuj ponownie.",
+        "description": "Komunikat informacyjny, gdy API zwraca pustą transkrypcję (cisza, zbyt krótkie nagranie)"
     },
     "bannerTranslating": {
         "message": "Trwa tłumaczenie...",

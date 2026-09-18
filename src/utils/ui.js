@@ -65,9 +65,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function createCopyButton(text, onError) {
         const copyButton = document.createElement('button');
-        const buttonText = globalThis.BabelFishAIUtils.i18n?.getMessage("copyButton") || 'Copier';
-        const successText = globalThis.BabelFishAIUtils.i18n?.getMessage("copySuccess") || 'Copié !';
-        const errorText = globalThis.BabelFishAIUtils.i18n?.getMessage("copyError") || 'Erreur lors de la copie du texte';
+        const buttonText = globalThis.BabelFishAIUtils.i18n?.getMessage('copyButton') || 'Copier';
+        const successText =
+            globalThis.BabelFishAIUtils.i18n?.getMessage('copySuccess') || 'Copié !';
+        const errorText =
+            globalThis.BabelFishAIUtils.i18n?.getMessage('copyError') ||
+            'Erreur lors de la copie du texte';
 
         copyButton.textContent = buttonText;
         copyButton.className = 'whisper-copy-button';
@@ -195,7 +198,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const title = document.createElement('div');
         title.id = 'whisper-dialog-title';
         title.className = 'whisper-dialog-title';
-        title.textContent = globalThis.BabelFishAIUtils.i18n?.getMessage("dialogTitle") || 'Transcription';
+        title.textContent =
+            globalThis.BabelFishAIUtils.i18n?.getMessage('dialogTitle') || 'Transcription';
         title.setAttribute('role', 'heading');
         title.setAttribute('aria-level', '2');
 
@@ -203,8 +207,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const closeButton = document.createElement('button');
         closeButton.textContent = '×';
         closeButton.className = 'whisper-close-button';
-        closeButton.title = globalThis.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer';
-        closeButton.setAttribute('aria-label', globalThis.BabelFishAIUtils.i18n?.getMessage("closeButton") || 'Fermer la boîte de dialogue');
+        closeButton.title = globalThis.BabelFishAIUtils.i18n?.getMessage('closeButton') || 'Fermer';
+        closeButton.setAttribute(
+            'aria-label',
+            globalThis.BabelFishAIUtils.i18n?.getMessage('closeButton') ||
+                'Fermer la boîte de dialogue',
+        );
 
         // Améliorer l'expérience de fermeture
         closeButton.onkeydown = (e) => {
@@ -254,7 +262,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         document.body.appendChild(container);
 
         // Forcer un reflow avant d'ajouter la classe d'animation
-        void container.offsetWidth; // skipcq: JS-0098
+        // (getBoundingClientRect retourne une valeur ET déclenche le reflow,
+        //  satisfait javascript:S905 contrairement à une lecture nue de offsetWidth)
+        container.getBoundingClientRect();
         container.classList.add('visible');
 
         // Ajouter du CSS dynamiquement pour les animations si nécessaire
@@ -323,13 +333,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 const currentContainer = document.getElementById('whisper-transcription-container');
 
                 // Si le conteneur est vide (ne contient que le bouton de fermeture) ou n'a plus d'enfants, on le supprime
-                if (currentContainer && (currentContainer.children.length <= 1 || currentContainer.children.length === 0)) {
+                if (
+                    currentContainer &&
+                    (currentContainer.children.length <= 1 ||
+                        currentContainer.children.length === 0)
+                ) {
                     if (document.body.contains(currentContainer)) {
                         currentContainer.remove();
                     }
                 }
             } catch (e) {
-                console.warn("Erreur lors du nettoyage du conteneur:", e);
+                console.warn('Erreur lors du nettoyage du conteneur:', e);
             }
         } catch (e) {
             console.warn("Erreur globale lors de la suppression de l'élément:", e);
@@ -379,7 +393,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         const toggleText = document.createElement('span');
         toggleText.className = 'whisper-autoclose-label';
-        toggleText.textContent = globalThis.BabelFishAIUtils.i18n?.getMessage("keepOpen") || 'Keep open';
+        toggleText.textContent =
+            globalThis.BabelFishAIUtils.i18n?.getMessage('keepOpen') || 'Keep open';
 
         toggleLabel.appendChild(toggleInput);
         toggleLabel.appendChild(toggleSwitch);
@@ -414,7 +429,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function setupAutoRemoval(textElement, duration, toggleInput, timerProgressDiv, timerTextSpan) {
         const timerId = `dialog_${Date.now()}`;
-        const timers = globalThis.BabelFishAIUtils.timers = globalThis.BabelFishAIUtils.timers || {};
+        const timers = (globalThis.BabelFishAIUtils.timers =
+            globalThis.BabelFishAIUtils.timers || {});
 
         if (timers[timerId]) {
             clearTimeout(timers[timerId]);
@@ -427,13 +443,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const scheduleRemoval = () => {
             try {
                 if ('requestIdleCallback' in globalThis) {
-                    globalThis.requestIdleCallback(() => {
-                        try {
-                            removeTranscriptionElement(textElement);
-                        } catch (e) {
-                            console.warn("Erreur lors de la suppression de l'élément:", e);
-                        }
-                    }, { timeout: 1000 });
+                    globalThis.requestIdleCallback(
+                        () => {
+                            try {
+                                removeTranscriptionElement(textElement);
+                            } catch (e) {
+                                console.warn("Erreur lors de la suppression de l'élément:", e);
+                            }
+                        },
+                        { timeout: 1000 },
+                    );
                 } else {
                     setTimeout(() => {
                         try {
@@ -444,7 +463,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     }, 0);
                 }
             } catch (e) {
-                console.warn("Erreur lors de la planification de la suppression:", e);
+                console.warn('Erreur lors de la planification de la suppression:', e);
             }
         };
 
@@ -473,11 +492,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             clearTimeout(timers[timerId]);
             clearInterval(activeIntervalId);
 
-            timerTextSpan.textContent = "∞";
-            timerProgressDiv.style.width = "100%";
-            timerProgressDiv.style.background = "#009688";
-            timerProgressDiv.style.opacity = "0.7";
-            timerProgressDiv.style.transition = "background 0.3s ease";
+            timerTextSpan.textContent = '∞';
+            timerProgressDiv.style.width = '100%';
+            timerProgressDiv.style.background = '#009688';
+            timerProgressDiv.style.opacity = '0.7';
+            timerProgressDiv.style.transition = 'background 0.3s ease';
         };
 
         /**
@@ -487,9 +506,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const setAutoCloseState = () => {
             timeLeft = duration;
 
-            timerProgressDiv.style.opacity = "1";
-            timerProgressDiv.style.background = "linear-gradient(90deg, #4c7b8d, #684054)";
-            timerProgressDiv.style.width = "100%";
+            timerProgressDiv.style.opacity = '1';
+            timerProgressDiv.style.background = 'linear-gradient(90deg, #4c7b8d, #684054)';
+            timerProgressDiv.style.width = '100%';
             timerTextSpan.textContent = `${duration}s`;
 
             clearInterval(activeIntervalId);
@@ -574,7 +593,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     // Exporter uniquement les fonctions utilisées publiquement
     exports.ui = {
         showTextInDialog,
-        updateBannerColor
+        updateBannerColor,
     };
-
 })(globalThis.BabelFishAIUtils);
