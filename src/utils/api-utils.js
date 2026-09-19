@@ -202,7 +202,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         if (!apiKeyFromStorage) {
             console.error('Erreur lors de la récupération de la clé API: Clé non trouvée.');
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            throw new Error(ERRORS.API_CONFIG_MISSING);
         }
 
         return apiKeyFromStorage;
@@ -649,7 +649,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         } = options;
 
         if (!apiKey) {
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            throw new Error(ERRORS.API_CONFIG_MISSING);
         }
 
         if (!url) {

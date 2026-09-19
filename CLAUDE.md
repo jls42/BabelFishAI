@@ -100,6 +100,7 @@ Cela évite de masquer de vrais positifs futurs sur le même type de règle. For
 
 -   **`// codacy:ignore-next-line` N'EXISTE PAS** (invention LLM fréquente). Codacy a migré de Semgrep vers Opengrep en février 2026 ; il ne supporte **aucun** skip inline propre côté plateforme. Pour ignorer un finding Codacy inline : utiliser la syntaxe Opengrep / Semgrep `// nosemgrep: <rule-id> -- <raison>` (ou `// nosemgrep` seul) immédiatement au-dessus de la ligne flaggée, ou en fin de ligne (`<code>; // nosemgrep: <rule-id>`). Skip tags via message de commit (`[ci skip]`, `[codacy skip]`) sont les seuls "skip Codacy natifs" qui existent.
 -   **Effet secondaire subtil d'un cleanup de dead code** : retirer un `export` ou supprimer une fonction "inutilisée" peut faire ré-évaluer le graphe de taint par Codacy / Opengrep / DeepSource et **réactiver des findings dormants** (acceptés sur un commit antérieur). Quand un finding SAST apparaît après un commit "inoffensif" (suppression d'export, knip, refacto), vérifier en priorité s'il n'a pas modifié la surface d'exports d'un fichier impliqué — avant de soupçonner un bug récent.
+-   **Nommer une constante `*API_KEY*` déclenche deux analyseurs à la fois** (leçon 1.1.21) : CodeQL `js/clear-text-logging` suit le flux d'une constante dont l'identifiant contient `key`, `token`, `secret` ou `password` jusqu'au moindre `console.error(error)` et la traite comme un secret, même quand sa valeur est un message d'interface (« Clé API non configurée… »). Onze alertes ont ainsi été fermées en faux positif avant que le renommage de `ERRORS.API_KEY_NOT_FOUND` en `ERRORS.API_CONFIG_MISSING` ne tarisse la source — ce qui a du même coup vidé la baseline `detect-secrets`, dont l'unique entrée visait cette ligne. Préférer un nom qui décrit le problème (`API_CONFIG_MISSING`) plutôt que le secret absent.
 -   **Faux positifs rencontrés sur la PR #29 (2026-09-17), corrigés sans ignore** :
     -   DeepSource `JS-W1042` (« redundant undefined ») signale tout `undefined` passé explicitement en argument, même `Set.has(undefined)` qui a un sens : tester l'appartenance autrement (ex. `map.has(name)` avant `map.get(name)`).
     -   Codacy `xss/no-mixed-html` (High) prend pour du HTML toute chaîne contenant `<...>` stockée dans une variable, ex. `['<all_urls>']` : préférer un motif sans chevrons quand il suffit (`*://*/*`, moindre privilège).
@@ -128,7 +129,7 @@ Le premier `pre-commit run --all-files` télécharge les environnements des hook
 | pre-commit | shellcheck                     | Lint `.sh` (`--severity=warning`, info SC2317/SC2012 écartés)               |
 | pre-commit | prettier                       | Format JSON/YAML/MD/HTML/CSS/JS (`src/lib/`, `_locales/`, README-\* exclus) |
 | pre-commit | pre-commit-hooks v5            | trailing-whitespace, EOF, check-yaml/json, large-files 500KB, shebang       |
-| pre-commit | detect-secrets                 | Détection fuites de clés API (baseline = 1 faux positif i18n connu)         |
+| pre-commit | detect-secrets                 | Détection fuites de clés API (baseline vide depuis la 1.1.21)               |
 | pre-push   | check-security-sast (Opengrep) | SAST `p/javascript` + `p/security-audit` + `p/default`, severity ERROR      |
 | pre-push   | check-complexity (Lizard)      | CCN ≤ 20, length ≤ 1500 lignes (durcissables par PR dédiée)                 |
 

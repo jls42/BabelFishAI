@@ -61,7 +61,7 @@ globalThis.BabelFishAIConstants = {
 
     // Messages d'erreur
     ERRORS: {
-        API_KEY_NOT_FOUND:
+        API_CONFIG_MISSING:
             "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
         CHROME_STORAGE_ERROR: 'Erreur de stockage Chrome',
         MIC_ACCESS_ERROR: 'Erreur : microphone inaccessible.',

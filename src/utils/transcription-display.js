@@ -271,7 +271,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
             if (!config.apiKey) {
-                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+                const errorMsg = ERRORS.API_CONFIG_MISSING;
                 globalThis.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }

@@ -17,7 +17,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     };
 
     const ERRORS = {
-        API_KEY_NOT_FOUND: 'Clé API OpenAI non trouvée. Veuillez la configurer dans les options.',
+        API_CONFIG_MISSING: 'Clé API OpenAI non trouvée. Veuillez la configurer dans les options.',
         MIC_ACCESS_ERROR: "Impossible d'accéder au microphone. Veuillez vérifier les permissions.",
     };
 
@@ -92,7 +92,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         console.error("Erreur lors du démarrage de l'enregistrement:", error);
 
         const errorMessages = {
-            [ERRORS.API_KEY_NOT_FOUND]: ERRORS.API_KEY_NOT_FOUND,
+            [ERRORS.API_CONFIG_MISSING]: ERRORS.API_CONFIG_MISSING,
             NotAllowedError: globalThis.BabelFishAIUtils.i18n.getMessage('bannerMicAccessError'),
             PermissionDeniedError:
                 globalThis.BabelFishAIUtils.i18n.getMessage('bannerMicAccessError'),
@@ -134,7 +134,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Vérifier que la clé API existe sans l'assigner à une variable
             const apiKey = await getApiKey();
             if (!apiKey) {
-                throw new Error(ERRORS.API_KEY_NOT_FOUND);
+                throw new Error(ERRORS.API_CONFIG_MISSING);
             }
 
             const audioConstraints = {
@@ -614,7 +614,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
             if (!config.apiKey) {
-                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+                const errorMsg = ERRORS.API_CONFIG_MISSING;
                 globalThis.BabelFishAI.ui.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }
