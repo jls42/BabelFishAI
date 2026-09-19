@@ -13,11 +13,13 @@ const BABEL_PROVIDERS = {
             transcription: 'https://api.openai.com/v1/audio/transcriptions',
             chat: 'https://api.openai.com/v1/chat/completions',
         },
+        // whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe sont retirés de l'API
+        // OpenAI le 2027-02-26, avec gpt-transcribe pour remplaçant recommandé
         transcriptionModels: [
-            { id: 'whisper-1', name: 'whisper-1', default: true },
+            { id: 'gpt-transcribe', name: 'gpt-transcribe', default: true },
+            { id: 'whisper-1', name: 'whisper-1' },
             { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
             { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' },
-            { id: 'gpt-transcribe', name: 'gpt-transcribe' },
         ],
         // Modèles retirés : gpt-4.1-nano et gpt-4o (réglages migrés par background.js)
         chatModels: [

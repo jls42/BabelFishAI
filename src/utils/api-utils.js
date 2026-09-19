@@ -341,7 +341,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         if (selectedModel) return selectedModel;
 
         return isTranscription
-            ? data.audioModelType || API_CONFIG.WHISPER_MODEL
+            ? data.audioModelType || API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL
             : data.modelType || API_CONFIG.GPT_MODEL;
     }
 
@@ -437,7 +437,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             transcriptionProvider: 'openai',
             chatProvider: 'openai',
             apiKey: '',
-            audioModelType: API_CONFIG.WHISPER_MODEL,
+            audioModelType: API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
             modelType: API_CONFIG.GPT_MODEL,
             disableLogging: false,
         });
@@ -844,7 +844,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         audioBlob,
         apiKey,
         apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
-        modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
+        modelType = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
         filename = null,
         generateUniqueFilename = false,
     ) {

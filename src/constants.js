@@ -47,7 +47,7 @@ globalThis.BabelFishAIConstants = {
         DEFAULT_MISTRAL_TRANSCRIPTION_URL: 'https://api.mistral.ai/v1/audio/transcriptions',
         DEFAULT_MISTRAL_CHAT_URL: 'https://api.mistral.ai/v1/chat/completions',
         // Modèles par défaut
-        WHISPER_MODEL: 'whisper-1',
+        DEFAULT_TRANSCRIPTION_MODEL: 'gpt-transcribe',
         GPT_MODEL: 'gpt-4o-mini',
         VOXTRAL_MODEL: 'voxtral-mini-latest',
         MISTRAL_CHAT_MODEL: 'mistral-small-latest',
