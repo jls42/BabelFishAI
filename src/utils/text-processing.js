@@ -277,11 +277,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             }
         } catch (error) {
             console.error('Correction error:', error);
-            throw new Error(
-                `${
-                    globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction'
-                }: ${error.message}`,
-            );
+            const correctErrorLabel =
+                globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction';
+            // callApi préfixe déjà ses propres erreurs avec ce libellé (api-utils.js) :
+            // le rajouter produirait « Erreur de correction: Erreur de correction: ... »
+            if (error.message.includes(correctErrorLabel)) {
+                throw error;
+            }
+            throw new Error(`${correctErrorLabel}: ${error.message}`);
         }
     }
 

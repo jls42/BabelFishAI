@@ -179,7 +179,7 @@ function updateRecordingState(state, errorMessage = '') {
 
     // Journaliser l'erreur si nécessaire
     if (config.logError && errorMessage) {
-        console.error('Recording error:', errorMessage);
+        console.error('BabelFishAI error:', errorMessage);
     }
 }
 
