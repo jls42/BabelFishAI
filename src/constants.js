@@ -79,7 +79,7 @@ globalThis.BabelFishAIConstants = {
 
     // Configuration des badges
     BADGES: {
-        RECORDING: '⏺',
+        RECORDING: '', // L'enregistrement est signalé par l'icône (point rouge), pas par un badge
         STOPPED: '',
         ERROR: '!',
     },

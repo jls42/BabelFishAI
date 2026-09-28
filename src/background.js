@@ -46,9 +46,20 @@ const ACTIONS = {
 };
 
 const BADGES = {
-    RECORDING: '⏺', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
+    RECORDING: '', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING (l'enregistrement est signalé par l'icône, voir ACTION_ICONS)
     STOPPED: '', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
     ERROR: '!', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
+};
+
+// Icônes de l'action : celle du manifest, et sa variante avec un petit point rouge pendant
+// l'enregistrement. Chemins absolus, car le service worker est dans src/
+const ACTION_ICONS = {
+    DEFAULT: { 16: '/images/icon16.png', 32: '/images/icon32.png', 48: '/images/icon48.png' },
+    RECORDING: {
+        16: '/images/icon16-recording.png',
+        32: '/images/icon32-recording.png',
+        48: '/images/icon48-recording.png',
+    },
 };
 
 const ERRORS = {
@@ -149,16 +160,19 @@ function updateRecordingState(state, errorMessage = '') {
     const stateConfig = {
         [STATES.RECORDING]: {
             isRecording: true,
+            icon: ACTION_ICONS.RECORDING,
             badgeText: BADGES.RECORDING,
             badgeColor: '#FF0000',
         },
         [STATES.STOPPED]: {
             isRecording: false,
+            icon: ACTION_ICONS.DEFAULT,
             badgeText: BADGES.STOPPED,
             badgeColor: '#808080',
         },
         [STATES.ERROR]: {
             isRecording: false, // En cas d'erreur, on considère que l'enregistrement est arrêté
+            icon: ACTION_ICONS.DEFAULT,
             badgeText: BADGES.ERROR,
             badgeColor: '#FF0000',
             logError: true,
@@ -177,7 +191,8 @@ function updateRecordingState(state, errorMessage = '') {
     // Mettre à jour l'état global
     isRecording = config.isRecording;
 
-    // Mettre à jour le badge
+    // Mettre à jour l'icône et le badge
+    chrome.action.setIcon({ path: config.icon });
     chrome.action.setBadgeText({ text: config.badgeText });
     chrome.action.setBadgeBackgroundColor({ color: config.badgeColor });
 
