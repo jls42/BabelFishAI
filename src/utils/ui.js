@@ -188,6 +188,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         container = document.createElement('div');
         container.id = 'whisper-transcription-container';
         container.className = 'whisper-transcription-container';
+        globalThis.BabelFishAIUtils.i18n?.setElementLanguage?.(container);
 
         // Ajouter les attributs ARIA pour l'accessibilité
         container.setAttribute('role', 'dialog');

@@ -368,6 +368,7 @@
         banner.setAttribute('role', 'status');
         banner.setAttribute('aria-live', 'polite');
         banner.setAttribute('data-extension', 'babelfishai'); // Ajouter l'attribut data-extension
+        globalThis.BabelFishAIUtils.i18n?.setElementLanguage?.(banner);
 
         // Fonction pour configurer le contenu de la bannière une fois les traductions chargées
         const setupBannerContent = () => {

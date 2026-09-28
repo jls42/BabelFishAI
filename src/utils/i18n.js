@@ -335,6 +335,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Déclare la langue de l'interface sur un élément de l'extension inséré dans une page web.
+     * La page garde sa propre langue (<html lang>) : les lecteurs d'écran prononcent ainsi le
+     * bandeau et la boîte de dialogue dans la langue de l'interface
+     * @param {HTMLElement} element - Racine d'un élément de l'extension
+     */
+    function setElementLanguage(element) {
+        element.lang = currentLanguage;
+    }
+
+    /**
      * Indique si le module tourne dans une page de l'extension (options), et non dans une page web
      * où le content script l'a chargé
      * @returns {boolean}
@@ -395,6 +405,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         translateElement,
         createTranslatedElement,
         sanitizeHTML,
+        setElementLanguage,
         init,
         getCurrentLanguage: () => currentLanguage,
     };
