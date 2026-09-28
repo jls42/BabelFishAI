@@ -88,3 +88,11 @@ repos:
             language: system
             pass_filenames: false
             stages: [pre-push]
+
+          # Node test suite (node --test, < 1 s). Skipped with a warning without Node 22+.
+          - id: run-tests
+            name: Node tests (scripts/run-tests.sh)
+            entry: scripts/run-tests.sh
+            language: system
+            pass_filenames: false
+            stages: [pre-push]
