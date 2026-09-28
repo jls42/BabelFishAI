@@ -1,4 +1,5 @@
 // Utilitaire d'internationalisation pour BabelFishAI
+/* global chrome */
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
