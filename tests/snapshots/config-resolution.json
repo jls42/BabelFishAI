@@ -376,13 +376,13 @@
             "valeur": null
         },
         "getApiKeyForProvider(custom)": {
-            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+            "valeur": null
         },
         "getApiKeyForProvider(mistral)": {
-            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+            "valeur": null
         },
         "getApiKeyForProvider(openai)": {
-            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+            "valeur": null
         },
         "getOrFetchApiKey(chat)": {
             "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
@@ -391,10 +391,22 @@
             "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
         },
         "resolveApiConfig(chat)": {
-            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "constructor",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
         },
         "resolveApiConfig(transcription)": {
-            "erreur": "TypeError: Cannot read properties of undefined (reading 'transcription')"
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "__proto__",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
         }
     },
     "configuration résolue : mistral": {

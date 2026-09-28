@@ -81,8 +81,10 @@ globalThis.BabelFishAIProviders = (function () {
      * @returns {Object|null} Configuration du provider ou null si non trouvé
      */
     function getProvider(providerId) {
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID ('openai'|'mistral'|'custom')
-        return PROVIDERS[providerId] || null;
+        // Seules les entrées propres au registre sont des providers : ni __proto__, ni constructor
+        if (!Object.hasOwn(PROVIDERS, providerId)) return null;
+        // eslint-disable-next-line security/detect-object-injection -- providerId vérifié par Object.hasOwn
+        return PROVIDERS[providerId];
     }
 
     /**
@@ -256,7 +258,7 @@ globalThis.BabelFishAIProviders = (function () {
         }
 
         const parts = fullModelId.split('/');
-        if (parts.length === 2 && PROVIDERS[parts[0]]) {
+        if (parts.length === 2 && Object.hasOwn(PROVIDERS, parts[0])) {
             return { providerId: parts[0], modelId: parts[1] };
         }
 
