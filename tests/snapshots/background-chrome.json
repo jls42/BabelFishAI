@@ -1,0 +1,3589 @@
+{
+    "badge : fermeture après redémarrage": {
+        "autreOnglet": [],
+        "ongletQuiEnregistre": [
+            {
+                "api": "storage.session.remove",
+                "args": [
+                    "recordingTabId"
+                ]
+            },
+            {
+                "api": "action.setIcon",
+                "args": [
+                    {
+                        "path": {
+                            "16": "/images/icon16.png",
+                            "32": "/images/icon32.png",
+                            "48": "/images/icon48.png"
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "action.setBadgeText",
+                "args": [
+                    {
+                        "text": ""
+                    }
+                ]
+            },
+            {
+                "api": "action.setBadgeBackgroundColor",
+                "args": [
+                    {
+                        "color": "#808080"
+                    }
+                ]
+            }
+        ],
+        "session": {}
+    },
+    "badge : séquence": {
+        "recordingError (erreur) #2": {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16.png",
+                                "32": "/images/icon32.png",
+                                "48": "/images/icon48.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": "!"
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.remove",
+                    "args": [
+                        "recordingTabId"
+                    ]
+                }
+            ],
+            "reponse": {},
+            "session": {}
+        },
+        "recordingStarted #0": {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16-recording.png",
+                                "32": "/images/icon32-recording.png",
+                                "48": "/images/icon48-recording.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.set",
+                    "args": [
+                        {
+                            "recordingTabId": 7
+                        }
+                    ]
+                }
+            ],
+            "reponse": {},
+            "session": {
+                "recordingTabId": 7
+            }
+        },
+        "recordingStarted #3": {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16-recording.png",
+                                "32": "/images/icon32-recording.png",
+                                "48": "/images/icon48-recording.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.set",
+                    "args": [
+                        {
+                            "recordingTabId": 7
+                        }
+                    ]
+                }
+            ],
+            "reponse": {},
+            "session": {
+                "recordingTabId": 7
+            }
+        },
+        "recordingStopped #1": {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16.png",
+                                "32": "/images/icon32.png",
+                                "48": "/images/icon48.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#808080"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.remove",
+                    "args": [
+                        "recordingTabId"
+                    ]
+                }
+            ],
+            "reponse": {},
+            "session": {}
+        }
+    },
+    "icône : content script présent": {
+        "delais": [],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            }
+        ]
+    },
+    "icône : injection puis envoi": {
+        "delais": [
+            500
+        ],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            },
+            {
+                "api": "scripting.executeScript",
+                "args": [
+                    {
+                        "files": [
+                            "src/constants.js",
+                            "src/utils/providers.js",
+                            "src/utils/ui.js",
+                            "src/utils/banner-utils.js",
+                            "src/utils/api-utils.js",
+                            "src/utils/i18n.js",
+                            "src/content.js"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "scripting.insertCSS",
+                "args": [
+                    {
+                        "files": [
+                            "src/styles/content.css"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            }
+        ]
+    },
+    "icône : échec": {
+        "delais": [
+            500
+        ],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            },
+            {
+                "api": "scripting.executeScript",
+                "args": [
+                    {
+                        "files": [
+                            "src/constants.js",
+                            "src/utils/providers.js",
+                            "src/utils/ui.js",
+                            "src/utils/banner-utils.js",
+                            "src/utils/api-utils.js",
+                            "src/utils/i18n.js",
+                            "src/content.js"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "scripting.insertCSS",
+                "args": [
+                    {
+                        "files": [
+                            "src/styles/content.css"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            },
+            {
+                "api": "action.setIcon",
+                "args": [
+                    {
+                        "path": {
+                            "16": "/images/icon16.png",
+                            "32": "/images/icon32.png",
+                            "48": "/images/icon48.png"
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "action.setBadgeText",
+                "args": [
+                    {
+                        "text": "!"
+                    }
+                ]
+            },
+            {
+                "api": "action.setBadgeBackgroundColor",
+                "args": [
+                    {
+                        "color": "#FF0000"
+                    }
+                ]
+            }
+        ]
+    },
+    "menu contextuel : correction": {
+        "delais": [],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "correctSelection",
+                        "text": "Du texte choisi"
+                    }
+                ]
+            }
+        ]
+    },
+    "menu contextuel : injection puis envoi": {
+        "delais": [
+            500
+        ],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "rephraseSelection",
+                        "text": "Du texte choisi"
+                    }
+                ]
+            },
+            {
+                "api": "scripting.executeScript",
+                "args": [
+                    {
+                        "files": [
+                            "src/constants.js",
+                            "src/utils/providers.js",
+                            "src/utils/ui.js",
+                            "src/utils/banner-utils.js",
+                            "src/utils/api-utils.js",
+                            "src/utils/i18n.js",
+                            "src/content.js"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "scripting.insertCSS",
+                "args": [
+                    {
+                        "files": [
+                            "src/styles/content.css"
+                        ],
+                        "target": {
+                            "tabId": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "rephraseSelection",
+                        "text": "Du texte choisi"
+                    }
+                ]
+            }
+        ]
+    },
+    "menu contextuel : menu-parent": {
+        "delais": [],
+        "effets": []
+    },
+    "menu contextuel : reformulation": {
+        "delais": [],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "rephraseSelection",
+                        "text": "Du texte choisi"
+                    }
+                ]
+            }
+        ]
+    },
+    "menu contextuel : sans-selection": {
+        "delais": [],
+        "effets": []
+    },
+    "menu contextuel : traduction-de": {
+        "delais": [],
+        "effets": [
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "translateSelection",
+                        "targetLanguage": "de",
+                        "text": "Du texte choisi"
+                    }
+                ]
+            }
+        ]
+    },
+    "messages divers": {
+        "inconnu": {},
+        "langues": {
+            "options": [
+                {
+                    "text": "English (en)",
+                    "value": "en"
+                },
+                {
+                    "text": "Français (fr)",
+                    "value": "fr"
+                },
+                {
+                    "text": "Español (es)",
+                    "value": "es"
+                },
+                {
+                    "text": "Português (pt)",
+                    "value": "pt"
+                },
+                {
+                    "text": "中文 (zh)",
+                    "value": "zh"
+                },
+                {
+                    "text": "हिंदी (hi)",
+                    "value": "hi"
+                },
+                {
+                    "text": "العربية (ar)",
+                    "value": "ar"
+                },
+                {
+                    "text": "Italiano (it)",
+                    "value": "it"
+                },
+                {
+                    "text": "Deutsch (de)",
+                    "value": "de"
+                },
+                {
+                    "text": "Svenska (sv)",
+                    "value": "sv"
+                },
+                {
+                    "text": "Polski (pl)",
+                    "value": "pl"
+                },
+                {
+                    "text": "Nederlands (nl)",
+                    "value": "nl"
+                },
+                {
+                    "text": "Română (ro)",
+                    "value": "ro"
+                },
+                {
+                    "text": "日本語 (ja)",
+                    "value": "ja"
+                },
+                {
+                    "text": "한국어 (ko)",
+                    "value": "ko"
+                }
+            ]
+        }
+    },
+    "onInstalled (install) : vide": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "openai",
+                        "providers": {
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "openai"
+                    }
+                ]
+            },
+            {
+                "api": "runtime.openOptionsPage",
+                "args": []
+            }
+        ],
+        "local": {},
+        "sync": {
+            "chatProvider": "openai",
+            "providers": {
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "onInstalled (update) : herite-litellm": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "custom",
+                        "providers": {
+                            "custom": {
+                                "apiKey": "{cle litellm}",
+                                "chatUrl": "http://localhost:4000/v1/chat/completions",
+                                "enabled": true,
+                                "transcriptionUrl": "http://localhost:4000/v1/audio/transcriptions"
+                            },
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "custom"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle litellm}",
+            "apiUrl": "http://localhost:4000/v1/audio/transcriptions",
+            "chatProvider": "custom",
+            "providers": {
+                "custom": {
+                    "apiKey": "{cle litellm}",
+                    "chatUrl": "http://localhost:4000/v1/chat/completions",
+                    "enabled": true,
+                    "transcriptionUrl": "http://localhost:4000/v1/audio/transcriptions"
+                },
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "custom",
+            "translationApiUrl": "http://localhost:4000/v1/chat/completions"
+        }
+    },
+    "onInstalled (update) : herite-litellm-transcription-seule": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "custom",
+                        "providers": {
+                            "custom": {
+                                "apiKey": "{cle litellm}",
+                                "chatUrl": "",
+                                "enabled": true,
+                                "transcriptionUrl": "http://localhost:4000/v1/audio/transcriptions"
+                            },
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "custom"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle litellm}",
+            "apiUrl": "http://localhost:4000/v1/audio/transcriptions",
+            "chatProvider": "custom",
+            "providers": {
+                "custom": {
+                    "apiKey": "{cle litellm}",
+                    "chatUrl": "",
+                    "enabled": true,
+                    "transcriptionUrl": "http://localhost:4000/v1/audio/transcriptions"
+                },
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "custom",
+            "translationApiUrl": "https://api.openai.com/v1/chat/completions"
+        }
+    },
+    "onInstalled (update) : herite-openai": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "openai",
+                        "providers": {
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "{cle openai}",
+                                "chatUrl": "",
+                                "enabled": true,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "openai"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle openai}",
+            "chatProvider": "openai",
+            "providers": {
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "{cle openai}",
+                    "chatUrl": "",
+                    "enabled": true,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "onInstalled (update) : herite-urls-openai-explicites": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "openai",
+                        "providers": {
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "{cle openai}",
+                                "chatUrl": "",
+                                "enabled": true,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "openai"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle openai}",
+            "apiUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "chatProvider": "openai",
+            "providers": {
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "{cle openai}",
+                    "chatUrl": "",
+                    "enabled": true,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "openai",
+            "translationApiUrl": "https://api.openai.com/v1/chat/completions"
+        }
+    },
+    "onInstalled (update) : mistral-nomme-gpt-4o-intact": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "",
+            "chatProvider": "mistral",
+            "providers": {
+                "custom": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionModels": [],
+                    "transcriptionUrl": ""
+                },
+                "mistral": {
+                    "apiKey": "{cle mistral}",
+                    "chatModels": [],
+                    "enabled": true,
+                    "selectedChatModel": "gpt-4o",
+                    "transcriptionModels": []
+                },
+                "openai": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "enabled": false,
+                    "transcriptionModels": []
+                }
+            },
+            "transcriptionProvider": "mistral"
+        }
+    },
+    "onInstalled (update) : modele-gpt-4.1-nano": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "providers": {
+                            "custom": {
+                                "apiKey": "",
+                                "chatModels": [],
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionModels": [],
+                                "transcriptionUrl": ""
+                            },
+                            "mistral": {
+                                "apiKey": "",
+                                "chatModels": [],
+                                "enabled": false,
+                                "transcriptionModels": []
+                            },
+                            "openai": {
+                                "apiKey": "{cle openai}",
+                                "chatModels": [],
+                                "enabled": true,
+                                "selectedChatModel": "gpt-5.6-luna",
+                                "transcriptionModels": []
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle openai}",
+            "chatProvider": "openai",
+            "providers": {
+                "custom": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionModels": [],
+                    "transcriptionUrl": ""
+                },
+                "mistral": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "enabled": false,
+                    "transcriptionModels": []
+                },
+                "openai": {
+                    "apiKey": "{cle openai}",
+                    "chatModels": [],
+                    "enabled": true,
+                    "selectedChatModel": "gpt-5.6-luna",
+                    "transcriptionModels": []
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "onInstalled (update) : modele-gpt-4o": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "providers": {
+                            "custom": {
+                                "apiKey": "",
+                                "chatModels": [],
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionModels": [],
+                                "transcriptionUrl": ""
+                            },
+                            "mistral": {
+                                "apiKey": "",
+                                "chatModels": [],
+                                "enabled": false,
+                                "transcriptionModels": []
+                            },
+                            "openai": {
+                                "apiKey": "{cle openai}",
+                                "chatModels": [],
+                                "enabled": true,
+                                "selectedChatModel": "gpt-4.1",
+                                "transcriptionModels": []
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle openai}",
+            "chatProvider": "openai",
+            "providers": {
+                "custom": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionModels": [],
+                    "transcriptionUrl": ""
+                },
+                "mistral": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "enabled": false,
+                    "transcriptionModels": []
+                },
+                "openai": {
+                    "apiKey": "{cle openai}",
+                    "chatModels": [],
+                    "enabled": true,
+                    "selectedChatModel": "gpt-4.1",
+                    "transcriptionModels": []
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "onInstalled (update) : openai": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "apiKey": "{cle openai}",
+            "chatProvider": "openai",
+            "providers": {
+                "custom": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionModels": [],
+                    "transcriptionUrl": ""
+                },
+                "mistral": {
+                    "apiKey": "",
+                    "chatModels": [],
+                    "enabled": false,
+                    "transcriptionModels": []
+                },
+                "openai": {
+                    "apiKey": "{cle openai}",
+                    "chatModels": [],
+                    "enabled": true,
+                    "transcriptionModels": []
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "onInstalled (update) : vide": {
+        "effets": [
+            {
+                "api": "contextMenus.removeAll",
+                "args": []
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "rephraseSelection",
+                        "title": "Reformuler la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "correctSelection",
+                        "title": "Corriger l'orthographe"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateMenu",
+                        "title": "Traduire la sélection"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_en",
+                        "parentId": "translateMenu",
+                        "title": "English (en)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_fr",
+                        "parentId": "translateMenu",
+                        "title": "Français (fr)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_es",
+                        "parentId": "translateMenu",
+                        "title": "Español (es)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pt",
+                        "parentId": "translateMenu",
+                        "title": "Português (pt)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_zh",
+                        "parentId": "translateMenu",
+                        "title": "中文 (zh)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_hi",
+                        "parentId": "translateMenu",
+                        "title": "हिंदी (hi)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ar",
+                        "parentId": "translateMenu",
+                        "title": "العربية (ar)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_it",
+                        "parentId": "translateMenu",
+                        "title": "Italiano (it)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_de",
+                        "parentId": "translateMenu",
+                        "title": "Deutsch (de)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_sv",
+                        "parentId": "translateMenu",
+                        "title": "Svenska (sv)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_pl",
+                        "parentId": "translateMenu",
+                        "title": "Polski (pl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_nl",
+                        "parentId": "translateMenu",
+                        "title": "Nederlands (nl)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ro",
+                        "parentId": "translateMenu",
+                        "title": "Română (ro)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ja",
+                        "parentId": "translateMenu",
+                        "title": "日本語 (ja)"
+                    }
+                ]
+            },
+            {
+                "api": "contextMenus.create",
+                "args": [
+                    {
+                        "contexts": [
+                            "selection"
+                        ],
+                        "id": "translateSelection_ko",
+                        "parentId": "translateMenu",
+                        "title": "한국어 (ko)"
+                    }
+                ]
+            },
+            {
+                "api": "storage.sync.set",
+                "args": [
+                    {
+                        "chatProvider": "openai",
+                        "providers": {
+                            "mistral": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            },
+                            "openai": {
+                                "apiKey": "",
+                                "chatUrl": "",
+                                "enabled": false,
+                                "transcriptionUrl": ""
+                            }
+                        },
+                        "transcriptionProvider": "openai"
+                    }
+                ]
+            }
+        ],
+        "local": {},
+        "sync": {
+            "chatProvider": "openai",
+            "providers": {
+                "mistral": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                },
+                "openai": {
+                    "apiKey": "",
+                    "chatUrl": "",
+                    "enabled": false,
+                    "transcriptionUrl": ""
+                }
+            },
+            "transcriptionProvider": "openai"
+        }
+    },
+    "proxy du background : erreur-reseau": {
+        "reponse": {
+            "error": "NetworkError when attempting to fetch resource.",
+            "errorName": "TypeError",
+            "success": false
+        },
+        "requetes": [
+            {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ]
+    },
+    "proxy du background : hote-custom-actif": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"ok\":true}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ]
+    },
+    "proxy du background : hote-custom-coupe": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
+    },
+    "proxy du background : hote-refuse": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
+    },
+    "proxy du background : http-502-html": {
+        "reponse": {
+            "contentType": "text/html",
+            "headers": {
+                "content-type": "text/html"
+            },
+            "rawText": "<html>Bad Gateway</html>",
+            "status": 502,
+            "statusText": "Bad Gateway",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ]
+    },
+    "proxy du background : http-hors-localhost": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
+    },
+    "proxy du background : json-openai": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"choices\":[{\"message\":{\"content\":\"ok\"}}]}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ]
+    },
+    "proxy du background : multipart-avec-content-type": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"text\":\"ok\"}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ]
+    },
+    "raccourci : _execute_action": {
+        "delais": [],
+        "effets": [
+            {
+                "api": "tabs.query",
+                "args": [
+                    {
+                        "active": true,
+                        "currentWindow": true
+                    }
+                ]
+            },
+            {
+                "api": "tabs.sendMessage",
+                "args": [
+                    7,
+                    {
+                        "action": "toggleRecording"
+                    }
+                ]
+            }
+        ]
+    },
+    "raccourci : autre-commande": {
+        "delais": [],
+        "effets": []
+    },
+    "écouteurs enregistrés": {
+        "action.onClicked": 1,
+        "commands.onChanged": 0,
+        "commands.onCommand": 1,
+        "contextMenus.onClicked": 1,
+        "permissions.onAdded": 0,
+        "permissions.onRemoved": 0,
+        "runtime.onInstalled": 2,
+        "runtime.onMessage": 1,
+        "runtime.onStartup": 0,
+        "storage.onChanged": 0,
+        "tabs.onRemoved": 1,
+        "tabs.onUpdated": 0
+    }
+}

@@ -31,6 +31,7 @@ repos:
                   _locales/.*|
                   node_modules/.*|
                   README-[a-z]{2}\.md|
+                  tests/snapshots/.*|
                   .*\.min\.js
                 )$
 

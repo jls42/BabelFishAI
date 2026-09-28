@@ -1,0 +1,728 @@
+{
+    "configuration résolue : custom": {
+        "getApiKey(chat)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle custom}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle custom}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle custom}",
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "custom",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle custom}",
+                "disableLogging": false,
+                "model": "whisper-1",
+                "providerId": "custom",
+                "url": "http://localhost:4000/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : custom-sans-journal": {
+        "getApiKey(chat)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle custom}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle custom}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle custom}",
+                "disableLogging": true,
+                "model": "gpt-4o-mini",
+                "providerId": "custom",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle custom}",
+                "disableLogging": true,
+                "model": "whisper-1",
+                "providerId": "custom",
+                "url": "http://localhost:4000/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : custom-sans-url": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": "{cle custom}"
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "voxtral-mini-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : futur-S1": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "gemini",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "gemini",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : futur-S1-cle-heritee": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "gemini",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "gemini",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : futur-S2": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "voxtral-mini-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : herite-litellm": {
+        "getApiKey(chat)": {
+            "valeur": "{cle litellm}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle litellm}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle litellm}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle litellm}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle litellm}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle litellm}",
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle litellm}",
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : herite-openai": {
+        "getApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : identifiant-prototype": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "voxtral-mini-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : identifiant-prototype-sans-repli": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+        },
+        "getApiKeyForProvider(mistral)": {
+            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+        },
+        "getApiKeyForProvider(openai)": {
+            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "erreur": "TypeError: Cannot read properties of undefined (reading 'chat')"
+        },
+        "resolveApiConfig(transcription)": {
+            "erreur": "TypeError: Cannot read properties of undefined (reading 'transcription')"
+        }
+    },
+    "configuration résolue : mistral": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "voxtral-mini-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : mistral-seul-openai-residuelle": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle mistral}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "voxtral-mini-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : mixte": {
+        "getApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle mistral}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle mistral}",
+                "disableLogging": false,
+                "model": "mistral-small-latest",
+                "providerId": "mistral",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : modele-retire": {
+        "getApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : modeles": {
+        "getApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "mon-modele-perso",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "whisper-1",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : openai": {
+        "getApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle openai}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle openai}",
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : tout-desactive": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": "{cle mistral}"
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : vide": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    }
+}

@@ -13,3 +13,6 @@ _locales/
 
 # Translated README files (out of scope until next localization cycle)
 README-*.md
+
+# Instantanés de tests, générés par scripts/run-tests.sh --update
+tests/snapshots/

@@ -1,0 +1,2362 @@
+{
+    "allowlist du content script : custom": {
+        "ftp://api.openai.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://127.0.0.1:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://example.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://localhost:4000/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "https://api.mistral.ai/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "https://api.openai.com.evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.openai.com/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "https://evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://localhost:4000/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "pas une url": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        }
+    },
+    "allowlist du content script : openai": {
+        "ftp://api.openai.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://127.0.0.1:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://example.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://localhost:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.mistral.ai/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "https://api.openai.com.evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.openai.com/v1/chat/completions": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "https://evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://localhost:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "pas une url": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        }
+    },
+    "callApi sans clé": {
+        "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+    },
+    "correction : 400 deux fois": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            },
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Requête invalide. Vérifiez vos paramètres et réessayez."
+        }
+    },
+    "correction : 400 puis succès sans temperature": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            },
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : 401": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+        }
+    },
+    "correction : custom": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : custom-sans-journal": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1,\"no-log\":true}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : futur-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
+    "correction : herite-litellm": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle litellm}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : herite-openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : mistral": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : mixte": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
+    "erreur HTTP 400 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Requête invalide. Vérifiez vos paramètres et réessayez."
+        }
+    },
+    "erreur HTTP 400 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Requête invalide. Vérifiez vos paramètres et réessayez."
+        }
+    },
+    "erreur HTTP 400 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Requête invalide. Vérifiez vos paramètres et réessayez."
+        }
+    },
+    "erreur HTTP 401 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+        }
+    },
+    "erreur HTTP 401 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+        }
+    },
+    "erreur HTTP 401 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+        }
+    },
+    "erreur HTTP 403 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Accès refusé. Votre clé API ne dispose pas des autorisations nécessaires."
+        }
+    },
+    "erreur HTTP 403 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Accès refusé. Votre clé API ne dispose pas des autorisations nécessaires."
+        }
+    },
+    "erreur HTTP 403 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Accès refusé. Votre clé API ne dispose pas des autorisations nécessaires."
+        }
+    },
+    "erreur HTTP 404 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: API ou ressource non trouvée. Vérifiez l'URL dans les paramètres avancés."
+        }
+    },
+    "erreur HTTP 404 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: API ou ressource non trouvée. Vérifiez l'URL dans les paramètres avancés."
+        }
+    },
+    "erreur HTTP 404 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: API ou ressource non trouvée. Vérifiez l'URL dans les paramètres avancés."
+        }
+    },
+    "erreur HTTP 418 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: message du provider (418)"
+        }
+    },
+    "erreur HTTP 418 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: message du provider (418)"
+        }
+    },
+    "erreur HTTP 418 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: message du provider (418)"
+        }
+    },
+    "erreur HTTP 422-detail : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Erreur lors de la reformulation"
+        }
+    },
+    "erreur HTTP 422-detail : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Erreur lors de la traduction"
+        }
+    },
+    "erreur HTTP 422-detail : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Erreur lors de la transcription"
+        }
+    },
+    "erreur HTTP 429 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer."
+        }
+    },
+    "erreur HTTP 429 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer."
+        }
+    },
+    "erreur HTTP 429 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer."
+        }
+    },
+    "erreur HTTP 500 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur HTTP 500 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur HTTP 500 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur HTTP 502 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 502 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 502 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 502-html : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 502-html : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 502-html : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Service indisponible. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 503 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Service surchargé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 503 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Service surchargé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 503 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Service surchargé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 504 : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Délai d'attente serveur dépassé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 504 : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Délai d'attente serveur dépassé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP 504 : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Délai d'attente serveur dépassé. Réessayez plus tard."
+        }
+    },
+    "erreur HTTP json-sans-message : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur HTTP json-sans-message : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur HTTP json-sans-message : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Erreur serveur. Le service est peut-être temporairement indisponible."
+        }
+    },
+    "erreur réseau failed-to-fetch : correction": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Impossible de contacter le serveur. Vérifiez votre connexion Internet."
+        }
+    },
+    "erreur réseau failed-to-fetch : reformulation": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Impossible de contacter le serveur. Vérifiez votre connexion Internet."
+        }
+    },
+    "erreur réseau failed-to-fetch : traduction": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la traduction: Impossible de contacter le serveur. Vérifiez votre connexion Internet."
+        }
+    },
+    "erreur réseau failed-to-fetch : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la transcription: Impossible de contacter le serveur. Vérifiez votre connexion Internet."
+        }
+    },
+    "erreur réseau networkerror-firefox : correction": {
+        "delais": [
+            1500
+        ],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            },
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "erreur réseau networkerror-firefox : reformulation": {
+        "delais": [
+            1500
+        ],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            },
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "erreur réseau networkerror-firefox : traduction": {
+        "delais": [
+            1500
+        ],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            },
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "erreur réseau networkerror-firefox : transcription": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "erreur": "TypeError: NetworkError when attempting to fetch resource."
+        }
+    },
+    "proxy : FileReader en échec": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "NotReadableError: The requested file could not be read"
+        }
+    },
+    "proxy : enveloppe invalide": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Impossible de contacter le serveur. Vérifiez votre connexion Internet."
+        }
+    },
+    "proxy : message de dictée": [
+        {
+            "action": "proxyFetch",
+            "request": {
+                "formDataFields": [
+                    {
+                        "data": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "isFile": true,
+                        "name": "file",
+                        "type": "audio/webm"
+                    },
+                    {
+                        "isFile": false,
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "options": {
+                    "headers": {
+                        "Authorization": "Bearer {cle openai}"
+                    },
+                    "method": "POST"
+                },
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    ],
+    "reformulation : custom": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : custom-sans-journal": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}],\"no-log\":true}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : futur-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
+    "reformulation : herite-litellm": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle litellm}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : herite-openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : mistral": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : mixte": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : réponse en blocs": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse en blocs."
+        }
+    },
+    "reformulation : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
+    "traduction : custom": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : custom-sans-journal": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}],\"no-log\":true}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : futur-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Clé API manquante"
+        }
+    },
+    "traduction : herite-litellm": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle litellm}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : herite-openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : mistral": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : mixte": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"mistral-small-latest\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Clé API manquante"
+        }
+    },
+    "transcription : custom": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "whisper-1"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : custom-sans-journal": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "whisper-1"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "http://localhost:4000/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : futur-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Aucun provider configuré : activez-en un et renseignez sa clé API dans les options."
+        }
+    },
+    "transcription : herite-litellm": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle litellm}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : herite-openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : mistral": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "voxtral-mini-latest"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle mistral}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : mixte": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : openai": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": [
+                    {
+                        "base64": "GkXfo0KGgQE=",
+                        "filename": "audio-1790683200000-4fzzzxjy.webm",
+                        "name": "file",
+                        "size": 8,
+                        "type": "audio/webm"
+                    },
+                    {
+                        "name": "model",
+                        "value": "gpt-transcribe"
+                    }
+                ],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Aucun provider configuré : activez-en un et renseignez sa clé API dans les options."
+        }
+    }
+}
