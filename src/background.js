@@ -69,6 +69,8 @@ const ERRORS = {
 
 // État global
 let isRecording = false;
+// État affiché par l'icône, pour qu'un arrêt qui suit une erreur n'efface pas le badge « ! »
+let displayedState = STATES.STOPPED;
 
 // Entrée du stockage de session (propriété `recordingTabId`) qui retient l'onglet en cours
 // d'enregistrement : s'il se ferme, son content script disparaît sans envoyer l'arrêt
@@ -190,6 +192,7 @@ function updateRecordingState(state, errorMessage = '') {
 
     // Mettre à jour l'état global
     isRecording = config.isRecording;
+    displayedState = state;
 
     // Mettre à jour l'icône et le badge
     chrome.action.setIcon({ path: config.icon });
@@ -845,6 +848,18 @@ async function clearBadgeIfRecordingTabClosed(tabId) {
 }
 
 /**
+ * Applique à l'icône l'état annoncé par le content script. Après une erreur, le content script
+ * envoie aussi l'arrêt (nettoyage de l'enregistrement) : le badge « ! » reste alors affiché
+ * jusqu'au prochain démarrage, au lieu de disparaître aussitôt
+ * @param {string} state - État annoncé
+ * @param {string} errorMessage - Message d'erreur éventuel
+ */
+function applyAnnouncedState(state, errorMessage) {
+    if (state === STATES.STOPPED && displayedState === STATES.ERROR) return;
+    updateRecordingState(state, errorMessage);
+}
+
+/**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
  * @param {Object} sender - L'expéditeur du message (son onglet sert au suivi du badge)
@@ -863,7 +878,7 @@ function handleMessage(message, sender, sendResponse) {
 
     // Gestion des notifications d'état d'enregistrement
     if (message.action && actionStateMap[message.action]) {
-        updateRecordingState(
+        applyAnnouncedState(
             actionStateMap[message.action],
             message.action === ACTIONS.ERROR ? message.error : '',
         );

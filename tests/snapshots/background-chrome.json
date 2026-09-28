@@ -1,4 +1,177 @@
 {
+    "badge : erreur puis arrêt": [
+        {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16-recording.png",
+                                "32": "/images/icon32-recording.png",
+                                "48": "/images/icon48-recording.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.set",
+                    "args": [
+                        {
+                            "recordingTabId": 7
+                        }
+                    ]
+                }
+            ],
+            "message": "recordingStarted"
+        },
+        {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16.png",
+                                "32": "/images/icon32.png",
+                                "48": "/images/icon48.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": "!"
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.remove",
+                    "args": [
+                        "recordingTabId"
+                    ]
+                }
+            ],
+            "message": "recordingError"
+        },
+        {
+            "effets": [
+                {
+                    "api": "storage.session.remove",
+                    "args": [
+                        "recordingTabId"
+                    ]
+                }
+            ],
+            "message": "recordingStopped"
+        },
+        {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16-recording.png",
+                                "32": "/images/icon32-recording.png",
+                                "48": "/images/icon48-recording.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#FF0000"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.set",
+                    "args": [
+                        {
+                            "recordingTabId": 7
+                        }
+                    ]
+                }
+            ],
+            "message": "recordingStarted"
+        },
+        {
+            "effets": [
+                {
+                    "api": "action.setIcon",
+                    "args": [
+                        {
+                            "path": {
+                                "16": "/images/icon16.png",
+                                "32": "/images/icon32.png",
+                                "48": "/images/icon48.png"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeText",
+                    "args": [
+                        {
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "api": "action.setBadgeBackgroundColor",
+                    "args": [
+                        {
+                            "color": "#808080"
+                        }
+                    ]
+                },
+                {
+                    "api": "storage.session.remove",
+                    "args": [
+                        "recordingTabId"
+                    ]
+                }
+            ],
+            "message": "recordingStopped"
+        }
+    ],
     "badge : fermeture après redémarrage": {
         "autreOnglet": [],
         "ongletQuiEnregistre": [

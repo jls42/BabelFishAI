@@ -245,6 +245,24 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
         matchSnapshot('badge : séquence', steps);
     });
 
+    test('badge : une erreur, puis l’arrêt envoyé par le nettoyage', async () => {
+        await freshBackground(STORAGE.openai);
+        const steps = [];
+        for (const message of [
+            { action: 'recordingStarted' },
+            { action: 'recordingError', error: 'transcription impossible' },
+            { action: 'recordingStopped' },
+            { action: 'recordingStarted' },
+            { action: 'recordingStopped' },
+        ]) {
+            env.calls.length = 0;
+            await send(message);
+            await flush();
+            steps.push({ message: message.action, effets: effects() });
+        }
+        matchSnapshot('badge : erreur puis arrêt', steps);
+    });
+
     test('badge : fermeture de l’onglet qui enregistre, après redémarrage du service worker', async () => {
         await freshBackground(STORAGE.openai);
         await send({ action: 'recordingStarted' });
