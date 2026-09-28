@@ -157,6 +157,14 @@ export const STORAGE = {
         apiKey: '',
         'extraProvider.gemini': { enabled: true, apiKey: KEYS.gemini },
     },
+    // Un provider inconnu du registre rangé dans `providers` (ce que le plan interdit d'écrire) :
+    // les versions publiées enverraient sa clé aux URLs OpenAI
+    'provider-inconnu-dans-providers': {
+        providers: { ...providers(), gemini: { enabled: true, apiKey: KEYS.gemini } },
+        transcriptionProvider: 'gemini',
+        chatProvider: 'openai',
+        apiKey: '',
+    },
     'identifiant-prototype': {
         providers: providers({ mistral: { enabled: true, apiKey: KEYS.mistral } }),
         transcriptionProvider: '__proto__',

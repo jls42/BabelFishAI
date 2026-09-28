@@ -282,21 +282,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Vérifie si un provider a une configuration valide
-     * @param {string} id - ID du provider
-     * @param {Object} config - Configuration du provider
-     * @returns {boolean} True si valide
-     */
-    function isProviderValid(id, config) {
-        if (!config?.enabled || !config?.apiKey) return false;
-        // Pour le provider custom, les URLs sont obligatoires
-        if (id === 'custom') {
-            return Boolean(config.transcriptionUrl && config.chatUrl);
-        }
-        return true;
-    }
-
-    /**
      * Résout l'URL pour un type de service
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @param {Object} providerConfig - Configuration du provider
@@ -359,59 +344,23 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Trouve un provider de fallback valide
-     * @param {Object} providers - Configuration des providers
-     * @param {string} currentProviderId - ID du provider actuel
-     * @returns {{providerId: string, providerConfig: Object}|null} Provider de fallback ou null
-     */
-    function findFallbackProvider(providers, currentProviderId) {
-        if (!providers) return null;
-
-        const availableProvider = Object.entries(providers).find(([id, config]) =>
-            isProviderValid(id, config),
-        );
-
-        if (availableProvider) {
-            // skipcq: JS-0002 - debug log for provider fallback diagnostics
-            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
-            console.log(
-                `[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`,
-            );
-            return { providerId: availableProvider[0], providerConfig: availableProvider[1] };
-        }
-        return null;
-    }
-
-    /**
-     * Résout le provider actif avec fallback si nécessaire
+     * Résout le provider actif avec fallback si nécessaire (provider-store.js)
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @param {Object} data - Données du storage
      * @returns {{providerId: string, providerConfig: Object|undefined}} Provider résolu
      */
     function resolveActiveProvider(serviceType, data) {
-        let providerId =
-            serviceType === 'transcription' ? data.transcriptionProvider : data.chatProvider;
-
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
-        let providerConfig = data.providers?.[providerId];
-
-        // Si non valide, chercher un provider de fallback
-        if (data.providers && !isProviderValid(providerId, providerConfig)) {
-            const fallback = findFallbackProvider(data.providers, providerId);
-            if (fallback) {
-                providerId = fallback.providerId;
-                providerConfig = fallback.providerConfig;
-            } else {
-                // F8 : aucun fallback valide. Invalider la config pour que callApi
-                // échoue tôt sur "clé API manquante" plutôt que de renvoyer
-                // l'utilisateur sur la fausse piste "URL non autorisée" via
-                // isUrlAllowed (cas typique : tous les providers désactivés mais
-                // l'un d'eux reste sélectionné comme actif).
-                providerConfig = undefined;
-            }
+        const store = globalThis.BabelFishAIProviderStore;
+        const resolved = store.resolveProvider(data, serviceType);
+        const selected = store.readSelection(data, serviceType);
+        if (resolved.providerConfig && resolved.providerId !== selected) {
+            // skipcq: JS-0002 - debug log for provider fallback diagnostics
+            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
+            console.log(
+                `[resolveApiConfig] Provider ${selected} n'a pas de configuration valide, fallback vers ${resolved.providerId}`,
+            );
         }
-
-        return { providerId, providerConfig };
+        return resolved;
     }
 
     /**

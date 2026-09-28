@@ -7,7 +7,15 @@ import { STORAGE } from './helpers/fixtures.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
 const env = setupEnv({ browser: 'chrome' });
-await loadScripts(['src/constants.js', 'src/utils/providers.js', 'src/utils/api-utils.js']);
+await loadScripts(
+    [
+        'src/constants.js',
+        'src/utils/providers.js',
+        'src/utils/provider-store.js',
+        'src/utils/api-utils.js',
+    ],
+    { optional: ['src/utils/provider-store.js'] },
+);
 const api = globalThis.BabelFishAIUtils.api;
 const matchSnapshot = createSnapshots(import.meta.url);
 

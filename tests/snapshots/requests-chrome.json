@@ -376,6 +376,14 @@
             "valeur": "Réponse du provider."
         }
     },
+    "correction : provider-inconnu-dans-providers": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
     "correction : tout-desactive": {
         "delais": [],
         "reponsesNonConsommees": 1,
@@ -1859,6 +1867,14 @@
             "valeur": "Réponse du provider."
         }
     },
+    "reformulation : provider-inconnu-dans-providers": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
     "reformulation : réponse en blocs": {
         "delais": [],
         "reponsesNonConsommees": 0,
@@ -2065,6 +2081,14 @@
         ],
         "resultat": {
             "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : provider-inconnu-dans-providers": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Clé API manquante"
         }
     },
     "traduction : tout-desactive": {
@@ -2305,6 +2329,14 @@
         ],
         "resultat": {
             "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : provider-inconnu-dans-providers": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Aucun provider configuré : activez-en un et renseignez sa clé API dans les options."
         }
     },
     "transcription : tout-desactive": {

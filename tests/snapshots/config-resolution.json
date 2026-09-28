@@ -655,6 +655,47 @@
             }
         }
     },
+    "configuration résolue : provider-inconnu-dans-providers": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "openai",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "gemini",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
     "configuration résolue : tout-desactive": {
         "getApiKey(chat)": {
             "valeur": null

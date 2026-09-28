@@ -12,11 +12,15 @@ import { createSnapshots } from './snapshot.mjs';
 const CONTENT_SCRIPTS = [
     'src/constants.js',
     'src/utils/providers.js',
+    'src/utils/provider-store.js',
     'src/utils/error-utils.js',
     'src/utils/api-utils.js',
     'src/utils/text-processing.js',
     'src/utils/recording-utils.js',
 ];
+
+// Modules apparus pendant la refonte : absents de l'arbre de base (--ref base-refonte)
+const OPTIONAL_MODULES = ['src/utils/provider-store.js'];
 
 const AUDIO = new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x42, 0x86, 0x81, 0x01]);
 const OK_TRANSCRIPTION = { json: { text: '  Bonjour, ceci est une dictée.  ' } };
@@ -56,6 +60,7 @@ const STORAGES_PER_ACTION = [
     'herite-litellm',
     'tout-desactive',
     'futur-S1',
+    'provider-inconnu-dans-providers',
 ];
 
 const HTTP_ERRORS = {
@@ -209,7 +214,7 @@ async function createRequestHarness(browser, testFileUrl) {
         await loadScripts(firefoxBackgroundScripts());
         env.handlers.runtimeMessage = routeToBackground(env);
     }
-    await loadScripts(CONTENT_SCRIPTS);
+    await loadScripts(CONTENT_SCRIPTS, { optional: OPTIONAL_MODULES });
     globalThis.BabelFishAI = { ui: { showBanner() {}, hideBanner() {}, handleError() {} } };
     const utils = globalThis.BabelFishAIUtils;
     const actions = makeActions(utils);
