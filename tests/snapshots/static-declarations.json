@@ -1,0 +1,152 @@
+{
+    "déclarations globales : background Firefox": {
+        "declarations": {
+            "src/background.js": [
+                "SERVICE_WORKER_CONFIG",
+                "CONTEXT_MENU_ACTIONS",
+                "STATES",
+                "ACTIONS",
+                "BADGES",
+                "ACTION_ICONS",
+                "ERRORS",
+                "isRecording",
+                "displayedState",
+                "RECORDING_TAB_ITEM",
+                "debug",
+                "injectContentScript",
+                "sendMessageToContentScript",
+                "updateRecordingState",
+                "handleCommand",
+                "handleExtensionIconClick",
+                "DEFAULT_URLS",
+                "migrateToMultiProvider",
+                "RETIRED_OPENAI_CHAT_MODELS",
+                "migrateRetiredOpenAIModels",
+                "isFirefoxBrowser",
+                "syncExecuteActionShortcut",
+                "handleExtensionInstalled",
+                "getTargetLanguageOptions",
+                "createContextMenuSafe",
+                "createContextMenus",
+                "handleContextMenuClick",
+                "decodeBase64ToBlob",
+                "reconstructFormData",
+                "captureResponseHeaders",
+                "BG_DEFAULT_ALLOWED_HOSTS",
+                "parseUrlOrNull",
+                "isBgProtocolAllowed",
+                "addBgHost",
+                "getBgCustomAllowedHosts",
+                "isUrlAllowedInBackground",
+                "safeParseResponseBody",
+                "proxyFetch",
+                "rememberRecordingTab",
+                "clearBadgeIfRecordingTabClosed",
+                "applyAnnouncedState",
+                "handleMessage"
+            ],
+            "src/utils/languages-data.js": [
+                "AVAILABLE_LANGUAGES"
+            ]
+        },
+        "fichiers": [
+            "src/utils/languages-data.js",
+            "src/background.js"
+        ]
+    },
+    "déclarations globales : content script": {
+        "declarations": {
+            "src/constants.js": [],
+            "src/content.js": [],
+            "src/utils/api-utils.js": [],
+            "src/utils/banner-utils.js": [],
+            "src/utils/i18n.js": [],
+            "src/utils/providers.js": [],
+            "src/utils/ui.js": []
+        },
+        "fichiers": [
+            "src/constants.js",
+            "src/utils/providers.js",
+            "src/utils/ui.js",
+            "src/utils/banner-utils.js",
+            "src/utils/api-utils.js",
+            "src/utils/i18n.js",
+            "src/content.js"
+        ]
+    },
+    "déclarations globales : page d'options": {
+        "declarations": {
+            "src/constants.js": [],
+            "src/pages/options/options.js": [
+                "isStandardProviderEnabled",
+                "logShortcutGuardError",
+                "loadStandardProviderConfig",
+                "validateCustomProviderUrls",
+                "determineActiveProviders"
+            ],
+            "src/utils/i18n.js": [],
+            "src/utils/providers.js": []
+        },
+        "fichiers": [
+            "src/constants.js",
+            "src/utils/providers.js",
+            "src/utils/i18n.js",
+            "src/pages/options/options.js"
+        ]
+    },
+    "déclarations globales : service worker Chrome": {
+        "declarations": {
+            "src/background.js": [
+                "SERVICE_WORKER_CONFIG",
+                "CONTEXT_MENU_ACTIONS",
+                "STATES",
+                "ACTIONS",
+                "BADGES",
+                "ACTION_ICONS",
+                "ERRORS",
+                "isRecording",
+                "displayedState",
+                "RECORDING_TAB_ITEM",
+                "debug",
+                "injectContentScript",
+                "sendMessageToContentScript",
+                "updateRecordingState",
+                "handleCommand",
+                "handleExtensionIconClick",
+                "DEFAULT_URLS",
+                "migrateToMultiProvider",
+                "RETIRED_OPENAI_CHAT_MODELS",
+                "migrateRetiredOpenAIModels",
+                "isFirefoxBrowser",
+                "syncExecuteActionShortcut",
+                "handleExtensionInstalled",
+                "getTargetLanguageOptions",
+                "createContextMenuSafe",
+                "createContextMenus",
+                "handleContextMenuClick",
+                "decodeBase64ToBlob",
+                "reconstructFormData",
+                "captureResponseHeaders",
+                "BG_DEFAULT_ALLOWED_HOSTS",
+                "parseUrlOrNull",
+                "isBgProtocolAllowed",
+                "addBgHost",
+                "getBgCustomAllowedHosts",
+                "isUrlAllowedInBackground",
+                "safeParseResponseBody",
+                "proxyFetch",
+                "rememberRecordingTab",
+                "clearBadgeIfRecordingTabClosed",
+                "applyAnnouncedState",
+                "handleMessage"
+            ],
+            "src/utils/languages-data.js": [
+                "AVAILABLE_LANGUAGES"
+            ]
+        },
+        "fichiers": [
+            "src/utils/languages-data.js",
+            "src/background.js"
+        ]
+    }
+}
