@@ -14,5 +14,8 @@ test('raccourci prioritaire : démarrage et changement de raccourci', async () =
     const demarrage = { effets: effects(), local: structuredClone(env.stores.local) };
     env.calls.length = 0;
     await emit('commands.onChanged', { name: '_execute_action', newShortcut: 'Ctrl+Shift+2' });
-    matchSnapshot('raccourci prioritaire', { demarrage, changement: { effets: effects(), local: env.stores.local } });
+    matchSnapshot('raccourci prioritaire', {
+        demarrage,
+        changement: { effets: effects(), local: env.stores.local },
+    });
 });

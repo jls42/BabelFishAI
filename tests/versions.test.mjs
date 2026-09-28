@@ -10,7 +10,11 @@ import { fileURLToPath } from 'node:url';
 import { REPO_ROOT, ROOT } from './helpers/env.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
-const PROBE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'helpers', 'version-probe.mjs');
+const PROBE = path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    'helpers',
+    'version-probe.mjs',
+);
 const matchSnapshot = createSnapshots(import.meta.url);
 
 /**
@@ -21,12 +25,17 @@ const matchSnapshot = createSnapshots(import.meta.url);
  */
 function extract(ref) {
     try {
-        execFileSync('git', ['rev-parse', '--verify', '--quiet', `${ref}^{commit}`], { cwd: REPO_ROOT });
+        execFileSync('git', ['rev-parse', '--verify', '--quiet', `${ref}^{commit}`], {
+            cwd: REPO_ROOT,
+        });
     } catch {
         return null;
     }
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), `babelfishai-${ref}-`));
-    const tar = execFileSync('git', ['archive', ref, 'src', '_locales', 'manifest.json'], { cwd: REPO_ROOT, maxBuffer: 1e9 });
+    const tar = execFileSync('git', ['archive', ref, 'src', '_locales', 'manifest.json'], {
+        cwd: REPO_ROOT,
+        maxBuffer: 1e9,
+    });
     execFileSync('tar', ['-x', '-C', dir], { input: tar });
     return dir;
 }
@@ -54,7 +63,8 @@ for (const ref of ['v1.1.17', 'v1.1.18', 'v1.1.19', 'v1.1.20']) {
             return;
         }
         try {
-            for (const [name, result] of Object.entries(runProbe(dir))) matchSnapshot(`${ref} : ${name}`, result);
+            for (const [name, result] of Object.entries(runProbe(dir)))
+                matchSnapshot(`${ref} : ${name}`, result);
         } finally {
             fs.rmSync(dir, { recursive: true, force: true });
         }
@@ -62,5 +72,6 @@ for (const ref of ['v1.1.17', 'v1.1.18', 'v1.1.19', 'v1.1.20']) {
 }
 
 test('arbre testé', () => {
-    for (const [name, result] of Object.entries(runProbe(ROOT))) matchSnapshot(`arbre testé : ${name}`, result);
+    for (const [name, result] of Object.entries(runProbe(ROOT)))
+        matchSnapshot(`arbre testé : ${name}`, result);
 });

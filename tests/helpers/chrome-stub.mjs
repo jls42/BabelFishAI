@@ -174,11 +174,19 @@ function makeStorageArea(area, ctx) {
         },
         set(items, callback) {
             ctx.calls.push({ api: `storage.${area}.set`, args: [structuredClone(items)] });
-            return respond(callback, write('set', () => applySet(store, items)), ctx.stub);
+            return respond(
+                callback,
+                write('set', () => applySet(store, items)),
+                ctx.stub,
+            );
         },
         remove(keys, callback) {
             ctx.calls.push({ api: `storage.${area}.remove`, args: [structuredClone(keys)] });
-            return respond(callback, write('remove', () => applyRemove(store, keys)), ctx.stub);
+            return respond(
+                callback,
+                write('remove', () => applyRemove(store, keys)),
+                ctx.stub,
+            );
         },
         clear(callback) {
             ctx.calls.push({ api: `storage.${area}.clear`, args: [] });
@@ -209,11 +217,19 @@ function makeRuntime(ctx) {
     return {
         id: 'babelfishai-tests',
         lastError: undefined,
-        getURL: (p) => new URL(String(p).startsWith('/') ? String(p).slice(1) : String(p), rootUrl).href,
-        getManifest: () => JSON.parse(fs.readFileSync(path.join(ctx.root, 'manifest.json'), 'utf8')),
+        getURL: (p) =>
+            new URL(String(p).startsWith('/') ? String(p).slice(1) : String(p), rootUrl).href,
+        getManifest: () =>
+            JSON.parse(fs.readFileSync(path.join(ctx.root, 'manifest.json'), 'utf8')),
         sendMessage: (...args) => {
             const callback = typeof args.at(-1) === 'function' ? args.pop() : undefined;
-            return dispatch(ctx, 'runtime.sendMessage', args, ctx.handlers.runtimeMessage, callback);
+            return dispatch(
+                ctx,
+                'runtime.sendMessage',
+                args,
+                ctx.handlers.runtimeMessage,
+                callback,
+            );
         },
         openOptionsPage: logged(ctx, 'runtime.openOptionsPage'),
         onMessage: ctx.event('runtime.onMessage'),
@@ -227,7 +243,13 @@ function makeTabs(ctx) {
         query: logged(ctx, 'tabs.query', () => structuredClone(ctx.tabs)),
         sendMessage: (tabId, message, ...rest) => {
             const callback = typeof rest.at(-1) === 'function' ? rest.pop() : undefined;
-            return dispatch(ctx, 'tabs.sendMessage', [tabId, message], ctx.handlers.tabMessage, callback);
+            return dispatch(
+                ctx,
+                'tabs.sendMessage',
+                [tabId, message],
+                ctx.handlers.tabMessage,
+                callback,
+            );
         },
         onRemoved: ctx.event('tabs.onRemoved'),
         onUpdated: ctx.event('tabs.onUpdated'),
@@ -260,7 +282,11 @@ function makeActionAndCommands(ctx) {
         },
         commands: {
             getAll: logged(ctx, 'commands.getAll', () => [
-                { name: '_execute_action', shortcut: 'Ctrl+Shift+1', description: 'Start/Stop Recording' },
+                {
+                    name: '_execute_action',
+                    shortcut: 'Ctrl+Shift+1',
+                    description: 'Start/Stop Recording',
+                },
             ]),
             openShortcutSettings: logged(ctx, 'commands.openShortcutSettings'),
             onCommand: ctx.event('commands.onCommand'),

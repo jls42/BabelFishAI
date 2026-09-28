@@ -13,7 +13,9 @@ const require = createRequire(import.meta.url);
 
 export const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 // Arbre testé : le dépôt, ou l'arbre d'une autre version extrait par scripts/run-tests.sh --ref
-export const ROOT = process.env.BABELFISH_ROOT ? path.resolve(process.env.BABELFISH_ROOT) : REPO_ROOT;
+export const ROOT = process.env.BABELFISH_ROOT
+    ? path.resolve(process.env.BABELFISH_ROOT)
+    : REPO_ROOT;
 
 export const USER_AGENTS = {
     chrome: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
@@ -43,7 +45,9 @@ export class FakeFileReader {
             return;
         }
         blob.arrayBuffer().then((buffer) => {
-            this.result = `data:${blob.type || 'application/octet-stream'};base64,${Buffer.from(buffer).toString('base64')}`;
+            this.result = `data:${blob.type || 'application/octet-stream'};base64,${Buffer.from(
+                buffer,
+            ).toString('base64')}`;
             this.error = null;
             this.onloadend?.();
         });
@@ -69,7 +73,13 @@ function describeHeaders(headers) {
 async function describeField(name, value) {
     if (!(value instanceof Blob)) return { name, value: String(value) };
     const bytes = Buffer.from(await value.arrayBuffer());
-    return { name, filename: value.name, type: value.type, size: bytes.length, base64: bytes.toString('base64') };
+    return {
+        name,
+        filename: value.name,
+        type: value.type,
+        size: bytes.length,
+        base64: bytes.toString('base64'),
+    };
 }
 
 /**
@@ -125,7 +135,8 @@ export function installFetchSpy() {
     const requests = [];
     const queue = [];
     globalThis.fetch = async (url, options = {}) => {
-        if (String(url).startsWith('file:')) return new Response(fs.readFileSync(fileURLToPath(String(url))));
+        if (String(url).startsWith('file:'))
+            return new Response(fs.readFileSync(fileURLToPath(String(url))));
         requests.push(await describeRequest(url, options));
         const next = queue.shift() ?? { status: 200, json: {} };
         if (next.networkError) throw next.networkError;

@@ -23,15 +23,24 @@ const MIGRATIONS = {
     },
     'modele-gpt-4.1-nano': {
         ...STORAGE.openai,
-        providers: { ...STORAGE.openai.providers, openai: { ...STORAGE.openai.providers.openai, selectedChatModel: 'gpt-4.1-nano' } },
+        providers: {
+            ...STORAGE.openai.providers,
+            openai: { ...STORAGE.openai.providers.openai, selectedChatModel: 'gpt-4.1-nano' },
+        },
     },
     'modele-gpt-4o': {
         ...STORAGE.openai,
-        providers: { ...STORAGE.openai.providers, openai: { ...STORAGE.openai.providers.openai, selectedChatModel: 'gpt-4o' } },
+        providers: {
+            ...STORAGE.openai.providers,
+            openai: { ...STORAGE.openai.providers.openai, selectedChatModel: 'gpt-4o' },
+        },
     },
     'mistral-nomme-gpt-4o-intact': {
         ...STORAGE.mistral,
-        providers: { ...STORAGE.mistral.providers, mistral: { ...STORAGE.mistral.providers.mistral, selectedChatModel: 'gpt-4o' } },
+        providers: {
+            ...STORAGE.mistral.providers,
+            mistral: { ...STORAGE.mistral.providers.mistral, selectedChatModel: 'gpt-4o' },
+        },
     },
 };
 
@@ -96,7 +105,9 @@ function createHarness(browser, testFileUrl) {
                 answered = true;
                 resolve(response);
             };
-            const async = (env.listeners['runtime.onMessage'] ?? []).map((fn) => fn(message, sender, sendResponse));
+            const async = (env.listeners['runtime.onMessage'] ?? []).map((fn) =>
+                fn(message, sender, sendResponse),
+            );
             if (!answered && !async.includes(true)) resolve('<aucune réponse>');
         });
     }
@@ -143,7 +154,6 @@ function defineInstallTests({ env, matchSnapshot, freshBackground, emit, effects
             Object.fromEntries(Object.entries(env.listeners).map(([k, v]) => [k, v.length])),
         );
     });
-
 }
 
 // Clics sur les menus contextuels (info de contextMenus.onClicked)
@@ -164,7 +174,10 @@ function defineNavigationTests({ env, matchSnapshot, delays, freshBackground, em
         test(`menu contextuel : ${label}`, async () => {
             await freshBackground(STORAGE.openai);
             await emit('contextMenus.onClicked', info, TAB);
-            matchSnapshot(`menu contextuel : ${label}`, { effets: effects(), delais: delays.slice() });
+            matchSnapshot(`menu contextuel : ${label}`, {
+                effets: effects(),
+                delais: delays.slice(),
+            });
         });
     }
 
@@ -188,13 +201,19 @@ function defineNavigationTests({ env, matchSnapshot, delays, freshBackground, em
     test('clic sur l’icône, content script présent', async () => {
         await freshBackground(STORAGE.openai);
         await emit('action.onClicked', TAB);
-        matchSnapshot('icône : content script présent', { effets: effects(), delais: delays.slice() });
+        matchSnapshot('icône : content script présent', {
+            effets: effects(),
+            delais: delays.slice(),
+        });
     });
     test('clic sur l’icône, content script à injecter', async () => {
         await freshBackground(STORAGE.openai);
         absentThenPresent();
         await emit('action.onClicked', TAB);
-        matchSnapshot('icône : injection puis envoi', { effets: effects(), delais: delays.slice() });
+        matchSnapshot('icône : injection puis envoi', {
+            effets: effects(),
+            delais: delays.slice(),
+        });
     });
     test('clic sur l’icône, page où l’injection échoue', async () => {
         await freshBackground(STORAGE.openai);
@@ -206,7 +225,10 @@ function defineNavigationTests({ env, matchSnapshot, delays, freshBackground, em
         await freshBackground(STORAGE.openai);
         absentThenPresent();
         await emit('contextMenus.onClicked', CLICKS.reformulation, TAB);
-        matchSnapshot('menu contextuel : injection puis envoi', { effets: effects(), delais: delays.slice() });
+        matchSnapshot('menu contextuel : injection puis envoi', {
+            effets: effects(),
+            delais: delays.slice(),
+        });
     });
 
     for (const command of ['_execute_action', 'autre-commande']) {
@@ -216,7 +238,6 @@ function defineNavigationTests({ env, matchSnapshot, delays, freshBackground, em
             matchSnapshot(`raccourci : ${command}`, { effets: effects(), delais: delays.slice() });
         });
     }
-
 }
 
 /**
@@ -236,7 +257,11 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
             env.calls.length = 0;
             const response = await send(message);
             await flush();
-            steps[message.action + (message.error ? ' (erreur)' : '') + ` #${Object.keys(steps).length}`] = {
+            steps[
+                message.action +
+                    (message.error ? ' (erreur)' : '') +
+                    ` #${Object.keys(steps).length}`
+            ] = {
                 reponse: response,
                 effets: effects(),
                 session: structuredClone(env.stores.session),
@@ -284,7 +309,6 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
             inconnu: await send({ action: 'actionInconnue' }),
         });
     });
-
 }
 
 const PROXY_CASES = {
@@ -292,7 +316,14 @@ const PROXY_CASES = {
         storage: STORAGE.openai,
         request: {
             url: 'https://api.openai.com/v1/chat/completions',
-            options: { method: 'POST', headers: { Authorization: `Bearer ${KEYS.openai}`, 'Content-Type': 'application/json' }, body: '{"model":"gpt-4o-mini"}' },
+            options: {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${KEYS.openai}`,
+                    'Content-Type': 'application/json',
+                },
+                body: '{"model":"gpt-4o-mini"}',
+            },
         },
         responses: [{ json: { choices: [{ message: { content: 'ok' } }] } }],
     },
@@ -300,9 +331,21 @@ const PROXY_CASES = {
         storage: STORAGE.openai,
         request: {
             url: 'https://api.openai.com/v1/audio/transcriptions',
-            options: { method: 'POST', headers: { Authorization: `Bearer ${KEYS.openai}`, 'content-type': 'multipart/form-data' } },
+            options: {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${KEYS.openai}`,
+                    'content-type': 'multipart/form-data',
+                },
+            },
             formDataFields: [
-                { name: 'file', isFile: true, data: 'GkXfo0KGgQE=', type: 'audio/webm', filename: 'audio.webm' },
+                {
+                    name: 'file',
+                    isFile: true,
+                    data: 'GkXfo0KGgQE=',
+                    type: 'audio/webm',
+                    filename: 'audio.webm',
+                },
                 { name: 'model', isFile: false, value: 'gpt-transcribe' },
             ],
         },
@@ -310,12 +353,19 @@ const PROXY_CASES = {
     },
     'hote-refuse': {
         storage: STORAGE.openai,
-        request: { url: 'https://evil.example/v1/chat/completions', options: { method: 'POST', headers: {} } },
+        request: {
+            url: 'https://evil.example/v1/chat/completions',
+            options: { method: 'POST', headers: {} },
+        },
         responses: [{ json: {} }],
     },
     'hote-custom-actif': {
         storage: STORAGE.custom,
-        request: { url: CUSTOM_URLS.chatUrl, options: { method: 'POST', headers: {} }, formDataFields: undefined },
+        request: {
+            url: CUSTOM_URLS.chatUrl,
+            options: { method: 'POST', headers: {} },
+            formDataFields: undefined,
+        },
         responses: [{ json: { ok: true } }],
     },
     'hote-custom-coupe': {
@@ -325,17 +375,28 @@ const PROXY_CASES = {
     },
     'http-hors-localhost': {
         storage: STORAGE.openai,
-        request: { url: 'http://api.openai.com/v1/chat/completions', options: { method: 'POST', headers: {} } },
+        request: {
+            url: 'http://api.openai.com/v1/chat/completions',
+            options: { method: 'POST', headers: {} },
+        },
         responses: [{ json: {} }],
     },
     'erreur-reseau': {
         storage: STORAGE.openai,
-        request: { url: 'https://api.openai.com/v1/chat/completions', options: { method: 'POST', headers: {} } },
-        responses: [{ networkError: new TypeError('NetworkError when attempting to fetch resource.') }],
+        request: {
+            url: 'https://api.openai.com/v1/chat/completions',
+            options: { method: 'POST', headers: {} },
+        },
+        responses: [
+            { networkError: new TypeError('NetworkError when attempting to fetch resource.') },
+        ],
     },
     'http-502-html': {
         storage: STORAGE.openai,
-        request: { url: 'https://api.openai.com/v1/chat/completions', options: { method: 'POST', headers: {} } },
+        request: {
+            url: 'https://api.openai.com/v1/chat/completions',
+            options: { method: 'POST', headers: {} },
+        },
         responses: [{ status: 502, statusText: 'Bad Gateway', raw: '<html>Bad Gateway</html>' }],
     },
 };
@@ -350,10 +411,12 @@ function defineProxyTests({ env, matchSnapshot, freshBackground, send }) {
             await freshBackground(c.storage);
             env.http.respond(...c.responses);
             const response = await send({ action: 'proxyFetch', request: c.request });
-            matchSnapshot(`proxy du background : ${label}`, { reponse: response, requetes: env.http.requests });
+            matchSnapshot(`proxy du background : ${label}`, {
+                reponse: response,
+                requetes: env.http.requests,
+            });
         });
     }
-
 }
 
 /**

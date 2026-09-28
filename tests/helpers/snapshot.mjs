@@ -46,7 +46,8 @@ export function createSnapshots(testFileUrl) {
         // `{cle <provider>}` : on lit quelle clé part vers quel hôte, et detect-secrets écarte
         // les valeurs en forme de gabarit
         let text = JSON.stringify(value, (_k, v) => (v === undefined ? '<undefined>' : v));
-        for (const [provider, key] of Object.entries(KEYS)) text = text.replaceAll(key, `{cle ${provider}}`);
+        for (const [provider, key] of Object.entries(KEYS))
+            text = text.replaceAll(key, `{cle ${provider}}`);
         const normalized = JSON.parse(text);
         assert.ok(!Object.hasOwn(seen, key), `clé d'instantané en double : ${key}`);
         seen[key] = normalized;

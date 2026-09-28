@@ -26,7 +26,9 @@ function topLevelNames(rel) {
 
 /** Fichiers injectés par executeScript dans le monde du content script */
 function contentWorld() {
-    const block = read('src/background.js').match(/executeScript\(\{[\s\S]*?files:\s*\[([\s\S]*?)\]/)[1];
+    const block = read('src/background.js').match(
+        /executeScript\(\{[\s\S]*?files:\s*\[([\s\S]*?)\]/,
+    )[1];
     return [...block.matchAll(/'([^']+)'/g)].map((m) => m[1]);
 }
 
@@ -38,8 +40,8 @@ function firefoxBackgroundWorld() {
 
 /** Service worker Chrome et les scripts qu'il importe */
 function chromeBackgroundWorld() {
-    const imported = [...read('src/background.js').matchAll(/importScripts\(([^)]*)\)/g)].flatMap((m) =>
-        [...m[1].matchAll(/'([^']+)'/g)].map((f) => `src/${f[1]}`),
+    const imported = [...read('src/background.js').matchAll(/importScripts\(([^)]*)\)/g)].flatMap(
+        (m) => [...m[1].matchAll(/'([^']+)'/g)].map((f) => `src/${f[1]}`),
     );
     return [...imported, 'src/background.js'];
 }
@@ -67,11 +69,17 @@ for (const [world, list] of Object.entries(WORLDS)) {
         for (const file of files) {
             declared[file] = topLevelNames(file);
             for (const name of declared[file]) {
-                assert.ok(!owners.has(name), `${name} déclaré par ${owners.get(name)} et ${file} (${world})`);
+                assert.ok(
+                    !owners.has(name),
+                    `${name} déclaré par ${owners.get(name)} et ${file} (${world})`,
+                );
                 owners.set(name, file);
             }
         }
-        matchSnapshot(`déclarations globales : ${world}`, { fichiers: files, declarations: declared });
+        matchSnapshot(`déclarations globales : ${world}`, {
+            fichiers: files,
+            declarations: declared,
+        });
     });
 }
 
@@ -81,5 +89,6 @@ test('chaque module de src/utils/ tient dans son IIFE', () => {
         .filter((f) => f.endsWith('.js'))
         .map((f) => `src/utils/${f}`)
         .filter((f) => !GLOBAL_BY_DESIGN.has(f));
-    for (const file of utils) assert.deepEqual(topLevelNames(file), [], `${file} déclare au niveau global`);
+    for (const file of utils)
+        assert.deepEqual(topLevelNames(file), [], `${file} déclare au niveau global`);
 });

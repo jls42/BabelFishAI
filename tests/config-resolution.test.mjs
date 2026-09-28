@@ -39,11 +39,15 @@ for (const [name, content] of Object.entries(STORAGE)) {
         const result = {};
         for (const service of ['transcription', 'chat']) {
             useStorage(content);
-            result[`resolveApiConfig(${service})`] = await outcome(() => api.resolveApiConfig(service));
+            result[`resolveApiConfig(${service})`] = await outcome(() =>
+                api.resolveApiConfig(service),
+            );
             useStorage(content);
             result[`getApiKey(${service})`] = await outcome(() => api.getApiKey(service));
             useStorage(content);
-            result[`getOrFetchApiKey(${service})`] = await outcome(() => api.getOrFetchApiKey(service));
+            result[`getOrFetchApiKey(${service})`] = await outcome(() =>
+                api.getOrFetchApiKey(service),
+            );
         }
         for (const provider of ['openai', 'mistral', 'custom']) {
             useStorage(content);

@@ -16,7 +16,13 @@ await loadScripts(
         'src/utils/text-processing.js',
         'src/utils/recording-utils.js',
     ],
-    { optional: ['src/utils/providers.js', 'src/utils/error-utils.js', 'src/utils/recording-utils.js'] },
+    {
+        optional: [
+            'src/utils/providers.js',
+            'src/utils/error-utils.js',
+            'src/utils/recording-utils.js',
+        ],
+    },
 );
 const utils = globalThis.BabelFishAIUtils;
 
@@ -36,7 +42,8 @@ async function probe(fn) {
     }
     const requetes = env.http.requests.map((r) => ({
         hote: new URL(r.url).host,
-        autorisation: r.headers.find(([name]) => name.toLowerCase() === 'authorization')?.[1] ?? null,
+        autorisation:
+            r.headers.find(([name]) => name.toLowerCase() === 'authorization')?.[1] ?? null,
     }));
     return { ...outcome, requetes };
 }
@@ -64,11 +71,15 @@ for (const [name, content] of Object.entries(VERSION_FIXTURES)) {
     reset();
     result.getApiKey = (await probe(() => utils.api.getApiKey())).valeur ?? null;
     reset();
-    result.reformulation = await probe(() => utils.textProcessing.rephraseText('Un texte à reformuler'));
+    result.reformulation = await probe(() =>
+        utils.textProcessing.rephraseText('Un texte à reformuler'),
+    );
     if (typeof utils.recording?._transcribeAudio === 'function') {
         reset();
         result.dictee = await probe(() =>
-            utils.recording._transcribeAudio(new Blob([new Uint8Array([1, 2, 3])], { type: 'audio/webm' })),
+            utils.recording._transcribeAudio(
+                new Blob([new Uint8Array([1, 2, 3])], { type: 'audio/webm' }),
+            ),
         );
     }
     results[name] = result;

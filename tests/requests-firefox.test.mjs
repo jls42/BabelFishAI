@@ -12,20 +12,29 @@ const { env, play, matchSnapshot, FakeFileReader } = await defineRequestSuite({
 test('proxy : messages envoyés au background pour une dictée', async () => {
     const before = env.calls.length;
     await play('transcription', STORAGE.openai, [{ json: { text: 'ok' } }]);
-    const messages = env.calls.slice(before).filter((c) => c.api === 'runtime.sendMessage').map((c) => c.args[0]);
+    const messages = env.calls
+        .slice(before)
+        .filter((c) => c.api === 'runtime.sendMessage')
+        .map((c) => c.args[0]);
     matchSnapshot('proxy : message de dictée', messages);
 });
 
 test('proxy : lecture de l’audio impossible (FileReader en échec)', async () => {
     FakeFileReader.failNext = true;
-    matchSnapshot('proxy : FileReader en échec', await play('transcription', STORAGE.openai, [{ json: { text: 'ok' } }]));
+    matchSnapshot(
+        'proxy : FileReader en échec',
+        await play('transcription', STORAGE.openai, [{ json: { text: 'ok' } }]),
+    );
 });
 
 test('proxy : enveloppe de réponse invalide (background injoignable)', async () => {
     const handler = env.handlers.runtimeMessage;
     env.handlers.runtimeMessage = () => undefined;
     try {
-        matchSnapshot('proxy : enveloppe invalide', await play('reformulation', STORAGE.openai, []));
+        matchSnapshot(
+            'proxy : enveloppe invalide',
+            await play('reformulation', STORAGE.openai, []),
+        );
     } finally {
         env.handlers.runtimeMessage = handler;
     }
