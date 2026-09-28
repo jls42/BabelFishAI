@@ -550,10 +550,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 apiKey: '', // Legacy key pour migration
             },
             (items) => {
-                // skipcq: JS-0002 - debug log for options loading diagnostics (extension legitimate console use)
-                // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
-                console.log('[Options] Loading providers config:', items);
-
                 const configs = {
                     openai: items.providers?.openai || {},
                     mistral: items.providers?.mistral || {},
