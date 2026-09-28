@@ -6,14 +6,11 @@
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;
 
-    // Charger le script de langues partagées comme un script standard
+    // Charger les langues partagées dans le monde du content script, comme les autres utilitaires.
+    // Une balise <script> les exécutait dans le monde de la page : le bandeau ne les voyait pas,
+    // et la page hôte recevait un global de l'extension
     try {
-        const script = document.createElement('script');
-        script.src = chrome.runtime.getURL('src/utils/languages-shared.js');
-        script.onload = () => {
-            script.remove();
-        };
-        (document.head || document.documentElement).appendChild(script);
+        await import(chrome.runtime.getURL('src/utils/languages-shared.js'));
     } catch (error) {
         console.error('Failed to load languages-shared.js:', error);
     }

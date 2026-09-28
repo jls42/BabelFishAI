@@ -452,7 +452,7 @@ Les fichiers deprecated ont été supprimés :
 
 -   **`languages-data.js` / `languages-shared.js`** : Nécessaire car le Service Worker n'a pas accès à `window`
 -   **Constantes dans `background.js`** : Nécessaire pour la même raison (STATES, ACTIONS, BADGES, ERRORS)
--   **Fallbacks langues dans `banner-utils.js`** : Nécessaire à cause d'une race condition au chargement
+-   **Fallbacks langues dans `banner-utils.js`** : filet si l'import de `languages-shared.js` échoue. Jusqu'à la 1.1.21, `content.js` injectait ce fichier par une balise `<script>`, qui l'exécutait dans le monde de la page, invisible du content script : le repli servait donc à chaque fois. La cause était l'isolement des mondes d'exécution, pas une course au chargement. Le fichier est désormais chargé par `import()` comme les autres utilitaires (lot 0 bis, n°5)
 
 ### Over-exposed Internal Functions - ✅ FIXED
 
