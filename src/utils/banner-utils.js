@@ -540,6 +540,33 @@
         }
     }
 
+    // Place réservée en haut de la page pendant l'affichage du bandeau, qui est en position fixe
+    const BANNER_PAGE_OFFSET = '35px';
+    // `padding-top` en ligne de <body> avant l'affichage du bandeau (null : aucune place réservée)
+    let bodyPaddingBeforeBanner = null;
+
+    /**
+     * Réserve la place du bandeau en haut de la page pendant son affichage. Au masquage, rend à
+     * <body> sa valeur d'origine, sauf si la page l'a changée entre-temps
+     * @param {boolean} show - true quand le bandeau s'affiche, false quand il se masque
+     */
+    function reserveBannerSpace(show) {
+        const body = document.body;
+        if (!body) return;
+        if (show) {
+            if (bodyPaddingBeforeBanner === null) {
+                bodyPaddingBeforeBanner = body.style.paddingTop;
+                body.style.paddingTop = BANNER_PAGE_OFFSET;
+            }
+            return;
+        }
+        if (bodyPaddingBeforeBanner === null) return;
+        if (body.style.paddingTop === BANNER_PAGE_OFFSET) {
+            body.style.paddingTop = bodyPaddingBeforeBanner;
+        }
+        bodyPaddingBeforeBanner = null;
+    }
+
     /**
      * Affiche ou masque la bannière
      * @param {HTMLElement} banner - L'élément bannière à afficher/masquer
@@ -549,6 +576,7 @@
         if (!banner) return;
 
         banner.style.display = show ? 'flex' : 'none';
+        reserveBannerSpace(show);
     }
 
     /**

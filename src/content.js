@@ -273,16 +273,15 @@
         // Utiliser la fonction du module banner-utils pour créer la bannière
         recordingBanner = globalThis.BabelFishAIUtils.banner.initBanner();
 
-        // Insérer la bannière dans le document
+        // Insérer la bannière dans le document. Sa place en haut de la page n'est réservée que
+        // pendant son affichage (toggleBannerVisibility, banner-utils.js)
         if (document.body) {
             document.body.insertBefore(recordingBanner, document.body.firstChild);
-            document.body.style.paddingTop = '35px';
             updateBannerColor(true);
         } else {
             // Si document.body n'est pas encore disponible
             document.addEventListener('DOMContentLoaded', () => {
                 document.body.insertBefore(recordingBanner, document.body.firstChild);
-                document.body.style.paddingTop = '35px';
                 updateBannerColor(true);
             });
         }
