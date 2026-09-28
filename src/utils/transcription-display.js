@@ -6,7 +6,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     // Utilisation des constantes globales depuis constants.js
     const CONFIG = globalThis.BabelFishAIConstants.CONFIG;
     const MESSAGE_TYPES = globalThis.BabelFishAIConstants.MESSAGE_TYPES;
-    const ERRORS = globalThis.BabelFishAIConstants.ERRORS;
 
     /**
      * Valide le texte d'entrée pour la transcription
@@ -259,57 +258,11 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         );
     }
 
-    /**
-     * Transcrit un blob audio en utilisant l'API de transcription (multi-provider)
-     * Supporte OpenAI Whisper, Mistral Voxtral, etc.
-     * @param {Blob} audioBlob - Le blob audio à transcrire
-     * @returns {Promise<Object>} - La réponse de l'API de transcription
-     */
-    async function transcribeAudio(audioBlob) {
-        try {
-            // Utiliser resolveApiConfig pour obtenir la config multi-provider
-            const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
-
-            if (!config.apiKey) {
-                const errorMsg = ERRORS.API_CONFIG_MISSING;
-                globalThis.BabelFishAIUtils.error.handleError(errorMsg, errorMsg);
-                throw new Error(errorMsg);
-            }
-
-            // skipcq: JS-0002 - debug log for provider diagnostics
-            // eslint-disable-next-line no-console -- Debug log for provider diagnostics
-            console.log(
-                '[Display] Using transcription provider:',
-                config.providerId,
-                'model:',
-                config.model,
-                'url:',
-                config.url,
-            );
-
-            // Utiliser la fonction de l'API pour la transcription avec génération de nom de fichier unique
-            const transcription = await globalThis.BabelFishAIUtils.api.transcribeAudio(
-                audioBlob,
-                config.apiKey,
-                config.url,
-                config.model,
-                null, // Pas de nom de fichier spécifique
-                true, // Générer un nom de fichier unique avec timestamp et partie aléatoire
-            );
-
-            return transcription;
-        } catch (error) {
-            console.error('Transcription error:', error);
-            throw error;
-        }
-    }
-
     // Exporter les fonctions dans l'espace BabelFishAIUtils
     exports.display = {
         showTranscription,
         displayTranscriptionText,
         showTranscriptionDialog,
         getDisplayOptions,
-        transcribeAudio,
     };
 })(globalThis.BabelFishAIUtils);
