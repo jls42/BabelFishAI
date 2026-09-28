@@ -17,7 +17,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     };
 
     const ERRORS = {
-        API_CONFIG_MISSING: 'Clé API OpenAI non trouvée. Veuillez la configurer dans les options.',
+        API_CONFIG_MISSING:
+            'Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.',
         MIC_ACCESS_ERROR: "Impossible d'accéder au microphone. Veuillez vérifier les permissions.",
     };
 
