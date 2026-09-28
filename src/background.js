@@ -59,6 +59,10 @@ const ERRORS = {
 // État global
 let isRecording = false;
 
+// Entrée du stockage de session (propriété `recordingTabId`) qui retient l'onglet en cours
+// d'enregistrement : s'il se ferme, son content script disparaît sans envoyer l'arrêt
+const RECORDING_TAB_ITEM = 'recordingTabId';
+
 /**
  * Log conditionnel pour le débogage
  * @param {...any} args - Arguments à logger
@@ -791,13 +795,48 @@ async function proxyFetch(request) {
 }
 
 /**
+ * Retient l'onglet qui enregistre, dans le stockage de session qui survit à l'arrêt du
+ * service worker, pour pouvoir effacer le badge si cet onglet se ferme pendant l'enregistrement
+ * @param {string} action - Action d'état reçue du content script
+ * @param {number} [tabId] - Onglet qui a envoyé le message
+ * @returns {Promise<void>}
+ */
+async function rememberRecordingTab(action, tabId) {
+    try {
+        if (action === ACTIONS.STARTED && Number.isInteger(tabId)) {
+            await chrome.storage.session?.set({ recordingTabId: tabId });
+        } else {
+            await chrome.storage.session?.remove(RECORDING_TAB_ITEM);
+        }
+    } catch (error) {
+        console.error('Recording tab tracking error:', error.message);
+    }
+}
+
+/**
+ * Efface le badge d'enregistrement quand l'onglet qui enregistrait est fermé
+ * @param {number} tabId - L'onglet fermé
+ * @returns {Promise<void>}
+ */
+async function clearBadgeIfRecordingTabClosed(tabId) {
+    try {
+        const { recordingTabId } = (await chrome.storage.session?.get(RECORDING_TAB_ITEM)) ?? {};
+        if (recordingTabId !== tabId) return;
+        await chrome.storage.session.remove(RECORDING_TAB_ITEM);
+        updateRecordingState(STATES.STOPPED);
+    } catch (error) {
+        console.error('Badge cleanup error:', error.message);
+    }
+}
+
+/**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
- * @param {Object} _sender - L'expéditeur du message (réservé : signature imposée par chrome.runtime.onMessage)
+ * @param {Object} sender - L'expéditeur du message (son onglet sert au suivi du badge)
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
-function handleMessage(message, _sender, sendResponse) {
+function handleMessage(message, sender, sendResponse) {
     debug('Message received:', message);
 
     // Mapping des actions d'état aux états correspondants
@@ -813,6 +852,7 @@ function handleMessage(message, _sender, sendResponse) {
             actionStateMap[message.action],
             message.action === ACTIONS.ERROR ? message.error : '',
         );
+        rememberRecordingTab(message.action, sender?.tab?.id);
         sendResponse({});
         return false;
     }
@@ -839,5 +879,8 @@ function handleMessage(message, _sender, sendResponse) {
 
 // Enregistrer le gestionnaire d'événements pour la réception de messages
 chrome.runtime.onMessage.addListener(handleMessage);
+
+// Effacer le badge si l'onglet qui enregistrait est fermé
+chrome.tabs.onRemoved.addListener(clearBadgeIfRecordingTabClosed);
 
 debug('Background script started');

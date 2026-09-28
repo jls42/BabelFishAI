@@ -648,6 +648,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Si la page disparaît pendant l'enregistrement (rechargement, navigation, fermeture),
+    // prévenir le background, sinon le badge ⏺ de l'icône resterait affiché
+    globalThis.addEventListener('pagehide', () => {
+        if (!isRecording) return;
+        globalThis.BabelFishAIUtils.error.safeExecute(
+            () => chrome.runtime.sendMessage({ action: ACTIONS.STOPPED }),
+            "Impossible d'envoyer le message d'arrêt au background",
+            { propagateError: false },
+        );
+    });
+
     exports.recording = {
         startRecording,
         stopRecording,
