@@ -34,6 +34,9 @@ function accessorsFor(id) {
             registry.getChatUrl(id, 'x'),
         ],
         supportsNoLog: registry.supportsNoLog(id),
+        acceptsTemperature: ['gpt-4o-mini', 'gpt-5.6-luna', 'inconnu'].map(
+            (model) => registry.acceptsTemperature?.(id, model) ?? null,
+        ),
     };
     for (const service of SERVICES) {
         result[`getDefaultModel(${service})`] = registry.getDefaultModel(id, service);
@@ -48,6 +51,8 @@ function accessorsFor(id) {
             service,
             'inconnu',
         );
+        result[`getService(${service})`] = registry.getService?.(id, service) ?? null;
+        result[`supportsService(${service})`] = registry.supportsService?.(id, service) ?? null;
     }
     return result;
 }

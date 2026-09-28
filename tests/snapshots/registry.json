@@ -1,96 +1,194 @@
 {
     "accesseurs par provider": {
         "__proto__": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
             "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
             "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
             ]
         },
         "constructor": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
             "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
             "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
             ]
         },
         "custom": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "",
             "getDefaultModel(chat)": "gpt-4o-mini",
             "getDefaultModel(transcription)": "whisper-1",
             "getProvider": "custom",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat",
+                "urlSetting": "chatUrl"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart",
+                "urlSetting": "transcriptionUrl"
+            },
             "getTranscriptionUrl": "",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": true,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
             ]
         },
         "gemini": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
             "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
             "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
             ]
         },
         "mistral": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "https://api.mistral.ai/v1/chat/completions",
             "getDefaultModel(chat)": "mistral-small-latest",
             "getDefaultModel(transcription)": "voxtral-mini-latest",
             "getProvider": "mistral",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart"
+            },
             "getTranscriptionUrl": "https://api.mistral.ai/v1/audio/transcriptions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
             ]
         },
         "openai": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": "gpt-4o-mini",
             "getDefaultModel(transcription)": "gpt-transcribe",
             "getProvider": "openai",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart"
+            },
             "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
@@ -374,6 +472,7 @@
         "exports": [
             "PROVIDERS",
             "PROVIDER_ORDER",
+            "acceptsTemperature",
             "createDefaultProvidersConfig",
             "detectProviderFromModel",
             "getAllModels",
@@ -383,11 +482,13 @@
             "getEnabledProviders",
             "getProvider",
             "getProviderOrder",
+            "getService",
             "getTranscriptionUrl",
             "isModelAvailable",
             "isValidUrl",
             "parseFullModelId",
-            "supportsNoLog"
+            "supportsNoLog",
+            "supportsService"
         ],
         "ordre": [
             "openai",
@@ -409,6 +510,26 @@
                 },
                 "id": "custom",
                 "name": "Custom/LiteLLM",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat",
+                        "urlSetting": "chatUrl"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart",
+                        "urlSetting": "transcriptionUrl"
+                    }
+                },
                 "supportsNoLog": true,
                 "transcriptionModels": [
                     {
@@ -460,6 +581,24 @@
                 },
                 "id": "mistral",
                 "name": "Mistral AI",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart"
+                    }
+                },
                 "supportsNoLog": false,
                 "transcriptionModels": [
                     {
@@ -515,6 +654,24 @@
                 },
                 "id": "openai",
                 "name": "OpenAI",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart"
+                    }
+                },
                 "supportsNoLog": false,
                 "transcriptionModels": [
                     {

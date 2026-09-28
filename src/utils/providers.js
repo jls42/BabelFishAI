@@ -4,9 +4,25 @@
 globalThis.BabelFishAIProviders = (function () {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
+    // Authentification des API compatibles OpenAI : entête Authorization, schéma Bearer
+    const BEARER = Object.freeze({ header: 'Authorization', scheme: 'Bearer' });
+
+    // Services d'une API compatible OpenAI : dictée en multipart, texte par chat/completions,
+    // erreurs au format { error: { message } }. L'URL de chaque service est dans defaultUrls
+    const OPENAI_COMPATIBLE_SERVICES = Object.freeze({
+        transcription: Object.freeze({
+            format: 'openai-multipart',
+            auth: BEARER,
+            errors: 'openai',
+        }),
+        chat: Object.freeze({ format: 'openai-chat', auth: BEARER, errors: 'openai' }),
+    });
+
     /**
      * Définition des providers IA disponibles
-     * Chaque provider contient ses URLs par défaut et ses modèles supportés
+     * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
+     * authentification, format d'erreur) et ses modèles supportés. Un modèle peut porter
+     * `temperature: false` s'il refuse ce paramètre
      */
     const PROVIDERS = {
         openai: {
@@ -16,6 +32,7 @@ globalThis.BabelFishAIProviders = (function () {
                 transcription: 'https://api.openai.com/v1/audio/transcriptions',
                 chat: 'https://api.openai.com/v1/chat/completions',
             },
+            services: OPENAI_COMPATIBLE_SERVICES,
             // whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe sont retirés de l'API
             // OpenAI le 2027-02-26, avec gpt-transcribe pour remplaçant recommandé
             transcriptionModels: [
@@ -45,6 +62,7 @@ globalThis.BabelFishAIProviders = (function () {
                 transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
                 chat: 'https://api.mistral.ai/v1/chat/completions',
             },
+            services: OPENAI_COMPATIBLE_SERVICES,
             transcriptionModels: [
                 { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true },
             ],
@@ -63,6 +81,14 @@ globalThis.BabelFishAIProviders = (function () {
             id: 'custom',
             name: 'Custom/LiteLLM',
             defaultUrls: { transcription: '', chat: '' },
+            // Les URLs viennent des réglages de l'utilisateur (urlSetting)
+            services: {
+                transcription: {
+                    ...OPENAI_COMPATIBLE_SERVICES.transcription,
+                    urlSetting: 'transcriptionUrl',
+                },
+                chat: { ...OPENAI_COMPATIBLE_SERVICES.chat, urlSetting: 'chatUrl' },
+            },
             transcriptionModels: [
                 { id: 'whisper-1', name: 'whisper-1', default: true },
                 { id: 'whisper', name: 'whisper' },
@@ -85,6 +111,41 @@ globalThis.BabelFishAIProviders = (function () {
         if (!Object.hasOwn(PROVIDERS, providerId)) return null;
         // eslint-disable-next-line security/detect-object-injection -- providerId vérifié par Object.hasOwn
         return PROVIDERS[providerId];
+    }
+
+    /**
+     * Définition d'un service d'un provider (format, authentification, format d'erreur)
+     * @param {string} providerId - ID du provider
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @returns {Object|null} Le service, ou null si le provider ne l'offre pas
+     */
+    function getService(providerId, serviceType) {
+        const services = getProvider(providerId)?.services;
+        if (!services || !Object.hasOwn(services, serviceType)) return null;
+        // eslint-disable-next-line security/detect-object-injection -- serviceType vérifié par Object.hasOwn
+        return services[serviceType];
+    }
+
+    /**
+     * Indique si un provider offre un service
+     * @param {string} providerId - ID du provider
+     * @param {string} serviceType - Type de service ('transcription' ou 'chat')
+     * @returns {boolean}
+     */
+    function supportsService(providerId, serviceType) {
+        return getService(providerId, serviceType) !== null;
+    }
+
+    /**
+     * Indique si un modèle de chat accepte le paramètre temperature : oui, sauf si le registre
+     * le déclare avec `temperature: false`
+     * @param {string} providerId - ID du provider
+     * @param {string} modelId - ID du modèle
+     * @returns {boolean}
+     */
+    function acceptsTemperature(providerId, modelId) {
+        const models = getProvider(providerId)?.chatModels ?? [];
+        return models.find((model) => model.id === modelId)?.temperature !== false;
     }
 
     /**
@@ -365,6 +426,9 @@ globalThis.BabelFishAIProviders = (function () {
 
         // Getters
         getProvider,
+        getService,
+        supportsService,
+        acceptsTemperature,
         getAllProviders,
         getProviderOrder,
         getEnabledProviders,
