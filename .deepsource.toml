@@ -1,4 +1,8 @@
 version = 1
 
+# Tests Node (scripts/run-tests.sh) : reconnus comme code de test. Clé de premier niveau,
+# placée avant [[analyzers]] (doc DeepSource, « .deepsource.toml »)
+test_patterns = ["tests/**"]
+
 [[analyzers]]
 name = "javascript"

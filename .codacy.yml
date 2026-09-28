@@ -1,0 +1,7 @@
+---
+# Chemins ignorés par Codacy. Ce fichier remplace les « Ignored files » de l'interface
+# (doc Codacy « Codacy configuration file ») : src/content.js, absent des fichiers analysés
+# au 29/09/2026 (API publique de Codacy), y est recopié pour que rien d'autre ne change.
+exclude_paths:
+    - 'tests/**'
+    - 'src/content.js'
