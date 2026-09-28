@@ -44,6 +44,9 @@
         "scripts": [
             "src/lib/browser-polyfill.min.js",
             "src/utils/languages-data.js",
+            "src/utils/providers.js",
+            "src/utils/provider-store.js",
+            "src/utils/provider-adapters.js",
             "src/background.js"
         ]
     },

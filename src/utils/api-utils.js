@@ -72,14 +72,28 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * Contourne les restrictions CSP des pages web
      * @param {string} url - URL de la requête
      * @param {Object} options - Options fetch (method, headers, body)
+     * @param {string} providerId - Provider de la requête
+     * @param {string} service - Service appelé ('transcription' ou 'chat')
      * @returns {Promise<Object>} Réponse simulée compatible avec le flux existant
      */
-    async function fetchViaProxy(url, options) {
+    async function fetchViaProxy(url, options, providerId, service) {
+        // Le background reconstruit l'authentification depuis le stockage : la clé ne passe pas
+        // par le message
+        const authHeader = (
+            globalThis.BabelFishAIProviders.getService(providerId, service)?.auth.header ??
+            'Authorization'
+        ).toLowerCase();
         const request = {
             url,
+            providerId,
+            service,
             options: {
                 method: options.method,
-                headers: options.headers,
+                headers: Object.fromEntries(
+                    Object.entries(options.headers ?? {}).filter(
+                        ([name]) => name.toLowerCase() !== authHeader,
+                    ),
+                ),
             },
         };
 
@@ -364,19 +378,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Résout la clé API pour un provider
-     * @param {Object} providerConfig - Configuration du provider
-     * @param {string} providerId - ID du provider
-     * @param {string} legacyApiKey - Clé API legacy (pour rétrocompatibilité)
-     * @returns {string|null} Clé API résolue
-     */
-    function resolveApiKey(providerConfig, providerId, legacyApiKey) {
-        if (providerConfig?.apiKey) return providerConfig.apiKey;
-        if (providerId === 'openai') return legacyApiKey || null;
-        return null;
-    }
-
-    /**
      * Résout le flag disableLogging selon le provider
      * @param {Object} providerDef - Définition du provider
      * @param {boolean} userPreference - Préférence utilisateur
@@ -399,17 +400,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     };
 
     /**
-     * Clé API du provider résolu. La clé legacy ne sert qu'en mode legacy (sans `providers`) :
-     * sinon ce n'est qu'une copie, qui enverrait la clé OpenAI alors qu'OpenAI est désactivé
-     * @param {Object} data - Données du storage
-     * @param {{providerId: string, providerConfig: Object|undefined}} resolved - Provider résolu
-     * @returns {string|null}
-     */
-    function resolvedApiKey(data, { providerId, providerConfig }) {
-        return resolveApiKey(providerConfig, providerId, data.providers ? null : data.apiKey);
-    }
-
-    /**
      * Résout la configuration API pour un type de service donné
      * Supporte le multi-provider avec fallback sur la configuration legacy
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
@@ -428,7 +418,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
-        const apiKey = resolvedApiKey(data, resolved);
+        // La clé legacy ne sert qu'en mode legacy (provider-store.js, resolveKey)
+        const apiKey = globalThis.BabelFishAIProviderStore.resolveKey(data, resolved);
         const model = resolveModel(
             serviceType,
             providerConfig,
@@ -563,8 +554,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             throw new Error(`${errorType}: provider ou service non indiqué pour la requête.`);
         }
         const data = await getFromStorage(CONFIG_DEFAULTS);
-        const resolved = globalThis.BabelFishAIProviderStore.resolveProvider(data, service);
-        if (resolved.providerId !== providerId || resolvedApiKey(data, resolved) !== apiKey) {
+        const store = globalThis.BabelFishAIProviderStore;
+        const resolved = store.resolveProvider(data, service);
+        if (resolved.providerId !== providerId || store.resolveKey(data, resolved) !== apiKey) {
             throw new Error(`${errorType}: la clé API ne correspond pas au provider configuré.`);
         }
         if (!isUrlAllowedForProvider(data, providerId, url)) {
@@ -737,7 +729,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const requestOptions = prepareRequestOptions();
             // Sur Firefox, utiliser le proxy via background script pour contourner les CSP
             const response = isFirefox()
-                ? await fetchViaProxy(url, requestOptions)
+                ? await fetchViaProxy(url, requestOptions, providerId, service)
                 : await fetch(url, requestOptions);
             await handleHttpErrors(response);
             const data = await response.json();

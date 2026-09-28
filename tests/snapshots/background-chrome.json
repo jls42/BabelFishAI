@@ -3573,6 +3573,35 @@
             "transcriptionProvider": "openai"
         }
     },
+    "proxy du background : entete-forge-remplace": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"text\":\"ok\"}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": null,
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "X-Autre",
+                        "garde"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ]
+    },
     "proxy du background : erreur-reseau": {
         "reponse": {
             "error": "NetworkError when attempting to fetch resource.",
@@ -3582,7 +3611,12 @@
         "requetes": [
             {
                 "body": null,
-                "headers": [],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
                 "method": "POST",
                 "url": "https://api.openai.com/v1/chat/completions"
             }
@@ -3602,7 +3636,12 @@
         "requetes": [
             {
                 "body": null,
-                "headers": [],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle custom}"
+                    ]
+                ],
                 "method": "POST",
                 "url": "http://localhost:4000/v1/chat/completions"
             }
@@ -3638,7 +3677,12 @@
         "requetes": [
             {
                 "body": null,
-                "headers": [],
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ]
+                ],
                 "method": "POST",
                 "url": "https://api.openai.com/v1/chat/completions"
             }
@@ -3717,6 +3761,22 @@
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         ]
+    },
+    "proxy du background : provider-qui-n-est-pas-celui-du-service": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
+    },
+    "proxy du background : sans-provider": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
     },
     "raccourci : _execute_action": {
         "delais": [],

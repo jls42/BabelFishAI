@@ -6,6 +6,21 @@
 // Sur Firefox, les scripts sont chargés via le manifest background.scripts.
 if (typeof importScripts === 'function') {
     importScripts('utils/languages-data.js'); // skipcq: JS-0103
+    // Registre, stockage et adaptateurs des providers, avec lesquels le proxy reconstruit
+    // l'authentification des requêtes. Leur absence ne doit pas empêcher le démarrage : le
+    // proxy refuse alors les requêtes
+    try {
+        importScripts(
+            'utils/providers.js',
+            'utils/provider-store.js',
+            'utils/provider-adapters.js',
+        ); // skipcq: JS-0103
+    } catch (error) {
+        console.error(
+            'Modules des providers indisponibles dans le service worker :',
+            error.message,
+        );
+    }
 }
 
 // Configuration spécifique au service worker
@@ -643,14 +658,6 @@ function captureResponseHeaders(response) {
 }
 
 /**
- * Hôtes par défaut autorisés côté background (defense-in-depth F7).
- * Dupliqué intentionnellement depuis providers.js car le background script
- * Firefox (scripts classiques) n'a pas accès à globalThis.BabelFishAIProviders.
- * Garder synchronisé avec les defaultUrls de PROVIDERS dans src/utils/providers.js.
- */
-const BG_DEFAULT_ALLOWED_HOSTS = new Set(['api.openai.com', 'api.mistral.ai']);
-
-/**
  * Parse une URL, retourne null si invalide (évite un try/catch inline chez
  * les appelants et réduit leur complexité cyclomatique).
  * @param {string} url - URL à parser
@@ -676,49 +683,95 @@ function isBgProtocolAllowed(target) {
     return target.protocol === 'http:' && isLocalhost;
 }
 
+// Données lues pour reconstruire l'authentification d'une requête du proxy
+const PROXY_CONFIG_DEFAULTS = {
+    providers: null,
+    transcriptionProvider: 'openai',
+    chatProvider: 'openai',
+    apiKey: '',
+};
+
 /**
- * Ajoute le hostname d'une URL au set (silencieux si URL absente/invalide).
- * @param {Set<string>} hosts - Set destinataire
- * @param {string} url - URL source
+ * Modules des providers chargés avec le background (registre, stockage, adaptateurs)
+ * @returns {{store: Object, registry: Object, adapters: Object}|null} null s'il en manque un
  */
-function addBgHost(hosts, url) {
-    if (!url) return;
-    const parsed = parseUrlOrNull(url);
-    if (parsed) hosts.add(parsed.hostname);
+function providerModules() {
+    const store = globalThis.BabelFishAIProviderStore;
+    const registry = globalThis.BabelFishAIProviders;
+    const adapters = globalThis.BabelFishAIProviderAdapters;
+    return store && registry && adapters ? { store, registry, adapters } : null;
 }
 
 /**
- * Récupère les hosts custom (mode LiteLLM) autorisés depuis la config
- * utilisateur. Erreur de stockage = aucun host custom (fail closed).
- * @returns {Promise<Set<string>>}
+ * Clé du provider annoncé par une requête du proxy, si le stockage le résout bien pour ce
+ * service, avec une clé, et si l'hôte de l'URL est configuré pour lui
+ * @param {Object} store - BabelFishAIProviderStore
+ * @param {Object} data - Données lues dans storage.sync
+ * @param {Object} request - providerId, service et hostname de la requête
+ * @returns {string|null}
  */
-async function getBgCustomAllowedHosts() {
-    const hosts = new Set();
-    try {
-        const stored = await chrome.storage.sync.get('providers');
-        const custom = stored.providers?.custom;
-        if (!custom?.enabled) return hosts;
-        addBgHost(hosts, custom.transcriptionUrl);
-        addBgHost(hosts, custom.chatUrl);
-    } catch (error) {
-        console.error('getBgCustomAllowedHosts: storage error', error);
-    }
-    return hosts;
+function keyForProxiedRequest(store, data, { providerId, service, hostname }) {
+    const resolved = store.resolveProvider(data, service);
+    const key = store.resolveKey(data, resolved);
+    if (resolved.providerId !== providerId || !key) return null;
+    return store.allowedHosts(data, providerId).has(hostname) ? key : null;
 }
 
 /**
- * Vérifie l'URL côté background : défense en profondeur contre un content
- * script compromis qui enverrait une URL hors allowlist.
- * @param {string} url - URL à valider
- * @returns {Promise<boolean>}
+ * Entête d'authentification décrit par le registre pour ce service
+ * @param {Object} modules - registre et adaptateurs
+ * @param {string} providerId
+ * @param {string} service
+ * @param {string} key
+ * @returns {Object}
  */
-async function isUrlAllowedInBackground(url) {
+function buildAuthHeader({ registry, adapters }, providerId, service, key) {
+    const auth = registry.getService(providerId, service)?.auth ?? adapters.DEFAULT_AUTH;
+    return adapters.authHeaders(auth, key);
+}
+
+/**
+ * Entête d'authentification d'une requête du proxy, reconstruit depuis le stockage :
+ * défense en profondeur (F7) contre un content script compromis, qui ne peut choisir ni la
+ * clé ni l'hôte. Le provider annoncé doit être celui que le stockage résout pour le service
+ * et avoir une clé, et l'URL doit viser un hôte configuré pour lui
+ * @param {Object} request - url, providerId et service de la requête
+ * @returns {Promise<Object|null>} L'entête, ou null si la requête n'est pas autorisée
+ */
+async function resolveProxyAuth({ url, providerId, service }) {
+    const modules = providerModules();
     const target = parseUrlOrNull(url);
-    if (!target) return false;
-    if (!isBgProtocolAllowed(target)) return false;
-    if (BG_DEFAULT_ALLOWED_HOSTS.has(target.hostname)) return true;
-    const customHosts = await getBgCustomAllowedHosts();
-    return customHosts.has(target.hostname);
+    if (!modules || !target || !isBgProtocolAllowed(target)) return null;
+    try {
+        const data = await chrome.storage.sync.get(PROXY_CONFIG_DEFAULTS);
+        const key = keyForProxiedRequest(modules.store, data, {
+            providerId,
+            service,
+            hostname: target.hostname,
+        });
+        return key ? buildAuthHeader(modules, providerId, service, key) : null;
+    } catch (error) {
+        console.error('resolveProxyAuth: storage error', error.message);
+        return null;
+    }
+}
+
+/**
+ * Entêtes de la requête du proxy : l'authentification reconstruite en tête, puis les entêtes
+ * reçus du content script, dont tout entête d'authentification est retiré
+ * @param {Object|undefined} headers - Entêtes reçus
+ * @param {Object} authHeader - Entête reconstruit
+ * @returns {Object}
+ */
+function withAuthHeader(headers, authHeader) {
+    const authNames = new Set([
+        'authorization',
+        ...Object.keys(authHeader).map((name) => name.toLowerCase()),
+    ]);
+    const others = Object.entries(headers ?? {}).filter(
+        ([name]) => !authNames.has(name.toLowerCase()),
+    );
+    return { ...authHeader, ...Object.fromEntries(others) };
 }
 
 /**
@@ -755,9 +808,11 @@ async function safeParseResponseBody(response) {
 async function proxyFetch(request) {
     const { url, options, formDataFields } = request;
 
-    // F7 : revérifier l'allowlist côté background même si le content script
-    // a déjà vérifié — defense in depth contre un content script compromis.
-    if (!(await isUrlAllowedInBackground(url))) {
+    // F7 : revérifier côté background même si le content script a déjà vérifié — defense
+    // in depth contre un content script compromis. L'entête d'authentification est
+    // reconstruit ici depuis le stockage ; celui du content script est ignoré.
+    const authHeader = await resolveProxyAuth(request);
+    if (!authHeader) {
         return {
             success: false,
             error: 'URL non autorisée côté background (defense-in-depth).',
@@ -766,7 +821,7 @@ async function proxyFetch(request) {
     }
 
     try {
-        const fetchOptions = { ...options };
+        const fetchOptions = { ...options, headers: withAuthHeader(options?.headers, authHeader) };
 
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {
@@ -775,13 +830,11 @@ async function proxyFetch(request) {
             // lui-même pour inclure le boundary). Filtrage case-insensitive via
             // Object.entries/fromEntries pour éviter un `delete` à clé dynamique
             // (règle Codacy "no dynamic delete").
-            if (fetchOptions.headers) {
-                fetchOptions.headers = Object.fromEntries(
-                    Object.entries(fetchOptions.headers).filter(
-                        ([name]) => name.toLowerCase() !== 'content-type',
-                    ),
-                );
-            }
+            fetchOptions.headers = Object.fromEntries(
+                Object.entries(fetchOptions.headers).filter(
+                    ([name]) => name.toLowerCase() !== 'content-type',
+                ),
+            );
         }
 
         // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire

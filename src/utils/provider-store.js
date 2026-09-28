@@ -156,8 +156,23 @@ globalThis.BabelFishAIProviderStore = (function () {
         return findFallback(data, serviceType) ?? { providerId, providerConfig: undefined };
     }
 
+    /**
+     * Clé API du provider résolu. La clé legacy (`apiKey`) ne sert qu'en mode legacy (sans
+     * `providers`) et pour OpenAI : sinon ce n'est qu'une copie, qui enverrait la clé OpenAI
+     * alors qu'OpenAI est désactivé
+     * @param {Object} data - Données lues dans storage.sync
+     * @param {{providerId: string, providerConfig: Object|undefined}} resolved - Provider résolu
+     * @returns {string|null}
+     */
+    function resolveKey(data, { providerId, providerConfig }) {
+        if (providerConfig?.apiKey) return providerConfig.apiKey;
+        if (providerId === 'openai' && !data.providers) return data.apiKey || null;
+        return null;
+    }
+
     return {
         allowedHosts,
+        resolveKey,
         getProviderConfig,
         isProviderUsable,
         findFallback,

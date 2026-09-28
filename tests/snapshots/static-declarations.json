@@ -32,12 +32,14 @@
                 "decodeBase64ToBlob",
                 "reconstructFormData",
                 "captureResponseHeaders",
-                "BG_DEFAULT_ALLOWED_HOSTS",
                 "parseUrlOrNull",
                 "isBgProtocolAllowed",
-                "addBgHost",
-                "getBgCustomAllowedHosts",
-                "isUrlAllowedInBackground",
+                "PROXY_CONFIG_DEFAULTS",
+                "providerModules",
+                "keyForProxiedRequest",
+                "buildAuthHeader",
+                "resolveProxyAuth",
+                "withAuthHeader",
                 "safeParseResponseBody",
                 "proxyFetch",
                 "rememberRecordingTab",
@@ -47,10 +49,16 @@
             ],
             "src/utils/languages-data.js": [
                 "AVAILABLE_LANGUAGES"
-            ]
+            ],
+            "src/utils/provider-adapters.js": [],
+            "src/utils/provider-store.js": [],
+            "src/utils/providers.js": []
         },
         "fichiers": [
             "src/utils/languages-data.js",
+            "src/utils/providers.js",
+            "src/utils/provider-store.js",
+            "src/utils/provider-adapters.js",
             "src/background.js"
         ]
     },
@@ -127,12 +135,14 @@
                 "decodeBase64ToBlob",
                 "reconstructFormData",
                 "captureResponseHeaders",
-                "BG_DEFAULT_ALLOWED_HOSTS",
                 "parseUrlOrNull",
                 "isBgProtocolAllowed",
-                "addBgHost",
-                "getBgCustomAllowedHosts",
-                "isUrlAllowedInBackground",
+                "PROXY_CONFIG_DEFAULTS",
+                "providerModules",
+                "keyForProxiedRequest",
+                "buildAuthHeader",
+                "resolveProxyAuth",
+                "withAuthHeader",
                 "safeParseResponseBody",
                 "proxyFetch",
                 "rememberRecordingTab",
@@ -142,10 +152,16 @@
             ],
             "src/utils/languages-data.js": [
                 "AVAILABLE_LANGUAGES"
-            ]
+            ],
+            "src/utils/provider-adapters.js": [],
+            "src/utils/provider-store.js": [],
+            "src/utils/providers.js": []
         },
         "fichiers": [
             "src/utils/languages-data.js",
+            "src/utils/providers.js",
+            "src/utils/provider-store.js",
+            "src/utils/provider-adapters.js",
             "src/background.js"
         ]
     }

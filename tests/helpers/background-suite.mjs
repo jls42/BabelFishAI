@@ -1,8 +1,11 @@
 // Suite commune aux tests du background (Chrome et Firefox), exercé par ses écouteurs :
 // installation et migrations, menus contextuels, clic sur l'icône, raccourci, messages du
 // content script (badge, langues, proxy) et fermeture d'onglet.
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import { test } from 'node:test';
-import { flush, loadScripts, setupEnv } from './env.mjs';
+import { ROOT, flush, loadScripts, setupEnv } from './env.mjs';
 import { CUSTOM_URLS, KEYS, STORAGE } from './fixtures.mjs';
 import { createSnapshots } from './snapshot.mjs';
 
@@ -44,6 +47,34 @@ const MIGRATIONS = {
     },
 };
 
+const requireFromTree = createRequire(import.meta.url);
+
+/**
+ * Scripts du background de l'arbre testé. Firefox : la liste du manifest, hors bibliothèques
+ * tierces. Chrome : le service worker seul, qui charge ses dépendances par importScripts
+ * @param {'chrome'|'firefox'} browser
+ * @returns {Array<string>}
+ */
+function backgroundScripts(browser) {
+    if (browser !== 'firefox') return ['src/background.js'];
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.firefox.json'), 'utf8'));
+    return manifest.background.scripts.filter((file) => !file.startsWith('src/lib/'));
+}
+
+/**
+ * importScripts du service worker Chrome : exécute pour de bon chaque fichier (chemins
+ * relatifs à src/), à nouveau à chaque service worker neuf
+ */
+function installImportScripts() {
+    globalThis.importScripts = (...files) => {
+        for (const file of files) {
+            const full = path.join(ROOT, 'src', file);
+            delete requireFromTree.cache[full];
+            requireFromTree(full);
+        }
+    };
+}
+
 /**
  * Prépare le harnais : bouchons, délais relevés, rechargement du background, événements
  * @param {'chrome'|'firefox'} browser
@@ -52,6 +83,7 @@ const MIGRATIONS = {
  */
 function createHarness(browser, testFileUrl) {
     const env = setupEnv({ browser, tabs: [TAB] });
+    if (browser === 'chrome') installImportScripts();
     const matchSnapshot = createSnapshots(testFileUrl);
     const delays = [];
     const realSetTimeout = globalThis.setTimeout;
@@ -77,7 +109,7 @@ function createHarness(browser, testFileUrl) {
         env.calls.length = 0;
         env.http.clear();
         delays.length = 0;
-        await loadScripts(['src/utils/languages-data.js', 'src/background.js'], { fresh: true });
+        await loadScripts(backgroundScripts(browser), { fresh: true });
     }
 
     /**
@@ -311,33 +343,30 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
     });
 }
 
+const OPENAI_CHAT = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_TRANSCRIPTION = 'https://api.openai.com/v1/audio/transcriptions';
+const JSON_HEADERS = { 'Content-Type': 'application/json' };
+
+// Requêtes envoyées au proxy du background, telles que le content script les forme
+// (provider et service, sans entête d'authentification), et cas hostiles
 const PROXY_CASES = {
     'json-openai': {
         storage: STORAGE.openai,
         request: {
-            url: 'https://api.openai.com/v1/chat/completions',
-            options: {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${KEYS.openai}`,
-                    'Content-Type': 'application/json',
-                },
-                body: '{"model":"gpt-4o-mini"}',
-            },
+            url: OPENAI_CHAT,
+            providerId: 'openai',
+            service: 'chat',
+            options: { method: 'POST', headers: JSON_HEADERS, body: '{"model":"gpt-4o-mini"}' },
         },
         responses: [{ json: { choices: [{ message: { content: 'ok' } }] } }],
     },
     'multipart-avec-content-type': {
         storage: STORAGE.openai,
         request: {
-            url: 'https://api.openai.com/v1/audio/transcriptions',
-            options: {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${KEYS.openai}`,
-                    'content-type': 'multipart/form-data',
-                },
-            },
+            url: OPENAI_TRANSCRIPTION,
+            providerId: 'openai',
+            service: 'transcription',
+            options: { method: 'POST', headers: { 'content-type': 'multipart/form-data' } },
             formDataFields: [
                 {
                     name: 'file',
@@ -351,10 +380,41 @@ const PROXY_CASES = {
         },
         responses: [{ json: { text: 'ok' } }],
     },
+    // Message forgé : entête d'un autre provider, remplacé par la clé du provider annoncé
+    'entete-forge-remplace': {
+        storage: STORAGE.mixte,
+        request: {
+            url: OPENAI_TRANSCRIPTION,
+            providerId: 'openai',
+            service: 'transcription',
+            options: {
+                method: 'POST',
+                headers: { authorization: `Bearer ${KEYS.mistral}`, 'X-Autre': 'garde' },
+            },
+        },
+        responses: [{ json: { text: 'ok' } }],
+    },
+    'provider-qui-n-est-pas-celui-du-service': {
+        storage: STORAGE.mixte,
+        request: {
+            url: OPENAI_CHAT,
+            providerId: 'openai',
+            service: 'chat',
+            options: { method: 'POST', headers: {} },
+        },
+        responses: [{ json: {} }],
+    },
+    'sans-provider': {
+        storage: STORAGE.openai,
+        request: { url: OPENAI_CHAT, options: { method: 'POST', headers: {} } },
+        responses: [{ json: {} }],
+    },
     'hote-refuse': {
         storage: STORAGE.openai,
         request: {
             url: 'https://evil.example/v1/chat/completions',
+            providerId: 'openai',
+            service: 'chat',
             options: { method: 'POST', headers: {} },
         },
         responses: [{ json: {} }],
@@ -363,20 +423,28 @@ const PROXY_CASES = {
         storage: STORAGE.custom,
         request: {
             url: CUSTOM_URLS.chatUrl,
+            providerId: 'custom',
+            service: 'chat',
             options: { method: 'POST', headers: {} },
-            formDataFields: undefined,
         },
         responses: [{ json: { ok: true } }],
     },
     'hote-custom-coupe': {
         storage: STORAGE.openai,
-        request: { url: CUSTOM_URLS.chatUrl, options: { method: 'POST', headers: {} } },
+        request: {
+            url: CUSTOM_URLS.chatUrl,
+            providerId: 'custom',
+            service: 'chat',
+            options: { method: 'POST', headers: {} },
+        },
         responses: [{ json: {} }],
     },
     'http-hors-localhost': {
         storage: STORAGE.openai,
         request: {
             url: 'http://api.openai.com/v1/chat/completions',
+            providerId: 'openai',
+            service: 'chat',
             options: { method: 'POST', headers: {} },
         },
         responses: [{ json: {} }],
@@ -384,7 +452,9 @@ const PROXY_CASES = {
     'erreur-reseau': {
         storage: STORAGE.openai,
         request: {
-            url: 'https://api.openai.com/v1/chat/completions',
+            url: OPENAI_CHAT,
+            providerId: 'openai',
+            service: 'chat',
             options: { method: 'POST', headers: {} },
         },
         responses: [
@@ -394,7 +464,9 @@ const PROXY_CASES = {
     'http-502-html': {
         storage: STORAGE.openai,
         request: {
-            url: 'https://api.openai.com/v1/chat/completions',
+            url: OPENAI_CHAT,
+            providerId: 'openai',
+            service: 'chat',
             options: { method: 'POST', headers: {} },
         },
         responses: [{ status: 502, statusText: 'Bad Gateway', raw: '<html>Bad Gateway</html>' }],

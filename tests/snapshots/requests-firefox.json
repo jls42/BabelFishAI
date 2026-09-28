@@ -1772,11 +1772,11 @@
                     }
                 ],
                 "options": {
-                    "headers": {
-                        "Authorization": "Bearer {cle openai}"
-                    },
+                    "headers": {},
                     "method": "POST"
                 },
+                "providerId": "openai",
+                "service": "transcription",
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         }
