@@ -106,6 +106,7 @@ Cela évite de masquer de vrais positifs futurs sur le même type de règle. For
     -   Codacy `xss/no-mixed-html` (High) prend pour du HTML toute chaîne contenant `<...>` stockée dans une variable, ex. `['<all_urls>']` : préférer un motif sans chevrons quand il suffit (`*://*/*`, moindre privilège).
     -   Codacy `detect-unhandled-async-errors` (High) : une fonction `async` appelée depuis un écouteur d'événement sans `catch` doit gérer ses erreurs elle-même (`try/catch` interne).
     -   Sonar `Web:S6819` : `<output>` (rôle implicite `status`) plutôt que `role="status"` ; `javascript:S7721` : sortir au niveau du module une fonction imbriquée qui ne capture aucune variable.
+-   **Un `eslint-disable-next-line` ne couvre que la ligne suivante** : si prettier coupe l'instruction exemptée en deux (au-delà de 100 caractères), l'accès signalé passe à la ligne d'après et n'est plus couvert. Garder l'instruction sur une ligne (nom de variable plus court) et relire le diff après `pre-commit` (leçon 1.1.21, `saveProvidersConfig`).
 -   **Avant d'ajouter un ignore (inline ou global)** : **mesurer** en lançant `pre-commit run --hook-stage pre-push --all-files` localement pour reproduire avec Opengrep. Ne jamais ignorer à l'aveugle un finding cloud sans tenter de reproduire localement d'abord (principe « Mesurer > deviner »). Note : certaines règles LGPL utilisées par Codacy ne sont PAS dans les packs locaux Opengrep — dans ce cas, opengrep local ne reproduit pas, et le seul moyen de valider un fix est le rescan Codacy post-push.
 
 ## Quality / pre-commit (workflow)
@@ -325,7 +326,7 @@ Uses `chrome.storage.sync` for: API key, display preferences, language settings,
 ### General Rules
 
 1. **Primary language**: French for comments and user-facing messages
-2. **Security**: NEVER expose API keys or sensitive URLs directly
+2. **Security**: NEVER expose API keys or sensitive URLs directly. Ne jamais journaliser un objet lu dans `chrome.storage.sync` (`items`, `data`, `providers`) : il contient les clés API. Journaliser des identifiants ou des booléens (leçon 1.1.21 : `options.js` écrivait toute la configuration, clés comprises, dans la console de la page d'options).
 3. **Documentation**: Document all feature changes in `README.md`
 4. **Expert mode**: Respect expert mode and advanced options as described in user documentation
 5. **Testing**: Always test after each function migration
@@ -760,6 +761,8 @@ Ollama ne remplace pas ce serveur : sa route `/v1/audio/transcriptions` existe m
 -   `manifest.json` : Source principale pour Chrome (Service Worker)
 -   `manifest.firefox.json` : Adapté pour Firefox (background scripts)
 -   Garder les deux synchronisés (version, permissions, etc.)
+-   **Déclaration des données Firefox** (`gecko.data_collection_permissions`) : une étiquette affichée à l'installation, pas un droit. Elle ne bloque ni n'autorise aucune requête, mais doit être exacte : pour Mozilla, la transmission couvre « any data collected, used, transferred, shared, or handled outside the add-on or the local browser », donc l'envoi au provider. La fiche AMO, créée le 16/12/2025, n'a pas l'exemption des extensions antérieures au 3/11/2025. Depuis la 1.1.21 : `personallyIdentifyingInfo`, `websiteContent`, `personalCommunications` et `authenticationInfo`, avec `strict_min_version` 140 (support du consentement intégré). Chaque catégorie requise ajoutée déclenche une invite à la mise à jour (« Firefox only shows the added required data permissions ») : revoir la liste dès qu'un nouveau type de donnée sort du navigateur, et tout déclarer d'un coup.
+-   **Ne pas ajouter `gecko_android`**, même pour fixer une version minimale : sa présence publie l'extension sur Firefox pour Android. MDN (`manifest.json/browser_specific_settings`) : « To support Firefox for Android without specifying a version range, the `gecko_android` sub-key must be an empty object […] Otherwise, the extension is only made available on desktop Firefox. » L'avertissement `KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION` d'addons-linter est donc sans objet (constaté le 2026-09-28).
 
 ### Publication
 
