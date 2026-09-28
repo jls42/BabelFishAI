@@ -642,7 +642,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Synchroniser avec la clé legacy pour rétrocompatibilité
         // Utiliser la clé du provider de transcription actif
         // eslint-disable-next-line security/detect-object-injection -- Faux positif : transcriptionProvider est un ID de provider contrôlé
-        const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
+        const activeApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
+        // Vide tant qu'OpenAI est désactivé : les anciennes versions enverraient cette copie à
+        // OpenAI (la clé du panneau OpenAI reste enregistrée dans providers.openai)
+        const legacyApiKey = providers.openai.enabled ? activeApiKey : '';
 
         // skipcq: JS-0002 - debug log for options saving diagnostics
         // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
@@ -1043,7 +1046,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
-        const legacyApiKey = openaiApiKeyInput.value.trim();
+        // Vide tant qu'OpenAI est désactivé : les anciennes versions l'enverraient à OpenAI
+        // (la clé reste dans le champ OpenAI et dans providers.openai)
+        const legacyApiKey = openaiEnabledCheckbox.checked ? openaiApiKeyInput.value.trim() : '';
 
         const options = {
             apiKey: legacyApiKey,
