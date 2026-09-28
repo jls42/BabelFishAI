@@ -170,3 +170,25 @@ export const STORAGE = {
         apiKey: '',
     },
 };
+
+// Stockages joués sur chaque version par versions.test.mjs (plan, contrat point 3) : ce qu'une
+// ancienne version installée sur un autre poste du même compte fait du stockage de la refonte
+export const VERSION_FIXTURES = {
+    openai: STORAGE.openai,
+    mistral: STORAGE.mistral,
+    'tout-desactive': STORAGE['tout-desactive'],
+    'S1 : futur provider seul, apiKey vide': STORAGE['futur-S1'],
+    'S1 : futur provider seul, clé OpenAI résiduelle dans apiKey': STORAGE['futur-S1-cle-heritee'],
+    // S1 après une sauvegarde d'une ancienne page d'options : la sélection revient sur openai
+    'S1-A : sélection openai, clé OpenAI résiduelle dans apiKey': {
+        ...STORAGE['futur-S1-cle-heritee'],
+        transcriptionProvider: 'openai',
+        chatProvider: 'openai',
+    },
+    'S1-A : sélection openai, apiKey vide': {
+        ...STORAGE['futur-S1'],
+        transcriptionProvider: 'openai',
+        chatProvider: 'openai',
+    },
+    'S2 : futur provider en dictée, Mistral en texte': STORAGE['futur-S2'],
+};

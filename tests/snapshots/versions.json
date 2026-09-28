@@ -1,0 +1,998 @@
+{
+    "arbre testé : S1 : futur provider seul, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "arbre testé : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "arbre testé : S1-A : sélection openai, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "arbre testé : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "arbre testé : S2 : futur provider en dictée, Mistral en texte": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "arbre testé : mistral": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "arbre testé : openai": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "arbre testé : tout-desactive": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.17 : S1 : futur provider seul, apiKey vide": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : S1-A : sélection openai, apiKey vide": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : S2 : futur provider en dictée, Mistral en texte": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : mistral": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : openai": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.17 : tout-desactive": {
+        "chat": "(pas de resolveApiConfig)",
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": "(pas de resolveApiConfig)"
+    },
+    "v1.1.18 : S1 : futur provider seul, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.18 : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.18 : S1-A : sélection openai, apiKey vide": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.18 : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.18 : S2 : futur provider en dictée, Mistral en texte": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.18 : mistral": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.18 : openai": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.18 : tout-desactive": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.19 : S1 : futur provider seul, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.19 : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.19 : S1-A : sélection openai, apiKey vide": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.19 : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.19 : S2 : futur provider en dictée, Mistral en texte": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.19 : mistral": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.19 : openai": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.19 : tout-desactive": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.20 : S1 : futur provider seul, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.20 : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "gemini"
+        }
+    },
+    "v1.1.20 : S1-A : sélection openai, apiKey vide": {
+        "chat": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "erreur": "Clé API OpenAI non trouvée. Veuillez la configurer dans les options.",
+            "requetes": []
+        },
+        "getApiKey": null,
+        "reformulation": {
+            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
+            "requetes": []
+        },
+        "transcription": {
+            "cle": null,
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.20 : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.20 : S2 : futur provider en dictée, Mistral en texte": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.20 : mistral": {
+        "chat": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle mistral}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle mistral}",
+                    "hote": "api.mistral.ai"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle mistral}",
+            "hote": "api.mistral.ai",
+            "provider": "mistral"
+        }
+    },
+    "v1.1.20 : openai": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    },
+    "v1.1.20 : tout-desactive": {
+        "chat": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        },
+        "dictee": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok "
+        },
+        "getApiKey": "{cle openai}",
+        "reformulation": {
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle openai}",
+                    "hote": "api.openai.com"
+                }
+            ],
+            "valeur": "ok"
+        },
+        "transcription": {
+            "cle": "{cle openai}",
+            "hote": "api.openai.com",
+            "provider": "openai"
+        }
+    }
+}
