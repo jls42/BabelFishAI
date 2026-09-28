@@ -543,27 +543,32 @@
 
     // Place réservée en haut de la page pendant l'affichage du bandeau, qui est en position fixe
     const BANNER_PAGE_OFFSET = '35px';
-    // `padding-top` en ligne de <body> avant l'affichage du bandeau (null : aucune place réservée)
+    // `padding-top` en ligne de <body> avant l'affichage du bandeau, avec sa priorité
+    // (null : aucune place réservée)
     let bodyPaddingBeforeBanner = null;
 
     /**
      * Réserve la place du bandeau en haut de la page pendant son affichage. Au masquage, rend à
-     * <body> sa valeur d'origine, sauf si la page l'a changée entre-temps
+     * <body> sa valeur d'origine et sa priorité, sauf si la page l'a changée entre-temps
      * @param {boolean} show - true quand le bandeau s'affiche, false quand il se masque
      */
     function reserveBannerSpace(show) {
-        const body = document.body;
-        if (!body) return;
+        const style = document.body?.style;
+        if (!style) return;
         if (show) {
             if (bodyPaddingBeforeBanner === null) {
-                bodyPaddingBeforeBanner = body.style.paddingTop;
-                body.style.paddingTop = BANNER_PAGE_OFFSET;
+                bodyPaddingBeforeBanner = {
+                    value: style.getPropertyValue('padding-top'),
+                    priority: style.getPropertyPriority('padding-top'),
+                };
+                style.paddingTop = BANNER_PAGE_OFFSET;
             }
             return;
         }
         if (bodyPaddingBeforeBanner === null) return;
-        if (body.style.paddingTop === BANNER_PAGE_OFFSET) {
-            body.style.paddingTop = bodyPaddingBeforeBanner;
+        if (style.paddingTop === BANNER_PAGE_OFFSET) {
+            const { value, priority } = bodyPaddingBeforeBanner;
+            style.setProperty('padding-top', value, priority);
         }
         bodyPaddingBeforeBanner = null;
     }
@@ -577,7 +582,9 @@
         if (!banner) return;
 
         banner.style.display = show ? 'flex' : 'none';
-        reserveBannerSpace(show);
+        // Une page qui remplace <body> en naviguant (Turbo Drive…) laisse le bandeau hors du
+        // document : ne pas lui réserver une place qui resterait vide
+        reserveBannerSpace(show && banner.isConnected);
     }
 
     /**
