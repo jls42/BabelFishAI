@@ -628,6 +628,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 config.model,
                 null, // Pas de nom de fichier spécifique
                 true, // Générer un nom de fichier unique avec timestamp et partie aléatoire
+                config.providerId,
             );
 
             return transcription;

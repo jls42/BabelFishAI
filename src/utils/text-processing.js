@@ -107,6 +107,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 headers: { 'Content-Type': 'application/json' },
                 body,
                 errorType: globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR,
+                providerId: config.providerId,
+                service: 'chat',
                 // Activer les tentatives de réessai
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA
@@ -231,6 +233,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                         globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR ||
                         'Erreur de correction',
                     retryOnFail: true,
+                    providerId: config.providerId,
+                    service: 'chat',
                 },
                 modelType,
                 messages,
@@ -314,6 +318,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 headers: { 'Content-Type': 'application/json' },
                 body,
                 errorType: globalThis.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,
+                providerId: config.providerId,
+                service: 'chat',
                 // Activer les tentatives de réessai pour les traductions
                 retryOnFail: true,
                 // Augmenter le timeout pour laisser plus de temps aux modèles d'IA

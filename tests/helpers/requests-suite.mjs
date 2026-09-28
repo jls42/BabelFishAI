@@ -296,30 +296,94 @@ function defineNetworkTests({ actions, play, matchSnapshot }) {
     }
 }
 
-/** Allowlist des hôtes de callApi, et appel sans clé */
-function defineAllowlistTests({ env, utils, matchSnapshot }) {
-    for (const storageName of ['openai', 'custom']) {
+// Provider et clé envoyés avec chaque URL des tests d'allowlist
+const ALLOWLIST_IDENTITIES = {
+    openai: { providerId: 'openai', apiKey: KEYS.openai },
+    custom: { providerId: 'custom', apiKey: KEYS.custom },
+};
+
+// Custom dont l'URL de chat est celle d'OpenAI : sa clé peut y partir, c'est son URL
+const CUSTOM_ON_OPENAI = {
+    ...STORAGE.custom,
+    providers: {
+        ...STORAGE.custom.providers,
+        custom: {
+            ...STORAGE.custom.providers.custom,
+            chatUrl: 'https://api.openai.com/v1/chat/completions',
+        },
+    },
+};
+
+const OPENAI_CHAT_URL = 'https://api.openai.com/v1/chat/completions';
+
+// Cas de l'invariant de sécurité : [stockage, requête]
+const INVARIANT_CASES = {
+    'clé OpenAI vers api.groq.com': [
+        STORAGE.openai,
+        { url: 'https://api.groq.com/openai/v1/chat/completions', ...ALLOWLIST_IDENTITIES.openai },
+    ],
+    'clé Custom vers un hôte hors de ses URLs': [
+        STORAGE.custom,
+        { url: OPENAI_CHAT_URL, ...ALLOWLIST_IDENTITIES.custom },
+    ],
+    'clé Custom vers api.openai.com, son URL': [
+        CUSTOM_ON_OPENAI,
+        { url: OPENAI_CHAT_URL, ...ALLOWLIST_IDENTITIES.custom },
+    ],
+    'clé qui ne correspond pas au provider': [
+        STORAGE.openai,
+        { url: OPENAI_CHAT_URL, providerId: 'openai', apiKey: KEYS.mistral },
+    ],
+    'provider qui n’est pas celui du stockage pour ce service': [
+        STORAGE.mixte,
+        { url: OPENAI_CHAT_URL, ...ALLOWLIST_IDENTITIES.openai },
+    ],
+    'provider absent': [STORAGE.openai, { url: OPENAI_CHAT_URL, apiKey: KEYS.openai }],
+};
+
+/**
+ * Appelle callApi directement sur un stockage (service chat)
+ * @param {Object} h - Harnais
+ * @param {Object} storage
+ * @param {Object} request - url, providerId, apiKey
+ * @returns {Promise<Object>} Résultat et nombre de requêtes émises
+ */
+async function callDirectly({ env, utils }, storage, request) {
+    useStorage(env, storage);
+    env.http.clear();
+    env.http.respond({ json: { ok: true } });
+    const r = await outcome(() =>
+        utils.api.callApi({
+            headers: { 'Content-Type': 'application/json' },
+            body: '{}',
+            service: 'chat',
+            ...request,
+        }),
+    );
+    return { ...r, requetes: env.http.requests.length };
+}
+
+/** Allowlist des hôtes de callApi, invariant de sécurité, et appel sans clé */
+function defineAllowlistTests(h) {
+    const { utils, matchSnapshot } = h;
+    for (const [storageName, identity] of Object.entries(ALLOWLIST_IDENTITIES)) {
         test(`allowlist du content script : ${storageName}`, async () => {
             const result = {};
             for (const url of ALLOWLIST) {
-                useStorage(env, STORAGE[storageName]);
-                env.http.clear();
-                env.http.respond({ json: { ok: true } });
-                const r = await outcome(() =>
-                    utils.api.callApi({
-                        url,
-                        apiKey: KEYS.openai,
-                        headers: { 'Content-Type': 'application/json' },
-                        body: '{}',
-                    }),
-                );
-                result[url] = { ...r, requetes: env.http.requests.length };
+                result[url] = await callDirectly(h, STORAGE[storageName], { url, ...identity });
             }
             matchSnapshot(`allowlist du content script : ${storageName}`, result);
         });
     }
+    test('invariant de sécurité', async () => {
+        const result = {};
+        for (const [label, [storage, request]] of Object.entries(INVARIANT_CASES)) {
+            result[label] = await callDirectly(h, storage, request);
+        }
+        matchSnapshot('invariant de sécurité', result);
+    });
     test('callApi sans clé', async () => {
-        const url = 'https://api.openai.com/v1/chat/completions';
+        const url = OPENAI_CHAT_URL;
         matchSnapshot(
             'callApi sans clé',
             await outcome(() => utils.api.callApi({ url, body: '{}' })),

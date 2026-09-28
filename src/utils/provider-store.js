@@ -88,6 +88,41 @@ globalThis.BabelFishAIProviderStore = (function () {
     }
 
     /**
+     * Nom d'hôte d'une URL, ou null si elle est vide ou invalide
+     * @param {string|undefined} url
+     * @returns {string|null}
+     */
+    function hostnameOf(url) {
+        if (!url) return null;
+        try {
+            return new URL(url).hostname;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Hôtes vers lesquels la clé d'un provider peut partir : ceux de ses URLs par défaut, ou,
+     * pour un provider dont l'utilisateur règle les URLs (Custom), ceux de ces réglages
+     * @param {Object} data - Données lues dans storage.sync
+     * @param {string} providerId
+     * @returns {Set<string>}
+     */
+    function allowedHosts(data, providerId) {
+        const hosts = new Set();
+        const provider = registry().getProvider(providerId);
+        const config = getProviderConfig(data, providerId);
+        for (const [serviceType, service] of Object.entries(provider?.services ?? {})) {
+            const url = service.urlSetting
+                ? ownValue(config, service.urlSetting)
+                : ownValue(provider.defaultUrls, serviceType);
+            const host = hostnameOf(url);
+            if (host) hosts.add(host);
+        }
+        return hosts;
+    }
+
+    /**
      * Valeur brute de la sélection d'un service, telle que stockée
      * @param {Object} data
      * @param {string} serviceType
@@ -122,6 +157,7 @@ globalThis.BabelFishAIProviderStore = (function () {
     }
 
     return {
+        allowedHosts,
         getProviderConfig,
         isProviderUsable,
         findFallback,

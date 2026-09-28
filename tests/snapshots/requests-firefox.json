@@ -19,20 +19,16 @@
             }
         },
         "https://api.mistral.ai/v1/chat/completions": {
-            "requetes": 1,
-            "valeur": {
-                "ok": true
-            }
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
         },
         "https://api.openai.com.evil.example/v1/chat/completions": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
             "requetes": 0
         },
         "https://api.openai.com/v1/chat/completions": {
-            "requetes": 1,
-            "valeur": {
-                "ok": true
-            }
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
         },
         "https://evil.example/v1/chat/completions": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
@@ -67,10 +63,8 @@
             "requetes": 0
         },
         "https://api.mistral.ai/v1/chat/completions": {
-            "requetes": 1,
-            "valeur": {
-                "ok": true
-            }
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
         },
         "https://api.openai.com.evil.example/v1/chat/completions": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
@@ -1713,6 +1707,34 @@
         ],
         "resultat": {
             "erreur": "TypeError: NetworkError when attempting to fetch resource."
+        }
+    },
+    "invariant de sécurité": {
+        "clé Custom vers api.openai.com, son URL": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "clé Custom vers un hôte hors de ses URLs": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "clé OpenAI vers api.groq.com": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "clé qui ne correspond pas au provider": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: la clé API ne correspond pas au provider configuré.",
+            "requetes": 0
+        },
+        "provider absent": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: provider ou service non indiqué pour la requête.",
+            "requetes": 0
+        },
+        "provider qui n’est pas celui du stockage pour ce service": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: la clé API ne correspond pas au provider configuré.",
+            "requetes": 0
         }
     },
     "proxy : FileReader en échec": {
