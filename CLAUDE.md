@@ -207,7 +207,9 @@ Les archives ZIP sont générées dans `dist/`.
 | Manifest                        | `manifest.json`                   | `manifest.firefox.json`             |
 | `importScripts()`               | Supporté (Service Worker)         | Non supporté (chargé via manifest)  |
 | CSP des pages                   | Content scripts exempts           | Content scripts soumis aux CSP      |
-| `fetch()` depuis content script | Utilise permissions extension     | Bloqué par `connect-src` de la page |
+| `fetch()` depuis content script | Au nom de la page, soumis au CORS | Bloqué par `connect-src` de la page |
+
+Sous Chrome, un `fetch()` du content script n'utilise pas les permissions de l'extension : doc Chrome « Cross-origin network requests » (relue le 2026-09-28), « Content scripts initiate requests on behalf of the web origin that the content script has been injected into and therefore content scripts are also subject to the same origin policy ». Le provider reçoit donc l'origine de la page visitée (`PRIVACY.md`), et un serveur appelé depuis un content script doit répondre avec des entêtes CORS (c'est le cas de `scripts/mock-openai-server.py`).
 
 #### Gestion de `importScripts()` (background.js)
 
@@ -243,18 +245,25 @@ const response = isFirefox()
 2. Le background script effectue le `fetch()` (non soumis aux CSP)
 3. Le résultat est renvoyé au content script
 
-**Sérialisation FormData** : Les `FormData` (pour l'upload audio) ne peuvent pas être envoyés via messaging. Ils sont convertis en tableau d'objets avec les blobs en `Uint8Array`.
+**Sérialisation FormData** : Les `FormData` (pour l'upload audio) ne peuvent pas être envoyés via messaging. `formDataToSerializable` (`api-utils.js`) les convertit en tableau d'objets, chaque blob étant encodé en base64 par `FileReader.readAsDataURL` ; le background le décode (`decodeBase64ToBlob`) et reconstruit le `FormData`. Ce passage décrivait jusqu'au 2026-09-29 une conversion en `Uint8Array` que le code ne fait plus.
 
 ```javascript
-// Conversion FormData → tableau sérialisable
-formData.forEach((value, name) => {
+// Conversion FormData → tableau sérialisable (formDataToSerializable)
+formData.forEach((value, name) => entries.push({ name, value }));
+for (const { name, value } of entries) {
     if (value instanceof Blob) {
-        // Blob → ArrayBuffer → Uint8Array → Array
-        fields.push({ name, isFile: true, data: Array.from(uint8Array), ... });
+        // Blob → data URL (FileReader) → base64 ; la promesse rejette si la lecture échoue
+        fields.push({
+            name,
+            isFile: true,
+            data: base64,
+            type: value.type,
+            filename: value.name || 'file',
+        });
     } else {
         fields.push({ name, isFile: false, value: String(value) });
     }
-});
+}
 ```
 
 #### Compatibilité FormData
@@ -752,7 +761,7 @@ python3 scripts/mock-openai-server.py 9000     # autre port
 
 Dans les options, provider Custom/LiteLLM : URL de transcription `http://localhost:8765/v1/audio/transcriptions`, URL de chat `http://localhost:8765/v1/chat/completions`, clé API quelconque. La validation d'URL accepte HTTP uniquement sur `localhost` / `127.0.0.1` (`providers.js:isValidUrl`, `api-utils.js:isProtocolAllowed`), donc n'importe quel port local convient.
 
-Une transcription doit insérer la phrase renvoyée par le serveur, et les actions texte un résultat préfixé par `[serveur local]`. C'est le seul moyen simple de vérifier le chemin `FormData` du proxy Firefox (sérialisation en `Uint8Array` dans le content script, reconstruction dans le background) sans dépendre d'une API payante. Validé ainsi le 2026-09-17 : transcription d'un `.webm` de 40 Ko et traduction, sous Firefox.
+Une transcription doit insérer la phrase renvoyée par le serveur, et les actions texte un résultat préfixé par `[serveur local]`. C'est le seul moyen simple de vérifier le chemin `FormData` du proxy Firefox (sérialisation en base64 dans le content script, reconstruction dans le background) sans dépendre d'une API payante. Validé ainsi le 2026-09-17 : transcription d'un `.webm` de 40 Ko et traduction, sous Firefox.
 
 Ollama ne remplace pas ce serveur : sa route `/v1/audio/transcriptions` existe mais le registre public n'expose aucun modèle de transcription (`whisper`, `faster-whisper`, `voxtral` renvoient tous HTTP 404 le 2026-09-17). Son endpoint `/v1/chat/completions` convient en revanche pour un test de chat réel, à condition d'utiliser un petit modèle.
 
