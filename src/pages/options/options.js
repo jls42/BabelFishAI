@@ -639,13 +639,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             chatProviderSelect,
         );
 
-        // Synchroniser avec la clé legacy pour rétrocompatibilité
-        // Utiliser la clé du provider de transcription actif
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : transcriptionProvider est un ID de provider contrôlé
-        const activeApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
-        // Vide tant qu'OpenAI est désactivé : les anciennes versions enverraient cette copie à
-        // OpenAI (la clé du panneau OpenAI reste enregistrée dans providers.openai)
-        const legacyApiKey = providers.openai.enabled ? activeApiKey : '';
+        // Synchroniser avec la clé legacy pour rétrocompatibilité. Les anciennes versions l'envoient
+        // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI (même valeur que dans saveOptions),
+        // et reste vide tant qu'OpenAI est désactivé (la clé reste enregistrée dans providers.openai)
+        const legacyApiKey = providers.openai.enabled ? providers.openai.apiKey : '';
 
         // skipcq: JS-0002 - debug log for options saving diagnostics
         // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
