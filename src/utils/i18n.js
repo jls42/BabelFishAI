@@ -335,6 +335,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Indique si le module tourne dans une page de l'extension (options), et non dans une page web
+     * où le content script l'a chargé
+     * @returns {boolean}
+     */
+    function isExtensionPage() {
+        return globalThis.location?.href.startsWith(chrome.runtime.getURL('')) === true;
+    }
+
+    /**
      * Initialise l'internationalisation
      */
     async function init() {
@@ -346,11 +355,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         await loadTranslations(userLanguage);
         currentLanguage = userLanguage;
 
-        // Définir la langue sur l'élément HTML
-        document.documentElement.lang = currentLanguage;
-
         // Remplacer les placeholders dans les messages de traduction
         processTranslationPlaceholders();
+
+        // Dans une page web, ne toucher ni à <html lang>, ni aux éléments [data-i18n] de la page,
+        // ni à ses mutations : le bandeau et la boîte de dialogue traduisent leurs propres éléments
+        if (!isExtensionPage()) return;
+
+        // Définir la langue sur l'élément HTML
+        document.documentElement.lang = currentLanguage;
 
         // Traduire la page
         translatePage();
