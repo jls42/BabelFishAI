@@ -133,6 +133,7 @@ Le premier `pre-commit run --all-files` télécharge les environnements des hook
 | pre-commit | detect-secrets                 | Détection fuites de clés API (baseline vide depuis la 1.1.21)               |
 | pre-push   | check-security-sast (Opengrep) | SAST `p/javascript` + `p/security-audit` + `p/default`, severity ERROR      |
 | pre-push   | check-complexity (Lizard)      | CCN ≤ 20, length ≤ 1500 lignes (durcissables par PR dédiée)                 |
+| pre-push   | run-tests                      | Tests Node `scripts/run-tests.sh` (voir « Tests » ci-dessous)               |
 
 ### Lancer manuellement
 
@@ -148,6 +149,21 @@ pre-commit run prettier --all-files                   # un hook précis
 git commit --no-verify   # skip les hooks pre-commit
 git push --no-verify     # skip les hooks pre-push
 ```
+
+## Tests
+
+### Suite Node (`./scripts/run-tests.sh`)
+
+-   **Lancer** : `./scripts/run-tests.sh` (Node 22 ou plus, moins d'une seconde, aussi exécuté par le hook pre-push). Le lanceur passe à `node --test` la liste explicite des `tests/**/*.test.mjs` et sort en erreur si elle est vide : `node --test tests/` échoue, et `node --test 'motif'` sans aucun fichier sortirait en 0.
+-   **Un fichier par configuration** (arbre × navigateur), chacun dans son propre processus : `config-resolution` (provider, URL, clé et modèle résolus pour chaque contenu de stockage), `requests-chrome` et `requests-firefox` (dictée et trois actions texte par provider, erreurs HTTP et réseau, allowlist), `background-chrome` et `background-firefox` (migrations, menus, icône, raccourci, badge, proxy).
+-   **Principe** : les bouchons (`tests/helpers/chrome-stub.mjs`, `env.mjs`) sont posés sur `globalThis`, puis les vrais fichiers de `src/` sont chargés par `import()`, sans `vm` ni `eval`. Sous Firefox, le vrai `background.js` est chargé dans le même processus et reçoit les messages `proxyFetch` du content script : les requêtes Chrome et Firefox d'un même scénario sont identiques, multipart compris.
+-   **Instantanés** (`tests/snapshots/*.json`) : toujours relevés en exécutant le code (`./scripts/run-tests.sh --update`), jamais écrits à la main. Ils décrivent le comportement actuel, défauts connus compris (clé d'un proxy LiteLLM non migré envoyée aux URLs OpenAI, message 422 répété, sélection `__proto__` sans repli qui plante). Relire le diff des instantanés avant de commiter une mise à jour : chaque différence est un changement de comportement. Les fausses clés y apparaissent sous la forme `{cle openai}` : on lit quelle clé part vers quel hôte, et detect-secrets écarte ces valeurs en forme de gabarit.
+-   **Preuve d'équivalence** : `./scripts/run-tests.sh --ref <réf>` exécute la suite de l'arbre de travail sur le code d'une autre version (`git archive` de `src`, `_locales` et des manifests). Une refonte « sans changement visible » doit passer sur l'arbre de travail et sur sa base. Exemple mesuré le 29/09 : sur `6c9ae09`, seul le test du `FileReader` en échec (correctif n°7) tombe.
+-   **Pièges** :
+    -   Sans `package.json`, Node charge les `.js` de l'extension en CommonJS, dont le cache ignore la requête de l'URL (`?instance=`). `loadScripts(..., { fresh: true })` retire donc le fichier de `require.cache` pour le réexécuter (état de module remis à zéro, par exemple les modèles qui refusent `temperature` dans `correctText`).
+    -   Ne jamais faire `git checkout -- <fichier>` sur un fichier ajouté par `git add -N` : il revient vide (constaté le 29/09 sur les instantanés).
+    -   Fixtures (`tests/helpers/fixtures.mjs`) : fausses clés sans la forme d'une vraie clé, aucun identifiant `*API_KEY*`.
+-   **Qualité** : `lizard -l javascript -C 8 -T nloc=50 -w tests scripts` doit rester muet (seuils de Codacy). `.sonarcloud.properties` (chemins simples, sans joker : sources et tests disjoints), `.deepsource.toml` (`test_patterns`) et `.codacy.yml` (`exclude_paths`) déclarent `tests/` comme code de test. **`.codacy.yml` remplace les fichiers ignorés dans l'interface de Codacy** (doc « Codacy configuration file ») : `src/content.js`, qui n'était pas analysé au 29/09 (API publique de Codacy), y est recopié ; tout nouvel ignore Codacy se fait désormais dans ce fichier.
 
 ## Development Workflow
 
