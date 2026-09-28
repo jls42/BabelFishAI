@@ -601,6 +601,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur à utiliser en cas d'échec
      * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse avant de la renvoyer
      * @param {boolean} [options.retryOnFail=false] - Si true, réessaiera une fois en cas d'échec
+     * @param {{header: string, scheme?: string}} [options.auth] - Authentification du service
+     *   (registre des providers), `Authorization: Bearer` par défaut
      * @returns {Promise<any>} Résultat traité de l'appel API
      * @throws {Error} Une erreur avec le message approprié en cas d'échec de l'appel
      */
@@ -614,6 +616,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             errorType = ERRORS.API_ERROR,
             responseProcessor = (data) => data,
             retryOnFail = false,
+            auth,
         } = options;
 
         if (!apiKey) {
@@ -651,8 +654,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          * @returns {Object} - Options de la requête configurées
          */
         function prepareRequestOptions() {
+            const adapters = globalThis.BabelFishAIProviderAdapters;
             const requestHeaders = {
-                Authorization: `Bearer ${apiKey}`,
+                ...adapters.authHeaders(auth ?? adapters.DEFAULT_AUTH, apiKey),
                 ...headers,
             };
 
@@ -822,10 +826,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
               `audio-${Date.now()}-${Math.random().toString(36).substring(2, 10)}.webm` // NOSONAR javascript:S2245 - Math.random() pour unicité pratique.
             : filename || 'audio.webm';
 
-        // Préparer le FormData pour l'envoi du fichier audio
-        const formData = new FormData();
-        formData.append('file', audioBlob, finalFilename);
-        formData.append('model', modelType);
+        // Préparer le FormData pour l'envoi du fichier audio (format openai-multipart)
+        const adapter = globalThis.BabelFishAIProviderAdapters.getAdapter('openai-multipart');
+        const formData = adapter.buildBody({
+            audioBlob,
+            filename: finalFilename,
+            model: modelType,
+        });
 
         // Utiliser la fonction callApi pour effectuer la requête
         return callApi({
@@ -833,13 +840,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             apiKey,
             body: formData,
             errorType: ERRORS.TRANSCRIPTION_ERROR,
-            responseProcessor: (data) => {
-                // Nettoyer le texte transcrit pour éliminer les retours à la ligne superflus au début
-                let text = data.text || '';
-                text = text.trim();
-                // Ajouter un espace à la fin pour permettre de continuer à dicter
-                return `${text} `;
-            },
+            responseProcessor: adapter.extractText,
         });
     }
 

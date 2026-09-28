@@ -13,27 +13,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     // Modèles ayant refusé le paramètre temperature (HTTP 400) pendant cette session
     const modelsRejectingTemperature = new Set();
 
+    // Température basse pour des corrections précises
+    const CORRECTION_TEMPERATURE = 0.1;
+
     /**
-     * Extrait le texte de la réponse d'une API chat/completions. Le contenu est une chaîne ou,
-     * pour les modèles Mistral qui raisonnent, une liste de blocs : seuls les blocs de texte
-     * (TextChunk) sont gardés, la réflexion (ThinkChunk, type "thinking") est ignorée
-     * (https://docs.mistral.ai/studio/conversations/reasoning).
-     * @param {Object} response - Réponse JSON de l'API
-     * @returns {string} Texte de la réponse sans espaces superflus, chaîne vide si absent
+     * Adaptateur du format chat/completions (provider-adapters.js) : corps des requêtes et
+     * lecture des réponses, blocs de réflexion Mistral compris
+     * @returns {{buildBody: Function, extractText: Function}}
      */
-    function extractMessageText(response) {
-        const content = response.choices[0].message?.content;
-        if (typeof content === 'string') {
-            return content.trim();
-        }
-        if (Array.isArray(content)) {
-            return content
-                .filter((chunk) => chunk?.type !== 'thinking' && typeof chunk?.text === 'string')
-                .map((chunk) => chunk.text)
-                .join('')
-                .trim();
-        }
-        return '';
+    function chatAdapter() {
+        return globalThis.BabelFishAIProviderAdapters.getAdapter('openai-chat');
     }
 
     /**
@@ -104,23 +93,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 },
             ];
 
-            // Préparer la charge utile pour l'API
-            const payload = {
+            // Préparer la charge utile pour l'API (option no-log si demandé)
+            const body = chatAdapter().buildBody({
                 model: modelType,
                 messages,
-            };
-
-            // Ajouter l'option no-log si demandé
-            if (disableLogging) {
-                payload['no-log'] = true;
-            }
+                noLog: disableLogging,
+            });
 
             // Utiliser la fonction callApi pour effectuer la requête avec optimisations
             const response = await globalThis.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body,
                 errorType: globalThis.BabelFishAIConstants.ERRORS.REPHRASE_ERROR,
                 // Activer les tentatives de réessai
                 retryOnFail: true,
@@ -131,7 +116,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte reformulé
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const rephrasedText = extractMessageText(response);
+                const rephrasedText = chatAdapter().extractText(response);
                 return rephrasedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -150,41 +135,18 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Construit le payload de la requête de correction orthographique
-     * @param {string} modelType - Modèle à utiliser
-     * @param {Array<Object>} messages - Messages envoyés à l'API
-     * @param {boolean} disableLogging - Ajoute l'option no-log (LiteLLM)
-     * @param {boolean} withTemperature - Inclut le paramètre temperature
-     * @returns {Object} Payload prêt à être sérialisé
-     */
-    function buildCorrectionPayload(modelType, messages, disableLogging, withTemperature) {
-        const payload = {
-            model: modelType,
-            messages,
-        };
-        if (withTemperature) {
-            payload.temperature = 0.1; // Température basse pour des corrections précises
-        }
-
-        // Ajouter l'option no-log si demandé
-        if (disableLogging) {
-            payload['no-log'] = true;
-        }
-
-        return payload;
-    }
-
-    /**
      * Appelle l'API de correction. Certains modèles qui raisonnent (ex. gpt-5.6-luna,
      * effort « medium » par défaut) refusent temperature avec une erreur HTTP 400 :
      * on réessaie alors une fois sans ce paramètre, et on le retient pour la session.
+     * Un modèle déclaré sans temperature dans le registre ne la reçoit jamais.
      * @param {Object} apiOptions - Options de callApi, sans le body
      * @param {string} modelType - Modèle à utiliser
      * @param {Array<Object>} messages - Messages envoyés à l'API
      * @param {boolean} disableLogging - Ajoute l'option no-log (LiteLLM)
+     * @param {string} providerId - Provider du modèle (indicateurs du registre)
      * @returns {Promise<Object>} Réponse de l'API
      */
-    async function callCorrectionApi(apiOptions, modelType, messages, disableLogging) {
+    async function callCorrectionApi(apiOptions, modelType, messages, disableLogging, providerId) {
         /**
          * Envoie la requête avec ou sans temperature
          * @param {boolean} withTemperature - Inclut le paramètre temperature
@@ -193,12 +155,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const callWith = (withTemperature) =>
             globalThis.BabelFishAIUtils.api.callApi({
                 ...apiOptions,
-                body: JSON.stringify(
-                    buildCorrectionPayload(modelType, messages, disableLogging, withTemperature),
-                ),
+                body: chatAdapter().buildBody({
+                    model: modelType,
+                    messages,
+                    temperature: withTemperature ? CORRECTION_TEMPERATURE : undefined,
+                    noLog: disableLogging,
+                }),
             });
 
-        if (modelsRejectingTemperature.has(modelType)) {
+        const Providers = globalThis.BabelFishAIProviders;
+        if (
+            !Providers.acceptsTemperature(providerId, modelType) ||
+            modelsRejectingTemperature.has(modelType)
+        ) {
             return callWith(false);
         }
 
@@ -252,7 +221,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 },
             ];
 
-            // Appeler l'API (payload construit par buildCorrectionPayload)
+            // Appeler l'API (corps construit par l'adaptateur chat)
             const response = await callCorrectionApi(
                 {
                     url: apiUrl,
@@ -266,11 +235,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 modelType,
                 messages,
                 disableLogging,
+                config.providerId,
             );
 
             // Extraire et retourner le texte corrigé
             if (response?.choices?.length > 0) {
-                const correctedText = extractMessageText(response);
+                const correctedText = chatAdapter().extractText(response);
                 return correctedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -330,23 +300,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 },
             ];
 
-            // Préparer la charge utile pour l'API
-            const payload = {
+            // Préparer la charge utile pour l'API (option no-log si demandé)
+            const body = chatAdapter().buildBody({
                 model: modelType,
                 messages,
-            };
-
-            // Ajouter l'option no-log si demandé
-            if (disableLogging) {
-                payload['no-log'] = true;
-            }
+                noLog: disableLogging,
+            });
 
             // Utiliser l'API pour traduire le texte
             const response = await globalThis.BabelFishAIUtils.api.callApi({
                 url: translationApiUrl,
                 apiKey: effectiveApiKey,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body,
                 errorType: globalThis.BabelFishAIConstants.ERRORS.TRANSLATION_ERROR,
                 // Activer les tentatives de réessai pour les traductions
                 retryOnFail: true,
@@ -357,7 +323,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte traduit
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const translatedText = extractMessageText(response);
+                const translatedText = chatAdapter().extractText(response);
                 return translatedText;
             } else {
                 throw new Error('Réponse API invalide');

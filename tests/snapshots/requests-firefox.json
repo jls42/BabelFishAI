@@ -352,6 +352,30 @@
             "valeur": "Réponse du provider."
         }
     },
+    "correction : modèle déclaré sans temperature": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
     "correction : openai": {
         "delais": [],
         "reponsesNonConsommees": 0,

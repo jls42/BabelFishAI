@@ -12,6 +12,7 @@ await loadScripts(
         'src/constants.js',
         'src/utils/providers.js',
         'src/utils/provider-store.js',
+        'src/utils/provider-adapters.js',
         'src/utils/error-utils.js',
         'src/utils/api-utils.js',
         'src/utils/text-processing.js',
@@ -21,6 +22,7 @@ await loadScripts(
         optional: [
             'src/utils/providers.js',
             'src/utils/provider-store.js',
+            'src/utils/provider-adapters.js',
             'src/utils/error-utils.js',
             'src/utils/recording-utils.js',
         ],

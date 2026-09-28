@@ -13,6 +13,7 @@ const CONTENT_SCRIPTS = [
     'src/constants.js',
     'src/utils/providers.js',
     'src/utils/provider-store.js',
+    'src/utils/provider-adapters.js',
     'src/utils/error-utils.js',
     'src/utils/api-utils.js',
     'src/utils/text-processing.js',
@@ -20,7 +21,7 @@ const CONTENT_SCRIPTS = [
 ];
 
 // Modules apparus pendant la refonte : absents de l'arbre de base (--ref base-refonte)
-const OPTIONAL_MODULES = ['src/utils/provider-store.js'];
+const OPTIONAL_MODULES = ['src/utils/provider-store.js', 'src/utils/provider-adapters.js'];
 
 const AUDIO = new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x42, 0x86, 0x81, 0x01]);
 const OK_TRANSCRIPTION = { json: { text: '  Bonjour, ceci est une dictée.  ' } };
@@ -265,6 +266,21 @@ function defineHttpErrorTests({ play, matchSnapshot }) {
     }
 }
 
+/** Modèle que le registre déclare sans temperature : la correction ne l'envoie jamais */
+function defineRegistryFlagTests({ play, matchSnapshot }) {
+    test('correction : modèle déclaré sans temperature', async () => {
+        const registry = globalThis.BabelFishAIProviders;
+        const accepts = registry.acceptsTemperature;
+        registry.acceptsTemperature = () => false;
+        try {
+            const key = 'correction : modèle déclaré sans temperature';
+            matchSnapshot(key, await play('correction', STORAGE.openai, [OK_CHAT]));
+        } finally {
+            registry.acceptsTemperature = accepts;
+        }
+    });
+}
+
 /** Erreurs réseau : message, et nouvel essai après 1,5 s selon l'action et l'erreur */
 function defineNetworkTests({ actions, play, matchSnapshot }) {
     for (const [label, error] of Object.entries(NETWORK_ERRORS)) {
@@ -322,6 +338,7 @@ export async function defineRequestSuite({ browser, testFileUrl }) {
     const h = await createRequestHarness(browser, testFileUrl);
     defineProviderTests(h);
     defineHttpErrorTests(h);
+    defineRegistryFlagTests(h);
     defineNetworkTests(h);
     defineAllowlistTests(h);
     return { ...h, outcome, FakeFileReader };
