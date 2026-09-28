@@ -147,6 +147,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
+     * Ne renvoie rien en mode multi-provider : la clé legacy n'y est qu'une copie.
      * @returns {Promise<string|null>} La clé API ou null si non trouvée.
      * @private
      */
@@ -155,7 +156,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // (cold-start sur content script injecté dynamiquement : voir background.js:121)
         globalThis.BabelFishAI = globalThis.BabelFishAI || {};
         try {
-            const result = await chrome.storage.sync.get(['apiKey']);
+            const result = await chrome.storage.sync.get(['apiKey', 'providers']);
+            // Avec `providers`, la clé legacy n'est qu'une copie gardée pour les anciennes
+            // versions : la reprendre enverrait la clé OpenAI alors qu'OpenAI est désactivé
+            if (result.providers) {
+                return null;
+            }
             const apiKey = result.apiKey;
 
             if (apiKey) {
@@ -451,7 +457,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
-        const apiKey = resolveApiKey(providerConfig, providerId, data.apiKey);
+        // La clé legacy ne sert qu'en mode legacy (sans `providers`) : sinon ce n'est qu'une
+        // copie, qui enverrait la clé OpenAI alors qu'OpenAI est désactivé
+        const apiKey = resolveApiKey(
+            providerConfig,
+            providerId,
+            data.providers ? null : data.apiKey,
+        );
         const model = resolveModel(
             serviceType,
             providerConfig,
