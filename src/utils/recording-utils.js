@@ -12,8 +12,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     // Constantes
     const ACTIONS = {
-        STARTED: 'recording_started',
-        STOPPED: 'recording_stopped',
+        STARTED: 'recordingStarted', // Doit correspondre à ACTIONS.STARTED de background.js, sinon le badge ne change pas
+        STOPPED: 'recordingStopped', // Doit correspondre à ACTIONS.STOPPED de background.js
     };
 
     const ERRORS = {
