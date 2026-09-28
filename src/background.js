@@ -646,7 +646,7 @@ function captureResponseHeaders(response) {
  * Hôtes par défaut autorisés côté background (defense-in-depth F7).
  * Dupliqué intentionnellement depuis providers.js car le background script
  * Firefox (scripts classiques) n'a pas accès à globalThis.BabelFishAIProviders.
- * Garder synchronisé avec src/utils/providers.js:BABEL_PROVIDERS.defaultUrls.
+ * Garder synchronisé avec les defaultUrls de PROVIDERS dans src/utils/providers.js.
  */
 const BG_DEFAULT_ALLOWED_HOSTS = new Set(['api.openai.com', 'api.mistral.ai']);
 
