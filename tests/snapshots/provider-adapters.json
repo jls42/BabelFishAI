@@ -1,0 +1,53 @@
+{
+    "corps et lecture des réponses": {
+        "chatComplet": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"temperature\":0.1,\"no-log\":true}",
+        "chatSimple": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}]}",
+        "formatInconnu": "Format d'API inconnu : format-inconnu",
+        "multipart": [
+            {
+                "base64": "AQID",
+                "filename": "audio.webm",
+                "name": "file",
+                "size": 3,
+                "type": "audio/webm"
+            },
+            {
+                "name": "model",
+                "value": "gpt-transcribe"
+            }
+        ],
+        "texteAbsent": "",
+        "texteBlocs": "ab",
+        "texteChaine": "réponse",
+        "transcription": "Bonjour. ",
+        "transcriptionVide": " "
+    },
+    "entêtes et redirections": {
+        "bearer": {
+            "Authorization": "Bearer {cle openai}"
+        },
+        "messageProxy": {
+            "Content-Type": "application/json",
+            "X-Autre": "garde"
+        },
+        "nomsDuRegistre": [
+            "authorization"
+        ],
+        "redirection": {
+            "bearer": "follow",
+            "google": "error",
+            "minuscules": "follow"
+        },
+        "requeteBearer": {
+            "Authorization": "Bearer {cle openai}",
+            "Content-Type": "application/json",
+            "X-Autre": "garde"
+        },
+        "sansEntetes": {
+            "Authorization": "Bearer k"
+        },
+        "sansSchema": {
+            "x-goog-api-key": "{cle gemini}"
+        }
+    }
+}

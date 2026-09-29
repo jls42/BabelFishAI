@@ -684,16 +684,14 @@ function keyForProxiedRequest(store, data, { providerId, service, url }) {
 }
 
 /**
- * Entête d'authentification décrit par le registre pour ce service
- * @param {Object} modules - registre et adaptateurs
+ * Authentification décrite par le registre pour ce service
+ * @param {Object} registry - BabelFishAIProviders
  * @param {string} providerId
  * @param {string} service
- * @param {string} key
- * @returns {Object}
+ * @returns {{header: string, scheme?: string}}
  */
-function buildAuthHeader({ registry, adapters }, providerId, service, key) {
-    const auth = registry.getService(providerId, service)?.auth ?? adapters.DEFAULT_AUTH;
-    return adapters.authHeaders(auth, key);
+function serviceAuth(registry, providerId, service) {
+    return registry.getService(providerId, service)?.auth ?? registry.DEFAULT_AUTH;
 }
 
 /**
@@ -702,7 +700,8 @@ function buildAuthHeader({ registry, adapters }, providerId, service, key) {
  * clé ni l'hôte. Le provider annoncé doit être celui que le stockage résout pour le service
  * et avoir une clé, et l'URL doit viser une origine configurée pour lui
  * @param {Object} request - url, providerId et service de la requête
- * @returns {Promise<Object|null>} L'entête, ou null si la requête n'est pas autorisée
+ * @returns {Promise<{header: Object, redirect: string}|null>} L'entête et la politique de
+ *   redirection, ou null si la requête n'est pas autorisée
  */
 async function resolveProxyAuth({ url, providerId, service }) {
     const modules = providerModules();
@@ -710,29 +709,16 @@ async function resolveProxyAuth({ url, providerId, service }) {
     try {
         const data = await chrome.storage.sync.get(modules.store.resolutionDefaults());
         const key = keyForProxiedRequest(modules.store, data, { providerId, service, url });
-        return key ? buildAuthHeader(modules, providerId, service, key) : null;
+        if (!key) return null;
+        const auth = serviceAuth(modules.registry, providerId, service);
+        return {
+            header: modules.adapters.authHeaders(auth, key),
+            redirect: modules.adapters.redirectPolicy(auth),
+        };
     } catch (error) {
         console.error('resolveProxyAuth: storage error', error.message);
         return null;
     }
-}
-
-/**
- * Entêtes de la requête du proxy : l'authentification reconstruite en tête, puis les entêtes
- * reçus du content script, dont tout entête d'authentification est retiré
- * @param {Object|undefined} headers - Entêtes reçus
- * @param {Object} authHeader - Entête reconstruit
- * @returns {Object}
- */
-function withAuthHeader(headers, authHeader) {
-    const authNames = new Set([
-        'authorization',
-        ...Object.keys(authHeader).map((name) => name.toLowerCase()),
-    ]);
-    const others = Object.entries(headers ?? {}).filter(
-        ([name]) => !authNames.has(name.toLowerCase()),
-    );
-    return { ...authHeader, ...Object.fromEntries(others) };
 }
 
 /**
@@ -772,8 +758,8 @@ async function proxyFetch(request) {
     // F7 : revérifier côté background même si le content script a déjà vérifié — defense
     // in depth contre un content script compromis. L'entête d'authentification est
     // reconstruit ici depuis le stockage ; celui du content script est ignoré.
-    const authHeader = await resolveProxyAuth(request);
-    if (!authHeader) {
+    const auth = await resolveProxyAuth(request);
+    if (!auth) {
         return {
             success: false,
             error: 'URL non autorisée côté background (defense-in-depth).',
@@ -782,7 +768,13 @@ async function proxyFetch(request) {
     }
 
     try {
-        const fetchOptions = { ...options, headers: withAuthHeader(options?.headers, authHeader) };
+        // Entêtes reçus sans aucun entête d'authentification, derrière celui reconstruit ; la
+        // politique de redirection vient du registre, jamais du message
+        const fetchOptions = {
+            ...options,
+            headers: providerModules().adapters.requestHeaders(options?.headers, auth.header),
+            redirect: auth.redirect,
+        };
 
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {

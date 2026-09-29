@@ -408,6 +408,27 @@
             "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
         }
     },
+    "entêtes d’authentification fournis par l’appelant": {
+        "entetes": [
+            [
+                [
+                    "Authorization",
+                    "Bearer {cle openai}"
+                ],
+                [
+                    "Content-Type",
+                    "application/json"
+                ],
+                [
+                    "X-Autre",
+                    "garde"
+                ]
+            ]
+        ],
+        "valeur": {
+            "ok": true
+        }
+    },
     "erreur HTTP 400 : reformulation": {
         "delais": [],
         "reponsesNonConsommees": 0,

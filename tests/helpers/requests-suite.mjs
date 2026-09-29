@@ -383,6 +383,28 @@ function defineAllowlistTests(h) {
             matchSnapshot(`allowlist du content script : ${storageName}`, result);
         });
     }
+    test('entêtes d’authentification fournis par l’appelant', async () => {
+        const request = {
+            url: OPENAI_CHAT_URL,
+            ...ALLOWLIST_IDENTITIES.openai,
+            headers: {
+                Authorization: `Bearer ${KEYS.mistral}`,
+                authorization: `Bearer ${KEYS.custom}`,
+                'Content-Type': 'application/json',
+                'X-Autre': 'garde',
+            },
+        };
+        useStorage(h.env, STORAGE.openai);
+        h.env.http.clear();
+        h.env.http.respond({ json: { ok: true } });
+        const r = await outcome(() =>
+            utils.api.callApi({ body: '{}', service: 'chat', ...request }),
+        );
+        matchSnapshot('entêtes d’authentification fournis par l’appelant', {
+            ...r,
+            entetes: h.env.http.requests.map((q) => q.headers),
+        });
+    });
     test('invariant de sécurité', async () => {
         const result = {};
         for (const [label, [storage, request]] of Object.entries(INVARIANT_CASES)) {

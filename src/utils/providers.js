@@ -82,6 +82,22 @@ globalThis.BabelFishAIProviders = (function (definitions) {
     }
 
     /**
+     * Noms, en minuscules, des entêtes d'authentification de tous les services du registre, plus
+     * `authorization` : on les retire des entêtes fournis par l'appelant, pour que seule la clé
+     * vérifiée parte avec une requête (ni la clé d'un autre provider, ni un entête forgé)
+     * @returns {Set<string>}
+     */
+    function authHeaderNames() {
+        const names = new Set(['authorization']);
+        for (const provider of Object.values(PROVIDERS)) {
+            for (const service of Object.values(provider.services)) {
+                names.add(service.auth.header.toLowerCase());
+            }
+        }
+        return names;
+    }
+
+    /**
      * Indique si un provider offre un service
      * @param {string} providerId - ID du provider
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
@@ -392,6 +408,7 @@ globalThis.BabelFishAIProviders = (function (definitions) {
         // Getters
         getProvider,
         getService,
+        authHeaderNames,
         supportsService,
         acceptsTemperature,
         getAllProviders,

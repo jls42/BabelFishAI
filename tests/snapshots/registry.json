@@ -477,6 +477,7 @@
         "exports": [
             "DEFAULT_AUTH",
             "acceptsTemperature",
+            "authHeaderNames",
             "createDefaultProvidersConfig",
             "detectProviderFromModel",
             "getAllModels",

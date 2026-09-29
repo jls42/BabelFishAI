@@ -77,23 +77,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<Object>} Réponse simulée compatible avec le flux existant
      */
     async function fetchViaProxy(url, options, providerId, service) {
-        // Le background reconstruit l'authentification depuis le stockage : la clé ne passe pas
-        // par le message
-        const authHeader = (
-            globalThis.BabelFishAIProviders.getService(providerId, service)?.auth.header ??
-            'Authorization'
-        ).toLowerCase();
+        // Le background reconstruit l'authentification depuis le stockage : aucun entête
+        // d'authentification ne passe par le message
         const request = {
             url,
             providerId,
             service,
             options: {
                 method: options.method,
-                headers: Object.fromEntries(
-                    Object.entries(options.headers ?? {}).filter(
-                        ([name]) => name.toLowerCase() !== authHeader,
-                    ),
-                ),
+                headers: globalThis.BabelFishAIProviderAdapters.requestHeaders(options.headers, {}),
             },
         };
 
@@ -590,20 +582,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          * @returns {Object} - Options de la requête configurées
          */
         function prepareRequestOptions() {
-            // Entête d'authentification du service, décrit par le registre des providers
+            // Entête d'authentification du service, décrit par le registre des providers : il
+            // passe devant les entêtes de l'appelant, d'où tout autre entête d'authentification
+            // est retiré, et une clé hors d'Authorization ne suit pas de redirection
+            const Providers = globalThis.BabelFishAIProviders;
             const adapters = globalThis.BabelFishAIProviderAdapters;
-            const auth =
-                globalThis.BabelFishAIProviders.getService(providerId, service)?.auth ??
-                adapters.DEFAULT_AUTH;
-            const requestHeaders = {
-                ...adapters.authHeaders(auth, apiKey),
-                ...headers,
-            };
-
+            const auth = Providers.getService(providerId, service)?.auth ?? Providers.DEFAULT_AUTH;
             return {
                 method,
-                headers: requestHeaders,
+                headers: adapters.requestHeaders(headers, adapters.authHeaders(auth, apiKey)),
                 body,
+                redirect: adapters.redirectPolicy(auth),
             };
         }
 

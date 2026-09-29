@@ -4,9 +4,6 @@
 globalThis.BabelFishAIProviderAdapters = (function () {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
-    // Authentification par défaut des API compatibles OpenAI
-    const DEFAULT_AUTH = Object.freeze({ header: 'Authorization', scheme: 'Bearer' });
-
     /**
      * Entête d'authentification d'un service, décrit par le registre (header, scheme)
      * @param {{header: string, scheme?: string}} auth - Authentification du service
@@ -16,6 +13,32 @@ globalThis.BabelFishAIProviderAdapters = (function () {
     function authHeaders(auth, apiKey) {
         const value = auth.scheme ? `${auth.scheme} ${apiKey}` : apiKey;
         return { [auth.header]: value };
+    }
+
+    /**
+     * Entêtes d'une requête : l'authentification du service en tête, puis les entêtes fournis,
+     * dont tout entête d'authentification connu du registre est retiré
+     * @param {Object|undefined} headers - Entêtes fournis par l'appelant ou le message du proxy
+     * @param {Object} authHeader - Entête construit par authHeaders ({} pour n'en poser aucun)
+     * @returns {Object}
+     */
+    function requestHeaders(headers, authHeader) {
+        const names = globalThis.BabelFishAIProviders.authHeaderNames();
+        const others = Object.entries(headers ?? {}).filter(
+            ([name]) => !names.has(name.toLowerCase()),
+        );
+        return { ...authHeader, ...Object.fromEntries(others) };
+    }
+
+    /**
+     * Politique de redirection d'une requête authentifiée. Lors d'un changement d'origine, la
+     * spec Fetch ne retire que l'entête Authorization : une clé portée par un autre entête
+     * suivrait la redirection, qui est donc refusée
+     * @param {{header: string}} auth - Authentification du service
+     * @returns {'follow'|'error'}
+     */
+    function redirectPolicy(auth) {
+        return auth.header.toLowerCase() === 'authorization' ? 'follow' : 'error';
     }
 
     /**
@@ -113,8 +136,9 @@ globalThis.BabelFishAIProviderAdapters = (function () {
     }
 
     return {
-        DEFAULT_AUTH,
         authHeaders,
+        requestHeaders,
+        redirectPolicy,
         getAdapter,
         extractMessageText,
     };
