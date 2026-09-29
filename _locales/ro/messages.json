@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Furnizori dintr-o versiune mai nouă",
+        "description": "Titlul secțiunii cu furnizorii salvați de o versiune mai nouă"
+    },
+    "unknownProvidersDescription": {
+        "message": "O versiune mai nouă a BabelFishAI, de exemplu pe un alt dispozitiv, a salvat acești furnizori. Această versiune nu îi poate folosi: le păstrează setările neschimbate. Ștergerea lor îi elimină de pe toate dispozitivele sincronizate.",
+        "description": "Explicația secțiunii cu furnizorii dintr-o versiune mai nouă"
+    },
+    "unknownProviderDelete": {
+        "message": "Șterge",
+        "description": "Buton care șterge setările unui furnizor dintr-o versiune mai nouă"
+    },
     "apiKeyPlaceholder": {
         "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"

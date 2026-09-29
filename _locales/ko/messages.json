@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "최신 버전의 제공업체",
+        "description": "최신 버전이 저장한 제공업체 섹션의 제목"
+    },
+    "unknownProvidersDescription": {
+        "message": "예를 들어 다른 기기에 있는 BabelFishAI 최신 버전이 이 제공업체들을 저장했습니다. 이 버전에서는 사용할 수 없으므로 설정을 그대로 유지합니다. 삭제하면 동기화된 모든 기기에서 제거됩니다.",
+        "description": "최신 버전의 제공업체 섹션에 대한 설명"
+    },
+    "unknownProviderDelete": {
+        "message": "삭제",
+        "description": "최신 버전 제공업체의 설정을 삭제하는 버튼"
+    },
     "apiKeyPlaceholder": {
         "message": "OpenAI API 키 (sk-...)",
         "description": "API 키 자리 표시자"

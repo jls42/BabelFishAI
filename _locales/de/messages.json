@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Provider aus einer neueren Version",
+        "description": "Titel des Abschnitts mit den Providern einer neueren Version"
+    },
+    "unknownProvidersDescription": {
+        "message": "Eine neuere Version von BabelFishAI, zum Beispiel auf einem anderen Gerät, hat diese Provider gespeichert. Diese Version kann sie nicht verwenden: Sie behält ihre Einstellungen unverändert bei. Wenn Sie sie löschen, werden sie von allen synchronisierten Geräten entfernt.",
+        "description": "Erklärung des Abschnitts mit den Providern einer neueren Version"
+    },
+    "unknownProviderDelete": {
+        "message": "Löschen",
+        "description": "Schaltfläche, die die Einstellungen eines Providers einer neueren Version löscht"
+    },
     "apiKeyPlaceholder": {
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"

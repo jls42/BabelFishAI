@@ -327,6 +327,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const futureSelection = { transcription: null, chat: null };
 
     const providerServices = document.getElementById('providerServices');
+    const unknownProvidersSection = document.getElementById('unknownProviders');
+    const unknownProvidersList = document.getElementById('unknownProvidersList');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
     const chatProviderSelect = document.getElementById('chatProvider');
 
@@ -752,6 +754,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Provider de chaque service : une sélection d'une version plus récente est gardée tant que
+     * son sélecteur n'a pas été changé, sinon la règle des providers activés s'applique
+     * @param {string[]} enabledProviders - Providers activés (getEnabledProviderIds)
+     * @returns {{transcriptionProvider: string, chatProvider: string}}
+     */
+    function serviceSelection(enabledProviders) {
+        const active = determineActiveProviders(
+            enabledProviders,
+            transcriptionProviderSelect,
+            chatProviderSelect,
+        );
+        return {
+            transcriptionProvider: futureSelection.transcription ?? active.transcriptionProvider,
+            chatProvider: futureSelection.chat ?? active.chatProvider,
+        };
+    }
+
+    /**
      * Clés des providers à enregistrer : configuration de chaque provider historique, provider
      * de chaque service et clé héritée
      * @returns {Object|null} providers, transcriptionProvider, chatProvider et apiKey, ou null si
@@ -768,16 +788,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             return null;
         }
 
-        // Déterminer les providers actifs pour la sélection de service. Une sélection d'une
-        // version plus récente est gardée tant que son sélecteur n'a pas été changé
+        // Déterminer les providers actifs pour la sélection de service
         const enabledProviders = getEnabledProviderIds();
-        const active = determineActiveProviders(
-            enabledProviders,
-            transcriptionProviderSelect,
-            chatProviderSelect,
-        );
-        const transcriptionProvider = futureSelection.transcription ?? active.transcriptionProvider;
-        const chatProvider = futureSelection.chat ?? active.chatProvider;
+        const { transcriptionProvider, chatProvider } = serviceSelection(enabledProviders);
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité. Les anciennes versions l'envoient
         // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI, et reste vide tant qu'OpenAI
@@ -840,6 +853,88 @@ document.addEventListener('DOMContentLoaded', async () => {
                 removals.forEach((id) => storedExtraProviders.delete(id));
             },
         );
+    }
+
+    // ===== Providers d'une version plus récente =====
+
+    /**
+     * Liste les providers dont une version plus récente a écrit la clé extraProvider.<id>.
+     * Tout le stockage est lu, mais seuls les noms de clés servent : les réglages, clés API
+     * comprises, ne sont jamais affichés ni journalisés
+     */
+    function loadUnknownProviders() {
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get(null, (items) => {
+            const ids = Object.keys(items)
+                .filter((key) => key.startsWith(EXTRA_PREFIX))
+                .map((key) => key.slice(EXTRA_PREFIX.length))
+                .filter((id) => !Providers.getProvider(id));
+            unknownProvidersList.replaceChildren(...ids.map(createUnknownProviderItem));
+            unknownProvidersSection.style.display = ids.length ? 'block' : 'none';
+        });
+    }
+
+    /**
+     * Ligne d'un provider d'une version plus récente : son identifiant et un bouton Effacer
+     * @param {string} providerId
+     * @returns {HTMLLIElement}
+     */
+    function createUnknownProviderItem(providerId) {
+        const item = document.createElement('li');
+        const name = document.createElement('code');
+        name.textContent = providerId;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.i18n = 'unknownProviderDelete';
+        button.textContent = i18n.getMessage('unknownProviderDelete');
+        button.addEventListener('click', () => deleteUnknownProvider(providerId));
+        item.append(name, button);
+        return item;
+    }
+
+    /**
+     * Efface les réglages d'un provider d'une version plus récente (contrat, point 4) : la
+     * sélection des services qui le visaient passe d'abord à un autre provider, puis sa clé est
+     * retirée. Un échec est affiché, et la clé reste listée, prête à être effacée de nouveau
+     * @param {string} providerId
+     */
+    function deleteUnknownProvider(providerId) {
+        const previous = { ...futureSelection };
+        if (futureSelection.transcription === providerId) futureSelection.transcription = null;
+        if (futureSelection.chat === providerId) futureSelection.chat = null;
+        if (previous.transcription !== providerId && previous.chat !== providerId) {
+            removeUnknownProvider(providerId);
+            return;
+        }
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.set(serviceSelection(getEnabledProviderIds()), () => {
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            const error = chrome.runtime.lastError;
+            if (error) {
+                Object.assign(futureSelection, previous);
+                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+                return;
+            }
+            removeUnknownProvider(providerId);
+        });
+    }
+
+    /**
+     * Retire la clé extraProvider.<id> d'un provider d'une version plus récente
+     * @param {string} providerId
+     */
+    function removeUnknownProvider(providerId) {
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.remove(`${EXTRA_PREFIX}${providerId}`, () => {
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            const error = chrome.runtime.lastError;
+            if (error) {
+                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+                return;
+            }
+            showStatus(i18n.getMessage('savedMessage'), 'success');
+            loadUnknownProviders();
+        });
     }
 
     // ===== Raccourci clavier sous Firefox =====
@@ -1458,6 +1553,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await i18n.init();
     setupProviderPasswordToggles();
     loadProvidersConfig();
+    loadUnknownProviders();
     loadOptions();
 
     // Initialiser le nouveau design dropdown + panel

@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Leverantörer från en nyare version",
+        "description": "Rubrik för avsnittet med leverantörer som sparats av en nyare version"
+    },
+    "unknownProvidersDescription": {
+        "message": "En nyare version av BabelFishAI, till exempel på en annan enhet, har sparat dessa leverantörer. Den här versionen kan inte använda dem: den behåller deras inställningar som de är. Om du tar bort dem tas de bort från alla dina synkroniserade enheter.",
+        "description": "Förklaring av avsnittet med leverantörer från en nyare version"
+    },
+    "unknownProviderDelete": {
+        "message": "Ta bort",
+        "description": "Knapp som tar bort inställningarna för en leverantör från en nyare version"
+    },
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"

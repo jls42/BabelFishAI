@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Providers uit een nieuwere versie",
+        "description": "Titel van de sectie met providers die door een nieuwere versie zijn opgeslagen"
+    },
+    "unknownProvidersDescription": {
+        "message": "Een nieuwere versie van BabelFishAI, bijvoorbeeld op een ander apparaat, heeft deze providers opgeslagen. Deze versie kan ze niet gebruiken: ze bewaart hun instellingen ongewijzigd. Als u ze verwijdert, worden ze van al uw gesynchroniseerde apparaten verwijderd.",
+        "description": "Uitleg bij de sectie met providers uit een nieuwere versie"
+    },
+    "unknownProviderDelete": {
+        "message": "Verwijderen",
+        "description": "Knop die de instellingen van een provider uit een nieuwere versie verwijdert"
+    },
     "apiKeyPlaceholder": {
         "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Plaatsaanduiding voor de API-sleutel"

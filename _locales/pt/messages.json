@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Provedores de uma versão mais recente",
+        "description": "Título da seção de provedores salvos por uma versão mais recente"
+    },
+    "unknownProvidersDescription": {
+        "message": "Uma versão mais recente do BabelFishAI, em outro dispositivo por exemplo, salvou estes provedores. Esta versão não consegue usá-los: mantém suas configurações como estão. Excluí-los os remove de todos os seus dispositivos sincronizados.",
+        "description": "Explicação da seção de provedores de uma versão mais recente"
+    },
+    "unknownProviderDelete": {
+        "message": "Excluir",
+        "description": "Botão que exclui as configurações de um provedor de uma versão mais recente"
+    },
     "apiKeyPlaceholder": {
         "message": "Sua chave API OpenAI (sk-...)",
         "description": "Espaço reservado para a chave API"

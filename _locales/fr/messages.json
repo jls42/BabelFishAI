@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "Providers d'une version plus récente",
+        "description": "Titre de la section des providers enregistrés par une version plus récente"
+    },
+    "unknownProvidersDescription": {
+        "message": "Une version plus récente de BabelFishAI, sur un autre poste par exemple, a enregistré ces providers. Cette version ne sait pas les utiliser : elle garde leurs réglages tels quels. Les effacer les retire de tous vos postes synchronisés.",
+        "description": "Explication de la section des providers d'une version plus récente"
+    },
+    "unknownProviderDelete": {
+        "message": "Effacer",
+        "description": "Bouton qui efface les réglages d'un provider d'une version plus récente"
+    },
     "apiKeyPlaceholder": {
         "message": "Votre clé API OpenAI (sk-...)",
         "description": "Placeholder pour la clé API"

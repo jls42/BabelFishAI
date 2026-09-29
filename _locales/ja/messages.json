@@ -113,6 +113,18 @@
             }
         }
     },
+    "unknownProvidersTitle": {
+        "message": "新しいバージョンのプロバイダー",
+        "description": "新しいバージョンが保存したプロバイダーのセクションの見出し"
+    },
+    "unknownProvidersDescription": {
+        "message": "BabelFishAIの新しいバージョン（たとえば別のデバイス上）がこれらのプロバイダーを保存しました。このバージョンでは使用できないため、設定をそのまま保持します。削除すると、同期しているすべてのデバイスから削除されます。",
+        "description": "新しいバージョンのプロバイダーのセクションの説明"
+    },
+    "unknownProviderDelete": {
+        "message": "削除",
+        "description": "新しいバージョンのプロバイダーの設定を削除するボタン"
+    },
     "apiKeyPlaceholder": {
         "message": "あなたのOpenAI APIキー（sk-...）",
         "description": "APIキーのプレースホルダー"

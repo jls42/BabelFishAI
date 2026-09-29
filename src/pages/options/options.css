@@ -1181,6 +1181,41 @@ input[type='color']:focus {
     font-weight: 600;
 }
 
+/* Providers d'une version plus récente (clés extraProvider.<id> inconnues de cette version) */
+.unknown-providers p {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
+}
+
+.unknown-providers ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.unknown-providers li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+}
+
+.unknown-providers button {
+    padding: var(--space-2) var(--space-4);
+    background: var(--primary-color-2);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.unknown-providers button:hover {
+    background: var(--primary-color-1);
+}
+
 /* Grid pour aligner labels et selects */
 .services-grid {
     display: grid;
