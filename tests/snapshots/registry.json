@@ -475,8 +475,7 @@
     },
     "données du registre": {
         "exports": [
-            "PROVIDERS",
-            "PROVIDER_ORDER",
+            "DEFAULT_AUTH",
             "acceptsTemperature",
             "createDefaultProvidersConfig",
             "detectProviderFromModel",
@@ -496,6 +495,7 @@
             "supportsNoLog",
             "supportsService"
         ],
+        "gele": true,
         "ordre": [
             "openai",
             "mistral",

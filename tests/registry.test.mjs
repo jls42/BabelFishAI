@@ -13,8 +13,9 @@ const SERVICES = ['transcription', 'chat'];
 
 test('données du registre', () => {
     matchSnapshot('données du registre', {
-        providers: registry.PROVIDERS,
-        ordre: registry.PROVIDER_ORDER,
+        providers: registry.getAllProviders(),
+        ordre: registry.getProviderOrder(),
+        gele: Object.isFrozen(registry.getProvider('openai').defaultUrls),
         exports: Object.keys(registry).sort(),
     });
 });

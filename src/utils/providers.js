@@ -1,122 +1,60 @@
 // Registre des providers IA pour l'extension BabelFishAI
 // Ce module définit les providers disponibles et leurs configurations
 
-globalThis.BabelFishAIProviders = (function () {
+globalThis.BabelFishAIProviders = (function (definitions) {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
-    // Authentification des API compatibles OpenAI : entête Authorization, schéma Bearer
-    const BEARER = Object.freeze({ header: 'Authorization', scheme: 'Bearer' });
-
-    // Services d'une API compatible OpenAI : dictée en multipart, texte par chat/completions,
-    // erreurs au format { error: { message } }. L'URL de chaque service est dans defaultUrls
-    const OPENAI_COMPATIBLE_SERVICES = Object.freeze({
-        transcription: Object.freeze({
-            format: 'openai-multipart',
-            auth: BEARER,
-            errors: 'openai',
-        }),
-        chat: Object.freeze({ format: 'openai-chat', auth: BEARER, errors: 'openai' }),
-    });
+    // Authentification par défaut d'un service : entête Authorization, schéma Bearer (API
+    // compatibles OpenAI)
+    const DEFAULT_AUTH = Object.freeze({ header: 'Authorization', scheme: 'Bearer' });
 
     /**
-     * Définition des providers IA disponibles
-     * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
-     * authentification, format d'erreur), sa présentation dans la page d'options (`ui` : rang,
-     * abréviation, nom du statut, logo ou emoji, page des clés) et ses modèles supportés.
-     * Un modèle peut porter `temperature: false` s'il refuse ce paramètre
+     * Gèle un objet et tout ce qu'il contient. L'invariant de sécurité tire du registre les
+     * hôtes vers lesquels part la clé d'un provider : rien ne doit pouvoir les changer ensuite
+     * @param {*} value
+     * @returns {*} La même valeur, gelée
      */
-    const PROVIDERS = {
-        openai: {
-            id: 'openai',
-            name: 'OpenAI',
-            defaultUrls: {
-                transcription: 'https://api.openai.com/v1/audio/transcriptions',
-                chat: 'https://api.openai.com/v1/chat/completions',
-            },
-            services: OPENAI_COMPATIBLE_SERVICES,
-            ui: {
-                order: 20,
-                short: 'OAI',
-                statusName: 'OpenAI',
-                logo: 'images/openai-logo.png',
-                keyUrl: 'https://platform.openai.com/account/api-keys',
-            },
-            // whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe sont retirés de l'API
-            // OpenAI le 2027-02-26, avec gpt-transcribe pour remplaçant recommandé
-            transcriptionModels: [
-                { id: 'gpt-transcribe', name: 'gpt-transcribe', default: true },
-                { id: 'whisper-1', name: 'whisper-1' },
-                { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
-                { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' },
-            ],
-            // Modèles retirés : gpt-4.1-nano et gpt-4o (réglages migrés par background.js)
-            chatModels: [
-                { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
-                { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
-                { id: 'gpt-4.1', name: 'gpt-4.1' },
-                { id: 'gpt-5.4-nano', name: 'gpt-5.4-nano' },
-                { id: 'gpt-5.4-mini', name: 'gpt-5.4-mini' },
-                { id: 'gpt-5.4', name: 'gpt-5.4' },
-                { id: 'gpt-5.6-luna', name: 'gpt-5.6-luna' },
-                { id: 'gpt-5.6-terra', name: 'gpt-5.6-terra' },
-                { id: 'gpt-5.6-sol', name: 'gpt-5.6-sol' },
-            ],
-            supportsNoLog: false, // NoLog est uniquement pour LiteLLM, pas OpenAI
-        },
-        mistral: {
-            id: 'mistral',
-            name: 'Mistral AI',
-            defaultUrls: {
-                transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
-                chat: 'https://api.mistral.ai/v1/chat/completions',
-            },
-            services: OPENAI_COMPATIBLE_SERVICES,
-            ui: {
-                order: 10,
-                short: 'Mis',
-                statusName: 'Mistral',
-                logo: 'images/mistral-logo.png',
-                keyUrl: 'https://console.mistral.ai/api-keys',
-            },
-            transcriptionModels: [
-                { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true },
-            ],
-            chatModels: [
-                { id: 'mistral-small-latest', name: 'Mistral Small', default: true },
-                { id: 'mistral-medium-latest', name: 'Mistral Medium' },
-                { id: 'mistral-large-latest', name: 'Mistral Large' },
-                { id: 'codestral-latest', name: 'Codestral' },
-                { id: 'ministral-3b-latest', name: 'Ministral 3B' },
-                { id: 'ministral-8b-latest', name: 'Ministral 8B' },
-                { id: 'ministral-14b-latest', name: 'Ministral 14B' },
-            ],
-            supportsNoLog: false,
-        },
-        custom: {
-            id: 'custom',
-            name: 'Custom/LiteLLM',
-            defaultUrls: { transcription: '', chat: '' },
-            // Les URLs viennent des réglages de l'utilisateur (urlSetting)
-            services: {
-                transcription: {
-                    ...OPENAI_COMPATIBLE_SERVICES.transcription,
-                    urlSetting: 'transcriptionUrl',
-                },
-                chat: { ...OPENAI_COMPATIBLE_SERVICES.chat, urlSetting: 'chatUrl' },
-            },
-            // Pas de logo officiel : l'emoji 🚅 de LiteLLM
-            ui: { order: 90, short: 'Cus', statusName: 'Custom', emoji: '🚅' },
-            transcriptionModels: [
-                { id: 'whisper-1', name: 'whisper-1', default: true },
-                { id: 'whisper', name: 'whisper' },
-            ],
-            chatModels: [{ id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }],
-            supportsNoLog: true,
-        },
-    };
+    function deepFreeze(value) {
+        if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+            Object.freeze(value);
+            Object.values(value).forEach(deepFreeze);
+        }
+        return value;
+    }
+
+    /**
+     * Complète un service : authentification Bearer et erreurs au format OpenAI
+     * ({ error: { message } }), sauf indication contraire de sa définition
+     * @param {Object} service
+     * @returns {Object}
+     */
+    function serviceWithDefaults(service) {
+        return { auth: DEFAULT_AUTH, errors: 'openai', ...service };
+    }
+
+    /**
+     * Applique une fonction à chaque valeur d'un objet
+     * @param {Object} object
+     * @param {Function} fn
+     * @returns {Object} Nouvel objet, mêmes clés dans le même ordre
+     */
+    function mapValues(object, fn) {
+        return Object.fromEntries(Object.entries(object).map((e) => e.with(1, fn(e[1]))));
+    }
+
+    /**
+     * Provider dont chaque service est complété par serviceWithDefaults
+     * @param {Object} provider
+     * @returns {Object}
+     */
+    function withServiceDefaults(provider) {
+        return { ...provider, services: mapValues(provider.services, serviceWithDefaults) };
+    }
+
+    const PROVIDERS = deepFreeze(mapValues(definitions.providers, withServiceDefaults));
 
     /** Liste ordonnée des IDs de providers (pour l'affichage UI) */
-    const PROVIDER_ORDER = ['openai', 'mistral', 'custom'];
+    const PROVIDER_ORDER = deepFreeze(definitions.order);
 
     /**
      * Récupère un provider par son ID
@@ -449,8 +387,7 @@ globalThis.BabelFishAIProviders = (function () {
     // API publique du module
     return {
         // Constantes
-        PROVIDERS,
-        PROVIDER_ORDER,
+        DEFAULT_AUTH,
 
         // Getters
         getProvider,
@@ -474,4 +411,108 @@ globalThis.BabelFishAIProviders = (function () {
         createDefaultProvidersConfig,
         isValidUrl,
     };
-})();
+})({
+    /**
+     * Définition des providers IA disponibles
+     * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
+     * et au besoin authentification, format d'erreur et réglage d'URL), sa présentation dans la
+     * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés) et
+     * ses modèles supportés. Un modèle peut porter `temperature: false` s'il refuse ce paramètre
+     */
+    providers: {
+        openai: {
+            id: 'openai',
+            name: 'OpenAI',
+            defaultUrls: {
+                transcription: 'https://api.openai.com/v1/audio/transcriptions',
+                chat: 'https://api.openai.com/v1/chat/completions',
+            },
+            // Dictée en multipart, texte par chat/completions (API compatible OpenAI)
+            services: {
+                transcription: { format: 'openai-multipart' },
+                chat: { format: 'openai-chat' },
+            },
+            ui: {
+                order: 20,
+                short: 'OAI',
+                statusName: 'OpenAI',
+                logo: 'images/openai-logo.png',
+                keyUrl: 'https://platform.openai.com/account/api-keys',
+            },
+            // whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe sont retirés de l'API
+            // OpenAI le 2027-02-26, avec gpt-transcribe pour remplaçant recommandé
+            transcriptionModels: [
+                { id: 'gpt-transcribe', name: 'gpt-transcribe', default: true },
+                { id: 'whisper-1', name: 'whisper-1' },
+                { id: 'gpt-4o-mini-transcribe', name: 'gpt-4o-mini-transcribe' },
+                { id: 'gpt-4o-transcribe', name: 'gpt-4o-transcribe' },
+            ],
+            // Modèles retirés : gpt-4.1-nano et gpt-4o (réglages migrés par background.js)
+            chatModels: [
+                { id: 'gpt-4o-mini', name: 'gpt-4o-mini', default: true },
+                { id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
+                { id: 'gpt-4.1', name: 'gpt-4.1' },
+                { id: 'gpt-5.4-nano', name: 'gpt-5.4-nano' },
+                { id: 'gpt-5.4-mini', name: 'gpt-5.4-mini' },
+                { id: 'gpt-5.4', name: 'gpt-5.4' },
+                { id: 'gpt-5.6-luna', name: 'gpt-5.6-luna' },
+                { id: 'gpt-5.6-terra', name: 'gpt-5.6-terra' },
+                { id: 'gpt-5.6-sol', name: 'gpt-5.6-sol' },
+            ],
+            supportsNoLog: false, // NoLog est uniquement pour LiteLLM, pas OpenAI
+        },
+        mistral: {
+            id: 'mistral',
+            name: 'Mistral AI',
+            defaultUrls: {
+                transcription: 'https://api.mistral.ai/v1/audio/transcriptions',
+                chat: 'https://api.mistral.ai/v1/chat/completions',
+            },
+            // Dictée en multipart, texte par chat/completions (API compatible OpenAI)
+            services: {
+                transcription: { format: 'openai-multipart' },
+                chat: { format: 'openai-chat' },
+            },
+            ui: {
+                order: 10,
+                short: 'Mis',
+                statusName: 'Mistral',
+                logo: 'images/mistral-logo.png',
+                keyUrl: 'https://console.mistral.ai/api-keys',
+            },
+            transcriptionModels: [
+                { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true },
+            ],
+            chatModels: [
+                { id: 'mistral-small-latest', name: 'Mistral Small', default: true },
+                { id: 'mistral-medium-latest', name: 'Mistral Medium' },
+                { id: 'mistral-large-latest', name: 'Mistral Large' },
+                { id: 'codestral-latest', name: 'Codestral' },
+                { id: 'ministral-3b-latest', name: 'Ministral 3B' },
+                { id: 'ministral-8b-latest', name: 'Ministral 8B' },
+                { id: 'ministral-14b-latest', name: 'Ministral 14B' },
+            ],
+            supportsNoLog: false,
+        },
+        custom: {
+            id: 'custom',
+            name: 'Custom/LiteLLM',
+            defaultUrls: { transcription: '', chat: '' },
+            // Les URLs viennent des réglages de l'utilisateur (urlSetting)
+            services: {
+                transcription: { format: 'openai-multipart', urlSetting: 'transcriptionUrl' },
+                chat: { format: 'openai-chat', urlSetting: 'chatUrl' },
+            },
+            // Pas de logo officiel : l'emoji 🚅 de LiteLLM
+            ui: { order: 90, short: 'Cus', statusName: 'Custom', emoji: '🚅' },
+            transcriptionModels: [
+                { id: 'whisper-1', name: 'whisper-1', default: true },
+                { id: 'whisper', name: 'whisper' },
+            ],
+            chatModels: [{ id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }],
+            supportsNoLog: true,
+        },
+    },
+    /** Liste ordonnée des IDs de providers (pour l'affichage UI) */
+    order: ['openai', 'mistral', 'custom'],
+});
