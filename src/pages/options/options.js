@@ -911,6 +911,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 
+    // ===== Écritures faites ailleurs (autre page d'options, autre poste) =====
+
+    /**
+     * Met à jour ce qui concerne les providers ajoutés et les versions plus récentes après une
+     * écriture faite ailleurs, sans jamais déclencher de sauvegarde (contrat, point 5). Un panneau
+     * généré modifié pendant la session garde la saisie de l'utilisateur ; les panneaux des
+     * providers historiques ne sont pas rafraîchis, comme avant la refonte
+     * @param {Object} changes - Changements de storage.sync
+     * @param {string} area - Zone de stockage modifiée
+     */
+    function handleStorageChanges(changes, area) {
+        if (area !== 'sync') return;
+        refreshFutureSelection(changes);
+        for (const id of generatedPanels.keys()) {
+            const key = `${EXTRA_PREFIX}${id}`;
+            if (Object.hasOwn(changes, key)) {
+                // eslint-disable-next-line security/detect-object-injection -- key vérifiée par Object.hasOwn
+                refreshGeneratedPanel(id, changes[key].newValue);
+            }
+        }
+        if (Object.keys(changes).some((key) => key.startsWith(EXTRA_PREFIX))) {
+            loadUnknownProviders();
+        }
+    }
+
+    /**
+     * Sélection d'une version plus récente écrite ou remplacée ailleurs
+     * @param {Object} changes - Changements de storage.sync
+     */
+    function refreshFutureSelection(changes) {
+        const before = { ...futureSelection };
+        if (Object.hasOwn(changes, 'transcriptionProvider')) {
+            futureSelection.transcription = unknownProviderId(
+                changes.transcriptionProvider.newValue,
+            );
+        }
+        if (Object.hasOwn(changes, 'chatProvider')) {
+            futureSelection.chat = unknownProviderId(changes.chatProvider.newValue);
+        }
+        if (
+            before.transcription !== futureSelection.transcription ||
+            before.chat !== futureSelection.chat
+        ) {
+            updateServiceSelectorsVisibility();
+        }
+    }
+
+    /**
+     * Configuration d'un provider généré écrite ou retirée ailleurs : l'état enregistré suit
+     * toujours le stockage, le panneau seulement s'il n'a pas été modifié pendant la session
+     * @param {string} providerId
+     * @param {*} value - Nouvelle valeur de sa clé extraProvider.<id> (undefined si retirée)
+     */
+    function refreshGeneratedPanel(providerId, value) {
+        const config = value && typeof value === 'object' ? value : {};
+        storedExtraConfigs.set(providerId, config);
+        if (Object.keys(config).length) {
+            storedExtraProviders.add(providerId);
+        } else {
+            storedExtraProviders.delete(providerId);
+        }
+        if (modifiedExtraProviders.has(providerId)) return;
+        loadPanelConfig(panels.get(providerId), config);
+        const models = (list) => (Array.isArray(list) ? list : []);
+        populateProviderModelSelect(
+            providerId,
+            'transcription',
+            models(config.transcriptionModels),
+            config.selectedTranscriptionModel,
+        );
+        populateProviderModelSelect(
+            providerId,
+            'chat',
+            models(config.chatModels),
+            config.selectedChatModel,
+        );
+        updateProviderDisplay(providerId);
+    }
+
     // ===== Providers d'une version plus récente =====
 
     /**
@@ -1640,6 +1719,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadProvidersConfig();
     loadUnknownProviders();
     loadOptions();
+    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+    chrome.storage.onChanged.addListener(handleStorageChanges);
 
     // Initialiser le nouveau design dropdown + panel
     showProviderConfig(providerSelector.value);
