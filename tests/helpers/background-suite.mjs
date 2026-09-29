@@ -346,6 +346,10 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
 const OPENAI_CHAT = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_TRANSCRIPTION = 'https://api.openai.com/v1/audio/transcriptions';
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
+const GEMINI_INTERACTIONS = 'https://generativelanguage.googleapis.com/v1beta/interactions';
+const GEMINI_CHAT = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+// Entêtes d'authentification forgés par un message : jamais relayés
+const FORGED_AUTH = { 'X-Goog-Api-Key': 'cle-forgee', Authorization: 'Bearer cle-forgee' };
 
 // Requêtes envoyées au proxy du background, telles que le content script les forme
 // (provider et service, sans entête d'authentification), et cas hostiles
@@ -460,6 +464,48 @@ const PROXY_CASES = {
         responses: [
             { networkError: new TypeError('NetworkError when attempting to fetch resource.') },
         ],
+    },
+    // Gemini : la politique de redirection et l'authentification viennent du registre, jamais du
+    // message. Clé de la dictée dans x-goog-api-key, sans redirection ; texte en Bearer
+    'gemini-dictee-redirection-forgee': {
+        storage: STORAGE.gemini,
+        request: {
+            url: GEMINI_INTERACTIONS,
+            providerId: 'gemini',
+            service: 'transcription',
+            options: {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { ...FORGED_AUTH, ...JSON_HEADERS },
+                body: '{"model":"gemini-3.5-transcribe","store":false}',
+            },
+        },
+        responses: [{ json: { status: 'completed' } }],
+    },
+    'gemini-texte-redirection-forgee': {
+        storage: STORAGE.gemini,
+        request: {
+            url: GEMINI_CHAT,
+            providerId: 'gemini',
+            service: 'chat',
+            options: {
+                method: 'POST',
+                redirect: 'manual',
+                headers: { ...FORGED_AUTH, ...JSON_HEADERS },
+                body: '{"model":"gemini-3.8-flash"}',
+            },
+        },
+        responses: [{ json: { choices: [{ message: { content: 'ok' } }] } }],
+    },
+    'gemini-dictee-hote-refuse': {
+        storage: STORAGE.gemini,
+        request: {
+            url: 'https://generativelanguage.googleapis.com.evil.example/v1beta/interactions',
+            providerId: 'gemini',
+            service: 'transcription',
+            options: { method: 'POST', headers: {} },
+        },
+        responses: [{ json: {} }],
     },
     'http-502-html': {
         storage: STORAGE.openai,

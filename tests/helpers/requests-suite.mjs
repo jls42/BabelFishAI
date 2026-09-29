@@ -448,6 +448,11 @@ function defineNetworkTests({ actions, play, matchSnapshot }) {
 const ALLOWLIST_IDENTITIES = {
     openai: { providerId: 'openai', apiKey: KEYS.openai },
     custom: { providerId: 'custom', apiKey: KEYS.custom },
+    gemini: { providerId: 'gemini', apiKey: KEYS.gemini },
+};
+const GEMINI_DICTATION = {
+    ...{ providerId: 'gemini', apiKey: KEYS.gemini },
+    service: 'transcription',
 };
 
 // Custom dont l'URL de chat est celle d'OpenAI : sa clé peut y partir, c'est son URL
@@ -495,13 +500,58 @@ const INVARIANT_CASES = {
         STORAGE.openai,
         { url: 'https://api.openai.com:8443/v1/chat/completions', ...ALLOWLIST_IDENTITIES.openai },
     ],
+    // Gemini, dont la clé de dictée part dans x-goog-api-key : origine exacte sur les deux services
+    'dictée : clé Gemini vers son URL': [
+        STORAGE.gemini,
+        {
+            url: 'https://generativelanguage.googleapis.com/v1beta/interactions',
+            ...GEMINI_DICTATION,
+        },
+    ],
+    'dictée : clé Gemini vers un hôte qui prolonge le sien': [
+        STORAGE.gemini,
+        {
+            url: 'https://generativelanguage.googleapis.com.evil.example/v1beta/interactions',
+            ...GEMINI_DICTATION,
+        },
+    ],
+    'dictée : clé Gemini vers un autre sous-domaine de googleapis.com': [
+        STORAGE.gemini,
+        { url: 'https://evil.googleapis.com/v1beta/interactions', ...GEMINI_DICTATION },
+    ],
+    'dictée : clé Gemini vers un autre port': [
+        STORAGE.gemini,
+        {
+            url: 'https://generativelanguage.googleapis.com:8443/v1beta/interactions',
+            ...GEMINI_DICTATION,
+        },
+    ],
+    'dictée : clé Gemini en http': [
+        STORAGE.gemini,
+        {
+            url: 'http://generativelanguage.googleapis.com/v1beta/interactions',
+            ...GEMINI_DICTATION,
+        },
+    ],
+    'texte : clé Gemini vers api.openai.com': [
+        STORAGE.gemini,
+        { url: OPENAI_CHAT_URL, ...ALLOWLIST_IDENTITIES.gemini },
+    ],
+    'dictée : clé OpenAI vers un hôte hors de ses URLs': [
+        STORAGE.openai,
+        {
+            url: 'https://evil.example/v1/audio/transcriptions',
+            ...ALLOWLIST_IDENTITIES.openai,
+            service: 'transcription',
+        },
+    ],
 };
 
 /**
- * Appelle callApi directement sur un stockage (service chat)
+ * Appelle callApi directement sur un stockage (service chat, sauf si la requête en donne un autre)
  * @param {Object} h - Harnais
  * @param {Object} storage
- * @param {Object} request - url, providerId, apiKey
+ * @param {Object} request - url, providerId, apiKey, et au besoin service
  * @returns {Promise<Object>} Résultat et nombre de requêtes émises
  */
 async function callDirectly({ env, utils }, storage, request) {

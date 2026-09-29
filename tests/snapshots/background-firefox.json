@@ -3767,6 +3767,74 @@
             }
         ]
     },
+    "proxy du background : gemini-dictee-hote-refuse": {
+        "reponse": {
+            "error": "URL non autorisée côté background (defense-in-depth).",
+            "errorName": "UrlNotAllowedError",
+            "success": false
+        },
+        "requetes": []
+    },
+    "proxy du background : gemini-dictee-redirection-forgee": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"status\":\"completed\"}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-transcribe\",\"store\":false}",
+                "headers": [
+                    [
+                        "x-goog-api-key",
+                        "{cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "error",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        ]
+    },
+    "proxy du background : gemini-texte-redirection-forgee": {
+        "reponse": {
+            "contentType": "application/json",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "rawText": "{\"choices\":[{\"message\":{\"content\":\"ok\"}}]}",
+            "status": 200,
+            "statusText": "",
+            "success": true
+        },
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ]
+    },
     "proxy du background : hote-custom-actif": {
         "reponse": {
             "contentType": "application/json",

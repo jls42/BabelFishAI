@@ -30,6 +30,12 @@ const URLS = [
     'http://[::1]:4000/v1/chat/completions',
     'data:text/plain,bonjour',
     'pas une url',
+    'https://generativelanguage.googleapis.com/v1beta/interactions',
+    'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+    'https://generativelanguage.googleapis.com.evil.example/v1beta/interactions',
+    'https://evil.googleapis.com/v1beta/interactions',
+    'https://generativelanguage.googleapis.com:8443/v1beta/interactions',
+    'http://generativelanguage.googleapis.com/v1beta/interactions',
 ];
 
 test('invariant : URL autorisées par provider', () => {
@@ -40,6 +46,9 @@ test('invariant : URL autorisées par provider', () => {
         ['custom', 'custom'],
         ['openai', 'custom'],
         ['vide', 'openai'],
+        ['gemini', 'gemini'],
+        ['gemini', 'openai'],
+        ['openai', 'gemini'],
     ]) {
         result[`${name} → ${providerId}`] = Object.fromEntries(
             URLS.map((url) => [url, store.isUrlAllowedForProvider(STORAGE[name], providerId, url)]),

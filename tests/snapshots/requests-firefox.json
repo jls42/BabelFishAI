@@ -120,6 +120,48 @@
             "requetes": 0
         }
     },
+    "allowlist du content script : gemini": {
+        "ftp://api.openai.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://127.0.0.1:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://example.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "http://localhost:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.mistral.ai/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.openai.com.evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://api.openai.com/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://evil.example/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "https://localhost:4000/v1/chat/completions": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "pas une url": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        }
+    },
     "allowlist du content script : openai": {
         "ftp://api.openai.com/v1/chat/completions": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
@@ -2434,12 +2476,42 @@
             "erreur": "Error: Erreur lors de l'appel à l'API: la clé API ne correspond pas au provider configuré.",
             "requetes": 0
         },
+        "dictée : clé Gemini en http": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "dictée : clé Gemini vers son URL": {
+            "requetes": 1,
+            "valeur": {
+                "ok": true
+            }
+        },
+        "dictée : clé Gemini vers un autre port": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "dictée : clé Gemini vers un autre sous-domaine de googleapis.com": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "dictée : clé Gemini vers un hôte qui prolonge le sien": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "dictée : clé OpenAI vers un hôte hors de ses URLs": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
         "provider absent": {
             "erreur": "Error: Erreur lors de l'appel à l'API: provider ou service non indiqué pour la requête.",
             "requetes": 0
         },
         "provider qui n’est pas celui du stockage pour ce service": {
             "erreur": "Error: Erreur lors de l'appel à l'API: la clé API ne correspond pas au provider configuré.",
+            "requetes": 0
+        },
+        "texte : clé Gemini vers api.openai.com": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
             "requetes": 0
         }
     },
