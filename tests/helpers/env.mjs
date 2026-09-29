@@ -97,7 +97,8 @@ async function describeBody(body) {
 }
 
 /**
- * Décrit une requête fetch de façon comparable
+ * Décrit une requête fetch de façon comparable, politique de redirection comprise (absente si
+ * l'appelant n'en donne pas)
  * @param {string} url
  * @param {Object} options
  * @returns {Promise<Object>}
@@ -108,6 +109,7 @@ export async function describeRequest(url, options = {}) {
         method: options.method ?? 'GET',
         headers: describeHeaders(options.headers),
         body: await describeBody(options.body),
+        redirect: options.redirect,
     };
 }
 

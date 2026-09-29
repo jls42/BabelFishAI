@@ -3741,6 +3741,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         ]
@@ -3761,6 +3762,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "https://api.openai.com/v1/chat/completions"
             }
         ]
@@ -3786,6 +3788,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "http://localhost:4000/v1/chat/completions"
             }
         ]
@@ -3827,6 +3830,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "https://api.openai.com/v1/chat/completions"
             }
         ]
@@ -3864,6 +3868,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "https://api.openai.com/v1/chat/completions"
             }
         ]
@@ -3914,6 +3919,7 @@
                     ]
                 ],
                 "method": "POST",
+                "redirect": "follow",
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         ]
