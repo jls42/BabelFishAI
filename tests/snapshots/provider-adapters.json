@@ -53,7 +53,8 @@
             "X-Autre": "garde"
         },
         "nomsDuRegistre": [
-            "authorization"
+            "authorization",
+            "x-goog-api-key"
         ],
         "redirection": {
             "bearer": "follow",
@@ -111,6 +112,14 @@
         "custom.transcription": [
             "openai-multipart",
             "openai"
+        ],
+        "gemini.chat": [
+            "openai-chat",
+            "gemini"
+        ],
+        "gemini.transcription": [
+            "gemini-interactions",
+            "gemini"
         ],
         "mistral.chat": [
             "openai-chat",

@@ -10,6 +10,7 @@ export const KEYS = {
     custom: 'cle-custom-factice',
     litellm: 'cle-litellm-factice',
     gemini: 'cle-gemini-factice',
+    'provider-futur': 'cle-provider-futur-factice',
 };
 
 export const CUSTOM_URLS = {
@@ -160,10 +161,31 @@ export const STORAGE = {
     // Un provider inconnu du registre rangé dans `providers` (ce que le plan interdit d'écrire) :
     // les versions publiées enverraient sa clé aux URLs OpenAI
     'provider-inconnu-dans-providers': {
-        providers: { ...providers(), gemini: { enabled: true, apiKey: KEYS.gemini } },
-        transcriptionProvider: 'gemini',
+        providers: {
+            ...providers(),
+            'provider-futur': { enabled: true, apiKey: KEYS['provider-futur'] },
+        },
+        transcriptionProvider: 'provider-futur',
         chatProvider: 'openai',
         apiKey: '',
+    },
+    // Gemini seul, écrit par la page d'options de cette version : sa configuration dans sa propre
+    // clé, les providers historiques désactivés
+    gemini: {
+        providers: providers(),
+        transcriptionProvider: 'gemini',
+        chatProvider: 'gemini',
+        apiKey: '',
+        'extraProvider.gemini': { enabled: true, apiKey: KEYS.gemini },
+    },
+    // Sélection écrite par une version plus récente, pour un provider inconnu de cette version
+    // (S1 du plan, depuis que Gemini est connu) : sa clé ne doit partir nulle part
+    'version-future-S1': {
+        providers: providers({ openai: { enabled: false, apiKey: KEYS.openai } }),
+        transcriptionProvider: 'provider-futur',
+        chatProvider: 'provider-futur',
+        apiKey: '',
+        'extraProvider.provider-futur': { enabled: true, apiKey: KEYS['provider-futur'] },
     },
     'identifiant-prototype': {
         providers: providers({ mistral: { enabled: true, apiKey: KEYS.mistral } }),

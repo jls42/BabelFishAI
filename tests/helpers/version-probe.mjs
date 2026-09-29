@@ -30,25 +30,39 @@ await loadScripts(
 );
 const utils = globalThis.BabelFishAIUtils;
 
+// Réponse lisible par tous les formats : transcription OpenAI (`text`), chat (`choices`) et
+// transcription par l'Interactions API de Gemini (`status`, `steps`)
+const OK_ALL_FORMATS = {
+    text: 'ok',
+    choices: [{ message: { content: 'ok' } }],
+    status: 'completed',
+    steps: [{ type: 'model_output', content: [{ type: 'text', text: 'ok' }] }],
+};
+
 /**
- * Joue un appel et le résume : valeur ou erreur, et requêtes émises (hôte et entête d'autorisation)
+ * Joue un appel et le résume : valeur ou erreur, et requêtes émises (hôte et entête d'autorisation,
+ * plus x-goog-api-key quand la clé part dans cet entête)
  * @param {Function} fn
  * @returns {Promise<Object>}
  */
 async function probe(fn) {
     env.http.clear();
-    env.http.respond({ json: { text: 'ok', choices: [{ message: { content: 'ok' } }] } });
+    env.http.respond({ json: OK_ALL_FORMATS });
     let outcome;
     try {
         outcome = { valeur: await fn() };
     } catch (error) {
         outcome = { erreur: error.message };
     }
-    const requetes = env.http.requests.map((r) => ({
-        hote: new URL(r.url).host,
-        autorisation:
-            r.headers.find(([name]) => name.toLowerCase() === 'authorization')?.[1] ?? null,
-    }));
+    const requetes = env.http.requests.map((r) => {
+        const header = (wanted) => r.headers.find(([name]) => name.toLowerCase() === wanted)?.[1];
+        const googleKey = header('x-goog-api-key');
+        return {
+            hote: new URL(r.url).host,
+            autorisation: header('authorization') ?? null,
+            ...(googleKey ? { 'x-goog-api-key': googleKey } : {}),
+        };
+    });
     return { ...outcome, requetes };
 }
 

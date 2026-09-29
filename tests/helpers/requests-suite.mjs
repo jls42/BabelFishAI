@@ -61,6 +61,8 @@ const STORAGES_PER_ACTION = [
     'herite-litellm',
     'tout-desactive',
     'futur-S1',
+    'gemini',
+    'version-future-S1',
     'provider-inconnu-dans-providers',
 ];
 
@@ -229,12 +231,29 @@ async function createRequestHarness(browser, testFileUrl) {
 }
 
 /** Chaque action sur chaque stockage, puis la réponse en blocs de Mistral */
+/**
+ * Réponse réussie d'une action pour un stockage : la dictée par Gemini répond au format de
+ * l'Interactions API, tout le reste au format OpenAI
+ * @param {string} action
+ * @param {Object} storage
+ * @returns {Object}
+ */
+function okResponse(action, storage) {
+    if (action === 'transcription' && storage.transcriptionProvider === 'gemini') {
+        return { json: GEMINI_INTERACTIONS.terminee };
+    }
+    return OK[action];
+}
+
 function defineProviderTests({ actions, play, matchSnapshot }) {
     for (const name of STORAGES_PER_ACTION) {
         for (const action of Object.keys(actions)) {
             const key = `${action} : ${name}`;
             test(key, async () =>
-                matchSnapshot(key, await play(action, STORAGE[name], [OK[action]])),
+                matchSnapshot(
+                    key,
+                    await play(action, STORAGE[name], [okResponse(action, STORAGE[name])]),
+                ),
             );
         }
     }

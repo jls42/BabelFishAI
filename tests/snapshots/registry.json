@@ -97,20 +97,33 @@
                 true,
                 true
             ],
-            "getChatUrl": "https://api.openai.com/v1/chat/completions",
-            "getDefaultModel(chat)": null,
-            "getDefaultModel(transcription)": null,
-            "getProvider": null,
-            "getService(chat)": null,
-            "getService(transcription)": null,
-            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "getChatUrl": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+            "getDefaultModel(chat)": "gemini-3.8-flash",
+            "getDefaultModel(transcription)": "gemini-3.5-transcribe",
+            "getProvider": "gemini",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "gemini",
+                "format": "openai-chat"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "x-goog-api-key"
+                },
+                "errors": "gemini",
+                "format": "gemini-interactions"
+            },
+            "getTranscriptionUrl": "https://generativelanguage.googleapis.com/v1beta/interactions",
             "isModelAvailable(chat, inconnu)": false,
             "isModelAvailable(chat, perso)": true,
             "isModelAvailable(transcription, inconnu)": false,
             "isModelAvailable(transcription, perso)": true,
             "supportsNoLog": false,
-            "supportsService(chat)": false,
-            "supportsService(transcription)": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
@@ -189,6 +202,31 @@
             "supportsNoLog": false,
             "supportsService(chat)": true,
             "supportsService(transcription)": true,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "provider-futur": {
+            "acceptsTemperature": [
+                true,
+                true,
+                true
+            ],
+            "getChatUrl": "https://api.openai.com/v1/chat/completions",
+            "getDefaultModel(chat)": null,
+            "getDefaultModel(transcription)": null,
+            "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
+            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
             "urlsPersonnalisees": [
                 "http://localhost:4000/t",
                 "x"
@@ -426,11 +464,13 @@
         "getProviderOrder": [
             "openai",
             "mistral",
-            "custom"
+            "custom",
+            "gemini"
         ],
         "getUiOrder": [
             "mistral",
             "openai",
+            "gemini",
             "custom"
         ],
         "isValidUrl": [
@@ -500,7 +540,8 @@
         "ordre": [
             "openai",
             "mistral",
-            "custom"
+            "custom",
+            "gemini"
         ],
         "providers": {
             "custom": {
@@ -554,6 +595,60 @@
                     "order": 90,
                     "short": "Cus",
                     "statusName": "Custom"
+                }
+            },
+            "gemini": {
+                "chatModels": [
+                    {
+                        "default": true,
+                        "id": "gemini-3.8-flash",
+                        "name": "Gemini 3.8 Flash",
+                        "reasoningEffort": "low",
+                        "temperature": false
+                    },
+                    {
+                        "id": "gemini-3.5-flash-lite",
+                        "name": "Gemini 3.5 Flash-Lite",
+                        "temperature": false
+                    }
+                ],
+                "defaultUrls": {
+                    "chat": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+                    "transcription": "https://generativelanguage.googleapis.com/v1beta/interactions"
+                },
+                "id": "gemini",
+                "name": "Gemini",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "gemini",
+                        "format": "openai-chat"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "x-goog-api-key"
+                        },
+                        "errors": "gemini",
+                        "format": "gemini-interactions"
+                    }
+                },
+                "supportsNoLog": false,
+                "transcriptionModels": [
+                    {
+                        "default": true,
+                        "id": "gemini-3.5-transcribe",
+                        "name": "Gemini 3.5 Transcribe"
+                    }
+                ],
+                "ui": {
+                    "emoji": "♊",
+                    "keyUrl": "https://aistudio.google.com/apikey",
+                    "order": 30,
+                    "short": "Gem",
+                    "statusName": "Gemini"
                 }
             },
             "mistral": {

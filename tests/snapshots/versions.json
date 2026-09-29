@@ -1,86 +1,130 @@
 {
     "arbre testé : S1 : futur provider seul, apiKey vide": {
         "chat": {
-            "cle": null,
-            "hote": "api.openai.com",
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
             "provider": "gemini"
         },
         "dictee": {
-            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": null,
+                    "hote": "generativelanguage.googleapis.com",
+                    "x-goog-api-key": "{cle gemini}"
+                }
+            ],
+            "valeur": "ok "
         },
-        "getApiKey": null,
+        "getApiKey": "{cle gemini}",
         "reformulation": {
-            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle gemini}",
+                    "hote": "generativelanguage.googleapis.com"
+                }
+            ],
+            "valeur": "ok"
         },
         "transcription": {
-            "cle": null,
-            "hote": "api.openai.com",
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
             "provider": "gemini"
         }
     },
     "arbre testé : S1 : futur provider seul, clé OpenAI résiduelle dans apiKey": {
         "chat": {
-            "cle": null,
-            "hote": "api.openai.com",
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
             "provider": "gemini"
         },
         "dictee": {
-            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": null,
+                    "hote": "generativelanguage.googleapis.com",
+                    "x-goog-api-key": "{cle gemini}"
+                }
+            ],
+            "valeur": "ok "
         },
-        "getApiKey": null,
+        "getApiKey": "{cle gemini}",
         "reformulation": {
-            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle gemini}",
+                    "hote": "generativelanguage.googleapis.com"
+                }
+            ],
+            "valeur": "ok"
         },
         "transcription": {
-            "cle": null,
-            "hote": "api.openai.com",
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
             "provider": "gemini"
         }
     },
     "arbre testé : S1-A : sélection openai, apiKey vide": {
         "chat": {
-            "cle": null,
-            "hote": "api.openai.com",
-            "provider": "openai"
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
+            "provider": "gemini"
         },
         "dictee": {
-            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": null,
+                    "hote": "generativelanguage.googleapis.com",
+                    "x-goog-api-key": "{cle gemini}"
+                }
+            ],
+            "valeur": "ok "
         },
-        "getApiKey": null,
+        "getApiKey": "{cle gemini}",
         "reformulation": {
-            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle gemini}",
+                    "hote": "generativelanguage.googleapis.com"
+                }
+            ],
+            "valeur": "ok"
         },
         "transcription": {
-            "cle": null,
-            "hote": "api.openai.com",
-            "provider": "openai"
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
+            "provider": "gemini"
         }
     },
     "arbre testé : S1-A : sélection openai, clé OpenAI résiduelle dans apiKey": {
         "chat": {
-            "cle": null,
-            "hote": "api.openai.com",
-            "provider": "openai"
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
+            "provider": "gemini"
         },
         "dictee": {
-            "erreur": "Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": null,
+                    "hote": "generativelanguage.googleapis.com",
+                    "x-goog-api-key": "{cle gemini}"
+                }
+            ],
+            "valeur": "ok "
         },
-        "getApiKey": null,
+        "getApiKey": "{cle gemini}",
         "reformulation": {
-            "erreur": "Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
-            "requetes": []
+            "requetes": [
+                {
+                    "autorisation": "Bearer {cle gemini}",
+                    "hote": "generativelanguage.googleapis.com"
+                }
+            ],
+            "valeur": "ok"
         },
         "transcription": {
-            "cle": null,
-            "hote": "api.openai.com",
-            "provider": "openai"
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
+            "provider": "gemini"
         }
     },
     "arbre testé : S2 : futur provider en dictée, Mistral en texte": {
@@ -92,13 +136,14 @@
         "dictee": {
             "requetes": [
                 {
-                    "autorisation": "Bearer {cle mistral}",
-                    "hote": "api.mistral.ai"
+                    "autorisation": null,
+                    "hote": "generativelanguage.googleapis.com",
+                    "x-goog-api-key": "{cle gemini}"
                 }
             ],
             "valeur": "ok "
         },
-        "getApiKey": "{cle mistral}",
+        "getApiKey": "{cle gemini}",
         "reformulation": {
             "requetes": [
                 {
@@ -109,9 +154,9 @@
             "valeur": "ok"
         },
         "transcription": {
-            "cle": "{cle mistral}",
-            "hote": "api.mistral.ai",
-            "provider": "mistral"
+            "cle": "{cle gemini}",
+            "hote": "generativelanguage.googleapis.com",
+            "provider": "gemini"
         }
     },
     "arbre testé : mistral": {

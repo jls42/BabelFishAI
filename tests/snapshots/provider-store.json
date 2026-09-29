@@ -25,19 +25,19 @@
             "provider": "mistral"
         },
         "futur-S1 (chat)": {
-            "cle": null,
+            "cle": "{cle gemini}",
             "provider": "gemini"
         },
         "futur-S1 (transcription)": {
-            "cle": null,
+            "cle": "{cle gemini}",
             "provider": "gemini"
         },
         "futur-S1-cle-heritee (chat)": {
-            "cle": null,
+            "cle": "{cle gemini}",
             "provider": "gemini"
         },
         "futur-S1-cle-heritee (transcription)": {
-            "cle": null,
+            "cle": "{cle gemini}",
             "provider": "gemini"
         },
         "futur-S2 (chat)": {
@@ -45,8 +45,16 @@
             "provider": "mistral"
         },
         "futur-S2 (transcription)": {
-            "cle": "{cle mistral}",
-            "provider": "mistral"
+            "cle": "{cle gemini}",
+            "provider": "gemini"
+        },
+        "gemini (chat)": {
+            "cle": "{cle gemini}",
+            "provider": "gemini"
+        },
+        "gemini (transcription)": {
+            "cle": "{cle gemini}",
+            "provider": "gemini"
         },
         "herite-litellm (chat)": {
             "cle": null,
@@ -134,7 +142,7 @@
         },
         "provider-inconnu-dans-providers (transcription)": {
             "cle": null,
-            "provider": "gemini"
+            "provider": "provider-futur"
         },
         "tout-desactive (chat)": {
             "cle": null,
@@ -143,6 +151,14 @@
         "tout-desactive (transcription)": {
             "cle": null,
             "provider": "openai"
+        },
+        "version-future-S1 (chat)": {
+            "cle": null,
+            "provider": "provider-futur"
+        },
+        "version-future-S1 (transcription)": {
+            "cle": null,
+            "provider": "provider-futur"
         },
         "vide (chat)": {
             "cle": null,
@@ -156,6 +172,7 @@
     "clés de stockage à lire": {
         "apiKey": "",
         "chatProvider": "openai",
+        "extraProvider.gemini": null,
         "providers": null,
         "transcriptionProvider": "openai"
     },

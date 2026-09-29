@@ -124,10 +124,10 @@
     },
     "configuration résolue : futur-S1": {
         "getApiKey(chat)": {
-            "valeur": null
+            "valeur": "{cle gemini}"
         },
         "getApiKey(transcription)": {
-            "valeur": null
+            "valeur": "{cle gemini}"
         },
         "getApiKeyForProvider(custom)": {
             "valeur": null
@@ -139,36 +139,36 @@
             "valeur": "{cle openai}"
         },
         "getOrFetchApiKey(chat)": {
-            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "{cle gemini}"
         },
         "getOrFetchApiKey(transcription)": {
-            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "{cle gemini}"
         },
         "resolveApiConfig(chat)": {
             "valeur": {
-                "apiKey": null,
+                "apiKey": "{cle gemini}",
                 "disableLogging": false,
-                "model": "gpt-4o-mini",
+                "model": "gemini-3.8-flash",
                 "providerId": "gemini",
-                "url": "https://api.openai.com/v1/chat/completions"
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
             }
         },
         "resolveApiConfig(transcription)": {
             "valeur": {
-                "apiKey": null,
+                "apiKey": "{cle gemini}",
                 "disableLogging": false,
-                "model": "gpt-transcribe",
+                "model": "gemini-3.5-transcribe",
                 "providerId": "gemini",
-                "url": "https://api.openai.com/v1/audio/transcriptions"
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
             }
         }
     },
     "configuration résolue : futur-S1-cle-heritee": {
         "getApiKey(chat)": {
-            "valeur": null
+            "valeur": "{cle gemini}"
         },
         "getApiKey(transcription)": {
-            "valeur": null
+            "valeur": "{cle gemini}"
         },
         "getApiKeyForProvider(custom)": {
             "valeur": null
@@ -180,27 +180,27 @@
             "valeur": "{cle openai}"
         },
         "getOrFetchApiKey(chat)": {
-            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "{cle gemini}"
         },
         "getOrFetchApiKey(transcription)": {
-            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "{cle gemini}"
         },
         "resolveApiConfig(chat)": {
             "valeur": {
-                "apiKey": null,
+                "apiKey": "{cle gemini}",
                 "disableLogging": false,
-                "model": "gpt-4o-mini",
+                "model": "gemini-3.8-flash",
                 "providerId": "gemini",
-                "url": "https://api.openai.com/v1/chat/completions"
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
             }
         },
         "resolveApiConfig(transcription)": {
             "valeur": {
-                "apiKey": null,
+                "apiKey": "{cle gemini}",
                 "disableLogging": false,
-                "model": "gpt-transcribe",
+                "model": "gemini-3.5-transcribe",
                 "providerId": "gemini",
-                "url": "https://api.openai.com/v1/audio/transcriptions"
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
             }
         }
     },
@@ -209,7 +209,7 @@
             "valeur": "{cle mistral}"
         },
         "getApiKey(transcription)": {
-            "valeur": "{cle mistral}"
+            "valeur": "{cle gemini}"
         },
         "getApiKeyForProvider(custom)": {
             "valeur": null
@@ -224,7 +224,7 @@
             "valeur": "{cle mistral}"
         },
         "getOrFetchApiKey(transcription)": {
-            "valeur": "{cle mistral}"
+            "valeur": "{cle gemini}"
         },
         "resolveApiConfig(chat)": {
             "valeur": {
@@ -237,11 +237,52 @@
         },
         "resolveApiConfig(transcription)": {
             "valeur": {
-                "apiKey": "{cle mistral}",
+                "apiKey": "{cle gemini}",
                 "disableLogging": false,
-                "model": "voxtral-mini-latest",
-                "providerId": "mistral",
-                "url": "https://api.mistral.ai/v1/audio/transcriptions"
+                "model": "gemini-3.5-transcribe",
+                "providerId": "gemini",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        }
+    },
+    "configuration résolue : gemini": {
+        "getApiKey(chat)": {
+            "valeur": "{cle gemini}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle gemini}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle gemini}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle gemini}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle gemini}",
+                "disableLogging": false,
+                "model": "gemini-3.8-flash",
+                "providerId": "gemini",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle gemini}",
+                "disableLogging": false,
+                "model": "gemini-3.5-transcribe",
+                "providerId": "gemini",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
             }
         }
     },
@@ -691,7 +732,7 @@
                 "apiKey": null,
                 "disableLogging": false,
                 "model": "gpt-transcribe",
-                "providerId": "gemini",
+                "providerId": "provider-futur",
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         }
@@ -733,6 +774,47 @@
                 "disableLogging": false,
                 "model": "gpt-transcribe",
                 "providerId": "openai",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        }
+    },
+    "configuration résolue : version-future-S1": {
+        "getApiKey(chat)": {
+            "valeur": null
+        },
+        "getApiKey(transcription)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": "{cle openai}"
+        },
+        "getOrFetchApiKey(chat)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "getOrFetchApiKey(transcription)": {
+            "erreur": "Error: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-4o-mini",
+                "providerId": "provider-futur",
+                "url": "https://api.openai.com/v1/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": null,
+                "disableLogging": false,
+                "model": "gpt-transcribe",
+                "providerId": "provider-futur",
                 "url": "https://api.openai.com/v1/audio/transcriptions"
             }
         }

@@ -529,7 +529,52 @@ globalThis.BabelFishAIProviders = (function (definitions) {
             chatModels: [{ id: 'gpt-4o-mini', name: 'GPT-4o Mini', default: true }],
             supportsNoLog: true,
         },
+        gemini: {
+            id: 'gemini',
+            name: 'Gemini',
+            defaultUrls: {
+                transcription: 'https://generativelanguage.googleapis.com/v1beta/interactions',
+                chat: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+            },
+            // Dictée par l'Interactions API (audio en base64, store: false), clé dans
+            // x-goog-api-key ; texte par la couche compatible OpenAI, en Bearer. Une clé refusée
+            // répond 400, dans un corps d'erreur propre à Gemini (mesures du 2026-09-29)
+            services: {
+                transcription: {
+                    format: 'gemini-interactions',
+                    auth: { header: 'x-goog-api-key' },
+                    errors: 'gemini',
+                },
+                chat: { format: 'openai-chat', errors: 'gemini' },
+            },
+            // Pas de logo : les règles de marque de Google exigent une approbation des visuels.
+            // Le signe zodiacal Gemini est un caractère Unicode
+            ui: {
+                order: 30,
+                short: 'Gem',
+                statusName: 'Gemini',
+                emoji: '♊',
+                keyUrl: 'https://aistudio.google.com/apikey',
+            },
+            // Seul modèle de transcription de l'API (hors temps réel)
+            transcriptionModels: [
+                { id: 'gemini-3.5-transcribe', name: 'Gemini 3.5 Transcribe', default: true },
+            ],
+            // temperature est dépréciée pour les modèles Gemini 3 ; 3.8 Flash réfléchit au niveau
+            // « medium » par défaut (4 à 9 s par action texte mesurées), « low » répond en 1 à 2 s
+            chatModels: [
+                {
+                    id: 'gemini-3.8-flash',
+                    name: 'Gemini 3.8 Flash',
+                    default: true,
+                    temperature: false,
+                    reasoningEffort: 'low',
+                },
+                { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash-Lite', temperature: false },
+            ],
+            supportsNoLog: false,
+        },
     },
     /** Liste ordonnée des IDs de providers (pour l'affichage UI) */
-    order: ['openai', 'mistral', 'custom'],
+    order: ['openai', 'mistral', 'custom', 'gemini'],
 });

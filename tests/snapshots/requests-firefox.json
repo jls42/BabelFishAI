@@ -326,10 +326,52 @@
     },
     "correction : futur-S1": {
         "delais": [],
-        "reponsesNonConsommees": 1,
-        "requetes": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
         "resultat": {
-            "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "Réponse du provider."
+        }
+    },
+    "correction : gemini": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
         }
     },
     "correction : herite-litellm": {
@@ -491,6 +533,14 @@
         }
     },
     "correction : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
+    "correction : version-future-S1": {
         "delais": [],
         "reponsesNonConsommees": 1,
         "requetes": [],
@@ -2437,10 +2487,52 @@
     },
     "reformulation : futur-S1": {
         "delais": [],
-        "reponsesNonConsommees": 1,
-        "requetes": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
         "resultat": {
-            "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : gemini": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
         }
     },
     "reformulation : herite-litellm": {
@@ -2609,6 +2701,14 @@
             "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
         }
     },
+    "reformulation : version-future-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Erreur lors de la reformulation: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
+        }
+    },
     "traduction : custom": {
         "delais": [],
         "reponsesNonConsommees": 0,
@@ -2661,10 +2761,52 @@
     },
     "traduction : futur-S1": {
         "delais": [],
-        "reponsesNonConsommees": 1,
-        "requetes": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
         "resultat": {
-            "erreur": "Error: Clé API manquante"
+            "valeur": "Réponse du provider."
+        }
+    },
+    "traduction : gemini": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
         }
     },
     "traduction : herite-litellm": {
@@ -2808,6 +2950,14 @@
             "erreur": "Error: Clé API manquante"
         }
     },
+    "traduction : version-future-S1": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Clé API manquante"
+        }
+    },
     "transcription : custom": {
         "delais": [],
         "reponsesNonConsommees": 0,
@@ -2876,10 +3026,52 @@
     },
     "transcription : futur-S1": {
         "delais": [],
-        "reponsesNonConsommees": 1,
-        "requetes": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                "headers": [
+                    [
+                        "x-goog-api-key",
+                        "{cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "error",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        ],
         "resultat": {
-            "erreur": "Error: Aucun provider configuré : activez-en un et renseignez sa clé API dans les options."
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : gemini": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                "headers": [
+                    [
+                        "x-goog-api-key",
+                        "{cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "error",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
         }
     },
     "transcription : herite-litellm": {
@@ -3056,6 +3248,14 @@
         }
     },
     "transcription : tout-desactive": {
+        "delais": [],
+        "reponsesNonConsommees": 1,
+        "requetes": [],
+        "resultat": {
+            "erreur": "Error: Aucun provider configuré : activez-en un et renseignez sa clé API dans les options."
+        }
+    },
+    "transcription : version-future-S1": {
         "delais": [],
         "reponsesNonConsommees": 1,
         "requetes": [],

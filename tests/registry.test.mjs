@@ -8,7 +8,7 @@ setupEnv({ browser: 'chrome' });
 await loadScripts(['src/utils/providers.js']);
 const registry = globalThis.BabelFishAIProviders;
 const matchSnapshot = createSnapshots(import.meta.url);
-const IDS = ['openai', 'mistral', 'custom', 'gemini', '__proto__', 'constructor'];
+const IDS = ['openai', 'mistral', 'custom', 'gemini', 'provider-futur', '__proto__', 'constructor'];
 const SERVICES = ['transcription', 'chat'];
 
 test('données du registre', () => {
