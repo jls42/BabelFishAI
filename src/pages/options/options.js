@@ -833,6 +833,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Écriture réussie : les clés écrites existent désormais, avec la configuration écrite, et
+     * celles des providers vidés sont retirées
+     * @param {{writes: Object, removals: string[]}} extraUpdate - Résultat d'extraProvidersUpdate
+     */
+    function extraWriteSucceeded(extraUpdate) {
+        for (const [key, config] of Object.entries(extraUpdate.writes)) {
+            const id = key.slice(EXTRA_PREFIX.length);
+            storedExtraProviders.add(id);
+            storedExtraConfigs.set(id, config);
+        }
+        removeEmptiedExtraProviders(extraUpdate.removals);
+    }
+
+    /**
+     * Écriture refusée : les providers concernés redeviennent « modifiés », pour la suivante
+     * @param {{writes: Object, removals: string[]}} extraUpdate - Résultat d'extraProvidersUpdate
+     */
+    function extraWriteFailed(extraUpdate) {
+        Object.keys(extraUpdate.writes).forEach((key) =>
+            modifiedExtraProviders.add(key.slice(EXTRA_PREFIX.length)),
+        );
+        extraUpdate.removals.forEach((id) => modifiedExtraProviders.add(id));
+    }
+
+    /**
      * Retire les clés des providers générés vidés, une fois la sélection des services écrite
      * @param {string[]} removals - IDs des providers vidés
      */
@@ -1329,21 +1354,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const error = chrome.runtime.lastError;
             if (error) {
                 console.error('[Options] Error saving:', error.message);
-                Object.keys(extraUpdate.writes).forEach((key) =>
-                    modifiedExtraProviders.add(key.slice(EXTRA_PREFIX.length)),
-                );
-                extraUpdate.removals.forEach((id) => modifiedExtraProviders.add(id));
+                extraWriteFailed(extraUpdate);
                 showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
-                return;
+            } else {
+                extraWriteSucceeded(extraUpdate);
+                // skipcq: JS-0002 - debug log for options saving success
+                // eslint-disable-next-line no-console -- Debug log for options saving success
+                console.log('[Options] Config saved successfully');
+                showStatus(i18n.getMessage('savedMessage'), 'success');
             }
-            Object.keys(extraUpdate.writes).forEach((key) =>
-                storedExtraProviders.add(key.slice(EXTRA_PREFIX.length)),
-            );
-            removeEmptiedExtraProviders(extraUpdate.removals);
-            // skipcq: JS-0002 - debug log for options saving success
-            // eslint-disable-next-line no-console -- Debug log for options saving success
-            console.log('[Options] Config saved successfully');
-            showStatus(i18n.getMessage('savedMessage'), 'success');
             if (scrollToStatus) {
                 statusElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
