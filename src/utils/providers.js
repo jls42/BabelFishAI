@@ -560,7 +560,8 @@ globalThis.BabelFishAIProviders = (function (definitions) {
             // réservé aux partenaires, n'ont pas pu être lues. Le signe zodiacal Gemini est un
             // caractère Unicode
             // Note du panneau (clé i18n) : clé d'un projet avec facturation ; hors de l'EEE, de la
-            // Suisse et du Royaume-Uni, Google peut utiliser les contenus d'une clé gratuite
+            // Suisse et du Royaume-Uni, Google peut utiliser les contenus d'une clé gratuite, avec
+            // relecture humaine ; clé restreinte à l'API Gemini, jamais à des sites web
             ui: {
                 order: 30,
                 short: 'Gem',

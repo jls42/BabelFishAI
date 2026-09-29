@@ -25,7 +25,8 @@ test('entêtes et redirections', () => {
         'X-Autre': 'garde',
     };
     const names = registry.authHeaderNames;
-    // Entête d'un provider à venir, déclaré dans le registre
+    // Entête d'authentification hors d'Authorization (celui de Gemini, x-goog-api-key), ajouté
+    // ici pour que le test ne dépende pas du contenu du registre
     registry.authHeaderNames = () => new Set([...names(), 'x-goog-api-key']);
     try {
         matchSnapshot('entêtes et redirections', {

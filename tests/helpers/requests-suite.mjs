@@ -233,7 +233,6 @@ async function createRequestHarness(browser, testFileUrl) {
     };
 }
 
-/** Chaque action sur chaque stockage, puis la réponse en blocs de Mistral */
 /**
  * Réponse réussie d'une action pour un stockage : la dictée par Gemini répond au format de
  * l'Interactions API, tout le reste au format OpenAI
@@ -248,6 +247,7 @@ function okResponse(action, storage) {
     return OK[action];
 }
 
+/** Chaque action sur chaque stockage, puis la réponse en blocs de Mistral */
 function defineProviderTests({ actions, play, matchSnapshot }) {
     for (const name of STORAGES_PER_ACTION) {
         for (const action of Object.keys(actions)) {

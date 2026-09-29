@@ -132,7 +132,9 @@ export const STORAGE = {
         chatProvider: 'openai',
         apiKey: KEYS.openai,
     },
-    // Plan, contrat point 3, S1 : identifiant d'une version future, clé OpenAI résiduelle
+    // Plan, contrat point 3, S1 : Gemini seul, clé OpenAI résiduelle. Gemini est inconnu des
+    // versions publiées, connu de l'arbre testé depuis le lot 4 ; une sélection que l'arbre testé
+    // ne connaît pas est jouée par version-future-S1
     'futur-S1': {
         providers: providers({ openai: { enabled: false, apiKey: KEYS.openai } }),
         transcriptionProvider: 'gemini',
@@ -214,7 +216,9 @@ export const STORAGE = {
 };
 
 // Stockages joués sur chaque version par versions.test.mjs (plan, contrat point 3) : ce qu'une
-// ancienne version installée sur un autre poste du même compte fait du stockage de la refonte
+// ancienne version installée sur un autre poste du même compte fait du stockage de la refonte.
+// « Futur provider » désigne Gemini : futur pour les versions publiées, connu de l'arbre testé,
+// qui lui envoie dictée et texte avec sa clé
 export const VERSION_FIXTURES = {
     openai: STORAGE.openai,
     mistral: STORAGE.mistral,
