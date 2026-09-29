@@ -3649,8 +3649,8 @@
     },
     "proxy du background : hote-custom-coupe": {
         "reponse": {
-            "error": "URL non autorisée côté background (defense-in-depth).",
-            "errorName": "UrlNotAllowedError",
+            "error": "Provider ou clé API non reconnus côté background (defense-in-depth).",
+            "errorName": "ProviderNotAllowedError",
             "success": false
         },
         "requetes": []
@@ -3725,6 +3725,19 @@
             }
         ]
     },
+    "proxy du background : module absent, stockage illisible": {
+        "moduleAbsent": {
+            "error": "Modules des providers indisponibles dans le background : requête refusée.",
+            "errorName": "ProviderModulesError",
+            "success": false
+        },
+        "requetes": [],
+        "stockageIllisible": {
+            "error": "Vérification de la requête impossible dans le background : requête refusée.",
+            "errorName": "ProxyCheckError",
+            "success": false
+        }
+    },
     "proxy du background : multipart-avec-content-type": {
         "reponse": {
             "contentType": "application/json",
@@ -3764,16 +3777,16 @@
     },
     "proxy du background : provider-qui-n-est-pas-celui-du-service": {
         "reponse": {
-            "error": "URL non autorisée côté background (defense-in-depth).",
-            "errorName": "UrlNotAllowedError",
+            "error": "Provider ou clé API non reconnus côté background (defense-in-depth).",
+            "errorName": "ProviderNotAllowedError",
             "success": false
         },
         "requetes": []
     },
     "proxy du background : sans-provider": {
         "reponse": {
-            "error": "URL non autorisée côté background (defense-in-depth).",
-            "errorName": "UrlNotAllowedError",
+            "error": "Provider ou clé API non reconnus côté background (defense-in-depth).",
+            "errorName": "ProviderNotAllowedError",
             "success": false
         },
         "requetes": []

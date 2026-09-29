@@ -2,6 +2,7 @@
 // storage.local pour src/shortcut-guard.js, à l'installation, au démarrage et à chaque changement.
 import { test } from 'node:test';
 import { defineBackgroundSuite } from './helpers/background-suite.mjs';
+import { loadScripts } from './helpers/env.mjs';
 
 const { env, emit, freshBackground, matchSnapshot, effects } = defineBackgroundSuite({
     browser: 'firefox',
@@ -18,4 +19,20 @@ test('raccourci prioritaire : démarrage et changement de raccourci', async () =
         demarrage,
         changement: { effets: effects(), local: env.stores.local },
     });
+});
+
+test('module des providers absent de background.scripts : signalé au démarrage', async () => {
+    await freshBackground({});
+    const adapters = globalThis.BabelFishAIProviderAdapters;
+    const errors = [];
+    const consoleError = console.error;
+    delete globalThis.BabelFishAIProviderAdapters;
+    console.error = (...args) => errors.push(args.join(' '));
+    try {
+        await loadScripts(['src/background.js'], { fresh: true });
+    } finally {
+        console.error = consoleError;
+        globalThis.BabelFishAIProviderAdapters = adapters;
+    }
+    matchSnapshot('module absent au démarrage', errors);
 });

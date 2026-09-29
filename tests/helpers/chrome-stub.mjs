@@ -145,7 +145,7 @@ function applyRemove(store, keys) {
 
 /**
  * Crée une zone de stockage (sync, local, session). `ctx.failures` programme des échecs :
- * clé `sync.set` ou `sync.remove`, valeur = l'erreur à lever une fois
+ * clé `sync.get`, `sync.set` ou `sync.remove`, valeur = l'erreur à lever une fois
  * @param {string} area - Nom de la zone
  * @param {Object} ctx - État partagé du bouchon
  * @returns {Object} La zone de stockage
@@ -170,7 +170,14 @@ function makeStorageArea(area, ctx) {
         get(keys, callback) {
             if (typeof keys === 'function') [callback, keys] = [keys, null];
             ctx.calls.push({ api: `storage.${area}.get`, args: [structuredClone(keys ?? null)] });
-            return respond(callback, () => pick(store, keys), ctx.stub);
+            return respond(
+                callback,
+                () => {
+                    fail('get');
+                    return pick(store, keys);
+                },
+                ctx.stub,
+            );
         },
         set(items, callback) {
             ctx.calls.push({ api: `storage.${area}.set`, args: [structuredClone(items)] });

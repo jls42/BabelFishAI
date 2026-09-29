@@ -21,6 +21,9 @@ if (typeof importScripts === 'function') {
             error.message,
         );
     }
+} else if (!providerModules()) {
+    // Firefox les charge avant ce script, par background.scripts du manifest
+    console.error('Modules des providers absents de background.scripts : proxy indisponible.');
 }
 
 // Configuration spécifique au service worker
@@ -668,19 +671,42 @@ function providerModules() {
     return store && registry && adapters ? { store, registry, adapters } : null;
 }
 
+// Refus du proxy, par cause (erreur renvoyée au content script)
+const PROXY_REFUSALS = Object.freeze({
+    modules: {
+        error: 'Modules des providers indisponibles dans le background : requête refusée.',
+        errorName: 'ProviderModulesError',
+    },
+    check: {
+        error: 'Vérification de la requête impossible dans le background : requête refusée.',
+        errorName: 'ProxyCheckError',
+    },
+    provider: {
+        error: 'Provider ou clé API non reconnus côté background (defense-in-depth).',
+        errorName: 'ProviderNotAllowedError',
+    },
+    url: {
+        error: 'URL non autorisée côté background (defense-in-depth).',
+        errorName: 'UrlNotAllowedError',
+    },
+});
+
 /**
  * Clé du provider annoncé par une requête du proxy, si le stockage le résout bien pour ce
  * service, avec une clé, et si l'URL vise une origine configurée pour lui
  * @param {Object} store - BabelFishAIProviderStore
  * @param {Object} data - Données lues dans storage.sync
  * @param {Object} request - providerId, service et url de la requête
- * @returns {string|null}
+ * @returns {{key: string}|{refusal: Object}} La clé, ou la cause du refus (PROXY_REFUSALS)
  */
 function keyForProxiedRequest(store, data, { providerId, service, url }) {
     const resolved = store.resolveProvider(data, service);
     const key = store.resolveKey(data, resolved);
-    if (resolved.providerId !== providerId || !key) return null;
-    return store.isUrlAllowedForProvider(data, providerId, url) ? key : null;
+    if (resolved.providerId !== providerId || !key) return { refusal: PROXY_REFUSALS.provider };
+    if (!store.isUrlAllowedForProvider(data, providerId, url)) {
+        return { refusal: PROXY_REFUSALS.url };
+    }
+    return { key };
 }
 
 /**
@@ -700,24 +726,25 @@ function serviceAuth(registry, providerId, service) {
  * clé ni l'hôte. Le provider annoncé doit être celui que le stockage résout pour le service
  * et avoir une clé, et l'URL doit viser une origine configurée pour lui
  * @param {Object} request - url, providerId et service de la requête
- * @returns {Promise<{header: Object, redirect: string}|null>} L'entête et la politique de
- *   redirection, ou null si la requête n'est pas autorisée
+ * @returns {Promise<{header: Object, redirect: string}|{refusal: Object}>} L'entête et la
+ *   politique de redirection, ou la cause du refus (PROXY_REFUSALS)
  */
 async function resolveProxyAuth({ url, providerId, service }) {
     const modules = providerModules();
-    if (!modules) return null;
+    if (!modules) return { refusal: PROXY_REFUSALS.modules };
     try {
         const data = await chrome.storage.sync.get(modules.store.resolutionDefaults());
-        const key = keyForProxiedRequest(modules.store, data, { providerId, service, url });
-        if (!key) return null;
+        const checked = keyForProxiedRequest(modules.store, data, { providerId, service, url });
+        if (checked.refusal) return checked;
         const auth = serviceAuth(modules.registry, providerId, service);
         return {
-            header: modules.adapters.authHeaders(auth, key),
+            header: modules.adapters.authHeaders(auth, checked.key),
             redirect: modules.adapters.redirectPolicy(auth),
         };
     } catch (error) {
-        console.error('resolveProxyAuth: storage error', error.message);
-        return null;
+        // Stockage illisible, ou message que la vérification ne sait pas lire
+        console.error('resolveProxyAuth:', error.message);
+        return { refusal: PROXY_REFUSALS.check };
     }
 }
 
@@ -759,12 +786,8 @@ async function proxyFetch(request) {
     // in depth contre un content script compromis. L'entête d'authentification est
     // reconstruit ici depuis le stockage ; celui du content script est ignoré.
     const auth = await resolveProxyAuth(request);
-    if (!auth) {
-        return {
-            success: false,
-            error: 'URL non autorisée côté background (defense-in-depth).',
-            errorName: 'UrlNotAllowedError',
-        };
+    if (auth.refusal) {
+        return { success: false, ...auth.refusal };
     }
 
     try {

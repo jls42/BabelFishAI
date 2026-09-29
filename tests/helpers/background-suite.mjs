@@ -489,6 +489,25 @@ function defineProxyTests({ env, matchSnapshot, freshBackground, send }) {
             });
         });
     }
+    test('proxy du background : module absent, stockage illisible', async () => {
+        const message = { action: 'proxyFetch', request: PROXY_CASES['json-openai'].request };
+        await freshBackground(STORAGE.openai);
+        const adapters = globalThis.BabelFishAIProviderAdapters;
+        delete globalThis.BabelFishAIProviderAdapters;
+        let moduleAbsent;
+        try {
+            moduleAbsent = await send(message);
+        } finally {
+            globalThis.BabelFishAIProviderAdapters = adapters;
+        }
+        env.failures.set('sync.get', new Error('Stockage indisponible'));
+        const stockageIllisible = await send(message);
+        matchSnapshot('proxy du background : module absent, stockage illisible', {
+            moduleAbsent,
+            stockageIllisible,
+            requetes: env.http.requests,
+        });
+    });
 }
 
 /**
