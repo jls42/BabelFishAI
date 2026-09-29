@@ -1,9 +1,11 @@
 // Script de gestion des options
 /* global chrome */ // Global de l'API d'extension Chrome
 
-// Panneaux statiques des providers historiques (options.html), dans l'ordre où `providers` est
-// écrit dans le stockage : le repli sur un autre provider suit cet ordre. `prefix` et `dom`
-// composent leurs identifiants (ex. openaiApiKey, newOpenaiChatModel)
+// Panneaux statiques des providers historiques (options.html). Leur ordre est celui dans lequel
+// `providers` est écrit, comme avant la refonte ; Chrome relit pourtant ces clés triées par ordre
+// alphabétique (mesuré le 29/09), et le repli du store à l'exécution suit l'ordre relu. La page,
+// elle, choisit son repli dans l'ordre d'affichage du registre. `prefix` et `dom` composent les
+// identifiants des panneaux (ex. openaiApiKey, newOpenaiChatModel)
 const STATIC_PANELS = new Map([
     ['openai', { prefix: 'openai', dom: 'Openai', panel: 'configOpenAI', toggle: 'toggleOpenAI' }],
     [
@@ -315,8 +317,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Panneau OpenAI : en mode legacy (sans `providers`), rempli depuis la clé héritée `apiKey`
     const openaiPanel = panels.get('openai');
 
-    // Providers générés : ceux dont la clé extraProvider.<id> existe, et ceux modifiés pendant
-    // la session. Seuls ces derniers sont écrits, pour ne pas écraser la clé d'un autre poste
+    // Providers générés dont la clé extraProvider.<id> existe, et providers modifiés pendant la
+    // session (tous : seuls les générés sont écrits dans extraProvider.<id>, pour ne pas écraser
+    // la clé d'un autre poste)
     const storedExtraProviders = new Set();
     const modifiedExtraProviders = new Set();
     // Configuration lue ou écrite de chaque provider généré : ses champs inconnus du panneau
@@ -328,8 +331,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const futureSelection = { transcription: null, chat: null };
 
     const providerServices = document.getElementById('providerServices');
-    const unknownProvidersSection = document.getElementById('unknownProviders');
-    const unknownProvidersList = document.getElementById('unknownProvidersList');
+    const unknownProvidersSection = byId('unknownProviders');
+    const unknownProvidersList = byId('unknownProvidersList');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
     const chatProviderSelect = document.getElementById('chatProvider');
 
@@ -387,7 +390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /**
      * Affiche le panel de configuration du provider sélectionné
-     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
+     * @param {string} providerId - ID d'un provider du menu (historique ou généré)
      */
     function showProviderConfig(providerId) {
         // Masquer tous les panels
@@ -638,10 +641,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const config = configs.get(providerId) || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];
-                const selected =
-                    config[
-                        `selected${modelType.charAt(0).toUpperCase() + modelType.slice(1)}Model`
-                    ];
+                const selected = config[`selected${capitalize(modelType)}Model`];
                 populateProviderModelSelect(providerId, modelType, models, selected);
             }
         }
@@ -651,7 +651,9 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage de tous les providers
      */
     function updateAllProviderDisplays() {
-        panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
+        for (const providerId of panels.keys()) {
+            updateProviderDisplay(providerId);
+        }
         updateDropdownStatus();
         updatePanelBorder(providerSelector.value);
     }
@@ -729,19 +731,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (items.providers) {
                     // Mode multi-provider
-                    STATIC_PANELS.forEach((ids, id) =>
-                        loadPanelConfig(panels.get(id), configs.get(id)),
-                    );
+                    for (const id of STATIC_PANELS.keys()) {
+                        loadPanelConfig(panels.get(id), configs.get(id));
+                    }
                 } else {
                     // Mode legacy : utiliser l'ancienne clé API pour OpenAI, les autres coupés
                     openaiPanel.apiKey.value = items.apiKey || '';
-                    STATIC_PANELS.forEach((ids, id) => {
+                    for (const id of STATIC_PANELS.keys()) {
                         panels.get(id).enabled.checked = id === 'openai' && Boolean(items.apiKey);
-                    });
+                    }
                 }
-                generatedPanels.forEach((ids, id) =>
-                    loadPanelConfig(panels.get(id), configs.get(id)),
-                );
+                for (const id of generatedPanels.keys()) {
+                    loadPanelConfig(panels.get(id), configs.get(id));
+                }
                 futureSelection.transcription = unknownProviderId(items.transcriptionProvider);
                 futureSelection.chat = unknownProviderId(items.chatProvider);
 
@@ -1511,7 +1513,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateTranslationOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(options.forcedDialogDomains);
-            panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
+            for (const providerId of panels.keys()) {
+                updateProviderDisplay(providerId);
+            }
         });
     }
 
