@@ -702,8 +702,9 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string|null} La valeur si c'est un tel identifiant, sinon null
      */
     function unknownProviderId(value) {
-        // Même forme que les identifiants du registre, et jamais un nom hérité d'Object
-        // (__proto__, constructor) : une valeur corrompue suit la règle habituelle
+        // Même forme que les identifiants du registre (motif imposé par
+        // tests/registry-rules.test.mjs), et jamais un nom hérité d'Object (__proto__,
+        // constructor) : une valeur corrompue suit la règle habituelle
         const plausible =
             typeof value === 'string' &&
             /^[a-z][a-z0-9-]*$/.test(value) &&

@@ -14,6 +14,9 @@ test('règles du registre dont dépend la page d’options', () => {
     const orders = providers.map((provider) => provider.ui.order);
     assert.equal(new Set(orders).size, orders.length, 'ordre d’affichage en double');
     for (const provider of providers) {
+        // Même motif que unknownProviderId (options.js) : une version antérieure ne garde une
+        // sélection écrite par une version plus récente que si l'identifiant a cette forme
+        assert.match(provider.id, /^[a-z][a-z0-9-]*$/, `${provider.id} : forme de l'identifiant`);
         // Règle du propriétaire (29/09) : un provider offre la dictée ET le texte
         for (const service of SERVICES) {
             assert.ok(
