@@ -145,7 +145,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
     }
 
     /**
-     * Récupère les providers activés depuis la configuration utilisateur
+     * Récupère les providers activés depuis la configuration utilisateur. Ne voit que les
+     * providers rangés dans `providers` (OpenAI, Mistral, Custom) : un provider ajouté vit dans
+     * `extraProvider.<id>` (provider-store.js). Aucun appelant (lot 7 du plan, n°14)
      * @param {Object} providersConfig - Configuration des providers depuis le storage
      * @returns {string[]} Liste des IDs de providers activés
      */

@@ -418,7 +418,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Récupère la clé API pour un provider spécifique ou le provider actif
+     * Récupère la clé API pour un provider spécifique ou le provider actif. Pour un provider
+     * autre que celui du service, ne lit que `providers` : la clé d'un provider ajouté
+     * (`extraProvider.<id>`) n'y est jamais. Aucun appelant (lot 7 du plan, n°14)
      * @param {string} [providerId] - ID du provider (optionnel, utilise le provider par défaut si non spécifié)
      * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider par défaut
      * @returns {Promise<string|null>} La clé API ou null si non trouvée
