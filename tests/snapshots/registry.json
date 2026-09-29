@@ -1,11 +1,9 @@
 {
     "accesseurs par provider": {
         "__proto__": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "inconnu": true
+            },
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
@@ -26,11 +24,9 @@
             ]
         },
         "constructor": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "inconnu": true
+            },
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
@@ -51,11 +47,10 @@
             ]
         },
         "custom": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "gpt-4o-mini": true,
+                "inconnu": true
+            },
             "getChatUrl": "",
             "getDefaultModel(chat)": "gpt-4o-mini",
             "getDefaultModel(transcription)": "whisper-1",
@@ -92,11 +87,11 @@
             ]
         },
         "gemini": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "gemini-3.5-flash-lite": false,
+                "gemini-3.8-flash": false,
+                "inconnu": false
+            },
             "getChatUrl": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
             "getDefaultModel(chat)": "gemini-3.8-flash",
             "getDefaultModel(transcription)": "gemini-3.5-transcribe",
@@ -107,7 +102,8 @@
                     "scheme": "Bearer"
                 },
                 "errors": "gemini",
-                "format": "openai-chat"
+                "format": "openai-chat",
+                "temperature": false
             },
             "getService(transcription)": {
                 "auth": {
@@ -130,11 +126,16 @@
             ]
         },
         "mistral": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "codestral-latest": true,
+                "inconnu": true,
+                "ministral-14b-latest": true,
+                "ministral-3b-latest": true,
+                "ministral-8b-latest": true,
+                "mistral-large-latest": true,
+                "mistral-medium-latest": true,
+                "mistral-small-latest": true
+            },
             "getChatUrl": "https://api.mistral.ai/v1/chat/completions",
             "getDefaultModel(chat)": "mistral-small-latest",
             "getDefaultModel(transcription)": "voxtral-mini-latest",
@@ -169,11 +170,18 @@
             ]
         },
         "openai": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "gpt-4.1": true,
+                "gpt-4.1-mini": true,
+                "gpt-4o-mini": true,
+                "gpt-5.4": true,
+                "gpt-5.4-mini": true,
+                "gpt-5.4-nano": true,
+                "gpt-5.6-luna": true,
+                "gpt-5.6-sol": true,
+                "gpt-5.6-terra": true,
+                "inconnu": true
+            },
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": "gpt-4o-mini",
             "getDefaultModel(transcription)": "gpt-transcribe",
@@ -208,11 +216,9 @@
             ]
         },
         "provider-futur": {
-            "acceptsTemperature": [
-                true,
-                true,
-                true
-            ],
+            "acceptsTemperature": {
+                "inconnu": true
+            },
             "getChatUrl": "https://api.openai.com/v1/chat/completions",
             "getDefaultModel(chat)": null,
             "getDefaultModel(transcription)": null,
@@ -603,13 +609,11 @@
                         "default": true,
                         "id": "gemini-3.8-flash",
                         "name": "Gemini 3.8 Flash",
-                        "reasoningEffort": "low",
-                        "temperature": false
+                        "reasoningEffort": "low"
                     },
                     {
                         "id": "gemini-3.5-flash-lite",
-                        "name": "Gemini 3.5 Flash-Lite",
-                        "temperature": false
+                        "name": "Gemini 3.5 Flash-Lite"
                     }
                 ],
                 "defaultUrls": {
@@ -625,7 +629,8 @@
                             "scheme": "Bearer"
                         },
                         "errors": "gemini",
-                        "format": "openai-chat"
+                        "format": "openai-chat",
+                        "temperature": false
                     },
                     "transcription": {
                         "auth": {

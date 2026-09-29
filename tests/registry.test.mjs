@@ -21,6 +21,22 @@ test('données du registre', () => {
 });
 
 /**
+ * acceptsTemperature pour les modèles de chat du provider, plus un modèle absent du registre
+ * (ajouté par l'utilisateur)
+ * @param {string} id
+ * @returns {Object}
+ */
+function temperatureProbe(id) {
+    const models = (registry.getProvider(id)?.chatModels ?? []).map((model) => model.id);
+    return Object.fromEntries(
+        [...models, 'inconnu'].map((model) => [
+            model,
+            registry.acceptsTemperature?.(id, model) ?? null,
+        ]),
+    );
+}
+
+/**
  * Réponses des accesseurs pour un identifiant
  * @param {string} id
  * @returns {Object}
@@ -35,9 +51,7 @@ function accessorsFor(id) {
             registry.getChatUrl(id, 'x'),
         ],
         supportsNoLog: registry.supportsNoLog(id),
-        acceptsTemperature: ['gpt-4o-mini', 'gpt-5.6-luna', 'inconnu'].map(
-            (model) => registry.acceptsTemperature?.(id, model) ?? null,
-        ),
+        acceptsTemperature: temperatureProbe(id),
     };
     for (const service of SERVICES) {
         result[`getDefaultModel(${service})`] = registry.getDefaultModel(id, service);

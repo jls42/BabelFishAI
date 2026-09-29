@@ -321,6 +321,23 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
             registry.acceptsTemperature = accepts;
         }
     });
+    test('correction : modèle ajouté au panneau Gemini, sans temperature', async () => {
+        // Modèle absent du registre, ajouté par l'utilisateur : le service de chat de Gemini
+        // refuse temperature pour tous ses modèles, donc une clé refusée ne part qu'une fois
+        const storage = {
+            ...STORAGE.gemini,
+            'extraProvider.gemini': {
+                ...STORAGE.gemini['extraProvider.gemini'],
+                chatModels: ['gemini-flash-latest'],
+                selectedChatModel: 'gemini-flash-latest',
+            },
+        };
+        const refused = { status: 400, json: GEMINI_ERRORS['cle-compatible'] };
+        matchSnapshot('correction : modèle ajouté au panneau Gemini', {
+            reponse: await play('correction', storage, [OK_CHAT]),
+            cleRefusee: await play('correction', storage, [refused, OK_CHAT]),
+        });
+    });
     test('actions texte : effort de réflexion déclaré pour le modèle', async () => {
         // Le registre déclare un effort de réflexion pour le modèle de chat d'OpenAI : il part
         // dans chaque action texte, correction comprise

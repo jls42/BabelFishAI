@@ -105,12 +105,14 @@ globalThis.BabelFishAIProviders = (function (definitions) {
 
     /**
      * Indique si un modèle de chat accepte le paramètre temperature : oui, sauf si le registre
-     * le déclare avec `temperature: false`
+     * déclare `temperature: false` pour le service de chat du provider (tous ses modèles, ceux
+     * que l'utilisateur ajoute compris) ou pour le modèle lui-même
      * @param {string} providerId - ID du provider
      * @param {string} modelId - ID du modèle
      * @returns {boolean}
      */
     function acceptsTemperature(providerId, modelId) {
+        if (getService(providerId, 'chat')?.temperature === false) return false;
         const models = getProvider(providerId)?.chatModels ?? [];
         return models.find((model) => model.id === modelId)?.temperature !== false;
     }
@@ -434,8 +436,10 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * et au besoin authentification, format d'erreur et réglage d'URL), sa présentation dans la
      * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés, note
      * facultative sous forme de clé i18n) et
-     * ses modèles supportés. Un modèle de chat peut porter `temperature: false` s'il refuse ce
-     * paramètre, et `reasoningEffort` pour l'effort de réflexion à envoyer (reasoning_effort)
+     * ses modèles supportés. `temperature: false` sur le service de chat vaut pour tous ses
+     * modèles, modèles ajoutés par l'utilisateur compris ; sur un modèle de chat, pour lui seul.
+     * Un modèle de chat peut aussi porter `reasoningEffort`, l'effort de réflexion à envoyer
+     * (reasoning_effort)
      */
     providers: {
         openai: {
@@ -546,7 +550,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
                     auth: { header: 'x-goog-api-key' },
                     errors: 'gemini',
                 },
-                chat: { format: 'openai-chat', errors: 'gemini' },
+                // temperature est dépréciée pour les modèles Gemini 3 : jamais envoyée, même à un
+                // modèle ajouté par l'utilisateur
+                chat: { format: 'openai-chat', errors: 'gemini', temperature: false },
             },
             // Pas de logo : les règles de marque de Google exigent une approbation des visuels.
             // Le signe zodiacal Gemini est un caractère Unicode
@@ -564,17 +570,16 @@ globalThis.BabelFishAIProviders = (function (definitions) {
             transcriptionModels: [
                 { id: 'gemini-3.5-transcribe', name: 'Gemini 3.5 Transcribe', default: true },
             ],
-            // temperature est dépréciée pour les modèles Gemini 3 ; 3.8 Flash réfléchit au niveau
-            // « medium » par défaut (4 à 9 s par action texte mesurées), « low » répond en 1 à 2 s
+            // 3.8 Flash réfléchit au niveau « medium » par défaut (4 à 9 s par action texte
+            // mesurées), « low » répond en 1 à 2 s
             chatModels: [
                 {
                     id: 'gemini-3.8-flash',
                     name: 'Gemini 3.8 Flash',
                     default: true,
-                    temperature: false,
                     reasoningEffort: 'low',
                 },
-                { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash-Lite', temperature: false },
+                { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash-Lite' },
             ],
             supportsNoLog: false,
         },
