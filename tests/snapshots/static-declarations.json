@@ -83,9 +83,15 @@
         "declarations": {
             "src/constants.js": [],
             "src/pages/options/options.js": [
-                "isStandardProviderEnabled",
+                "STATIC_PANELS",
+                "byId",
+                "capitalize",
+                "urlSettingsOf",
+                "staticPanelElements",
+                "isPanelReady",
                 "logShortcutGuardError",
-                "loadStandardProviderConfig",
+                "loadPanelConfig",
+                "storedProviderConfig",
                 "validateCustomProviderUrls",
                 "determineActiveProviders"
             ],

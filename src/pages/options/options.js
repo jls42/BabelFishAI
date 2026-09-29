@@ -1,14 +1,84 @@
 // Script de gestion des options
 /* global chrome */ // Global de l'API d'extension Chrome
 
+// Panneaux statiques des providers historiques (options.html), dans l'ordre où `providers` est
+// écrit dans le stockage : le repli sur un autre provider suit cet ordre. `prefix` et `dom`
+// composent leurs identifiants (ex. openaiApiKey, newOpenaiChatModel)
+const STATIC_PANELS = new Map([
+    ['openai', { prefix: 'openai', dom: 'Openai', panel: 'configOpenAI', toggle: 'toggleOpenAI' }],
+    [
+        'mistral',
+        { prefix: 'mistral', dom: 'Mistral', panel: 'configMistral', toggle: 'toggleMistral' },
+    ],
+    ['custom', { prefix: 'custom', dom: 'Custom', panel: 'configCustom', toggle: 'toggleCustom' }],
+]);
+
 /**
- * Vérifie si un provider standard (OpenAI/Mistral) est activé
- * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
- * @param {HTMLInputElement} keyInput - Input de la clé API
+ * Élément du DOM par identifiant
+ * @param {string} id
+ * @returns {HTMLElement|null}
+ */
+function byId(id) {
+    return document.getElementById(id);
+}
+
+/**
+ * Met en majuscule la première lettre (ex. transcriptionUrl → TranscriptionUrl)
+ * @param {string} text
+ * @returns {string}
+ */
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/**
+ * Réglages d'URL qu'un provider demande à l'utilisateur, dans l'ordre de ses services
+ * (Custom : transcriptionUrl puis chatUrl)
+ * @param {Object} Providers - Registre des providers
+ * @param {string} providerId
+ * @returns {string[]}
+ */
+function urlSettingsOf(Providers, providerId) {
+    const services = Providers.getProvider(providerId)?.services ?? {};
+    return Object.values(services)
+        .map((service) => service.urlSetting)
+        .filter(Boolean);
+}
+
+/**
+ * Éléments d'un panneau statique de provider
+ * @param {Object} ids - Entrée de STATIC_PANELS
+ * @param {string[]} urlSettings - Réglages d'URL du provider
+ * @returns {Object}
+ */
+function staticPanelElements(ids, urlSettings) {
+    return {
+        panel: byId(ids.panel),
+        toggle: byId(ids.toggle),
+        enabled: byId(`${ids.prefix}Enabled`),
+        apiKey: byId(`${ids.prefix}ApiKey`),
+        urls: urlSettings.map((setting) => [setting, byId(`${ids.prefix}${capitalize(setting)}`)]),
+        transcriptionSelect: byId(`${ids.prefix}TranscriptionModel`),
+        chatSelect: byId(`${ids.prefix}ChatModel`),
+        newTranscriptionInput: byId(`new${ids.dom}TranscriptionModel`),
+        newChatInput: byId(`new${ids.dom}ChatModel`),
+        addTranscriptionButton: byId(`add${ids.dom}TranscriptionModel`),
+        addChatButton: byId(`add${ids.dom}ChatModel`),
+    };
+}
+
+/**
+ * Vérifie si le provider d'un panneau est prêt : activé, avec une clé API, et avec ses URLs
+ * s'il en demande (Custom)
+ * @param {Object} elements - Éléments du panneau
  * @returns {boolean}
  */
-function isStandardProviderEnabled(enabledCheckbox, keyInput) {
-    return enabledCheckbox.checked && Boolean(keyInput.value.trim());
+function isPanelReady(elements) {
+    return (
+        elements.enabled.checked &&
+        Boolean(elements.apiKey.value.trim()) &&
+        elements.urls.every(([, input]) => Boolean(input.value.trim()))
+    );
 }
 
 /**
@@ -20,14 +90,29 @@ function logShortcutGuardError(error) {
 }
 
 /**
- * Charge la configuration d'un provider standard (OpenAI/Mistral)
+ * Charge la configuration d'un provider dans son panneau
+ * @param {Object} elements - Éléments du panneau
  * @param {Object} config - Configuration du provider
- * @param {HTMLInputElement} keyInput - Input de la clé API
- * @param {HTMLInputElement} checkbox - Checkbox d'activation
  */
-function loadStandardProviderConfig(config, keyInput, checkbox) {
-    keyInput.value = config.apiKey || '';
-    checkbox.checked = config.enabled || false;
+function loadPanelConfig(elements, config) {
+    elements.apiKey.value = config.apiKey || '';
+    elements.enabled.checked = config.enabled || false;
+    for (const [setting, input] of elements.urls) {
+        // eslint-disable-next-line security/detect-object-injection -- setting vient du registre, vérifié par Object.hasOwn
+        input.value = (Object.hasOwn(config, setting) && config[setting]) || '';
+    }
+}
+
+/**
+ * Configuration enregistrée d'un provider historique
+ * @param {*} providers - Valeur de la clé `providers` du stockage
+ * @param {string} providerId
+ * @returns {Object} La configuration, ou {} s'il n'y en a pas
+ */
+function storedProviderConfig(providers, providerId) {
+    if (!providers || !Object.hasOwn(providers, providerId)) return {};
+    // eslint-disable-next-line security/detect-object-injection -- providerId vérifié par Object.hasOwn
+    return providers[providerId] || {};
 }
 
 /**
@@ -96,44 +181,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dropdownStatus = document.getElementById('dropdownStatus');
     const providerConfigPanel = document.getElementById('providerConfigPanel');
 
-    const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
-    const openaiApiKeyInput = document.getElementById('openaiApiKey');
-
-    const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
-    const mistralApiKeyInput = document.getElementById('mistralApiKey');
-
-    const customEnabledCheckbox = document.getElementById('customEnabled');
-    const customApiKeyInput = document.getElementById('customApiKey');
-    const customTranscriptionUrlInput = document.getElementById('customTranscriptionUrl');
-    const customChatUrlInput = document.getElementById('customChatUrl');
-
-    // Éléments DOM pour les modèles de chaque provider
-    const providerModelElements = {
-        openai: {
-            transcriptionSelect: document.getElementById('openaiTranscriptionModel'),
-            chatSelect: document.getElementById('openaiChatModel'),
-            newTranscriptionInput: document.getElementById('newOpenaiTranscriptionModel'),
-            newChatInput: document.getElementById('newOpenaiChatModel'),
-            addTranscriptionButton: document.getElementById('addOpenaiTranscriptionModel'),
-            addChatButton: document.getElementById('addOpenaiChatModel'),
-        },
-        mistral: {
-            transcriptionSelect: document.getElementById('mistralTranscriptionModel'),
-            chatSelect: document.getElementById('mistralChatModel'),
-            newTranscriptionInput: document.getElementById('newMistralTranscriptionModel'),
-            newChatInput: document.getElementById('newMistralChatModel'),
-            addTranscriptionButton: document.getElementById('addMistralTranscriptionModel'),
-            addChatButton: document.getElementById('addMistralChatModel'),
-        },
-        custom: {
-            transcriptionSelect: document.getElementById('customTranscriptionModel'),
-            chatSelect: document.getElementById('customChatModel'),
-            newTranscriptionInput: document.getElementById('newCustomTranscriptionModel'),
-            newChatInput: document.getElementById('newCustomChatModel'),
-            addTranscriptionButton: document.getElementById('addCustomTranscriptionModel'),
-            addChatButton: document.getElementById('addCustomChatModel'),
-        },
-    };
+    // Éléments du panneau de chaque provider (clé, activation, URLs, modèles)
+    const panels = new Map(
+        [...STATIC_PANELS].map(([id, ids]) => [
+            id,
+            staticPanelElements(ids, urlSettingsOf(Providers, id)),
+        ]),
+    );
+    // Champ OpenAI, recopié dans la clé héritée `apiKey`
+    const openaiPanel = panels.get('openai');
 
     const providerServices = document.getElementById('providerServices');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
@@ -202,46 +258,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             config.style.display = 'none';
         });
 
-        // Mapper providerId vers l'ID du panel HTML
-        const panelIdMap = {
-            openai: 'configOpenAI',
-            mistral: 'configMistral',
-            custom: 'configCustom',
-        };
-
-        // Mapper providerId vers le logo
-        const logoMap = {
-            openai: '../../../images/openai-logo.png',
-            mistral: '../../../images/mistral-logo.png',
-            custom: null, // Emoji 🚅 pour LiteLLM
-        };
-
-        // Mettre à jour le logo à côté du dropdown
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-        const logoSrc = logoMap[providerId];
-        if (logoSrc) {
-            providerLogo.src = logoSrc;
-            providerLogo.style.display = 'block';
-            // Masquer l'emoji si présent
-            const emojiEl = document.getElementById('providerLogoEmoji');
-            if (emojiEl) emojiEl.style.display = 'none';
-        } else {
-            // Pour Custom/LiteLLM, utiliser l'emoji train
-            providerLogo.style.display = 'none';
-            let emojiEl = document.getElementById('providerLogoEmoji');
-            if (!emojiEl) {
-                emojiEl = document.createElement('span');
-                emojiEl.id = 'providerLogoEmoji';
-                emojiEl.className = 'provider-selector-emoji';
-                providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
-            }
-            emojiEl.textContent = '🚅';
-            emojiEl.style.display = 'block';
-        }
+        // Mettre à jour le logo à côté du dropdown (registre : logo, ou emoji sans logo officiel)
+        showProviderLogo(Providers.getProvider(providerId)?.ui);
 
         // Afficher le panel sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const targetConfig = document.getElementById(panelIdMap[providerId]);
+        const targetConfig = panels.get(providerId)?.panel;
         if (targetConfig) {
             targetConfig.style.display = 'block';
         }
@@ -254,26 +275,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Affiche le toggle ON/OFF du provider sélectionné
+     * Affiche le logo du provider à côté du dropdown, ou son emoji s'il n'a pas de logo
+     * officiel (🚅 pour Custom/LiteLLM)
+     * @param {Object|undefined} ui - Présentation du provider dans le registre
+     */
+    function showProviderLogo(ui) {
+        if (ui?.logo) {
+            providerLogo.src = `../../../${ui.logo}`;
+            providerLogo.style.display = 'block';
+            // Masquer l'emoji si présent
+            const emojiEl = document.getElementById('providerLogoEmoji');
+            if (emojiEl) emojiEl.style.display = 'none';
+            return;
+        }
+        providerLogo.style.display = 'none';
+        let emojiEl = document.getElementById('providerLogoEmoji');
+        if (!emojiEl) {
+            emojiEl = document.createElement('span');
+            emojiEl.id = 'providerLogoEmoji';
+            emojiEl.className = 'provider-selector-emoji';
+            providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
+        }
+        emojiEl.textContent = ui?.emoji ?? '🚅';
+        emojiEl.style.display = 'block';
+    }
+
+    /**
+     * Affiche le toggle ON/OFF du provider sélectionné, et masque les autres
      * @param {string} providerId - ID du provider
      */
     function showProviderToggle(providerId) {
-        const toggles = {
-            openai: document.getElementById('toggleOpenAI'),
-            mistral: document.getElementById('toggleMistral'),
-            custom: document.getElementById('toggleCustom'),
-        };
-
-        // Masquer tous les toggles
-        Object.values(toggles).forEach((toggle) => {
-            if (toggle) toggle.style.display = 'none';
-        });
-
-        // Afficher le toggle du provider sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        if (toggles[providerId]) {
-            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-            toggles[providerId].style.display = 'inline-block';
+        for (const [id, elements] of panels) {
+            if (elements.toggle) {
+                elements.toggle.style.display = id === providerId ? 'inline-block' : 'none';
+            }
         }
     }
 
@@ -282,14 +317,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} providerId - ID du provider
      */
     function updatePanelBorder(providerId) {
-        let isEnabled = false;
-        if (providerId === 'openai') {
-            isEnabled = openaiEnabledCheckbox.checked;
-        } else if (providerId === 'mistral') {
-            isEnabled = mistralEnabledCheckbox.checked;
-        } else if (providerId === 'custom') {
-            isEnabled = customEnabledCheckbox.checked;
-        }
+        const isEnabled = panels.get(providerId)?.enabled.checked ?? false;
 
         if (isEnabled) {
             providerConfigPanel.style.borderColor = 'var(--primary-color-2)';
@@ -302,13 +330,10 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage des status à côté du dropdown
      */
     function updateDropdownStatus() {
-        const providers = ['mistral', 'openai', 'custom'];
-        const shortNames = { openai: 'OAI', mistral: 'Mis', custom: 'Cus' };
-
         // Vider le contenu existant de manière sécurisée
         dropdownStatus.textContent = '';
 
-        providers.forEach((providerId) => {
+        displayedProviderIds().forEach((providerId) => {
             const status = getProviderStatus(providerId);
             let cssClass = 'status-dot';
             let symbol = '';
@@ -327,8 +352,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const span = document.createElement('span');
             span.className = cssClass;
             span.title = status.name;
-            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient d'un tableau de providers contrôlé
-            span.textContent = `${symbol} ${shortNames[providerId]}`;
+            span.textContent = `${symbol} ${Providers.getProvider(providerId).ui.short}`;
             dropdownStatus.appendChild(span);
         });
     }
@@ -339,45 +363,25 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Object} Statut du provider
      */
     function getProviderStatus(providerId) {
-        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables assignées intentionnellement dans des blocs if/else
-
-        if (providerId === 'openai') {
-            enabledCheckbox = openaiEnabledCheckbox;
-            apiKeyInputEl = openaiApiKeyInput;
-            name = 'OpenAI';
-        } else if (providerId === 'mistral') {
-            enabledCheckbox = mistralEnabledCheckbox;
-            apiKeyInputEl = mistralApiKeyInput;
-            name = 'Mistral';
-        } else if (providerId === 'custom') {
-            enabledCheckbox = customEnabledCheckbox;
-            apiKeyInputEl = customApiKeyInput;
-            name = 'Custom';
-        } else {
+        const elements = panels.get(providerId);
+        if (!elements) {
             return { enabled: false, configured: false, name: '' };
         }
 
-        const isEnabled = enabledCheckbox.checked;
-        const hasApiKey = apiKeyInputEl.value.trim().length > 0;
-
-        // Pour le provider custom, vérifier aussi les URLs
-        let hasRequiredUrls = true;
-        if (providerId === 'custom') {
-            hasRequiredUrls =
-                customTranscriptionUrlInput.value.trim().length > 0 &&
-                customChatUrlInput.value.trim().length > 0;
-        }
+        const hasApiKey = elements.apiKey.value.trim().length > 0;
+        // Pour un provider qui demande des URLs (Custom), vérifier aussi qu'elles sont saisies
+        const hasRequiredUrls = elements.urls.every(([, input]) => input.value.trim().length > 0);
 
         return {
-            enabled: isEnabled,
-            configured: hasApiKey && (providerId !== 'custom' || hasRequiredUrls),
-            name,
+            enabled: elements.enabled.checked,
+            configured: hasApiKey && hasRequiredUrls,
+            name: Providers.getProvider(providerId).ui.statusName,
         };
     }
 
     /**
      * Met à jour l'affichage visuel d'un provider (appelé après changement)
-     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
+     * @param {string} providerId - ID du provider
      */
     function updateProviderDisplay(providerId) {
         // Mettre à jour les badges de statut
@@ -408,33 +412,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Vérifie si le provider custom est activé (nécessite URLs en plus)
-     * @returns {boolean}
+     * Providers qui ont un panneau, dans l'ordre d'affichage du registre (Mistral, OpenAI, Custom)
+     * @returns {string[]} Liste des IDs
      */
-    function isCustomProviderEnabled() {
-        const hasApiKey = customEnabledCheckbox.checked && Boolean(customApiKeyInput.value.trim());
-        const hasUrls =
-            Boolean(customTranscriptionUrlInput.value.trim()) &&
-            Boolean(customChatUrlInput.value.trim());
-        return hasApiKey && hasUrls;
+    function displayedProviderIds() {
+        return Providers.getUiOrder().filter((providerId) => panels.has(providerId));
     }
 
     /**
-     * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom)
+     * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom), dans
+     * l'ordre d'affichage : le premier sert de repli pour les sélecteurs de service
      * @returns {string[]} Liste des IDs
      */
     function getEnabledProviderIds() {
-        const enabled = [];
-        if (isStandardProviderEnabled(mistralEnabledCheckbox, mistralApiKeyInput)) {
-            enabled.push('mistral');
-        }
-        if (isStandardProviderEnabled(openaiEnabledCheckbox, openaiApiKeyInput)) {
-            enabled.push('openai');
-        }
-        if (isCustomProviderEnabled()) {
-            enabled.push('custom');
-        }
-        return enabled;
+        return displayedProviderIds().filter((providerId) => isPanelReady(panels.get(providerId)));
     }
 
     /**
@@ -477,27 +468,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Charge la configuration du provider custom
-     * @param {Object} config - Configuration du provider custom
-     */
-    function loadCustomProviderConfig(config) {
-        customApiKeyInput.value = config.apiKey || '';
-        customEnabledCheckbox.checked = config.enabled || false;
-        customTranscriptionUrlInput.value = config.transcriptionUrl || '';
-        customChatUrlInput.value = config.chatUrl || '';
-    }
-
-    /**
      * Peuple les sélecteurs de modèles pour tous les providers
-     * @param {Object} configs - Configurations des providers {openai, mistral, custom}
+     * @param {Map<string, Object>} configs - Configuration de chaque provider
      */
     function populateAllModelSelects(configs) {
-        const providerIds = ['openai', 'mistral', 'custom'];
         const modelTypes = ['transcription', 'chat'];
 
-        for (const providerId of providerIds) {
-            // eslint-disable-next-line security/detect-object-injection -- providerId provient d'un tableau constant
-            const config = configs[providerId] || {};
+        for (const providerId of panels.keys()) {
+            const config = configs.get(providerId) || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];
                 const selected =
@@ -513,9 +491,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage de tous les providers
      */
     function updateAllProviderDisplays() {
-        updateProviderDisplay('openai');
-        updateProviderDisplay('mistral');
-        updateProviderDisplay('custom');
+        panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
         updateDropdownStatus();
         updatePanelBorder(providerSelector.value);
     }
@@ -550,31 +526,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 apiKey: '', // Legacy key pour migration
             },
             (items) => {
-                const configs = {
-                    openai: items.providers?.openai || {},
-                    mistral: items.providers?.mistral || {},
-                    custom: items.providers?.custom || {},
-                };
+                const configs = new Map(
+                    [...panels.keys()].map((id) => [id, storedProviderConfig(items.providers, id)]),
+                );
 
                 if (items.providers) {
                     // Mode multi-provider
-                    loadStandardProviderConfig(
-                        configs.openai,
-                        openaiApiKeyInput,
-                        openaiEnabledCheckbox,
-                    );
-                    loadStandardProviderConfig(
-                        configs.mistral,
-                        mistralApiKeyInput,
-                        mistralEnabledCheckbox,
-                    );
-                    loadCustomProviderConfig(configs.custom);
+                    panels.forEach((elements, id) => loadPanelConfig(elements, configs.get(id)));
                 } else {
-                    // Mode legacy : utiliser l'ancienne clé API pour OpenAI
-                    openaiApiKeyInput.value = items.apiKey || '';
-                    openaiEnabledCheckbox.checked = Boolean(items.apiKey);
-                    mistralEnabledCheckbox.checked = false;
-                    customEnabledCheckbox.checked = false;
+                    // Mode legacy : utiliser l'ancienne clé API pour OpenAI, les autres coupés
+                    openaiPanel.apiKey.value = items.apiKey || '';
+                    panels.forEach((elements, id) => {
+                        elements.enabled.checked = id === 'openai' && Boolean(items.apiKey);
+                    });
                 }
 
                 populateAllModelSelects(configs);
@@ -596,35 +560,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     /**
      * Sauvegarde la configuration des providers
      */
-    function saveProvidersConfig() {
-        const providers = {
-            openai: {
-                apiKey: openaiApiKeyInput.value.trim(),
-                enabled: openaiEnabledCheckbox.checked,
-                transcriptionModels: getProviderCustomModels('openai', 'transcription'),
-                chatModels: getProviderCustomModels('openai', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('openai', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('openai', 'chat'),
-            },
-            mistral: {
-                apiKey: mistralApiKeyInput.value.trim(),
-                enabled: mistralEnabledCheckbox.checked,
-                transcriptionModels: getProviderCustomModels('mistral', 'transcription'),
-                chatModels: getProviderCustomModels('mistral', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('mistral', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('mistral', 'chat'),
-            },
-            custom: {
-                apiKey: customApiKeyInput.value.trim(),
-                enabled: customEnabledCheckbox.checked,
-                transcriptionUrl: customTranscriptionUrlInput.value.trim(),
-                chatUrl: customChatUrlInput.value.trim(),
-                transcriptionModels: getProviderCustomModels('custom', 'transcription'),
-                chatModels: getProviderCustomModels('custom', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('custom', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('custom', 'chat'),
-            },
+    /**
+     * Configuration d'un provider telle que saisie dans son panneau
+     * @param {string} providerId - ID du provider
+     * @param {Object} elements - Éléments du panneau
+     * @returns {Object}
+     */
+    function panelConfig(providerId, elements) {
+        return {
+            apiKey: elements.apiKey.value.trim(),
+            enabled: elements.enabled.checked,
+            ...Object.fromEntries(
+                elements.urls.map(([setting, input]) => [setting, input.value.trim()]),
+            ),
+            transcriptionModels: getProviderCustomModels(providerId, 'transcription'),
+            chatModels: getProviderCustomModels(providerId, 'chat'),
+            selectedTranscriptionModel: getSelectedProviderModel(providerId, 'transcription'),
+            selectedChatModel: getSelectedProviderModel(providerId, 'chat'),
         };
+    }
+
+    function saveProvidersConfig() {
+        // Seuls les providers historiques vont dans `providers`, dans l'ordre de STATIC_PANELS
+        const providers = Object.fromEntries(
+            [...STATIC_PANELS.keys()].map((id) => [id, panelConfig(id, panels.get(id))]),
+        );
 
         // Valider les URLs du provider custom
         if (!validateCustomProviderUrls(providers.custom, showStatus, i18n, Providers)) {
@@ -671,9 +631,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // eslint-disable-next-line no-console -- Debug log for options saving success
                     console.log('[Options] Config saved successfully');
                 }
-                updateProviderDisplay('openai');
-                updateProviderDisplay('mistral');
-                updateProviderDisplay('custom');
+                panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
             },
         );
 
@@ -786,15 +744,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ===== Gestion des modèles pour tous les providers =====
 
     // Stockage temporaire des modèles personnalisés par provider
-    const providerCustomModelsCache = {
-        openai: { transcription: [], chat: [] },
-        mistral: { transcription: [], chat: [] },
-        custom: { transcription: [], chat: [] },
-    };
+    const providerCustomModelsCache = new Map(
+        [...panels.keys()].map((id) => [id, { transcription: [], chat: [] }]),
+    );
 
     /**
      * Peuple le sélecteur de modèles d'un provider (par défaut + personnalisés)
-     * @param {string} providerId - ID du provider ('openai', 'mistral', 'custom')
+     * @param {string} providerId - ID du provider
      * @param {string} modelType - 'transcription' ou 'chat'
      * @param {string[]} customModels - Liste des modèles personnalisés
      * @param {string} selectedModel - Modèle actuellement sélectionné
@@ -805,8 +761,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         customModels = [],
         selectedModel = null,
     ) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return;
 
         const selectElement =
@@ -815,8 +770,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!selectElement) return;
 
         // Sauvegarder les modèles personnalisés dans le cache
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
-        providerCustomModelsCache[providerId][modelType] = [...customModels];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        providerCustomModelsCache.get(providerId)[modelType] = [...customModels];
 
         selectElement.innerHTML = '';
 
@@ -875,8 +830,8 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string[]} Liste des modèles personnalisés
      */
     function getProviderCustomModels(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
-        return providerCustomModelsCache[providerId]?.[modelType] || [];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        return providerCustomModelsCache.get(providerId)?.[modelType] || [];
     }
 
     /**
@@ -886,8 +841,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     function getSelectedProviderModel(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return null;
 
         const selectElement =
@@ -903,8 +857,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {{input: HTMLInputElement, select: HTMLSelectElement}|null}
      */
     function getModelAddElements(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return null;
 
         const input =
@@ -921,8 +874,8 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} model - Nom du modèle
      */
     function addModelToCache(providerId, modelType, model) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : valeurs contrôlées
-        const cache = providerCustomModelsCache[providerId][modelType];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        const cache = providerCustomModelsCache.get(providerId)[modelType];
         if (!cache.includes(model)) {
             cache.push(model);
         }
@@ -1045,7 +998,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
         // Vide tant qu'OpenAI est désactivé : les anciennes versions l'enverraient à OpenAI
         // (la clé reste dans le champ OpenAI et dans providers.openai)
-        const legacyApiKey = openaiEnabledCheckbox.checked ? openaiApiKeyInput.value.trim() : '';
+        const legacyApiKey = openaiPanel.enabled.checked ? openaiPanel.apiKey.value.trim() : '';
 
         const options = {
             apiKey: legacyApiKey,
@@ -1190,59 +1143,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         showProviderConfig(providerSelector.value);
     });
 
-    // Event listeners - Providers (avec debounce pour les inputs)
-    openaiEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('openai');
-        debouncedSaveOptions();
-    });
-    openaiApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (openaiApiKeyInput.value.trim()) {
-            openaiEnabledCheckbox.checked = true;
+    /**
+     * Écouteurs d'un panneau : activation, clé API et URLs (avec debounce pour les inputs)
+     * @param {string} providerId - ID du provider
+     * @param {Object} elements - Éléments du panneau
+     */
+    function setupPanelListeners(providerId, elements) {
+        const refresh = () => {
+            updateProviderDisplay(providerId);
+            debouncedSaveOptions();
+        };
+        elements.enabled.addEventListener('change', refresh);
+        elements.apiKey.addEventListener('input', () => {
+            // Activer automatiquement le provider si une clé est saisie
+            if (elements.apiKey.value.trim()) {
+                elements.enabled.checked = true;
+            }
+            refresh();
+        });
+        for (const [, input] of elements.urls) {
+            input.addEventListener('input', refresh);
         }
-        updateProviderDisplay('openai');
-        debouncedSaveOptions();
-    });
+    }
 
-    mistralEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('mistral');
-        debouncedSaveOptions();
-    });
-    mistralApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (mistralApiKeyInput.value.trim()) {
-            mistralEnabledCheckbox.checked = true;
-        }
-        updateProviderDisplay('mistral');
-        debouncedSaveOptions();
-    });
-
-    // Event listeners - Provider Custom
-    customEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (customApiKeyInput.value.trim()) {
-            customEnabledCheckbox.checked = true;
-        }
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customTranscriptionUrlInput.addEventListener('input', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customChatUrlInput.addEventListener('input', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
+    // Event listeners - Providers
+    panels.forEach((elements, providerId) => setupPanelListeners(providerId, elements));
 
     // Event listeners - Modèles pour tous les providers
-    Object.keys(providerModelElements).forEach((providerId) => {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient de Object.keys()
-        const elements = providerModelElements[providerId];
+    panels.forEach((elements, providerId) => {
         // Boutons d'ajout de modèles
         if (elements.addTranscriptionButton) {
             elements.addTranscriptionButton.addEventListener('click', () =>
