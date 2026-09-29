@@ -125,6 +125,16 @@
         "message": "Usuń",
         "description": "Przycisk usuwający ustawienia dostawcy z nowszej wersji"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nowsza wersja)",
+        "description": "Opcja wyboru usługi dla dostawcy zapisanego przez nowszą wersję ($provider$: jego identyfikator)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Twój klucz API OpenAI (sk-...)",
         "description": "Symbol zastępczy klucza API"

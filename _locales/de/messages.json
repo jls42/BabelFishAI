@@ -125,6 +125,16 @@
         "message": "Löschen",
         "description": "Schaltfläche, die die Einstellungen eines Providers einer neueren Version löscht"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (neuere Version)",
+        "description": "Option einer Dienstauswahl für einen Anbieter, den eine neuere Version gespeichert hat ($provider$: seine Kennung)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"

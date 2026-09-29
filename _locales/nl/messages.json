@@ -125,6 +125,16 @@
         "message": "Verwijderen",
         "description": "Knop die de instellingen van een provider uit een nieuwere versie verwijdert"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nieuwere versie)",
+        "description": "Optie van een servicekeuze voor een provider die door een nieuwere versie is opgeslagen ($provider$: de id ervan)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Plaatsaanduiding voor de API-sleutel"

@@ -125,6 +125,16 @@
         "message": "Șterge",
         "description": "Buton care șterge setările unui furnizor dintr-o versiune mai nouă"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (versiune mai nouă)",
+        "description": "Opțiune a unui selector de serviciu pentru un furnizor salvat de o versiune mai nouă ($provider$: identificatorul său)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"

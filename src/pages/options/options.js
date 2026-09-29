@@ -603,6 +603,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (enabledProviders.includes(currentChat)) {
             chatProviderSelect.value = currentChat;
         }
+
+        // Une sélection d'une version plus récente reste affichée telle qu'elle est écrite,
+        // jusqu'à ce que l'utilisateur choisisse un autre provider
+        showFutureSelection(transcriptionProviderSelect, futureSelection.transcription);
+        showFutureSelection(chatProviderSelect, futureSelection.chat);
+    }
+
+    /**
+     * Ajoute à un sélecteur de service l'option sélectionnée d'un provider d'une version plus
+     * récente, que cette version ne sait pas utiliser
+     * @param {HTMLSelectElement} select - Sélecteur de service
+     * @param {string|null} providerId - Sélection gardée pour ce service, ou null
+     */
+    function showFutureSelection(select, providerId) {
+        if (!providerId) return;
+        const option = document.createElement('option');
+        option.value = providerId;
+        option.textContent = i18n.getMessage('newerVersionProviderOption', {
+            provider: providerId,
+        });
+        select.appendChild(option);
+        select.value = providerId;
     }
 
     /**

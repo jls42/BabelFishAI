@@ -125,6 +125,16 @@
         "message": "Effacer",
         "description": "Bouton qui efface les réglages d'un provider d'une version plus récente"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (version plus récente)",
+        "description": "Option d'un sélecteur de service pour un provider enregistré par une version plus récente ($provider$ : son identifiant)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Votre clé API OpenAI (sk-...)",
         "description": "Placeholder pour la clé API"

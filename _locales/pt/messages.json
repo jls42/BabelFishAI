@@ -125,6 +125,16 @@
         "message": "Excluir",
         "description": "Botão que exclui as configurações de um provedor de uma versão mais recente"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (versão mais recente)",
+        "description": "Opção de um seletor de serviço para um provedor salvo por uma versão mais recente ($provider$: seu identificador)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Sua chave API OpenAI (sk-...)",
         "description": "Espaço reservado para a chave API"

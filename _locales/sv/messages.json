@@ -125,6 +125,16 @@
         "message": "Ta bort",
         "description": "Knapp som tar bort inställningarna för en leverantör från en nyare version"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nyare version)",
+        "description": "Alternativ i en tjänsteväljare för en leverantör som sparats av en nyare version ($provider$: dess identifierare)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"

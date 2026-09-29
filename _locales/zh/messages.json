@@ -125,6 +125,16 @@
         "message": "删除",
         "description": "删除较新版本供应商设置的按钮"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$（较新版本）",
+        "description": "服务选择器中由较新版本保存的提供商选项（$provider$：其标识符）",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥（sk-...）",
         "description": "API 密钥的占位符"

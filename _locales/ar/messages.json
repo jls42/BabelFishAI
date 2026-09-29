@@ -125,6 +125,16 @@
         "message": "حذف",
         "description": "زر يحذف إعدادات مزود من إصدار أحدث"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (إصدار أحدث)",
+        "description": "خيار في محدد الخدمة لموفر حفظه إصدار أحدث ($provider$: معرّفه)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
         "description": "العنصر النائب لمفتاح واجهة برمجة التطبيقات"

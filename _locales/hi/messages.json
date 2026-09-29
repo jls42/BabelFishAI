@@ -125,6 +125,16 @@
         "message": "हटाएं",
         "description": "नए संस्करण के किसी प्रदाता की सेटिंग्स हटाने वाला बटन"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (नया संस्करण)",
+        "description": "नए संस्करण द्वारा सहेजे गए प्रदाता के लिए सेवा चयनकर्ता का विकल्प ($provider$: उसका पहचानकर्ता)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "आपकी OpenAI API कुंजी (sk-...)",
         "description": "API कुंजी के लिए प्लेसहोल्डर"

@@ -125,6 +125,16 @@
         "message": "Delete",
         "description": "Button that deletes the settings of a provider from a newer version"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (newer version)",
+        "description": "Service selector option for a provider saved by a newer version ($provider$: its identifier)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Your OpenAI API key (sk-...)",
         "description": "Placeholder for the API key"

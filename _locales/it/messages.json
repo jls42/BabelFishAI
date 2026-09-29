@@ -125,6 +125,16 @@
         "message": "Elimina",
         "description": "Pulsante che elimina le impostazioni di un provider di una versione più recente"
     },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (versione più recente)",
+        "description": "Opzione di un selettore di servizio per un provider salvato da una versione più recente ($provider$: il suo identificativo)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "La tua chiave API OpenAI (sk-...)",
         "description": "Segnaposto per la chiave API"
