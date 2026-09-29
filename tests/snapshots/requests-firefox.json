@@ -506,6 +506,80 @@
             "valeur": "Dictée en JSON. "
         }
     },
+    "dictée au format gemini-interactions": {
+        "incomplete": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/audio/transcriptions"
+                }
+            ],
+            "resultat": {
+                "erreur": "Error: Transcription inachevée (statut : incomplete)"
+            }
+        },
+        "terminee": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/audio/transcriptions"
+                }
+            ],
+            "resultat": {
+                "valeur": "Bonjour, ceci est une dictée. "
+            }
+        },
+        "terminee-sans-etapes": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/audio/transcriptions"
+                }
+            ],
+            "resultat": {
+                "valeur": " "
+            }
+        }
+    },
     "entêtes d’authentification fournis par l’appelant": {
         "entetes": [
             [

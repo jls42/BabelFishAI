@@ -139,11 +139,57 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         return `${text} `;
     }
 
+    /**
+     * Corps JSON d'une transcription par l'Interactions API de Gemini : l'audio en base64 dans la
+     * requête, avec son type MIME sans paramètre (audio/webm), et store: false pour que Google ne
+     * garde pas l'interaction (1 jour en offre gratuite, 55 jours en payant, doc Interactions API)
+     * @param {Object} request
+     * @param {Blob} request.audioBlob - Audio enregistré
+     * @param {string} request.model - Modèle de transcription
+     * @returns {Promise<string>} Corps sérialisé
+     */
+    async function buildInteractionsTranscriptionBody({ audioBlob, model }) {
+        const mimeType = audioBlob.type.split(';')[0] || 'audio/webm';
+        const data = await blobToBase64(audioBlob);
+        return JSON.stringify({
+            model,
+            input: [{ type: 'audio', data, mime_type: mimeType }],
+            store: false,
+        });
+    }
+
+    /**
+     * Texte d'une transcription par l'Interactions API : blocs de texte des étapes model_output.
+     * Seule une interaction terminée (status « completed ») est insérée : « incomplete » (limite
+     * de jetons atteinte), « failed » ou tout autre statut lèvent une erreur
+     * @param {Object} data - Ressource Interaction renvoyée par l'API
+     * @returns {string} Le texte, suivi d'une espace
+     * @throws {Error} Si l'interaction n'est pas terminée
+     */
+    function extractInteractionsText(data) {
+        if (data?.status !== 'completed') {
+            throw new Error(`Transcription inachevée (statut : ${data?.status ?? 'absent'})`);
+        }
+        const steps = Array.isArray(data.steps) ? data.steps : [];
+        const text = steps
+            .filter((step) => step?.type === 'model_output' && Array.isArray(step.content))
+            .flatMap((step) => step.content)
+            .filter((block) => block?.type === 'text' && typeof block.text === 'string')
+            .map((block) => block.text)
+            .join('');
+        return `${text.trim()} `;
+    }
+
     const ADAPTERS = Object.freeze({
         'openai-chat': Object.freeze({ buildBody: buildChatBody, extractText: extractMessageText }),
         'openai-multipart': Object.freeze({
             buildBody: buildTranscriptionBody,
             extractText: extractTranscriptionText,
+        }),
+        'gemini-interactions': Object.freeze({
+            buildBody: buildInteractionsTranscriptionBody,
+            extractText: extractInteractionsText,
+            headers: Object.freeze({ 'Content-Type': 'application/json' }),
         }),
     });
 

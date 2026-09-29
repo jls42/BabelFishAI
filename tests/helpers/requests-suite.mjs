@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 import { FakeFileReader, ROOT, loadScripts, setupEnv } from './env.mjs';
-import { GEMINI_ERRORS, KEYS, STORAGE } from './fixtures.mjs';
+import { GEMINI_ERRORS, GEMINI_INTERACTIONS, KEYS, STORAGE } from './fixtures.mjs';
 import { createSnapshots } from './snapshot.mjs';
 
 export const CONTENT_SCRIPTS = [
@@ -365,6 +365,17 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
         } finally {
             adapters.getAdapter = getAdapter;
         }
+    });
+    test('dictée au format gemini-interactions', async () => {
+        // Le service de dictée déclare le format de l'Interactions API : corps JSON avec l'audio
+        // en base64, Content-Type de l'adaptateur, texte lu dans les étapes, statut contrôlé
+        const result = {};
+        for (const name of ['terminee', 'terminee-sans-etapes', 'incomplete']) {
+            result[name] = await withServiceFormats({ format: 'gemini-interactions' }, () =>
+                play('transcription', STORAGE.openai, [{ json: GEMINI_INTERACTIONS[name] }]),
+            );
+        }
+        matchSnapshot('dictée au format gemini-interactions', result);
     });
     test('erreurs au format gemini : clé refusée en 400', async () => {
         const errors = { errors: 'gemini' };

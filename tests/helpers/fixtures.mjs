@@ -248,3 +248,48 @@ export const GEMINI_ERRORS = {
         },
     ],
 };
+
+// Réponses de l'Interactions API à une transcription, de la forme relevée le 2026-09-29 (page de
+// mesure du lot 4) : sans `id` quand `store` vaut false, texte dans les étapes model_output.
+// Textes et jetons d'exemple ; l'étape de réflexion (ThoughtStep de la référence) est illustrative
+const INTERACTION = {
+    usage: { total_tokens: 139, total_input_tokens: 139 },
+    created: '2026-09-29T20:49:30Z',
+    updated: '2026-09-29T20:49:30Z',
+    service_tier: 'standard',
+    object: 'interaction',
+    model: 'gemini-3.5-transcribe',
+};
+
+export const GEMINI_INTERACTIONS = {
+    terminee: {
+        ...INTERACTION,
+        status: 'completed',
+        steps: [
+            {
+                type: 'model_output',
+                content: [{ type: 'text', text: ' Bonjour, ceci est une dictée. ' }],
+            },
+        ],
+    },
+    // Relevé sur un audio fabriqué (copies d'un clip) dont le modèle n'a tiré aucun texte
+    'terminee-sans-etapes': { ...INTERACTION, status: 'completed' },
+    'etapes-melangees': {
+        ...INTERACTION,
+        status: 'completed',
+        steps: [
+            { type: 'thought', summary: [{ type: 'text', text: 'réflexion' }] },
+            {
+                type: 'model_output',
+                content: [{ type: 'text', text: 'Première phrase.' }, { type: 'image' }],
+            },
+            { type: 'model_output', content: [{ type: 'text', text: ' Seconde phrase.' }] },
+        ],
+    },
+    incomplete: {
+        ...INTERACTION,
+        status: 'incomplete',
+        steps: [{ type: 'model_output', content: [{ type: 'text', text: 'Début tronqué' }] }],
+    },
+    echec: { ...INTERACTION, status: 'failed' },
+};

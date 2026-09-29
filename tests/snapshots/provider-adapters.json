@@ -28,6 +28,22 @@
         "transcription": "Bonjour. ",
         "transcriptionVide": " "
     },
+    "dictée au format gemini-interactions": {
+        "corps": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+        "corpsNull": "erreur : Transcription inachevée (statut : absent)",
+        "corpsSansType": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+        "entetes": {
+            "Content-Type": "application/json"
+        },
+        "etapesInvalides": " ",
+        "lectures": {
+            "echec": "erreur : Transcription inachevée (statut : failed)",
+            "etapes-melangees": "Première phrase. Seconde phrase. ",
+            "incomplete": "erreur : Transcription inachevée (statut : incomplete)",
+            "terminee": "Bonjour, ceci est une dictée. ",
+            "terminee-sans-etapes": " "
+        }
+    },
     "entêtes et redirections": {
         "bearer": {
             "Authorization": "Bearer {cle openai}"

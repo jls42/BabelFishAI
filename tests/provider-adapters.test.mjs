@@ -2,7 +2,7 @@
 // politique de redirection, corps des requêtes et lecture des réponses.
 import { test } from 'node:test';
 import { FakeFileReader, describeRequest, loadScripts, setupEnv } from './helpers/env.mjs';
-import { GEMINI_ERRORS } from './helpers/fixtures.mjs';
+import { GEMINI_ERRORS, GEMINI_INTERACTIONS } from './helpers/fixtures.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
 setupEnv({ browser: 'chrome' });
@@ -87,6 +87,35 @@ test('corps et lecture des réponses', async () => {
         transcription: multipart.extractText({ text: '\n Bonjour.  ' }),
         transcriptionVide: multipart.extractText({}),
         formatInconnu: unknown,
+    });
+});
+
+test('dictée au format gemini-interactions : corps et lecture', async () => {
+    const interactions = adapters.getAdapter('gemini-interactions');
+    const audio = new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x42, 0x86, 0x81, 0x01]);
+    const read = (data) => {
+        try {
+            return interactions.extractText(data);
+        } catch (error) {
+            return `erreur : ${error.message}`;
+        }
+    };
+    matchSnapshot('dictée au format gemini-interactions', {
+        entetes: interactions.headers,
+        corps: await interactions.buildBody({
+            audioBlob: new Blob([audio], { type: 'audio/webm;codecs=opus' }),
+            filename: 'audio.webm',
+            model: 'gemini-3.5-transcribe',
+        }),
+        corpsSansType: await interactions.buildBody({
+            audioBlob: new Blob([audio]),
+            model: 'gemini-3.5-transcribe',
+        }),
+        lectures: Object.fromEntries(
+            Object.entries(GEMINI_INTERACTIONS).map(([name, data]) => [name, read(data)]),
+        ),
+        etapesInvalides: read({ status: 'completed', steps: 'pas une liste' }),
+        corpsNull: read(null),
     });
 });
 
