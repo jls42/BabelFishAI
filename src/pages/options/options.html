@@ -884,12 +884,13 @@
                 <div class="provider-config-body">
                     <div class="api-key-container">
                         <label
+                            for="templateApiKey"
                             class="visually-hidden"
                             data-i18n="apiKeyInputLabel"
                             data-field="apiKeyLabel"
                             >Clé API</label
                         >
-                        <input type="password" data-field="apiKey" />
+                        <input type="password" id="templateApiKey" data-field="apiKey" />
                         <button type="button" class="toggle-password" data-field="apiKeyToggle">
                             👁️
                         </button>
@@ -908,22 +909,29 @@
                         <div class="custom-models-section">
                             <div class="form-group">
                                 <label
+                                    for="templateTranscriptionModel"
                                     data-i18n="transcriptionModelLabel"
                                     data-field="transcriptionSelectLabel"
                                     >Modèle de transcription :</label
                                 >
                                 <select
+                                    id="templateTranscriptionModel"
                                     class="model-select"
                                     data-field="transcriptionSelect"
                                 ></select>
                                 <div class="model-input-container">
                                     <label
+                                        for="templateNewTranscriptionModel"
                                         class="visually-hidden"
                                         data-i18n="addModelInputLabel"
                                         data-field="newTranscriptionLabel"
                                         >Nouveau modèle personnalisé</label
                                     >
-                                    <input type="text" data-field="newTranscriptionInput" />
+                                    <input
+                                        type="text"
+                                        id="templateNewTranscriptionModel"
+                                        data-field="newTranscriptionInput"
+                                    />
                                     <button
                                         type="button"
                                         data-i18n="addModelButton"
@@ -934,18 +942,30 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label data-i18n="chatModelLabel" data-field="chatSelectLabel"
+                                <label
+                                    for="templateChatModel"
+                                    data-i18n="chatModelLabel"
+                                    data-field="chatSelectLabel"
                                     >Modèle de chat :</label
                                 >
-                                <select class="model-select" data-field="chatSelect"></select>
+                                <select
+                                    id="templateChatModel"
+                                    class="model-select"
+                                    data-field="chatSelect"
+                                ></select>
                                 <div class="model-input-container">
                                     <label
+                                        for="templateNewChatModel"
                                         class="visually-hidden"
                                         data-i18n="addModelInputLabel"
                                         data-field="newChatLabel"
                                         >Nouveau modèle personnalisé</label
                                     >
-                                    <input type="text" data-field="newChatInput" />
+                                    <input
+                                        type="text"
+                                        id="templateNewChatModel"
+                                        data-field="newChatInput"
+                                    />
                                     <button
                                         type="button"
                                         data-i18n="addModelButton"
@@ -962,7 +982,7 @@
         </template>
         <template id="providerToggleTemplate">
             <label class="provider-toggle" style="display: none">
-                <input type="checkbox" data-field="enabled" />
+                <input type="checkbox" data-field="enabled" aria-label="Enable provider" />
                 <span class="toggle-slider"></span>
             </label>
         </template>

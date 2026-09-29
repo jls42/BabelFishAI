@@ -119,7 +119,7 @@ function fillProviderPanel(panel, ids, provider) {
     const field = (name) => panel.querySelector(`[data-field="${name}"]`);
     const bind = (name, id, labelName) => {
         field(name).id = id;
-        if (labelName) field(labelName).htmlFor = id;
+        if (labelName) field(labelName).setAttribute('for', id);
     };
     panel.id = ids.panel;
     panel.dataset.provider = provider.id;
@@ -149,7 +149,6 @@ function fillProviderPanel(panel, ids, provider) {
 function createProviderToggle(ids, provider) {
     const toggle = cloneTemplate('providerToggleTemplate');
     toggle.id = ids.toggle;
-    toggle.setAttribute('aria-label', `Enable ${provider.name} provider`);
     const checkbox = toggle.querySelector('[data-field="enabled"]');
     checkbox.id = `${ids.prefix}Enabled`;
     checkbox.setAttribute('aria-label', `Enable ${provider.name}`);
