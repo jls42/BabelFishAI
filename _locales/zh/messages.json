@@ -468,7 +468,7 @@
         "description": "无效 URL 的错误消息"
     },
     "geminiKeyNote": {
-        "message": "提示：请使用已启用结算的项目中的密钥。使用免费密钥时，在欧洲（欧洲经济区、瑞士、英国）以外，Google 可能会使用您的内容改进其产品：请勿用它听写个人数据。请勿将密钥限制为特定网站。",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "提示：请使用已启用结算的项目中的密钥。使用免费密钥时，如果您位于欧洲经济区、瑞士和英国以外，Google 可能会使用您的听写内容和发送的文本改进其产品，并可能由人工审核：请勿用它发送任何个人、敏感或机密信息。请将密钥限制为 Gemini API（新密钥的默认设置），切勿限制为网站。",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

@@ -124,7 +124,7 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
     -   Entrez votre clé API :
         -   **Mistral AI** : disponible sur [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
         -   **OpenAI** : disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-        -   **Gemini** : disponible sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Préférez une clé d'un projet avec facturation : avec une clé gratuite, hors de l'Espace économique européen, de la Suisse et du Royaume-Uni, Google peut utiliser vos contenus pour améliorer ses produits. Ne restreignez pas la clé à des sites web : sous Chrome, les requêtes partent de la page où vous dictez.
+        -   **Gemini** : disponible sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Préférez une clé d'un projet avec facturation : avec une clé gratuite, si vous vous trouvez hors de l'Espace économique européen, de la Suisse et du Royaume-Uni, Google peut utiliser vos dictées et les textes envoyés pour améliorer ses produits, avec une relecture humaine possible ; n'y envoyez aucune information personnelle, sensible ou confidentielle. Restreignez la clé à l'API Gemini (réglage par défaut des nouvelles clés), jamais à des sites web : sous Chrome, les requêtes partent de la page où vous dictez.
     -   Activez le provider avec le toggle à côté du menu déroulant.
 
 2.  **Personnalisation des Options :**

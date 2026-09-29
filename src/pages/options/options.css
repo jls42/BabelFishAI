@@ -1058,10 +1058,11 @@ input[type='color']:focus {
     font-size: var(--text-sm);
 }
 
-/* Note propre à un provider, sous le lien de sa page de clés */
+/* Note propre à un provider, sous le lien de sa page de clés : même taille que l'aide, car elle
+   peut porter un avertissement de confidentialité */
 .provider-config-body .provider-note {
     margin: var(--space-2) 0 0;
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     line-height: 1.5;
 }
 

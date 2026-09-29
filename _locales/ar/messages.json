@@ -468,7 +468,7 @@
         "description": "رسالة خطأ لعناوين URL غير صالحة"
     },
     "geminiKeyNote": {
-        "message": "نصيحة: استخدم مفتاحًا من مشروع مفعّل فيه الفوترة. مع مفتاح مجاني، خارج أوروبا (المنطقة الاقتصادية الأوروبية وسويسرا والمملكة المتحدة)، يمكن لـ Google استخدام محتواك لتحسين منتجاتها: لا تُملِ بيانات شخصية باستخدامه. لا تقيّد المفتاح بمواقع ويب.",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "نصيحة: استخدم مفتاحًا من مشروع مفعّل فيه الفوترة. مع مفتاح مجاني، إذا كنت خارج المنطقة الاقتصادية الأوروبية وسويسرا والمملكة المتحدة، يمكن لـ Google استخدام إملاءاتك والنصوص التي ترسلها لتحسين منتجاتها، مع احتمال مراجعتها من قِبل أشخاص: لا ترسل باستخدامه أي معلومات شخصية أو حساسة أو سرية. قيّد المفتاح بواجهة Gemini API (الإعداد الافتراضي للمفاتيح الجديدة)، ولا تقيّده أبدًا بمواقع ويب.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

@@ -468,7 +468,7 @@
         "description": "Mesaj de eroare pentru URL-uri invalide"
     },
     "geminiKeyNote": {
-        "message": "Sfat: folosiți o cheie dintr-un proiect cu facturare activată. Cu o cheie gratuită, în afara Europei (SEE, Elveția, Regatul Unit), Google vă poate folosi conținutul pentru a-și îmbunătăți produsele: nu dictați date personale cu ea. Nu restricționați cheia la site-uri web.",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "Sfat: folosiți o cheie dintr-un proiect cu facturare activată. Cu o cheie gratuită, dacă vă aflați în afara SEE, a Elveției și a Regatului Unit, Google vă poate folosi dictările și textele trimise pentru a-și îmbunătăți produsele, cu posibilă verificare umană: nu trimiteți cu ea informații personale, sensibile sau confidențiale. Restricționați cheia la API-ul Gemini (setarea implicită a cheilor noi), niciodată la site-uri web.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

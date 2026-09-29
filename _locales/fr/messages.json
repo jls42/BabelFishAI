@@ -468,7 +468,7 @@
         "description": "Message d'erreur pour les URLs invalides"
     },
     "geminiKeyNote": {
-        "message": "Conseil : utilisez une clé d'un projet avec facturation. Avec une clé gratuite, hors d'Europe (EEE, Suisse, Royaume-Uni), Google peut utiliser vos contenus pour améliorer ses produits : n'y dictez pas de données personnelles. Ne restreignez pas la clé à des sites web.",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "Conseil : utilisez une clé d'un projet avec facturation. Avec une clé gratuite, si vous êtes hors de l'EEE, de la Suisse et du Royaume-Uni, Google peut utiliser vos dictées et les textes envoyés pour améliorer ses produits, avec une relecture humaine possible : n'y envoyez aucune information personnelle, sensible ou confidentielle. Restreignez la clé à l'API Gemini (réglage par défaut des nouvelles clés), jamais à des sites web.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

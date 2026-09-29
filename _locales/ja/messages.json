@@ -468,7 +468,7 @@
         "description": "無効なURLのエラーメッセージ"
     },
     "geminiKeyNote": {
-        "message": "ヒント：請求先アカウントが有効なプロジェクトのキーを使用してください。無料のキーでは、ヨーロッパ（EEA、スイス、英国）以外で、Google がコンテンツを製品の改善に使用する場合があります。無料のキーで個人データを音声入力しないでください。キーをウェブサイトに制限しないでください。",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "ヒント：請求先アカウントが有効なプロジェクトのキーを使用してください。無料のキーでは、EEA、スイス、英国の外にいる場合、Google が音声入力の内容や送信したテキストを製品の改善に使用し、人間が確認することがあります。無料のキーで個人情報、機密情報、秘密の情報を送信しないでください。キーは Gemini API に制限し（新しいキーの既定の設定）、ウェブサイトには制限しないでください。",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

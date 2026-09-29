@@ -468,7 +468,7 @@
         "description": "अमान्य URLs के लिए त्रुटि संदेश"
     },
     "geminiKeyNote": {
-        "message": "सुझाव: बिलिंग सक्षम प्रोजेक्ट की कुंजी का उपयोग करें। मुफ़्त कुंजी के साथ, यूरोप (EEA, स्विट्ज़रलैंड, यूके) के बाहर, Google आपकी सामग्री का उपयोग अपने उत्पादों को बेहतर बनाने के लिए कर सकता है: इससे व्यक्तिगत डेटा बोलकर न लिखवाएँ। कुंजी को वेबसाइटों तक सीमित न करें।",
-        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
+        "message": "सुझाव: बिलिंग सक्षम प्रोजेक्ट की कुंजी का उपयोग करें। मुफ़्त कुंजी के साथ, यदि आप EEA, स्विट्ज़रलैंड और यूके के बाहर हैं, तो Google आपके डिक्टेशन और भेजे गए टेक्स्ट का उपयोग अपने उत्पादों को बेहतर बनाने के लिए कर सकता है, और लोग उनकी समीक्षा भी कर सकते हैं: इससे कोई भी व्यक्तिगत, संवेदनशील या गोपनीय जानकारी न भेजें। कुंजी को Gemini API तक सीमित करें (नई कुंजियों की डिफ़ॉल्ट सेटिंग), वेबसाइटों तक कभी नहीं।",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }
