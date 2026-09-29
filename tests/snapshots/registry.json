@@ -428,6 +428,11 @@
             "mistral",
             "custom"
         ],
+        "getUiOrder": [
+            "mistral",
+            "openai",
+            "custom"
+        ],
         "isValidUrl": [
             true,
             false,
@@ -484,6 +489,7 @@
             "getProviderOrder",
             "getService",
             "getTranscriptionUrl",
+            "getUiOrder",
             "isModelAvailable",
             "isValidUrl",
             "parseFullModelId",
@@ -541,7 +547,13 @@
                         "id": "whisper",
                         "name": "whisper"
                     }
-                ]
+                ],
+                "ui": {
+                    "emoji": "🚅",
+                    "order": 90,
+                    "short": "Cus",
+                    "statusName": "Custom"
+                }
             },
             "mistral": {
                 "chatModels": [
@@ -606,7 +618,14 @@
                         "id": "voxtral-mini-latest",
                         "name": "Voxtral Mini"
                     }
-                ]
+                ],
+                "ui": {
+                    "keyUrl": "https://console.mistral.ai/api-keys",
+                    "logo": "images/mistral-logo.png",
+                    "order": 10,
+                    "short": "Mis",
+                    "statusName": "Mistral"
+                }
             },
             "openai": {
                 "chatModels": [
@@ -691,7 +710,14 @@
                         "id": "gpt-4o-transcribe",
                         "name": "gpt-4o-transcribe"
                     }
-                ]
+                ],
+                "ui": {
+                    "keyUrl": "https://platform.openai.com/account/api-keys",
+                    "logo": "images/openai-logo.png",
+                    "order": 20,
+                    "short": "OAI",
+                    "statusName": "OpenAI"
+                }
             }
         }
     }

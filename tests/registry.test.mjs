@@ -68,6 +68,7 @@ test('accesseurs par provider', () => {
 test('accesseurs transverses', () => {
     matchSnapshot('accesseurs transverses', {
         getProviderOrder: registry.getProviderOrder(),
+        getUiOrder: registry.getUiOrder?.() ?? null,
         getEnabledProviders: [
             registry.getEnabledProviders(null),
             registry.getEnabledProviders({

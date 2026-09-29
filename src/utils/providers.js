@@ -21,8 +21,9 @@ globalThis.BabelFishAIProviders = (function () {
     /**
      * Définition des providers IA disponibles
      * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
-     * authentification, format d'erreur) et ses modèles supportés. Un modèle peut porter
-     * `temperature: false` s'il refuse ce paramètre
+     * authentification, format d'erreur), sa présentation dans la page d'options (`ui` : rang,
+     * abréviation, nom du statut, logo ou emoji, page des clés) et ses modèles supportés.
+     * Un modèle peut porter `temperature: false` s'il refuse ce paramètre
      */
     const PROVIDERS = {
         openai: {
@@ -33,6 +34,13 @@ globalThis.BabelFishAIProviders = (function () {
                 chat: 'https://api.openai.com/v1/chat/completions',
             },
             services: OPENAI_COMPATIBLE_SERVICES,
+            ui: {
+                order: 20,
+                short: 'OAI',
+                statusName: 'OpenAI',
+                logo: 'images/openai-logo.png',
+                keyUrl: 'https://platform.openai.com/account/api-keys',
+            },
             // whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe sont retirés de l'API
             // OpenAI le 2027-02-26, avec gpt-transcribe pour remplaçant recommandé
             transcriptionModels: [
@@ -63,6 +71,13 @@ globalThis.BabelFishAIProviders = (function () {
                 chat: 'https://api.mistral.ai/v1/chat/completions',
             },
             services: OPENAI_COMPATIBLE_SERVICES,
+            ui: {
+                order: 10,
+                short: 'Mis',
+                statusName: 'Mistral',
+                logo: 'images/mistral-logo.png',
+                keyUrl: 'https://console.mistral.ai/api-keys',
+            },
             transcriptionModels: [
                 { id: 'voxtral-mini-latest', name: 'Voxtral Mini', default: true },
             ],
@@ -89,6 +104,8 @@ globalThis.BabelFishAIProviders = (function () {
                 },
                 chat: { ...OPENAI_COMPATIBLE_SERVICES.chat, urlSetting: 'chatUrl' },
             },
+            // Pas de logo officiel : l'emoji 🚅 de LiteLLM
+            ui: { order: 90, short: 'Cus', statusName: 'Custom', emoji: '🚅' },
             transcriptionModels: [
                 { id: 'whisper-1', name: 'whisper-1', default: true },
                 { id: 'whisper', name: 'whisper' },
@@ -154,6 +171,17 @@ globalThis.BabelFishAIProviders = (function () {
      */
     function getAllProviders() {
         return { ...PROVIDERS };
+    }
+
+    /**
+     * IDs des providers dans l'ordre de la page d'options (rang `ui.order` : Mistral, OpenAI,
+     * les nouveaux providers, puis Custom)
+     * @returns {string[]}
+     */
+    function getUiOrder() {
+        return Object.values(PROVIDERS)
+            .sort((a, b) => a.ui.order - b.ui.order)
+            .map((provider) => provider.id);
     }
 
     /**
@@ -431,6 +459,7 @@ globalThis.BabelFishAIProviders = (function () {
         acceptsTemperature,
         getAllProviders,
         getProviderOrder,
+        getUiOrder,
         getEnabledProviders,
         getTranscriptionUrl,
         getChatUrl,
