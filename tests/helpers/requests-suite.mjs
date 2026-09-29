@@ -266,7 +266,30 @@ function defineHttpErrorTests({ play, matchSnapshot }) {
     }
 }
 
-/** Modèle que le registre déclare sans temperature : la correction ne l'envoie jamais */
+/**
+ * Joue un appel pendant que chaque service du registre déclare d'autres formats
+ * @param {Object} formats - Champs remplacés dans chaque service (format, errors)
+ * @param {Function} fn
+ * @returns {Promise<*>}
+ */
+async function withServiceFormats(formats, fn) {
+    const registry = globalThis.BabelFishAIProviders;
+    const getService = registry.getService;
+    registry.getService = (id, service) => {
+        const definition = getService(id, service);
+        return definition && { ...definition, ...formats };
+    };
+    try {
+        return await fn();
+    } finally {
+        registry.getService = getService;
+    }
+}
+
+/**
+ * Indicateurs et formats du registre : un modèle déclaré sans temperature ne la reçoit jamais,
+ * et le format des corps comme celui des erreurs viennent du service appelé
+ */
 function defineRegistryFlagTests({ play, matchSnapshot }) {
     test('correction : modèle déclaré sans temperature', async () => {
         const registry = globalThis.BabelFishAIProviders;
@@ -278,6 +301,21 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
         } finally {
             registry.acceptsTemperature = accepts;
         }
+    });
+    test('formats lus dans le registre', async () => {
+        const format = { format: 'format-test' };
+        const errors = { errors: 'format-test' };
+        matchSnapshot('formats lus dans le registre', {
+            chat: await withServiceFormats(format, () =>
+                play('reformulation', STORAGE.openai, [OK_CHAT]),
+            ),
+            transcription: await withServiceFormats(format, () =>
+                play('transcription', STORAGE.openai, [OK.transcription]),
+            ),
+            erreurs: await withServiceFormats(errors, () =>
+                play('traduction', STORAGE.openai, [HTTP_ERRORS[401]]),
+            ),
+        });
     });
 }
 

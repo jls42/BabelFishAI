@@ -1728,6 +1728,48 @@
             "erreur": "TypeError: NetworkError when attempting to fetch resource."
         }
     },
+    "formats lus dans le registre": {
+        "chat": {
+            "delais": [],
+            "reponsesNonConsommees": 1,
+            "requetes": [],
+            "resultat": {
+                "erreur": "Error: Erreur lors de la reformulation: Format d'API inconnu : format-test"
+            }
+        },
+        "erreurs": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/chat/completions"
+                }
+            ],
+            "resultat": {
+                "erreur": "Error: Format d'erreurs inconnu : format-test"
+            }
+        },
+        "transcription": {
+            "delais": [],
+            "reponsesNonConsommees": 1,
+            "requetes": [],
+            "resultat": {
+                "erreur": "Error: Format d'API inconnu : format-test"
+            }
+        }
+    },
     "invariant de sécurité": {
         "clé Custom vers api.openai.com, son URL": {
             "requetes": 1,

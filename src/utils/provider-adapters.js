@@ -1,5 +1,5 @@
 // Adaptateurs des formats d'API déclarés par le registre (providers.js) : construction du corps
-// des requêtes, entête d'authentification et lecture des réponses.
+// des requêtes, entête d'authentification, lecture des réponses et des messages d'erreur.
 // Sans DOM ni BabelFishAIConstants, pour servir aussi au background.
 globalThis.BabelFishAIProviderAdapters = (function () {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
@@ -122,17 +122,50 @@ globalThis.BabelFishAIProviderAdapters = (function () {
     });
 
     /**
+     * Message d'une réponse en erreur au format OpenAI : { error: { message } }
+     * @param {Object} data - Corps JSON de la réponse en erreur
+     * @returns {string|undefined} Message de l'API, undefined s'il n'y en a pas
+     */
+    function openaiErrorMessage(data) {
+        return data.error?.message;
+    }
+
+    const ERROR_READERS = Object.freeze({ openai: openaiErrorMessage });
+
+    /**
+     * Entrée d'une table de formats
+     * @param {Object} table - Table gelée, indexée par nom de format
+     * @param {string} format - Format déclaré par le registre
+     * @param {string} label - Nature du format, pour le message d'erreur
+     * @returns {*}
+     * @throws {Error} Si le format est inconnu
+     */
+    function fromTable(table, format, label) {
+        if (!Object.hasOwn(table, format)) {
+            throw new Error(`${label} inconnu : ${format}`);
+        }
+        // eslint-disable-next-line security/detect-object-injection -- format vérifié par Object.hasOwn
+        return table[format];
+    }
+
+    /**
      * Adaptateur d'un format d'API
      * @param {string} format - Format déclaré par le registre (ex. 'openai-chat')
      * @returns {{buildBody: Function, extractText: Function}}
      * @throws {Error} Si le format est inconnu
      */
     function getAdapter(format) {
-        if (!Object.hasOwn(ADAPTERS, format)) {
-            throw new Error(`Format d'API inconnu : ${format}`);
-        }
-        // eslint-disable-next-line security/detect-object-injection -- format vérifié par Object.hasOwn
-        return ADAPTERS[format];
+        return fromTable(ADAPTERS, format, "Format d'API");
+    }
+
+    /**
+     * Lecteur du message d'une réponse en erreur, selon le format d'erreurs d'un service
+     * @param {string} format - Format d'erreurs déclaré par le registre (ex. 'openai')
+     * @returns {Function} (data) => message de l'API, ou undefined
+     * @throws {Error} Si le format est inconnu
+     */
+    function getErrorReader(format) {
+        return fromTable(ERROR_READERS, format, "Format d'erreurs");
     }
 
     return {
@@ -140,5 +173,6 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         requestHeaders,
         redirectPolicy,
         getAdapter,
+        getErrorReader,
     };
 })();

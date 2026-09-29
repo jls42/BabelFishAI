@@ -49,5 +49,37 @@
         "sansSchema": {
             "x-goog-api-key": "{cle gemini}"
         }
+    },
+    "formats déclarés par le registre": {
+        "custom.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "custom.transcription": [
+            "openai-multipart",
+            "openai"
+        ],
+        "mistral.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "mistral.transcription": [
+            "openai-multipart",
+            "openai"
+        ],
+        "openai.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "openai.transcription": [
+            "openai-multipart",
+            "openai"
+        ]
+    },
+    "messages des réponses en erreur": {
+        "detailMistral": null,
+        "formatInconnu": "Format d'erreurs inconnu : format-inconnu",
+        "message": "Clé invalide",
+        "sansMessage": null
     }
 }

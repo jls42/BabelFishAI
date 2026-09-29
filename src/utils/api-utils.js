@@ -578,6 +578,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         /**
+         * Service appelé, tel que le décrit le registre des providers
+         * @returns {Object} Sa définition, ou les valeurs par défaut s'il n'en a pas
+         */
+        function serviceDefinition() {
+            const Providers = globalThis.BabelFishAIProviders;
+            return Providers.getService(providerId, service) ?? Providers.DEFAULT_SERVICE;
+        }
+
+        /**
          * Prépare les options de la requête fetch
          * @returns {Object} - Options de la requête configurées
          */
@@ -585,9 +594,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Entête d'authentification du service, décrit par le registre des providers : il
             // passe devant les entêtes de l'appelant, d'où tout autre entête d'authentification
             // est retiré, et une clé hors d'Authorization ne suit pas de redirection
-            const Providers = globalThis.BabelFishAIProviders;
             const adapters = globalThis.BabelFishAIProviderAdapters;
-            const auth = Providers.getService(providerId, service)?.auth ?? Providers.DEFAULT_AUTH;
+            const { auth } = serviceDefinition();
             return {
                 method,
                 headers: adapters.requestHeaders(headers, adapters.authHeaders(auth, apiKey)),
@@ -603,10 +611,14 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          */
         async function handleHttpErrors(response) {
             if (!response.ok) {
+                // Message lu selon le format d'erreurs que le registre déclare pour ce service
+                const readErrorMessage = globalThis.BabelFishAIProviderAdapters.getErrorReader(
+                    serviceDefinition().errors,
+                );
                 let errorMessage; // skipcq: JS-0119 - Initialisation dépend du bloc try/catch.
                 try {
                     const errorData = await response.json();
-                    errorMessage = errorData.error?.message || errorType;
+                    errorMessage = readErrorMessage(errorData) || errorType;
                     // Message de l'API en texte : l'objet seul s'affiche replié dans la console
                     console.error(
                         `API Error (HTTP ${response.status}): ${errorMessage}`,

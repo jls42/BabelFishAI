@@ -87,3 +87,32 @@ test('corps et lecture des réponses', async () => {
         formatInconnu: unknown,
     });
 });
+
+test('messages des réponses en erreur', () => {
+    const openai = adapters.getErrorReader('openai');
+    let unknown;
+    try {
+        adapters.getErrorReader('format-inconnu');
+    } catch (error) {
+        unknown = error.message;
+    }
+    matchSnapshot('messages des réponses en erreur', {
+        message: openai({ error: { message: 'Clé invalide', type: 'invalid_request_error' } }),
+        sansMessage: openai({ error: {} }) ?? null,
+        detailMistral: openai({ detail: [{ msg: 'champ manquant' }] }) ?? null,
+        formatInconnu: unknown,
+    });
+});
+
+test('formats déclarés par le registre, tous connus des adaptateurs', () => {
+    const result = {};
+    for (const provider of Object.values(registry.getAllProviders())) {
+        for (const [service, definition] of Object.entries(provider.services)) {
+            adapters.getAdapter(definition.format);
+            adapters.getErrorReader(definition.errors);
+            result[`${provider.id}.${service}`] = [definition.format, definition.errors];
+        }
+    }
+    adapters.getErrorReader(registry.DEFAULT_SERVICE.errors);
+    matchSnapshot('formats déclarés par le registre', result);
+});

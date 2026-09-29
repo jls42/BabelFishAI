@@ -17,12 +17,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     const CORRECTION_TEMPERATURE = 0.1;
 
     /**
-     * Adaptateur du format chat/completions (provider-adapters.js) : corps des requêtes et
-     * lecture des réponses, blocs de réflexion Mistral compris
+     * Adaptateur du format de chat que le registre déclare pour ce provider
+     * (provider-adapters.js) : corps des requêtes et lecture des réponses, blocs de réflexion
+     * Mistral compris
+     * @param {string} providerId - Provider de chat résolu par resolveApiConfig
      * @returns {{buildBody: Function, extractText: Function}}
      */
-    function chatAdapter() {
-        return globalThis.BabelFishAIProviderAdapters.getAdapter('openai-chat');
+    function chatAdapter(providerId) {
+        // Sans service de chat au registre (provider inconnu), callApi refusera la requête
+        const format = globalThis.BabelFishAIProviders.getService(providerId, 'chat')?.format;
+        return globalThis.BabelFishAIProviderAdapters.getAdapter(format ?? 'openai-chat');
     }
 
     /**
@@ -94,7 +98,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             ];
 
             // Préparer la charge utile pour l'API (option no-log si demandé)
-            const body = chatAdapter().buildBody({
+            const body = chatAdapter(config.providerId).buildBody({
                 model: modelType,
                 messages,
                 noLog: disableLogging,
@@ -118,7 +122,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte reformulé
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const rephrasedText = chatAdapter().extractText(response);
+                const rephrasedText = chatAdapter(config.providerId).extractText(response);
                 return rephrasedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -156,7 +160,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         const callWith = (withTemperature) =>
             globalThis.BabelFishAIUtils.api.callApi({
                 ...apiOptions,
-                body: chatAdapter().buildBody({
+                body: chatAdapter(apiOptions.providerId).buildBody({
                     model: modelType,
                     messages,
                     temperature: withTemperature ? CORRECTION_TEMPERATURE : undefined,
@@ -242,7 +246,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
             // Extraire et retourner le texte corrigé
             if (response?.choices?.length > 0) {
-                const correctedText = chatAdapter().extractText(response);
+                const correctedText = chatAdapter(config.providerId).extractText(response);
                 return correctedText;
             } else {
                 throw new Error('Réponse API invalide');
@@ -301,7 +305,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             ];
 
             // Préparer la charge utile pour l'API (option no-log si demandé)
-            const body = chatAdapter().buildBody({
+            const body = chatAdapter(config.providerId).buildBody({
                 model: modelType,
                 messages,
                 noLog: disableLogging,
@@ -325,7 +329,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Extraire et retourner le texte traduit
             // Utilisation du chaînage optionnel
             if (response?.choices?.length > 0) {
-                const translatedText = chatAdapter().extractText(response);
+                const translatedText = chatAdapter(config.providerId).extractText(response);
                 return translatedText;
             } else {
                 throw new Error('Réponse API invalide');

@@ -475,7 +475,7 @@
     },
     "données du registre": {
         "exports": [
-            "DEFAULT_AUTH",
+            "DEFAULT_SERVICE",
             "acceptsTemperature",
             "authHeaderNames",
             "createDefaultProvidersConfig",

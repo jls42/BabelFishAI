@@ -398,8 +398,8 @@ globalThis.BabelFishAIProviders = (function (definitions) {
 
     // API publique du module
     return {
-        // Constantes (gelée avec les providers, dont les services la reprennent)
-        DEFAULT_AUTH: definitions.defaultAuth,
+        // Valeurs par défaut d'un service, pour un type de service que le registre ne déclare pas
+        DEFAULT_SERVICE: deepFreeze(serviceWithDefaults({})),
 
         // Getters
         getProvider,

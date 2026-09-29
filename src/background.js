@@ -691,7 +691,7 @@ function keyForProxiedRequest(store, data, { providerId, service, url }) {
  * @returns {{header: string, scheme?: string}}
  */
 function serviceAuth(registry, providerId, service) {
-    return registry.getService(providerId, service)?.auth ?? registry.DEFAULT_AUTH;
+    return (registry.getService(providerId, service) ?? registry.DEFAULT_SERVICE).auth;
 }
 
 /**
