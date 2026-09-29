@@ -42,9 +42,9 @@ Vulnerabilities that the project can realistically prevent or mitigate:
 -   **XSS via DOM injection** in third-party pages where the extension injects
     content scripts (status banner, dialog box, language selector).
 -   **Leak or exposure of API keys** stored in `chrome.storage.sync`
-    (OpenAI / Mistral / LiteLLM credentials configured by the user).
+    (OpenAI / Mistral / Gemini / LiteLLM credentials configured by the user).
 -   **Mis-routing, downgrade or unintended exposure** of API calls to the
-    official providers (OpenAI, Mistral, LiteLLM proxy).
+    official providers (OpenAI, Mistral, Gemini, LiteLLM proxy).
 -   **CSP bypass** in the Firefox `proxyFetch` background script.
 -   **Cross-extension or cross-origin data exfiltration** triggered by the
     extension itself.
@@ -62,7 +62,7 @@ The following are not vulnerabilities of this extension:
     extension's UI.
 -   **Findings limited to non-standard user configuration** (e.g. arbitrary
     custom LiteLLM endpoints pointing at malicious servers).
--   **Third-party provider issues** (OpenAI / Mistral side outages, API quota
+-   **Third-party provider issues** (OpenAI / Mistral / Gemini side outages, API quota
     abuse, model output content).
 
 ## Coordinated Disclosure
