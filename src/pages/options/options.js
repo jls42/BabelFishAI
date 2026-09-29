@@ -319,6 +319,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // la session. Seuls ces derniers sont écrits, pour ne pas écraser la clé d'un autre poste
     const storedExtraProviders = new Set();
     const modifiedExtraProviders = new Set();
+    // Configuration lue ou écrite de chaque provider généré : ses champs inconnus du panneau
+    // (ajoutés par une version plus récente) sont conservés à la réécriture
+    const storedExtraConfigs = new Map();
 
     // Sélection lue d'une version plus récente (identifiant inconnu du registre), par service :
     // elle est réécrite telle quelle tant que l'utilisateur ne change pas ce sélecteur
@@ -663,6 +666,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 continue;
             }
             if (Object.keys(config).length) storedExtraProviders.add(id);
+            storedExtraConfigs.set(id, config);
             configs.set(id, config);
         }
         return configs;
@@ -819,7 +823,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         for (const id of modified) {
             const config = panelConfig(id, panels.get(id));
             if (!isEmptyConfig(config)) {
-                writes[`${EXTRA_PREFIX}${id}`] = config;
+                writes[`${EXTRA_PREFIX}${id}`] = { ...storedExtraConfigs.get(id), ...config };
             } else if (storedExtraProviders.has(id)) {
                 removals.push(id);
             }
@@ -848,7 +852,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     );
                     return;
                 }
-                removals.forEach((id) => storedExtraProviders.delete(id));
+                removals.forEach((id) => {
+                    storedExtraProviders.delete(id);
+                    storedExtraConfigs.set(id, {});
+                });
             },
         );
     }
