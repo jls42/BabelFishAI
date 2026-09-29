@@ -118,7 +118,7 @@
         "description": "Tytuł sekcji dostawców zapisanych przez nowszą wersję"
     },
     "unknownProvidersDescription": {
-        "message": "Nowsza wersja BabelFishAI, na przykład na innym urządzeniu, zapisała tych dostawców. Ta wersja nie może z nich korzystać: zachowuje ich ustawienia bez zmian. Usunięcie ich usuwa je ze wszystkich synchronizowanych urządzeń.",
+        "message": "Nowsza wersja BabelFishAI, na przykład na innym urządzeniu, zapisała tych dostawców. Ta wersja nie może z nich korzystać: zachowuje ich ustawienia bez zmian. Usunięcie ich ustawień usuwa je ze wszystkich synchronizowanych urządzeń.",
         "description": "Objaśnienie sekcji dostawców z nowszej wersji"
     },
     "unknownProviderDelete": {
