@@ -1,4 +1,78 @@
 {
+    "actions texte : effort de réflexion déclaré pour le modèle": {
+        "correction": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}],\"temperature\":0.1,\"reasoning_effort\":\"low\"}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/chat/completions"
+                }
+            ],
+            "resultat": {
+                "valeur": "Réponse du provider."
+            }
+        },
+        "reformulation": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}],\"reasoning_effort\":\"low\"}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/chat/completions"
+                }
+            ],
+            "resultat": {
+                "valeur": "Réponse du provider."
+            }
+        },
+        "traduction": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}],\"reasoning_effort\":\"low\"}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "url": "https://api.openai.com/v1/chat/completions"
+                }
+            ],
+            "resultat": {
+                "valeur": "Réponse du provider."
+            }
+        }
+    },
     "allowlist du content script : custom": {
         "ftp://api.openai.com/v1/chat/completions": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",

@@ -6,6 +6,7 @@
     },
     "corps et lecture des réponses": {
         "chatComplet": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"temperature\":0.1,\"no-log\":true}",
+        "chatEffort": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"reasoning_effort\":\"low\"}",
         "chatSimple": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}]}",
         "formatInconnu": "Format d'API inconnu : format-inconnu",
         "multipart": [

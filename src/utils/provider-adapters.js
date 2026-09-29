@@ -48,9 +48,11 @@ globalThis.BabelFishAIProviderAdapters = (function () {
      * @param {Array<Object>} request.messages - Messages envoyés à l'API
      * @param {number} [request.temperature] - Omis si non fourni
      * @param {boolean} [request.noLog] - Ajoute l'option no-log (LiteLLM)
+     * @param {string} [request.reasoningEffort] - Effort de réflexion déclaré pour le modèle
+     *   (reasoning_effort), omis si non fourni
      * @returns {string} Corps sérialisé
      */
-    function buildChatBody({ model, messages, temperature, noLog }) {
+    function buildChatBody({ model, messages, temperature, noLog, reasoningEffort }) {
         const payload = { model, messages };
         if (temperature !== undefined) {
             payload.temperature = temperature;
@@ -58,6 +60,9 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         // Ajouter l'option no-log si demandé
         if (noLog) {
             payload['no-log'] = true;
+        }
+        if (reasoningEffort) {
+            payload.reasoning_effort = reasoningEffort;
         }
         return JSON.stringify(payload);
     }

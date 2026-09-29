@@ -19,14 +19,25 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     /**
      * Adaptateur du format de chat que le registre déclare pour ce provider
      * (provider-adapters.js) : corps des requêtes et lecture des réponses, blocs de réflexion
-     * Mistral compris
+     * Mistral compris. Le corps reçoit l'effort de réflexion que le registre déclare pour le
+     * modèle demandé (`reasoningEffort`), aucun pour un modèle qui n'en déclare pas
      * @param {string} providerId - Provider de chat résolu par resolveApiConfig
      * @returns {{buildBody: Function, extractText: Function}}
      */
     function chatAdapter(providerId) {
+        const Providers = globalThis.BabelFishAIProviders;
         // Sans service de chat au registre (provider inconnu), callApi refusera la requête
-        const format = globalThis.BabelFishAIProviders.getService(providerId, 'chat')?.format;
-        return globalThis.BabelFishAIProviderAdapters.getAdapter(format ?? 'openai-chat');
+        const format = Providers.getService(providerId, 'chat')?.format;
+        const adapter = globalThis.BabelFishAIProviderAdapters.getAdapter(format ?? 'openai-chat');
+        const models = Providers.getProvider(providerId)?.chatModels ?? [];
+        return {
+            ...adapter,
+            buildBody: (request) =>
+                adapter.buildBody({
+                    ...request,
+                    reasoningEffort: models.find((m) => m.id === request.model)?.reasoningEffort,
+                }),
+        };
     }
 
     /**

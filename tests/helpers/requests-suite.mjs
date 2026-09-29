@@ -302,6 +302,29 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
             registry.acceptsTemperature = accepts;
         }
     });
+    test('actions texte : effort de réflexion déclaré pour le modèle', async () => {
+        // Le registre déclare un effort de réflexion pour le modèle de chat d'OpenAI : il part
+        // dans chaque action texte, correction comprise
+        const registry = globalThis.BabelFishAIProviders;
+        const getProvider = registry.getProvider;
+        registry.getProvider = (id) => {
+            const provider = getProvider(id);
+            if (id !== 'openai') return provider;
+            const chatModels = provider.chatModels.map((model) =>
+                model.id === 'gpt-4o-mini' ? { ...model, reasoningEffort: 'low' } : model,
+            );
+            return { ...provider, chatModels };
+        };
+        try {
+            const result = {};
+            for (const action of ['reformulation', 'correction', 'traduction']) {
+                result[action] = await play(action, STORAGE.openai, [OK_CHAT]);
+            }
+            matchSnapshot('actions texte : effort de réflexion déclaré pour le modèle', result);
+        } finally {
+            registry.getProvider = getProvider;
+        }
+    });
     test('formats lus dans le registre', async () => {
         const format = { format: 'format-test' };
         const errors = { errors: 'format-test' };

@@ -433,7 +433,8 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
      * et au besoin authentification, format d'erreur et réglage d'URL), sa présentation dans la
      * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés) et
-     * ses modèles supportés. Un modèle peut porter `temperature: false` s'il refuse ce paramètre
+     * ses modèles supportés. Un modèle de chat peut porter `temperature: false` s'il refuse ce
+     * paramètre, et `reasoningEffort` pour l'effort de réflexion à envoyer (reasoning_effort)
      */
     providers: {
         openai: {

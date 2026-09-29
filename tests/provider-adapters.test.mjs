@@ -67,6 +67,7 @@ test('corps et lecture des réponses', async () => {
     matchSnapshot('corps et lecture des réponses', {
         chatSimple: chat.buildBody({ model: 'm', messages }),
         chatComplet: chat.buildBody({ model: 'm', messages, temperature: 0.1, noLog: true }),
+        chatEffort: chat.buildBody({ model: 'm', messages, reasoningEffort: 'low' }),
         multipart: (await describeRequest('https://x.example', { body: form })).body,
         texteChaine: chat.extractText({ choices: [{ message: { content: '  réponse  ' } }] }),
         texteBlocs: chat.extractText({
