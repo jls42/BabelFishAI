@@ -4,10 +4,6 @@
 globalThis.BabelFishAIProviders = (function (definitions) {
     'use strict'; // skipcq: JS-0118 - 'use strict' inside IIFE is intentional for module isolation
 
-    // Authentification par défaut d'un service : entête Authorization, schéma Bearer (API
-    // compatibles OpenAI)
-    const DEFAULT_AUTH = Object.freeze({ header: 'Authorization', scheme: 'Bearer' });
-
     /**
      * Gèle un objet et tout ce qu'il contient. L'invariant de sécurité tire du registre les
      * hôtes vers lesquels part la clé d'un provider : rien ne doit pouvoir les changer ensuite
@@ -29,7 +25,7 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * @returns {Object}
      */
     function serviceWithDefaults(service) {
-        return { auth: DEFAULT_AUTH, errors: 'openai', ...service };
+        return { auth: definitions.defaultAuth, errors: 'openai', ...service };
     }
 
     /**
@@ -402,8 +398,8 @@ globalThis.BabelFishAIProviders = (function (definitions) {
 
     // API publique du module
     return {
-        // Constantes
-        DEFAULT_AUTH,
+        // Constantes (gelée avec les providers, dont les services la reprennent)
+        DEFAULT_AUTH: definitions.defaultAuth,
 
         // Getters
         getProvider,
@@ -429,6 +425,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
         isValidUrl,
     };
 })({
+    // Authentification par défaut d'un service : entête Authorization, schéma Bearer (API
+    // compatibles OpenAI)
+    defaultAuth: { header: 'Authorization', scheme: 'Bearer' },
     /**
      * Définition des providers IA disponibles
      * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
