@@ -436,7 +436,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * et au besoin authentification, format d'erreur et réglage d'URL), sa présentation dans la
      * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés, note
      * facultative sous forme de clé i18n) et
-     * ses modèles supportés. `temperature: false` sur le service de chat vaut pour tous ses
+     * ses modèles supportés. La page des clés (`keyUrl`) et la note (`noteKey`) ne servent qu'au
+     * panneau généré d'un provider ajouté : les panneaux d'OpenAI, de Mistral et de Custom sont
+     * écrits dans options.html. `temperature: false` sur le service de chat vaut pour tous ses
      * modèles, modèles ajoutés par l'utilisateur compris ; sur un modèle de chat, pour lui seul.
      * Un modèle de chat peut aussi porter `reasoningEffort`, l'effort de réflexion à envoyer
      * (reasoning_effort)

@@ -154,6 +154,7 @@ function fillProviderPanel(panel, ids, provider) {
         keyLink.href = provider.ui.keyUrl;
         keyLink.textContent = host;
     } else {
+        // Masque aussi la note, dans le même bloc : registry-rules exige un keyUrl analysable
         keyLink.parentElement.hidden = true;
     }
     // Note propre au provider : une clé i18n du registre, traduite avec le reste de la page
