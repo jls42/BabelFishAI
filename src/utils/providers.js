@@ -556,8 +556,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
                 // modèle ajouté par l'utilisateur
                 chat: { format: 'openai-chat', errors: 'gemini', temperature: false },
             },
-            // Pas de logo : les règles de marque de Google exigent une approbation des visuels.
-            // Le signe zodiacal Gemini est un caractère Unicode
+            // Pas de logo (choix du propriétaire) : les règles de marque de Google, sur un portail
+            // réservé aux partenaires, n'ont pas pu être lues. Le signe zodiacal Gemini est un
+            // caractère Unicode
             // Note du panneau (clé i18n) : clé d'un projet avec facturation ; hors de l'EEE, de la
             // Suisse et du Royaume-Uni, Google peut utiliser les contenus d'une clé gratuite
             ui: {

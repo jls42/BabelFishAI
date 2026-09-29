@@ -488,7 +488,7 @@ Les logos des providers sont stockés dans `images/` :
 -   `images/mistral-logo.png` - Logo Mistral AI (M arc-en-ciel)
 -   `images/openai-logo.png` - Logo OpenAI (blossom)
 -   Custom/LiteLLM utilise l'emoji 🚅 (pas de logo officiel)
--   Gemini utilise le signe zodiacal ♊ : pas de logo Google, dont les règles de marque (Google APIs Terms, section 6, et leur portail partenaires) exigent une approbation des visuels
+-   Gemini utilise le signe zodiacal ♊ : pas de logo Google, par choix du propriétaire. Les Google APIs Terms (section 6b) n'accordent une licence d'affichage que sous réserve des règles de marque de Google, illisibles sans compte sur leur portail partenaires (relevé du 2026-09-29) : ne pas écrire qu'elles « exigent une approbation », personne ne les a lues
 
 **Pages Brand officielles :**
 

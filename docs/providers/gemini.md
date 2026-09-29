@@ -47,7 +47,7 @@ Source : [Gemini API Additional Terms of Service](https://ai.google.dev/gemini-a
 -   **Offre gratuite** : Google utilise les contenus pour améliorer ses produits, avec relecture humaine possible : « Do not submit sensitive, confidential, or personal information to the Unpaid Services. »
 -   **Europe** : « If you're in the European Economic Area, Switzerland, or the United Kingdom, the terms under "How Google uses Your Data" in "Paid Services" apply to all Services, including Google AI Studio and unpaid quota ». D'où la note du panneau (`geminiKeyNote`, 15 langues) : une clé d'un projet avec facturation ; avec une clé gratuite, hors de l'EEE, de la Suisse et du Royaume-Uni, dictées et textes envoyés peuvent servir à Google, avec relecture humaine possible, donc aucune information personnelle, sensible ou confidentielle ; une clé restreinte à l'API Gemini, jamais à des sites web.
 -   **Clauses tranchées par le propriétaire le 29/09/2026** (Gemini jugé publiable) : 18 ans minimum et API Clients non destinés aux mineurs ; « for professional or business purposes, not for consumer use » ; offre payante exigée pour les API Clients mis à disposition d'utilisateurs européens.
--   **Marque** : pas de logo (les règles de marque de Google exigent une approbation des visuels) ; le panneau affiche le signe zodiacal ♊, un caractère Unicode.
+-   **Marque** : pas de logo, par choix du propriétaire. Les Google APIs Terms (section 6b) accordent une licence d'affichage des marques de Google, mais sous réserve des « Google Brand Features Use Guidelines », qui n'ont pas pu être lues : leur lien mène à un portail réservé aux partenaires (relevé du 29/09). Le panneau affiche le signe zodiacal ♊, un caractère Unicode.
 
 ## Réseau et permissions
 
