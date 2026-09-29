@@ -35,10 +35,8 @@
             "requetes": 0
         },
         "https://localhost:4000/v1/chat/completions": {
-            "requetes": 1,
-            "valeur": {
-                "ok": true
-            }
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
         },
         "pas une url": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
@@ -1716,11 +1714,19 @@
                 "ok": true
             }
         },
+        "clé Custom vers un autre port de son hôte": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
         "clé Custom vers un hôte hors de ses URLs": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
             "requetes": 0
         },
         "clé OpenAI vers api.groq.com": {
+            "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
+            "requetes": 0
+        },
+        "clé OpenAI vers un autre port d’api.openai.com": {
             "erreur": "Error: Erreur lors de l'appel à l'API: URL non autorisée. Vérifiez la configuration du provider dans les options.",
             "requetes": 0
         },

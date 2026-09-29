@@ -388,16 +388,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         return supportsNoLog && userPreference;
     }
 
-    // Données lues pour résoudre la configuration API, avec leurs valeurs par défaut
-    const CONFIG_DEFAULTS = {
-        providers: null,
-        transcriptionProvider: 'openai',
-        chatProvider: 'openai',
-        apiKey: '',
-        audioModelType: API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
-        modelType: API_CONFIG.GPT_MODEL,
-        disableLogging: false,
-    };
+    /**
+     * Données lues pour résoudre la configuration API, avec leurs valeurs par défaut : celles
+     * qui décident du provider et de la clé (provider-store.js), plus les modèles et no-log
+     * @returns {Object}
+     */
+    function configDefaults() {
+        return {
+            ...globalThis.BabelFishAIProviderStore.resolutionDefaults(),
+            audioModelType: API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
+            modelType: API_CONFIG.GPT_MODEL,
+            disableLogging: false,
+        };
+    }
 
     /**
      * Résout la configuration API pour un type de service donné
@@ -406,7 +409,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @returns {Promise<Object>} Configuration API résolue
      */
     async function resolveApiConfig(serviceType) {
-        const data = await getFromStorage(CONFIG_DEFAULTS);
+        const data = await getFromStorage(configDefaults());
 
         // Résoudre le provider actif
         const resolved = resolveActiveProvider(serviceType, data);
@@ -501,50 +504,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Parse une URL en URL object, retourne null si invalide
-     * @param {string} url - URL à parser
-     * @returns {URL|null}
-     */
-    function parseUrl(url) {
-        try {
-            return new URL(url);
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * Vérifie si le protocole est autorisé : HTTPS partout, HTTP uniquement
-     * pour localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM).
-     * @param {URL} target - URL parsée
-     * @returns {boolean}
-     */
-    function isProtocolAllowed(target) {
-        if (target.protocol === 'https:') return true;
-        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-        return target.protocol === 'http:' && isLocalhost;
-    }
-
-    /**
-     * Indique si une URL vise, avec un protocole autorisé, un hôte configuré pour le provider
-     * @param {Object} data - Données du storage
-     * @param {string} providerId - Provider dont la clé part avec la requête
-     * @param {string} url - URL de la requête
-     * @returns {boolean}
-     */
-    function isUrlAllowedForProvider(data, providerId, url) {
-        const target = parseUrl(url);
-        if (!target || !isProtocolAllowed(target)) return false;
-        return globalThis.BabelFishAIProviderStore.allowedHosts(data, providerId).has(
-            target.hostname,
-        );
-    }
-
-    /**
      * Invariant de sécurité (défense en profondeur contre une fuite de clé, cf. SECURITY.md
      * « API key leakage »), vérifié sur une lecture fraîche du stockage : le provider et la
-     * clé sont ceux que ce stockage résout pour le service, et l'URL vise un hôte configuré
-     * pour ce provider (URL du registre, ou URL réglée par l'utilisateur pour Custom)
+     * clé sont ceux que ce stockage résout pour le service, et l'URL vise une origine
+     * configurée pour ce provider (URL du registre, ou URL réglée par l'utilisateur pour Custom)
      * @param {Object} request - url, apiKey, providerId, service et errorType de la requête
      * @returns {Promise<void>}
      * @throws {Error} Si la requête enverrait une clé ailleurs que chez son provider
@@ -553,13 +516,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         if (!providerId || !service) {
             throw new Error(`${errorType}: provider ou service non indiqué pour la requête.`);
         }
-        const data = await getFromStorage(CONFIG_DEFAULTS);
+        const data = await getFromStorage(configDefaults());
         const store = globalThis.BabelFishAIProviderStore;
         const resolved = store.resolveProvider(data, service);
         if (resolved.providerId !== providerId || store.resolveKey(data, resolved) !== apiKey) {
             throw new Error(`${errorType}: la clé API ne correspond pas au provider configuré.`);
         }
-        if (!isUrlAllowedForProvider(data, providerId, url)) {
+        if (!store.isUrlAllowedForProvider(data, providerId, url)) {
             throw new Error(
                 `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
             );

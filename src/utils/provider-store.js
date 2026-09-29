@@ -88,38 +88,85 @@ globalThis.BabelFishAIProviderStore = (function () {
     }
 
     /**
-     * Nom d'hôte d'une URL, ou null si elle est vide ou invalide
+     * URL analysée, ou null si elle est vide ou invalide
      * @param {string|undefined} url
-     * @returns {string|null}
+     * @returns {URL|null}
      */
-    function hostnameOf(url) {
+    function parseUrl(url) {
         if (!url) return null;
         try {
-            return new URL(url).hostname;
+            return new URL(url);
         } catch {
             return null;
         }
     }
 
     /**
-     * Hôtes vers lesquels la clé d'un provider peut partir : ceux de ses URLs par défaut, ou,
-     * pour un provider dont l'utilisateur règle les URLs (Custom), ceux de ces réglages
+     * Protocole autorisé : HTTPS partout, HTTP uniquement pour localhost (cohérent avec
+     * providers.js:isValidUrl, mode dev LiteLLM)
+     * @param {URL} target - URL analysée
+     * @returns {boolean}
+     */
+    function isProtocolAllowed(target) {
+        if (target.protocol === 'https:') return true;
+        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
+        return target.protocol === 'http:' && isLocalhost;
+    }
+
+    /**
+     * Origines (schéma, hôte et port) vers lesquelles la clé d'un provider peut partir : celles
+     * de ses URLs par défaut, ou, pour un provider dont l'utilisateur règle les URLs (Custom),
+     * celles de ces réglages
      * @param {Object} data - Données lues dans storage.sync
      * @param {string} providerId
      * @returns {Set<string>}
      */
-    function allowedHosts(data, providerId) {
-        const hosts = new Set();
+    function allowedOrigins(data, providerId) {
+        const origins = new Set();
         const provider = registry().getProvider(providerId);
         const config = getProviderConfig(data, providerId);
         for (const [serviceType, service] of Object.entries(provider?.services ?? {})) {
             const url = service.urlSetting
                 ? ownValue(config, service.urlSetting)
                 : ownValue(provider.defaultUrls, serviceType);
-            const host = hostnameOf(url);
-            if (host) hosts.add(host);
+            const target = parseUrl(url);
+            if (target) origins.add(target.origin);
         }
-        return hosts;
+        return origins;
+    }
+
+    /**
+     * Invariant de sécurité : une URL ne peut recevoir la clé d'un provider que si son protocole
+     * est autorisé et que son origine est une de celles configurées pour ce provider. Commun au
+     * content script et au background, qui vérifient la même règle
+     * @param {Object} data - Données lues dans storage.sync
+     * @param {string} providerId - Provider dont la clé part avec la requête
+     * @param {string} url - URL de la requête
+     * @returns {boolean}
+     */
+    function isUrlAllowedForProvider(data, providerId, url) {
+        const target = parseUrl(url);
+        if (!target || !isProtocolAllowed(target)) return false;
+        return allowedOrigins(data, providerId).has(target.origin);
+    }
+
+    /**
+     * Clés de storage.sync qui décident du provider et de sa clé, avec leurs valeurs par défaut :
+     * les clés historiques, et la clé propre de chaque nouveau provider du registre
+     * @returns {Object} Argument de chrome.storage.sync.get
+     */
+    function resolutionDefaults() {
+        const extra = registry()
+            .getProviderOrder()
+            .filter((id) => !LEGACY_IDS.has(id))
+            .map((id) => [`${EXTRA_PREFIX}${id}`, null]);
+        return {
+            providers: null,
+            transcriptionProvider: 'openai',
+            chatProvider: 'openai',
+            apiKey: '',
+            ...Object.fromEntries(extra),
+        };
     }
 
     /**
@@ -171,7 +218,8 @@ globalThis.BabelFishAIProviderStore = (function () {
     }
 
     return {
-        allowedHosts,
+        isUrlAllowedForProvider,
+        resolutionDefaults,
         resolveKey,
         getProviderConfig,
         isProviderUsable,

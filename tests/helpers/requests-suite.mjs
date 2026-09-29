@@ -339,6 +339,14 @@ const INVARIANT_CASES = {
         { url: OPENAI_CHAT_URL, ...ALLOWLIST_IDENTITIES.openai },
     ],
     'provider absent': [STORAGE.openai, { url: OPENAI_CHAT_URL, apiKey: KEYS.openai }],
+    'clé Custom vers un autre port de son hôte': [
+        STORAGE.custom,
+        { url: 'http://localhost:9999/v1/chat/completions', ...ALLOWLIST_IDENTITIES.custom },
+    ],
+    'clé OpenAI vers un autre port d’api.openai.com': [
+        STORAGE.openai,
+        { url: 'https://api.openai.com:8443/v1/chat/completions', ...ALLOWLIST_IDENTITIES.openai },
+    ],
 };
 
 /**

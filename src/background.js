@@ -658,40 +658,6 @@ function captureResponseHeaders(response) {
 }
 
 /**
- * Parse une URL, retourne null si invalide (évite un try/catch inline chez
- * les appelants et réduit leur complexité cyclomatique).
- * @param {string} url - URL à parser
- * @returns {URL|null}
- */
-function parseUrlOrNull(url) {
-    try {
-        return new URL(url);
-    } catch {
-        return null;
-    }
-}
-
-/**
- * Protocole autorisé : HTTPS partout, HTTP uniquement pour localhost
- * (cohérent avec api-utils.js:isProtocolAllowed, mode dev LiteLLM).
- * @param {URL} target - URL parsée
- * @returns {boolean}
- */
-function isBgProtocolAllowed(target) {
-    if (target.protocol === 'https:') return true;
-    const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-    return target.protocol === 'http:' && isLocalhost;
-}
-
-// Données lues pour reconstruire l'authentification d'une requête du proxy
-const PROXY_CONFIG_DEFAULTS = {
-    providers: null,
-    transcriptionProvider: 'openai',
-    chatProvider: 'openai',
-    apiKey: '',
-};
-
-/**
  * Modules des providers chargés avec le background (registre, stockage, adaptateurs)
  * @returns {{store: Object, registry: Object, adapters: Object}|null} null s'il en manque un
  */
@@ -704,17 +670,17 @@ function providerModules() {
 
 /**
  * Clé du provider annoncé par une requête du proxy, si le stockage le résout bien pour ce
- * service, avec une clé, et si l'hôte de l'URL est configuré pour lui
+ * service, avec une clé, et si l'URL vise une origine configurée pour lui
  * @param {Object} store - BabelFishAIProviderStore
  * @param {Object} data - Données lues dans storage.sync
- * @param {Object} request - providerId, service et hostname de la requête
+ * @param {Object} request - providerId, service et url de la requête
  * @returns {string|null}
  */
-function keyForProxiedRequest(store, data, { providerId, service, hostname }) {
+function keyForProxiedRequest(store, data, { providerId, service, url }) {
     const resolved = store.resolveProvider(data, service);
     const key = store.resolveKey(data, resolved);
     if (resolved.providerId !== providerId || !key) return null;
-    return store.allowedHosts(data, providerId).has(hostname) ? key : null;
+    return store.isUrlAllowedForProvider(data, providerId, url) ? key : null;
 }
 
 /**
@@ -734,21 +700,16 @@ function buildAuthHeader({ registry, adapters }, providerId, service, key) {
  * Entête d'authentification d'une requête du proxy, reconstruit depuis le stockage :
  * défense en profondeur (F7) contre un content script compromis, qui ne peut choisir ni la
  * clé ni l'hôte. Le provider annoncé doit être celui que le stockage résout pour le service
- * et avoir une clé, et l'URL doit viser un hôte configuré pour lui
+ * et avoir une clé, et l'URL doit viser une origine configurée pour lui
  * @param {Object} request - url, providerId et service de la requête
  * @returns {Promise<Object|null>} L'entête, ou null si la requête n'est pas autorisée
  */
 async function resolveProxyAuth({ url, providerId, service }) {
     const modules = providerModules();
-    const target = parseUrlOrNull(url);
-    if (!modules || !target || !isBgProtocolAllowed(target)) return null;
+    if (!modules) return null;
     try {
-        const data = await chrome.storage.sync.get(PROXY_CONFIG_DEFAULTS);
-        const key = keyForProxiedRequest(modules.store, data, {
-            providerId,
-            service,
-            hostname: target.hostname,
-        });
+        const data = await chrome.storage.sync.get(modules.store.resolutionDefaults());
+        const key = keyForProxiedRequest(modules.store, data, { providerId, service, url });
         return key ? buildAuthHeader(modules, providerId, service, key) : null;
     } catch (error) {
         console.error('resolveProxyAuth: storage error', error.message);
