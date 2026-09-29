@@ -36,18 +36,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const { name, value } = entry;
             if (value instanceof Blob) {
                 // Convertir le Blob en Base64 (plus efficace que Array.from pour la sérialisation)
-                const base64 = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    // `loadend` suit aussi un échec ou une annulation : `result` vaut alors null
-                    reader.onloadend = () => {
-                        if (typeof reader.result === 'string') {
-                            resolve(reader.result.split(',')[1]);
-                        } else {
-                            reject(reader.error ?? new Error('Lecture du fichier impossible'));
-                        }
-                    };
-                    reader.readAsDataURL(value);
-                });
+                const base64 = await globalThis.BabelFishAIProviderAdapters.blobToBase64(value);
                 fields.push({
                     name,
                     isFile: true,

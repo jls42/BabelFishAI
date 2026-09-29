@@ -1,4 +1,9 @@
 {
+    "audio en base64": {
+        "lectureImpossible": "NotReadableError",
+        "sansType": "GkXfo/8AEA==",
+        "webm": "GkXfo/8AEA=="
+    },
     "corps et lecture des réponses": {
         "chatComplet": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"temperature\":0.1,\"no-log\":true}",
         "chatSimple": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}]}",

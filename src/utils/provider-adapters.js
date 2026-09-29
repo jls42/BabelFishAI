@@ -86,6 +86,27 @@ globalThis.BabelFishAIProviderAdapters = (function () {
     }
 
     /**
+     * Contenu d'un Blob en base64, sans le préfixe « data:…;base64, », lu par
+     * FileReader.readAsDataURL : pour le proxy Firefox, et pour un audio envoyé dans du JSON
+     * @param {Blob} blob
+     * @returns {Promise<string>} Rejetée si la lecture échoue
+     */
+    function blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            // `loadend` suit aussi un échec ou une annulation : `result` vaut alors null
+            reader.onloadend = () => {
+                if (typeof reader.result === 'string') {
+                    resolve(reader.result.split(',')[1]);
+                } else {
+                    reject(reader.error ?? new Error('Lecture du fichier impossible'));
+                }
+            };
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    /**
      * Corps multipart d'une transcription (format OpenAI) : le fichier audio, puis le modèle
      * @param {Object} request
      * @param {Blob} request.audioBlob - Audio enregistré
@@ -227,6 +248,7 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         authHeaders,
         requestHeaders,
         redirectPolicy,
+        blobToBase64,
         getAdapter,
         getErrorReader,
         rejectsKey,

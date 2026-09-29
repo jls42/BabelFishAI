@@ -1,7 +1,7 @@
 // Adaptateurs de formats d'API (src/utils/provider-adapters.js) : entêtes d'authentification,
 // politique de redirection, corps des requêtes et lecture des réponses.
 import { test } from 'node:test';
-import { describeRequest, loadScripts, setupEnv } from './helpers/env.mjs';
+import { FakeFileReader, describeRequest, loadScripts, setupEnv } from './helpers/env.mjs';
 import { GEMINI_ERRORS } from './helpers/fixtures.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
@@ -86,6 +86,17 @@ test('corps et lecture des réponses', async () => {
         transcription: multipart.extractText({ text: '\n Bonjour.  ' }),
         transcriptionVide: multipart.extractText({}),
         formatInconnu: unknown,
+    });
+});
+
+test('audio en base64 : contenu, type ignoré, échec de lecture', async () => {
+    const bytes = new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0xff, 0x00, 0x10]);
+    FakeFileReader.failNext = true;
+    const failure = await adapters.blobToBase64(new Blob([bytes])).catch((error) => error.name);
+    matchSnapshot('audio en base64', {
+        webm: await adapters.blobToBase64(new Blob([bytes], { type: 'audio/webm;codecs=opus' })),
+        sansType: await adapters.blobToBase64(new Blob([bytes])),
+        lectureImpossible: failure,
     });
 });
 
