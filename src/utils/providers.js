@@ -35,7 +35,7 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * @returns {Object} Nouvel objet, mêmes clés dans le même ordre
      */
     function mapValues(object, fn) {
-        return Object.fromEntries(Object.entries(object).map((e) => e.with(1, fn(e[1]))));
+        return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, fn(value)]));
     }
 
     /**
