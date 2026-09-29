@@ -813,6 +813,7 @@ console.log('[Module] debug info');
 1. Toujours tester sur Chrome ET Firefox après modifications de `api-utils.js` ou `background.js`
 2. Tester sur des sites avec CSP stricte (ex: chatgpt.com) pour vérifier le proxy Firefox
 3. Tester sur des sites sans CSP (ex: chat.mistral.ai) pour vérifier le flux normal
+4. Tester aussi le provider **Custom/LiteLLM**, pas seulement OpenAI et Mistral : dictée et trois actions texte, sous Chrome et sous Firefox, avec le serveur factice (`python3 scripts/mock-openai-server.py`, voir plus bas) ou un vrai proxy LiteLLM. C'est le seul provider dont les URLs viennent de l'utilisateur (`urlSetting`), donc le seul qui éprouve la règle d'origine exacte de l'invariant de sécurité (port compris). Demandé par le propriétaire le 2026-09-29. Piège vu ce jour-là : une dictée Firefox échouée en « NetworkError » sur `http://localhost:8765` venait du serveur factice non lancé, pas du code.
 
 ### Tester le provider Custom/LiteLLM sans serveur distant
 
