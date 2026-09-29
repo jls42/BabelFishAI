@@ -191,6 +191,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Champ OpenAI, recopié dans la clé héritée `apiKey`
     const openaiPanel = panels.get('openai');
 
+    // Sélection lue d'une version plus récente (identifiant inconnu du registre), par service :
+    // elle est réécrite telle quelle tant que l'utilisateur ne change pas ce sélecteur
+    const futureSelection = { transcription: null, chat: null };
+
     const providerServices = document.getElementById('providerServices');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
     const chatProviderSelect = document.getElementById('chatProvider');
@@ -514,6 +518,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Identifiant de provider inconnu de cette version (écrit par une version plus récente)
+     * @param {*} value - Valeur lue pour la sélection d'un service
+     * @returns {string|null} La valeur si c'est un identifiant inconnu, sinon null
+     */
+    function unknownProviderId(value) {
+        return typeof value === 'string' && value !== '' && !Providers.getProvider(value)
+            ? value
+            : null;
+    }
+
+    /**
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
@@ -540,6 +555,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         elements.enabled.checked = id === 'openai' && Boolean(items.apiKey);
                     });
                 }
+                futureSelection.transcription = unknownProviderId(items.transcriptionProvider);
+                futureSelection.chat = unknownProviderId(items.chatProvider);
 
                 populateAllModelSelects(configs);
                 updateAllProviderDisplays();
@@ -597,13 +614,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             return null;
         }
 
-        // Déterminer les providers actifs pour la sélection de service
+        // Déterminer les providers actifs pour la sélection de service. Une sélection d'une
+        // version plus récente est gardée tant que son sélecteur n'a pas été changé
         const enabledProviders = getEnabledProviderIds();
-        const { transcriptionProvider, chatProvider } = determineActiveProviders(
+        const active = determineActiveProviders(
             enabledProviders,
             transcriptionProviderSelect,
             chatProviderSelect,
         );
+        const transcriptionProvider = futureSelection.transcription ?? active.transcriptionProvider;
+        const chatProvider = futureSelection.chat ?? active.chatProvider;
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité. Les anciennes versions l'envoient
         // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI, et reste vide tant qu'OpenAI
@@ -1182,8 +1202,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    transcriptionProviderSelect.addEventListener('change', () => debouncedSaveOptions());
-    chatProviderSelect.addEventListener('change', () => debouncedSaveOptions());
+    // Changer un sélecteur de service remplace une sélection d'une version plus récente
+    transcriptionProviderSelect.addEventListener('change', () => {
+        futureSelection.transcription = null;
+        debouncedSaveOptions();
+    });
+    chatProviderSelect.addEventListener('change', () => {
+        futureSelection.chat = null;
+        debouncedSaveOptions();
+    });
 
     // Event listeners - Legacy (avec debounce pour les inputs)
     interfaceLanguageSelect.addEventListener('change', handleLanguageChange);
