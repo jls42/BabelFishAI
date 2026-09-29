@@ -32,20 +32,6 @@ function capitalize(text) {
 }
 
 /**
- * Réglages d'URL qu'un provider demande à l'utilisateur, dans l'ordre de ses services
- * (Custom : transcriptionUrl puis chatUrl)
- * @param {Object} Providers - Registre des providers
- * @param {string} providerId
- * @returns {string[]}
- */
-function urlSettingsOf(Providers, providerId) {
-    const services = Providers.getProvider(providerId)?.services ?? {};
-    return Object.values(services)
-        .map((service) => service.urlSetting)
-        .filter(Boolean);
-}
-
-/**
  * Éléments du panneau d'un provider, statique ou généré
  * @param {Object} ids - Entrée de STATIC_PANELS, ou generatedPanelIds
  * @param {string[]} urlSettings - Réglages d'URL du provider
@@ -102,23 +88,6 @@ function loadPanelConfig(elements, config) {
         input.value = (Object.hasOwn(config, setting) && config[setting]) || '';
     }
 }
-
-/**
- * Configuration enregistrée d'un provider : entrée de `providers` pour un provider historique,
- * valeur de sa clé extraProvider.<id> pour un provider ajouté depuis
- * @param {*} container - Valeur de la clé `providers`, ou données lues dans le stockage
- * @param {string} key - ID du provider, ou nom de sa clé de stockage
- * @returns {Object} La configuration, ou {} s'il n'y en a pas
- */
-function storedConfig(container, key) {
-    if (!container || !Object.hasOwn(container, key)) return {};
-    // eslint-disable-next-line security/detect-object-injection -- key vérifiée par Object.hasOwn
-    return container[key] || {};
-}
-
-// Préfixe des clés de stockage des providers ajoutés après les trois historiques (contrat,
-// point 4) : une clé par provider, jamais écrite dans `providers`
-const EXTRA_PREFIX = 'extraProvider.';
 
 /**
  * Identifiants DOM du panneau généré d'un provider, de même forme que STATIC_PANELS
@@ -220,6 +189,31 @@ function createGeneratedPanel(Providers, provider) {
 }
 
 /**
+ * Panneaux de la page : les trois statiques, puis un panneau généré pour chaque provider ajouté
+ * au registre après les trois historiques, à sa place dans le menu (ordre d'affichage)
+ * @param {Object} Providers - Registre des providers
+ * @param {Object} store - Stockage des providers (provider-store.js)
+ * @returns {{generatedPanels: Map<string, Object>, panels: Map<string, Object>}} Identifiants
+ *   des panneaux générés, et éléments du panneau de chaque provider (clé, activation, URLs,
+ *   modèles)
+ */
+function buildPanels(Providers, store) {
+    const generatedPanels = new Map(
+        Providers.getUiOrder()
+            .filter((id) => !STATIC_PANELS.has(id))
+            .map((id) => [id, createGeneratedPanel(Providers, Providers.getProvider(id))]),
+    );
+    // Un panneau généré n'a pas de champ d'URL : seul Custom en demande (test du registre)
+    const panels = new Map(
+        [...STATIC_PANELS, ...generatedPanels].map(([id, ids]) => [
+            id,
+            panelElements(ids, STATIC_PANELS.has(id) ? store.requiredUrlSettings(id) : []),
+        ]),
+    );
+    return { generatedPanels, panels };
+}
+
+/**
  * Configuration sans rien à conserver : ni clé API, ni activation, ni modèle personnalisé
  * @param {Object} config - Configuration saisie (panelConfig)
  * @returns {boolean}
@@ -292,6 +286,9 @@ function determineActiveProviders(enabledProviders, transcriptionSelect, chatSel
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
+    // Convention de stockage partagée avec l'extension (provider-store.js)
+    const store = globalThis.BabelFishAIProviderStore;
+    const { EXTRA_PREFIX } = store;
 
     // Éléments du DOM - Providers (nouveau design dropdown + panel)
     const providerSelector = document.getElementById('providerSelector');
@@ -299,22 +296,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dropdownStatus = document.getElementById('dropdownStatus');
     const providerConfigPanel = document.getElementById('providerConfigPanel');
 
-    // Panneau généré pour chaque provider ajouté au registre après les trois historiques, à sa
-    // place dans le menu (ordre d'affichage du registre)
-    const generatedPanels = new Map(
-        Providers.getUiOrder()
-            .filter((id) => !STATIC_PANELS.has(id))
-            .map((id) => [id, createGeneratedPanel(Providers, Providers.getProvider(id))]),
-    );
-    // Éléments du panneau de chaque provider (clé, activation, URLs, modèles). Un panneau généré
-    // n'a pas de champ d'URL : seul Custom en demande (test du registre)
-    const panels = new Map(
-        [...STATIC_PANELS, ...generatedPanels].map(([id, ids]) => [
-            id,
-            panelElements(ids, STATIC_PANELS.has(id) ? urlSettingsOf(Providers, id) : []),
-        ]),
-    );
-    // Champ OpenAI, recopié dans la clé héritée `apiKey`
+    const { generatedPanels, panels } = buildPanels(Providers, store);
+    // Panneau OpenAI : en mode legacy (sans `providers`), rempli depuis la clé héritée `apiKey`
     const openaiPanel = panels.get('openai');
 
     // Providers générés : ceux dont la clé extraProvider.<id> existe, et ceux modifiés pendant
@@ -659,11 +642,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         storedExtraProviders.clear();
         const configs = new Map();
         for (const id of panels.keys()) {
+            const config = store.getProviderConfig(items, id) || {};
             if (STATIC_PANELS.has(id)) {
-                configs.set(id, storedConfig(items.providers, id));
+                configs.set(id, config);
                 continue;
             }
-            const config = storedConfig(items, `${EXTRA_PREFIX}${id}`);
             if (Object.keys(config).length) storedExtraProviders.add(id);
             configs.set(id, config);
         }

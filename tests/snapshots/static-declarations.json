@@ -86,29 +86,29 @@
                 "STATIC_PANELS",
                 "byId",
                 "capitalize",
-                "urlSettingsOf",
                 "panelElements",
                 "isPanelReady",
                 "logShortcutGuardError",
                 "loadPanelConfig",
-                "storedConfig",
-                "EXTRA_PREFIX",
                 "generatedPanelIds",
                 "cloneTemplate",
                 "fillProviderPanel",
                 "createProviderToggle",
                 "insertProviderOption",
                 "createGeneratedPanel",
+                "buildPanels",
                 "isEmptyConfig",
                 "validateCustomProviderUrls",
                 "determineActiveProviders"
             ],
             "src/utils/i18n.js": [],
+            "src/utils/provider-store.js": [],
             "src/utils/providers.js": []
         },
         "fichiers": [
             "src/constants.js",
             "src/utils/providers.js",
+            "src/utils/provider-store.js",
             "src/utils/i18n.js",
             "src/pages/options/options.js"
         ]

@@ -222,6 +222,10 @@ globalThis.BabelFishAIProviderStore = (function () {
     }
 
     return {
+        // Convention de stockage, partagée avec la page d'options
+        EXTRA_PREFIX,
+        getProviderConfig,
+        requiredUrlSettings,
         isUrlAllowedForProvider,
         resolutionDefaults,
         resolveKey,
