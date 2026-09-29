@@ -191,10 +191,12 @@ globalThis.BabelFishAIProviderStore = (function () {
      * @returns {{providerId: string, providerConfig: Object|undefined}}
      */
     function resolveProvider(data, serviceType) {
-        const providerId = readSelection(data, serviceType);
+        // Tout type autre que la transcription désigne le chat, comme avant la refonte
+        const service = serviceType === 'transcription' ? 'transcription' : 'chat';
+        const providerId = readSelection(data, service);
         if (!data.providers) return { providerId, providerConfig: undefined };
         const providerConfig = getProviderConfig(data, providerId);
-        if (isProviderUsable(providerId, serviceType, providerConfig)) {
+        if (isProviderUsable(providerId, service, providerConfig)) {
             return { providerId, providerConfig };
         }
         // F8 : aucun fallback valide. Invalider la config pour que callApi
@@ -202,7 +204,7 @@ globalThis.BabelFishAIProviderStore = (function () {
         // l'utilisateur sur la fausse piste "URL non autorisée" via
         // assertRequestAllowed (api-utils.js) (cas typique : tous les providers désactivés mais
         // l'un d'eux reste sélectionné comme actif).
-        return findFallback(data, serviceType) ?? { providerId, providerConfig: undefined };
+        return findFallback(data, service) ?? { providerId, providerConfig: undefined };
     }
 
     /**

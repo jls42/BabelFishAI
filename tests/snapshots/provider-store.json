@@ -250,5 +250,23 @@
             "https://localhost:4000/v1/chat/completions": false,
             "pas une url": false
         }
+    },
+    "type de service inconnu": {
+        "Chat": {
+            "cle": "{cle mistral}",
+            "provider": "mistral"
+        },
+        "autre": {
+            "cle": "{cle mistral}",
+            "provider": "mistral"
+        },
+        "chat": {
+            "cle": "{cle mistral}",
+            "provider": "mistral"
+        },
+        "undefined": {
+            "cle": "{cle mistral}",
+            "provider": "mistral"
+        }
     }
 }

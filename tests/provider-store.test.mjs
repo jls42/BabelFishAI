@@ -52,6 +52,18 @@ test('clés de stockage à lire', () => {
     matchSnapshot('clés de stockage à lire', store.resolutionDefaults());
 });
 
+test('type de service inconnu : traité comme le chat', () => {
+    const result = {};
+    for (const service of [undefined, 'Chat', 'autre', 'chat']) {
+        const resolved = store.resolveProvider(STORAGE.mixte, service);
+        result[String(service)] = {
+            provider: resolved.providerId,
+            cle: store.resolveKey(STORAGE.mixte, resolved),
+        };
+    }
+    matchSnapshot('type de service inconnu', result);
+});
+
 test('clé résolue', () => {
     const result = {};
     for (const name of Object.keys(STORAGE)) {
