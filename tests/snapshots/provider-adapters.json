@@ -50,6 +50,37 @@
             "x-goog-api-key": "{cle gemini}"
         }
     },
+    "erreurs au format gemini": {
+        "429": {
+            "cleRefusee": false,
+            "message": "message du provider (429)"
+        },
+        "autre-400": {
+            "cleRefusee": false,
+            "message": "message du provider (400)"
+        },
+        "cle-compatible": {
+            "cleRefusee": true,
+            "message": "Please pass a valid API key"
+        },
+        "cle-interactions": {
+            "cleRefusee": true,
+            "message": "API key not valid. Please pass a valid API key."
+        },
+        "cle-native": {
+            "cleRefusee": true,
+            "message": "API key not valid. Please pass a valid API key."
+        },
+        "corps null": {
+            "cleRefusee": false,
+            "message": null
+        },
+        "openai : clé refusée ?": false,
+        "tableau vide": {
+            "cleRefusee": false,
+            "message": null
+        }
+    },
     "formats déclarés par le registre": {
         "custom.chat": [
             "openai-chat",

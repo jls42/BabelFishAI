@@ -612,13 +612,16 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         async function handleHttpErrors(response) {
             if (!response.ok) {
                 // Message lu selon le format d'erreurs que le registre déclare pour ce service
-                const readErrorMessage = globalThis.BabelFishAIProviderAdapters.getErrorReader(
-                    serviceDefinition().errors,
-                );
+                const adapters = globalThis.BabelFishAIProviderAdapters;
+                const errorFormat = serviceDefinition().errors;
+                const readErrorMessage = adapters.getErrorReader(errorFormat);
                 let errorMessage; // skipcq: JS-0119 - Initialisation dépend du bloc try/catch.
+                // Clé refusée par un provider qui ne répond pas 401 (Gemini : 400)
+                let keyRejected = false;
                 try {
                     const errorData = await response.json();
                     errorMessage = readErrorMessage(errorData) || errorType;
+                    keyRejected = adapters.rejectsKey(errorFormat, errorData);
                     // Message de l'API en texte : l'objet seul s'affiche replié dans la console
                     console.error(
                         `API Error (HTTP ${response.status}): ${errorMessage}`,
@@ -635,8 +638,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     );
                 }
 
-                // Message d'erreur amélioré avec suggestion de résolution
-                const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
+                // Message d'erreur amélioré avec suggestion de résolution (celui du 401 pour une
+                // clé refusée, quel que soit le code)
+                const userFriendlyMessage = getImprovedErrorMessage(
+                    keyRejected ? 401 : response.status,
+                    errorMessage,
+                );
                 const httpError = new Error(userFriendlyMessage);
                 // Code HTTP conservé pour que l'appelant puisse adapter sa requête (ex. 400)
                 httpError.status = response.status;

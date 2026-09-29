@@ -2,6 +2,7 @@
 // politique de redirection, corps des requêtes et lecture des réponses.
 import { test } from 'node:test';
 import { describeRequest, loadScripts, setupEnv } from './helpers/env.mjs';
+import { GEMINI_ERRORS } from './helpers/fixtures.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
 setupEnv({ browser: 'chrome' });
@@ -102,6 +103,20 @@ test('messages des réponses en erreur', () => {
         detailMistral: openai({ detail: [{ msg: 'champ manquant' }] }) ?? null,
         formatInconnu: unknown,
     });
+});
+
+test('erreurs au format gemini : message et clé refusée', () => {
+    const gemini = adapters.getErrorReader('gemini');
+    const bodies = { ...GEMINI_ERRORS, 'tableau vide': [], 'corps null': null };
+    const result = Object.fromEntries(
+        Object.entries(bodies).map(([name, body]) => [
+            name,
+            { message: gemini(body) ?? null, cleRefusee: adapters.rejectsKey('gemini', body) },
+        ]),
+    );
+    // Le format OpenAI ne reconnaît aucune clé refusée : ses providers répondent alors 401
+    result['openai : clé refusée ?'] = adapters.rejectsKey('openai', GEMINI_ERRORS['cle-native']);
+    matchSnapshot('erreurs au format gemini', result);
 });
 
 test('formats déclarés par le registre, tous connus des adaptateurs', () => {

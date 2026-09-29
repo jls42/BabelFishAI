@@ -200,3 +200,51 @@ export const VERSION_FIXTURES = {
     },
     'S2 : futur provider en dictée, Mistral en texte': STORAGE['futur-S2'],
 };
+
+// Réponses de l'API Gemini à une clé invalide, relevées le 2026-09-29 (page de mesure du lot 4,
+// fausse clé) : HTTP 400 et non 401, objet pour l'API native, tableau pour l'Interactions API et
+// pour la couche compatible OpenAI. Les autres corps sont des exemples de forme, pas des relevés
+const GEMINI_KEY_ERROR = {
+    code: 400,
+    message: 'API key not valid. Please pass a valid API key.',
+    status: 'INVALID_ARGUMENT',
+    details: [
+        {
+            '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+            reason: 'API_KEY_INVALID',
+            domain: 'googleapis.com',
+            metadata: { service: 'generativelanguage.googleapis.com' },
+        },
+        {
+            '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+            locale: 'en-US',
+            message: 'API key not valid. Please pass a valid API key.',
+        },
+    ],
+};
+
+export const GEMINI_ERRORS = {
+    'cle-native': { error: GEMINI_KEY_ERROR },
+    'cle-interactions': [{ error: GEMINI_KEY_ERROR }],
+    'cle-compatible': [
+        {
+            error: {
+                code: 400,
+                message: 'Please pass a valid API key',
+                status: 'INVALID_ARGUMENT',
+            },
+        },
+    ],
+    'autre-400': [
+        { error: { code: 400, message: 'message du provider (400)', status: 'INVALID_ARGUMENT' } },
+    ],
+    429: [
+        {
+            error: {
+                code: 429,
+                message: 'message du provider (429)',
+                status: 'RESOURCE_EXHAUSTED',
+            },
+        },
+    ],
+};

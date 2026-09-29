@@ -130,7 +130,48 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         return data.error?.message;
     }
 
-    const ERROR_READERS = Object.freeze({ openai: openaiErrorMessage });
+    /**
+     * Objet `error` d'une réponse en erreur de l'API Gemini : { error: { code, message, status,
+     * details } } pour l'API native, le même objet dans un tableau pour l'Interactions API et la
+     * couche compatible OpenAI (mesuré le 2026-09-29 avec une clé invalide)
+     * @param {Object|Array} data - Corps JSON de la réponse en erreur
+     * @returns {Object|undefined}
+     */
+    function geminiError(data) {
+        return (Array.isArray(data) ? data[0] : data)?.error;
+    }
+
+    /**
+     * Message d'une réponse en erreur de l'API Gemini
+     * @param {Object|Array} data - Corps JSON de la réponse en erreur
+     * @returns {string|undefined} Message de l'API, undefined s'il n'y en a pas
+     */
+    function geminiErrorMessage(data) {
+        return geminiError(data)?.message;
+    }
+
+    /**
+     * Indique si l'API Gemini refuse la clé. Elle répond alors HTTP 400, et non 401, avec la
+     * raison API_KEY_INVALID (API native, Interactions API) ou un message seul (couche compatible
+     * OpenAI : « Please pass a valid API key »)
+     * @param {Object|Array} data - Corps JSON de la réponse en erreur
+     * @returns {boolean}
+     */
+    function geminiRejectsKey(data) {
+        const error = geminiError(data);
+        const details = Array.isArray(error?.details) ? error.details : [];
+        return (
+            details.some((detail) => detail?.reason === 'API_KEY_INVALID') ||
+            /\bAPI key\b/i.test(error?.message ?? '')
+        );
+    }
+
+    // Formats d'erreurs : lecture du message, et reconnaissance d'une clé refusée pour un
+    // provider qui ne répond pas 401 dans ce cas
+    const ERROR_FORMATS = Object.freeze({
+        openai: Object.freeze({ message: openaiErrorMessage }),
+        gemini: Object.freeze({ message: geminiErrorMessage, rejectsKey: geminiRejectsKey }),
+    });
 
     /**
      * Entrée d'une table de formats
@@ -165,7 +206,20 @@ globalThis.BabelFishAIProviderAdapters = (function () {
      * @throws {Error} Si le format est inconnu
      */
     function getErrorReader(format) {
-        return fromTable(ERROR_READERS, format, "Format d'erreurs");
+        return fromTable(ERROR_FORMATS, format, "Format d'erreurs").message;
+    }
+
+    /**
+     * Indique si une réponse en erreur refuse la clé API, pour un format d'erreurs qui le déclare
+     * (un provider qui répond 401 dans ce cas n'en a pas besoin)
+     * @param {string} format - Format d'erreurs déclaré par le registre (ex. 'gemini')
+     * @param {*} data - Corps JSON de la réponse en erreur
+     * @returns {boolean}
+     * @throws {Error} Si le format est inconnu
+     */
+    function rejectsKey(format, data) {
+        const reader = fromTable(ERROR_FORMATS, format, "Format d'erreurs");
+        return reader.rejectsKey?.(data) ?? false;
     }
 
     return {
@@ -174,5 +228,6 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         redirectPolicy,
         getAdapter,
         getErrorReader,
+        rejectsKey,
     };
 })();

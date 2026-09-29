@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 import { FakeFileReader, ROOT, loadScripts, setupEnv } from './env.mjs';
-import { KEYS, STORAGE } from './fixtures.mjs';
+import { GEMINI_ERRORS, KEYS, STORAGE } from './fixtures.mjs';
 import { createSnapshots } from './snapshot.mjs';
 
 export const CONTENT_SCRIPTS = [
@@ -316,6 +316,20 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
                 play('traduction', STORAGE.openai, [HTTP_ERRORS[401]]),
             ),
         });
+    });
+    test('erreurs au format gemini : clé refusée en 400', async () => {
+        const errors = { errors: 'gemini' };
+        const result = {};
+        for (const [name, json] of Object.entries(GEMINI_ERRORS)) {
+            // Code HTTP de la réponse : celui que le corps annonce
+            const response = { status: (Array.isArray(json) ? json[0] : json).error.code, json };
+            for (const action of ['transcription', 'traduction']) {
+                result[`${action} : ${name}`] = await withServiceFormats(errors, () =>
+                    play(action, STORAGE.openai, [response]),
+                );
+            }
+        }
+        matchSnapshot('erreurs au format gemini', result);
     });
 }
 
