@@ -36,3 +36,10 @@ test('règles du registre dont dépend la page d’options', () => {
         }
     }
 });
+
+test('chaque provider figure une fois dans l’ordre des providers', () => {
+    // Le stockage (provider-store.js) ne lit la clé extraProvider.<id> d'un provider ajouté, et ne
+    // le prend en repli, que s'il figure dans cet ordre : sans lui, sa clé ne serait jamais lue
+    const ids = Object.keys(registry.getAllProviders()).sort();
+    assert.deepEqual(registry.getProviderOrder().sort(), ids);
+});
