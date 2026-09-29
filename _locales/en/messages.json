@@ -103,6 +103,16 @@
         "message": "Options saved!",
         "description": "Save confirmation message"
     },
+    "saveErrorMessage": {
+        "message": "Error: the options were not saved ($error$).",
+        "description": "Error message when saving the options fails ($error$: browser message)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Your OpenAI API key (sk-...)",
         "description": "Placeholder for the API key"

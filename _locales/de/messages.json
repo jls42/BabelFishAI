@@ -103,6 +103,16 @@
         "message": "Optionen gespeichert!",
         "description": "Bestätigungsmeldung für die Speicherung"
     },
+    "saveErrorMessage": {
+        "message": "Fehler: Die Optionen wurden nicht gespeichert ($error$).",
+        "description": "Fehlermeldung, wenn das Speichern der Optionen fehlschlägt ($error$: Meldung des Browsers)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"

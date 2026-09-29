@@ -103,6 +103,16 @@
         "message": "Opcje zapisane!",
         "description": "Komunikat potwierdzenia zapisu"
     },
+    "saveErrorMessage": {
+        "message": "Błąd: opcje nie zostały zapisane ($error$).",
+        "description": "Komunikat o błędzie, gdy zapisanie opcji się nie powiedzie ($error$: komunikat przeglądarki)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Twój klucz API OpenAI (sk-...)",
         "description": "Symbol zastępczy klucza API"

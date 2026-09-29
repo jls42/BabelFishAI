@@ -580,7 +580,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
-    function saveProvidersConfig() {
+    /**
+     * Clés des providers à enregistrer : configuration de chaque provider historique, provider
+     * de chaque service et clé héritée
+     * @returns {Object|null} providers, transcriptionProvider, chatProvider et apiKey, ou null si
+     *   la configuration est invalide (le message est déjà affiché)
+     */
+    function providersStorageUpdate() {
         // Seuls les providers historiques vont dans `providers`, dans l'ordre de STATIC_PANELS
         const providers = Object.fromEntries(
             [...STATIC_PANELS.keys()].map((id) => [id, panelConfig(id, panels.get(id))]),
@@ -588,7 +594,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Valider les URLs du provider custom
         if (!validateCustomProviderUrls(providers.custom, showStatus, i18n, Providers)) {
-            return false;
+            return null;
         }
 
         // Déterminer les providers actifs pour la sélection de service
@@ -600,8 +606,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
 
         // Synchroniser avec la clé legacy pour rétrocompatibilité. Les anciennes versions l'envoient
-        // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI (même valeur que dans saveOptions),
-        // et reste vide tant qu'OpenAI est désactivé (la clé reste enregistrée dans providers.openai)
+        // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI, et reste vide tant qu'OpenAI
+        // est désactivé (la clé reste enregistrée dans le champ OpenAI et dans providers.openai)
         const legacyApiKey = providers.openai.enabled ? providers.openai.apiKey : '';
 
         // skipcq: JS-0002 - debug log for options saving diagnostics
@@ -612,30 +618,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             enabledProviders,
         });
 
-        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-        chrome.storage.sync.set(
-            {
-                providers,
-                transcriptionProvider,
-                chatProvider,
-                // Legacy keys pour rétrocompatibilité
-                apiKey: legacyApiKey,
-            },
-            () => {
-                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-                if (chrome.runtime.lastError) {
-                    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-                    console.error('[Options] Error saving:', chrome.runtime.lastError);
-                } else {
-                    // skipcq: JS-0002 - debug log for options saving success
-                    // eslint-disable-next-line no-console -- Debug log for options saving success
-                    console.log('[Options] Config saved successfully');
-                }
-                panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
-            },
-        );
-
-        return true;
+        return { providers, transcriptionProvider, chatProvider, apiKey: legacyApiKey };
     }
 
     // ===== Raccourci clavier sous Firefox =====
@@ -990,18 +973,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Sauvegarder les options
     function saveOptions(scrollToStatus = true) {
-        // Sauvegarder d'abord la config providers
-        if (!saveProvidersConfig()) {
-            return; // Arrêter si la validation a échoué
+        // Config providers d'abord : arrêter si la validation a échoué
+        const providersUpdate = providersStorageUpdate();
+        if (!providersUpdate) {
+            return;
         }
 
-        // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
-        // Vide tant qu'OpenAI est désactivé : les anciennes versions l'enverraient à OpenAI
-        // (la clé reste dans le champ OpenAI et dans providers.openai)
-        const legacyApiKey = openaiPanel.enabled.checked ? openaiPanel.apiKey.value.trim() : '';
-
         const options = {
-            apiKey: legacyApiKey,
             activeDisplay: activeDisplayCheckbox.checked,
             dialogDisplay: dialogDisplayCheckbox.checked,
             dialogDuration: Number.parseInt(dialogDurationInput.value, 10),
@@ -1019,8 +997,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             ),
         };
 
+        // Une seule écriture : les clés des providers, puis les options générales. Un échec
+        // (quota dépassé par exemple) est affiché, et la saisie reste en place
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-        chrome.storage.sync.set(options, () => {
+        chrome.storage.sync.set({ ...providersUpdate, ...options }, () => {
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            const error = chrome.runtime.lastError;
+            if (error) {
+                console.error('[Options] Error saving:', error.message);
+                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+                return;
+            }
+            // skipcq: JS-0002 - debug log for options saving success
+            // eslint-disable-next-line no-console -- Debug log for options saving success
+            console.log('[Options] Config saved successfully');
             showStatus(i18n.getMessage('savedMessage'), 'success');
             if (scrollToStatus) {
                 statusElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1030,6 +1020,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateTranslationOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(options.forcedDialogDomains);
+            panels.forEach((elements, providerId) => updateProviderDisplay(providerId));
         });
     }
 

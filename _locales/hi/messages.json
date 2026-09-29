@@ -103,6 +103,16 @@
         "message": "विकल्प सहेजे गए!",
         "description": "पुष्टिकरण संदेश सहेजें"
     },
+    "saveErrorMessage": {
+        "message": "त्रुटि: विकल्प सहेजे नहीं गए ($error$)।",
+        "description": "विकल्प सहेजने में विफल होने पर त्रुटि संदेश ($error$: ब्राउज़र का संदेश)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "आपकी OpenAI API कुंजी (sk-...)",
         "description": "API कुंजी के लिए प्लेसहोल्डर"

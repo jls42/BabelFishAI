@@ -103,6 +103,16 @@
         "message": "Opțiuni salvate!",
         "description": "Mesaj de confirmare a salvării"
     },
+    "saveErrorMessage": {
+        "message": "Eroare: opțiunile nu au fost salvate ($error$).",
+        "description": "Mesaj de eroare când salvarea opțiunilor eșuează ($error$: mesajul browserului)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Cheia dvs. API OpenAI (sk-...)",
         "description": "Placeholder pentru cheia API"

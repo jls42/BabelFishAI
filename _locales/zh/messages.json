@@ -103,6 +103,16 @@
         "message": "选项已保存！",
         "description": "保存确认消息"
     },
+    "saveErrorMessage": {
+        "message": "错误：选项未能保存（$error$）。",
+        "description": "保存选项失败时的错误消息（$error$：浏览器消息）",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥（sk-...）",
         "description": "API 密钥的占位符"

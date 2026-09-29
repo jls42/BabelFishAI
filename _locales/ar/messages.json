@@ -103,6 +103,16 @@
         "message": "تم حفظ الخيارات!",
         "description": "رسالة تأكيد الحفظ"
     },
+    "saveErrorMessage": {
+        "message": "خطأ: لم يتم حفظ الخيارات ($error$).",
+        "description": "رسالة خطأ عند فشل حفظ الخيارات ($error$: رسالة المتصفح)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
         "description": "العنصر النائب لمفتاح واجهة برمجة التطبيقات"

@@ -103,6 +103,16 @@
         "message": "オプションを保存しました！",
         "description": "保存確認メッセージ"
     },
+    "saveErrorMessage": {
+        "message": "エラー: オプションを保存できませんでした ($error$)。",
+        "description": "オプションの保存に失敗したときのエラーメッセージ ($error$: ブラウザーのメッセージ)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "あなたのOpenAI APIキー（sk-...）",
         "description": "APIキーのプレースホルダー"

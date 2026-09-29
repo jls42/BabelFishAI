@@ -103,6 +103,16 @@
         "message": "Opties opgeslagen!",
         "description": "Bevestigingsbericht voor opslaan"
     },
+    "saveErrorMessage": {
+        "message": "Fout: de opties zijn niet opgeslagen ($error$).",
+        "description": "Foutmelding wanneer het opslaan van de opties mislukt ($error$: melding van de browser)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Plaatsaanduiding voor de API-sleutel"

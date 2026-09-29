@@ -103,6 +103,16 @@
         "message": "옵션이 저장되었습니다!",
         "description": "저장 확인 메시지"
     },
+    "saveErrorMessage": {
+        "message": "오류: 옵션이 저장되지 않았습니다 ($error$).",
+        "description": "옵션 저장에 실패했을 때의 오류 메시지 ($error$: 브라우저 메시지)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "OpenAI API 키 (sk-...)",
         "description": "API 키 자리 표시자"

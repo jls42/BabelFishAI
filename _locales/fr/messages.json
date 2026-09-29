@@ -103,6 +103,16 @@
         "message": "Options sauvegardées !",
         "description": "Message de confirmation de sauvegarde"
     },
+    "saveErrorMessage": {
+        "message": "Erreur : les options n'ont pas été enregistrées ($error$).",
+        "description": "Message d'erreur quand l'enregistrement des options échoue ($error$ : message du navigateur)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Votre clé API OpenAI (sk-...)",
         "description": "Placeholder pour la clé API"

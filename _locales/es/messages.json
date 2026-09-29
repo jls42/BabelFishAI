@@ -103,6 +103,16 @@
         "message": "¡Opciones guardadas!",
         "description": "Mensaje de confirmación de guardado"
     },
+    "saveErrorMessage": {
+        "message": "Error: las opciones no se han guardado ($error$).",
+        "description": "Mensaje de error cuando falla el guardado de las opciones ($error$: mensaje del navegador)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Tu clave API OpenAI (sk-...)",
         "description": "Marcador de posición para la clave API"

@@ -103,6 +103,16 @@
         "message": "Alternativ sparade!",
         "description": "Bekräftelsemeddelande för sparande"
     },
+    "saveErrorMessage": {
+        "message": "Fel: alternativen sparades inte ($error$).",
+        "description": "Felmeddelande när alternativen inte kan sparas ($error$: webbläsarens meddelande)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"
