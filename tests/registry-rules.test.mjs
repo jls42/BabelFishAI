@@ -28,7 +28,8 @@ test('règles du registre dont dépend la page d’options', () => {
         assert.equal(urlSettings.length > 0, provider.id === 'custom', `${provider.id} : URLs`);
         // Un provider ajouté depuis les trois historiques a un lien vers sa page de clés API
         if (!['openai', 'mistral', 'custom'].includes(provider.id)) {
-            assert.ok(provider.ui.keyUrl?.startsWith('https://'), `${provider.id} : keyUrl`);
+            // Une URL qui ne s'analyse pas masquerait le lien de la clé API
+            assert.equal(new URL(provider.ui.keyUrl).protocol, 'https:', `${provider.id} : keyUrl`);
         }
     }
 });

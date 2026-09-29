@@ -90,6 +90,21 @@ function loadPanelConfig(elements, config) {
 }
 
 /**
+ * Nom d'hôte de la page des clés API d'un provider (texte de son lien)
+ * @param {string|undefined} keyUrl - ui.keyUrl du registre
+ * @returns {string|null} L'hôte, ou null si l'URL manque ou ne s'analyse pas
+ */
+function keyUrlHost(keyUrl) {
+    if (!keyUrl) return null;
+    try {
+        return new URL(keyUrl).hostname;
+    } catch (error) {
+        console.error('keyUrl illisible dans le registre :', error.message);
+        return null;
+    }
+}
+
+/**
  * Identifiants DOM du panneau généré d'un provider, de même forme que STATIC_PANELS
  * @param {string} providerId
  * @returns {Object}
@@ -132,9 +147,10 @@ function fillProviderPanel(panel, ids, provider) {
     bind('newChatInput', `new${ids.dom}ChatModel`, 'newChatLabel');
     bind('addChatButton', `add${ids.dom}ChatModel`);
     const keyLink = field('keyLink');
-    if (provider.ui.keyUrl) {
+    const host = keyUrlHost(provider.ui.keyUrl);
+    if (host) {
         keyLink.href = provider.ui.keyUrl;
-        keyLink.textContent = new URL(provider.ui.keyUrl).hostname;
+        keyLink.textContent = host;
     } else {
         keyLink.parentElement.hidden = true;
     }

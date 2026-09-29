@@ -90,6 +90,7 @@
                 "isPanelReady",
                 "logShortcutGuardError",
                 "loadPanelConfig",
+                "keyUrlHost",
                 "generatedPanelIds",
                 "cloneTemplate",
                 "fillProviderPanel",
