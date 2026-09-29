@@ -673,14 +673,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Identifiant de provider inconnu de cette version (écrit par une version plus récente)
+     * Identifiant de provider inconnu de cette version, écrit par une version plus récente
      * @param {*} value - Valeur lue pour la sélection d'un service
-     * @returns {string|null} La valeur si c'est un identifiant inconnu, sinon null
+     * @returns {string|null} La valeur si c'est un tel identifiant, sinon null
      */
     function unknownProviderId(value) {
-        return typeof value === 'string' && value !== '' && !Providers.getProvider(value)
-            ? value
-            : null;
+        // Même forme que les identifiants du registre, et jamais un nom hérité d'Object
+        // (__proto__, constructor) : une valeur corrompue suit la règle habituelle
+        const plausible =
+            typeof value === 'string' &&
+            /^[a-z][a-z0-9-]*$/.test(value) &&
+            !Object.hasOwn(Object.prototype, value);
+        return plausible && !Providers.getProvider(value) ? value : null;
     }
 
     /**
