@@ -9,7 +9,7 @@ import { FakeFileReader, ROOT, loadScripts, setupEnv } from './env.mjs';
 import { KEYS, STORAGE } from './fixtures.mjs';
 import { createSnapshots } from './snapshot.mjs';
 
-const CONTENT_SCRIPTS = [
+export const CONTENT_SCRIPTS = [
     'src/constants.js',
     'src/utils/providers.js',
     'src/utils/provider-store.js',
