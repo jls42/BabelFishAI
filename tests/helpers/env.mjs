@@ -89,6 +89,9 @@ async function describeField(name, value) {
  * @returns {Promise<*>}
  */
 async function describeBody(body) {
+    // Un corps asynchrone non attendu partirait tel quel (« [object Promise] ») : le signaler au
+    // lieu de l'attendre ici, sinon la suite Chrome ne verrait pas un await manquant
+    if (typeof body?.then === 'function') return '<promesse non attendue>';
     const isFormData = typeof body?.forEach === 'function' && typeof body?.append === 'function';
     if (!isFormData) return body ?? null;
     const fields = [];

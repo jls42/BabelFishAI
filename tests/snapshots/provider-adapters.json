@@ -94,6 +94,10 @@
             "cleRefusee": true,
             "message": "API key not valid. Please pass a valid API key."
         },
+        "cle-raison-seule": {
+            "cleRefusee": true,
+            "message": "Clé non valide. Transmettez une clé valide."
+        },
         "corps null": {
             "cleRefusee": false,
             "message": null

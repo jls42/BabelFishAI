@@ -178,6 +178,18 @@ export const STORAGE = {
         apiKey: '',
         'extraProvider.gemini': { enabled: true, apiKey: KEYS.gemini },
     },
+    // Gemini avec son modèle de texte le plus rapide : ni effort de réflexion ni temperature
+    'gemini-flash-lite': {
+        providers: providers(),
+        transcriptionProvider: 'gemini',
+        chatProvider: 'gemini',
+        apiKey: '',
+        'extraProvider.gemini': {
+            enabled: true,
+            apiKey: KEYS.gemini,
+            selectedChatModel: 'gemini-3.5-flash-lite',
+        },
+    },
     // Sélection écrite par une version plus récente, pour un provider inconnu de cette version
     // (S1 du plan, depuis que Gemini est connu) : sa clé ne doit partir nulle part
     'version-future-S1': {
@@ -248,6 +260,17 @@ const GEMINI_KEY_ERROR = {
 export const GEMINI_ERRORS = {
     'cle-native': { error: GEMINI_KEY_ERROR },
     'cle-interactions': [{ error: GEMINI_KEY_ERROR }],
+    // Exemple de forme : la raison seule reconnaît la clé refusée, message localisé sans « API key »
+    'cle-raison-seule': {
+        error: {
+            code: 400,
+            message: 'Clé non valide. Transmettez une clé valide.',
+            status: 'INVALID_ARGUMENT',
+            details: [
+                { '@type': 'type.googleapis.com/google.rpc.ErrorInfo', reason: 'API_KEY_INVALID' },
+            ],
+        },
+    },
     'cle-compatible': [
         {
             error: {
@@ -300,6 +323,8 @@ export const GEMINI_INTERACTIONS = {
         ...INTERACTION,
         status: 'completed',
         steps: [
+            // Étape d'un autre type qui porte du texte : seul model_output doit être lu
+            { type: 'user_input', content: [{ type: 'text', text: 'Consigne envoyée.' }] },
             { type: 'thought', summary: [{ type: 'text', text: 'réflexion' }] },
             {
                 type: 'model_output',

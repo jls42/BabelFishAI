@@ -62,6 +62,7 @@ const STORAGES_PER_ACTION = [
     'tout-desactive',
     'futur-S1',
     'gemini',
+    'gemini-flash-lite',
     'version-future-S1',
     'provider-inconnu-dans-providers',
 ];
@@ -112,11 +113,13 @@ const ALLOWLIST = [
  * @param {Function} fn
  * @returns {Promise<Object>}
  */
-async function outcome(fn) {
+async function outcome(fn, { status = false } = {}) {
     try {
         return { valeur: await fn() };
     } catch (error) {
-        return { erreur: `${error.name}: ${error.message}` };
+        const erreur = `${error.name}: ${error.message}`;
+        // Code HTTP que callApi laisse sur l'erreur pour ses appelants, relevé sur demande
+        return status ? { erreur, statut: error.status ?? null } : { erreur };
     }
 }
 
@@ -178,7 +181,7 @@ function makeActions(utils) {
  * @returns {Function}
  */
 function makePlayer(env, actions) {
-    return async function play(action, storage, responses) {
+    return async function play(action, storage, responses, options = {}) {
         useStorage(env, storage);
         // État de session de correctText (modèles qui refusent temperature) remis à zéro
         await loadScripts(['src/utils/text-processing.js'], { fresh: true });
@@ -192,7 +195,7 @@ function makePlayer(env, actions) {
             return realSetTimeout(fn, 0, ...args);
         };
         try {
-            const resultat = await outcome(actions[action]);
+            const resultat = await outcome(actions[action], options);
             return {
                 resultat,
                 requetes: env.http.requests.slice(),
@@ -421,7 +424,7 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
             const response = { status: (Array.isArray(json) ? json[0] : json).error.code, json };
             for (const action of ['transcription', 'traduction']) {
                 result[`${action} : ${name}`] = await withServiceFormats(errors, () =>
-                    play(action, STORAGE.openai, [response]),
+                    play(action, STORAGE.openai, [response], { status: true }),
                 );
             }
         }
@@ -450,10 +453,7 @@ const ALLOWLIST_IDENTITIES = {
     custom: { providerId: 'custom', apiKey: KEYS.custom },
     gemini: { providerId: 'gemini', apiKey: KEYS.gemini },
 };
-const GEMINI_DICTATION = {
-    ...{ providerId: 'gemini', apiKey: KEYS.gemini },
-    service: 'transcription',
-};
+const GEMINI_DICTATION = { providerId: 'gemini', apiKey: KEYS.gemini, service: 'transcription' };
 
 // Custom dont l'URL de chat est celle d'OpenAI : sa clé peut y partir, c'est son URL
 const CUSTOM_ON_OPENAI = {

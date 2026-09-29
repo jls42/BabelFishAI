@@ -56,6 +56,14 @@
             "cle": "{cle gemini}",
             "provider": "gemini"
         },
+        "gemini-flash-lite (chat)": {
+            "cle": "{cle gemini}",
+            "provider": "gemini"
+        },
+        "gemini-flash-lite (transcription)": {
+            "cle": "{cle gemini}",
+            "provider": "gemini"
+        },
         "herite-litellm (chat)": {
             "cle": null,
             "provider": "<undefined>"

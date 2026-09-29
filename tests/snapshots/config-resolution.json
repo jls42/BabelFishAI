@@ -286,6 +286,47 @@
             }
         }
     },
+    "configuration résolue : gemini-flash-lite": {
+        "getApiKey(chat)": {
+            "valeur": "{cle gemini}"
+        },
+        "getApiKey(transcription)": {
+            "valeur": "{cle gemini}"
+        },
+        "getApiKeyForProvider(custom)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(mistral)": {
+            "valeur": null
+        },
+        "getApiKeyForProvider(openai)": {
+            "valeur": null
+        },
+        "getOrFetchApiKey(chat)": {
+            "valeur": "{cle gemini}"
+        },
+        "getOrFetchApiKey(transcription)": {
+            "valeur": "{cle gemini}"
+        },
+        "resolveApiConfig(chat)": {
+            "valeur": {
+                "apiKey": "{cle gemini}",
+                "disableLogging": false,
+                "model": "gemini-3.5-flash-lite",
+                "providerId": "gemini",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        },
+        "resolveApiConfig(transcription)": {
+            "valeur": {
+                "apiKey": "{cle gemini}",
+                "disableLogging": false,
+                "model": "gemini-3.5-transcribe",
+                "providerId": "gemini",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        }
+    },
     "configuration résolue : herite-litellm": {
         "getApiKey(chat)": {
             "valeur": "{cle litellm}"

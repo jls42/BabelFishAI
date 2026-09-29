@@ -416,6 +416,31 @@
             "valeur": "Réponse du provider."
         }
     },
+    "correction : gemini-flash-lite": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-flash-lite\",\"messages\":[{\"role\":\"system\",\"content\":\"Tu es un correcteur orthographique expert. Corrige uniquement les fautes d'orthographe, de grammaire et de ponctuation dans le texte fourni. Ne modifie pas le sens, le style ou la structure du texte. Retourne uniquement le texte corrigé, sans explications ni commentaires.\"},{\"role\":\"user\",\"content\":\"Un texte avec des fote.\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
     "correction : herite-litellm": {
         "delais": [],
         "reponsesNonConsommees": 0,
@@ -2137,7 +2162,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la traduction: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer."
+                "erreur": "Error: Erreur lors de la traduction: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer.",
+                "statut": 429
             }
         },
         "traduction : autre-400": {
@@ -2162,7 +2188,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la traduction: Requête invalide. Vérifiez vos paramètres et réessayez."
+                "erreur": "Error: Erreur lors de la traduction: Requête invalide. Vérifiez vos paramètres et réessayez.",
+                "statut": 400
             }
         },
         "traduction : cle-compatible": {
@@ -2187,7 +2214,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         },
         "traduction : cle-interactions": {
@@ -2212,7 +2240,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         },
         "traduction : cle-native": {
@@ -2237,7 +2266,34 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
+            }
+        },
+        "traduction : cle-raison-seule": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ],
+                        [
+                            "Content-Type",
+                            "application/json"
+                        ]
+                    ],
+                    "method": "POST",
+                    "redirect": "follow",
+                    "url": "https://api.openai.com/v1/chat/completions"
+                }
+            ],
+            "resultat": {
+                "erreur": "Error: Erreur lors de la traduction: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         },
         "transcription : 429": {
@@ -2270,7 +2326,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la transcription: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer."
+                "erreur": "Error: Erreur lors de la transcription: Limite de requêtes atteinte. Attendez quelques instants avant de réessayer.",
+                "statut": 429
             }
         },
         "transcription : autre-400": {
@@ -2303,7 +2360,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la transcription: Requête invalide. Vérifiez vos paramètres et réessayez."
+                "erreur": "Error: Erreur lors de la transcription: Requête invalide. Vérifiez vos paramètres et réessayez.",
+                "statut": 400
             }
         },
         "transcription : cle-compatible": {
@@ -2336,7 +2394,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         },
         "transcription : cle-interactions": {
@@ -2369,7 +2428,8 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         },
         "transcription : cle-native": {
@@ -2402,7 +2462,42 @@
                 }
             ],
             "resultat": {
-                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres."
+                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
+            }
+        },
+        "transcription : cle-raison-seule": {
+            "delais": [],
+            "reponsesNonConsommees": 0,
+            "requetes": [
+                {
+                    "body": [
+                        {
+                            "base64": "GkXfo0KGgQE=",
+                            "filename": "audio-1790683200000-4fzzzxjy.webm",
+                            "name": "file",
+                            "size": 8,
+                            "type": "audio/webm"
+                        },
+                        {
+                            "name": "model",
+                            "value": "gpt-transcribe"
+                        }
+                    ],
+                    "headers": [
+                        [
+                            "Authorization",
+                            "Bearer {cle openai}"
+                        ]
+                    ],
+                    "method": "POST",
+                    "redirect": "follow",
+                    "url": "https://api.openai.com/v1/audio/transcriptions"
+                }
+            ],
+            "resultat": {
+                "erreur": "Error: Erreur lors de la transcription: Clé API non valide ou expirée. Vérifiez votre clé dans les paramètres.",
+                "statut": 400
             }
         }
     },
@@ -2596,6 +2691,31 @@
         "requetes": [
             {
                 "body": "{\"model\":\"gemini-3.8-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}],\"reasoning_effort\":\"low\"}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
+    "reformulation : gemini-flash-lite": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-flash-lite\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert language assistant. Your role is to improve text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning of the original text while enhancing its readability and eloquence. Do not add new information or modify the original intent. Always preserve the original language of the input text.\"},{\"role\":\"user\",\"content\":\"Improve the following text by rephrasing it to be more clear, professional, and fluid. Maintain the exact meaning while enhancing readability. Preserve the original language. Return only the improved text without any introduction, notes, or explanation: Un texte à reformuler.\"}]}",
                 "headers": [
                     [
                         "Authorization",
@@ -2889,6 +3009,31 @@
             "valeur": "Réponse du provider."
         }
     },
+    "traduction : gemini-flash-lite": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-flash-lite\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an expert translator with deep knowledge of multiple languages and cultures. Your role is to provide accurate, natural-sounding translations while preserving the exact meaning and tone of the original text. You excel at maintaining consistency in technical terms, handling idiomatic expressions appropriately, and ensuring the translation reads naturally in the target language.\"},{\"role\":\"user\",\"content\":\"Perform a direct translation from fr to en, without altering URLs. Strictly follow the source text without adding, modifying, or omitting elements that are not explicitly present. Begin the translation immediately without any introduction or added notes, and ensure not to include any additional information or context beyond the requested translation: Bonjour tout le monde\"}]}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "follow",
+                "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Réponse du provider."
+        }
+    },
     "traduction : herite-litellm": {
         "delais": [],
         "reponsesNonConsommees": 0,
@@ -3130,6 +3275,31 @@
         }
     },
     "transcription : gemini": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+                "headers": [
+                    [
+                        "x-goog-api-key",
+                        "{cle gemini}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "redirect": "error",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Bonjour, ceci est une dictée. "
+        }
+    },
+    "transcription : gemini-flash-lite": {
         "delais": [],
         "reponsesNonConsommees": 0,
         "requetes": [
