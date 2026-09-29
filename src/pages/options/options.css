@@ -926,11 +926,15 @@ input[type='color']:focus {
     background: linear-gradient(135deg, rgba(104, 64, 84, 0.02), rgba(76, 123, 141, 0.02));
 }
 
-/* Header avec titre + status badges */
+/* Header avec titre + status badges : quand la place manque (420 px, dès quatre providers), les
+   pastilles passent sous le titre, à droite comme sur une seule ligne, et vont à la ligne entre
+   elles, sans jamais se couper */
 .providers-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-2);
     margin-bottom: var(--space-4);
 }
 
@@ -940,7 +944,9 @@ input[type='color']:focus {
 
 .provider-status-badges {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-2);
+    margin-inline-start: auto;
 }
 
 /* Dropdown + Toggle sur la même ligne */
@@ -989,6 +995,7 @@ input[type='color']:focus {
     color: var(--gray-500);
     font-size: var(--text-xs);
     font-weight: 500;
+    white-space: nowrap;
     transition: all var(--duration-fast);
 }
 
