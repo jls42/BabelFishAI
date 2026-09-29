@@ -1195,10 +1195,22 @@ input[type='color']:focus {
 
 .unknown-providers li {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
     padding: var(--space-2) 0;
+}
+
+/* Échec d'un effacement, affiché dans la ligne du provider */
+.unknown-providers li output {
+    flex-basis: 100%;
+    color: var(--error-color);
+    font-size: var(--text-sm);
+}
+
+.unknown-providers li output:empty {
+    display: none;
 }
 
 .unknown-providers button {

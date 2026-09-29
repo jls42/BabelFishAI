@@ -917,79 +917,112 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Liste les providers dont une version plus récente a écrit la clé extraProvider.<id>.
      * Tout le stockage est lu, mais seuls les noms de clés servent : les réglages, clés API
      * comprises, ne sont jamais affichés ni journalisés
+     * @param {number|null} [focusIndex=null] - Après un effacement, rang du bouton qui avait le
+     *   focus : il passe au bouton suivant, ou au menu des providers s'il n'en reste aucun
      */
-    function loadUnknownProviders() {
+    function loadUnknownProviders(focusIndex = null) {
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.get(null, (items) => {
-            const ids = Object.keys(items)
+            const ids = Object.keys(items ?? {})
                 .filter((key) => key.startsWith(EXTRA_PREFIX))
                 .map((key) => key.slice(EXTRA_PREFIX.length))
                 .filter((id) => !Providers.getProvider(id));
             unknownProvidersList.replaceChildren(...ids.map(createUnknownProviderItem));
             unknownProvidersSection.style.display = ids.length ? 'block' : 'none';
+            if (focusIndex !== null) {
+                const buttons = unknownProvidersList.querySelectorAll('button');
+                (buttons[Math.min(focusIndex, buttons.length - 1)] ?? providerSelector).focus();
+            }
         });
     }
 
     /**
-     * Ligne d'un provider d'une version plus récente : son identifiant et un bouton Effacer
+     * Ligne d'un provider d'une version plus récente : son identifiant, un bouton Effacer décrit
+     * par cet identifiant, et la zone où s'affiche un échec
      * @param {string} providerId
+     * @param {number} index - Rang dans la liste
      * @returns {HTMLLIElement}
      */
-    function createUnknownProviderItem(providerId) {
+    function createUnknownProviderItem(providerId, index) {
         const item = document.createElement('li');
         const name = document.createElement('code');
+        name.id = `unknownProvider${index}`;
         name.textContent = providerId;
         const button = document.createElement('button');
         button.type = 'button';
         button.dataset.i18n = 'unknownProviderDelete';
         button.textContent = i18n.getMessage('unknownProviderDelete');
-        button.addEventListener('click', () => deleteUnknownProvider(providerId));
-        item.append(name, button);
+        button.setAttribute('aria-describedby', name.id);
+        const result = document.createElement('output');
+        button.addEventListener('click', () =>
+            deleteUnknownProvider(providerId, { button, result, index }),
+        );
+        item.append(name, button, result);
         return item;
     }
 
     /**
-     * Efface les réglages d'un provider d'une version plus récente (contrat, point 4) : la
-     * sélection des services qui le visaient passe d'abord à un autre provider, puis sa clé est
-     * retirée. Un échec est affiché, et la clé reste listée, prête à être effacée de nouveau
+     * Efface les réglages d'un provider d'une version plus récente (contrat, point 4). Si la
+     * sélection enregistrée ou gardée d'un service le vise, elle passe d'abord à un autre
+     * provider ; sa clé est retirée ensuite. Un échec s'affiche dans sa ligne, qui reste en place
+     * pour un nouvel essai ; le bouton est inactif pendant l'opération
      * @param {string} providerId
+     * @param {{button: HTMLButtonElement, result: HTMLOutputElement, index: number}} row
      */
-    function deleteUnknownProvider(providerId) {
-        const previous = { ...futureSelection };
-        if (futureSelection.transcription === providerId) futureSelection.transcription = null;
-        if (futureSelection.chat === providerId) futureSelection.chat = null;
-        if (previous.transcription !== providerId && previous.chat !== providerId) {
-            removeUnknownProvider(providerId);
-            return;
-        }
+    function deleteUnknownProvider(providerId, row) {
+        row.button.disabled = true;
+        row.result.textContent = '';
+        const showError = (error) => {
+            row.button.disabled = false;
+            row.result.textContent = i18n.getMessage('saveErrorMessage', { error: error.message });
+        };
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-        chrome.storage.sync.set(serviceSelection(getEnabledProviderIds()), () => {
-            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-            const error = chrome.runtime.lastError;
-            if (error) {
-                Object.assign(futureSelection, previous);
-                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+        chrome.storage.sync.get({ transcriptionProvider: null, chatProvider: null }, (stored) => {
+            const previous = { ...futureSelection };
+            const selected = [
+                stored?.transcriptionProvider,
+                stored?.chatProvider,
+                previous.transcription,
+                previous.chat,
+            ].includes(providerId);
+            if (futureSelection.transcription === providerId) futureSelection.transcription = null;
+            if (futureSelection.chat === providerId) futureSelection.chat = null;
+            if (!selected) {
+                removeUnknownProvider(providerId, row, showError);
                 return;
             }
-            removeUnknownProvider(providerId);
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            chrome.storage.sync.set(serviceSelection(getEnabledProviderIds()), () => {
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+                const error = chrome.runtime.lastError;
+                if (error) {
+                    Object.assign(futureSelection, previous);
+                    showError(error);
+                    return;
+                }
+                removeUnknownProvider(providerId, row, showError);
+            });
         });
     }
 
     /**
-     * Retire la clé extraProvider.<id> d'un provider d'une version plus récente
+     * Retire la clé extraProvider.<id> d'un provider d'une version plus récente, puis met la liste
+     * à jour (la sélection, si elle le visait, est déjà passée à un autre provider)
      * @param {string} providerId
+     * @param {{index: number}} row - Ligne du provider
+     * @param {Function} showError - Affiche un échec dans la ligne
      */
-    function removeUnknownProvider(providerId) {
+    function removeUnknownProvider(providerId, row, showError) {
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
         chrome.storage.sync.remove(`${EXTRA_PREFIX}${providerId}`, () => {
             // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
             const error = chrome.runtime.lastError;
             if (error) {
-                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+                showError(error);
                 return;
             }
             showStatus(i18n.getMessage('savedMessage'), 'success');
-            loadUnknownProviders();
+            loadUnknownProviders(row.index);
         });
     }
 
