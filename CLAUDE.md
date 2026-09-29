@@ -107,6 +107,7 @@ Cela évite de masquer de vrais positifs futurs sur le même type de règle. For
     -   Codacy `detect-unhandled-async-errors` (High) : une fonction `async` appelée depuis un écouteur d'événement sans `catch` doit gérer ses erreurs elle-même (`try/catch` interne).
     -   Sonar `Web:S6819` : `<output>` (rôle implicite `status`) plutôt que `role="status"` ; `javascript:S7721` : sortir au niveau du module une fonction imbriquée qui ne capture aucune variable.
 -   **Un `eslint-disable-next-line` ne couvre que la ligne suivante** : si prettier coupe l'instruction exemptée en deux (au-delà de 100 caractères), l'accès signalé passe à la ligne d'après et n'est plus couvert. Garder l'instruction sur une ligne (nom de variable plus court) et relire le diff après `pre-commit` (leçon 1.1.21, `saveProvidersConfig`).
+-   **Lizard aux seuils de Codacy** (`lizard -l javascript -C 8 -T nloc=50 -w <fichier>`, leçon du lot 2) : une IIFE compte comme une fonction, dont le corps entier compte hors fonctions internes. Le registre (`providers.js`) est à 50 NLOC : une constante de plus dans le corps de l'IIFE suffit à créer un avertissement (51 NLOC mesurés à `ba6f3ed`, ramenés à 50 par `7851826`), d'où les valeurs calculées directement dans l'objet exporté (`DEFAULT_SERVICE`, `15ec1e9`). Lizard lit aussi mal certaines formes, qui gonflent ou coupent une fonction : une regex `/^\//` passée à un appel (préférer `startsWith`), une fonction fléchée qui renvoie un tableau coupé sur plusieurs lignes par prettier. Relancer lizard sur chaque fichier touché avant de commiter, et comparer à l'arbre de base (`git archive`) : les avertissements déjà présents (`correctText`, `options.js`) ne sont pas des régressions.
 -   **Avant d'ajouter un ignore (inline ou global)** : **mesurer** en lançant `pre-commit run --hook-stage pre-push --all-files` localement pour reproduire avec Opengrep. Ne jamais ignorer à l'aveugle un finding cloud sans tenter de reproduire localement d'abord (principe « Mesurer > deviner »). Note : certaines règles LGPL utilisées par Codacy ne sont PAS dans les packs locaux Opengrep — dans ce cas, opengrep local ne reproduit pas, et le seul moyen de valider un fix est le rescan Codacy post-push.
 
 ## Quality / pre-commit (workflow)
@@ -155,9 +156,9 @@ git push --no-verify     # skip les hooks pre-push
 ### Suite Node (`./scripts/run-tests.sh`)
 
 -   **Lancer** : `./scripts/run-tests.sh` (Node 22 ou plus, moins d'une seconde, aussi exécuté par le hook pre-push). Le lanceur passe à `node --test` la liste explicite des `tests/**/*.test.mjs` et sort en erreur si elle est vide : `node --test tests/` échoue, et `node --test 'motif'` sans aucun fichier sortirait en 0.
--   **Un fichier par configuration** (arbre × navigateur), chacun dans son propre processus : `config-resolution` (provider, URL, clé et modèle résolus pour chaque contenu de stockage), `requests-chrome` et `requests-firefox` (dictée et trois actions texte par provider, erreurs HTTP et réseau, allowlist), `background-chrome` et `background-firefox` (migrations, menus, icône, raccourci, badge, proxy).
+-   **Un fichier par configuration** (arbre × navigateur), chacun dans son propre processus : `config-resolution` (provider, URL, clé et modèle résolus pour chaque contenu de stockage), `requests-chrome` et `requests-firefox` (dictée et trois actions texte par provider, erreurs HTTP et réseau, allowlist), `background-chrome` et `background-firefox` (migrations, menus, icône, raccourci, badge, proxy), `versions` (versions publiées 1.1.17 à 1.1.20 et arbre testé sur les mêmes stockages : quelle clé part vers quel hôte). Viennent ensuite les modules des providers, testés seuls : `registry` (données et accesseurs du registre), `provider-store` (règle d'URL de l'invariant, clés de stockage lues, clé résolue) et `provider-adapters` (entêtes, redirections, corps, lecture des réponses et des erreurs, formats déclarés par le registre). Enfin, deux tests statiques : `static-declarations` (déclarations globales par monde d'exécution) et `content-modules` (modules chargés par `content.js`, couverts par `web_accessible_resources`).
 -   **Principe** : les bouchons (`tests/helpers/chrome-stub.mjs`, `env.mjs`) sont posés sur `globalThis`, puis les vrais fichiers de `src/` sont chargés par `import()`, sans `vm` ni `eval`. Sous Firefox, le vrai `background.js` est chargé dans le même processus et reçoit les messages `proxyFetch` du content script : les requêtes Chrome et Firefox d'un même scénario sont identiques, multipart compris.
--   **Instantanés** (`tests/snapshots/*.json`) : toujours relevés en exécutant le code (`./scripts/run-tests.sh --update`), jamais écrits à la main. Ils décrivent le comportement actuel, défauts connus compris (clé d'un proxy LiteLLM non migré envoyée aux URLs OpenAI, message 422 répété, sélection `__proto__` sans repli qui plante). Relire le diff des instantanés avant de commiter une mise à jour : chaque différence est un changement de comportement. Les fausses clés y apparaissent sous la forme `{cle openai}` : on lit quelle clé part vers quel hôte, et detect-secrets écarte ces valeurs en forme de gabarit.
+-   **Instantanés** (`tests/snapshots/*.json`) : toujours relevés en exécutant le code (`./scripts/run-tests.sh --update`), jamais écrits à la main. Ils décrivent le comportement actuel, défauts connus compris (clé d'un proxy LiteLLM non migré envoyée aux URLs OpenAI, message 422 répété). La sélection `__proto__` sans repli, qui plantait sur la base de la refonte, se résout depuis le lot 2 en configuration sans clé. Relire le diff des instantanés avant de commiter une mise à jour : chaque différence est un changement de comportement. Les fausses clés y apparaissent sous la forme `{cle openai}` : on lit quelle clé part vers quel hôte, et detect-secrets écarte ces valeurs en forme de gabarit.
 -   **Preuve d'équivalence** : `./scripts/run-tests.sh --ref <réf>` exécute la suite de l'arbre de travail sur le code d'une autre version (`git archive` de `src`, `_locales` et des manifests). Une refonte « sans changement visible » doit passer sur l'arbre de travail et sur sa base. Exemple mesuré le 29/09 : sur `6c9ae09`, seul le test du `FileReader` en échec (correctif n°7) tombe.
 -   **Pièges** :
     -   Sans `package.json`, Node charge les `.js` de l'extension en CommonJS, dont le cache ignore la requête de l'URL (`?instance=`). `loadScripts(..., { fresh: true })` retire donc le fichier de `require.cache` pour le réexécuter (état de module remis à zéro, par exemple les modèles qui refusent `temperature` dans `correctText`).
@@ -201,7 +202,9 @@ Les archives ZIP sont générées dans `dist/`.
 -   `globalThis.BabelFishAIConstants` - Configuration constants
 -   `globalThis.BabelFishAIUtils` - Utility functions (recording, text, UI, etc.)
 -   `globalThis.BabelFishAI` - Main application state
--   `globalThis.BabelFishAIProviders` - AI provider registry
+-   `globalThis.BabelFishAIProviders` - AI provider registry (`providers.js`, données gelées)
+-   `globalThis.BabelFishAIProviderStore` - Lecture des réglages des providers dans le stockage et invariant de sécurité (`provider-store.js`)
+-   `globalThis.BabelFishAIProviderAdapters` - Formats d'API : entêtes, corps, lecture des réponses et des erreurs (`provider-adapters.js`)
 
 **Note**: Utiliser `globalThis` au lieu de `window` pour la portabilité ES2020+.
 
@@ -234,8 +237,26 @@ Le code utilise une vérification conditionnelle car Firefox ne supporte pas `im
 ```javascript
 if (typeof importScripts === 'function') {
     importScripts('utils/languages-data.js');
+    // Modules des providers : leur absence ne doit pas empêcher le démarrage (le proxy refuse
+    // alors les requêtes)
+    try {
+        importScripts(
+            'utils/providers.js',
+            'utils/provider-store.js',
+            'utils/provider-adapters.js',
+        );
+    } catch (error) {
+        console.error(
+            'Modules des providers indisponibles dans le service worker :',
+            error.message,
+        );
+    }
+} else if (!providerModules()) {
+    console.error('Modules des providers absents de background.scripts : proxy indisponible.');
 }
 ```
+
+Sous Firefox, ces trois modules doivent figurer dans `background.scripts` de `manifest.firefox.json`, **avant** `src/background.js`. Un script chargé par le background et absent de cette liste casse le proxy sans erreur de chargement : d'où le message au démarrage. Les tests le voient aussi : la suite du background Firefox charge les scripts de cette liste, et l'instantané de `static-declarations` fige la liste de chaque monde (background Firefox, service worker Chrome).
 
 #### Proxy fetch pour Firefox (CRITIQUE)
 
@@ -251,15 +272,17 @@ function isFirefox() {
 
 // Dans performApiCall()
 const response = isFirefox()
-    ? await fetchViaProxy(url, requestOptions) // Via background
+    ? await fetchViaProxy(url, requestOptions, providerId, service) // Via background
     : await fetch(url, requestOptions); // Direct
 ```
 
 **Architecture du proxy** (`background.js` → `proxyFetch()`) :
 
-1. Le content script envoie un message `proxyFetch` avec les paramètres
-2. Le background script effectue le `fetch()` (non soumis aux CSP)
-3. Le résultat est renvoyé au content script
+1. Le content script envoie un message `proxyFetch` avec l'URL, le provider, le service et les options, **sans aucun entête d'authentification** (`requestHeaders(headers, {})` les retire tous)
+2. Le background relit le stockage et vérifie l'invariant de sécurité (voir « Appels d'API ») : provider résolu pour ce service, clé présente, URL sur une origine configurée pour ce provider. Il reconstruit lui-même l'entête d'authentification décrit par le registre et fixe la politique de redirection
+3. Le background effectue le `fetch()` (non soumis aux CSP), et le résultat est renvoyé au content script
+
+Chaque refus a sa cause (`PROXY_REFUSALS`) : `UrlNotAllowedError` (URL hors des origines du provider, message historique), `ProviderNotAllowedError` (provider ou clé non résolus par le stockage), `ProxyCheckError` (vérification impossible, stockage illisible par exemple) et `ProviderModulesError` (module des providers absent du background). Aucun de ces messages ne ressemble à une erreur réseau : `callApi` ne réessaie pas.
 
 **Sérialisation FormData** : Les `FormData` (pour l'upload audio) ne peuvent pas être envoyés via messaging. `formDataToSerializable` (`api-utils.js`) les convertit en tableau d'objets, chaque blob étant encodé en base64 par `FileReader.readAsDataURL` ; le background le décode (`decodeBase64ToBlob`) et reconstruit le `FormData`. Ce passage décrivait jusqu'au 2026-09-29 une conversion en `Uint8Array` que le code ne fait plus.
 
@@ -322,7 +345,9 @@ if (body instanceof FormData) { ... }
 | `event-handlers.js` | User interaction handlers |
 | `error-utils.js` | Error handling and display |
 | `transcription-display.js` | Result display logic |
-| `providers.js` | AI provider registry (OpenAI, Mistral) |
+| `providers.js` | Registre des providers (OpenAI, Mistral, Custom) : services, URLs, authentification, formats, modèles, présentation dans les options |
+| `provider-store.js` | Réglages des providers dans le stockage (`providers`, `extraProvider.<id>`), provider et clé résolus, origines autorisées (invariant de sécurité) ; sans DOM, partagé avec le background |
+| `provider-adapters.js` | Formats d'API déclarés par le registre : entête d'authentification, politique de redirection, corps des requêtes, lecture des réponses et des messages d'erreur ; sans DOM, partagé avec le background |
 | `languages-shared.js` | Language definitions (single source of truth) |
 | `languages-data.js` | Language data for Service Worker context |
 | `i18n.js` | Internationalization |
@@ -634,6 +659,10 @@ container.innerHTML = `<span class="status">${text}</span>`;
 contraste */ }
 ```
 
+#### 11. Vérifier la version minimale d'une API JavaScript récente
+
+Le manifest Chrome ne fixe aucune version minimale (`minimum_chrome_version` absent). Le plancher de fait est Chrome 99 : `sendMessageToContentScript` (`background.js`) n'injecte le content script que dans le `catch` d'un `await chrome.tabs.sendMessage`, et cette méthode ne renvoie de promesse qu'à partir de Chrome 99 (doc Chrome, API `tabs`, `sendMessage` : « Returns Promise<any> Chrome 99+ », relue le 2026-09-29). `Object.hasOwn` (Chrome 93) reste en dessous. Sous Firefox, `strict_min_version` vaut 140. Avant d'utiliser une API plus récente dans `src/`, lire sa table de compatibilité sur MDN : `Array.prototype.with` (Chrome 110) a failli rendre le registre, donc toute l'extension, inutilisable sur un Chrome plus ancien (leçon du lot 2, commit `3ede6f8`, dont le message situe à tort le plancher à Chrome 93).
+
 ### Variables et Fonctions
 
 -   **Ne JAMAIS déclarer de variables non utilisées** : Si une variable est déclarée, elle doit être utilisée
@@ -646,12 +675,15 @@ La fonction `callApi` attend UN SEUL objet avec toutes les options :
 
 ```javascript
 // ✅ CORRECT
+const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('chat');
 await globalThis.BabelFishAIUtils.api.callApi({
-    url: apiUrl,
-    apiKey: effectiveApiKey,
+    url: config.url,
+    apiKey: config.apiKey,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body,
     errorType: 'Error message',
+    providerId: config.providerId, // obligatoire : invariant de sécurité
+    service: 'chat', // obligatoire : 'chat' ou 'transcription'
     retryOnFail: true
 });
 
@@ -659,7 +691,9 @@ await globalThis.BabelFishAIUtils.api.callApi({
 await globalThis.BabelFishAIUtils.api.callApi(apiUrl, { ... });
 ```
 
-Pour lire la réponse d'une API chat/completions, passer par `extractMessageText(response)` (`text-processing.js`), jamais par `response.choices[0].message.content.trim()` : les modèles Mistral qui raisonnent (Small 4, Medium 3.5) peuvent renvoyer `content` sous forme de liste de blocs (`TextChunk` `{type: "text", text}` et `ThinkChunk` `{type: "thinking", thinking}`), et seule la réponse doit être insérée (https://docs.mistral.ai/studio/conversations/reasoning).
+**Invariant de sécurité** (défense en profondeur, `assertRequestAllowed` dans `api-utils.js`, repris par le proxy Firefox) : une clé ne part que vers une origine exacte (schéma, hôte et port) configurée pour son provider, c'est-à-dire une URL du registre, ou une URL réglée par l'utilisateur pour Custom. Sur une lecture fraîche du stockage, le provider et la clé passés à `callApi` doivent être ceux que ce stockage résout pour le service. Ne jamais passer d'entête d'authentification à `callApi` : tout entête d'authentification connu du registre est retiré, et celui du service est construit d'après le registre (`auth: {header, scheme}`). Une clé portée par un autre entête qu'`Authorization` ne suit pas de redirection (`redirect: 'error'`), car la spec Fetch ne retire qu'`Authorization` lors d'un changement d'origine.
+
+Le corps d'une requête et la lecture de sa réponse passent par l'adaptateur du format que le registre déclare pour le service (`BabelFishAIProviderAdapters.getAdapter(format)`, `chatAdapter(providerId)` dans `text-processing.js`), et le message d'une réponse en erreur par le lecteur de son format d'erreurs (`getErrorReader`). Pour lire la réponse d'une API chat/completions, passer par `extractText(response)` de l'adaptateur, jamais par `response.choices[0].message.content.trim()` : les modèles Mistral qui raisonnent (Small 4, Medium 3.5) peuvent renvoyer `content` sous forme de liste de blocs (`TextChunk` `{type: "text", text}` et `ThinkChunk` `{type: "thinking", thinking}`), et seule la réponse doit être insérée (https://docs.mistral.ai/studio/conversations/reasoning).
 
 ### Scripts Shell (Bash)
 
@@ -775,7 +809,7 @@ python3 scripts/mock-openai-server.py          # port 8765 par défaut
 python3 scripts/mock-openai-server.py 9000     # autre port
 ```
 
-Dans les options, provider Custom/LiteLLM : URL de transcription `http://localhost:8765/v1/audio/transcriptions`, URL de chat `http://localhost:8765/v1/chat/completions`, clé API quelconque. La validation d'URL accepte HTTP uniquement sur `localhost` / `127.0.0.1` (`providers.js:isValidUrl`, `api-utils.js:isProtocolAllowed`), donc n'importe quel port local convient.
+Dans les options, provider Custom/LiteLLM : URL de transcription `http://localhost:8765/v1/audio/transcriptions`, URL de chat `http://localhost:8765/v1/chat/completions`, clé API quelconque. La validation d'URL accepte HTTP uniquement sur `localhost` / `127.0.0.1` (`providers.js:isValidUrl`, `provider-store.js:isProtocolAllowed`), donc n'importe quel port local convient, à condition que les deux URLs de Custom le visent : la clé ne part que vers leurs origines exactes, port compris.
 
 Une transcription doit insérer la phrase renvoyée par le serveur, et les actions texte un résultat préfixé par `[serveur local]`. C'est le seul moyen simple de vérifier le chemin `FormData` du proxy Firefox (sérialisation en base64 dans le content script, reconstruction dans le background) sans dépendre d'une API payante. Validé ainsi le 2026-09-17 : transcription d'un `.webm` de 40 Ko et traduction, sous Firefox.
 
