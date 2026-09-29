@@ -432,7 +432,8 @@ globalThis.BabelFishAIProviders = (function (definitions) {
      * Définition des providers IA disponibles
      * Chaque provider contient ses URLs par défaut, ses services (format d'adaptateur,
      * et au besoin authentification, format d'erreur et réglage d'URL), sa présentation dans la
-     * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés) et
+     * page d'options (`ui` : rang, abréviation, nom du statut, logo ou emoji, page des clés, note
+     * facultative sous forme de clé i18n) et
      * ses modèles supportés. Un modèle de chat peut porter `temperature: false` s'il refuse ce
      * paramètre, et `reasoningEffort` pour l'effort de réflexion à envoyer (reasoning_effort)
      */
@@ -549,12 +550,15 @@ globalThis.BabelFishAIProviders = (function (definitions) {
             },
             // Pas de logo : les règles de marque de Google exigent une approbation des visuels.
             // Le signe zodiacal Gemini est un caractère Unicode
+            // Note du panneau (clé i18n) : clé d'un projet avec facturation ; hors de l'EEE, de la
+            // Suisse et du Royaume-Uni, Google peut utiliser les contenus d'une clé gratuite
             ui: {
                 order: 30,
                 short: 'Gem',
                 statusName: 'Gemini',
                 emoji: '♊',
                 keyUrl: 'https://aistudio.google.com/apikey',
+                noteKey: 'geminiKeyNote',
             },
             // Seul modèle de transcription de l'API (hors temps réel)
             transcriptionModels: [

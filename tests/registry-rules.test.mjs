@@ -1,8 +1,10 @@
 // Règles du registre (src/utils/providers.js) dont dépend la page d'options : elle génère le
 // panneau d'un provider ajouté d'après ces champs, sans code propre à ce provider.
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { test } from 'node:test';
-import { loadScripts, setupEnv } from './helpers/env.mjs';
+import { ROOT, loadScripts, setupEnv } from './helpers/env.mjs';
 
 setupEnv({ browser: 'chrome' });
 await loadScripts(['src/utils/providers.js']);
@@ -42,4 +44,18 @@ test('chaque provider figure une fois dans l’ordre des providers', () => {
     // le prend en repli, que s'il figure dans cet ordre : sans lui, sa clé ne serait jamais lue
     const ids = Object.keys(registry.getAllProviders()).sort();
     assert.deepEqual(registry.getProviderOrder().sort(), ids);
+});
+
+test('note d’un panneau : clé présente dans chaque langue', () => {
+    // getMessage renvoie le nom de la clé quand elle manque : la note l'afficherait telle quelle
+    const locales = fs.readdirSync(path.join(ROOT, '_locales'));
+    assert.equal(locales.length, 15, 'nombre de langues');
+    for (const provider of Object.values(registry.getAllProviders())) {
+        if (!provider.ui.noteKey) continue;
+        for (const locale of locales) {
+            const file = path.join(ROOT, '_locales', locale, 'messages.json');
+            const messages = JSON.parse(fs.readFileSync(file, 'utf8'));
+            assert.ok(messages[provider.ui.noteKey]?.message, `${provider.id} : ${locale}`);
+        }
+    }
 });

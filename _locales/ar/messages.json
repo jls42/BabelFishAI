@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "خطأ: يجب أن تستخدم عناوين URL بروتوكول HTTPS.",
         "description": "رسالة خطأ لعناوين URL غير صالحة"
+    },
+    "geminiKeyNote": {
+        "message": "نصيحة: استخدم مفتاحًا من مشروع مفعّل فيه الفوترة. مع مفتاح مجاني، خارج أوروبا (المنطقة الاقتصادية الأوروبية وسويسرا والمملكة المتحدة)، يمكن لـ Google استخدام محتواك لتحسين منتجاتها: لا تُملِ بيانات شخصية باستخدامه. لا تقيّد المفتاح بمواقع ويب.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

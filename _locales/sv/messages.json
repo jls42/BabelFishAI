@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "Fel: URL:er måste använda HTTPS.",
         "description": "Felmeddelande för ogiltiga URL:er"
+    },
+    "geminiKeyNote": {
+        "message": "Tips: använd en nyckel från ett projekt med fakturering. Med en kostnadsfri nyckel kan Google utanför Europa (EES, Schweiz, Storbritannien) använda ditt innehåll för att förbättra sina produkter: diktera inga personuppgifter med den. Begränsa inte nyckeln till webbplatser.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

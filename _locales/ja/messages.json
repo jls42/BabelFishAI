@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "エラー: URLはHTTPSを使用する必要があります。",
         "description": "無効なURLのエラーメッセージ"
+    },
+    "geminiKeyNote": {
+        "message": "ヒント：請求先アカウントが有効なプロジェクトのキーを使用してください。無料のキーでは、ヨーロッパ（EEA、スイス、英国）以外で、Google がコンテンツを製品の改善に使用する場合があります。無料のキーで個人データを音声入力しないでください。キーをウェブサイトに制限しないでください。",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

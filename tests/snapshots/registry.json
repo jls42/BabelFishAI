@@ -646,6 +646,7 @@
                 "ui": {
                     "emoji": "♊",
                     "keyUrl": "https://aistudio.google.com/apikey",
+                    "noteKey": "geminiKeyNote",
                     "order": 30,
                     "short": "Gem",
                     "statusName": "Gemini"

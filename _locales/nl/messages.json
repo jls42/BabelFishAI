@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "Fout: URL's moeten HTTPS gebruiken.",
         "description": "Foutmelding voor ongeldige URL's"
+    },
+    "geminiKeyNote": {
+        "message": "Tip: gebruik een sleutel van een project met facturering. Met een gratis sleutel kan Google buiten Europa (EER, Zwitserland, VK) uw inhoud gebruiken om zijn producten te verbeteren: dicteer er geen persoonsgegevens mee. Beperk de sleutel niet tot websites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

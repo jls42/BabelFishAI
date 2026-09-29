@@ -1058,6 +1058,13 @@ input[type='color']:focus {
     font-size: var(--text-sm);
 }
 
+/* Note propre à un provider, sous le lien de sa page de clés */
+.provider-config-body .provider-note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+}
+
 .provider-config-body .option-description {
     margin: var(--space-2) 0 var(--space-3);
 }

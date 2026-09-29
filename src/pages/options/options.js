@@ -156,6 +156,12 @@ function fillProviderPanel(panel, ids, provider) {
     } else {
         keyLink.parentElement.hidden = true;
     }
+    // Note propre au provider : une clé i18n du registre, traduite avec le reste de la page
+    if (provider.ui.noteKey) {
+        const note = field('note');
+        note.dataset.i18n = provider.ui.noteKey;
+        note.hidden = false;
+    }
 }
 
 /**

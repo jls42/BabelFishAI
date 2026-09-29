@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "오류: URL은 HTTPS를 사용해야 합니다.",
         "description": "유효하지 않은 URL에 대한 오류 메시지"
+    },
+    "geminiKeyNote": {
+        "message": "팁: 결제가 활성화된 프로젝트의 키를 사용하세요. 무료 키를 사용하면 유럽(EEA, 스위스, 영국) 외 지역에서 Google이 콘텐츠를 제품 개선에 사용할 수 있습니다. 무료 키로 개인 데이터를 음성 입력하지 마세요. 키를 웹사이트로 제한하지 마세요.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

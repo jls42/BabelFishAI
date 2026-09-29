@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "Erreur : Les URLs doivent utiliser HTTPS (ou HTTP pour localhost).",
         "description": "Message d'erreur pour les URLs invalides"
+    },
+    "geminiKeyNote": {
+        "message": "Conseil : utilisez une clé d'un projet avec facturation. Avec une clé gratuite, hors d'Europe (EEE, Suisse, Royaume-Uni), Google peut utiliser vos contenus pour améliorer ses produits : n'y dictez pas de données personnelles. Ne restreignez pas la clé à des sites web.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

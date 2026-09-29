@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "Erro: as URLs devem usar HTTPS.",
         "description": "Mensagem de erro para URLs inválidas"
+    },
+    "geminiKeyNote": {
+        "message": "Dica: use uma chave de um projeto com faturamento ativado. Com uma chave gratuita, fora da Europa (EEE, Suíça, Reino Unido), o Google pode usar seu conteúdo para melhorar os próprios produtos: não dite dados pessoais com ela. Não restrinja a chave a sites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }

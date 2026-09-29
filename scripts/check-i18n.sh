@@ -63,8 +63,11 @@ collect_keys() {
     # Clés __MSG_xxx__ dans manifest.json
     manifest_keys=$(grep -oP '__MSG_\K[a-zA-Z0-9_]+(?=__)' "$PROJECT_DIR/manifest.json" 2>/dev/null | sort -u || true)
 
+    # Clés déclarées par le registre des providers (note d'un panneau généré : ui.noteKey)
+    registry_keys=$(grep -oP "noteKey: '\K[a-zA-Z0-9_]+(?=')" "$PROJECT_DIR/src/utils/providers.js" 2>/dev/null | sort -u || true)
+
     # Combiner et dédupliquer
-    echo -e "$html_keys\n$placeholder_keys\n$title_keys\n$js_keys\n$chrome_keys\n$manifest_keys" | grep -v '^$' | sort -u
+    echo -e "$html_keys\n$placeholder_keys\n$title_keys\n$js_keys\n$chrome_keys\n$manifest_keys\n$registry_keys" | grep -v '^$' | sort -u
     return 0
 }
 

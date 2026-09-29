@@ -466,5 +466,9 @@
     "invalidUrlError": {
         "message": "Eroare: URL-urile trebuie să folosească HTTPS.",
         "description": "Mesaj de eroare pentru URL-uri invalide"
+    },
+    "geminiKeyNote": {
+        "message": "Sfat: folosiți o cheie dintr-un proiect cu facturare activată. Cu o cheie gratuită, în afara Europei (SEE, Elveția, Regatul Unit), Google vă poate folosi conținutul pentru a-și îmbunătăți produsele: nu dictați date personale cu ea. Nu restricționați cheia la site-uri web.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation, données de l'offre gratuite hors d'Europe, pas de restriction par site"
     }
 }
