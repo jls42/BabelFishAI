@@ -763,7 +763,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      *   dernier et vaut undefined par défaut pour garder l'ordre des paramètres existants
      * @returns {Promise<string>} Le texte transcrit
      */
-    function transcribeAudio(
+    async function transcribeAudio(
         audioBlob,
         apiKey,
         apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
@@ -783,7 +783,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             globalThis.BabelFishAIProviders.getService(providerId, 'transcription')?.format ??
             'openai-multipart';
         const adapter = globalThis.BabelFishAIProviderAdapters.getAdapter(format);
-        const formData = adapter.buildBody({
+        // Un FormData pour le multipart ; un adaptateur qui encode l'audio (base64 dans du JSON)
+        // prépare son corps de façon asynchrone
+        const body = await adapter.buildBody({
             audioBlob,
             filename: finalFilename,
             model: modelType,
@@ -793,7 +795,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         return callApi({
             url: apiUrl,
             apiKey,
-            body: formData,
+            // Entêtes propres au format, comme le Content-Type d'un corps JSON (aucun pour le
+            // multipart, dont le navigateur écrit lui-même le Content-Type)
+            headers: adapter.headers ?? {},
+            body,
             errorType: ERRORS.TRANSCRIPTION_ERROR,
             responseProcessor: adapter.extractText,
             providerId,

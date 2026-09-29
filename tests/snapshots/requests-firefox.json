@@ -408,6 +408,30 @@
             "erreur": "Error: Erreur de correction: Clé API non configurée. Veuillez la configurer dans les options de l'extension."
         }
     },
+    "dictée : corps asynchrone et entêtes de l’adaptateur": {
+        "delais": [],
+        "reponsesNonConsommees": 0,
+        "requetes": [
+            {
+                "body": "{\"model\":\"gpt-transcribe\",\"octetsAudio\":8}",
+                "headers": [
+                    [
+                        "Authorization",
+                        "Bearer {cle openai}"
+                    ],
+                    [
+                        "Content-Type",
+                        "application/json"
+                    ]
+                ],
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/transcriptions"
+            }
+        ],
+        "resultat": {
+            "valeur": "Dictée en JSON. "
+        }
+    },
     "entêtes d’authentification fournis par l’appelant": {
         "entetes": [
             [

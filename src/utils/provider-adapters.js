@@ -190,9 +190,10 @@ globalThis.BabelFishAIProviderAdapters = (function () {
     }
 
     /**
-     * Adaptateur d'un format d'API
+     * Adaptateur d'un format d'API. Pour la dictée, `buildBody` peut renvoyer une promesse (audio
+     * encodé dans un corps JSON), et `headers` donne les entêtes propres au format
      * @param {string} format - Format déclaré par le registre (ex. 'openai-chat')
-     * @returns {{buildBody: Function, extractText: Function}}
+     * @returns {{buildBody: Function, extractText: Function, headers?: Object}}
      * @throws {Error} Si le format est inconnu
      */
     function getAdapter(format) {

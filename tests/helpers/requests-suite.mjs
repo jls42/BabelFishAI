@@ -317,6 +317,32 @@ function defineRegistryFlagTests({ play, matchSnapshot }) {
             ),
         });
     });
+    test('dictée : corps asynchrone et entêtes donnés par l’adaptateur', async () => {
+        // Adaptateur d'essai d'une dictée en JSON : corps préparé de façon asynchrone, comme un
+        // audio encodé en base64, et Content-Type propre au format
+        const adapters = globalThis.BabelFishAIProviderAdapters;
+        const getAdapter = adapters.getAdapter;
+        const jsonAdapter = {
+            buildBody: async ({ audioBlob, model }) =>
+                JSON.stringify({ model, octetsAudio: (await audioBlob.arrayBuffer()).byteLength }),
+            headers: { 'Content-Type': 'application/json' },
+            extractText: (data) => `${data.texte} `,
+        };
+        adapters.getAdapter = (format) =>
+            format === 'format-json-test' ? jsonAdapter : getAdapter(format);
+        try {
+            const key = 'dictée : corps asynchrone et entêtes de l’adaptateur';
+            const response = { json: { texte: 'Dictée en JSON.' } };
+            matchSnapshot(
+                key,
+                await withServiceFormats({ format: 'format-json-test' }, () =>
+                    play('transcription', STORAGE.openai, [response]),
+                ),
+            );
+        } finally {
+            adapters.getAdapter = getAdapter;
+        }
+    });
     test('erreurs au format gemini : clé refusée en 400', async () => {
         const errors = { errors: 'gemini' };
         const result = {};
