@@ -739,7 +739,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} [modelType] - Le modèle Whisper à utiliser
      * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
-     * @param {string} [providerId] - Provider de la clé : format et authentification du registre
+     * @param {string} providerId - Obligatoire : provider de la clé (format et authentification
+     *   du registre, invariant de sécurité). Sans lui, callApi refuse la requête ; il vient en
+     *   dernier et vaut undefined par défaut pour garder l'ordre des paramètres existants
      * @returns {Promise<string>} Le texte transcrit
      */
     function transcribeAudio(

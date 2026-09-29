@@ -140,6 +140,5 @@ globalThis.BabelFishAIProviderAdapters = (function () {
         requestHeaders,
         redirectPolicy,
         getAdapter,
-        extractMessageText,
     };
 })();

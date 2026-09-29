@@ -14,7 +14,7 @@ if (typeof importScripts === 'function') {
             'utils/providers.js',
             'utils/provider-store.js',
             'utils/provider-adapters.js',
-        ); // skipcq: JS-0103
+        );
     } catch (error) {
         console.error(
             'Modules des providers indisponibles dans le service worker :',

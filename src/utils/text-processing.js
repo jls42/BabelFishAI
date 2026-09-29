@@ -145,10 +145,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} modelType - Modèle à utiliser
      * @param {Array<Object>} messages - Messages envoyés à l'API
      * @param {boolean} disableLogging - Ajoute l'option no-log (LiteLLM)
-     * @param {string} providerId - Provider du modèle (indicateurs du registre)
      * @returns {Promise<Object>} Réponse de l'API
      */
-    async function callCorrectionApi(apiOptions, modelType, messages, disableLogging, providerId) {
+    async function callCorrectionApi(apiOptions, modelType, messages, disableLogging) {
         /**
          * Envoie la requête avec ou sans temperature
          * @param {boolean} withTemperature - Inclut le paramètre temperature
@@ -167,7 +166,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         const Providers = globalThis.BabelFishAIProviders;
         if (
-            !Providers.acceptsTemperature(providerId, modelType) ||
+            !Providers.acceptsTemperature(apiOptions.providerId, modelType) ||
             modelsRejectingTemperature.has(modelType)
         ) {
             return callWith(false);
@@ -203,6 +202,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Nettoyer le texte avant traitement
         const cleanedText = cleanText(text);
+        const correctErrorLabel =
+            globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction';
 
         try {
             // Utiliser resolveApiConfig pour obtenir la configuration multi-provider
@@ -229,9 +230,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     url: apiUrl,
                     apiKey: effectiveApiKey,
                     headers: { 'Content-Type': 'application/json' },
-                    errorType:
-                        globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR ||
-                        'Erreur de correction',
+                    errorType: correctErrorLabel,
                     retryOnFail: true,
                     providerId: config.providerId,
                     service: 'chat',
@@ -239,7 +238,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 modelType,
                 messages,
                 disableLogging,
-                config.providerId,
             );
 
             // Extraire et retourner le texte corrigé
@@ -251,8 +249,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             }
         } catch (error) {
             console.error('Correction error:', error);
-            const correctErrorLabel =
-                globalThis.BabelFishAIConstants.ERRORS.CORRECT_ERROR || 'Erreur de correction';
             // callApi préfixe déjà ses propres erreurs avec ce libellé (api-utils.js) :
             // le rajouter produirait « Erreur de correction: Erreur de correction: ... »
             if (error.message.includes(correctErrorLabel)) {

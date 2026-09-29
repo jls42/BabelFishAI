@@ -63,7 +63,9 @@ globalThis.BabelFishAIProviderStore = (function () {
     function isProviderUsable(providerId, serviceType, config) {
         if (!registry().supportsService(providerId, serviceType)) return false;
         if (!config?.enabled || !config?.apiKey) return false;
-        return requiredUrlSettings(providerId).every((setting) => Boolean(config[setting]));
+        return requiredUrlSettings(providerId).every((setting) =>
+            Boolean(ownValue(config, setting)),
+        );
     }
 
     /**
@@ -198,7 +200,7 @@ globalThis.BabelFishAIProviderStore = (function () {
         // F8 : aucun fallback valide. Invalider la config pour que callApi
         // échoue tôt sur "clé API manquante" plutôt que de renvoyer
         // l'utilisateur sur la fausse piste "URL non autorisée" via
-        // isUrlAllowed (cas typique : tous les providers désactivés mais
+        // assertRequestAllowed (api-utils.js) (cas typique : tous les providers désactivés mais
         // l'un d'eux reste sélectionné comme actif).
         return findFallback(data, serviceType) ?? { providerId, providerConfig: undefined };
     }
@@ -221,9 +223,6 @@ globalThis.BabelFishAIProviderStore = (function () {
         isUrlAllowedForProvider,
         resolutionDefaults,
         resolveKey,
-        getProviderConfig,
-        isProviderUsable,
-        findFallback,
         readSelection,
         resolveProvider,
     };
