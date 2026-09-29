@@ -1226,6 +1226,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (existingOptions.includes(newModel)) {
             elements.input.value = '';
             elements.select.value = newModel;
+            // Pas de sauvegarde ici, comme avant ; la suivante reprendra ce choix
+            modifiedExtraProviders.add(providerId);
             return;
         }
 
