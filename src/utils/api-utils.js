@@ -36,7 +36,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const { name, value } = entry;
             if (value instanceof Blob) {
                 // Convertir le Blob en Base64 (plus efficace que Array.from pour la sérialisation)
-                const base64 = await globalThis.BabelFishAIProviderAdapters.blobToBase64(value);
+                const base64 = await globalThis.BabelFishAIProviderAdapters.blobToBase64(value); // NOSONAR javascript:S9382 - une requête ne porte qu'un fichier audio ; lire plusieurs blobs à la fois multiplierait la mémoire occupée
                 fields.push({
                     name,
                     isFile: true,
