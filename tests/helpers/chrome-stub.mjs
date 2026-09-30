@@ -82,14 +82,15 @@ function respond(callback, compute, stub) {
         });
     }
     queueMicrotask(() => {
-        let result;
+        // Après une erreur, le rappel reçoit undefined, comme dans Chrome
+        const outcome = {};
         try {
-            result = compute();
+            outcome.result = compute();
         } catch (error) {
             stub.runtime.lastError = { message: error.message };
         }
         try {
-            callback(result);
+            callback(outcome.result);
         } finally {
             stub.runtime.lastError = undefined;
         }

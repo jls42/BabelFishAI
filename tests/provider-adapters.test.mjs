@@ -59,7 +59,7 @@ test('corps et lecture des réponses', async () => {
         filename: 'audio.webm',
         model: 'gpt-transcribe',
     });
-    let unknown;
+    let unknown = null;
     try {
         adapters.getAdapter('format-inconnu');
     } catch (error) {
@@ -133,7 +133,7 @@ test('audio en base64 : contenu, type ignoré, échec de lecture', async () => {
 
 test('messages des réponses en erreur', () => {
     const openai = adapters.getErrorReader('openai');
-    let unknown;
+    let unknown = null;
     try {
         adapters.getErrorReader('format-inconnu');
     } catch (error) {

@@ -48,7 +48,7 @@ const OK_ALL_FORMATS = {
 async function probe(fn) {
     env.http.clear();
     env.http.respond({ json: OK_ALL_FORMATS });
-    let outcome;
+    let outcome = null;
     try {
         outcome = { valeur: await fn() };
     } catch (error) {

@@ -540,7 +540,7 @@ function defineProxyTests({ env, matchSnapshot, freshBackground, send }) {
         await freshBackground(STORAGE.openai);
         const adapters = globalThis.BabelFishAIProviderAdapters;
         delete globalThis.BabelFishAIProviderAdapters;
-        let moduleAbsent;
+        let moduleAbsent = null;
         try {
             moduleAbsent = await send(message);
         } finally {
