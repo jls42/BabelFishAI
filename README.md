@@ -12,7 +12,7 @@
 | :--------------------------------------------------------------: | :------------------------------------------------------------------------------------------------ |
 | <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI** : [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)               |
 |   <img src="images/openai-logo.png" alt="OpenAI" height="30">    | **OpenAI** : [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
-|                                ♊                                | **Gemini (Google)** : [aistudio.google.com/apikey](https://aistudio.google.com/apikey)            |
+|   <img src="images/gemini-logo.png" alt="Gemini" height="30">    | **Gemini (Google)** : [aistudio.google.com/apikey](https://aistudio.google.com/apikey)            |
 |                                🚅                                | **Custom/LiteLLM** : Pour utiliser vos propres endpoints API                                      |
 
 Babel Fish AI est une extension de navigateur innovante conçue pour offrir une transcription vocale puissante avec support multi-provider. Transformez votre voix en texte avec une précision remarquable grâce aux API de transcription de Mistral AI (Voxtral), OpenAI (gpt-transcribe, Whisper) ou Gemini (Gemini 3.5 Transcribe), et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.

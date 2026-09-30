@@ -649,8 +649,8 @@
                     }
                 ],
                 "ui": {
-                    "emoji": "♊",
                     "keyUrl": "https://aistudio.google.com/apikey",
+                    "logo": "images/gemini-logo.png",
                     "noteKey": "geminiKeyNote",
                     "order": 30,
                     "short": "Gem",

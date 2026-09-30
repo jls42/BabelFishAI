@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             emojiEl.id = 'providerLogoEmoji';
             emojiEl.className = 'provider-selector-emoji';
             // Décoratif, comme le logo (alt="") : le menu voisin nomme déjà le provider, alors
-            // qu'un lecteur d'écran lirait « gémeaux » pour ♊ ou « train à grande vitesse » pour 🚅
+            // qu'un lecteur d'écran lirait par exemple « train à grande vitesse » pour 🚅
             emojiEl.setAttribute('aria-hidden', 'true');
             providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
         }

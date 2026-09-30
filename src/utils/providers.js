@@ -558,9 +558,9 @@ globalThis.BabelFishAIProviders = (function (definitions) {
                 // modèle ajouté par l'utilisateur
                 chat: { format: 'openai-chat', errors: 'gemini', temperature: false },
             },
-            // Pas de logo (choix du propriétaire) : les règles de marque de Google, sur un portail
-            // réservé aux partenaires, n'ont pas pu être lues. Le signe zodiacal Gemini est un
-            // caractère Unicode
+            // Logo : l'icône de Gemini (Wikimedia Commons, « Google Gemini icon 2025.svg »), rendue en
+            // PNG par Chrome. Elle indique que l'extension utilise l'API Gemini, usage que permet la
+            // section 6b des Google APIs Terms ; rien ne doit suggérer un partenariat (6c)
             // Note du panneau (clé i18n) : clé d'un projet avec facturation ; hors de l'EEE, de la
             // Suisse et du Royaume-Uni, Google peut utiliser les contenus d'une clé gratuite, avec
             // relecture humaine ; clé restreinte à l'API Gemini, jamais à des sites web
@@ -568,7 +568,7 @@ globalThis.BabelFishAIProviders = (function (definitions) {
                 order: 30,
                 short: 'Gem',
                 statusName: 'Gemini',
-                emoji: '♊',
+                logo: 'images/gemini-logo.png',
                 keyUrl: 'https://aistudio.google.com/apikey',
                 noteKey: 'geminiKeyNote',
             },
