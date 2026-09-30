@@ -911,7 +911,7 @@ function handleMessage(message, sender, sendResponse) {
             actionStateMap[message.action],
             message.action === ACTIONS.ERROR ? message.error : '',
         );
-        rememberRecordingTab(message.action, sender?.tab?.id);
+        rememberRecordingTab(message.action, sender?.tab?.id); // NOSONAR javascript:S9383 - gère ses erreurs (try/catch interne) : sa promesse ne rejette pas
         sendResponse({});
         return false;
     }

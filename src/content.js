@@ -2,7 +2,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename -- chrome.runtime.getURL returns safe extension-internal URLs */
 /* eslint-disable unicorn/prefer-top-level-await -- IIFE required: Chrome content scripts don't support top-level await */
 // skipcq: JS-0116 - IIFE required for Chrome extension content scripts (top-level await not supported in this context)
-(async function () {
+(async function () /* NOSONAR javascript:S9383 - point d'entrée du content script, sans appelant ; un rejet imprévu reste signalé par le navigateur */ {
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;
 
@@ -121,7 +121,7 @@
     }
 
     // Initialiser les options de l'extension
-    initializeExtensionOptions();
+    initializeExtensionOptions(); // NOSONAR javascript:S9383 - gère ses erreurs (try/catch interne) : sa promesse ne rejette pas
 
     /**
      * Met à jour la couleur du bandeau en utilisant la fonction de l'utilitaire banner

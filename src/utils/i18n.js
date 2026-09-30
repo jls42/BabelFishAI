@@ -417,6 +417,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        init();
+        init(); // NOSONAR javascript:S9383 - initialisation au chargement, sans appelant ; un rejet reste signalé par le navigateur
     }
 })(globalThis.BabelFishAIUtils);
