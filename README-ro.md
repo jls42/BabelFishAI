@@ -14,57 +14,59 @@
 | :--------------------------------------------------------------: | :------------------------------------------------------------------------------------------------ |
 | <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI**: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)                                             |
 |   <img src="images/openai-logo.png" alt="OpenAI" height="30">    | **OpenAI**: [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)                                        |
-|                                🚅                                | **Custom/LiteLLM**: Pentru utilizarea propriilor endpoint-uri API                                 |
+|   <img src="images/gemini-logo.png" alt="Gemini" height="30">    | **Gemini (Google)**: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)                                         |
+|                                🚅                                | **Custom/LiteLLM**: Pentru a utiliza propriile endpointuri API                                    |
 
-Babel Fish AI este o extensie inovatoare pentru browser, concepută să ofere o transcriere vocală performantă, cu suport pentru mai mulți provideri. Transformați-vă vocea în text cu o precizie remarcabilă folosind API-urile de transcriere Mistral AI (Voxtral) sau OpenAI (Whisper) și beneficiați opțional de traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de necesități.
+Babel Fish AI este o extensie de browser inovatoare, concepută pentru a oferi o transcriere vocală performantă, cu suport pentru mai mulți provideri. Transformați-vă vocea în text cu o precizie remarcabilă datorită API-urilor de transcriere Mistral AI (Voxtral), OpenAI (gpt-transcribe, Whisper) sau Gemini (Gemini 3.5 Transcribe) și beneficiați opțional de traducere automată în timp real. Puteți utiliza Babel Fish AI exclusiv pentru transcriere sau puteți activa traducerea din mers, în funcție de necesități.
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Insigna Codacy](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Insignă Codacy](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-[![Starea pragului de calitate](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Evaluarea securității](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Evaluarea mentenabilității](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Vulnerabilități](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Probleme de calitate a codului](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Datorie tehnică](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Linii de cod](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI)
+[![Starea pragului de calitate](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Evaluarea securității](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Evaluarea mentenabilității](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Vulnerabilități](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Probleme de cod](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Datorie tehnică](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI) [![Linii de cod](https://sonarcloud.io/api/project_badges/measure?project=jls42_BabelFishAI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jls42_BabelFishAI)
 
 ## 🌟 Funcționalități
 
 -   **Transcriere vocală avansată**
 
     -   Captură audio de înaltă calitate prin microfonul dispozitivului.
-    -   Transcriere precisă prin API-urile Voxtral (Mistral AI) sau Whisper (OpenAI).
-    -   Suport pentru mai mulți provideri: alegeți liber între Mistral AI, OpenAI sau un endpoint personalizat.
-    -   Suport multilingv pentru recunoașterea vocală și afișarea textului, permițând transcrierea intrărilor vocale în diferite limbi și afișarea rezultatelor (transcriere și traducere, dacă este activată) în limba dorită.
-    -   Inserarea automată a textului în câmpul activ sau afișarea într-o casetă de dialog dedicată.
+    -   Transcriere precisă prin API-urile Voxtral (Mistral AI), gpt-transcribe și Whisper (OpenAI) sau Gemini 3.5 Transcribe (Google).
+    -   Suport pentru mai mulți provideri: alegeți liber între Mistral AI, OpenAI, Gemini sau un endpoint personalizat.
+    -   Suport multilingv pentru recunoașterea vocală și afișarea textului, permițând transcrierea intrărilor vocale în diferite limbi și afișarea rezultatelor (transcrierea și traducerea, dacă este activată) în limba aleasă.
+    -   Inserarea automată a textului în câmpul activ sau afișarea acestuia într-o casetă de dialog dedicată.
 
 -   **Traducere și reformulare inteligente**
 
     -   Traducerea imediată a transcrierilor în diverse limbi, care poate fi activată la nevoie.
-    -   Reformularea textului pentru îmbunătățirea stilului și clarității.
+    -   Reformularea textului pentru îmbunătățirea stilului și a clarității.
     -   Utilizarea unui model IA avansat pentru a garanta o traducere fidelă sensului original.
     -   Posibilitatea de a utiliza exclusiv transcrierea sau de a combina transcrierea cu traducerea.
 
 -   **Meniu contextual performant**
 
-    -   Opțiunea „Reformulează selecția” pentru îmbunătățirea instantanee a textelor selectate.
+    -   Opțiunea „Reformulează selecția” pentru a îmbunătăți instantaneu textele selectate.
     -   Opțiunea „Tradu selecția”, cu un submeniu care conține toate limbile disponibile.
     -   Opțiunea „Corectează ortografia” pentru corectarea greșelilor de ortografie, gramatică și punctuație.
     -   Înlocuirea directă a textului selectat cu versiunea sa tradusă, reformulată sau corectată.
-    -   Integrare perfectă în interfața nativă a browserului.
+    -   Integrare perfectă în interfața nativă cu utilizatorul a browserului.
 
--   **Interfață intuitivă și personalizabilă**
+-   **Interfață cu utilizatorul intuitivă și personalizabilă**
 
-    -   Mod flexibil de afișare: zonă activă de introducere sau fereastră de dialog flotantă.
-    -   Banner de stare configurabil, cu posibilitatea alegerii culorilor, opacității și duratei de afișare.
+    -   Mod flexibil de afișare: zonă de introducere activă sau fereastră de dialog flotantă.
+    -   Banner de stare configurabil, cu posibilitatea de a alege culorile, opacitatea și durata afișării.
     -   Scurtătură de la tastatură (Ctrl+Shift+1 sau ⌘+Shift+1 pe Mac) pentru pornirea/oprirea înregistrării.
-    -   În Firefox, „scurtătură prioritară” pentru site-urile al căror editor de pagină interceptează combinația (ChatGPT, Notion…): activă imediat după instalare și dezactivabilă din opțiuni (consultați [PRIVACY.md](PRIVACY.md)).
+    -   În Firefox, „scurtătură prioritară” pentru site-urile al căror editor de pagină interceptează combinația (ChatGPT, Notion…): activă imediat după instalare, poate fi dezactivată din opțiuni (consultați [PRIVACY.md](PRIVACY.md)).
     -   Opțiunea „Păstrează deschis” pentru controlarea duratei de afișare a rezultatelor.
     -   Pictogramă personalizată, care integrează un microfon și numărul „42”, pentru recunoaștere imediată.
 
 -   **Opțiuni avansate**
-    -   Suport pentru mai mulți provideri: Mistral AI, OpenAI și Custom/LiteLLM, pentru flexibilitate maximă.
+    -   Suport pentru mai mulți provideri: Mistral AI, OpenAI, Gemini și Custom/LiteLLM, pentru flexibilitate maximă.
     -   Posibilitatea de a personaliza modelele de transcriere și traducere pentru fiecare provider.
-    -   Modele OpenAI disponibile: GPT-4o mini (implicit), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** și **GPT-5.6 (luna/terra/sol)**. Transcriere: whisper-1 (implicit), gpt-4o-mini-transcribe, gpt-4o-transcribe și **gpt-transcribe**.
-    -   Modele Mistral disponibile: Mistral Small (implicit), Mistral Medium, Mistral Large, Codestral și **Ministral 3 (3B/8B/14B)**. Transcriere: Voxtral Mini. Sunt acceptate răspunsurile modelelor Mistral care raționează (blocuri de reflecție).
-    -   Configurările care utilizau gpt-4.1-nano (API-ul OpenAI va fi retras la 23/10/2026) sau gpt-4o trec automat la gpt-5.6-luna și gpt-4.1 în timpul actualizării.
+    -   Modele OpenAI disponibile: GPT-4o mini (implicit), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** și **GPT-5.6 (luna/terra/sol)**. Transcriere: **gpt-transcribe** (implicit), whisper-1, gpt-4o-mini-transcribe și gpt-4o-transcribe. OpenAI va retrage ultimele trei modele din API-ul său la 26.02.2027; un model deja ales în opțiuni va continua să fie utilizat până atunci.
+    -   Modele Mistral disponibile: Mistral Small (implicit), Mistral Medium, Mistral Large, Codestral și **Ministral 3 (3B/8B/14B)**. Transcriere: Voxtral Mini. Răspunsurile modelelor Mistral care raționează (blocuri de reflecție) sunt acceptate.
+    -   Modele Gemini disponibile: **Gemini 3.8 Flash** (implicit, cu raționare redusă pentru a răspunde în una-două secunde) și **Gemini 3.5 Flash-Lite** (cel mai rapid). Transcriere: **Gemini 3.5 Transcribe**, prin API-ul Interactions de la Google, fără salvarea dictărilor în istoricul acestui API (`store: false`, consultați [docs/providers/gemini.md](docs/providers/gemini.md)).
+    -   Configurările care utilizau gpt-4.1-nano (API-ul OpenAI va fi oprit la 23.10.2026) sau gpt-4o trec automat la gpt-5.6-luna și gpt-4.1 în timpul actualizării.
     -   Selectarea independentă a providerului pentru transcriere și traducere/reformulare.
     -   Compatibilitate cu LiteLLM Proxy prin providerul Custom, pentru conectarea la modele alternative.
-    -   Gestionarea completă a internaționalizării prin fișierele de limbă (\_locales), oferind o interfață și suport vocal în mai multe limbi.
+    -   Gestionarea completă a internaționalizării datorită fișierelor de limbă (\_locales), oferind o interfață și suport vocal în mai multe limbi.
 
 ## 🌐 Limbi acceptate
 
@@ -92,52 +94,60 @@ Iată lista limbilor acceptate de Babel Fish AI, cu linkuri către videoclipuri 
 
 1.  **Descărcare și instalare:**
 
-    -   Clonați acest depozit de pe GitHub sau descărcați manual dosarul extensiei.
+    -   Clonați acest depozit de pe GitHub sau descărcați manual folderul extensiei.
     -   **Sau instalați extensia direct din [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
     -   Deschideți Chrome și accesați `chrome://extensions/`.
-    -   Activați „Modul pentru dezvoltatori” în colțul din dreapta sus.
-    -   Faceți clic pe „Încarcă extensia neîmpachetată” și selectați dosarul Babel Fish AI.
+    -   Activați „Modul pentru dezvoltatori” din dreapta sus.
+    -   Faceți clic pe „Încarcă extensia neîmpachetată” și selectați folderul Babel Fish AI.
 
 2.  **Verificare:**
-    -   Asigurați-vă că extensia apare în bara de instrumente a browserului cu pictograma personalizată.
+    -   Asigurați-vă că extensia apare în bara de instrumente a browserului, cu pictograma personalizată.
 
 ### Firefox
 
 1.  **Descărcare și instalare:**
 
+    -   Începând cu versiunea 1.2.0, este necesar **Firefox 140 sau o versiune ulterioară** (pentru computer). La instalare și la actualizarea la versiunea 1.2.0, Firefox afișează datele pe care extensia le transmite providerului configurat de dumneavoastră: vocea, textul selectat sau dictat și cheia API (consultați [PRIVACY.md](PRIVACY.md)).
     -   **Instalați extensia direct din [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
-    -   Sau, pentru instalarea manuală: clonați acest depozit de pe GitHub, apoi executați `./scripts/build.sh firefox`, care pregătește `dist/firefox/` cu manifestul Firefox redenumit în `manifest.json`.
-    -   Deschideți Firefox și accesați `about:debugging#/runtime/this-firefox` (nu „Instalează un supliment dintr-un fișier” din `about:addons`, opțiune rezervată extensiilor semnate).
+    -   Sau, pentru instalarea manuală: clonați acest depozit de pe GitHub, apoi rulați `./scripts/build.sh firefox`, care pregătește `dist/firefox/` cu manifestul Firefox redenumit în `manifest.json`.
+    -   Deschideți Firefox și accesați `about:debugging#/runtime/this-firefox` (nu „Instalează un supliment dintr-un fișier” din `about:addons`, care este rezervat extensiilor semnate).
     -   Faceți clic pe „Încarcă un supliment temporar...”.
     -   Selectați fișierul `dist/firefox/manifest.json`.
 
 2.  **Verificare:**
-    -   Asigurați-vă că extensia apare în bara de instrumente Firefox cu pictograma personalizată.
+    -   Asigurați-vă că extensia apare în bara de instrumente Firefox, cu pictograma personalizată.
 
 ## ⚙️ Configurare
 
 1.  **Configurarea providerului IA:**
 
     -   Faceți clic pe pictograma extensiei pentru a accesa opțiunile.
-    -   Selectați providerul din meniul derulant (Mistral AI, OpenAI sau Custom/LiteLLM).
+    -   Selectați providerul din meniul derulant (Mistral AI, OpenAI, Gemini sau Custom/LiteLLM).
     -   Introduceți cheia API:
         -   **Mistral AI**: disponibilă pe [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
         -   **OpenAI**: disponibilă pe [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-    -   Activați providerul cu ajutorul comutatorului de lângă meniul derulant.
+        -   **Gemini**: disponibilă pe [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Preferați o cheie provenită dintr-un proiect cu facturare: dacă utilizați o cheie gratuită și vă aflați în afara Spațiului Economic European, Elveției și Regatului Unit, Google vă poate utiliza dictările și textele trimise pentru a-și îmbunătăți produsele, fiind posibilă și examinarea de către persoane; nu trimiteți informații personale, sensibile sau confidențiale. Restricționați cheia la API-ul Gemini (configurarea implicită pentru cheile noi), niciodată la site-uri web: în Chrome, solicitările sunt trimise din pagina în care dictați.
+    -   Activați providerul folosind comutatorul de lângă meniul derulant.
 
 2.  **Personalizarea opțiunilor:**
 
     -   Alegeți modul de afișare (zonă activă sau casetă de dialog).
-    -   Configurați culoarea, opacitatea și durata de afișare a bannerului de stare.
+    -   Configurați culoarea, opacitatea și durata afișării bannerului de stare.
     -   Selectați limbile pentru transcriere (intrare vocală) și pentru afișarea textului.
     -   Activați sau dezactivați funcționalitatea de traducere în funcție de necesități.
 
 3.  **(Opțional) Configurarea avansată a modelelor:**
+
     -   În opțiunile fiecărui provider, faceți clic pe „Configurarea modelelor” pentru a personaliza modelele utilizate.
     -   Puteți adăuga modele personalizate pentru transcriere și traducere/reformulare.
-    -   Dacă sunt activați mai mulți provideri, puteți alege providerul utilizat pentru fiecare serviciu (transcriere și traducere).
+    -   Dacă sunt activați mai mulți provideri, puteți alege care dintre ei să fie utilizat pentru fiecare serviciu (transcriere și traducere).
 
-## 🚀 Utilizarea cu LiteLLM Proxy sau endpoint-uri personalizate
+4.  **Mai multe dispozitive sincronizate:**
+    -   Actualizați extensia pe toate dispozitivele. O versiune anterioară versiunii 1.2.0 nu recunoaște Gemini: dacă este selectat Gemini, aceasta utilizează un provider mai vechi pe care l-ați activat sau nu trimite nimic.
+    -   Dacă o versiune mai nouă a extensiei a salvat un provider pe care versiunea dumneavoastră încă nu îl recunoaște, pagina de opțiuni indică acest lucru în secțiunea „Provideri dintr-o versiune mai nouă”, cu un buton pentru ștergerea configurărilor acestuia de pe toate dispozitivele dumneavoastră.
+    -   Dacă browserul refuză să salveze opțiunile (de exemplu, din cauza unei valori prea lungi), pagina afișează eroarea în locul mesajului „Opțiuni salvate!” și nu salvează nimic.
+
+## 🚀 Utilizarea cu LiteLLM Proxy sau endpointuri personalizate
 
 Babel Fish AI este compatibil cu [LiteLLM Proxy](https://litellm.ai/) și cu alte proxy-uri API compatibile cu OpenAI, permițând utilizarea unor modele lingvistice alternative.
 
@@ -147,13 +157,13 @@ Babel Fish AI este compatibil cu [LiteLLM Proxy](https://litellm.ai/) și cu alt
 2.  **Configurați extensia Babel Fish AI:**
     -   În opțiunile extensiei, selectați providerul **Custom/LiteLLM** din meniul derulant.
     -   Introduceți cheia API (dacă este necesar).
-    -   Configurați URL-urile API:
-        -   **URL de transcriere**: de exemplu, `http://localhost:4000/v1/audio/transcriptions`
-        -   **URL de chat**: de exemplu, `http://localhost:4000/v1/chat/completions`
-    -   Activați providerul cu ajutorul comutatorului.
+    -   Configurați URL-urile API-urilor:
+        -   **URL pentru transcriere**: de exemplu, `http://localhost:4000/v1/audio/transcriptions`
+        -   **URL pentru chat**: de exemplu, `http://localhost:4000/v1/chat/completions`
+    -   Activați providerul folosind comutatorul.
     -   Bifați opțiunea **„NoLog”** dacă doriți să dezactivați jurnalizarea solicitărilor de către LiteLLM.
 
-**Important:** Opțiunea „NoLog” este disponibilă **numai** pentru providerul Custom/LiteLLM. Aceasta nu este compatibilă cu API-urile oficiale OpenAI sau Mistral AI.
+**Important:** Opțiunea „NoLog” este disponibilă **exclusiv** în providerul Custom/LiteLLM. Aceasta nu este compatibilă cu API-urile oficiale OpenAI, Mistral AI sau Gemini.
 
 ## 🛠️ Funcționare tehnică
 
@@ -165,32 +175,34 @@ Extensia este alcătuită din mai multe fișiere JavaScript care interacționeaz
 
 -   **`manifest.json`:** Fișierul principal de configurare al extensiei. Acesta definește permisiunile, scripturile, resursele accesibile etc. Utilizează versiunea 3 a manifestului și declară permisiunile `activeTab`, `storage`, `commands`, `scripting` și `contextMenus`.
 -   **`background.js`:** Service worker-ul care rulează în fundal. Acesta gestionează evenimentele (clic pe pictogramă, scurtături de la tastatură, meniu contextual), injectează `content script` dacă este necesar și comunică cu `content script`.
--   **`content.js`:** Scriptul principal care este injectat în paginile web. Acesta coordonează diferitele module utilitare și gestionează fluxul general al extensiei.
+-   **`content.js`:** Scriptul principal injectat în paginile web. Acesta coordonează diferitele module utilitare și gestionează fluxul general al extensiei.
 -   **`src/constants.js`:** Definește constante pentru configurare, stări, acțiuni etc.
 
 #### Module utilitare
 
-Extensia utilizează o arhitectură modulară cu mai multe fișiere utilitare specializate:
+Extensia utilizează o arhitectură modulară, cu mai multe fișiere utilitare specializate:
 
 ##### Gestionarea providerilor și a API-urilor
 
--   **`src/utils/providers.js`:** Registrul providerilor IA (Mistral AI, OpenAI, Custom/LiteLLM), cu configurările, modelele și URL-urile lor implicite.
--   **`src/utils/api-utils.js`:** Funcții pentru interacțiunea cu API-urile externe, rezolvarea configurării cu mai mulți provideri și transcrierea audio.
+-   **`src/utils/providers.js`:** Registrul providerilor IA (Mistral AI, OpenAI, Gemini, Custom/LiteLLM), cu configurările, modelele și URL-urile lor implicite.
+-   **`src/utils/provider-store.js`:** Citirea configurărilor providerilor din spațiul de stocare și verificarea faptului că o cheie API este trimisă numai către adresele providerului său.
+-   **`src/utils/provider-adapters.js`:** Formatele API-urilor providerilor: autentificare, corpul solicitărilor, citirea răspunsurilor și a erorilor.
+-   **`src/utils/api-utils.js`:** Funcții pentru interacțiunea cu API-uri externe, soluționarea configurării cu mai mulți provideri și transcrierea audio.
 -   **`src/utils/text-processing.js`:** Funcții de procesare a textului: traducere, reformulare, corectare ortografică.
 
-##### Interfață și interacțiune cu utilizatorul
+##### Interfață cu utilizatorul și interacțiune
 
 -   **`src/utils/ui.js`:** Funcții utilitare generale pentru interfața cu utilizatorul.
 -   **`src/utils/banner-utils.js`:** Gestionează bannerul de stare, comenzile acestuia și selectorul de limbă.
--   **`src/utils/focus-utils.js`:** Gestionează salvarea și restaurarea focalizării și a selecției textului.
+-   **`src/utils/focus-utils.js`:** Gestionează salvarea și restabilirea focalizării și a selecției textului.
 -   **`src/utils/transcription-display.js`:** Gestionează afișarea rezultatelor transcrierii.
--   **`src/utils/error-utils.js`:** Gestionează afișarea și procesarea erorilor.
+-   **`src/utils/error-utils.js`:** Gestionează afișarea și tratarea erorilor.
 -   **`src/styles/content.css`:** Stiluri CSS pentru interfața cu utilizatorul injectată în paginile web.
 
 ##### Înregistrare și evenimente
 
 -   **`src/utils/recording-utils.js`:** Gestionează înregistrarea audio prin microfon și procesarea datelor audio.
--   **`src/utils/event-handlers.js`:** Conține gestionarii de evenimente pentru interacțiunile cu utilizatorul.
+-   **`src/utils/event-handlers.js`:** Conține gestionarii de evenimente pentru interacțiunile utilizatorului.
 
 ##### Internaționalizare și limbi
 
@@ -202,33 +214,32 @@ Extensia utilizează o arhitectură modulară cu mai multe fișiere utilitare sp
 ##### Pagina de opțiuni
 
 -   **`src/pages/options/`:** Conține fișierele pentru pagina de opțiuni a extensiei (HTML, CSS, JavaScript).
-
 ### Procesul de transcriere și traducere
 
 #### Funcționalitatea principală de transcriere vocală
 
-1.  **Pornirea înregistrării:** Utilizatorul pornește înregistrarea făcând clic pe pictograma extensiei sau folosind scurtătura de la tastatură (Ctrl+Shift+1 sau ⌘+Shift+1 pe Mac). `background script` trimite un mesaj către `content script` pentru a porni înregistrarea.
-2.  **Captură audio:** `content script` utilizează API-ul `navigator.mediaDevices.getUserMedia` pentru a accesa microfonul și a înregistra sunetul prin API-ul MediaRecorder.
-3.  **Transcriere:** `content script` utilizează funcția `transcribeAudio` (`src/utils/api-utils.js`) pentru a trimite înregistrarea audio către API-ul de transcriere al providerului configurat (Voxtral pentru Mistral AI, Whisper pentru OpenAI). API-ul returnează textul transcris.
+1.  **Pornirea înregistrării:** Utilizatorul pornește înregistrarea făcând clic pe pictograma extensiei sau folosind comanda rapidă de la tastatură (Ctrl+Shift+1 sau ⌘+Shift+1 pe Mac). `background script` trimite un mesaj către `content script` pentru a porni înregistrarea.
+2.  **Captarea audio:** `content script` utilizează API-ul `navigator.mediaDevices.getUserMedia` pentru a accesa microfonul și a înregistra sunetul prin API-ul MediaRecorder.
+3.  **Transcriere:** `content script` utilizează funcția `transcribeAudio` (`src/utils/api-utils.js`) pentru a trimite înregistrarea audio către API-ul de transcriere al providerului configurat (Voxtral pentru Mistral AI, gpt-transcribe sau Whisper pentru OpenAI, Gemini 3.5 Transcribe pentru Gemini). API-ul returnează textul transcris.
 4.  **Traducere sau reformulare (opțională):**
 
 -   Dacă opțiunea de traducere este activată, `content script` utilizează funcția `translateText` (`src/utils/text-processing.js`) pentru a trimite textul transcris către API-ul de chat al providerului configurat.
--   Dacă opțiunea de reformulare este activată, funcția `rephraseText` este utilizată pentru îmbunătățirea textului transcris.
+-   Dacă opțiunea de reformulare este activată, funcția `rephraseText` este utilizată pentru a îmbunătăți textul transcris.
 
-5.  **Afișare:** `content script` afișează textul procesat fie în elementul activ al paginii (dacă acesta este un câmp de text sau un element editabil), fie într-o casetă de dialog personalizată.
+5.  **Afișare:** `content script` afișează textul procesat fie în elementul activ al paginii (dacă este un câmp de text sau un element editabil), fie într-o casetă de dialog personalizată.
 
 #### Funcționalitatea meniului contextual
 
 1. **Selectarea textului:** Utilizatorul selectează text pe o pagină web.
 2. **Meniu contextual:** Un clic dreapta afișează opțiunile:
-    - „Reformulează selecția” pentru îmbunătățirea stilului și clarității
+    - „Reformulează selecția” pentru a îmbunătăți stilul și claritatea
     - „Tradu selecția”, cu un submeniu al limbilor disponibile
-    - „Corectează ortografia” pentru corectarea greșelilor
+    - „Corectează ortografia” pentru a corecta greșelile
 3. **Procesare:** În funcție de opțiunea aleasă:
     - Textul este trimis pentru reformulare prin funcția `rephraseText`
     - Textul este trimis pentru traducere prin funcția `translateText`, cu limba țintă selectată
     - Textul este trimis pentru corectare prin funcția `correctText`
-4. **Afișare:** Rezultatul înlocuiește selecția originală în elementul în care se află textul selectat.
+4. **Afișare:** Rezultatul înlocuiește selecția inițială în elementul în care se află textul selectat.
 
 ### Comunicare
 
@@ -238,23 +249,24 @@ Comunicarea dintre `background script` și `content script` se realizează prin 
 
 Extensia utilizează `chrome.storage.sync` pentru a stoca:
 
--   Configurarea providerilor IA (chei API, modele selectate, URL-uri personalizate).
+-   Configurația providerilor IA (chei API, modele selectate, URL-uri personalizate). Gemini, adăugat în versiunea 1.2.0, are propria cheie de stocare (`extraProvider.gemini`), pe care versiunile anterioare o ignoră.
 -   Opțiunile extensiei (afișare, traducere, culorile bannerului etc.).
--   Preferințele lingvistice pentru traducere.
+-   Preferințele de limbă pentru traducere.
 
-Aceste date sunt stocate local pe computerul dumneavoastră, în spațiul de stocare al extensiei browserului.
+Aceste date sunt stocate local pe computerul dumneavoastră, în spațiul de stocare al extensiei de browser.
+
 ### Gestionarea erorilor
 
-Erorile posibile (cheie API lipsă, eroare de transcriere etc.) sunt definite în fișierul `constants.js`. Funcțiile `api-utils.js` și `text-processing.js` gestionează erorile potențiale ale apelurilor API prin mesaje îmbunătățite în funcție de codul HTTP. `content.js` afișează utilizatorului mesajele de eroare printr-un banner în partea de jos a paginii.
+Erorile posibile (cheie API lipsă, eroare de transcriere etc.) sunt definite în fișierul `constants.js`. Funcțiile `api-utils.js` și `text-processing.js` gestionează eventualele erori ale apelurilor API, cu mesaje îmbunătățite în funcție de codul HTTP. `content.js` afișează utilizatorului mesajele de eroare printr-un banner în partea de jos a paginii.
 
 ## 🛡️ Securitate și confidențialitate
 
 -   **Protecția datelor:**
     -   Cheia API este stocată în siguranță în browser.
-    -   Extensia nu păstrează datele dumneavoastră audio; toate procesările se efectuează în timp real.
+    -   Extensia nu păstrează datele dumneavoastră audio; toate procesările sunt efectuate în timp real.
     -   Comunicarea cu API-urile se realizează prin conexiuni HTTPS securizate.
 
-Pentru informații complete despre modul în care BabelFishAI vă gestionează datele, consultați [Politica noastră de confidențialitate](PRIVACY.md).
+Pentru informații complete despre modul în care BabelFishAI gestionează datele dumneavoastră, consultați [Politica noastră de confidențialitate](PRIVACY.md).
 
 ## 🔧 Depanare
 
@@ -274,7 +286,7 @@ Contribuțiile și sugestiile sunt binevenite. Pentru a contribui:
 
 -   Raportați bugurile prin secțiunea Issues de pe GitHub.
 -   Propuneți îmbunătățiri sau funcționalități noi.
--   Trimiteți pull request-urile dumneavoastră.
+-   Trimiteți pull request-uri.
 
 ## 📄 Licență
 
@@ -284,4 +296,4 @@ Această extensie este distribuită sub licența GNU Affero General Public Licen
 
 ## Dacă apreciați această extensie, îi puteți susține dezvoltarea făcând o donație prin [PayPal](https://paypal.me/jls).
 
-Dezvoltat de jls42.org cu pasiune și spirit inovator, Babel Fish AI duce transcrierea și traducerea spre noi orizonturi cu ajutorul inteligenței artificiale de ultimă generație.
+Dezvoltat de jls42.org cu pasiune și inovație, Babel Fish AI duce transcrierea și traducerea spre noi orizonturi datorită inteligenței artificiale de ultimă generație.
