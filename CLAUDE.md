@@ -859,6 +859,7 @@ Ollama ne remplace pas ce serveur : sa route `/v1/audio/transcriptions` existe m
 
 -   **Chrome** : `./scripts/build.sh chrome` → upload sur Chrome Web Store
 -   **Firefox** : `./scripts/build.sh firefox` → upload sur Firefox Add-ons (AMO)
+-   **README traduits** : `./scripts/translate-readmes.sh` régénère les 14 `README-*.md` depuis `README.md` avec `aipmt` par le CLI Codex (quota de l'abonnement ChatGPT, aucune clé d'API), gpt-6.1-sol en effort xhigh, et ne remplace un fichier qu'après avoir comparé sa structure à la source ; `--verifier` fait ce contrôle sans traduire. À lancer à chaque version, avant le tag. Choix du propriétaire le 2026-09-30, sur le modèle du script de leapmultix.
 -   L'ID Firefox (`babelfishai@jls42.org`) dans `browser_specific_settings.gecko.id` doit rester constant
 
 ## Git Workflow
