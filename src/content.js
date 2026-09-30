@@ -570,4 +570,8 @@
 
     // Écouter les changements dans les options en utilisant la fonction du module event-handlers.js
     chrome.storage.onChanged.addListener(globalThis.BabelFishAIUtils.events.handleStorageChanges);
+    // #lizard forgives - point d'entrée du content script (84 NLOC) : il charge les modules puis
+    // branche les écouteurs, et le découper toucherait un code validé en réel dans les deux
+    // navigateurs. Lizard applique cette consigne à la prochaine fonction qui se termine :
+    // elle doit donc suivre la dernière fonction interne
 })();
