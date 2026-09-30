@@ -148,6 +148,10 @@ function routeToBackground(env) {
     return (message) =>
         new Promise((resolve) => {
             let answered = false;
+            /**
+             * Rappel sendResponse passé aux écouteurs : la promesse se règle sur sa réponse
+             * @param {*} response
+             */
             const sendResponse = (response) => {
                 answered = true;
                 resolve(response);

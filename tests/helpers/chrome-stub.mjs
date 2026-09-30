@@ -153,16 +153,30 @@ function applyRemove(store, keys) {
  */
 function makeStorageArea(area, ctx) {
     const store = ctx.stores[area];
+    /**
+     * Lève, une seule fois, l'échec programmé pour cette opération
+     * @param {string} op - get, set ou remove
+     */
     const fail = (op) => {
         const error = ctx.failures.get(`${area}.${op}`);
         if (!error) return;
         ctx.failures.delete(`${area}.${op}`);
         throw error;
     };
+    /**
+     * Prévient les écouteurs de storage.onChanged
+     * @param {Object} changes - Changements, par clé
+     */
     const notify = (changes) => {
         if (!Object.keys(changes).length) return;
         for (const fn of ctx.storageListeners) fn(structuredClone(changes), area);
     };
+    /**
+     * Écriture : l'échec programmé est levé avant d'écrire, puis les écouteurs sont prévenus
+     * @param {string} op - set ou remove
+     * @param {Function} apply - Écrit et renvoie les changements
+     * @returns {Function}
+     */
     const write = (op, apply) => () => {
         fail(op);
         notify(apply());
@@ -220,6 +234,11 @@ function dispatch(ctx, api, args, handler, callback) {
     return undefined;
 }
 
+/**
+ * API runtime du bouchon : URLs des fichiers de l'arbre testé, manifest, messages
+ * @param {Object} ctx - État partagé du bouchon
+ * @returns {Object}
+ */
 function makeRuntime(ctx) {
     const rootUrl = pathToFileURL(ctx.root.endsWith(path.sep) ? ctx.root : ctx.root + path.sep);
     return {
@@ -246,6 +265,11 @@ function makeRuntime(ctx) {
     };
 }
 
+/**
+ * API tabs du bouchon : onglets renvoyés par tabs.query, messages envoyés aux onglets
+ * @param {Object} ctx - État partagé du bouchon
+ * @returns {Object}
+ */
 function makeTabs(ctx) {
     return {
         query: logged(ctx, 'tabs.query', () => structuredClone(ctx.tabs)),
@@ -264,8 +288,18 @@ function makeTabs(ctx) {
     };
 }
 
+/**
+ * API i18n du bouchon : messages lus dans les _locales de l'arbre testé
+ * @param {Object} ctx - État partagé du bouchon
+ * @returns {Object}
+ */
 function makeI18n(ctx) {
     const cache = new Map();
+    /**
+     * Messages d'une langue, lus une fois dans _locales (vides si la langue manque)
+     * @param {string} lang
+     * @returns {Object}
+     */
     const messages = (lang) => {
         if (!cache.has(lang)) {
             const file = path.join(ctx.root, '_locales', lang, 'messages.json');
@@ -279,6 +313,11 @@ function makeI18n(ctx) {
     };
 }
 
+/**
+ * API action et commands du bouchon : badge, icône et titre relevés, événements
+ * @param {Object} ctx - État partagé du bouchon
+ * @returns {Object}
+ */
 function makeActionAndCommands(ctx) {
     return {
         action: {
@@ -303,6 +342,11 @@ function makeActionAndCommands(ctx) {
     };
 }
 
+/**
+ * API contextMenus, scripting et permissions du bouchon
+ * @param {Object} ctx - État partagé du bouchon
+ * @returns {Object}
+ */
 function makePageApis(ctx) {
     return {
         contextMenus: {

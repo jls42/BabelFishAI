@@ -133,6 +133,10 @@ function createHarness(browser, testFileUrl) {
     function send(message, sender = { tab: TAB }) {
         return new Promise((resolve) => {
             let answered = false;
+            /**
+             * Rappel sendResponse passé aux écouteurs : la promesse se règle sur sa réponse
+             * @param {*} response
+             */
             const sendResponse = (response) => {
                 answered = true;
                 resolve(response);
@@ -224,6 +228,7 @@ function defineNavigationTests({ env, matchSnapshot, delays, freshBackground, em
             return {};
         };
     };
+    /** Content script toujours absent : chaque envoi à l'onglet échoue */
     const absentAlways = () => {
         env.handlers.tabMessage = () => {
             throw new Error('Could not establish connection. Receiving end does not exist.');

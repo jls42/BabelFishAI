@@ -10,6 +10,11 @@ import { ROOT } from './helpers/env.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
 const matchSnapshot = createSnapshots(import.meta.url);
+/**
+ * Contenu d'un fichier de l'arbre testé
+ * @param {string} rel - Chemin relatif à la racine
+ * @returns {string}
+ */
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 // Fichiers qui déclarent volontairement au niveau global (service worker)
 const GLOBAL_BY_DESIGN = new Set(['src/background.js', 'src/utils/languages-data.js']);

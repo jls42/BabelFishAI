@@ -11,6 +11,11 @@ import { CONTENT_SCRIPTS } from './helpers/requests-suite.mjs';
 import { createSnapshots } from './helpers/snapshot.mjs';
 
 const matchSnapshot = createSnapshots(import.meta.url);
+/**
+ * Contenu d'un fichier de l'arbre testé
+ * @param {string} rel - Chemin relatif à la racine
+ * @returns {string}
+ */
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 
 /** Fichiers injectés par executeScript (background.js) */

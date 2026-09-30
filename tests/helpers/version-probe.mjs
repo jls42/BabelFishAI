@@ -55,6 +55,11 @@ async function probe(fn) {
         outcome = { erreur: error.message };
     }
     const requetes = env.http.requests.map((r) => {
+        /**
+         * Valeur d'un entête de la requête relevée
+         * @param {string} wanted - Nom de l'entête, en minuscules
+         * @returns {string|undefined}
+         */
         const header = (wanted) => r.headers.find(([name]) => name.toLowerCase() === wanted)?.[1];
         const googleKey = header('x-goog-api-key');
         return {
@@ -83,6 +88,7 @@ async function resolved(service) {
 
 const results = {};
 for (const [name, content] of Object.entries(VERSION_FIXTURES)) {
+    /** Remet le stockage au contenu du jeu, et l'interface du content script à zéro */
     const reset = () => {
         for (const key of Object.keys(env.stores.sync)) delete env.stores.sync[key];
         Object.assign(env.stores.sync, structuredClone(content));

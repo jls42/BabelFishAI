@@ -32,6 +32,10 @@ export const FIXED_RANDOM = 0.123456789;
 export class FakeFileReader {
     static failNext = false;
 
+    /**
+     * Lit le Blob en data URL puis appelle onloadend ; échoue une fois si failNext est posé
+     * @param {Blob} blob
+     */
     readAsDataURL(blob) {
         if (FakeFileReader.failNext) {
             FakeFileReader.failNext = false;
@@ -186,6 +190,11 @@ export function silentUi() {
  */
 export function setupEnv({ browser = 'chrome', sync, local, uiLanguage, tabs } = {}) {
     const stub = createChromeStub({ root: ROOT, sync, local, uiLanguage, tabs });
+    /**
+     * Pose une valeur sur globalThis, remplaçable par le test suivant
+     * @param {string} name
+     * @param {*} value
+     */
     const define = (name, value) =>
         Object.defineProperty(globalThis, name, { value, configurable: true, writable: true });
     define('chrome', stub.chrome);

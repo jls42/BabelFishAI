@@ -94,6 +94,11 @@ test('corps et lecture des réponses', async () => {
 test('dictée au format gemini-interactions : corps et lecture', async () => {
     const interactions = adapters.getAdapter('gemini-interactions');
     const audio = new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x42, 0x86, 0x81, 0x01]);
+    /**
+     * Texte lu dans une réponse de l'API Interactions, ou le message de l'erreur levée
+     * @param {Object} data - Corps de la réponse
+     * @returns {string}
+     */
     const read = (data) => {
         try {
             return interactions.extractText(data);
