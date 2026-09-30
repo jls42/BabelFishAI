@@ -12,9 +12,10 @@
 | :--------------------------------------------------------------: | :------------------------------------------------------------------------------------------------ |
 | <img src="images/mistral-logo.png" alt="Mistral AI" height="30"> | **Mistral AI** : [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)               |
 |   <img src="images/openai-logo.png" alt="OpenAI" height="30">    | **OpenAI** : [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys) |
+|   <img src="images/gemini-logo.png" alt="Gemini" height="30">    | **Gemini (Google)** : [aistudio.google.com/apikey](https://aistudio.google.com/apikey)            |
 |                                🚅                                | **Custom/LiteLLM** : Pour utiliser vos propres endpoints API                                      |
 
-Babel Fish AI est une extension de navigateur innovante conçue pour offrir une transcription vocale puissante avec support multi-provider. Transformez votre voix en texte avec une précision remarquable grâce aux API de transcription de Mistral AI (Voxtral) ou OpenAI (Whisper), et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
+Babel Fish AI est une extension de navigateur innovante conçue pour offrir une transcription vocale puissante avec support multi-provider. Transformez votre voix en texte avec une précision remarquable grâce aux API de transcription de Mistral AI (Voxtral), OpenAI (gpt-transcribe, Whisper) ou Gemini (Gemini 3.5 Transcribe), et bénéficiez en option d'une traduction automatique en temps réel. Vous pouvez utiliser Babel Fish AI exclusivement pour la transcription ou activer la traduction à la volée selon vos besoins.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jls42/babelfishai/badge)](https://www.codefactor.io/repository/github/jls42/babelfishai) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/59bfe4cd13444ee1b4cffa58300dd043)](https://app.codacy.com/gh/jls42/BabelFishAI/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
@@ -25,8 +26,8 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
 -   **Transcription Vocale Avancée**
 
     -   Capture audio de haute qualité via le microphone de votre appareil.
-    -   Transcription précise via les API Voxtral (Mistral AI) ou Whisper (OpenAI).
-    -   Support multi-provider : choisissez librement entre Mistral AI, OpenAI ou un endpoint personnalisé.
+    -   Transcription précise via les API Voxtral (Mistral AI), gpt-transcribe et Whisper (OpenAI) ou Gemini 3.5 Transcribe (Google).
+    -   Support multi-provider : choisissez librement entre Mistral AI, OpenAI, Gemini ou un endpoint personnalisé.
     -   Prise en charge multilingue pour la reconnaissance vocale et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d'afficher les résultats (transcription et traduction, si activée) dans la langue de votre choix.
     -   Insertion automatique du texte dans le champ actif ou affichage dans une boîte de dialogue dédiée.
 
@@ -55,10 +56,11 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
     -   Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
 
 -   **Options Avancées**
-    -   Support multi-provider : Mistral AI, OpenAI, et Custom/LiteLLM pour une flexibilité maximale.
+    -   Support multi-provider : Mistral AI, OpenAI, Gemini et Custom/LiteLLM pour une flexibilité maximale.
     -   Possibilité de personnaliser les modèles de transcription et de traduction par provider.
-    -   Modèles OpenAI disponibles : GPT-4o mini (par défaut), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** et **GPT-5.6 (luna/terra/sol)**. Transcription : whisper-1 (par défaut), gpt-4o-mini-transcribe, gpt-4o-transcribe et **gpt-transcribe**.
+    -   Modèles OpenAI disponibles : GPT-4o mini (par défaut), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** et **GPT-5.6 (luna/terra/sol)**. Transcription : **gpt-transcribe** (par défaut), whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe. OpenAI retire ces trois derniers de son API le 26/02/2027 ; un modèle déjà choisi dans les options reste utilisé d'ici là.
     -   Modèles Mistral disponibles : Mistral Small (par défaut), Mistral Medium, Mistral Large, Codestral et **Ministral 3 (3B/8B/14B)**. Transcription : Voxtral Mini. Les réponses des modèles Mistral qui raisonnent (blocs de réflexion) sont prises en charge.
+    -   Modèles Gemini disponibles : **Gemini 3.8 Flash** (par défaut, avec une réflexion réduite pour répondre en une à deux secondes) et **Gemini 3.5 Flash-Lite** (le plus rapide). Transcription : **Gemini 3.5 Transcribe**, par l'API Interactions de Google, sans enregistrer les dictées dans l'historique de cette API (`store: false`, voir [docs/providers/gemini.md](docs/providers/gemini.md)).
     -   Les réglages qui utilisaient gpt-4.1-nano (arrêt de l'API OpenAI le 23/10/2026) ou gpt-4o passent automatiquement sur gpt-5.6-luna et gpt-4.1 lors de la mise à jour.
     -   Sélection indépendante du provider pour la transcription et la traduction/reformulation.
     -   Compatibilité avec LiteLLM Proxy via le provider Custom pour vous connecter à des modèles alternatifs.
@@ -103,6 +105,7 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 
 1.  **Téléchargement et Installation :**
 
+    -   **Firefox 140 ou plus** (ordinateur) est nécessaire depuis la version 1.2.0. À l'installation, et lors de la mise à jour vers la 1.2.0, Firefox affiche les données que l'extension transmet au provider que vous configurez : votre voix, le texte sélectionné ou dicté, et votre clé API (voir [PRIVACY.md](PRIVACY.md)).
     -   **Installez directement l'extension depuis [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
     -   Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub, puis lancez `./scripts/build.sh firefox`, qui prépare `dist/firefox/` avec le manifest Firefox renommé en `manifest.json`.
     -   Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox` (et non « Installer un module depuis un fichier » dans `about:addons`, réservé aux extensions signées).
@@ -117,10 +120,11 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 1.  **Configuration du Provider IA :**
 
     -   Cliquez sur l'icône de l'extension pour accéder aux options.
-    -   Sélectionnez votre provider dans le menu déroulant (Mistral AI, OpenAI ou Custom/LiteLLM).
+    -   Sélectionnez votre provider dans le menu déroulant (Mistral AI, OpenAI, Gemini ou Custom/LiteLLM).
     -   Entrez votre clé API :
         -   **Mistral AI** : disponible sur [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
         -   **OpenAI** : disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
+        -   **Gemini** : disponible sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Préférez une clé d'un projet avec facturation : avec une clé gratuite, si vous vous trouvez hors de l'Espace économique européen, de la Suisse et du Royaume-Uni, Google peut utiliser vos dictées et les textes envoyés pour améliorer ses produits, avec une relecture humaine possible ; n'y envoyez aucune information personnelle, sensible ou confidentielle. Restreignez la clé à l'API Gemini (réglage par défaut des nouvelles clés), jamais à des sites web : sous Chrome, les requêtes partent de la page où vous dictez.
     -   Activez le provider avec le toggle à côté du menu déroulant.
 
 2.  **Personnalisation des Options :**
@@ -131,9 +135,15 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
     -   Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
 
 3.  **(Optionnel) Configuration avancée des modèles :**
+
     -   Dans les options de chaque provider, cliquez sur "Configuration des modèles" pour personnaliser les modèles utilisés.
     -   Vous pouvez ajouter des modèles personnalisés pour la transcription et la traduction/reformulation.
     -   Si plusieurs providers sont activés, vous pouvez choisir lequel utiliser pour chaque service (transcription et traduction).
+
+4.  **Plusieurs appareils synchronisés :**
+    -   Mettez à jour l'extension sur tous vos appareils. Une version antérieure à la 1.2.0 ne connaît pas Gemini : si Gemini est choisi, elle utilise un ancien provider que vous avez activé, ou n'envoie rien.
+    -   Si une version plus récente de l'extension a enregistré un provider que votre version ne connaît pas encore, la page d'options le signale dans la section « Providers d'une version plus récente », avec un bouton pour effacer ses réglages de tous vos appareils.
+    -   Si le navigateur refuse d'enregistrer vos options (par exemple une valeur trop longue), la page affiche l'erreur au lieu de « Options sauvegardées ! » et n'enregistre rien.
 
 ## 🚀 Utilisation avec LiteLLM Proxy ou Endpoints Personnalisés
 
@@ -151,7 +161,7 @@ Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/) et d'autr
     -   Activez le provider avec le toggle.
     -   Cochez l'option **"NoLog"** si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
 
-**Important :** L'option "NoLog" est disponible **uniquement** dans le provider Custom/LiteLLM. Elle n'est pas compatible avec les API officielles d'OpenAI ou Mistral AI.
+**Important :** L'option "NoLog" est disponible **uniquement** dans le provider Custom/LiteLLM. Elle n'est pas compatible avec les API officielles d'OpenAI, de Mistral AI ou de Gemini.
 
 ## 🛠️ Fonctionnement Technique
 
@@ -172,7 +182,9 @@ L'extension utilise une architecture modulaire avec plusieurs fichiers utilitair
 
 ##### Gestion des Providers et API
 
--   **`src/utils/providers.js`:** Registre des providers IA (Mistral AI, OpenAI, Custom/LiteLLM) avec leurs configurations, modèles et URLs par défaut.
+-   **`src/utils/providers.js`:** Registre des providers IA (Mistral AI, OpenAI, Gemini, Custom/LiteLLM) avec leurs configurations, modèles et URLs par défaut.
+-   **`src/utils/provider-store.js`:** Lecture des réglages des providers dans le stockage, et contrôle qu'une clé API ne part que vers les adresses de son provider.
+-   **`src/utils/provider-adapters.js`:** Formats des API des providers : authentification, corps des requêtes, lecture des réponses et des erreurs.
 -   **`src/utils/api-utils.js`:** Fonctions pour l'interaction avec les API externes, résolution de la configuration multi-provider, et transcription audio.
 -   **`src/utils/text-processing.js`:** Fonctions de traitement de texte : traduction, reformulation, correction orthographique.
 
@@ -207,7 +219,7 @@ L'extension utilise une architecture modulaire avec plusieurs fichiers utilitair
 
 1.  **Démarrage de l'Enregistrement :** L'utilisateur démarre l'enregistrement en cliquant sur l'icône de l'extension ou en utilisant le raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac). Le `background script` envoie un message au `content script` pour démarrer l'enregistrement.
 2.  **Capture Audio :** Le `content script` utilise l'API `navigator.mediaDevices.getUserMedia` pour accéder au microphone et enregistrer l'audio via l'API MediaRecorder.
-3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api-utils.js`) pour envoyer l'audio à l'API de transcription du provider configuré (Voxtral pour Mistral AI, Whisper pour OpenAI). L'API renvoie le texte transcrit.
+3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api-utils.js`) pour envoyer l'audio à l'API de transcription du provider configuré (Voxtral pour Mistral AI, gpt-transcribe ou Whisper pour OpenAI, Gemini 3.5 Transcribe pour Gemini). L'API renvoie le texte transcrit.
 4.  **Traduction ou Reformulation (Optionnelle) :**
 
 -   Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/text-processing.js`) pour envoyer le texte transcrit à l'API de chat du provider configuré.
@@ -236,7 +248,7 @@ La communication entre le `background script` et le `content script` se fait via
 
 L'extension utilise `chrome.storage.sync` pour stocker :
 
--   La configuration des providers IA (clés API, modèles sélectionnés, URLs personnalisées).
+-   La configuration des providers IA (clés API, modèles sélectionnés, URLs personnalisées). Gemini, ajouté en 1.2.0, a sa propre clé de stockage (`extraProvider.gemini`), que les versions antérieures ignorent.
 -   Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
 -   Les préférences de langue pour la traduction.
 

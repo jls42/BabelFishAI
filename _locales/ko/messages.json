@@ -103,6 +103,38 @@
         "message": "옵션이 저장되었습니다!",
         "description": "저장 확인 메시지"
     },
+    "saveErrorMessage": {
+        "message": "오류: 옵션이 저장되지 않았습니다 ($error$).",
+        "description": "옵션 저장에 실패했을 때의 오류 메시지 ($error$: 브라우저 메시지)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "최신 버전의 제공업체",
+        "description": "최신 버전이 저장한 제공업체 섹션의 제목"
+    },
+    "unknownProvidersDescription": {
+        "message": "예를 들어 다른 기기에 있는 BabelFishAI 최신 버전이 이 제공업체들을 저장했습니다. 이 버전에서는 사용할 수 없으므로 설정을 그대로 유지합니다. 삭제하면 동기화된 모든 기기에서 제거됩니다.",
+        "description": "최신 버전의 제공업체 섹션에 대한 설명"
+    },
+    "unknownProviderDelete": {
+        "message": "삭제",
+        "description": "최신 버전 제공업체의 설정을 삭제하는 버튼"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (최신 버전)",
+        "description": "최신 버전이 저장한 제공업체를 나타내는 서비스 선택 항목 ($provider$: 식별자)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "OpenAI API 키 (sk-...)",
         "description": "API 키 자리 표시자"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "오류: URL은 HTTPS를 사용해야 합니다.",
         "description": "유효하지 않은 URL에 대한 오류 메시지"
+    },
+    "geminiKeyNote": {
+        "message": "팁: 결제가 활성화된 프로젝트의 키를 사용하세요. 무료 키를 사용할 때 EEA, 스위스, 영국 밖에 있다면 Google이 받아쓰기 내용과 전송한 텍스트를 제품 개선에 사용할 수 있으며 사람이 검토할 수도 있습니다. 이 키로 개인 정보, 민감한 정보, 기밀 정보를 보내지 마세요. 키는 Gemini API로 제한하고(새 키의 기본 설정), 웹사이트로는 절대 제한하지 마세요.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

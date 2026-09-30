@@ -103,6 +103,38 @@
         "message": "Alternativ sparade!",
         "description": "Bekräftelsemeddelande för sparande"
     },
+    "saveErrorMessage": {
+        "message": "Fel: alternativen sparades inte ($error$).",
+        "description": "Felmeddelande när alternativen inte kan sparas ($error$: webbläsarens meddelande)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Leverantörer från en nyare version",
+        "description": "Rubrik för avsnittet med leverantörer som sparats av en nyare version"
+    },
+    "unknownProvidersDescription": {
+        "message": "En nyare version av BabelFishAI, till exempel på en annan enhet, har sparat dessa leverantörer. Den här versionen kan inte använda dem: den behåller deras inställningar som de är. Om du tar bort dem tas de bort från alla dina synkroniserade enheter.",
+        "description": "Förklaring av avsnittet med leverantörer från en nyare version"
+    },
+    "unknownProviderDelete": {
+        "message": "Ta bort",
+        "description": "Knapp som tar bort inställningarna för en leverantör från en nyare version"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nyare version)",
+        "description": "Alternativ i en tjänsteväljare för en leverantör som sparats av en nyare version ($provider$: dess identifierare)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Din OpenAI API-nyckel (sk-...)",
         "description": "Platshållare för API-nyckeln"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Fel: URL:er måste använda HTTPS.",
         "description": "Felmeddelande för ogiltiga URL:er"
+    },
+    "geminiKeyNote": {
+        "message": "Tips: använd en nyckel från ett projekt med fakturering. Om du befinner dig utanför EES, Schweiz och Storbritannien kan Google med en kostnadsfri nyckel använda dina dikteringar och de texter du skickar för att förbättra sina produkter, med möjlig mänsklig granskning: skicka ingen personlig, känslig eller konfidentiell information med den. Begränsa nyckeln till Gemini API (standard för nya nycklar), aldrig till webbplatser.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

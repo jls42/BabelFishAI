@@ -2,18 +2,16 @@
 /* eslint-disable security/detect-non-literal-fs-filename -- chrome.runtime.getURL returns safe extension-internal URLs */
 /* eslint-disable unicorn/prefer-top-level-await -- IIFE required: Chrome content scripts don't support top-level await */
 // skipcq: JS-0116 - IIFE required for Chrome extension content scripts (top-level await not supported in this context)
-(async function () {
+(async function () /* NOSONAR javascript:S9383 - point d'entrée du content script, sans appelant ; un rejet imprévu reste signalé par le navigateur */ {
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;
 
-    // Charger le script de langues partagées comme un script standard
+    /* eslint-disable no-unsanitized/method -- import() de modules de l'extension : chemins fixes, résolus par chrome.runtime.getURL */
+    // Charger les langues partagées dans le monde du content script, comme les autres utilitaires.
+    // Une balise <script> les exécutait dans le monde de la page : le bandeau ne les voyait pas,
+    // et la page hôte recevait un global de l'extension
     try {
-        const script = document.createElement('script');
-        script.src = chrome.runtime.getURL('src/utils/languages-shared.js');
-        script.onload = () => {
-            script.remove();
-        };
-        (document.head || document.documentElement).appendChild(script);
+        await import(chrome.runtime.getURL('src/utils/languages-shared.js'));
     } catch (error) {
         console.error('Failed to load languages-shared.js:', error);
     }
@@ -21,6 +19,8 @@
     // Importer les utilitaires dynamiquement et s'assurer qu'ils sont initialisés correctement
     try {
         await import(chrome.runtime.getURL('src/utils/providers.js'));
+        await import(chrome.runtime.getURL('src/utils/provider-store.js'));
+        await import(chrome.runtime.getURL('src/utils/provider-adapters.js'));
         await import(chrome.runtime.getURL('src/utils/i18n.js'));
         await import(chrome.runtime.getURL('src/utils/focus-utils.js'));
         await import(chrome.runtime.getURL('src/utils/error-utils.js'));
@@ -31,6 +31,7 @@
         await import(chrome.runtime.getURL('src/utils/banner-utils.js'));
         await import(chrome.runtime.getURL('src/utils/ui.js'));
         await import(chrome.runtime.getURL('src/utils/api-utils.js'));
+        /* eslint-enable no-unsanitized/method */
         // Initialisation après l'importation
         await globalThis.BabelFishAIUtils.i18n.init();
 
@@ -122,7 +123,7 @@
     }
 
     // Initialiser les options de l'extension
-    initializeExtensionOptions();
+    initializeExtensionOptions(); // NOSONAR javascript:S9383 - gère ses erreurs (try/catch interne) : sa promesse ne rejette pas
 
     /**
      * Met à jour la couleur du bandeau en utilisant la fonction de l'utilitaire banner
@@ -276,16 +277,15 @@
         // Utiliser la fonction du module banner-utils pour créer la bannière
         recordingBanner = globalThis.BabelFishAIUtils.banner.initBanner();
 
-        // Insérer la bannière dans le document
+        // Insérer la bannière dans le document. Sa place en haut de la page n'est réservée que
+        // pendant son affichage (toggleBannerVisibility, banner-utils.js)
         if (document.body) {
             document.body.insertBefore(recordingBanner, document.body.firstChild);
-            document.body.style.paddingTop = '35px';
             updateBannerColor(true);
         } else {
             // Si document.body n'est pas encore disponible
             document.addEventListener('DOMContentLoaded', () => {
                 document.body.insertBefore(recordingBanner, document.body.firstChild);
-                document.body.style.paddingTop = '35px';
                 updateBannerColor(true);
             });
         }
@@ -570,4 +570,8 @@
 
     // Écouter les changements dans les options en utilisant la fonction du module event-handlers.js
     chrome.storage.onChanged.addListener(globalThis.BabelFishAIUtils.events.handleStorageChanges);
+    // #lizard forgives - point d'entrée du content script (84 NLOC) : il charge les modules puis
+    // branche les écouteurs, et le découper toucherait un code validé en réel dans les deux
+    // navigateurs. Lizard applique cette consigne à la prochaine fonction qui se termine :
+    // elle doit donc suivre la dernière fonction interne
 })();

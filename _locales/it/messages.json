@@ -103,6 +103,38 @@
         "message": "Opzioni salvate!",
         "description": "Messaggio di conferma del salvataggio"
     },
+    "saveErrorMessage": {
+        "message": "Errore: le opzioni non sono state salvate ($error$).",
+        "description": "Messaggio di errore quando il salvataggio delle opzioni non riesce ($error$: messaggio del browser)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Provider di una versione più recente",
+        "description": "Titolo della sezione dei provider salvati da una versione più recente"
+    },
+    "unknownProvidersDescription": {
+        "message": "Una versione più recente di BabelFishAI, ad esempio su un altro dispositivo, ha salvato questi provider. Questa versione non può usarli: ne conserva le impostazioni così come sono. Eliminarli li rimuove da tutti i dispositivi sincronizzati.",
+        "description": "Spiegazione della sezione dei provider di una versione più recente"
+    },
+    "unknownProviderDelete": {
+        "message": "Elimina",
+        "description": "Pulsante che elimina le impostazioni di un provider di una versione più recente"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (versione più recente)",
+        "description": "Opzione di un selettore di servizio per un provider salvato da una versione più recente ($provider$: il suo identificativo)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "La tua chiave API OpenAI (sk-...)",
         "description": "Segnaposto per la chiave API"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Errore: gli URL devono utilizzare HTTPS.",
         "description": "Messaggio di errore per URL non validi"
+    },
+    "geminiKeyNote": {
+        "message": "Suggerimento: usa una chiave di un progetto con fatturazione attiva. Con una chiave gratuita, se ti trovi fuori dal SEE, dalla Svizzera e dal Regno Unito, Google può usare le tue dettature e i testi inviati per migliorare i suoi prodotti, con possibile revisione umana: non inviare con essa informazioni personali, sensibili o riservate. Limita la chiave all'API Gemini (impostazione predefinita delle nuove chiavi), mai a siti web.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

@@ -103,6 +103,38 @@
         "message": "Options saved!",
         "description": "Save confirmation message"
     },
+    "saveErrorMessage": {
+        "message": "Error: the options were not saved ($error$).",
+        "description": "Error message when saving the options fails ($error$: browser message)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Providers from a newer version",
+        "description": "Title of the section listing providers saved by a newer version"
+    },
+    "unknownProvidersDescription": {
+        "message": "A newer version of BabelFishAI, on another device for example, saved these providers. This version cannot use them: it keeps their settings as they are. Deleting them removes them from all your synced devices.",
+        "description": "Explanation of the section listing providers from a newer version"
+    },
+    "unknownProviderDelete": {
+        "message": "Delete",
+        "description": "Button that deletes the settings of a provider from a newer version"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (newer version)",
+        "description": "Service selector option for a provider saved by a newer version ($provider$: its identifier)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Your OpenAI API key (sk-...)",
         "description": "Placeholder for the API key"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Error: URLs must use HTTPS.",
         "description": "Error message for invalid URLs"
+    },
+    "geminiKeyNote": {
+        "message": "Tip: use a key from a project with billing enabled. With a free key, if you are outside the EEA, Switzerland and the UK, Google may use your dictations and the texts you send to improve its products, with possible human review: do not send any personal, sensitive or confidential information with it. Restrict the key to the Gemini API (the default for new keys), never to websites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

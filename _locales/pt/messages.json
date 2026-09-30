@@ -103,6 +103,38 @@
         "message": "Opções salvas!",
         "description": "Mensagem de confirmação de salvamento"
     },
+    "saveErrorMessage": {
+        "message": "Erro: as opções não foram salvas ($error$).",
+        "description": "Mensagem de erro quando o salvamento das opções falha ($error$: mensagem do navegador)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Provedores de uma versão mais recente",
+        "description": "Título da seção de provedores salvos por uma versão mais recente"
+    },
+    "unknownProvidersDescription": {
+        "message": "Uma versão mais recente do BabelFishAI, em outro dispositivo por exemplo, salvou estes provedores. Esta versão não consegue usá-los: mantém suas configurações como estão. Excluí-los os remove de todos os seus dispositivos sincronizados.",
+        "description": "Explicação da seção de provedores de uma versão mais recente"
+    },
+    "unknownProviderDelete": {
+        "message": "Excluir",
+        "description": "Botão que exclui as configurações de um provedor de uma versão mais recente"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (versão mais recente)",
+        "description": "Opção de um seletor de serviço para um provedor salvo por uma versão mais recente ($provider$: seu identificador)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Sua chave API OpenAI (sk-...)",
         "description": "Espaço reservado para a chave API"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Erro: as URLs devem usar HTTPS.",
         "description": "Mensagem de erro para URLs inválidas"
+    },
+    "geminiKeyNote": {
+        "message": "Dica: use uma chave de um projeto com faturamento ativado. Com uma chave gratuita, se você estiver fora do EEE, da Suíça e do Reino Unido, o Google pode usar seus ditados e os textos enviados para melhorar os próprios produtos, com possível revisão humana: não envie com ela nenhuma informação pessoal, sensível ou confidencial. Restrinja a chave à API Gemini (padrão das chaves novas), nunca a sites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

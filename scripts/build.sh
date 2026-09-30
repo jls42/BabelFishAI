@@ -94,6 +94,9 @@ build_chrome() {
     # Copier le manifest Chrome
     cp "$PROJECT_ROOT/manifest.json" "$DIST_DIR/$BROWSER_CHROME/manifest.json"
 
+    # src/shortcut-guard.js ne sert qu'à Firefox (déclaré dans manifest.firefox.json)
+    rm -f "$DIST_DIR/$BROWSER_CHROME/src/shortcut-guard.js"
+
     echo -e "${GREEN}✓ Build Chrome terminé : dist/$BROWSER_CHROME/${NC}"
     return 0
 }

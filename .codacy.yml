@@ -1,0 +1,6 @@
+---
+# Chemins ignorés par Codacy. Ce fichier remplace les « Ignored files » de l'interface
+# (doc Codacy « Ignoring files ») : seul le code de test en sort. Un faux positif s'écarte
+# dans le code, par un commentaire justifié sur sa ligne, jamais en ignorant un fichier entier.
+exclude_paths:
+    - 'tests/**'

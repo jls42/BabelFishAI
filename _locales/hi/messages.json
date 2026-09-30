@@ -103,6 +103,38 @@
         "message": "विकल्प सहेजे गए!",
         "description": "पुष्टिकरण संदेश सहेजें"
     },
+    "saveErrorMessage": {
+        "message": "त्रुटि: विकल्प सहेजे नहीं गए ($error$)।",
+        "description": "विकल्प सहेजने में विफल होने पर त्रुटि संदेश ($error$: ब्राउज़र का संदेश)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "नए संस्करण के प्रदाता",
+        "description": "नए संस्करण द्वारा सहेजे गए प्रदाताओं के अनुभाग का शीर्षक"
+    },
+    "unknownProvidersDescription": {
+        "message": "BabelFishAI के एक नए संस्करण ने, उदाहरण के लिए किसी दूसरे डिवाइस पर, इन प्रदाताओं को सहेजा है। यह संस्करण इनका उपयोग नहीं कर सकता: यह इनकी सेटिंग्स को जैसा है वैसा ही रखता है। इन्हें हटाने से ये आपके सभी सिंक किए गए डिवाइस से हट जाएंगे।",
+        "description": "नए संस्करण के प्रदाताओं वाले अनुभाग की व्याख्या"
+    },
+    "unknownProviderDelete": {
+        "message": "हटाएं",
+        "description": "नए संस्करण के किसी प्रदाता की सेटिंग्स हटाने वाला बटन"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (नया संस्करण)",
+        "description": "नए संस्करण द्वारा सहेजे गए प्रदाता के लिए सेवा चयनकर्ता का विकल्प ($provider$: उसका पहचानकर्ता)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "आपकी OpenAI API कुंजी (sk-...)",
         "description": "API कुंजी के लिए प्लेसहोल्डर"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "त्रुटि: URLs को HTTPS का उपयोग करना चाहिए।",
         "description": "अमान्य URLs के लिए त्रुटि संदेश"
+    },
+    "geminiKeyNote": {
+        "message": "सुझाव: बिलिंग सक्षम प्रोजेक्ट की कुंजी का उपयोग करें। मुफ़्त कुंजी के साथ, यदि आप EEA, स्विट्ज़रलैंड और यूके के बाहर हैं, तो Google आपके डिक्टेशन और भेजे गए टेक्स्ट का उपयोग अपने उत्पादों को बेहतर बनाने के लिए कर सकता है, और लोग उनकी समीक्षा भी कर सकते हैं: इससे कोई भी व्यक्तिगत, संवेदनशील या गोपनीय जानकारी न भेजें। कुंजी को Gemini API तक सीमित करें (नई कुंजियों की डिफ़ॉल्ट सेटिंग), वेबसाइटों तक कभी नहीं।",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

@@ -47,7 +47,7 @@ globalThis.BabelFishAIConstants = {
         DEFAULT_MISTRAL_TRANSCRIPTION_URL: 'https://api.mistral.ai/v1/audio/transcriptions',
         DEFAULT_MISTRAL_CHAT_URL: 'https://api.mistral.ai/v1/chat/completions',
         // Modèles par défaut
-        WHISPER_MODEL: 'whisper-1',
+        DEFAULT_TRANSCRIPTION_MODEL: 'gpt-transcribe',
         GPT_MODEL: 'gpt-4o-mini',
         VOXTRAL_MODEL: 'voxtral-mini-latest',
         MISTRAL_CHAT_MODEL: 'mistral-small-latest',
@@ -61,7 +61,7 @@ globalThis.BabelFishAIConstants = {
 
     // Messages d'erreur
     ERRORS: {
-        API_KEY_NOT_FOUND:
+        API_CONFIG_MISSING:
             "Clé API non configurée. Veuillez la configurer dans les options de l'extension.",
         CHROME_STORAGE_ERROR: 'Erreur de stockage Chrome',
         MIC_ACCESS_ERROR: 'Erreur : microphone inaccessible.',
@@ -79,7 +79,7 @@ globalThis.BabelFishAIConstants = {
 
     // Configuration des badges
     BADGES: {
-        RECORDING: '⏺',
+        RECORDING: '', // L'enregistrement est signalé par l'icône (point rouge), pas par un badge
         STOPPED: '',
         ERROR: '!',
     },

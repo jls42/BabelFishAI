@@ -103,6 +103,38 @@
         "message": "Opcje zapisane!",
         "description": "Komunikat potwierdzenia zapisu"
     },
+    "saveErrorMessage": {
+        "message": "Błąd: opcje nie zostały zapisane ($error$).",
+        "description": "Komunikat o błędzie, gdy zapisanie opcji się nie powiedzie ($error$: komunikat przeglądarki)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Dostawcy z nowszej wersji",
+        "description": "Tytuł sekcji dostawców zapisanych przez nowszą wersję"
+    },
+    "unknownProvidersDescription": {
+        "message": "Nowsza wersja BabelFishAI, na przykład na innym urządzeniu, zapisała tych dostawców. Ta wersja nie może z nich korzystać: zachowuje ich ustawienia bez zmian. Usunięcie ich ustawień usuwa je ze wszystkich synchronizowanych urządzeń.",
+        "description": "Objaśnienie sekcji dostawców z nowszej wersji"
+    },
+    "unknownProviderDelete": {
+        "message": "Usuń",
+        "description": "Przycisk usuwający ustawienia dostawcy z nowszej wersji"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nowsza wersja)",
+        "description": "Opcja wyboru usługi dla dostawcy zapisanego przez nowszą wersję ($provider$: jego identyfikator)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Twój klucz API OpenAI (sk-...)",
         "description": "Symbol zastępczy klucza API"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Błąd: adresy URL muszą używać HTTPS.",
         "description": "Komunikat błędu dla nieprawidłowych adresów URL"
+    },
+    "geminiKeyNote": {
+        "message": "Wskazówka: użyj klucza z projektu z włączonymi płatnościami. Jeśli jesteś poza EOG, Szwajcarią i Wielką Brytanią, przy bezpłatnym kluczu Google może wykorzystywać Twoje dyktowane treści i wysyłane teksty do ulepszania swoich produktów, także z możliwą weryfikacją przez ludzi: nie wysyłaj z nim żadnych informacji osobistych, wrażliwych ani poufnych. Ogranicz klucz do Gemini API (domyślne ustawienie nowych kluczy), nigdy do stron internetowych.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

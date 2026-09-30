@@ -51,6 +51,9 @@ collect_keys() {
     # Clés data-i18n-placeholder dans les fichiers HTML
     placeholder_keys=$(grep -rhoP 'data-i18n-placeholder="[^"]*"' "$PROJECT_DIR/src" 2>/dev/null | sed 's/data-i18n-placeholder="//;s/"//' | sort -u || true)
 
+    # Clés data-i18n-title (titres traduits par i18n.js, y compris celui de <html>)
+    title_keys=$(grep -rhoP 'data-i18n-title="[^"]*"' "$PROJECT_DIR/src" 2>/dev/null | sed 's/data-i18n-title="//;s/"//' | sort -u || true)
+
     # Clés getMessage('...') dans les fichiers JS
     js_keys=$(grep -rhoP "getMessage\(['\"][^'\"]+['\"]" "$PROJECT_DIR/src" 2>/dev/null | sed "s/getMessage(['\"]//;s/['\"]$//" | sort -u || true)
 
@@ -60,8 +63,11 @@ collect_keys() {
     # Clés __MSG_xxx__ dans manifest.json
     manifest_keys=$(grep -oP '__MSG_\K[a-zA-Z0-9_]+(?=__)' "$PROJECT_DIR/manifest.json" 2>/dev/null | sort -u || true)
 
+    # Clés déclarées par le registre des providers (note d'un panneau généré : ui.noteKey)
+    registry_keys=$(grep -oP "noteKey: '\K[a-zA-Z0-9_]+(?=')" "$PROJECT_DIR/src/utils/providers.js" 2>/dev/null | sort -u || true)
+
     # Combiner et dédupliquer
-    echo -e "$html_keys\n$placeholder_keys\n$js_keys\n$chrome_keys\n$manifest_keys" | grep -v '^$' | sort -u
+    echo -e "$html_keys\n$placeholder_keys\n$title_keys\n$js_keys\n$chrome_keys\n$manifest_keys\n$registry_keys" | grep -v '^$' | sort -u
     return 0
 }
 

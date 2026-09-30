@@ -103,6 +103,38 @@
         "message": "تم حفظ الخيارات!",
         "description": "رسالة تأكيد الحفظ"
     },
+    "saveErrorMessage": {
+        "message": "خطأ: لم يتم حفظ الخيارات ($error$).",
+        "description": "رسالة خطأ عند فشل حفظ الخيارات ($error$: رسالة المتصفح)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "موفرون من إصدار أحدث",
+        "description": "عنوان قسم المزودين الذين حفظهم إصدار أحدث"
+    },
+    "unknownProvidersDescription": {
+        "message": "حفظ إصدار أحدث من BabelFishAI، على جهاز آخر مثلاً، هؤلاء الموفرين. لا يستطيع هذا الإصدار استخدامهم: فهو يحتفظ بإعداداتهم كما هي. يؤدي حذفهم إلى إزالتهم من جميع أجهزتك المتزامنة.",
+        "description": "شرح قسم المزودين من إصدار أحدث"
+    },
+    "unknownProviderDelete": {
+        "message": "حذف",
+        "description": "زر يحذف إعدادات مزود من إصدار أحدث"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (إصدار أحدث)",
+        "description": "خيار في محدد الخدمة لموفر حفظه إصدار أحدث ($provider$: معرّفه)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "مفتاح واجهة برمجة تطبيقات OpenAI الخاص بك (sk-...)",
         "description": "العنصر النائب لمفتاح واجهة برمجة التطبيقات"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "خطأ: يجب أن تستخدم عناوين URL بروتوكول HTTPS.",
         "description": "رسالة خطأ لعناوين URL غير صالحة"
+    },
+    "geminiKeyNote": {
+        "message": "نصيحة: استخدم مفتاحًا من مشروع مفعّل فيه الفوترة. مع مفتاح مجاني، إذا كنت خارج المنطقة الاقتصادية الأوروبية وسويسرا والمملكة المتحدة، يمكن لـ Google استخدام إملاءاتك والنصوص التي ترسلها لتحسين منتجاتها، مع احتمال مراجعتها من قِبل أشخاص: لا ترسل باستخدامه أي معلومات شخصية أو حساسة أو سرية. قيّد المفتاح بواجهة Gemini API (الإعداد الافتراضي للمفاتيح الجديدة)، ولا تقيّده أبدًا بمواقع ويب.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

@@ -6,6 +6,24 @@
 // Sur Firefox, les scripts sont chargés via le manifest background.scripts.
 if (typeof importScripts === 'function') {
     importScripts('utils/languages-data.js'); // skipcq: JS-0103
+    // Registre, stockage et adaptateurs des providers, avec lesquels le proxy reconstruit
+    // l'authentification des requêtes. Leur absence ne doit pas empêcher le démarrage : le
+    // proxy refuse alors les requêtes
+    try {
+        importScripts(
+            'utils/providers.js',
+            'utils/provider-store.js',
+            'utils/provider-adapters.js',
+        );
+    } catch (error) {
+        console.error(
+            'Modules des providers indisponibles dans le service worker :',
+            error.message,
+        );
+    }
+} else if (!providerModules()) {
+    // Firefox les charge avant ce script, par background.scripts du manifest
+    console.error('Modules des providers absents de background.scripts : proxy indisponible.');
 }
 
 // Configuration spécifique au service worker
@@ -46,9 +64,20 @@ const ACTIONS = {
 };
 
 const BADGES = {
-    RECORDING: '⏺', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING
+    RECORDING: '', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.RECORDING (l'enregistrement est signalé par l'icône, voir ACTION_ICONS)
     STOPPED: '', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.STOPPED
     ERROR: '!', // Doit correspondre à globalThis.BabelFishAIConstants.BADGES.ERROR
+};
+
+// Icônes de l'action : celle du manifest, et sa variante avec un petit point rouge pendant
+// l'enregistrement. Chemins absolus, car le service worker est dans src/
+const ACTION_ICONS = {
+    DEFAULT: { 16: '/images/icon16.png', 32: '/images/icon32.png', 48: '/images/icon48.png' },
+    RECORDING: {
+        16: '/images/icon16-recording.png',
+        32: '/images/icon32-recording.png',
+        48: '/images/icon48-recording.png',
+    },
 };
 
 const ERRORS = {
@@ -58,6 +87,12 @@ const ERRORS = {
 
 // État global
 let isRecording = false;
+// État affiché par l'icône, pour qu'un arrêt qui suit une erreur n'efface pas le badge « ! »
+let displayedState = STATES.STOPPED;
+
+// Entrée du stockage de session (propriété `recordingTabId`) qui retient l'onglet en cours
+// d'enregistrement : s'il se ferme, son content script disparaît sans envoyer l'arrêt
+const RECORDING_TAB_ITEM = 'recordingTabId';
 
 /**
  * Log conditionnel pour le débogage
@@ -145,16 +180,19 @@ function updateRecordingState(state, errorMessage = '') {
     const stateConfig = {
         [STATES.RECORDING]: {
             isRecording: true,
+            icon: ACTION_ICONS.RECORDING,
             badgeText: BADGES.RECORDING,
             badgeColor: '#FF0000',
         },
         [STATES.STOPPED]: {
             isRecording: false,
+            icon: ACTION_ICONS.DEFAULT,
             badgeText: BADGES.STOPPED,
             badgeColor: '#808080',
         },
         [STATES.ERROR]: {
             isRecording: false, // En cas d'erreur, on considère que l'enregistrement est arrêté
+            icon: ACTION_ICONS.DEFAULT,
             badgeText: BADGES.ERROR,
             badgeColor: '#FF0000',
             logError: true,
@@ -172,14 +210,16 @@ function updateRecordingState(state, errorMessage = '') {
 
     // Mettre à jour l'état global
     isRecording = config.isRecording;
+    displayedState = state;
 
-    // Mettre à jour le badge
+    // Mettre à jour l'icône et le badge
+    chrome.action.setIcon({ path: config.icon });
     chrome.action.setBadgeText({ text: config.badgeText });
     chrome.action.setBadgeBackgroundColor({ color: config.badgeColor });
 
     // Journaliser l'erreur si nécessaire
     if (config.logError && errorMessage) {
-        console.error('Recording error:', errorMessage);
+        console.error('BabelFishAI error:', errorMessage);
     }
 }
 
@@ -621,82 +661,91 @@ function captureResponseHeaders(response) {
 }
 
 /**
- * Hôtes par défaut autorisés côté background (defense-in-depth F7).
- * Dupliqué intentionnellement depuis providers.js car le background script
- * Firefox (scripts classiques) n'a pas accès à globalThis.BabelFishAIProviders.
- * Garder synchronisé avec src/utils/providers.js:BABEL_PROVIDERS.defaultUrls.
+ * Modules des providers chargés avec le background (registre, stockage, adaptateurs)
+ * @returns {{store: Object, registry: Object, adapters: Object}|null} null s'il en manque un
  */
-const BG_DEFAULT_ALLOWED_HOSTS = new Set(['api.openai.com', 'api.mistral.ai']);
+function providerModules() {
+    const store = globalThis.BabelFishAIProviderStore;
+    const registry = globalThis.BabelFishAIProviders;
+    const adapters = globalThis.BabelFishAIProviderAdapters;
+    return store && registry && adapters ? { store, registry, adapters } : null;
+}
+
+// Refus du proxy, par cause (erreur renvoyée au content script)
+const PROXY_REFUSALS = Object.freeze({
+    modules: {
+        error: 'Modules des providers indisponibles dans le background : requête refusée.',
+        errorName: 'ProviderModulesError',
+    },
+    check: {
+        error: 'Vérification de la requête impossible dans le background : requête refusée.',
+        errorName: 'ProxyCheckError',
+    },
+    provider: {
+        error: 'Provider ou clé API non reconnus côté background (defense-in-depth).',
+        errorName: 'ProviderNotAllowedError',
+    },
+    url: {
+        error: 'URL non autorisée côté background (defense-in-depth).',
+        errorName: 'UrlNotAllowedError',
+    },
+});
 
 /**
- * Parse une URL, retourne null si invalide (évite un try/catch inline chez
- * les appelants et réduit leur complexité cyclomatique).
- * @param {string} url - URL à parser
- * @returns {URL|null}
+ * Clé du provider annoncé par une requête du proxy, si le stockage le résout bien pour ce
+ * service, avec une clé, et si l'URL vise une origine configurée pour lui
+ * @param {Object} store - BabelFishAIProviderStore
+ * @param {Object} data - Données lues dans storage.sync
+ * @param {Object} request - providerId, service et url de la requête
+ * @returns {{key: string}|{refusal: Object}} La clé, ou la cause du refus (PROXY_REFUSALS)
  */
-function parseUrlOrNull(url) {
-    try {
-        return new URL(url);
-    } catch {
-        return null;
+function keyForProxiedRequest(store, data, { providerId, service, url }) {
+    const resolved = store.resolveProvider(data, service);
+    const key = store.resolveKey(data, resolved);
+    if (resolved.providerId !== providerId || !key) return { refusal: PROXY_REFUSALS.provider };
+    if (!store.isUrlAllowedForProvider(data, providerId, url)) {
+        return { refusal: PROXY_REFUSALS.url };
     }
+    return { key };
 }
 
 /**
- * Protocole autorisé : HTTPS partout, HTTP uniquement pour localhost
- * (cohérent avec api-utils.js:isProtocolAllowed, mode dev LiteLLM).
- * @param {URL} target - URL parsée
- * @returns {boolean}
+ * Authentification décrite par le registre pour ce service
+ * @param {Object} registry - BabelFishAIProviders
+ * @param {string} providerId
+ * @param {string} service
+ * @returns {{header: string, scheme?: string}}
  */
-function isBgProtocolAllowed(target) {
-    if (target.protocol === 'https:') return true;
-    const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-    return target.protocol === 'http:' && isLocalhost;
+function serviceAuth(registry, providerId, service) {
+    return (registry.getService(providerId, service) ?? registry.DEFAULT_SERVICE).auth;
 }
 
 /**
- * Ajoute le hostname d'une URL au set (silencieux si URL absente/invalide).
- * @param {Set<string>} hosts - Set destinataire
- * @param {string} url - URL source
+ * Entête d'authentification d'une requête du proxy, reconstruit depuis le stockage :
+ * défense en profondeur (F7) contre un content script compromis, qui ne peut choisir ni la
+ * clé ni l'hôte. Le provider annoncé doit être celui que le stockage résout pour le service
+ * et avoir une clé, et l'URL doit viser une origine configurée pour lui
+ * @param {Object} request - url, providerId et service de la requête
+ * @returns {Promise<{header: Object, redirect: string}|{refusal: Object}>} L'entête et la
+ *   politique de redirection, ou la cause du refus (PROXY_REFUSALS)
  */
-function addBgHost(hosts, url) {
-    if (!url) return;
-    const parsed = parseUrlOrNull(url);
-    if (parsed) hosts.add(parsed.hostname);
-}
-
-/**
- * Récupère les hosts custom (mode LiteLLM) autorisés depuis la config
- * utilisateur. Erreur de stockage = aucun host custom (fail closed).
- * @returns {Promise<Set<string>>}
- */
-async function getBgCustomAllowedHosts() {
-    const hosts = new Set();
+async function resolveProxyAuth({ url, providerId, service }) {
+    const modules = providerModules();
+    if (!modules) return { refusal: PROXY_REFUSALS.modules };
     try {
-        const stored = await chrome.storage.sync.get('providers');
-        const custom = stored.providers?.custom;
-        if (!custom?.enabled) return hosts;
-        addBgHost(hosts, custom.transcriptionUrl);
-        addBgHost(hosts, custom.chatUrl);
+        const data = await chrome.storage.sync.get(modules.store.resolutionDefaults());
+        const checked = keyForProxiedRequest(modules.store, data, { providerId, service, url });
+        if (checked.refusal) return checked;
+        const auth = serviceAuth(modules.registry, providerId, service);
+        return {
+            header: modules.adapters.authHeaders(auth, checked.key),
+            redirect: modules.adapters.redirectPolicy(auth),
+        };
     } catch (error) {
-        console.error('getBgCustomAllowedHosts: storage error', error);
+        // Stockage illisible, ou message que la vérification ne sait pas lire
+        console.error('resolveProxyAuth:', error.message);
+        return { refusal: PROXY_REFUSALS.check };
     }
-    return hosts;
-}
-
-/**
- * Vérifie l'URL côté background : défense en profondeur contre un content
- * script compromis qui enverrait une URL hors allowlist.
- * @param {string} url - URL à valider
- * @returns {Promise<boolean>}
- */
-async function isUrlAllowedInBackground(url) {
-    const target = parseUrlOrNull(url);
-    if (!target) return false;
-    if (!isBgProtocolAllowed(target)) return false;
-    if (BG_DEFAULT_ALLOWED_HOSTS.has(target.hostname)) return true;
-    const customHosts = await getBgCustomAllowedHosts();
-    return customHosts.has(target.hostname);
 }
 
 /**
@@ -733,18 +782,22 @@ async function safeParseResponseBody(response) {
 async function proxyFetch(request) {
     const { url, options, formDataFields } = request;
 
-    // F7 : revérifier l'allowlist côté background même si le content script
-    // a déjà vérifié — defense in depth contre un content script compromis.
-    if (!(await isUrlAllowedInBackground(url))) {
-        return {
-            success: false,
-            error: 'URL non autorisée côté background (defense-in-depth).',
-            errorName: 'UrlNotAllowedError',
-        };
+    // F7 : revérifier côté background même si le content script a déjà vérifié — defense
+    // in depth contre un content script compromis. L'entête d'authentification est
+    // reconstruit ici depuis le stockage ; celui du content script est ignoré.
+    const auth = await resolveProxyAuth(request);
+    if (auth.refusal) {
+        return { success: false, ...auth.refusal };
     }
 
     try {
-        const fetchOptions = { ...options };
+        // Entêtes reçus sans aucun entête d'authentification, derrière celui reconstruit ; la
+        // politique de redirection vient du registre, jamais du message
+        const fetchOptions = {
+            ...options,
+            headers: providerModules().adapters.requestHeaders(options?.headers, auth.header),
+            redirect: auth.redirect,
+        };
 
         // Si on a des champs FormData (pour l'upload audio)
         if (formDataFields) {
@@ -753,13 +806,11 @@ async function proxyFetch(request) {
             // lui-même pour inclure le boundary). Filtrage case-insensitive via
             // Object.entries/fromEntries pour éviter un `delete` à clé dynamique
             // (règle Codacy "no dynamic delete").
-            if (fetchOptions.headers) {
-                fetchOptions.headers = Object.fromEntries(
-                    Object.entries(fetchOptions.headers).filter(
-                        ([name]) => name.toLowerCase() !== 'content-type',
-                    ),
-                );
-            }
+            fetchOptions.headers = Object.fromEntries(
+                Object.entries(fetchOptions.headers).filter(
+                    ([name]) => name.toLowerCase() !== 'content-type',
+                ),
+            );
         }
 
         // URL provient de l'extension elle-même (api-utils.js), pas d'entrée utilisateur arbitraire
@@ -791,13 +842,60 @@ async function proxyFetch(request) {
 }
 
 /**
+ * Retient l'onglet qui enregistre, dans le stockage de session qui survit à l'arrêt du
+ * service worker, pour pouvoir effacer le badge si cet onglet se ferme pendant l'enregistrement
+ * @param {string} action - Action d'état reçue du content script
+ * @param {number} [tabId] - Onglet qui a envoyé le message
+ * @returns {Promise<void>}
+ */
+async function rememberRecordingTab(action, tabId) {
+    try {
+        if (action === ACTIONS.STARTED && Number.isInteger(tabId)) {
+            await chrome.storage.session?.set({ recordingTabId: tabId });
+        } else {
+            await chrome.storage.session?.remove(RECORDING_TAB_ITEM);
+        }
+    } catch (error) {
+        console.error('Recording tab tracking error:', error.message);
+    }
+}
+
+/**
+ * Efface le badge d'enregistrement quand l'onglet qui enregistrait est fermé
+ * @param {number} tabId - L'onglet fermé
+ * @returns {Promise<void>}
+ */
+async function clearBadgeIfRecordingTabClosed(tabId) {
+    try {
+        const { recordingTabId } = (await chrome.storage.session?.get(RECORDING_TAB_ITEM)) ?? {};
+        if (recordingTabId !== tabId) return;
+        await chrome.storage.session.remove(RECORDING_TAB_ITEM);
+        updateRecordingState(STATES.STOPPED);
+    } catch (error) {
+        console.error('Badge cleanup error:', error.message);
+    }
+}
+
+/**
+ * Applique à l'icône l'état annoncé par le content script. Après une erreur, le content script
+ * envoie aussi l'arrêt (nettoyage de l'enregistrement) : le badge « ! » reste alors affiché
+ * jusqu'au prochain démarrage, au lieu de disparaître aussitôt
+ * @param {string} state - État annoncé
+ * @param {string} errorMessage - Message d'erreur éventuel
+ */
+function applyAnnouncedState(state, errorMessage) {
+    if (state === STATES.STOPPED && displayedState === STATES.ERROR) return;
+    updateRecordingState(state, errorMessage);
+}
+
+/**
  * Gère tous les messages du content script (listener centralisé unique)
  * @param {Object} message - Le message reçu
- * @param {Object} _sender - L'expéditeur du message (réservé : signature imposée par chrome.runtime.onMessage)
+ * @param {Object} sender - L'expéditeur du message (son onglet sert au suivi du badge)
  * @param {Function} sendResponse - Fonction de réponse
  * @returns {boolean} - Indique si la réponse sera envoyée de manière asynchrone
  */
-function handleMessage(message, _sender, sendResponse) {
+function handleMessage(message, sender, sendResponse) {
     debug('Message received:', message);
 
     // Mapping des actions d'état aux états correspondants
@@ -809,10 +907,11 @@ function handleMessage(message, _sender, sendResponse) {
 
     // Gestion des notifications d'état d'enregistrement
     if (message.action && actionStateMap[message.action]) {
-        updateRecordingState(
+        applyAnnouncedState(
             actionStateMap[message.action],
             message.action === ACTIONS.ERROR ? message.error : '',
         );
+        rememberRecordingTab(message.action, sender?.tab?.id); // NOSONAR javascript:S9383 - gère ses erreurs (try/catch interne) : sa promesse ne rejette pas
         sendResponse({});
         return false;
     }
@@ -839,5 +938,8 @@ function handleMessage(message, _sender, sendResponse) {
 
 // Enregistrer le gestionnaire d'événements pour la réception de messages
 chrome.runtime.onMessage.addListener(handleMessage);
+
+// Effacer le badge si l'onglet qui enregistrait est fermé
+chrome.tabs.onRemoved.addListener(clearBadgeIfRecordingTabClosed);
 
 debug('Background script started');

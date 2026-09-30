@@ -1,4 +1,5 @@
 // Utilitaire d'internationalisation pour BabelFishAI
+/* global chrome */
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
@@ -41,8 +42,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         let message = translation.message;
         if (substitutions) {
-            Object.entries(substitutions).forEach(([key, value]) => {
-                message = message.replace(`$${key}$`, value);
+            Object.entries(substitutions).forEach(([name, value]) => {
+                // Fonction de remplacement : les motifs $&, $' ou $$ d'un texte substitué (un
+                // message d'erreur du navigateur par exemple) restent du texte
+                message = message.replace(`$${name}$`, () => String(value));
             });
         }
         return message;
@@ -335,6 +338,25 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Déclare la langue de l'interface sur un élément de l'extension inséré dans une page web.
+     * La page garde sa propre langue (<html lang>) : les lecteurs d'écran prononcent ainsi le
+     * bandeau et la boîte de dialogue dans la langue de l'interface
+     * @param {HTMLElement} element - Racine d'un élément de l'extension
+     */
+    function setElementLanguage(element) {
+        element.lang = currentLanguage;
+    }
+
+    /**
+     * Indique si le module tourne dans une page de l'extension (options), et non dans une page web
+     * où le content script l'a chargé
+     * @returns {boolean}
+     */
+    function isExtensionPage() {
+        return globalThis.location?.href.startsWith(chrome.runtime.getURL('')) === true;
+    }
+
+    /**
      * Initialise l'internationalisation
      */
     async function init() {
@@ -346,11 +368,15 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         await loadTranslations(userLanguage);
         currentLanguage = userLanguage;
 
-        // Définir la langue sur l'élément HTML
-        document.documentElement.lang = currentLanguage;
-
         // Remplacer les placeholders dans les messages de traduction
         processTranslationPlaceholders();
+
+        // Dans une page web, ne toucher ni à <html lang>, ni aux éléments [data-i18n] de la page,
+        // ni à ses mutations : le bandeau et la boîte de dialogue traduisent leurs propres éléments
+        if (!isExtensionPage()) return;
+
+        // Définir la langue sur l'élément HTML
+        document.documentElement.lang = currentLanguage;
 
         // Traduire la page
         translatePage();
@@ -382,6 +408,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         translateElement,
         createTranslatedElement,
         sanitizeHTML,
+        setElementLanguage,
         init,
         getCurrentLanguage: () => currentLanguage,
     };
@@ -390,6 +417,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        init();
+        init(); // NOSONAR javascript:S9383 - initialisation au chargement, sans appelant ; un rejet reste signalé par le navigateur
     }
 })(globalThis.BabelFishAIUtils);

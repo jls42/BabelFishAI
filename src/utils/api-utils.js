@@ -36,11 +36,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const { name, value } = entry;
             if (value instanceof Blob) {
                 // Convertir le Blob en Base64 (plus efficace que Array.from pour la sérialisation)
-                const base64 = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                    reader.readAsDataURL(value);
-                });
+                const base64 = await globalThis.BabelFishAIProviderAdapters.blobToBase64(value); // NOSONAR javascript:S9382 - une requête ne porte qu'un fichier audio ; lire plusieurs blobs à la fois multiplierait la mémoire occupée
                 fields.push({
                     name,
                     isFile: true,
@@ -65,14 +61,20 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * Contourne les restrictions CSP des pages web
      * @param {string} url - URL de la requête
      * @param {Object} options - Options fetch (method, headers, body)
+     * @param {string} providerId - Provider de la requête
+     * @param {string} service - Service appelé ('transcription' ou 'chat')
      * @returns {Promise<Object>} Réponse simulée compatible avec le flux existant
      */
-    async function fetchViaProxy(url, options) {
+    async function fetchViaProxy(url, options, providerId, service) {
+        // Le background reconstruit l'authentification depuis le stockage : aucun entête
+        // d'authentification ne passe par le message
         const request = {
             url,
+            providerId,
+            service,
             options: {
                 method: options.method,
-                headers: options.headers,
+                headers: globalThis.BabelFishAIProviderAdapters.requestHeaders(options.headers, {}),
             },
         };
 
@@ -147,6 +149,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     /**
      * Fonction interne pour récupérer la clé API depuis le stockage et la mettre en cache.
+     * Ne renvoie rien en mode multi-provider : la clé legacy n'y est qu'une copie.
      * @returns {Promise<string|null>} La clé API ou null si non trouvée.
      * @private
      */
@@ -155,7 +158,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         // (cold-start sur content script injecté dynamiquement : voir background.js:121)
         globalThis.BabelFishAI = globalThis.BabelFishAI || {};
         try {
-            const result = await chrome.storage.sync.get(['apiKey']);
+            const result = await chrome.storage.sync.get(['apiKey', 'providers']);
+            // Avec `providers`, la clé legacy n'est qu'une copie gardée pour les anciennes
+            // versions : la reprendre enverrait la clé OpenAI alors qu'OpenAI est désactivé
+            if (result.providers) {
+                return null;
+            }
             const apiKey = result.apiKey;
 
             if (apiKey) {
@@ -202,7 +210,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         if (!apiKeyFromStorage) {
             console.error('Erreur lors de la récupération de la clé API: Clé non trouvée.');
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            throw new Error(ERRORS.API_CONFIG_MISSING);
         }
 
         return apiKeyFromStorage;
@@ -269,21 +277,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Vérifie si un provider a une configuration valide
-     * @param {string} id - ID du provider
-     * @param {Object} config - Configuration du provider
-     * @returns {boolean} True si valide
-     */
-    function isProviderValid(id, config) {
-        if (!config?.enabled || !config?.apiKey) return false;
-        // Pour le provider custom, les URLs sont obligatoires
-        if (id === 'custom') {
-            return Boolean(config.transcriptionUrl && config.chatUrl);
-        }
-        return true;
-    }
-
-    /**
      * Résout l'URL pour un type de service
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @param {Object} providerConfig - Configuration du provider
@@ -341,77 +334,28 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         if (selectedModel) return selectedModel;
 
         return isTranscription
-            ? data.audioModelType || API_CONFIG.WHISPER_MODEL
+            ? data.audioModelType || API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL
             : data.modelType || API_CONFIG.GPT_MODEL;
     }
 
     /**
-     * Trouve un provider de fallback valide
-     * @param {Object} providers - Configuration des providers
-     * @param {string} currentProviderId - ID du provider actuel
-     * @returns {{providerId: string, providerConfig: Object}|null} Provider de fallback ou null
-     */
-    function findFallbackProvider(providers, currentProviderId) {
-        if (!providers) return null;
-
-        const availableProvider = Object.entries(providers).find(([id, config]) =>
-            isProviderValid(id, config),
-        );
-
-        if (availableProvider) {
-            // skipcq: JS-0002 - debug log for provider fallback diagnostics
-            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
-            console.log(
-                `[resolveApiConfig] Provider ${currentProviderId} n'a pas de configuration valide, fallback vers ${availableProvider[0]}`,
-            );
-            return { providerId: availableProvider[0], providerConfig: availableProvider[1] };
-        }
-        return null;
-    }
-
-    /**
-     * Résout le provider actif avec fallback si nécessaire
+     * Résout le provider actif avec fallback si nécessaire (provider-store.js)
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @param {Object} data - Données du storage
      * @returns {{providerId: string, providerConfig: Object|undefined}} Provider résolu
      */
     function resolveActiveProvider(serviceType, data) {
-        let providerId =
-            serviceType === 'transcription' ? data.transcriptionProvider : data.chatProvider;
-
-        // eslint-disable-next-line security/detect-object-injection -- False positive: providerId is a controlled provider ID
-        let providerConfig = data.providers?.[providerId];
-
-        // Si non valide, chercher un provider de fallback
-        if (data.providers && !isProviderValid(providerId, providerConfig)) {
-            const fallback = findFallbackProvider(data.providers, providerId);
-            if (fallback) {
-                providerId = fallback.providerId;
-                providerConfig = fallback.providerConfig;
-            } else {
-                // F8 : aucun fallback valide. Invalider la config pour que callApi
-                // échoue tôt sur "clé API manquante" plutôt que de renvoyer
-                // l'utilisateur sur la fausse piste "URL non autorisée" via
-                // isUrlAllowed (cas typique : tous les providers désactivés mais
-                // l'un d'eux reste sélectionné comme actif).
-                providerConfig = undefined;
-            }
+        const store = globalThis.BabelFishAIProviderStore;
+        const resolved = store.resolveProvider(data, serviceType);
+        const selected = store.readSelection(data, serviceType);
+        if (resolved.providerConfig && resolved.providerId !== selected) {
+            // skipcq: JS-0002 - debug log for provider fallback diagnostics
+            // eslint-disable-next-line no-console -- Debug log for provider fallback diagnostics
+            console.log(
+                `[resolveApiConfig] Provider ${selected} n'a pas de configuration valide, fallback vers ${resolved.providerId}`,
+            );
         }
-
-        return { providerId, providerConfig };
-    }
-
-    /**
-     * Résout la clé API pour un provider
-     * @param {Object} providerConfig - Configuration du provider
-     * @param {string} providerId - ID du provider
-     * @param {string} legacyApiKey - Clé API legacy (pour rétrocompatibilité)
-     * @returns {string|null} Clé API résolue
-     */
-    function resolveApiKey(providerConfig, providerId, legacyApiKey) {
-        if (providerConfig?.apiKey) return providerConfig.apiKey;
-        if (providerId === 'openai') return legacyApiKey || null;
-        return null;
+        return resolved;
     }
 
     /**
@@ -426,24 +370,31 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Données lues pour résoudre la configuration API, avec leurs valeurs par défaut : celles
+     * qui décident du provider et de la clé (provider-store.js), plus les modèles et no-log
+     * @returns {Object}
+     */
+    function configDefaults() {
+        return {
+            ...globalThis.BabelFishAIProviderStore.resolutionDefaults(),
+            audioModelType: API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
+            modelType: API_CONFIG.GPT_MODEL,
+            disableLogging: false,
+        };
+    }
+
+    /**
      * Résout la configuration API pour un type de service donné
      * Supporte le multi-provider avec fallback sur la configuration legacy
      * @param {string} serviceType - Type de service ('transcription' ou 'chat')
      * @returns {Promise<Object>} Configuration API résolue
      */
     async function resolveApiConfig(serviceType) {
-        const data = await getFromStorage({
-            providers: null,
-            transcriptionProvider: 'openai',
-            chatProvider: 'openai',
-            apiKey: '',
-            audioModelType: API_CONFIG.WHISPER_MODEL,
-            modelType: API_CONFIG.GPT_MODEL,
-            disableLogging: false,
-        });
+        const data = await getFromStorage(configDefaults());
 
         // Résoudre le provider actif
-        const { providerId, providerConfig } = resolveActiveProvider(serviceType, data);
+        const resolved = resolveActiveProvider(serviceType, data);
+        const { providerId, providerConfig } = resolved;
 
         // Récupérer les définitions du provider depuis le registre
         const Providers = globalThis.BabelFishAIProviders;
@@ -451,7 +402,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         // Résoudre URL, clé API et modèle
         const url = resolveUrl(serviceType, providerConfig, providerDef, providerId);
-        const apiKey = resolveApiKey(providerConfig, providerId, data.apiKey);
+        // La clé legacy ne sert qu'en mode legacy (provider-store.js, resolveKey)
+        const apiKey = globalThis.BabelFishAIProviderStore.resolveKey(data, resolved);
         const model = resolveModel(
             serviceType,
             providerConfig,
@@ -466,7 +418,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Récupère la clé API pour un provider spécifique ou le provider actif
+     * Récupère la clé API pour un provider spécifique ou le provider actif. Pour un provider
+     * autre que celui du service, ne lit que `providers` : la clé d'un provider ajouté
+     * (`extraProvider.<id>`) n'y est jamais. Aucun appelant (lot 7 du plan, n°14)
      * @param {string} [providerId] - ID du provider (optionnel, utilise le provider par défaut si non spécifié)
      * @param {string} [serviceType='transcription'] - Type de service pour déterminer le provider par défaut
      * @returns {Promise<string|null>} La clé API ou null si non trouvée
@@ -533,92 +487,30 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Parse une URL en URL object, retourne null si invalide
-     * @param {string} url - URL à parser
-     * @returns {URL|null}
+     * Invariant de sécurité (défense en profondeur contre une fuite de clé, cf. SECURITY.md
+     * « API key leakage »), vérifié sur une lecture fraîche du stockage : le provider et la
+     * clé sont ceux que ce stockage résout pour le service, et l'URL vise une origine
+     * configurée pour ce provider (URL du registre, ou URL réglée par l'utilisateur pour Custom)
+     * @param {Object} request - url, apiKey, providerId, service et errorType de la requête
+     * @returns {Promise<void>}
+     * @throws {Error} Si la requête enverrait une clé ailleurs que chez son provider
      */
-    function parseUrl(url) {
-        try {
-            return new URL(url);
-        } catch {
-            return null;
+    async function assertRequestAllowed({ url, apiKey, providerId, service, errorType }) {
+        if (!providerId || !service) {
+            throw new Error(`${errorType}: provider ou service non indiqué pour la requête.`);
         }
-    }
-
-    /**
-     * Ajoute le hostname d'une URL au set cible (silencieux si URL invalide)
-     * @param {string} url - URL source
-     * @param {Set<string>} targetSet - Set destinataire
-     */
-    function addHostname(url, targetSet) {
-        if (!url) return;
-        const parsed = parseUrl(url);
-        if (parsed) targetSet.add(parsed.hostname);
-    }
-
-    /**
-     * Vérifie si le protocole est autorisé : HTTPS partout, HTTP uniquement
-     * pour localhost (cohérent avec providers.js:isValidUrl, mode dev LiteLLM).
-     * @param {URL} target - URL parsée
-     * @returns {boolean}
-     */
-    function isProtocolAllowed(target) {
-        if (target.protocol === 'https:') return true;
-        const isLocalhost = target.hostname === 'localhost' || target.hostname === '127.0.0.1';
-        return target.protocol === 'http:' && isLocalhost;
-    }
-
-    /**
-     * Extrait l'allowlist des hostnames par défaut depuis le registre providers
-     * (source unique de vérité : ajouter un provider dans providers.js le propage ici).
-     * @returns {Set<string>}
-     */
-    function getDefaultAllowedHosts() {
-        const hosts = new Set();
-        const registry = globalThis.BabelFishAIProviders?.PROVIDERS ?? {};
-        for (const provider of Object.values(registry)) {
-            for (const defaultUrl of Object.values(provider.defaultUrls ?? {})) {
-                addHostname(defaultUrl, hosts);
-            }
+        const data = await getFromStorage(configDefaults());
+        const store = globalThis.BabelFishAIProviderStore;
+        const resolved = store.resolveProvider(data, service);
+        if (resolved.providerId !== providerId || store.resolveKey(data, resolved) !== apiKey) {
+            throw new Error(`${errorType}: la clé API ne correspond pas au provider configuré.`);
         }
-        return hosts;
-    }
-
-    /**
-     * Extrait l'allowlist des hostnames custom (mode LiteLLM) depuis la config
-     * utilisateur, relue à chaque appel pour suivre les changements sans cache.
-     * @returns {Promise<Set<string>>}
-     */
-    async function getCustomAllowedHosts() {
-        const hosts = new Set();
-        const { providers } = await chrome.storage.sync.get('providers');
-        const custom = providers?.custom;
-        if (!custom?.enabled) return hosts;
-        addHostname(custom.transcriptionUrl, hosts);
-        addHostname(custom.chatUrl, hosts);
-        return hosts;
-    }
-
-    /**
-     * Vérifie si l'URL cible appartient à l'allowlist des providers connus.
-     * Défense en profondeur contre une fuite de clé API vers un hôte arbitraire
-     * (cf. SECURITY.md scope "API key leakage"). L'allowlist est dérivée
-     * dynamiquement du registre providers et de la config utilisateur — pas
-     * de duplication, si on ajoute un provider dans providers.js il est suivi
-     * automatiquement ici. Mode LiteLLM/custom respecté via providers.custom.
-     * @param {string} url - URL à valider
-     * @returns {Promise<boolean>} True si l'URL est autorisée
-     */
-    async function isUrlAllowed(url) {
-        const target = parseUrl(url);
-        if (!target) return false;
-        if (!isProtocolAllowed(target)) return false;
-
-        const defaults = getDefaultAllowedHosts();
-        if (defaults.has(target.hostname)) return true;
-
-        const customHosts = await getCustomAllowedHosts();
-        return customHosts.has(target.hostname);
+        // eslint-disable-next-line security-node/detect-unhandled-async-errors -- erreurs levées exprès avant tout envoi : callApi les attend et les propage à son appelant
+        if (!store.isUrlAllowedForProvider(data, providerId, url)) {
+            throw new Error(
+                `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
+            );
+        }
     }
 
     /**
@@ -633,6 +525,8 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} [options.errorType=ERRORS.API_ERROR] - Type d'erreur à utiliser en cas d'échec
      * @param {Function} [options.responseProcessor] - Fonction pour traiter la réponse avant de la renvoyer
      * @param {boolean} [options.retryOnFail=false] - Si true, réessaiera une fois en cas d'échec
+     * @param {string} options.providerId - Provider dont la clé est envoyée (invariant de sécurité)
+     * @param {string} options.service - Service appelé ('transcription' ou 'chat')
      * @returns {Promise<any>} Résultat traité de l'appel API
      * @throws {Error} Une erreur avec le message approprié en cas d'échec de l'appel
      */
@@ -646,23 +540,20 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             errorType = ERRORS.API_ERROR,
             responseProcessor = (data) => data,
             retryOnFail = false,
+            providerId,
+            service,
         } = options;
 
         if (!apiKey) {
-            throw new Error(ERRORS.API_KEY_NOT_FOUND);
+            throw new Error(ERRORS.API_CONFIG_MISSING);
         }
 
         if (!url) {
             throw new Error('URL API manquante');
         }
 
-        // Allowlist d'hôtes : bloque toute fuite potentielle de la clé API vers un
-        // hôte hors registre providers / config utilisateur (defense in depth).
-        if (!(await isUrlAllowed(url))) {
-            throw new Error(
-                `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
-            );
-        }
+        // Invariant de sécurité : la clé ne part que vers un hôte configuré pour son provider
+        await assertRequestAllowed({ url, apiKey, providerId, service, errorType });
 
         /**
          * Vérifie la connexion réseau avant de faire l'appel API
@@ -679,19 +570,29 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         }
 
         /**
+         * Service appelé, tel que le décrit le registre des providers
+         * @returns {Object} Sa définition, ou les valeurs par défaut s'il n'en a pas
+         */
+        function serviceDefinition() {
+            const Providers = globalThis.BabelFishAIProviders;
+            return Providers.getService(providerId, service) ?? Providers.DEFAULT_SERVICE;
+        }
+
+        /**
          * Prépare les options de la requête fetch
          * @returns {Object} - Options de la requête configurées
          */
         function prepareRequestOptions() {
-            const requestHeaders = {
-                Authorization: `Bearer ${apiKey}`,
-                ...headers,
-            };
-
+            // Entête d'authentification du service, décrit par le registre des providers : il
+            // passe devant les entêtes de l'appelant, d'où tout autre entête d'authentification
+            // est retiré, et une clé hors d'Authorization ne suit pas de redirection
+            const adapters = globalThis.BabelFishAIProviderAdapters;
+            const { auth } = serviceDefinition();
             return {
                 method,
-                headers: requestHeaders,
+                headers: adapters.requestHeaders(headers, adapters.authHeaders(auth, apiKey)),
                 body,
+                redirect: adapters.redirectPolicy(auth),
             };
         }
 
@@ -702,10 +603,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
          */
         async function handleHttpErrors(response) {
             if (!response.ok) {
+                // Message lu selon le format d'erreurs que le registre déclare pour ce service
+                const adapters = globalThis.BabelFishAIProviderAdapters;
+                const errorFormat = serviceDefinition().errors;
+                const readErrorMessage = adapters.getErrorReader(errorFormat);
                 let errorMessage; // skipcq: JS-0119 - Initialisation dépend du bloc try/catch.
+                // Clé refusée par un provider qui ne répond pas 401 (Gemini : 400)
+                let keyRejected = false;
                 try {
                     const errorData = await response.json();
-                    errorMessage = errorData.error?.message || errorType;
+                    errorMessage = readErrorMessage(errorData) || errorType;
+                    keyRejected = adapters.rejectsKey(errorFormat, errorData);
                     // Message de l'API en texte : l'objet seul s'affiche replié dans la console
                     console.error(
                         `API Error (HTTP ${response.status}): ${errorMessage}`,
@@ -722,8 +630,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                     );
                 }
 
-                // Message d'erreur amélioré avec suggestion de résolution
-                const userFriendlyMessage = getImprovedErrorMessage(response.status, errorMessage);
+                // Message d'erreur amélioré avec suggestion de résolution (celui du 401 pour une
+                // clé refusée, quel que soit le code)
+                const userFriendlyMessage = getImprovedErrorMessage(
+                    keyRejected ? 401 : response.status,
+                    errorMessage,
+                );
                 const httpError = new Error(userFriendlyMessage);
                 // Code HTTP conservé pour que l'appelant puisse adapter sa requête (ex. 400)
                 httpError.status = response.status;
@@ -780,7 +692,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const requestOptions = prepareRequestOptions();
             // Sur Firefox, utiliser le proxy via background script pour contourner les CSP
             const response = isFirefox()
-                ? await fetchViaProxy(url, requestOptions)
+                ? await fetchViaProxy(url, requestOptions, providerId, service)
                 : await fetch(url, requestOptions);
             await handleHttpErrors(response);
             const data = await response.json();
@@ -838,15 +750,19 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @param {string} [modelType] - Le modèle Whisper à utiliser
      * @param {string} [filename] - Nom du fichier à envoyer (optionnel)
      * @param {boolean} [generateUniqueFilename=false] - Générer un nom de fichier unique avec timestamp et partie aléatoire
+     * @param {string} providerId - Obligatoire : provider de la clé (format et authentification
+     *   du registre, invariant de sécurité). Sans lui, callApi refuse la requête ; il vient en
+     *   dernier et vaut undefined par défaut pour garder l'ordre des paramètres existants
      * @returns {Promise<string>} Le texte transcrit
      */
-    function transcribeAudio(
+    async function transcribeAudio(
         audioBlob,
         apiKey,
         apiUrl = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_WHISPER_API_URL,
-        modelType = globalThis.BabelFishAIConstants.API_CONFIG.WHISPER_MODEL,
+        modelType = globalThis.BabelFishAIConstants.API_CONFIG.DEFAULT_TRANSCRIPTION_MODEL,
         filename = null,
         generateUniqueFilename = false,
+        providerId = undefined,
     ) {
         // Déterminer le nom de fichier final
         const finalFilename = generateUniqueFilename
@@ -854,24 +770,31 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
               `audio-${Date.now()}-${Math.random().toString(36).substring(2, 10)}.webm` // NOSONAR javascript:S2245 - Math.random() pour unicité pratique.
             : filename || 'audio.webm';
 
-        // Préparer le FormData pour l'envoi du fichier audio
-        const formData = new FormData();
-        formData.append('file', audioBlob, finalFilename);
-        formData.append('model', modelType);
+        // Préparer le corps de la requête selon le format du provider (multipart OpenAI par défaut)
+        const format =
+            globalThis.BabelFishAIProviders.getService(providerId, 'transcription')?.format ??
+            'openai-multipart';
+        const adapter = globalThis.BabelFishAIProviderAdapters.getAdapter(format);
+        // Un FormData pour le multipart ; un adaptateur qui encode l'audio (base64 dans du JSON)
+        // prépare son corps de façon asynchrone
+        const body = await adapter.buildBody({
+            audioBlob,
+            filename: finalFilename,
+            model: modelType,
+        });
 
         // Utiliser la fonction callApi pour effectuer la requête
         return callApi({
             url: apiUrl,
             apiKey,
-            body: formData,
+            // Entêtes propres au format, comme le Content-Type d'un corps JSON (aucun pour le
+            // multipart, dont le navigateur écrit lui-même le Content-Type)
+            headers: adapter.headers ?? {},
+            body,
             errorType: ERRORS.TRANSCRIPTION_ERROR,
-            responseProcessor: (data) => {
-                // Nettoyer le texte transcrit pour éliminer les retours à la ligne superflus au début
-                let text = data.text || '';
-                text = text.trim();
-                // Ajouter un espace à la fin pour permettre de continuer à dicter
-                return `${text} `;
-            },
+            responseProcessor: adapter.extractText,
+            providerId,
+            service: 'transcription',
         });
     }
 

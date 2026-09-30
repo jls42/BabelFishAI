@@ -1,4 +1,5 @@
 // Utilitaires d'enregistrement audio pour l'extension BabelFishAI
+/* global chrome */
 globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
 (function (exports) {
@@ -12,12 +13,13 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
     // Constantes
     const ACTIONS = {
-        STARTED: 'recording_started',
-        STOPPED: 'recording_stopped',
+        STARTED: 'recordingStarted', // Doit correspondre à ACTIONS.STARTED de background.js, sinon le badge ne change pas
+        STOPPED: 'recordingStopped', // Doit correspondre à ACTIONS.STOPPED de background.js
     };
 
     const ERRORS = {
-        API_KEY_NOT_FOUND: 'Clé API OpenAI non trouvée. Veuillez la configurer dans les options.',
+        API_CONFIG_MISSING:
+            'Aucun provider configuré : activez-en un et renseignez sa clé API dans les options.',
         MIC_ACCESS_ERROR: "Impossible d'accéder au microphone. Veuillez vérifier les permissions.",
     };
 
@@ -92,7 +94,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         console.error("Erreur lors du démarrage de l'enregistrement:", error);
 
         const errorMessages = {
-            [ERRORS.API_KEY_NOT_FOUND]: ERRORS.API_KEY_NOT_FOUND,
+            [ERRORS.API_CONFIG_MISSING]: ERRORS.API_CONFIG_MISSING,
             NotAllowedError: globalThis.BabelFishAIUtils.i18n.getMessage('bannerMicAccessError'),
             PermissionDeniedError:
                 globalThis.BabelFishAIUtils.i18n.getMessage('bannerMicAccessError'),
@@ -134,7 +136,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             // Vérifier que la clé API existe sans l'assigner à une variable
             const apiKey = await getApiKey();
             if (!apiKey) {
-                throw new Error(ERRORS.API_KEY_NOT_FOUND);
+                throw new Error(ERRORS.API_CONFIG_MISSING);
             }
 
             const audioConstraints = {
@@ -303,12 +305,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Traite l'audio enregistré de manière optimisée
-     * @param {Blob} audioBlob - Le blob audio à traiter
-     * @returns {Promise<void>}
+     * Vérifie que l'enregistrement a produit un blob audio non vide
+     * @param {Blob} blob - Le blob audio enregistré
+     * @throws {Error} Si le blob est absent, vide, ou d'un autre type qu'audio
      */
     function validateAudioBlob(blob) {
-        if (!blob || blob.size <= 0 || blob.type.indexOf('audio/') !== 0) {
+        if (!blob || blob.size <= 0 || !blob.type.startsWith('audio/')) {
             throw new Error('Blob audio invalide ou vide');
         }
     }
@@ -614,7 +616,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
             const config = await globalThis.BabelFishAIUtils.api.resolveApiConfig('transcription');
 
             if (!config.apiKey) {
-                const errorMsg = ERRORS.API_KEY_NOT_FOUND;
+                const errorMsg = ERRORS.API_CONFIG_MISSING;
                 globalThis.BabelFishAI.ui.handleError(errorMsg, errorMsg);
                 throw new Error(errorMsg);
             }
@@ -627,6 +629,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
                 config.model,
                 null, // Pas de nom de fichier spécifique
                 true, // Générer un nom de fichier unique avec timestamp et partie aléatoire
+                config.providerId,
             );
 
             return transcription;
@@ -648,6 +651,17 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     // Exporter les fonctions dans l'espace BabelFishAIUtils
+    // Si la page disparaît pendant l'enregistrement (rechargement, navigation, fermeture),
+    // prévenir le background, sinon le badge ⏺ de l'icône resterait affiché
+    globalThis.addEventListener('pagehide', () => {
+        if (!isRecording) return;
+        globalThis.BabelFishAIUtils.error.safeExecute(
+            () => chrome.runtime.sendMessage({ action: ACTIONS.STOPPED }),
+            "Impossible d'envoyer le message d'arrêt au background",
+            { propagateError: false },
+        );
+    });
+
     exports.recording = {
         startRecording,
         stopRecording,

@@ -1,0 +1,151 @@
+{
+    "audio en base64": {
+        "lectureImpossible": "NotReadableError",
+        "sansType": "GkXfo/8AEA==",
+        "webm": "GkXfo/8AEA=="
+    },
+    "corps et lecture des réponses": {
+        "chatComplet": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"temperature\":0.1,\"no-log\":true}",
+        "chatEffort": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}],\"reasoning_effort\":\"low\"}",
+        "chatSimple": "{\"model\":\"m\",\"messages\":[{\"role\":\"user\",\"content\":\"Bonjour\"}]}",
+        "formatInconnu": "Format d'API inconnu : format-inconnu",
+        "multipart": [
+            {
+                "base64": "AQID",
+                "filename": "audio.webm",
+                "name": "file",
+                "size": 3,
+                "type": "audio/webm"
+            },
+            {
+                "name": "model",
+                "value": "gpt-transcribe"
+            }
+        ],
+        "texteAbsent": "",
+        "texteBlocs": "ab",
+        "texteChaine": "réponse",
+        "transcription": "Bonjour. ",
+        "transcriptionVide": " "
+    },
+    "dictée au format gemini-interactions": {
+        "corps": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+        "corpsNull": "erreur : Transcription inachevée (statut : absent)",
+        "corpsSansType": "{\"model\":\"gemini-3.5-transcribe\",\"input\":[{\"type\":\"audio\",\"data\":\"GkXfo0KGgQE=\",\"mime_type\":\"audio/webm\"}],\"store\":false}",
+        "entetes": {
+            "Content-Type": "application/json"
+        },
+        "etapesInvalides": " ",
+        "lectures": {
+            "echec": "erreur : Transcription inachevée (statut : failed)",
+            "etapes-melangees": "Première phrase. Seconde phrase. ",
+            "incomplete": "erreur : Transcription inachevée (statut : incomplete)",
+            "terminee": "Bonjour, ceci est une dictée. ",
+            "terminee-sans-etapes": " "
+        }
+    },
+    "entêtes et redirections": {
+        "bearer": {
+            "Authorization": "Bearer {cle openai}"
+        },
+        "messageProxy": {
+            "Content-Type": "application/json",
+            "X-Autre": "garde"
+        },
+        "nomsDuRegistre": [
+            "authorization",
+            "x-goog-api-key"
+        ],
+        "redirection": {
+            "bearer": "follow",
+            "google": "error",
+            "minuscules": "follow"
+        },
+        "requeteBearer": {
+            "Authorization": "Bearer {cle openai}",
+            "Content-Type": "application/json",
+            "X-Autre": "garde"
+        },
+        "sansEntetes": {
+            "Authorization": "Bearer k"
+        },
+        "sansSchema": {
+            "x-goog-api-key": "{cle gemini}"
+        }
+    },
+    "erreurs au format gemini": {
+        "429": {
+            "cleRefusee": false,
+            "message": "message du provider (429)"
+        },
+        "autre-400": {
+            "cleRefusee": false,
+            "message": "message du provider (400)"
+        },
+        "cle-compatible": {
+            "cleRefusee": true,
+            "message": "Please pass a valid API key"
+        },
+        "cle-interactions": {
+            "cleRefusee": true,
+            "message": "API key not valid. Please pass a valid API key."
+        },
+        "cle-native": {
+            "cleRefusee": true,
+            "message": "API key not valid. Please pass a valid API key."
+        },
+        "cle-raison-seule": {
+            "cleRefusee": true,
+            "message": "Clé non valide. Transmettez une clé valide."
+        },
+        "corps null": {
+            "cleRefusee": false,
+            "message": null
+        },
+        "openai : clé refusée ?": false,
+        "tableau vide": {
+            "cleRefusee": false,
+            "message": null
+        }
+    },
+    "formats déclarés par le registre": {
+        "custom.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "custom.transcription": [
+            "openai-multipart",
+            "openai"
+        ],
+        "gemini.chat": [
+            "openai-chat",
+            "gemini"
+        ],
+        "gemini.transcription": [
+            "gemini-interactions",
+            "gemini"
+        ],
+        "mistral.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "mistral.transcription": [
+            "openai-multipart",
+            "openai"
+        ],
+        "openai.chat": [
+            "openai-chat",
+            "openai"
+        ],
+        "openai.transcription": [
+            "openai-multipart",
+            "openai"
+        ]
+    },
+    "messages des réponses en erreur": {
+        "detailMistral": null,
+        "formatInconnu": "Format d'erreurs inconnu : format-inconnu",
+        "message": "Clé invalide",
+        "sansMessage": null
+    }
+}

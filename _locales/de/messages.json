@@ -103,6 +103,38 @@
         "message": "Optionen gespeichert!",
         "description": "Bestätigungsmeldung für die Speicherung"
     },
+    "saveErrorMessage": {
+        "message": "Fehler: Die Optionen wurden nicht gespeichert ($error$).",
+        "description": "Fehlermeldung, wenn das Speichern der Optionen fehlschlägt ($error$: Meldung des Browsers)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Anbieter aus einer neueren Version",
+        "description": "Titel des Abschnitts mit den Providern einer neueren Version"
+    },
+    "unknownProvidersDescription": {
+        "message": "Eine neuere Version von BabelFishAI, zum Beispiel auf einem anderen Gerät, hat diese Anbieter gespeichert. Diese Version kann sie nicht verwenden: Sie behält ihre Einstellungen unverändert bei. Wenn Sie sie löschen, werden sie von allen synchronisierten Geräten entfernt.",
+        "description": "Erklärung des Abschnitts mit den Providern einer neueren Version"
+    },
+    "unknownProviderDelete": {
+        "message": "Löschen",
+        "description": "Schaltfläche, die die Einstellungen eines Providers einer neueren Version löscht"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (neuere Version)",
+        "description": "Option einer Dienstauswahl für einen Anbieter, den eine neuere Version gespeichert hat ($provider$: seine Kennung)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Ihr OpenAI-API-Schlüssel (sk-...)",
         "description": "Platzhalter für den API-Schlüssel"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Fehler: URLs müssen HTTPS verwenden.",
         "description": "Fehlermeldung für ungültige URLs"
+    },
+    "geminiKeyNote": {
+        "message": "Tipp: Verwenden Sie einen Schlüssel aus einem Projekt mit aktivierter Abrechnung. Wenn Sie sich außerhalb des EWR, der Schweiz und des Vereinigten Königreichs befinden, kann Google bei einem kostenlosen Schlüssel Ihre Diktate und die gesendeten Texte zur Verbesserung seiner Produkte verwenden, auch mit möglicher Prüfung durch Menschen: Senden Sie damit keine personenbezogenen, sensiblen oder vertraulichen Informationen. Beschränken Sie den Schlüssel auf die Gemini API (Standard bei neuen Schlüsseln), niemals auf Websites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

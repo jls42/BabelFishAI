@@ -1,0 +1,29 @@
+{
+    "modules du content script": {
+        "importes": [
+            "src/utils/languages-shared.js",
+            "src/utils/providers.js",
+            "src/utils/provider-store.js",
+            "src/utils/provider-adapters.js",
+            "src/utils/i18n.js",
+            "src/utils/focus-utils.js",
+            "src/utils/error-utils.js",
+            "src/utils/recording-utils.js",
+            "src/utils/text-processing.js",
+            "src/utils/event-handlers.js",
+            "src/utils/transcription-display.js",
+            "src/utils/banner-utils.js",
+            "src/utils/ui.js",
+            "src/utils/api-utils.js"
+        ],
+        "injectes": [
+            "src/constants.js",
+            "src/utils/providers.js",
+            "src/utils/ui.js",
+            "src/utils/banner-utils.js",
+            "src/utils/api-utils.js",
+            "src/utils/i18n.js",
+            "src/content.js"
+        ]
+    }
+}

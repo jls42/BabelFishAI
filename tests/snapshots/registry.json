@@ -1,0 +1,826 @@
+{
+    "accesseurs par provider": {
+        "__proto__": {
+            "acceptsTemperature": {
+                "inconnu": true
+            },
+            "getChatUrl": "https://api.openai.com/v1/chat/completions",
+            "getDefaultModel(chat)": null,
+            "getDefaultModel(transcription)": null,
+            "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
+            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "constructor": {
+            "acceptsTemperature": {
+                "inconnu": true
+            },
+            "getChatUrl": "https://api.openai.com/v1/chat/completions",
+            "getDefaultModel(chat)": null,
+            "getDefaultModel(transcription)": null,
+            "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
+            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "custom": {
+            "acceptsTemperature": {
+                "gpt-4o-mini": true,
+                "inconnu": true
+            },
+            "getChatUrl": "",
+            "getDefaultModel(chat)": "gpt-4o-mini",
+            "getDefaultModel(transcription)": "whisper-1",
+            "getProvider": "custom",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat",
+                "urlSetting": "chatUrl"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart",
+                "urlSetting": "transcriptionUrl"
+            },
+            "getTranscriptionUrl": "",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": true,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "gemini": {
+            "acceptsTemperature": {
+                "gemini-3.5-flash-lite": false,
+                "gemini-3.8-flash": false,
+                "inconnu": false
+            },
+            "getChatUrl": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+            "getDefaultModel(chat)": "gemini-3.8-flash",
+            "getDefaultModel(transcription)": "gemini-3.5-transcribe",
+            "getProvider": "gemini",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "gemini",
+                "format": "openai-chat",
+                "temperature": false
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "x-goog-api-key"
+                },
+                "errors": "gemini",
+                "format": "gemini-interactions"
+            },
+            "getTranscriptionUrl": "https://generativelanguage.googleapis.com/v1beta/interactions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "mistral": {
+            "acceptsTemperature": {
+                "codestral-latest": true,
+                "inconnu": true,
+                "ministral-14b-latest": true,
+                "ministral-3b-latest": true,
+                "ministral-8b-latest": true,
+                "mistral-large-latest": true,
+                "mistral-medium-latest": true,
+                "mistral-small-latest": true
+            },
+            "getChatUrl": "https://api.mistral.ai/v1/chat/completions",
+            "getDefaultModel(chat)": "mistral-small-latest",
+            "getDefaultModel(transcription)": "voxtral-mini-latest",
+            "getProvider": "mistral",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart"
+            },
+            "getTranscriptionUrl": "https://api.mistral.ai/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "openai": {
+            "acceptsTemperature": {
+                "gpt-4.1": true,
+                "gpt-4.1-mini": true,
+                "gpt-4o-mini": true,
+                "gpt-5.4": true,
+                "gpt-5.4-mini": true,
+                "gpt-5.4-nano": true,
+                "gpt-5.6-luna": true,
+                "gpt-5.6-sol": true,
+                "gpt-5.6-terra": true,
+                "inconnu": true
+            },
+            "getChatUrl": "https://api.openai.com/v1/chat/completions",
+            "getDefaultModel(chat)": "gpt-4o-mini",
+            "getDefaultModel(transcription)": "gpt-transcribe",
+            "getProvider": "openai",
+            "getService(chat)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-chat"
+            },
+            "getService(transcription)": {
+                "auth": {
+                    "header": "Authorization",
+                    "scheme": "Bearer"
+                },
+                "errors": "openai",
+                "format": "openai-multipart"
+            },
+            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": true,
+            "supportsService(transcription)": true,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        },
+        "provider-futur": {
+            "acceptsTemperature": {
+                "inconnu": true
+            },
+            "getChatUrl": "https://api.openai.com/v1/chat/completions",
+            "getDefaultModel(chat)": null,
+            "getDefaultModel(transcription)": null,
+            "getProvider": null,
+            "getService(chat)": null,
+            "getService(transcription)": null,
+            "getTranscriptionUrl": "https://api.openai.com/v1/audio/transcriptions",
+            "isModelAvailable(chat, inconnu)": false,
+            "isModelAvailable(chat, perso)": true,
+            "isModelAvailable(transcription, inconnu)": false,
+            "isModelAvailable(transcription, perso)": true,
+            "supportsNoLog": false,
+            "supportsService(chat)": false,
+            "supportsService(transcription)": false,
+            "urlsPersonnalisees": [
+                "http://localhost:4000/t",
+                "x"
+            ]
+        }
+    },
+    "accesseurs transverses": {
+        "createDefaultProvidersConfig": {
+            "custom": {
+                "apiKey": "",
+                "chatModels": [],
+                "chatUrl": "",
+                "enabled": false,
+                "transcriptionModels": [],
+                "transcriptionUrl": ""
+            },
+            "mistral": {
+                "apiKey": "",
+                "chatModels": [],
+                "enabled": false,
+                "transcriptionModels": []
+            },
+            "openai": {
+                "apiKey": "",
+                "chatModels": [],
+                "enabled": false,
+                "transcriptionModels": []
+            }
+        },
+        "detectProviderFromModel": [
+            "openai",
+            "openai",
+            "mistral",
+            "mistral",
+            "mistral",
+            "openai"
+        ],
+        "getAllModels": [
+            [
+                {
+                    "fullId": "openai/gpt-transcribe",
+                    "id": "gpt-transcribe",
+                    "isDefault": true,
+                    "name": "OpenAI: gpt-transcribe",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/whisper-1",
+                    "id": "whisper-1",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: whisper-1",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-4o-mini-transcribe",
+                    "id": "gpt-4o-mini-transcribe",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-4o-mini-transcribe",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-4o-transcribe",
+                    "id": "gpt-4o-transcribe",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-4o-transcribe",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "mistral/voxtral-mini-latest",
+                    "id": "voxtral-mini-latest",
+                    "isDefault": true,
+                    "name": "Mistral AI: Voxtral Mini",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "custom/whisper-1",
+                    "id": "whisper-1",
+                    "isDefault": true,
+                    "name": "Custom/LiteLLM: whisper-1",
+                    "providerId": "custom"
+                },
+                {
+                    "fullId": "custom/whisper",
+                    "id": "whisper",
+                    "isDefault": "<undefined>",
+                    "name": "Custom/LiteLLM: whisper",
+                    "providerId": "custom"
+                },
+                {
+                    "fullId": "custom/perso",
+                    "id": "perso",
+                    "isDefault": false,
+                    "name": "Custom: perso",
+                    "providerId": "custom"
+                }
+            ],
+            [
+                {
+                    "fullId": "openai/gpt-4o-mini",
+                    "id": "gpt-4o-mini",
+                    "isDefault": true,
+                    "name": "OpenAI: gpt-4o-mini",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-4.1-mini",
+                    "id": "gpt-4.1-mini",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-4.1-mini",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-4.1",
+                    "id": "gpt-4.1",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-4.1",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.4-nano",
+                    "id": "gpt-5.4-nano",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.4-nano",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.4-mini",
+                    "id": "gpt-5.4-mini",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.4-mini",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.4",
+                    "id": "gpt-5.4",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.4",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.6-luna",
+                    "id": "gpt-5.6-luna",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.6-luna",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.6-terra",
+                    "id": "gpt-5.6-terra",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.6-terra",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "openai/gpt-5.6-sol",
+                    "id": "gpt-5.6-sol",
+                    "isDefault": "<undefined>",
+                    "name": "OpenAI: gpt-5.6-sol",
+                    "providerId": "openai"
+                },
+                {
+                    "fullId": "mistral/mistral-small-latest",
+                    "id": "mistral-small-latest",
+                    "isDefault": true,
+                    "name": "Mistral AI: Mistral Small",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/mistral-medium-latest",
+                    "id": "mistral-medium-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Mistral Medium",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/mistral-large-latest",
+                    "id": "mistral-large-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Mistral Large",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/codestral-latest",
+                    "id": "codestral-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Codestral",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/ministral-3b-latest",
+                    "id": "ministral-3b-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Ministral 3B",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/ministral-8b-latest",
+                    "id": "ministral-8b-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Ministral 8B",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "mistral/ministral-14b-latest",
+                    "id": "ministral-14b-latest",
+                    "isDefault": "<undefined>",
+                    "name": "Mistral AI: Ministral 14B",
+                    "providerId": "mistral"
+                },
+                {
+                    "fullId": "custom/gpt-4o-mini",
+                    "id": "gpt-4o-mini",
+                    "isDefault": true,
+                    "name": "Custom/LiteLLM: GPT-4o Mini",
+                    "providerId": "custom"
+                },
+                {
+                    "fullId": "custom/perso",
+                    "id": "perso",
+                    "isDefault": false,
+                    "name": "Custom: perso",
+                    "providerId": "custom"
+                }
+            ]
+        ],
+        "getEnabledProviders": [
+            [
+                "openai"
+            ],
+            [
+                "openai",
+                "custom"
+            ]
+        ],
+        "getProviderOrder": [
+            "openai",
+            "mistral",
+            "custom",
+            "gemini"
+        ],
+        "getUiOrder": [
+            "mistral",
+            "openai",
+            "gemini",
+            "custom"
+        ],
+        "isValidUrl": [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+        ],
+        "parseFullModelId": [
+            {
+                "modelId": "gpt-4o-mini",
+                "providerId": "openai"
+            },
+            {
+                "modelId": "x",
+                "providerId": "mistral"
+            },
+            {
+                "modelId": "__proto__/x",
+                "providerId": "openai"
+            },
+            {
+                "modelId": "gpt-4o-mini",
+                "providerId": "openai"
+            },
+            {
+                "modelId": "voxtral-mini-latest",
+                "providerId": "mistral"
+            },
+            {
+                "modelId": "",
+                "providerId": "openai"
+            },
+            {
+                "modelId": "",
+                "providerId": "openai"
+            }
+        ]
+    },
+    "données du registre": {
+        "exports": [
+            "DEFAULT_SERVICE",
+            "acceptsTemperature",
+            "authHeaderNames",
+            "createDefaultProvidersConfig",
+            "detectProviderFromModel",
+            "getAllModels",
+            "getAllProviders",
+            "getChatUrl",
+            "getDefaultModel",
+            "getEnabledProviders",
+            "getProvider",
+            "getProviderOrder",
+            "getService",
+            "getTranscriptionUrl",
+            "getUiOrder",
+            "isModelAvailable",
+            "isValidUrl",
+            "parseFullModelId",
+            "supportsNoLog",
+            "supportsService"
+        ],
+        "gele": true,
+        "ordre": [
+            "openai",
+            "mistral",
+            "custom",
+            "gemini"
+        ],
+        "providers": {
+            "custom": {
+                "chatModels": [
+                    {
+                        "default": true,
+                        "id": "gpt-4o-mini",
+                        "name": "GPT-4o Mini"
+                    }
+                ],
+                "defaultUrls": {
+                    "chat": "",
+                    "transcription": ""
+                },
+                "id": "custom",
+                "name": "Custom/LiteLLM",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat",
+                        "urlSetting": "chatUrl"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart",
+                        "urlSetting": "transcriptionUrl"
+                    }
+                },
+                "supportsNoLog": true,
+                "transcriptionModels": [
+                    {
+                        "default": true,
+                        "id": "whisper-1",
+                        "name": "whisper-1"
+                    },
+                    {
+                        "id": "whisper",
+                        "name": "whisper"
+                    }
+                ],
+                "ui": {
+                    "emoji": "🚅",
+                    "order": 90,
+                    "short": "Cus",
+                    "statusName": "Custom"
+                }
+            },
+            "gemini": {
+                "chatModels": [
+                    {
+                        "default": true,
+                        "id": "gemini-3.8-flash",
+                        "name": "Gemini 3.8 Flash",
+                        "reasoningEffort": "low"
+                    },
+                    {
+                        "id": "gemini-3.5-flash-lite",
+                        "name": "Gemini 3.5 Flash-Lite"
+                    }
+                ],
+                "defaultUrls": {
+                    "chat": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+                    "transcription": "https://generativelanguage.googleapis.com/v1beta/interactions"
+                },
+                "id": "gemini",
+                "name": "Gemini",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "gemini",
+                        "format": "openai-chat",
+                        "temperature": false
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "x-goog-api-key"
+                        },
+                        "errors": "gemini",
+                        "format": "gemini-interactions"
+                    }
+                },
+                "supportsNoLog": false,
+                "transcriptionModels": [
+                    {
+                        "default": true,
+                        "id": "gemini-3.5-transcribe",
+                        "name": "Gemini 3.5 Transcribe"
+                    }
+                ],
+                "ui": {
+                    "keyUrl": "https://aistudio.google.com/apikey",
+                    "logo": "images/gemini-logo.png",
+                    "noteKey": "geminiKeyNote",
+                    "order": 30,
+                    "short": "Gem",
+                    "statusName": "Gemini"
+                }
+            },
+            "mistral": {
+                "chatModels": [
+                    {
+                        "default": true,
+                        "id": "mistral-small-latest",
+                        "name": "Mistral Small"
+                    },
+                    {
+                        "id": "mistral-medium-latest",
+                        "name": "Mistral Medium"
+                    },
+                    {
+                        "id": "mistral-large-latest",
+                        "name": "Mistral Large"
+                    },
+                    {
+                        "id": "codestral-latest",
+                        "name": "Codestral"
+                    },
+                    {
+                        "id": "ministral-3b-latest",
+                        "name": "Ministral 3B"
+                    },
+                    {
+                        "id": "ministral-8b-latest",
+                        "name": "Ministral 8B"
+                    },
+                    {
+                        "id": "ministral-14b-latest",
+                        "name": "Ministral 14B"
+                    }
+                ],
+                "defaultUrls": {
+                    "chat": "https://api.mistral.ai/v1/chat/completions",
+                    "transcription": "https://api.mistral.ai/v1/audio/transcriptions"
+                },
+                "id": "mistral",
+                "name": "Mistral AI",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart"
+                    }
+                },
+                "supportsNoLog": false,
+                "transcriptionModels": [
+                    {
+                        "default": true,
+                        "id": "voxtral-mini-latest",
+                        "name": "Voxtral Mini"
+                    }
+                ],
+                "ui": {
+                    "keyUrl": "https://console.mistral.ai/api-keys",
+                    "logo": "images/mistral-logo.png",
+                    "order": 10,
+                    "short": "Mis",
+                    "statusName": "Mistral"
+                }
+            },
+            "openai": {
+                "chatModels": [
+                    {
+                        "default": true,
+                        "id": "gpt-4o-mini",
+                        "name": "gpt-4o-mini"
+                    },
+                    {
+                        "id": "gpt-4.1-mini",
+                        "name": "gpt-4.1-mini"
+                    },
+                    {
+                        "id": "gpt-4.1",
+                        "name": "gpt-4.1"
+                    },
+                    {
+                        "id": "gpt-5.4-nano",
+                        "name": "gpt-5.4-nano"
+                    },
+                    {
+                        "id": "gpt-5.4-mini",
+                        "name": "gpt-5.4-mini"
+                    },
+                    {
+                        "id": "gpt-5.4",
+                        "name": "gpt-5.4"
+                    },
+                    {
+                        "id": "gpt-5.6-luna",
+                        "name": "gpt-5.6-luna"
+                    },
+                    {
+                        "id": "gpt-5.6-terra",
+                        "name": "gpt-5.6-terra"
+                    },
+                    {
+                        "id": "gpt-5.6-sol",
+                        "name": "gpt-5.6-sol"
+                    }
+                ],
+                "defaultUrls": {
+                    "chat": "https://api.openai.com/v1/chat/completions",
+                    "transcription": "https://api.openai.com/v1/audio/transcriptions"
+                },
+                "id": "openai",
+                "name": "OpenAI",
+                "services": {
+                    "chat": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-chat"
+                    },
+                    "transcription": {
+                        "auth": {
+                            "header": "Authorization",
+                            "scheme": "Bearer"
+                        },
+                        "errors": "openai",
+                        "format": "openai-multipart"
+                    }
+                },
+                "supportsNoLog": false,
+                "transcriptionModels": [
+                    {
+                        "default": true,
+                        "id": "gpt-transcribe",
+                        "name": "gpt-transcribe"
+                    },
+                    {
+                        "id": "whisper-1",
+                        "name": "whisper-1"
+                    },
+                    {
+                        "id": "gpt-4o-mini-transcribe",
+                        "name": "gpt-4o-mini-transcribe"
+                    },
+                    {
+                        "id": "gpt-4o-transcribe",
+                        "name": "gpt-4o-transcribe"
+                    }
+                ],
+                "ui": {
+                    "keyUrl": "https://platform.openai.com/account/api-keys",
+                    "logo": "images/openai-logo.png",
+                    "order": 20,
+                    "short": "OAI",
+                    "statusName": "OpenAI"
+                }
+            }
+        }
+    }
+}

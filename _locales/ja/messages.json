@@ -103,6 +103,38 @@
         "message": "オプションを保存しました！",
         "description": "保存確認メッセージ"
     },
+    "saveErrorMessage": {
+        "message": "エラー: オプションを保存できませんでした ($error$)。",
+        "description": "オプションの保存に失敗したときのエラーメッセージ ($error$: ブラウザーのメッセージ)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "新しいバージョンのプロバイダー",
+        "description": "新しいバージョンが保存したプロバイダーのセクションの見出し"
+    },
+    "unknownProvidersDescription": {
+        "message": "BabelFishAIの新しいバージョン（たとえば別のデバイス上）がこれらのプロバイダーを保存しました。このバージョンでは使用できないため、設定をそのまま保持します。削除すると、同期しているすべてのデバイスから削除されます。",
+        "description": "新しいバージョンのプロバイダーのセクションの説明"
+    },
+    "unknownProviderDelete": {
+        "message": "削除",
+        "description": "新しいバージョンのプロバイダーの設定を削除するボタン"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$（新しいバージョン）",
+        "description": "新しいバージョンが保存したプロバイダーを示すサービス選択の項目（$provider$: その識別子）",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "あなたのOpenAI APIキー（sk-...）",
         "description": "APIキーのプレースホルダー"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "エラー: URLはHTTPSを使用する必要があります。",
         "description": "無効なURLのエラーメッセージ"
+    },
+    "geminiKeyNote": {
+        "message": "ヒント：請求先アカウントが有効なプロジェクトのキーを使用してください。無料のキーでは、EEA、スイス、英国の外にいる場合、Google が音声入力の内容や送信したテキストを製品の改善に使用し、人間が確認することがあります。無料のキーで個人情報、機密情報、秘密の情報を送信しないでください。キーは Gemini API に制限し（新しいキーの既定の設定）、ウェブサイトには制限しないでください。",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

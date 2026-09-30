@@ -2,6 +2,7 @@
  * Utilitaires pour la gestion de la bannière d'état et des contrôles associés
  * Ce module fait partie de BabelFishAI et gère l'interface utilisateur de la bannière
  */
+/* global chrome */
 (function (exports) {
     'use strict';
 
@@ -368,6 +369,7 @@
         banner.setAttribute('role', 'status');
         banner.setAttribute('aria-live', 'polite');
         banner.setAttribute('data-extension', 'babelfishai'); // Ajouter l'attribut data-extension
+        globalThis.BabelFishAIUtils.i18n?.setElementLanguage?.(banner);
 
         // Fonction pour configurer le contenu de la bannière une fois les traductions chargées
         const setupBannerContent = () => {
@@ -540,6 +542,38 @@
         }
     }
 
+    // Place réservée en haut de la page pendant l'affichage du bandeau, qui est en position fixe
+    const BANNER_PAGE_OFFSET = '35px';
+    // `padding-top` en ligne de <body> avant l'affichage du bandeau, avec sa priorité
+    // (null : aucune place réservée)
+    let bodyPaddingBeforeBanner = null;
+
+    /**
+     * Réserve la place du bandeau en haut de la page pendant son affichage. Au masquage, rend à
+     * <body> sa valeur d'origine et sa priorité, sauf si la page l'a changée entre-temps
+     * @param {boolean} show - true quand le bandeau s'affiche, false quand il se masque
+     */
+    function reserveBannerSpace(show) {
+        const style = document.body?.style;
+        if (!style) return;
+        if (show) {
+            if (bodyPaddingBeforeBanner === null) {
+                bodyPaddingBeforeBanner = {
+                    value: style.getPropertyValue('padding-top'),
+                    priority: style.getPropertyPriority('padding-top'),
+                };
+                style.paddingTop = BANNER_PAGE_OFFSET;
+            }
+            return;
+        }
+        if (bodyPaddingBeforeBanner === null) return;
+        if (style.paddingTop === BANNER_PAGE_OFFSET) {
+            const { value, priority } = bodyPaddingBeforeBanner;
+            style.setProperty('padding-top', value, priority);
+        }
+        bodyPaddingBeforeBanner = null;
+    }
+
     /**
      * Affiche ou masque la bannière
      * @param {HTMLElement} banner - L'élément bannière à afficher/masquer
@@ -549,6 +583,9 @@
         if (!banner) return;
 
         banner.style.display = show ? 'flex' : 'none';
+        // Une page qui remplace <body> en naviguant (Turbo Drive…) laisse le bandeau hors du
+        // document : ne pas lui réserver une place qui resterait vide
+        reserveBannerSpace(show && banner.isConnected);
     }
 
     /**

@@ -1,14 +1,72 @@
 // Script de gestion des options
 /* global chrome */ // Global de l'API d'extension Chrome
 
+// Panneaux statiques des providers historiques (options.html). Leur ordre est celui dans lequel
+// `providers` est écrit, comme avant la refonte ; Chrome relit pourtant ces clés triées par ordre
+// alphabétique (mesuré le 29/09), et le repli du store à l'exécution suit l'ordre relu. La page,
+// elle, choisit son repli dans l'ordre d'affichage du registre. `prefix` et `dom` composent les
+// identifiants des panneaux (ex. openaiApiKey, newOpenaiChatModel)
+const STATIC_PANELS = new Map([
+    ['openai', { prefix: 'openai', dom: 'Openai', panel: 'configOpenAI', toggle: 'toggleOpenAI' }],
+    [
+        'mistral',
+        { prefix: 'mistral', dom: 'Mistral', panel: 'configMistral', toggle: 'toggleMistral' },
+    ],
+    ['custom', { prefix: 'custom', dom: 'Custom', panel: 'configCustom', toggle: 'toggleCustom' }],
+]);
+
 /**
- * Vérifie si un provider standard (OpenAI/Mistral) est activé
- * @param {HTMLInputElement} enabledCheckbox - Checkbox d'activation
- * @param {HTMLInputElement} keyInput - Input de la clé API
+ * Élément du DOM par identifiant
+ * @param {string} id
+ * @returns {HTMLElement|null}
+ */
+function byId(id) {
+    return document.getElementById(id);
+}
+
+/**
+ * Met en majuscule la première lettre (ex. transcriptionUrl → TranscriptionUrl)
+ * @param {string} text
+ * @returns {string}
+ */
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/**
+ * Éléments du panneau d'un provider, statique ou généré
+ * @param {Object} ids - Entrée de STATIC_PANELS, ou generatedPanelIds
+ * @param {string[]} urlSettings - Réglages d'URL du provider
+ * @returns {Object}
+ */
+function panelElements(ids, urlSettings) {
+    return {
+        panel: byId(ids.panel),
+        toggle: byId(ids.toggle),
+        enabled: byId(`${ids.prefix}Enabled`),
+        apiKey: byId(`${ids.prefix}ApiKey`),
+        urls: urlSettings.map((setting) => [setting, byId(`${ids.prefix}${capitalize(setting)}`)]),
+        transcriptionSelect: byId(`${ids.prefix}TranscriptionModel`),
+        chatSelect: byId(`${ids.prefix}ChatModel`),
+        newTranscriptionInput: byId(`new${ids.dom}TranscriptionModel`),
+        newChatInput: byId(`new${ids.dom}ChatModel`),
+        addTranscriptionButton: byId(`add${ids.dom}TranscriptionModel`),
+        addChatButton: byId(`add${ids.dom}ChatModel`),
+    };
+}
+
+/**
+ * Vérifie si le provider d'un panneau est prêt : activé, avec une clé API, et avec ses URLs
+ * s'il en demande (Custom)
+ * @param {Object} elements - Éléments du panneau
  * @returns {boolean}
  */
-function isStandardProviderEnabled(enabledCheckbox, keyInput) {
-    return enabledCheckbox.checked && Boolean(keyInput.value.trim());
+function isPanelReady(elements) {
+    return (
+        elements.enabled.checked &&
+        Boolean(elements.apiKey.value.trim()) &&
+        elements.urls.every(([, input]) => Boolean(input.value.trim()))
+    );
 }
 
 /**
@@ -20,14 +78,188 @@ function logShortcutGuardError(error) {
 }
 
 /**
- * Charge la configuration d'un provider standard (OpenAI/Mistral)
+ * Charge la configuration d'un provider dans son panneau
+ * @param {Object} elements - Éléments du panneau
  * @param {Object} config - Configuration du provider
- * @param {HTMLInputElement} keyInput - Input de la clé API
- * @param {HTMLInputElement} checkbox - Checkbox d'activation
  */
-function loadStandardProviderConfig(config, keyInput, checkbox) {
-    keyInput.value = config.apiKey || '';
-    checkbox.checked = config.enabled || false;
+function loadPanelConfig(elements, config) {
+    elements.apiKey.value = config.apiKey || '';
+    elements.enabled.checked = config.enabled || false;
+    for (const [setting, input] of elements.urls) {
+        // eslint-disable-next-line security/detect-object-injection -- setting vient du registre, vérifié par Object.hasOwn
+        input.value = (Object.hasOwn(config, setting) && config[setting]) || '';
+    }
+}
+
+/**
+ * Nom d'hôte de la page des clés API d'un provider (texte de son lien)
+ * @param {string|undefined} keyUrl - ui.keyUrl du registre
+ * @returns {string|null} L'hôte, ou null si l'URL manque ou ne s'analyse pas
+ */
+function keyUrlHost(keyUrl) {
+    if (!keyUrl) return null;
+    try {
+        return new URL(keyUrl).hostname;
+    } catch (error) {
+        console.error('keyUrl illisible dans le registre :', error.message);
+        return null;
+    }
+}
+
+/**
+ * Identifiants DOM du panneau généré d'un provider, de même forme que STATIC_PANELS
+ * @param {string} providerId
+ * @returns {Object}
+ */
+function generatedPanelIds(providerId) {
+    const dom = capitalize(providerId);
+    return { prefix: providerId, dom, panel: `config${dom}`, toggle: `toggle${dom}` };
+}
+
+/**
+ * Copie du premier élément d'un modèle (<template>) d'options.html
+ * @param {string} templateId
+ * @returns {HTMLElement}
+ */
+function cloneTemplate(templateId) {
+    return byId(templateId).content.firstElementChild.cloneNode(true);
+}
+
+/**
+ * Pose les identifiants d'un panneau généré, relie ses libellés, et renseigne le lien vers la
+ * page des clés API du provider
+ * @param {HTMLElement} panel - Copie de providerPanelTemplate
+ * @param {Object} ids - Identifiants (generatedPanelIds)
+ * @param {Object} provider - Entrée du registre
+ */
+function fillProviderPanel(panel, ids, provider) {
+    /**
+     * Élément du panneau copié, repéré par son data-field
+     * @param {string} name
+     * @returns {HTMLElement}
+     */
+    const field = (name) => panel.querySelector(`[data-field="${name}"]`);
+    /**
+     * Donne son identifiant à un champ du panneau et, au besoin, y relie son libellé
+     * @param {string} name - data-field du champ
+     * @param {string} id - Identifiant du champ
+     * @param {string} [labelName] - data-field de son libellé
+     */
+    const bind = (name, id, labelName) => {
+        field(name).id = id;
+        if (labelName) field(labelName).setAttribute('for', id);
+    };
+    panel.id = ids.panel;
+    panel.dataset.provider = provider.id;
+    bind('apiKey', `${ids.prefix}ApiKey`, 'apiKeyLabel');
+    field('apiKeyToggle').dataset.target = `${ids.prefix}ApiKey`;
+    bind('transcriptionSelect', `${ids.prefix}TranscriptionModel`, 'transcriptionSelectLabel');
+    bind('newTranscriptionInput', `new${ids.dom}TranscriptionModel`, 'newTranscriptionLabel');
+    bind('addTranscriptionButton', `add${ids.dom}TranscriptionModel`);
+    bind('chatSelect', `${ids.prefix}ChatModel`, 'chatSelectLabel');
+    bind('newChatInput', `new${ids.dom}ChatModel`, 'newChatLabel');
+    bind('addChatButton', `add${ids.dom}ChatModel`);
+    const keyLink = field('keyLink');
+    const host = keyUrlHost(provider.ui.keyUrl);
+    if (host) {
+        keyLink.href = provider.ui.keyUrl;
+        keyLink.textContent = host;
+    } else {
+        // Masque aussi la note, dans le même bloc : registry-rules exige un keyUrl analysable
+        keyLink.parentElement.hidden = true;
+    }
+    // Note propre au provider : une clé i18n du registre, traduite avec le reste de la page
+    if (provider.ui.noteKey) {
+        const note = field('note');
+        note.dataset.i18n = provider.ui.noteKey;
+        note.hidden = false;
+    }
+}
+
+/**
+ * Interrupteur d'activation d'un provider généré
+ * @param {Object} ids - Identifiants (generatedPanelIds)
+ * @param {Object} provider - Entrée du registre
+ * @returns {HTMLElement}
+ */
+function createProviderToggle(ids, provider) {
+    const toggle = cloneTemplate('providerToggleTemplate');
+    toggle.id = ids.toggle;
+    const checkbox = toggle.querySelector('[data-field="enabled"]');
+    checkbox.id = `${ids.prefix}Enabled`;
+    checkbox.setAttribute('aria-label', `Enable ${provider.name}`);
+    return toggle;
+}
+
+/**
+ * Ajoute un provider au menu des providers, à sa place dans l'ordre d'affichage du registre
+ * @param {Object} Providers - Registre des providers
+ * @param {Object} provider - Entrée du registre
+ */
+function insertProviderOption(Providers, provider) {
+    const selector = byId('providerSelector');
+    const option = document.createElement('option');
+    option.value = provider.id;
+    option.textContent = provider.name;
+    const next = [...selector.options].find(
+        (other) => (Providers.getProvider(other.value)?.ui.order ?? Infinity) > provider.ui.order,
+    );
+    selector.insertBefore(option, next ?? null);
+}
+
+/**
+ * Crée le panneau, l'interrupteur et l'entrée de menu d'un provider sans panneau statique
+ * @param {Object} Providers - Registre des providers
+ * @param {Object} provider - Entrée du registre
+ * @returns {Object} Identifiants du panneau (generatedPanelIds)
+ */
+function createGeneratedPanel(Providers, provider) {
+    const ids = generatedPanelIds(provider.id);
+    const panel = cloneTemplate('providerPanelTemplate');
+    fillProviderPanel(panel, ids, provider);
+    byId('providerConfigPanel').appendChild(panel);
+    byId('providerToggleWrapper').appendChild(createProviderToggle(ids, provider));
+    insertProviderOption(Providers, provider);
+    return ids;
+}
+
+/**
+ * Panneaux de la page : les trois statiques, puis un panneau généré pour chaque provider ajouté
+ * au registre après les trois historiques, à sa place dans le menu (ordre d'affichage)
+ * @param {Object} Providers - Registre des providers
+ * @param {Object} store - Stockage des providers (provider-store.js)
+ * @returns {{generatedPanels: Map<string, Object>, panels: Map<string, Object>}} Identifiants
+ *   des panneaux générés, et éléments du panneau de chaque provider (clé, activation, URLs,
+ *   modèles)
+ */
+function buildPanels(Providers, store) {
+    const generatedPanels = new Map(
+        Providers.getUiOrder()
+            .filter((id) => !STATIC_PANELS.has(id))
+            .map((id) => [id, createGeneratedPanel(Providers, Providers.getProvider(id))]),
+    );
+    // Un panneau généré n'a pas de champ d'URL : seul Custom en demande (test du registre)
+    const panels = new Map(
+        [...STATIC_PANELS, ...generatedPanels].map(([id, ids]) => [
+            id,
+            panelElements(ids, STATIC_PANELS.has(id) ? store.requiredUrlSettings(id) : []),
+        ]),
+    );
+    return { generatedPanels, panels };
+}
+
+/**
+ * Configuration sans rien à conserver : ni clé API, ni activation, ni modèle personnalisé
+ * @param {Object} config - Configuration saisie (panelConfig)
+ * @returns {boolean}
+ */
+function isEmptyConfig(config) {
+    return (
+        !config.apiKey &&
+        !config.enabled &&
+        !config.transcriptionModels.length &&
+        !config.chatModels.length
+    );
 }
 
 /**
@@ -89,6 +321,9 @@ function determineActiveProviders(enabledProviders, transcriptionSelect, chatSel
 document.addEventListener('DOMContentLoaded', async () => {
     const i18n = globalThis.BabelFishAIUtils.i18n;
     const Providers = globalThis.BabelFishAIProviders;
+    // Convention de stockage partagée avec l'extension (provider-store.js)
+    const store = globalThis.BabelFishAIProviderStore;
+    const { EXTRA_PREFIX } = store;
 
     // Éléments du DOM - Providers (nouveau design dropdown + panel)
     const providerSelector = document.getElementById('providerSelector');
@@ -96,46 +331,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dropdownStatus = document.getElementById('dropdownStatus');
     const providerConfigPanel = document.getElementById('providerConfigPanel');
 
-    const openaiEnabledCheckbox = document.getElementById('openaiEnabled');
-    const openaiApiKeyInput = document.getElementById('openaiApiKey');
+    const { generatedPanels, panels } = buildPanels(Providers, store);
+    // Panneau OpenAI : en mode legacy (sans `providers`), rempli depuis la clé héritée `apiKey`
+    const openaiPanel = panels.get('openai');
 
-    const mistralEnabledCheckbox = document.getElementById('mistralEnabled');
-    const mistralApiKeyInput = document.getElementById('mistralApiKey');
+    // Providers générés dont la clé extraProvider.<id> existe, et providers modifiés pendant la
+    // session (tous : seuls les générés sont écrits dans extraProvider.<id>, pour ne pas écraser
+    // la clé d'un autre poste)
+    const storedExtraProviders = new Set();
+    const modifiedExtraProviders = new Set();
+    // Configuration lue ou écrite de chaque provider généré : ses champs inconnus du panneau
+    // (ajoutés par une version plus récente) sont conservés à la réécriture
+    const storedExtraConfigs = new Map();
 
-    const customEnabledCheckbox = document.getElementById('customEnabled');
-    const customApiKeyInput = document.getElementById('customApiKey');
-    const customTranscriptionUrlInput = document.getElementById('customTranscriptionUrl');
-    const customChatUrlInput = document.getElementById('customChatUrl');
-
-    // Éléments DOM pour les modèles de chaque provider
-    const providerModelElements = {
-        openai: {
-            transcriptionSelect: document.getElementById('openaiTranscriptionModel'),
-            chatSelect: document.getElementById('openaiChatModel'),
-            newTranscriptionInput: document.getElementById('newOpenaiTranscriptionModel'),
-            newChatInput: document.getElementById('newOpenaiChatModel'),
-            addTranscriptionButton: document.getElementById('addOpenaiTranscriptionModel'),
-            addChatButton: document.getElementById('addOpenaiChatModel'),
-        },
-        mistral: {
-            transcriptionSelect: document.getElementById('mistralTranscriptionModel'),
-            chatSelect: document.getElementById('mistralChatModel'),
-            newTranscriptionInput: document.getElementById('newMistralTranscriptionModel'),
-            newChatInput: document.getElementById('newMistralChatModel'),
-            addTranscriptionButton: document.getElementById('addMistralTranscriptionModel'),
-            addChatButton: document.getElementById('addMistralChatModel'),
-        },
-        custom: {
-            transcriptionSelect: document.getElementById('customTranscriptionModel'),
-            chatSelect: document.getElementById('customChatModel'),
-            newTranscriptionInput: document.getElementById('newCustomTranscriptionModel'),
-            newChatInput: document.getElementById('newCustomChatModel'),
-            addTranscriptionButton: document.getElementById('addCustomTranscriptionModel'),
-            addChatButton: document.getElementById('addCustomChatModel'),
-        },
-    };
+    // Sélection lue d'une version plus récente (identifiant inconnu du registre), par service :
+    // elle est réécrite telle quelle tant que l'utilisateur ne change pas ce sélecteur
+    const futureSelection = { transcription: null, chat: null };
 
     const providerServices = document.getElementById('providerServices');
+    const unknownProvidersSection = byId('unknownProviders');
+    const unknownProvidersList = byId('unknownProvidersList');
     const transcriptionProviderSelect = document.getElementById('transcriptionProvider');
     const chatProviderSelect = document.getElementById('chatProvider');
 
@@ -193,7 +408,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /**
      * Affiche le panel de configuration du provider sélectionné
-     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
+     * @param {string} providerId - ID d'un provider du menu (historique ou généré)
      */
     function showProviderConfig(providerId) {
         // Masquer tous les panels
@@ -202,46 +417,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             config.style.display = 'none';
         });
 
-        // Mapper providerId vers l'ID du panel HTML
-        const panelIdMap = {
-            openai: 'configOpenAI',
-            mistral: 'configMistral',
-            custom: 'configCustom',
-        };
-
-        // Mapper providerId vers le logo
-        const logoMap = {
-            openai: '../../../images/openai-logo.png',
-            mistral: '../../../images/mistral-logo.png',
-            custom: null, // Emoji 🚅 pour LiteLLM
-        };
-
-        // Mettre à jour le logo à côté du dropdown
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-        const logoSrc = logoMap[providerId];
-        if (logoSrc) {
-            providerLogo.src = logoSrc;
-            providerLogo.style.display = 'block';
-            // Masquer l'emoji si présent
-            const emojiEl = document.getElementById('providerLogoEmoji');
-            if (emojiEl) emojiEl.style.display = 'none';
-        } else {
-            // Pour Custom/LiteLLM, utiliser l'emoji train
-            providerLogo.style.display = 'none';
-            let emojiEl = document.getElementById('providerLogoEmoji');
-            if (!emojiEl) {
-                emojiEl = document.createElement('span');
-                emojiEl.id = 'providerLogoEmoji';
-                emojiEl.className = 'provider-selector-emoji';
-                providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
-            }
-            emojiEl.textContent = '🚅';
-            emojiEl.style.display = 'block';
-        }
+        // Mettre à jour le logo à côté du dropdown (registre : logo, ou emoji sans logo officiel)
+        showProviderLogo(Providers.getProvider(providerId)?.ui);
 
         // Afficher le panel sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const targetConfig = document.getElementById(panelIdMap[providerId]);
+        const targetConfig = panels.get(providerId)?.panel;
         if (targetConfig) {
             targetConfig.style.display = 'block';
         }
@@ -254,26 +434,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Affiche le toggle ON/OFF du provider sélectionné
+     * Affiche le logo du provider à côté du dropdown, ou son emoji s'il n'a pas de logo
+     * officiel (🚅 pour Custom/LiteLLM)
+     * @param {Object|undefined} ui - Présentation du provider dans le registre
+     */
+    function showProviderLogo(ui) {
+        if (ui?.logo) {
+            providerLogo.src = `../../../${ui.logo}`;
+            providerLogo.style.display = 'block';
+            // Masquer l'emoji si présent
+            const emojiEl = document.getElementById('providerLogoEmoji');
+            if (emojiEl) emojiEl.style.display = 'none';
+            return;
+        }
+        providerLogo.style.display = 'none';
+        let emojiEl = document.getElementById('providerLogoEmoji');
+        if (!emojiEl) {
+            emojiEl = document.createElement('span');
+            emojiEl.id = 'providerLogoEmoji';
+            emojiEl.className = 'provider-selector-emoji';
+            // Décoratif, comme le logo (alt="") : le menu voisin nomme déjà le provider, alors
+            // qu'un lecteur d'écran lirait par exemple « train à grande vitesse » pour 🚅
+            emojiEl.setAttribute('aria-hidden', 'true');
+            providerLogo.parentNode.insertBefore(emojiEl, providerLogo);
+        }
+        emojiEl.textContent = ui?.emoji ?? '🚅';
+        emojiEl.style.display = 'block';
+    }
+
+    /**
+     * Affiche le toggle ON/OFF du provider sélectionné, et masque les autres
      * @param {string} providerId - ID du provider
      */
     function showProviderToggle(providerId) {
-        const toggles = {
-            openai: document.getElementById('toggleOpenAI'),
-            mistral: document.getElementById('toggleMistral'),
-            custom: document.getElementById('toggleCustom'),
-        };
-
-        // Masquer tous les toggles
-        Object.values(toggles).forEach((toggle) => {
-            if (toggle) toggle.style.display = 'none';
-        });
-
-        // Afficher le toggle du provider sélectionné
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        if (toggles[providerId]) {
-            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-            toggles[providerId].style.display = 'inline-block';
+        for (const [id, elements] of panels) {
+            if (elements.toggle) {
+                elements.toggle.style.display = id === providerId ? 'inline-block' : 'none';
+            }
         }
     }
 
@@ -282,14 +479,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} providerId - ID du provider
      */
     function updatePanelBorder(providerId) {
-        let isEnabled = false;
-        if (providerId === 'openai') {
-            isEnabled = openaiEnabledCheckbox.checked;
-        } else if (providerId === 'mistral') {
-            isEnabled = mistralEnabledCheckbox.checked;
-        } else if (providerId === 'custom') {
-            isEnabled = customEnabledCheckbox.checked;
-        }
+        const isEnabled = panels.get(providerId)?.enabled.checked ?? false;
 
         if (isEnabled) {
             providerConfigPanel.style.borderColor = 'var(--primary-color-2)';
@@ -302,13 +492,10 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage des status à côté du dropdown
      */
     function updateDropdownStatus() {
-        const providers = ['mistral', 'openai', 'custom'];
-        const shortNames = { openai: 'OAI', mistral: 'Mis', custom: 'Cus' };
-
         // Vider le contenu existant de manière sécurisée
         dropdownStatus.textContent = '';
 
-        providers.forEach((providerId) => {
+        displayedProviderIds().forEach((providerId) => {
             const status = getProviderStatus(providerId);
             let cssClass = 'status-dot';
             let symbol = '';
@@ -327,8 +514,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const span = document.createElement('span');
             span.className = cssClass;
             span.title = status.name;
-            // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient d'un tableau de providers contrôlé
-            span.textContent = `${symbol} ${shortNames[providerId]}`;
+            span.textContent = `${symbol} ${Providers.getProvider(providerId).ui.short}`;
             dropdownStatus.appendChild(span);
         });
     }
@@ -339,45 +525,25 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {Object} Statut du provider
      */
     function getProviderStatus(providerId) {
-        let enabledCheckbox, apiKeyInputEl, name; // skipcq: JS-0119 - Variables assignées intentionnellement dans des blocs if/else
-
-        if (providerId === 'openai') {
-            enabledCheckbox = openaiEnabledCheckbox;
-            apiKeyInputEl = openaiApiKeyInput;
-            name = 'OpenAI';
-        } else if (providerId === 'mistral') {
-            enabledCheckbox = mistralEnabledCheckbox;
-            apiKeyInputEl = mistralApiKeyInput;
-            name = 'Mistral';
-        } else if (providerId === 'custom') {
-            enabledCheckbox = customEnabledCheckbox;
-            apiKeyInputEl = customApiKeyInput;
-            name = 'Custom';
-        } else {
+        const elements = panels.get(providerId);
+        if (!elements) {
             return { enabled: false, configured: false, name: '' };
         }
 
-        const isEnabled = enabledCheckbox.checked;
-        const hasApiKey = apiKeyInputEl.value.trim().length > 0;
-
-        // Pour le provider custom, vérifier aussi les URLs
-        let hasRequiredUrls = true;
-        if (providerId === 'custom') {
-            hasRequiredUrls =
-                customTranscriptionUrlInput.value.trim().length > 0 &&
-                customChatUrlInput.value.trim().length > 0;
-        }
+        const hasApiKey = elements.apiKey.value.trim().length > 0;
+        // Pour un provider qui demande des URLs (Custom), vérifier aussi qu'elles sont saisies
+        const hasRequiredUrls = elements.urls.every(([, input]) => input.value.trim().length > 0);
 
         return {
-            enabled: isEnabled,
-            configured: hasApiKey && (providerId !== 'custom' || hasRequiredUrls),
-            name,
+            enabled: elements.enabled.checked,
+            configured: hasApiKey && hasRequiredUrls,
+            name: Providers.getProvider(providerId).ui.statusName,
         };
     }
 
     /**
      * Met à jour l'affichage visuel d'un provider (appelé après changement)
-     * @param {string} providerId - ID du provider ('openai', 'mistral' ou 'custom')
+     * @param {string} providerId - ID du provider
      */
     function updateProviderDisplay(providerId) {
         // Mettre à jour les badges de statut
@@ -408,33 +574,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Vérifie si le provider custom est activé (nécessite URLs en plus)
-     * @returns {boolean}
+     * Providers qui ont un panneau, dans l'ordre d'affichage du registre (Mistral, OpenAI, Custom)
+     * @returns {string[]} Liste des IDs
      */
-    function isCustomProviderEnabled() {
-        const hasApiKey = customEnabledCheckbox.checked && Boolean(customApiKeyInput.value.trim());
-        const hasUrls =
-            Boolean(customTranscriptionUrlInput.value.trim()) &&
-            Boolean(customChatUrlInput.value.trim());
-        return hasApiKey && hasUrls;
+    function displayedProviderIds() {
+        return Providers.getUiOrder().filter((providerId) => panels.has(providerId));
     }
 
     /**
-     * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom)
+     * Récupère la liste des IDs de providers activés (avec clé API et URLs pour custom), dans
+     * l'ordre d'affichage : le premier sert de repli pour les sélecteurs de service
      * @returns {string[]} Liste des IDs
      */
     function getEnabledProviderIds() {
-        const enabled = [];
-        if (isStandardProviderEnabled(mistralEnabledCheckbox, mistralApiKeyInput)) {
-            enabled.push('mistral');
-        }
-        if (isStandardProviderEnabled(openaiEnabledCheckbox, openaiApiKeyInput)) {
-            enabled.push('openai');
-        }
-        if (isCustomProviderEnabled()) {
-            enabled.push('custom');
-        }
-        return enabled;
+        return displayedProviderIds().filter((providerId) => isPanelReady(panels.get(providerId)));
     }
 
     /**
@@ -474,36 +627,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (enabledProviders.includes(currentChat)) {
             chatProviderSelect.value = currentChat;
         }
+
+        // Une sélection d'une version plus récente reste affichée telle qu'elle est écrite,
+        // jusqu'à ce que l'utilisateur choisisse un autre provider
+        showFutureSelection(transcriptionProviderSelect, futureSelection.transcription);
+        showFutureSelection(chatProviderSelect, futureSelection.chat);
     }
 
     /**
-     * Charge la configuration du provider custom
-     * @param {Object} config - Configuration du provider custom
+     * Ajoute à un sélecteur de service l'option sélectionnée d'un provider d'une version plus
+     * récente, que cette version ne sait pas utiliser
+     * @param {HTMLSelectElement} select - Sélecteur de service
+     * @param {string|null} providerId - Sélection gardée pour ce service, ou null
      */
-    function loadCustomProviderConfig(config) {
-        customApiKeyInput.value = config.apiKey || '';
-        customEnabledCheckbox.checked = config.enabled || false;
-        customTranscriptionUrlInput.value = config.transcriptionUrl || '';
-        customChatUrlInput.value = config.chatUrl || '';
+    function showFutureSelection(select, providerId) {
+        if (!providerId) return;
+        const option = document.createElement('option');
+        option.value = providerId;
+        option.textContent = i18n.getMessage('newerVersionProviderOption', {
+            provider: providerId,
+        });
+        select.appendChild(option);
+        select.value = providerId;
     }
 
     /**
      * Peuple les sélecteurs de modèles pour tous les providers
-     * @param {Object} configs - Configurations des providers {openai, mistral, custom}
+     * @param {Map<string, Object>} configs - Configuration de chaque provider
      */
     function populateAllModelSelects(configs) {
-        const providerIds = ['openai', 'mistral', 'custom'];
         const modelTypes = ['transcription', 'chat'];
 
-        for (const providerId of providerIds) {
-            // eslint-disable-next-line security/detect-object-injection -- providerId provient d'un tableau constant
-            const config = configs[providerId] || {};
+        for (const providerId of panels.keys()) {
+            const config = configs.get(providerId) || {};
             for (const modelType of modelTypes) {
                 const models = config[`${modelType}Models`] || [];
-                const selected =
-                    config[
-                        `selected${modelType.charAt(0).toUpperCase() + modelType.slice(1)}Model`
-                    ];
+                const selected = config[`selected${capitalize(modelType)}Model`];
                 populateProviderModelSelect(providerId, modelType, models, selected);
             }
         }
@@ -513,9 +672,9 @@ document.addEventListener('DOMContentLoaded', async () => {
      * Met à jour l'affichage de tous les providers
      */
     function updateAllProviderDisplays() {
-        updateProviderDisplay('openai');
-        updateProviderDisplay('mistral');
-        updateProviderDisplay('custom');
+        for (const providerId of panels.keys()) {
+            updateProviderDisplay(providerId);
+        }
         updateDropdownStatus();
         updatePanelBorder(providerSelector.value);
     }
@@ -538,6 +697,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * Configuration enregistrée de chaque provider, et providers générés dont la clé existe
+     * @param {Object} items - Données lues dans le stockage
+     * @returns {Map<string, Object>}
+     */
+    function storedConfigs(items) {
+        storedExtraProviders.clear();
+        const configs = new Map();
+        for (const id of panels.keys()) {
+            const config = store.getProviderConfig(items, id) || {};
+            if (STATIC_PANELS.has(id)) {
+                configs.set(id, config);
+                continue;
+            }
+            if (Object.keys(config).length) storedExtraProviders.add(id);
+            storedExtraConfigs.set(id, config);
+            configs.set(id, config);
+        }
+        return configs;
+    }
+
+    /**
+     * Identifiant de provider inconnu de cette version, écrit par une version plus récente
+     * @param {*} value - Valeur lue pour la sélection d'un service
+     * @returns {string|null} La valeur si c'est un tel identifiant, sinon null
+     */
+    function unknownProviderId(value) {
+        // Même forme que les identifiants du registre (motif imposé par
+        // tests/registry-rules.test.mjs), et jamais un nom hérité d'Object (__proto__,
+        // constructor) : une valeur corrompue suit la règle habituelle
+        const plausible =
+            typeof value === 'string' &&
+            /^[a-z][a-z0-9-]*$/.test(value) &&
+            !Object.hasOwn(Object.prototype, value);
+        return plausible && !Providers.getProvider(value) ? value : null;
+    }
+
+    /**
      * Charge la configuration des providers depuis le storage
      */
     function loadProvidersConfig() {
@@ -548,38 +744,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                 transcriptionProvider: 'openai',
                 chatProvider: 'openai',
                 apiKey: '', // Legacy key pour migration
+                ...Object.fromEntries(
+                    [...generatedPanels.keys()].map((id) => [`${EXTRA_PREFIX}${id}`, null]),
+                ),
             },
             (items) => {
-                // skipcq: JS-0002 - debug log for options loading diagnostics (extension legitimate console use)
-                // eslint-disable-next-line no-console -- Debug log for options loading diagnostics
-                console.log('[Options] Loading providers config:', items);
-
-                const configs = {
-                    openai: items.providers?.openai || {},
-                    mistral: items.providers?.mistral || {},
-                    custom: items.providers?.custom || {},
-                };
+                const configs = storedConfigs(items);
 
                 if (items.providers) {
                     // Mode multi-provider
-                    loadStandardProviderConfig(
-                        configs.openai,
-                        openaiApiKeyInput,
-                        openaiEnabledCheckbox,
-                    );
-                    loadStandardProviderConfig(
-                        configs.mistral,
-                        mistralApiKeyInput,
-                        mistralEnabledCheckbox,
-                    );
-                    loadCustomProviderConfig(configs.custom);
+                    for (const id of STATIC_PANELS.keys()) {
+                        loadPanelConfig(panels.get(id), configs.get(id));
+                    }
                 } else {
-                    // Mode legacy : utiliser l'ancienne clé API pour OpenAI
-                    openaiApiKeyInput.value = items.apiKey || '';
-                    openaiEnabledCheckbox.checked = Boolean(items.apiKey);
-                    mistralEnabledCheckbox.checked = false;
-                    customEnabledCheckbox.checked = false;
+                    // Mode legacy : utiliser l'ancienne clé API pour OpenAI, les autres coupés
+                    openaiPanel.apiKey.value = items.apiKey || '';
+                    for (const id of STATIC_PANELS.keys()) {
+                        panels.get(id).enabled.checked = id === 'openai' && Boolean(items.apiKey);
+                    }
                 }
+                for (const id of generatedPanels.keys()) {
+                    loadPanelConfig(panels.get(id), configs.get(id));
+                }
+                futureSelection.transcription = unknownProviderId(items.transcriptionProvider);
+                futureSelection.chat = unknownProviderId(items.chatProvider);
 
                 populateAllModelSelects(configs);
                 updateAllProviderDisplays();
@@ -598,55 +786,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * Sauvegarde la configuration des providers
+     * Configuration d'un provider telle que saisie dans son panneau
+     * @param {string} providerId - ID du provider
+     * @param {Object} elements - Éléments du panneau
+     * @returns {Object}
      */
-    function saveProvidersConfig() {
-        const providers = {
-            openai: {
-                apiKey: openaiApiKeyInput.value.trim(),
-                enabled: openaiEnabledCheckbox.checked,
-                transcriptionModels: getProviderCustomModels('openai', 'transcription'),
-                chatModels: getProviderCustomModels('openai', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('openai', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('openai', 'chat'),
-            },
-            mistral: {
-                apiKey: mistralApiKeyInput.value.trim(),
-                enabled: mistralEnabledCheckbox.checked,
-                transcriptionModels: getProviderCustomModels('mistral', 'transcription'),
-                chatModels: getProviderCustomModels('mistral', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('mistral', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('mistral', 'chat'),
-            },
-            custom: {
-                apiKey: customApiKeyInput.value.trim(),
-                enabled: customEnabledCheckbox.checked,
-                transcriptionUrl: customTranscriptionUrlInput.value.trim(),
-                chatUrl: customChatUrlInput.value.trim(),
-                transcriptionModels: getProviderCustomModels('custom', 'transcription'),
-                chatModels: getProviderCustomModels('custom', 'chat'),
-                selectedTranscriptionModel: getSelectedProviderModel('custom', 'transcription'),
-                selectedChatModel: getSelectedProviderModel('custom', 'chat'),
-            },
+    function panelConfig(providerId, elements) {
+        return {
+            apiKey: elements.apiKey.value.trim(),
+            enabled: elements.enabled.checked,
+            ...Object.fromEntries(
+                elements.urls.map(([setting, input]) => [setting, input.value.trim()]),
+            ),
+            transcriptionModels: getProviderCustomModels(providerId, 'transcription'),
+            chatModels: getProviderCustomModels(providerId, 'chat'),
+            selectedTranscriptionModel: getSelectedProviderModel(providerId, 'transcription'),
+            selectedChatModel: getSelectedProviderModel(providerId, 'chat'),
         };
+    }
 
-        // Valider les URLs du provider custom
-        if (!validateCustomProviderUrls(providers.custom, showStatus, i18n, Providers)) {
-            return false;
-        }
-
-        // Déterminer les providers actifs pour la sélection de service
-        const enabledProviders = getEnabledProviderIds();
-        const { transcriptionProvider, chatProvider } = determineActiveProviders(
+    /**
+     * Provider de chaque service : une sélection d'une version plus récente est gardée tant que
+     * son sélecteur n'a pas été changé, sinon la règle des providers activés s'applique
+     * @param {string[]} enabledProviders - Providers activés (getEnabledProviderIds)
+     * @returns {{transcriptionProvider: string, chatProvider: string}}
+     */
+    function serviceSelection(enabledProviders) {
+        const active = determineActiveProviders(
             enabledProviders,
             transcriptionProviderSelect,
             chatProviderSelect,
         );
+        return {
+            transcriptionProvider: futureSelection.transcription ?? active.transcriptionProvider,
+            chatProvider: futureSelection.chat ?? active.chatProvider,
+        };
+    }
 
-        // Synchroniser avec la clé legacy pour rétrocompatibilité
-        // Utiliser la clé du provider de transcription actif
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : transcriptionProvider est un ID de provider contrôlé
-        const legacyApiKey = providers[transcriptionProvider]?.apiKey || providers.openai.apiKey;
+    /**
+     * Clés des providers à enregistrer : configuration de chaque provider historique, provider
+     * de chaque service et clé héritée
+     * @returns {Object|null} providers, transcriptionProvider, chatProvider et apiKey, ou null si
+     *   la configuration est invalide (le message est déjà affiché)
+     */
+    function providersStorageUpdate() {
+        // Seuls les providers historiques vont dans `providers`, dans l'ordre de STATIC_PANELS
+        const providers = Object.fromEntries(
+            [...STATIC_PANELS.keys()].map((id) => [id, panelConfig(id, panels.get(id))]),
+        );
+
+        // Valider les URLs du provider custom
+        if (!validateCustomProviderUrls(providers.custom, showStatus, i18n, Providers)) {
+            return null;
+        }
+
+        // Déterminer les providers actifs pour la sélection de service
+        const enabledProviders = getEnabledProviderIds();
+        const { transcriptionProvider, chatProvider } = serviceSelection(enabledProviders);
+
+        // Synchroniser avec la clé legacy pour rétrocompatibilité. Les anciennes versions l'envoient
+        // toujours à OpenAI : elle ne reçoit donc que la clé OpenAI, et reste vide tant qu'OpenAI
+        // est désactivé (la clé reste enregistrée dans le champ OpenAI et dans providers.openai)
+        const legacyApiKey = providers.openai.enabled ? providers.openai.apiKey : '';
 
         // skipcq: JS-0002 - debug log for options saving diagnostics
         // eslint-disable-next-line no-console -- Debug log for options saving diagnostics
@@ -656,32 +857,287 @@ document.addEventListener('DOMContentLoaded', async () => {
             enabledProviders,
         });
 
+        return { providers, transcriptionProvider, chatProvider, apiKey: legacyApiKey };
+    }
+
+    /**
+     * Providers générés modifiés pendant la session : clé extraProvider.<id> à écrire, ou à
+     * retirer si le provider a été vidé (contrat, point 4 : jamais écrite vide). Ils cessent
+     * d'être « modifiés » ; un échec d'écriture les y remet
+     * @returns {{writes: Object, removals: string[]}}
+     */
+    function extraProvidersUpdate() {
+        const writes = {};
+        const removals = [];
+        const modified = [...generatedPanels.keys()].filter((id) => modifiedExtraProviders.has(id));
+        for (const id of modified) {
+            const config = panelConfig(id, panels.get(id));
+            if (!isEmptyConfig(config)) {
+                writes[`${EXTRA_PREFIX}${id}`] = { ...storedExtraConfigs.get(id), ...config };
+            } else if (storedExtraProviders.has(id)) {
+                removals.push(id);
+            }
+        }
+        modifiedExtraProviders.clear();
+        return { writes, removals };
+    }
+
+    /**
+     * Écriture réussie : les clés écrites existent désormais, avec la configuration écrite, et
+     * celles des providers vidés sont retirées
+     * @param {{writes: Object, removals: string[]}} extraUpdate - Résultat d'extraProvidersUpdate
+     */
+    function extraWriteSucceeded(extraUpdate) {
+        for (const [key, config] of Object.entries(extraUpdate.writes)) {
+            const id = key.slice(EXTRA_PREFIX.length);
+            storedExtraProviders.add(id);
+            storedExtraConfigs.set(id, config);
+        }
+        removeEmptiedExtraProviders(extraUpdate.removals);
+    }
+
+    /**
+     * Écriture refusée : les providers concernés redeviennent « modifiés », pour la suivante
+     * @param {{writes: Object, removals: string[]}} extraUpdate - Résultat d'extraProvidersUpdate
+     */
+    function extraWriteFailed(extraUpdate) {
+        Object.keys(extraUpdate.writes).forEach((key) =>
+            modifiedExtraProviders.add(key.slice(EXTRA_PREFIX.length)),
+        );
+        extraUpdate.removals.forEach((id) => modifiedExtraProviders.add(id));
+    }
+
+    /**
+     * Retire les clés des providers générés vidés, une fois la sélection des services écrite
+     * @param {string[]} removals - IDs des providers vidés
+     */
+    function removeEmptiedExtraProviders(removals) {
+        if (!removals.length) return;
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-        chrome.storage.sync.set(
-            {
-                providers,
-                transcriptionProvider,
-                chatProvider,
-                // Legacy keys pour rétrocompatibilité
-                apiKey: legacyApiKey,
-            },
+        chrome.storage.sync.remove(
+            removals.map((id) => `${EXTRA_PREFIX}${id}`),
             () => {
                 // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-                if (chrome.runtime.lastError) {
-                    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-                    console.error('[Options] Error saving:', chrome.runtime.lastError);
-                } else {
-                    // skipcq: JS-0002 - debug log for options saving success
-                    // eslint-disable-next-line no-console -- Debug log for options saving success
-                    console.log('[Options] Config saved successfully');
+                const error = chrome.runtime.lastError;
+                if (error) {
+                    removals.forEach((id) => modifiedExtraProviders.add(id));
+                    showStatus(
+                        i18n.getMessage('saveErrorMessage', { error: error.message }),
+                        'error',
+                    );
+                    return;
                 }
-                updateProviderDisplay('openai');
-                updateProviderDisplay('mistral');
-                updateProviderDisplay('custom');
+                removals.forEach((id) => {
+                    storedExtraProviders.delete(id);
+                    storedExtraConfigs.set(id, {});
+                });
             },
         );
+    }
 
-        return true;
+    // ===== Écritures faites ailleurs (autre page d'options, autre poste) =====
+
+    /**
+     * Met à jour ce qui concerne les providers ajoutés et les versions plus récentes après une
+     * écriture faite ailleurs, sans jamais déclencher de sauvegarde (contrat, point 5). Un panneau
+     * généré modifié pendant la session garde la saisie de l'utilisateur ; les panneaux des
+     * providers historiques ne sont pas rafraîchis, comme avant la refonte
+     * @param {Object} changes - Changements de storage.sync
+     * @param {string} area - Zone de stockage modifiée
+     */
+    function handleStorageChanges(changes, area) {
+        if (area !== 'sync') return;
+        refreshFutureSelection(changes);
+        for (const id of generatedPanels.keys()) {
+            const key = `${EXTRA_PREFIX}${id}`;
+            if (Object.hasOwn(changes, key)) {
+                // eslint-disable-next-line security/detect-object-injection -- key vérifiée par Object.hasOwn
+                refreshGeneratedPanel(id, changes[key].newValue);
+            }
+        }
+        if (Object.keys(changes).some((key) => key.startsWith(EXTRA_PREFIX))) {
+            loadUnknownProviders();
+        }
+    }
+
+    /**
+     * Sélection d'une version plus récente écrite ou remplacée ailleurs
+     * @param {Object} changes - Changements de storage.sync
+     */
+    function refreshFutureSelection(changes) {
+        const before = { ...futureSelection };
+        if (Object.hasOwn(changes, 'transcriptionProvider')) {
+            futureSelection.transcription = unknownProviderId(
+                changes.transcriptionProvider.newValue,
+            );
+        }
+        if (Object.hasOwn(changes, 'chatProvider')) {
+            futureSelection.chat = unknownProviderId(changes.chatProvider.newValue);
+        }
+        if (
+            before.transcription !== futureSelection.transcription ||
+            before.chat !== futureSelection.chat
+        ) {
+            updateServiceSelectorsVisibility();
+        }
+    }
+
+    /**
+     * Configuration d'un provider généré écrite ou retirée ailleurs : l'état enregistré suit
+     * toujours le stockage, le panneau seulement s'il n'a pas été modifié pendant la session
+     * @param {string} providerId
+     * @param {*} value - Nouvelle valeur de sa clé extraProvider.<id> (undefined si retirée)
+     */
+    function refreshGeneratedPanel(providerId, value) {
+        const config = value && typeof value === 'object' ? value : {};
+        storedExtraConfigs.set(providerId, config);
+        if (Object.keys(config).length) {
+            storedExtraProviders.add(providerId);
+        } else {
+            storedExtraProviders.delete(providerId);
+        }
+        if (modifiedExtraProviders.has(providerId)) return;
+        loadPanelConfig(panels.get(providerId), config);
+        /**
+         * Liste de modèles lue dans le stockage, vide si ce n'est pas un tableau
+         * @param {*} list
+         * @returns {Array}
+         */
+        const models = (list) => (Array.isArray(list) ? list : []);
+        populateProviderModelSelect(
+            providerId,
+            'transcription',
+            models(config.transcriptionModels),
+            config.selectedTranscriptionModel,
+        );
+        populateProviderModelSelect(
+            providerId,
+            'chat',
+            models(config.chatModels),
+            config.selectedChatModel,
+        );
+        updateProviderDisplay(providerId);
+    }
+
+    // ===== Providers d'une version plus récente =====
+
+    /**
+     * Liste les providers dont une version plus récente a écrit la clé extraProvider.<id>.
+     * Tout le stockage est lu, mais seuls les noms de clés servent : les réglages, clés API
+     * comprises, ne sont jamais affichés ni journalisés
+     * @param {number|null} [focusIndex=null] - Après un effacement, rang du bouton qui avait le
+     *   focus : il passe au bouton suivant, ou au menu des providers s'il n'en reste aucun
+     */
+    function loadUnknownProviders(focusIndex = null) {
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get(null, (items) => {
+            const ids = Object.keys(items ?? {})
+                .filter((key) => key.startsWith(EXTRA_PREFIX))
+                .map((key) => key.slice(EXTRA_PREFIX.length))
+                .filter((id) => !Providers.getProvider(id));
+            unknownProvidersList.replaceChildren(
+                ...ids.map((id, index) => createUnknownProviderItem(id, index)),
+            );
+            unknownProvidersSection.style.display = ids.length ? 'block' : 'none';
+            if (focusIndex !== null) {
+                const buttons = unknownProvidersList.querySelectorAll('button');
+                (buttons[Math.min(focusIndex, buttons.length - 1)] ?? providerSelector).focus();
+            }
+        });
+    }
+
+    /**
+     * Ligne d'un provider d'une version plus récente : son identifiant, un bouton Effacer décrit
+     * par cet identifiant, et la zone où s'affiche un échec
+     * @param {string} providerId
+     * @param {number} index - Rang dans la liste
+     * @returns {HTMLLIElement}
+     */
+    function createUnknownProviderItem(providerId, index) {
+        const item = document.createElement('li');
+        const name = document.createElement('code');
+        name.id = `unknownProvider${index}`;
+        name.textContent = providerId;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.i18n = 'unknownProviderDelete';
+        button.textContent = i18n.getMessage('unknownProviderDelete');
+        button.setAttribute('aria-describedby', name.id);
+        const result = document.createElement('output');
+        button.addEventListener('click', () =>
+            deleteUnknownProvider(providerId, { button, result, index }),
+        );
+        item.append(name, button, result);
+        return item;
+    }
+
+    /**
+     * Efface les réglages d'un provider d'une version plus récente (contrat, point 4). Si la
+     * sélection enregistrée ou gardée d'un service le vise, elle passe d'abord à un autre
+     * provider ; sa clé est retirée ensuite. Un échec s'affiche dans sa ligne, qui reste en place
+     * pour un nouvel essai ; le bouton est inactif pendant l'opération
+     * @param {string} providerId
+     * @param {{button: HTMLButtonElement, result: HTMLOutputElement, index: number}} row
+     */
+    function deleteUnknownProvider(providerId, row) {
+        row.button.disabled = true;
+        row.result.textContent = '';
+        /**
+         * Affiche l'échec dans la ligne et réactive son bouton pour un nouvel essai
+         * @param {Error} error
+         */
+        const showError = (error) => {
+            row.button.disabled = false;
+            row.result.textContent = i18n.getMessage('saveErrorMessage', { error: error.message });
+        };
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.get({ transcriptionProvider: null, chatProvider: null }, (stored) => {
+            const previous = { ...futureSelection };
+            const selected = [
+                stored?.transcriptionProvider,
+                stored?.chatProvider,
+                previous.transcription,
+                previous.chat,
+            ].includes(providerId);
+            if (futureSelection.transcription === providerId) futureSelection.transcription = null;
+            if (futureSelection.chat === providerId) futureSelection.chat = null;
+            if (!selected) {
+                removeUnknownProvider(providerId, row, showError);
+                return;
+            }
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            chrome.storage.sync.set(serviceSelection(getEnabledProviderIds()), () => {
+                // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+                const error = chrome.runtime.lastError;
+                if (error) {
+                    Object.assign(futureSelection, previous);
+                    showError(error);
+                    return;
+                }
+                removeUnknownProvider(providerId, row, showError);
+            });
+        });
+    }
+
+    /**
+     * Retire la clé extraProvider.<id> d'un provider d'une version plus récente, puis met la liste
+     * à jour (la sélection, si elle le visait, est déjà passée à un autre provider)
+     * @param {string} providerId
+     * @param {{index: number}} row - Ligne du provider
+     * @param {Function} showError - Affiche un échec dans la ligne
+     */
+    function removeUnknownProvider(providerId, row, showError) {
+        // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+        chrome.storage.sync.remove(`${EXTRA_PREFIX}${providerId}`, () => {
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            const error = chrome.runtime.lastError;
+            if (error) {
+                showError(error);
+                return;
+            }
+            showStatus(i18n.getMessage('savedMessage'), 'success');
+            loadUnknownProviders(row.index);
+        });
     }
 
     // ===== Raccourci clavier sous Firefox =====
@@ -790,15 +1246,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ===== Gestion des modèles pour tous les providers =====
 
     // Stockage temporaire des modèles personnalisés par provider
-    const providerCustomModelsCache = {
-        openai: { transcription: [], chat: [] },
-        mistral: { transcription: [], chat: [] },
-        custom: { transcription: [], chat: [] },
-    };
+    const providerCustomModelsCache = new Map(
+        [...panels.keys()].map((id) => [id, { transcription: [], chat: [] }]),
+    );
 
     /**
      * Peuple le sélecteur de modèles d'un provider (par défaut + personnalisés)
-     * @param {string} providerId - ID du provider ('openai', 'mistral', 'custom')
+     * @param {string} providerId - ID du provider
      * @param {string} modelType - 'transcription' ou 'chat'
      * @param {string[]} customModels - Liste des modèles personnalisés
      * @param {string} selectedModel - Modèle actuellement sélectionné
@@ -809,8 +1263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         customModels = [],
         selectedModel = null,
     ) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return;
 
         const selectElement =
@@ -819,8 +1272,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!selectElement) return;
 
         // Sauvegarder les modèles personnalisés dans le cache
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
-        providerCustomModelsCache[providerId][modelType] = [...customModels];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        providerCustomModelsCache.get(providerId)[modelType] = [...customModels];
 
         selectElement.innerHTML = '';
 
@@ -879,8 +1332,8 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string[]} Liste des modèles personnalisés
      */
     function getProviderCustomModels(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId et modelType sont des valeurs contrôlées
-        return providerCustomModelsCache[providerId]?.[modelType] || [];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        return providerCustomModelsCache.get(providerId)?.[modelType] || [];
     }
 
     /**
@@ -890,8 +1343,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {string} ID du modèle sélectionné
      */
     function getSelectedProviderModel(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé ('openai'|'mistral'|'custom')
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return null;
 
         const selectElement =
@@ -907,8 +1359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {{input: HTMLInputElement, select: HTMLSelectElement}|null}
      */
     function getModelAddElements(providerId, modelType) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId est un enum contrôlé
-        const elements = providerModelElements[providerId];
+        const elements = panels.get(providerId);
         if (!elements) return null;
 
         const input =
@@ -925,8 +1376,8 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {string} model - Nom du modèle
      */
     function addModelToCache(providerId, modelType, model) {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : valeurs contrôlées
-        const cache = providerCustomModelsCache[providerId][modelType];
+        // eslint-disable-next-line security/detect-object-injection -- Faux positif : modelType vaut 'transcription' ou 'chat'
+        const cache = providerCustomModelsCache.get(providerId)[modelType];
         if (!cache.includes(model)) {
             cache.push(model);
         }
@@ -948,6 +1399,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (existingOptions.includes(newModel)) {
             elements.input.value = '';
             elements.select.value = newModel;
+            // Pas de sauvegarde ici, comme avant ; la suivante reprendra ce choix
+            modifiedExtraProviders.add(providerId);
             return;
         }
 
@@ -961,6 +1414,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         elements.select.value = newModel;
 
         elements.input.value = '';
+        modifiedExtraProviders.add(providerId);
         debouncedSaveOptions();
     }
 
@@ -1041,16 +1495,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Sauvegarder les options
     function saveOptions(scrollToStatus = true) {
-        // Sauvegarder d'abord la config providers
-        if (!saveProvidersConfig()) {
-            return; // Arrêter si la validation a échoué
+        // Config providers d'abord : arrêter si la validation a échoué
+        const providersUpdate = providersStorageUpdate();
+        if (!providersUpdate) {
+            return;
         }
 
-        // Récupérer la clé API depuis le provider OpenAI pour rétrocompat
-        const legacyApiKey = openaiApiKeyInput.value.trim();
-
         const options = {
-            apiKey: legacyApiKey,
             activeDisplay: activeDisplayCheckbox.checked,
             dialogDisplay: dialogDisplayCheckbox.checked,
             dialogDuration: Number.parseInt(dialogDurationInput.value, 10),
@@ -1068,9 +1519,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             ),
         };
 
+        // Une seule écriture : les clés des providers (historiques, puis générés modifiés), puis
+        // les options générales. Un échec (quota dépassé par exemple) est affiché, et la saisie
+        // reste en place
+        const extraUpdate = extraProvidersUpdate();
         // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
-        chrome.storage.sync.set(options, () => {
-            showStatus(i18n.getMessage('savedMessage'), 'success');
+        chrome.storage.sync.set({ ...providersUpdate, ...extraUpdate.writes, ...options }, () => {
+            // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+            const error = chrome.runtime.lastError;
+            if (error) {
+                console.error('[Options] Error saving:', error.message);
+                extraWriteFailed(extraUpdate);
+                showStatus(i18n.getMessage('saveErrorMessage', { error: error.message }), 'error');
+            } else {
+                extraWriteSucceeded(extraUpdate);
+                // skipcq: JS-0002 - debug log for options saving success
+                // eslint-disable-next-line no-console -- Debug log for options saving success
+                console.log('[Options] Config saved successfully');
+                showStatus(i18n.getMessage('savedMessage'), 'success');
+            }
             if (scrollToStatus) {
                 statusElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
@@ -1079,6 +1546,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateTranslationOptionsVisibility();
             updateColorPreview();
             displayForcedDomains(options.forcedDialogDomains);
+            for (const providerId of panels.keys()) {
+                updateProviderDisplay(providerId);
+            }
         });
     }
 
@@ -1192,59 +1662,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         showProviderConfig(providerSelector.value);
     });
 
-    // Event listeners - Providers (avec debounce pour les inputs)
-    openaiEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('openai');
-        debouncedSaveOptions();
-    });
-    openaiApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (openaiApiKeyInput.value.trim()) {
-            openaiEnabledCheckbox.checked = true;
+    /**
+     * Écouteurs d'un panneau : activation, clé API et URLs (avec debounce pour les inputs)
+     * @param {string} providerId - ID du provider
+     * @param {Object} elements - Éléments du panneau
+     */
+    function setupPanelListeners(providerId, elements) {
+        /**
+         * Après une modification du panneau : le marquer comme modifié, mettre à jour son
+         * affichage et programmer la sauvegarde
+         */
+        const refresh = () => {
+            modifiedExtraProviders.add(providerId);
+            updateProviderDisplay(providerId);
+            debouncedSaveOptions();
+        };
+        elements.enabled.addEventListener('change', refresh);
+        elements.apiKey.addEventListener('input', () => {
+            // Activer automatiquement le provider si une clé est saisie
+            if (elements.apiKey.value.trim()) {
+                elements.enabled.checked = true;
+            }
+            refresh();
+        });
+        for (const [, input] of elements.urls) {
+            input.addEventListener('input', refresh);
         }
-        updateProviderDisplay('openai');
-        debouncedSaveOptions();
-    });
+    }
 
-    mistralEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('mistral');
-        debouncedSaveOptions();
-    });
-    mistralApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (mistralApiKeyInput.value.trim()) {
-            mistralEnabledCheckbox.checked = true;
-        }
-        updateProviderDisplay('mistral');
-        debouncedSaveOptions();
-    });
-
-    // Event listeners - Provider Custom
-    customEnabledCheckbox.addEventListener('change', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customApiKeyInput.addEventListener('input', () => {
-        // Activer automatiquement le provider si une clé est saisie
-        if (customApiKeyInput.value.trim()) {
-            customEnabledCheckbox.checked = true;
-        }
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customTranscriptionUrlInput.addEventListener('input', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
-    customChatUrlInput.addEventListener('input', () => {
-        updateProviderDisplay('custom');
-        debouncedSaveOptions();
-    });
+    // Event listeners - Providers
+    panels.forEach((elements, providerId) => setupPanelListeners(providerId, elements));
 
     // Event listeners - Modèles pour tous les providers
-    Object.keys(providerModelElements).forEach((providerId) => {
-        // eslint-disable-next-line security/detect-object-injection -- Faux positif : providerId provient de Object.keys()
-        const elements = providerModelElements[providerId];
+    panels.forEach((elements, providerId) => {
         // Boutons d'ajout de modèles
         if (elements.addTranscriptionButton) {
             elements.addTranscriptionButton.addEventListener('click', () =>
@@ -1257,16 +1707,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             );
         }
         // Sélecteurs de modèles
+        const modelChanged = () => {
+            modifiedExtraProviders.add(providerId);
+            debouncedSaveOptions();
+        };
         if (elements.transcriptionSelect) {
-            elements.transcriptionSelect.addEventListener('change', () => debouncedSaveOptions());
+            elements.transcriptionSelect.addEventListener('change', modelChanged);
         }
         if (elements.chatSelect) {
-            elements.chatSelect.addEventListener('change', () => debouncedSaveOptions());
+            elements.chatSelect.addEventListener('change', modelChanged);
         }
     });
 
-    transcriptionProviderSelect.addEventListener('change', () => debouncedSaveOptions());
-    chatProviderSelect.addEventListener('change', () => debouncedSaveOptions());
+    // Changer un sélecteur de service remplace une sélection d'une version plus récente
+    transcriptionProviderSelect.addEventListener('change', () => {
+        futureSelection.transcription = null;
+        debouncedSaveOptions();
+    });
+    chatProviderSelect.addEventListener('change', () => {
+        futureSelection.chat = null;
+        debouncedSaveOptions();
+    });
 
     // Event listeners - Legacy (avec debounce pour les inputs)
     interfaceLanguageSelect.addEventListener('change', handleLanguageChange);
@@ -1297,7 +1758,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await i18n.init();
     setupProviderPasswordToggles();
     loadProvidersConfig();
+    loadUnknownProviders();
     loadOptions();
+    // eslint-disable-next-line no-undef -- chrome est un global fourni par l'environnement d'extension Chrome
+    chrome.storage.onChanged.addListener(handleStorageChanges);
 
     // Initialiser le nouveau design dropdown + panel
     showProviderConfig(providerSelector.value);

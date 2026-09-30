@@ -103,6 +103,38 @@
         "message": "Opties opgeslagen!",
         "description": "Bevestigingsbericht voor opslaan"
     },
+    "saveErrorMessage": {
+        "message": "Fout: de opties zijn niet opgeslagen ($error$).",
+        "description": "Foutmelding wanneer het opslaan van de opties mislukt ($error$: melding van de browser)",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "Providers uit een nieuwere versie",
+        "description": "Titel van de sectie met providers die door een nieuwere versie zijn opgeslagen"
+    },
+    "unknownProvidersDescription": {
+        "message": "Een nieuwere versie van BabelFishAI, bijvoorbeeld op een ander apparaat, heeft deze providers opgeslagen. Deze versie kan ze niet gebruiken: ze bewaart hun instellingen ongewijzigd. Als u ze verwijdert, worden ze van al uw gesynchroniseerde apparaten verwijderd.",
+        "description": "Uitleg bij de sectie met providers uit een nieuwere versie"
+    },
+    "unknownProviderDelete": {
+        "message": "Verwijderen",
+        "description": "Knop die de instellingen van een provider uit een nieuwere versie verwijdert"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$ (nieuwere versie)",
+        "description": "Optie van een servicekeuze voor een provider die door een nieuwere versie is opgeslagen ($provider$: de id ervan)",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "Uw OpenAI API-sleutel (sk-...)",
         "description": "Plaatsaanduiding voor de API-sleutel"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "Fout: URL's moeten HTTPS gebruiken.",
         "description": "Foutmelding voor ongeldige URL's"
+    },
+    "geminiKeyNote": {
+        "message": "Tip: gebruik een sleutel van een project met facturering. Als u zich buiten de EER, Zwitserland en het VK bevindt, kan Google met een gratis sleutel uw dictaten en de verzonden teksten gebruiken om zijn producten te verbeteren, mogelijk met menselijke controle: verstuur er geen persoonlijke, gevoelige of vertrouwelijke informatie mee. Beperk de sleutel tot de Gemini API (standaard voor nieuwe sleutels), nooit tot websites.",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }

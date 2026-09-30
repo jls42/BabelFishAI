@@ -103,6 +103,38 @@
         "message": "选项已保存！",
         "description": "保存确认消息"
     },
+    "saveErrorMessage": {
+        "message": "错误：选项未能保存（$error$）。",
+        "description": "保存选项失败时的错误消息（$error$：浏览器消息）",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "QUOTA_BYTES_PER_ITEM quota exceeded"
+            }
+        }
+    },
+    "unknownProvidersTitle": {
+        "message": "来自较新版本的提供商",
+        "description": "较新版本保存的供应商部分的标题"
+    },
+    "unknownProvidersDescription": {
+        "message": "BabelFishAI 的较新版本（例如在另一台设备上）保存了这些提供商。此版本无法使用它们，因此会原样保留其设置。删除后，它们将从您所有已同步的设备中移除。",
+        "description": "较新版本供应商部分的说明"
+    },
+    "unknownProviderDelete": {
+        "message": "删除",
+        "description": "删除较新版本供应商设置的按钮"
+    },
+    "newerVersionProviderOption": {
+        "message": "$provider$（较新版本）",
+        "description": "服务选择器中由较新版本保存的提供商选项（$provider$：其标识符）",
+        "placeholders": {
+            "provider": {
+                "content": "$1",
+                "example": "gemini"
+            }
+        }
+    },
     "apiKeyPlaceholder": {
         "message": "您的 OpenAI API 密钥（sk-...）",
         "description": "API 密钥的占位符"
@@ -434,5 +466,9 @@
     "invalidUrlError": {
         "message": "错误：URL 必须使用 HTTPS。",
         "description": "无效 URL 的错误消息"
+    },
+    "geminiKeyNote": {
+        "message": "提示：请使用已启用结算的项目中的密钥。使用免费密钥时，如果您位于欧洲经济区、瑞士和英国以外，Google 可能会使用您的听写内容和发送的文本改进其产品，并可能由人工审核：请勿用它发送任何个人、敏感或机密信息。请将密钥限制为 Gemini API（新密钥的默认设置），切勿限制为网站。",
+        "description": "Note du panneau Gemini dans les options : clé d'un projet avec facturation ; hors de l'EEE, de la Suisse et du Royaume-Uni, contenus d'une clé gratuite utilisables par Google avec relecture humaine ; clé restreinte à l'API Gemini, pas à des sites"
     }
 }
