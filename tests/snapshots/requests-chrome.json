@@ -769,6 +769,10 @@
             }
         }
     },
+    "dictée sans proxy": {
+        "messagesAuBackground": [],
+        "requetesDirectes": 1
+    },
     "entêtes d’authentification fournis par l’appelant": {
         "entetes": [
             [

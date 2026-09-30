@@ -718,6 +718,19 @@
             ]
         }
     },
+    "modules introuvables au démarrage": {
+        "ecoutes": [
+            "runtime.onMessage",
+            "runtime.onInstalled",
+            "action.onClicked",
+            "commands.onCommand",
+            "contextMenus.onClicked",
+            "tabs.onRemoved"
+        ],
+        "erreurs": [
+            "Modules des providers indisponibles dans le service worker : Failed to execute 'importScripts' on 'WorkerGlobalScope'"
+        ]
+    },
     "onInstalled (install) : vide": {
         "effets": [
             {
