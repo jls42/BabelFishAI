@@ -133,7 +133,18 @@ function cloneTemplate(templateId) {
  * @param {Object} provider - Entrée du registre
  */
 function fillProviderPanel(panel, ids, provider) {
+    /**
+     * Élément du panneau copié, repéré par son data-field
+     * @param {string} name
+     * @returns {HTMLElement}
+     */
     const field = (name) => panel.querySelector(`[data-field="${name}"]`);
+    /**
+     * Donne son identifiant à un champ du panneau et, au besoin, y relie son libellé
+     * @param {string} name - data-field du champ
+     * @param {string} id - Identifiant du champ
+     * @param {string} [labelName] - data-field de son libellé
+     */
     const bind = (name, id, labelName) => {
         field(name).id = id;
         if (labelName) field(labelName).setAttribute('for', id);
@@ -987,6 +998,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (modifiedExtraProviders.has(providerId)) return;
         loadPanelConfig(panels.get(providerId), config);
+        /**
+         * Liste de modèles lue dans le stockage, vide si ce n'est pas un tableau
+         * @param {*} list
+         * @returns {Array}
+         */
         const models = (list) => (Array.isArray(list) ? list : []);
         populateProviderModelSelect(
             providerId,
@@ -1066,6 +1082,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     function deleteUnknownProvider(providerId, row) {
         row.button.disabled = true;
         row.result.textContent = '';
+        /**
+         * Affiche l'échec dans la ligne et réactive son bouton pour un nouvel essai
+         * @param {Error} error
+         */
         const showError = (error) => {
             row.button.disabled = false;
             row.result.textContent = i18n.getMessage('saveErrorMessage', { error: error.message });
@@ -1648,6 +1668,10 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @param {Object} elements - Éléments du panneau
      */
     function setupPanelListeners(providerId, elements) {
+        /**
+         * Après une modification du panneau : le marquer comme modifié, mettre à jour son
+         * affichage et programmer la sauvegarde
+         */
         const refresh = () => {
             modifiedExtraProviders.add(providerId);
             updateProviderDisplay(providerId);
