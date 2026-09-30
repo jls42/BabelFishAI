@@ -73,8 +73,12 @@ async function probe(fn) {
  */
 async function resolved(service) {
     if (typeof utils.api.resolveApiConfig !== 'function') return '(pas de resolveApiConfig)';
-    const c = await utils.api.resolveApiConfig(service);
-    return { provider: c.providerId, hote: new URL(c.url).host, cle: c.apiKey ?? null };
+    const config = await utils.api.resolveApiConfig(service);
+    return {
+        provider: config.providerId,
+        hote: new URL(config.url).host,
+        cle: config.apiKey ?? null,
+    };
 }
 
 const results = {};

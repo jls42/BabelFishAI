@@ -558,7 +558,7 @@ async function callDirectly({ env, utils }, storage, request) {
     useStorage(env, storage);
     env.http.clear();
     env.http.respond({ json: { ok: true } });
-    const r = await outcome(() =>
+    const called = await outcome(() =>
         utils.api.callApi({
             headers: { 'Content-Type': 'application/json' },
             body: '{}',
@@ -566,7 +566,7 @@ async function callDirectly({ env, utils }, storage, request) {
             ...request,
         }),
     );
-    return { ...r, requetes: env.http.requests.length };
+    return { ...called, requetes: env.http.requests.length };
 }
 
 /** Allowlist des hôtes de callApi, invariant de sécurité, et appel sans clé */
@@ -595,11 +595,11 @@ function defineAllowlistTests(h) {
         useStorage(h.env, STORAGE.openai);
         h.env.http.clear();
         h.env.http.respond({ json: { ok: true } });
-        const r = await outcome(() =>
+        const called = await outcome(() =>
             utils.api.callApi({ body: '{}', service: 'chat', ...request }),
         );
         matchSnapshot('entêtes d’authentification fournis par l’appelant', {
-            ...r,
+            ...called,
             entetes: h.env.http.requests.map((q) => q.headers),
         });
     });
@@ -627,11 +627,11 @@ function defineAllowlistTests(h) {
  * @returns {Promise<Object>} Le harnais, pour les tests propres à un navigateur
  */
 export async function defineRequestSuite({ browser, testFileUrl }) {
-    const h = await createRequestHarness(browser, testFileUrl);
-    defineProviderTests(h);
-    defineHttpErrorTests(h);
-    defineRegistryFlagTests(h);
-    defineNetworkTests(h);
-    defineAllowlistTests(h);
-    return { ...h, outcome, FakeFileReader };
+    const harness = await createRequestHarness(browser, testFileUrl);
+    defineProviderTests(harness);
+    defineHttpErrorTests(harness);
+    defineRegistryFlagTests(harness);
+    defineNetworkTests(harness);
+    defineAllowlistTests(harness);
+    return { ...harness, outcome, FakeFileReader };
 }

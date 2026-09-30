@@ -564,10 +564,10 @@ function defineProxyTests({ env, matchSnapshot, freshBackground, send }) {
  * @returns {Object} Le harnais, pour les tests propres à un navigateur
  */
 export function defineBackgroundSuite({ browser, testFileUrl }) {
-    const h = createHarness(browser, testFileUrl);
-    defineInstallTests(h);
-    defineNavigationTests(h);
-    defineMessageTests(h);
-    defineProxyTests(h);
-    return h;
+    const harness = createHarness(browser, testFileUrl);
+    defineInstallTests(harness);
+    defineNavigationTests(harness);
+    defineMessageTests(harness);
+    defineProxyTests(harness);
+    return harness;
 }
