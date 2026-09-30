@@ -2,6 +2,7 @@
  * Utilitaires pour la gestion de la bannière d'état et des contrôles associés
  * Ce module fait partie de BabelFishAI et gère l'interface utilisateur de la bannière
  */
+/* global chrome */
 (function (exports) {
     'use strict';
 
