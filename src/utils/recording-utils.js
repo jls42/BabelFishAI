@@ -310,7 +310,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      * @throws {Error} Si le blob est absent, vide, ou d'un autre type qu'audio
      */
     function validateAudioBlob(blob) {
-        if (!blob || blob.size <= 0 || blob.type.indexOf('audio/') !== 0) {
+        if (!blob || blob.size <= 0 || !blob.type.startsWith('audio/')) {
             throw new Error('Blob audio invalide ou vide');
         }
     }
