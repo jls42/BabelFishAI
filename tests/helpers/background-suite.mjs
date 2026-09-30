@@ -289,11 +289,8 @@ function defineMessageTests({ env, matchSnapshot, freshBackground, emit, send, e
             env.calls.length = 0;
             const response = await send(message);
             await flush();
-            steps[
-                message.action +
-                    (message.error ? ' (erreur)' : '') +
-                    ` #${Object.keys(steps).length}`
-            ] = {
+            const erreur = message.error ? ' (erreur)' : '';
+            steps[`${message.action}${erreur} #${Object.keys(steps).length}`] = {
                 reponse: response,
                 effets: effects(),
                 session: structuredClone(env.stores.session),
