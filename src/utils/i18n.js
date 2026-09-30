@@ -42,10 +42,10 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
 
         let message = translation.message;
         if (substitutions) {
-            Object.entries(substitutions).forEach(([key, value]) => {
+            Object.entries(substitutions).forEach(([name, value]) => {
                 // Fonction de remplacement : les motifs $&, $' ou $$ d'un texte substitué (un
                 // message d'erreur du navigateur par exemple) restent du texte
-                message = message.replace(`$${key}$`, () => String(value));
+                message = message.replace(`$${name}$`, () => String(value));
             });
         }
         return message;
