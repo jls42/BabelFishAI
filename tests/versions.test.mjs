@@ -56,7 +56,7 @@ function runProbe(root) {
 }
 
 for (const ref of ['v1.1.17', 'v1.1.18', 'v1.1.19', 'v1.1.20']) {
-    test(`version publiée ${ref}`, async (t) => {
+    test(`version publiée ${ref}`, (t) => {
         const dir = extract(ref);
         if (!dir) {
             t.skip(`référence ${ref} absente de ce clone`);

@@ -86,9 +86,9 @@ async function describeField(name, value) {
  * Corps d'une requête : chaîne telle quelle (JSON comparé en chaîne), ou multipart décrit
  * champ par champ (duck typing, comme api-utils.js)
  * @param {*} body
- * @returns {Promise<*>}
+ * @returns {*|Promise<Array>} Le corps décrit, ou la promesse des champs d'un FormData
  */
-async function describeBody(body) {
+function describeBody(body) {
     // Un corps asynchrone non attendu partirait tel quel (« [object Promise] ») : le signaler au
     // lieu de l'attendre ici, sinon la suite Chrome ne verrait pas un await manquant
     if (typeof body?.then === 'function') return '<promesse non attendue>';
