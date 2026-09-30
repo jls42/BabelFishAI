@@ -155,7 +155,7 @@ function routeToBackground(env) {
             const async = env.listeners['runtime.onMessage'].map((fn) =>
                 fn(message, { tab: { id: 7 } }, sendResponse),
             );
-            if (!answered && !async.includes(true)) resolve(undefined);
+            if (!answered && !async.includes(true)) resolve();
         });
 }
 
