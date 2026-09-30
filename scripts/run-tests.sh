@@ -101,7 +101,7 @@ collect_files() {
 
 extract_ref() {
     TMP_ROOT="$(mktemp -d)"
-    git -C "$PROJECT_ROOT" archive "$REF" src _locales manifest.json manifest.firefox.json |
+    git -C "$PROJECT_ROOT" archive "$REF" src _locales images manifest.json manifest.firefox.json |
         tar -x -C "$TMP_ROOT"
     export BABELFISH_ROOT="$TMP_ROOT"
     echo "Code testé : $REF ($(git -C "$PROJECT_ROOT" rev-parse --short "$REF"))"

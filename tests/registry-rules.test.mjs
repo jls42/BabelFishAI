@@ -62,3 +62,12 @@ test('note d’un panneau : clé présente dans chaque langue', () => {
         }
     }
 });
+
+test('logos du registre : fichiers présents dans l’arbre', () => {
+    // Un logo absent afficherait une image cassée à côté du menu des providers
+    for (const provider of Object.values(registry.getAllProviders())) {
+        if (!provider.ui.logo) continue;
+        const file = path.join(ROOT, provider.ui.logo);
+        assert.ok(fs.existsSync(file), `${provider.id} : ${provider.ui.logo}`);
+    }
+});
