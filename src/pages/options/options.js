@@ -1019,7 +1019,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .filter((key) => key.startsWith(EXTRA_PREFIX))
                 .map((key) => key.slice(EXTRA_PREFIX.length))
                 .filter((id) => !Providers.getProvider(id));
-            unknownProvidersList.replaceChildren(...ids.map(createUnknownProviderItem));
+            unknownProvidersList.replaceChildren(
+                ...ids.map((id, index) => createUnknownProviderItem(id, index)),
+            );
             unknownProvidersSection.style.display = ids.length ? 'block' : 'none';
             if (focusIndex !== null) {
                 const buttons = unknownProvidersList.querySelectorAll('button');
