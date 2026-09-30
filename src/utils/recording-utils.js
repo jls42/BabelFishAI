@@ -305,9 +305,9 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
-     * Traite l'audio enregistré de manière optimisée
-     * @param {Blob} audioBlob - Le blob audio à traiter
-     * @returns {Promise<void>}
+     * Vérifie que l'enregistrement a produit un blob audio non vide
+     * @param {Blob} blob - Le blob audio enregistré
+     * @throws {Error} Si le blob est absent, vide, ou d'un autre type qu'audio
      */
     function validateAudioBlob(blob) {
         if (!blob || blob.size <= 0 || blob.type.indexOf('audio/') !== 0) {
