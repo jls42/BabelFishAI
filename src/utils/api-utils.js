@@ -505,6 +505,7 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         if (resolved.providerId !== providerId || store.resolveKey(data, resolved) !== apiKey) {
             throw new Error(`${errorType}: la clé API ne correspond pas au provider configuré.`);
         }
+        // eslint-disable-next-line security-node/detect-unhandled-async-errors -- erreurs levées exprès avant tout envoi : callApi les attend et les propage à son appelant
         if (!store.isUrlAllowedForProvider(data, providerId, url)) {
             throw new Error(
                 `${errorType}: URL non autorisée. Vérifiez la configuration du provider dans les options.`,
