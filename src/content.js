@@ -6,6 +6,7 @@
     if (globalThis.__whisperContentScriptHasRun) return;
     globalThis.__whisperContentScriptHasRun = true;
 
+    /* eslint-disable no-unsanitized/method -- import() de modules de l'extension : chemins fixes, résolus par chrome.runtime.getURL */
     // Charger les langues partagées dans le monde du content script, comme les autres utilitaires.
     // Une balise <script> les exécutait dans le monde de la page : le bandeau ne les voyait pas,
     // et la page hôte recevait un global de l'extension
@@ -30,6 +31,7 @@
         await import(chrome.runtime.getURL('src/utils/banner-utils.js'));
         await import(chrome.runtime.getURL('src/utils/ui.js'));
         await import(chrome.runtime.getURL('src/utils/api-utils.js'));
+        /* eslint-enable no-unsanitized/method */
         // Initialisation après l'importation
         await globalThis.BabelFishAIUtils.i18n.init();
 
