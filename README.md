@@ -105,7 +105,7 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 
 1.  **Téléchargement et Installation :**
 
-    -   **Firefox 140 ou plus** (ordinateur) est nécessaire depuis la version 1.1.21. À l'installation, et lors de la mise à jour vers la 1.1.21, Firefox affiche les données que l'extension transmet au provider que vous configurez : votre voix, le texte sélectionné ou dicté, et votre clé API (voir [PRIVACY.md](PRIVACY.md)).
+    -   **Firefox 140 ou plus** (ordinateur) est nécessaire depuis la version 1.2.0. À l'installation, et lors de la mise à jour vers la 1.2.0, Firefox affiche les données que l'extension transmet au provider que vous configurez : votre voix, le texte sélectionné ou dicté, et votre clé API (voir [PRIVACY.md](PRIVACY.md)).
     -   **Installez directement l'extension depuis [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
     -   Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub, puis lancez `./scripts/build.sh firefox`, qui prépare `dist/firefox/` avec le manifest Firefox renommé en `manifest.json`.
     -   Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox` (et non « Installer un module depuis un fichier » dans `about:addons`, réservé aux extensions signées).
