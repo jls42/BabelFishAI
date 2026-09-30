@@ -1,7 +1,7 @@
 // Sonde lancée dans son propre processus par versions.test.mjs : BABELFISH_ROOT désigne l'arbre
 // d'une version (git archive). Elle joue chaque contenu de stockage de VERSION_FIXTURES et écrit
 // en JSON, sur la sortie standard, ce que cette version résout et envoie réellement.
-import { loadScripts, setupEnv } from './env.mjs';
+import { loadScripts, setupEnv, silentUi } from './env.mjs';
 import { VERSION_FIXTURES } from './fixtures.mjs';
 
 const env = setupEnv({ browser: 'chrome' });
@@ -86,7 +86,7 @@ for (const [name, content] of Object.entries(VERSION_FIXTURES)) {
     const reset = () => {
         for (const key of Object.keys(env.stores.sync)) delete env.stores.sync[key];
         Object.assign(env.stores.sync, structuredClone(content));
-        globalThis.BabelFishAI = { ui: { showBanner() {}, hideBanner() {}, handleError() {} } };
+        globalThis.BabelFishAI = silentUi();
     };
     reset();
     const result = { transcription: await resolved('transcription'), chat: await resolved('chat') };

@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { FakeFileReader, ROOT, loadScripts, setupEnv } from './env.mjs';
+import { FakeFileReader, ROOT, loadScripts, setupEnv, silentUi } from './env.mjs';
 import { GEMINI_ERRORS, GEMINI_INTERACTIONS, KEYS, STORAGE } from './fixtures.mjs';
 import { createSnapshots } from './snapshot.mjs';
 
@@ -221,7 +221,7 @@ async function createRequestHarness(browser, testFileUrl) {
         env.handlers.runtimeMessage = routeToBackground(env);
     }
     await loadScripts(CONTENT_SCRIPTS, { optional: OPTIONAL_MODULES });
-    globalThis.BabelFishAI = { ui: { showBanner() {}, hideBanner() {}, handleError() {} } };
+    globalThis.BabelFishAI = silentUi();
     const utils = globalThis.BabelFishAIUtils;
     const actions = makeActions(utils);
     return {

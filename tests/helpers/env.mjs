@@ -159,6 +159,22 @@ export function installFetchSpy() {
 }
 
 /**
+ * Ne fait rien : bouchon des fonctions dont les tests n'observent pas l'effet (événements de la
+ * page, bandeau et erreurs du content script)
+ */
+export function doNothing() {
+    // Les tests relèvent les requêtes et le stockage, pas l'affichage ni les événements de page
+}
+
+/**
+ * Interface du content script dont chaque fonction ne fait rien
+ * @returns {Object} Valeur de globalThis.BabelFishAI
+ */
+export function silentUi() {
+    return { ui: { showBanner: doNothing, hideBanner: doNothing, handleError: doNothing } };
+}
+
+/**
  * Pose les bouchons sur globalThis
  * @param {Object} [options]
  * @param {'chrome'|'firefox'} [options.browser='chrome'] - userAgent simulé
@@ -176,8 +192,8 @@ export function setupEnv({ browser = 'chrome', sync, local, uiLanguage, tabs } =
     define('navigator', { userAgent: USER_AGENTS[browser], onLine: true, language: 'fr-FR' });
     define('FileReader', FakeFileReader);
     // recording-utils.js écoute `pagehide` sur globalThis
-    define('addEventListener', () => {});
-    define('removeEventListener', () => {});
+    define('addEventListener', doNothing);
+    define('removeEventListener', doNothing);
     Date.now = () => FIXED_NOW;
     Math.random = () => FIXED_RANDOM;
     const http = installFetchSpy();
