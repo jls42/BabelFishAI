@@ -229,6 +229,16 @@
     }
 
     /**
+     * Indique qu'un événement ne vient pas d'une action de l'utilisateur (`isTrusted` à false) :
+     * les contrôles du bandeau ne réagissent qu'à un geste réel, comme src/shortcut-guard.js
+     * @param {Event} event - L'événement reçu
+     * @returns {boolean} true si l'événement est à ignorer
+     */
+    function isUntrustedEvent(event) {
+        return event?.isTrusted === false;
+    }
+
+    /**
      * Configure les gestionnaires d'événements pour les contrôles de la bannière
      * @param {HTMLButtonElement} rephraseButton - Bouton de reformulation
      * @param {HTMLButtonElement} translateButton - Bouton de traduction
@@ -246,7 +256,8 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        rephraseButton.addEventListener('click', () => {
+        rephraseButton.addEventListener('click', (event) => {
+            if (isUntrustedEvent(event)) return;
             const isActive = rephraseButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
@@ -270,7 +281,8 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        translateButton.addEventListener('click', () => {
+        translateButton.addEventListener('click', (event) => {
+            if (isUntrustedEvent(event)) return;
             const isActive = translateButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
@@ -307,7 +319,8 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        languageSelect.addEventListener('change', () => {
+        languageSelect.addEventListener('change', (event) => {
+            if (isUntrustedEvent(event)) return;
             chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
                 setTimeout(
                     () => globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true),
