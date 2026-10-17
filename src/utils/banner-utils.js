@@ -229,6 +229,36 @@
     }
 
     /**
+     * Indique qu'un événement ne vient pas d'une action de l'utilisateur (`isTrusted` à false) :
+     * les contrôles du bandeau ne réagissent qu'à un geste réel, comme src/shortcut-guard.js
+     * @param {Event} event - L'événement reçu
+     * @returns {boolean} true si l'événement est à ignorer
+     */
+    function isUntrustedEvent(event) {
+        return event?.isTrusted === false;
+    }
+
+    /**
+     * Indique si une langue choisie dans le menu fait partie de la liste des langues, avec la
+     * règle de la consigne de traduction (isKnownLanguageCode, text-processing.js)
+     * @param {string} code - Valeur du menu des langues
+     * @returns {boolean}
+     */
+    function isListedLanguage(code) {
+        return globalThis.BabelFishAIUtils.textProcessing?.isKnownLanguageCode(code) === true;
+    }
+
+    /**
+     * Remet dans le menu la langue cible enregistrée
+     * @param {HTMLSelectElement} select - Le menu des langues du bandeau
+     */
+    function showSavedLanguage(select) {
+        chrome.storage.sync.get({ targetLanguage: 'en' }, (items) => {
+            select.value = items.targetLanguage;
+        });
+    }
+
+    /**
      * Configure les gestionnaires d'événements pour les contrôles de la bannière
      * @param {HTMLButtonElement} rephraseButton - Bouton de reformulation
      * @param {HTMLButtonElement} translateButton - Bouton de traduction
@@ -246,7 +276,8 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        rephraseButton.addEventListener('click', () => {
+        rephraseButton.addEventListener('click', (event) => {
+            if (isUntrustedEvent(event)) return;
             const isActive = rephraseButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
@@ -270,7 +301,8 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        translateButton.addEventListener('click', () => {
+        translateButton.addEventListener('click', (event) => {
+            if (isUntrustedEvent(event)) return;
             const isActive = translateButton.getAttribute('data-active') === 'true';
             const newState = !isActive;
 
@@ -307,7 +339,13 @@
             'mousedown',
             globalThis.BabelFishAIUtils.focus.storeFocusAndSelection,
         );
-        languageSelect.addEventListener('change', () => {
+        languageSelect.addEventListener('change', (event) => {
+            if (isUntrustedEvent(event)) return;
+            // Langue hors liste : rien n'est enregistré, le menu reprend la langue enregistrée
+            if (!isListedLanguage(languageSelect.value)) {
+                showSavedLanguage(languageSelect);
+                return;
+            }
             chrome.storage.sync.set({ targetLanguage: languageSelect.value }, () => {
                 setTimeout(
                     () => globalThis.BabelFishAIUtils.focus.restoreFocusAndSelection(true, true),

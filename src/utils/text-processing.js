@@ -352,6 +352,18 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
     }
 
     /**
+     * Indique si une valeur est un code de la liste des langues de l'extension
+     * (languages-shared.js) ; si la liste n'est pas chargée, un code de deux lettres
+     * @param {string} code - Code de langue lu dans les options
+     * @returns {boolean}
+     */
+    function isKnownLanguageCode(code) {
+        const languages = globalThis.BabelFishAI?.AVAILABLE_LANGUAGES;
+        if (Array.isArray(languages)) return languages.some((language) => language.value === code);
+        return typeof code === 'string' && /^[a-z]{2}$/.test(code);
+    }
+
+    /**
      * Détermine les langues source et cible pour la traduction
      * @param {Object} options - Options actuelles
      * @param {string} [specifiedTargetLanguage] - Langue cible optionnelle (prioritaire)
@@ -359,8 +371,12 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
      */
     function determineTranslationLanguages(options, specifiedTargetLanguage) {
         const sourceLanguage = options.enableTranslation ? options.sourceLanguage : 'auto';
-        const targetLanguage =
+        const requestedTargetLanguage =
             specifiedTargetLanguage || (options.enableTranslation ? options.targetLanguage : 'en');
+        // Le prompt ne reçoit qu'un code de la liste des langues, l'anglais par défaut
+        const targetLanguage = isKnownLanguageCode(requestedTargetLanguage)
+            ? requestedTargetLanguage
+            : 'en';
 
         return { sourceLanguage, targetLanguage };
     }
@@ -534,5 +550,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         handleTextCorrection,
         handleTextTranslation,
         determineTranslationLanguages,
+        isKnownLanguageCode,
     };
 })(globalThis.BabelFishAIUtils);
