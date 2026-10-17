@@ -550,5 +550,6 @@ globalThis.BabelFishAIUtils = globalThis.BabelFishAIUtils || {};
         handleTextCorrection,
         handleTextTranslation,
         determineTranslationLanguages,
+        isKnownLanguageCode,
     };
 })(globalThis.BabelFishAIUtils);

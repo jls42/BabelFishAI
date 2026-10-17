@@ -1,5 +1,6 @@
 // Contrôles du bandeau (banner-utils.js) : seul un geste de l'utilisateur (événement `isTrusted`)
-// modifie les réglages ; les événements créés par un script sont ignorés.
+// modifie les réglages ; les événements créés par un script sont ignorés, et le menu des
+// langues n'enregistre qu'une langue de la liste (languages-shared.js).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { doNothing, flush, loadScripts, setupEnv } from './helpers/env.mjs';
@@ -8,7 +9,11 @@ const env = setupEnv({ browser: 'chrome' });
 globalThis.BabelFishAIUtils = {
     focus: { storeFocusAndSelection: doNothing, restoreFocusAndSelection: doNothing },
 };
-await loadScripts(['src/utils/banner-utils.js']);
+await loadScripts([
+    'src/utils/languages-shared.js',
+    'src/utils/text-processing.js',
+    'src/utils/banner-utils.js',
+]);
 
 /**
  * Élément réduit à ce qu'utilise setupBannerEventListeners : écouteurs, attributs, style, valeur
@@ -78,4 +83,20 @@ test('les contrôles du bandeau ne réagissent qu’aux gestes de l’utilisateu
     ]);
     assert.equal(translate.getAttribute('data-active'), 'true');
     assert.equal(container.style.display, 'flex');
+});
+
+test('le menu des langues n’enregistre qu’une langue de la liste', async () => {
+    const select = fakeElement();
+    const { banner } = globalThis.BabelFishAIUtils;
+    banner.setupBannerEventListeners(fakeElement(), fakeElement(), select, fakeElement());
+    const start = env.calls.length;
+
+    select.value = 'it';
+    select.fire('change', true);
+    await flush();
+    select.value = 'du texte libre';
+    select.fire('change', true);
+    await flush();
+    assert.deepEqual(syncWrites(start), [{ targetLanguage: 'it' }]);
+    assert.equal(select.value, 'it');
 });
