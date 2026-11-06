@@ -23,68 +23,68 @@ Babel Fish AI est une extension de navigateur innovante conçue pour offrir une 
 
 ## 🌟 Fonctionnalités
 
--   **Transcription Vocale Avancée**
+- **Transcription Vocale Avancée**
 
-    -   Capture audio de haute qualité via le microphone de votre appareil.
-    -   Transcription précise via les API Voxtral (Mistral AI), gpt-transcribe et Whisper (OpenAI) ou Gemini 3.5 Transcribe (Google).
-    -   Support multi-provider : choisissez librement entre Mistral AI, OpenAI, Gemini ou un endpoint personnalisé.
-    -   Prise en charge multilingue pour la reconnaissance vocale et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d'afficher les résultats (transcription et traduction, si activée) dans la langue de votre choix.
-    -   Insertion automatique du texte dans le champ actif ou affichage dans une boîte de dialogue dédiée.
+    - Capture audio de haute qualité via le microphone de votre appareil.
+    - Transcription précise via les API Voxtral (Mistral AI), gpt-transcribe et Whisper (OpenAI) ou Gemini 3.5 Transcribe (Google).
+    - Support multi-provider : choisissez librement entre Mistral AI, OpenAI, Gemini ou un endpoint personnalisé.
+    - Prise en charge multilingue pour la reconnaissance vocale et l'affichage du texte, permettant de transcrire des entrées vocales dans différentes langues et d'afficher les résultats (transcription et traduction, si activée) dans la langue de votre choix.
+    - Insertion automatique du texte dans le champ actif ou affichage dans une boîte de dialogue dédiée.
 
--   **Traduction et Reformulation Intelligentes**
+- **Traduction et Reformulation Intelligentes**
 
-    -   Traduction immédiate des transcriptions en diverses langues, à activer si besoin.
-    -   Reformulation du texte pour améliorer son style et sa clarté.
-    -   Utilisation d'un modèle d'IA avancé pour garantir une traduction fidèle au sens original.
-    -   Choix libre d'utiliser exclusivement la transcription ou de combiner transcription et traduction.
+    - Traduction immédiate des transcriptions en diverses langues, à activer si besoin.
+    - Reformulation du texte pour améliorer son style et sa clarté.
+    - Utilisation d'un modèle d'IA avancé pour garantir une traduction fidèle au sens original.
+    - Choix libre d'utiliser exclusivement la transcription ou de combiner transcription et traduction.
 
--   **Menu Contextuel Puissant**
+- **Menu Contextuel Puissant**
 
-    -   Option "Reformuler la sélection" pour améliorer instantanément vos textes sélectionnés.
-    -   Option "Traduire la sélection" avec sous-menu de toutes les langues disponibles.
-    -   Option "Corriger l'orthographe" pour corriger les fautes d'orthographe, grammaire et ponctuation.
-    -   Remplacement direct du texte sélectionné par sa version traduite, reformulée ou corrigée.
-    -   Parfaite intégration dans l'interface utilisateur native du navigateur.
+    - Option "Reformuler la sélection" pour améliorer instantanément vos textes sélectionnés.
+    - Option "Traduire la sélection" avec sous-menu de toutes les langues disponibles.
+    - Option "Corriger l'orthographe" pour corriger les fautes d'orthographe, grammaire et ponctuation.
+    - Remplacement direct du texte sélectionné par sa version traduite, reformulée ou corrigée.
+    - Parfaite intégration dans l'interface utilisateur native du navigateur.
 
--   **Interface Utilisateur Intuitive et Personnalisable**
+- **Interface Utilisateur Intuitive et Personnalisable**
 
-    -   Mode d'affichage flexible : zone de saisie active ou fenêtre de dialogue flottante.
-    -   Bandeau de statut configurable avec choix des couleurs, de l'opacité et de la durée d'affichage.
-    -   Raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac) pour démarrer/arrêter l'enregistrement.
-    -   Sous Firefox, « raccourci prioritaire » pour les sites dont l'éditeur de page intercepte la combinaison (ChatGPT, Notion…) : actif dès l'installation, désactivable depuis les options (voir [PRIVACY.md](PRIVACY.md)).
-    -   Option "Garder ouvert" pour contrôler la durée d'affichage des résultats.
-    -   Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
+    - Mode d'affichage flexible : zone de saisie active ou fenêtre de dialogue flottante.
+    - Bandeau de statut configurable avec choix des couleurs, de l'opacité et de la durée d'affichage.
+    - Raccourci clavier (Ctrl+Shift+1 ou ⌘+Shift+1 sur Mac) pour démarrer/arrêter l'enregistrement.
+    - Sous Firefox, « raccourci prioritaire » pour les sites dont l'éditeur de page intercepte la combinaison (ChatGPT, Notion…) : actif dès l'installation, désactivable depuis les options (voir [PRIVACY.md](PRIVACY.md)).
+    - Option "Garder ouvert" pour contrôler la durée d'affichage des résultats.
+    - Icône personnalisée, intégrant un microphone et le chiffre "42", pour une reconnaissance immédiate.
 
--   **Options Avancées**
-    -   Support multi-provider : Mistral AI, OpenAI, Gemini et Custom/LiteLLM pour une flexibilité maximale.
-    -   Possibilité de personnaliser les modèles de transcription et de traduction par provider.
-    -   Modèles OpenAI disponibles : GPT-4o mini (par défaut), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** et **GPT-5.6 (luna/terra/sol)**. Transcription : **gpt-transcribe** (par défaut), whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe. OpenAI retire ces trois derniers de son API le 26/02/2027 ; un modèle déjà choisi dans les options reste utilisé d'ici là.
-    -   Modèles Mistral disponibles : Mistral Small (par défaut), Mistral Medium, Mistral Large, Codestral et **Ministral 3 (3B/8B/14B)**. Transcription : Voxtral Mini. Les réponses des modèles Mistral qui raisonnent (blocs de réflexion) sont prises en charge.
-    -   Modèles Gemini disponibles : **Gemini 3.8 Flash** (par défaut, avec une réflexion réduite pour répondre en une à deux secondes) et **Gemini 3.5 Flash-Lite** (le plus rapide). Transcription : **Gemini 3.5 Transcribe**, par l'API Interactions de Google, sans enregistrer les dictées dans l'historique de cette API (`store: false`, voir [docs/providers/gemini.md](docs/providers/gemini.md)).
-    -   Les réglages qui utilisaient gpt-4.1-nano (arrêt de l'API OpenAI le 23/10/2026) ou gpt-4o passent automatiquement sur gpt-5.6-luna et gpt-4.1 lors de la mise à jour.
-    -   Sélection indépendante du provider pour la transcription et la traduction/reformulation.
-    -   Compatibilité avec LiteLLM Proxy via le provider Custom pour vous connecter à des modèles alternatifs.
-    -   Gestion complète de l'internationalisation grâce aux fichiers de langue (\_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
+- **Options Avancées**
+    - Support multi-provider : Mistral AI, OpenAI, Gemini et Custom/LiteLLM pour une flexibilité maximale.
+    - Possibilité de personnaliser les modèles de transcription et de traduction par provider.
+    - Modèles OpenAI disponibles : GPT-4o mini (par défaut), GPT-4.1 (mini/standard), **GPT-5.4 (nano/mini/standard)** et **GPT-5.6 (luna/terra/sol)**. Transcription : **gpt-transcribe** (par défaut), whisper-1, gpt-4o-mini-transcribe et gpt-4o-transcribe. OpenAI retire ces trois derniers de son API le 26/02/2027 ; un modèle déjà choisi dans les options reste utilisé d'ici là.
+    - Modèles Mistral disponibles : Mistral Small (par défaut), Mistral Medium, Mistral Large, Codestral et **Ministral 3 (3B/8B/14B)**. Transcription : Voxtral Mini. Les réponses des modèles Mistral qui raisonnent (blocs de réflexion) sont prises en charge.
+    - Modèles Gemini disponibles : **Gemini 3.8 Flash** (par défaut, avec une réflexion réduite pour répondre en une à deux secondes) et **Gemini 3.5 Flash-Lite** (le plus rapide). Transcription : **Gemini 3.5 Transcribe**, par l'API Interactions de Google, sans enregistrer les dictées dans l'historique de cette API (`store: false`, voir [docs/providers/gemini.md](docs/providers/gemini.md)).
+    - Les réglages qui utilisaient gpt-4.1-nano (arrêt de l'API OpenAI le 23/10/2026) ou gpt-4o passent automatiquement sur gpt-5.6-luna et gpt-4.1 lors de la mise à jour.
+    - Sélection indépendante du provider pour la transcription et la traduction/reformulation.
+    - Compatibilité avec LiteLLM Proxy via le provider Custom pour vous connecter à des modèles alternatifs.
+    - Gestion complète de l'internationalisation grâce aux fichiers de langue (\_locales), offrant une interface et une prise en charge vocale en plusieurs langues.
 
 ## 🌐 Langues Supportées
 
 Voici la liste des langues supportées par Babel Fish AI, avec des liens vers des vidéos de démonstration :
 
--   [Arabe](https://www.youtube.com/watch?v=onzOGx7nbUE)
--   [Allemand](https://www.youtube.com/watch?v=G1QVF1NTQYE)
--   [Anglais](https://www.youtube.com/watch?v=QC8WiIszn3Q)
--   [Espagnol](https://www.youtube.com/watch?v=nA93pis4vDQ)
--   [Français](https://www.youtube.com/watch?v=ITNFjx7Mgo4)
--   [Hindi](https://www.youtube.com/watch?v=FMEYdwCqoPg)
--   [Italien](https://www.youtube.com/watch?v=QgYZt8myods)
--   [Japonais](https://www.youtube.com/watch?v=noHEJCnocH8)
--   [Coréen](https://www.youtube.com/watch?v=YrYN75YSH3w)
--   [Néerlandais](https://www.youtube.com/watch?v=OnAZHzbd2NQ)
--   [Polonais](https://www.youtube.com/watch?v=E5AVNjZYOxM)
--   [Portugais](https://www.youtube.com/watch?v=st0XwCV1tvo)
--   [Roumain](https://www.youtube.com/watch?v=H2IMpU5_Hew)
--   [Suédois](https://www.youtube.com/watch?v=HMMzGyW8000)
--   [Chinois](https://www.youtube.com/watch?v=OJe6oVA_Y0s)
+- [Arabe](https://www.youtube.com/watch?v=onzOGx7nbUE)
+- [Allemand](https://www.youtube.com/watch?v=G1QVF1NTQYE)
+- [Anglais](https://www.youtube.com/watch?v=QC8WiIszn3Q)
+- [Espagnol](https://www.youtube.com/watch?v=nA93pis4vDQ)
+- [Français](https://www.youtube.com/watch?v=ITNFjx7Mgo4)
+- [Hindi](https://www.youtube.com/watch?v=FMEYdwCqoPg)
+- [Italien](https://www.youtube.com/watch?v=QgYZt8myods)
+- [Japonais](https://www.youtube.com/watch?v=noHEJCnocH8)
+- [Coréen](https://www.youtube.com/watch?v=YrYN75YSH3w)
+- [Néerlandais](https://www.youtube.com/watch?v=OnAZHzbd2NQ)
+- [Polonais](https://www.youtube.com/watch?v=E5AVNjZYOxM)
+- [Portugais](https://www.youtube.com/watch?v=st0XwCV1tvo)
+- [Roumain](https://www.youtube.com/watch?v=H2IMpU5_Hew)
+- [Suédois](https://www.youtube.com/watch?v=HMMzGyW8000)
+- [Chinois](https://www.youtube.com/watch?v=OJe6oVA_Y0s)
 
 ## 🚀 Installation
 
@@ -92,58 +92,58 @@ Voici la liste des langues supportées par Babel Fish AI, avec des liens vers de
 
 1.  **Téléchargement et Installation :**
 
-    -   Clonez ce dépôt depuis GitHub ou téléchargez manuellement le dossier de l'extension.
-    -   **Ou installez directement l'extension depuis le [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
-    -   Ouvrez Chrome et accédez à `chrome://extensions/`.
-    -   Activez le « Mode développeur » en haut à droite.
-    -   Cliquez sur « Charger l'extension non empaquetée » et sélectionnez le dossier de Babel Fish AI.
+    - Clonez ce dépôt depuis GitHub ou téléchargez manuellement le dossier de l'extension.
+    - **Ou installez directement l'extension depuis le [Chrome Web Store](https://chromewebstore.google.com/detail/babelfishai-by-jls42org/aahodplbenfmijbeahnhoklpdnmfdmbk)**
+    - Ouvrez Chrome et accédez à `chrome://extensions/`.
+    - Activez le « Mode développeur » en haut à droite.
+    - Cliquez sur « Charger l'extension non empaquetée » et sélectionnez le dossier de Babel Fish AI.
 
 2.  **Vérification :**
-    -   Assurez-vous que l'extension apparaît dans la barre d'outils du navigateur avec l'icône personnalisée.
+    - Assurez-vous que l'extension apparaît dans la barre d'outils du navigateur avec l'icône personnalisée.
 
 ### Firefox
 
 1.  **Téléchargement et Installation :**
 
-    -   **Firefox 140 ou plus** (ordinateur) est nécessaire depuis la version 1.2.0. À l'installation, et lors de la mise à jour vers la 1.2.0, Firefox affiche les données que l'extension transmet au provider que vous configurez : votre voix, le texte sélectionné ou dicté, et votre clé API (voir [PRIVACY.md](PRIVACY.md)).
-    -   **Installez directement l'extension depuis [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
-    -   Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub, puis lancez `./scripts/build.sh firefox`, qui prépare `dist/firefox/` avec le manifest Firefox renommé en `manifest.json`.
-    -   Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox` (et non « Installer un module depuis un fichier » dans `about:addons`, réservé aux extensions signées).
-    -   Cliquez sur « Charger un module complémentaire temporaire... ».
-    -   Sélectionnez le fichier `dist/firefox/manifest.json`.
+    - **Firefox 140 ou plus** (ordinateur) est nécessaire depuis la version 1.2.0. À l'installation, et lors de la mise à jour vers la 1.2.0, Firefox affiche les données que l'extension transmet au provider que vous configurez : votre voix, le texte sélectionné ou dicté, et votre clé API (voir [PRIVACY.md](PRIVACY.md)).
+    - **Installez directement l'extension depuis [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/babelfishai-by-jls42-org/)**
+    - Ou pour l'installation manuelle : clonez ce dépôt depuis GitHub, puis lancez `./scripts/build.sh firefox`, qui prépare `dist/firefox/` avec le manifest Firefox renommé en `manifest.json`.
+    - Ouvrez Firefox et accédez à `about:debugging#/runtime/this-firefox` (et non « Installer un module depuis un fichier » dans `about:addons`, réservé aux extensions signées).
+    - Cliquez sur « Charger un module complémentaire temporaire... ».
+    - Sélectionnez le fichier `dist/firefox/manifest.json`.
 
 2.  **Vérification :**
-    -   Assurez-vous que l'extension apparaît dans la barre d'outils de Firefox avec l'icône personnalisée.
+    - Assurez-vous que l'extension apparaît dans la barre d'outils de Firefox avec l'icône personnalisée.
 
 ## ⚙️ Configuration
 
 1.  **Configuration du Provider IA :**
 
-    -   Cliquez sur l'icône de l'extension pour accéder aux options.
-    -   Sélectionnez votre provider dans le menu déroulant (Mistral AI, OpenAI, Gemini ou Custom/LiteLLM).
-    -   Entrez votre clé API :
-        -   **Mistral AI** : disponible sur [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
-        -   **OpenAI** : disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
-        -   **Gemini** : disponible sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Préférez une clé d'un projet avec facturation : avec une clé gratuite, si vous vous trouvez hors de l'Espace économique européen, de la Suisse et du Royaume-Uni, Google peut utiliser vos dictées et les textes envoyés pour améliorer ses produits, avec une relecture humaine possible ; n'y envoyez aucune information personnelle, sensible ou confidentielle. Restreignez la clé à l'API Gemini (réglage par défaut des nouvelles clés), jamais à des sites web : sous Chrome, les requêtes partent de la page où vous dictez.
-    -   Activez le provider avec le toggle à côté du menu déroulant.
+    - Cliquez sur l'icône de l'extension pour accéder aux options.
+    - Sélectionnez votre provider dans le menu déroulant (Mistral AI, OpenAI, Gemini ou Custom/LiteLLM).
+    - Entrez votre clé API :
+        - **Mistral AI** : disponible sur [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys)
+        - **OpenAI** : disponible sur [platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
+        - **Gemini** : disponible sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Préférez une clé d'un projet avec facturation : avec une clé gratuite, si vous vous trouvez hors de l'Espace économique européen, de la Suisse et du Royaume-Uni, Google peut utiliser vos dictées et les textes envoyés pour améliorer ses produits, avec une relecture humaine possible ; n'y envoyez aucune information personnelle, sensible ou confidentielle. Restreignez la clé à l'API Gemini (réglage par défaut des nouvelles clés), jamais à des sites web : sous Chrome, les requêtes partent de la page où vous dictez.
+    - Activez le provider avec le toggle à côté du menu déroulant.
 
 2.  **Personnalisation des Options :**
 
-    -   Choisissez le mode d'affichage (zone active ou boîte de dialogue).
-    -   Configurez la couleur, l'opacité et la durée d'affichage du bandeau de statut.
-    -   Sélectionnez les langues pour la transcription (entrée vocale) et pour l'affichage du texte.
-    -   Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
+    - Choisissez le mode d'affichage (zone active ou boîte de dialogue).
+    - Configurez la couleur, l'opacité et la durée d'affichage du bandeau de statut.
+    - Sélectionnez les langues pour la transcription (entrée vocale) et pour l'affichage du texte.
+    - Activez ou désactivez la fonctionnalité de traduction selon vos besoins.
 
 3.  **(Optionnel) Configuration avancée des modèles :**
 
-    -   Dans les options de chaque provider, cliquez sur "Configuration des modèles" pour personnaliser les modèles utilisés.
-    -   Vous pouvez ajouter des modèles personnalisés pour la transcription et la traduction/reformulation.
-    -   Si plusieurs providers sont activés, vous pouvez choisir lequel utiliser pour chaque service (transcription et traduction).
+    - Dans les options de chaque provider, cliquez sur "Configuration des modèles" pour personnaliser les modèles utilisés.
+    - Vous pouvez ajouter des modèles personnalisés pour la transcription et la traduction/reformulation.
+    - Si plusieurs providers sont activés, vous pouvez choisir lequel utiliser pour chaque service (transcription et traduction).
 
 4.  **Plusieurs appareils synchronisés :**
-    -   Mettez à jour l'extension sur tous vos appareils. Une version antérieure à la 1.2.0 ne connaît pas Gemini : si Gemini est choisi, elle utilise un ancien provider que vous avez activé, ou n'envoie rien.
-    -   Si une version plus récente de l'extension a enregistré un provider que votre version ne connaît pas encore, la page d'options le signale dans la section « Providers d'une version plus récente », avec un bouton pour effacer ses réglages de tous vos appareils.
-    -   Si le navigateur refuse d'enregistrer vos options (par exemple une valeur trop longue), la page affiche l'erreur au lieu de « Options sauvegardées ! » et n'enregistre rien.
+    - Mettez à jour l'extension sur tous vos appareils. Une version antérieure à la 1.2.0 ne connaît pas Gemini : si Gemini est choisi, elle utilise un ancien provider que vous avez activé, ou n'envoie rien.
+    - Si une version plus récente de l'extension a enregistré un provider que votre version ne connaît pas encore, la page d'options le signale dans la section « Providers d'une version plus récente », avec un bouton pour effacer ses réglages de tous vos appareils.
+    - Si le navigateur refuse d'enregistrer vos options (par exemple une valeur trop longue), la page affiche l'erreur au lieu de « Options sauvegardées ! » et n'enregistre rien.
 
 ## 🚀 Utilisation avec LiteLLM Proxy ou Endpoints Personnalisés
 
@@ -153,13 +153,13 @@ Babel Fish AI est compatible avec [LiteLLM Proxy](https://litellm.ai/) et d'autr
 
 1.  **Installez et configurez votre proxy :** Suivez les instructions du service que vous utilisez (LiteLLM, etc.).
 2.  **Configurez l'extension Babel Fish AI :**
-    -   Dans les options de l'extension, sélectionnez le provider **Custom/LiteLLM** dans le menu déroulant.
-    -   Entrez votre clé API (si nécessaire).
-    -   Configurez les URLs des API :
-        -   **URL Transcription** : par exemple `http://localhost:4000/v1/audio/transcriptions`
-        -   **URL Chat** : par exemple `http://localhost:4000/v1/chat/completions`
-    -   Activez le provider avec le toggle.
-    -   Cochez l'option **"NoLog"** si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
+    - Dans les options de l'extension, sélectionnez le provider **Custom/LiteLLM** dans le menu déroulant.
+    - Entrez votre clé API (si nécessaire).
+    - Configurez les URLs des API :
+        - **URL Transcription** : par exemple `http://localhost:4000/v1/audio/transcriptions`
+        - **URL Chat** : par exemple `http://localhost:4000/v1/chat/completions`
+    - Activez le provider avec le toggle.
+    - Cochez l'option **"NoLog"** si vous souhaitez désactiver la journalisation des requêtes par LiteLLM.
 
 **Important :** L'option "NoLog" est disponible **uniquement** dans le provider Custom/LiteLLM. Elle n'est pas compatible avec les API officielles d'OpenAI, de Mistral AI ou de Gemini.
 
@@ -171,10 +171,10 @@ L'extension est composée de plusieurs fichiers JavaScript qui interagissent ent
 
 #### Fichiers Principaux
 
--   **`manifest.json`:** Le fichier de configuration principal de l'extension. Il définit les permissions, les scripts, les ressources accessibles, etc. Il utilise la version 3 du manifeste et déclare les permissions `activeTab`, `storage`, `commands`, `scripting` et `contextMenus`.
--   **`background.js`:** Le service worker qui s'exécute en arrière-plan. Il gère les événements (clic sur l'icône, raccourcis clavier, menu contextuel), injecte le `content script` si nécessaire, et communique avec le `content script`.
--   **`content.js`:** Le script principal qui est injecté dans les pages web. Il coordonne les différents modules utilitaires et gère le flux global de l'extension.
--   **`src/constants.js`:** Définit des constantes pour la configuration, les états, les actions, etc.
+- **`manifest.json`:** Le fichier de configuration principal de l'extension. Il définit les permissions, les scripts, les ressources accessibles, etc. Il utilise la version 3 du manifeste et déclare les permissions `activeTab`, `storage`, `commands`, `scripting` et `contextMenus`.
+- **`background.js`:** Le service worker qui s'exécute en arrière-plan. Il gère les événements (clic sur l'icône, raccourcis clavier, menu contextuel), injecte le `content script` si nécessaire, et communique avec le `content script`.
+- **`content.js`:** Le script principal qui est injecté dans les pages web. Il coordonne les différents modules utilitaires et gère le flux global de l'extension.
+- **`src/constants.js`:** Définit des constantes pour la configuration, les états, les actions, etc.
 
 #### Modules Utilitaires
 
@@ -182,36 +182,36 @@ L'extension utilise une architecture modulaire avec plusieurs fichiers utilitair
 
 ##### Gestion des Providers et API
 
--   **`src/utils/providers.js`:** Registre des providers IA (Mistral AI, OpenAI, Gemini, Custom/LiteLLM) avec leurs configurations, modèles et URLs par défaut.
--   **`src/utils/provider-store.js`:** Lecture des réglages des providers dans le stockage, et contrôle qu'une clé API ne part que vers les adresses de son provider.
--   **`src/utils/provider-adapters.js`:** Formats des API des providers : authentification, corps des requêtes, lecture des réponses et des erreurs.
--   **`src/utils/api-utils.js`:** Fonctions pour l'interaction avec les API externes, résolution de la configuration multi-provider, et transcription audio.
--   **`src/utils/text-processing.js`:** Fonctions de traitement de texte : traduction, reformulation, correction orthographique.
+- **`src/utils/providers.js`:** Registre des providers IA (Mistral AI, OpenAI, Gemini, Custom/LiteLLM) avec leurs configurations, modèles et URLs par défaut.
+- **`src/utils/provider-store.js`:** Lecture des réglages des providers dans le stockage, et contrôle qu'une clé API ne part que vers les adresses de son provider.
+- **`src/utils/provider-adapters.js`:** Formats des API des providers : authentification, corps des requêtes, lecture des réponses et des erreurs.
+- **`src/utils/api-utils.js`:** Fonctions pour l'interaction avec les API externes, résolution de la configuration multi-provider, et transcription audio.
+- **`src/utils/text-processing.js`:** Fonctions de traitement de texte : traduction, reformulation, correction orthographique.
 
 ##### Interface Utilisateur et Interaction
 
--   **`src/utils/ui.js`:** Fonctions utilitaires générales pour l'interface utilisateur.
--   **`src/utils/banner-utils.js`:** Gère la bannière d'état, ses contrôles et le sélecteur de langue.
--   **`src/utils/focus-utils.js`:** Gère la sauvegarde et la restauration du focus et de la sélection de texte.
--   **`src/utils/transcription-display.js`:** Gère l'affichage des résultats de transcription.
--   **`src/utils/error-utils.js`:** Gère l'affichage et le traitement des erreurs.
--   **`src/styles/content.css`:** Styles CSS pour l'interface utilisateur injectée dans les pages web.
+- **`src/utils/ui.js`:** Fonctions utilitaires générales pour l'interface utilisateur.
+- **`src/utils/banner-utils.js`:** Gère la bannière d'état, ses contrôles et le sélecteur de langue.
+- **`src/utils/focus-utils.js`:** Gère la sauvegarde et la restauration du focus et de la sélection de texte.
+- **`src/utils/transcription-display.js`:** Gère l'affichage des résultats de transcription.
+- **`src/utils/error-utils.js`:** Gère l'affichage et le traitement des erreurs.
+- **`src/styles/content.css`:** Styles CSS pour l'interface utilisateur injectée dans les pages web.
 
 ##### Enregistrement et Événements
 
--   **`src/utils/recording-utils.js`:** Gère l'enregistrement audio via le microphone et le traitement des données audio.
--   **`src/utils/event-handlers.js`:** Contient les gestionnaires d'événements pour les interactions utilisateur.
+- **`src/utils/recording-utils.js`:** Gère l'enregistrement audio via le microphone et le traitement des données audio.
+- **`src/utils/event-handlers.js`:** Contient les gestionnaires d'événements pour les interactions utilisateur.
 
 ##### Internationalisation et Langues
 
--   **`src/utils/languages.js`:** Définit les langues supportées par l'extension.
--   **`src/utils/languages-shared.js`:** Définit la liste des langues supportées pour le contexte de la page web.
--   **`src/utils/languages-data.js`:** Définit la liste des langues supportées pour le service worker.
--   **`src/utils/i18n.js`:** Gère l'internationalisation pour l'interface utilisateur.
+- **`src/utils/languages.js`:** Définit les langues supportées par l'extension.
+- **`src/utils/languages-shared.js`:** Définit la liste des langues supportées pour le contexte de la page web.
+- **`src/utils/languages-data.js`:** Définit la liste des langues supportées pour le service worker.
+- **`src/utils/i18n.js`:** Gère l'internationalisation pour l'interface utilisateur.
 
 ##### Page d'Options
 
--   **`src/pages/options/`:** Contient les fichiers pour la page d'options de l'extension (HTML, CSS, JavaScript).
+- **`src/pages/options/`:** Contient les fichiers pour la page d'options de l'extension (HTML, CSS, JavaScript).
 
 ### Processus de Transcription et Traduction
 
@@ -222,8 +222,8 @@ L'extension utilise une architecture modulaire avec plusieurs fichiers utilitair
 3.  **Transcription :** Le `content script` utilise la fonction `transcribeAudio` (`src/utils/api-utils.js`) pour envoyer l'audio à l'API de transcription du provider configuré (Voxtral pour Mistral AI, gpt-transcribe ou Whisper pour OpenAI, Gemini 3.5 Transcribe pour Gemini). L'API renvoie le texte transcrit.
 4.  **Traduction ou Reformulation (Optionnelle) :**
 
--   Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/text-processing.js`) pour envoyer le texte transcrit à l'API de chat du provider configuré.
--   Si l'option de reformulation est activée, la fonction `rephraseText` est utilisée pour améliorer le texte transcrit.
+- Si l'option de traduction est activée, le `content script` utilise la fonction `translateText` (`src/utils/text-processing.js`) pour envoyer le texte transcrit à l'API de chat du provider configuré.
+- Si l'option de reformulation est activée, la fonction `rephraseText` est utilisée pour améliorer le texte transcrit.
 
 5.  **Affichage :** Le `content script` affiche le texte traité soit dans l'élément actif de la page (si c'est un champ de texte ou un élément éditable), soit dans une boîte de dialogue personnalisée.
 
@@ -248,9 +248,9 @@ La communication entre le `background script` et le `content script` se fait via
 
 L'extension utilise `chrome.storage.sync` pour stocker :
 
--   La configuration des providers IA (clés API, modèles sélectionnés, URLs personnalisées). Gemini, ajouté en 1.2.0, a sa propre clé de stockage (`extraProvider.gemini`), que les versions antérieures ignorent.
--   Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
--   Les préférences de langue pour la traduction.
+- La configuration des providers IA (clés API, modèles sélectionnés, URLs personnalisées). Gemini, ajouté en 1.2.0, a sa propre clé de stockage (`extraProvider.gemini`), que les versions antérieures ignorent.
+- Les options de l'extension (affichage, traduction, couleurs du bandeau, etc.).
+- Les préférences de langue pour la traduction.
 
 Ces données sont stockées localement sur votre ordinateur, dans le stockage de l'extension du navigateur.
 
@@ -260,32 +260,32 @@ Les erreurs possibles (clé API manquante, erreur de transcription, etc.) sont d
 
 ## 🛡️ Sécurité et Confidentialité
 
--   **Protection des Données :**
-    -   La clé API est stockée de manière sécurisée dans le navigateur.
-    -   L'extension ne conserve pas vos données audio ; tous les traitements s'effectuent en temps réel.
-    -   La communication avec les API se fait via des connexions HTTPS sécurisées.
+- **Protection des Données :**
+    - La clé API est stockée de manière sécurisée dans le navigateur.
+    - L'extension ne conserve pas vos données audio ; tous les traitements s'effectuent en temps réel.
+    - La communication avec les API se fait via des connexions HTTPS sécurisées.
 
 Pour des informations complètes sur la manière dont BabelFishAI gère vos données, veuillez consulter notre [Politique de Confidentialité](PRIVACY.md).
 
 ## 🔧 Dépannage
 
--   **Problèmes de Microphone :**
+- **Problèmes de Microphone :**
 
-    -   Vérifiez les permissions d'accès au microphone dans votre navigateur.
-    -   Assurez-vous qu'aucune autre application n'utilise le microphone simultanément.
+    - Vérifiez les permissions d'accès au microphone dans votre navigateur.
+    - Assurez-vous qu'aucune autre application n'utilise le microphone simultanément.
 
--   **Erreurs de Transcription/Traduction :**
-    -   Vérifiez que la clé API est valide et active.
-    -   Assurez-vous d'avoir une connexion internet stable.
-    -   Consultez la console du navigateur pour obtenir des logs détaillés en cas d'erreur.
+- **Erreurs de Transcription/Traduction :**
+    - Vérifiez que la clé API est valide et active.
+    - Assurez-vous d'avoir une connexion internet stable.
+    - Consultez la console du navigateur pour obtenir des logs détaillés en cas d'erreur.
 
 ## 🤝 Contribution
 
 Les contributions et suggestions sont les bienvenues. Pour contribuer :
 
--   Signalez les bugs via la section Issues sur GitHub.
--   Proposez des améliorations ou de nouvelles fonctionnalités.
--   Soumettez vos pull requests.
+- Signalez les bugs via la section Issues sur GitHub.
+- Proposez des améliorations ou de nouvelles fonctionnalités.
+- Soumettez vos pull requests.
 
 ## 📄 Licence
 

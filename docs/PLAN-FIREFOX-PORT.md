@@ -10,9 +10,9 @@
 
 BabelFishAI est une extension Chrome (Manifest V3) pour la transcription vocale et traduction IA.
 
--   **Stack** : JavaScript vanilla, ES6 modules, pas de build system
--   **APIs** : OpenAI Whisper + GPT, Mistral AI, LiteLLM Proxy
--   **Langues** : 15 locales supportées
+- **Stack** : JavaScript vanilla, ES6 modules, pas de build system
+- **APIs** : OpenAI Whisper + GPT, Mistral AI, LiteLLM Proxy
+- **Langues** : 15 locales supportées
 
 ---
 
@@ -20,17 +20,17 @@ BabelFishAI est une extension Chrome (Manifest V3) pour la transcription vocale 
 
 ### Ce qui NE change PAS
 
--   Le code source JavaScript (99% identique)
--   La structure des fichiers
--   Le workflow de publication Chrome
--   Les fonctionnalités
+- Le code source JavaScript (99% identique)
+- La structure des fichiers
+- Le workflow de publication Chrome
+- Les fonctionnalités
 
 ### Ce qui CHANGE
 
--   Ajout d'un manifest Firefox séparé
--   Ajout de webextension-polyfill pour compatibilité API
--   Script de build pour générer les packages par navigateur
--   Documentation mise à jour
+- Ajout d'un manifest Firefox séparé
+- Ajout de webextension-polyfill pour compatibilité API
+- Script de build pour générer les packages par navigateur
+- Documentation mise à jour
 
 ---
 
@@ -195,10 +195,10 @@ curl -L https://unpkg.com/webextension-polyfill@0.12.0/dist/browser-polyfill.min
 
 #### 3.2 Ce que fait le polyfill
 
--   Fournit l'objet `browser` unifié sur Chrome
--   Convertit les callbacks `chrome.*` en Promises
--   Permet d'écrire du code identique pour les deux navigateurs
--   Sur Firefox : no-op (déjà natif)
+- Fournit l'objet `browser` unifié sur Chrome
+- Convertit les callbacks `chrome.*` en Promises
+- Permet d'écrire du code identique pour les deux navigateurs
+- Sur Firefox : no-op (déjà natif)
 
 #### 3.3 Mise à jour du manifest Chrome (optionnel mais recommandé)
 
@@ -225,10 +225,10 @@ Le `background.js` actuel doit fonctionner en **Service Worker** (Chrome) ET **b
 
 **Vérifier l'absence de** :
 
--   `window` → utiliser `globalThis`
--   `document` → non disponible en SW
--   `XMLHttpRequest` → utiliser `fetch`
--   `localStorage` → utiliser `chrome.storage`
+- `window` → utiliser `globalThis`
+- `document` → non disponible en SW
+- `XMLHttpRequest` → utiliser `fetch`
+- `localStorage` → utiliser `chrome.storage`
 
 **Déjà OK dans le projet** : Le code utilise `globalThis` et `chrome.storage`.
 
@@ -504,15 +504,15 @@ Ajouter dans la section "Development Workflow" :
 
 Le projet supporte Chrome et Firefox depuis le même codebase.
 
--   `manifest.json` : Chrome (source principale)
--   `manifest.firefox.json` : Firefox
--   `./scripts/build.sh [chrome|firefox|all]` : Génère les packages
+- `manifest.json` : Chrome (source principale)
+- `manifest.firefox.json` : Firefox
+- `./scripts/build.sh [chrome|firefox|all]` : Génère les packages
 
 ### Différences clés
 
--   Chrome : Service Worker pour background
--   Firefox : Background scripts classiques
--   Le polyfill `browser-polyfill.min.js` unifie les APIs
+- Chrome : Service Worker pour background
+- Firefox : Background scripts classiques
+- Le polyfill `browser-polyfill.min.js` unifie les APIs
 ```
 
 ---
@@ -521,27 +521,27 @@ Le projet supporte Chrome et Firefox depuis le même codebase.
 
 ### Fichiers à créer
 
--   [ ] `manifest.firefox.json`
--   [ ] `src/lib/browser-polyfill.min.js`
--   [ ] `scripts/build.sh`
--   [ ] Mettre à jour `.gitignore`
+- [ ] `manifest.firefox.json`
+- [ ] `src/lib/browser-polyfill.min.js`
+- [ ] `scripts/build.sh`
+- [ ] Mettre à jour `.gitignore`
 
 ### Code à vérifier/adapter
 
--   [ ] `background.js` : compatibilité Service Worker
--   [ ] Gestion API `offscreen` (Chrome-only)
--   [ ] Tester toutes les fonctionnalités sur Firefox
+- [ ] `background.js` : compatibilité Service Worker
+- [ ] Gestion API `offscreen` (Chrome-only)
+- [ ] Tester toutes les fonctionnalités sur Firefox
 
 ### Documentation
 
--   [ ] README.md : liens et instructions Firefox
--   [ ] CLAUDE.md : workflow multi-navigateur
+- [ ] README.md : liens et instructions Firefox
+- [ ] CLAUDE.md : workflow multi-navigateur
 
 ### Publication
 
--   [ ] Compte Firefox Add-ons créé
--   [ ] ID extension Firefox choisi et fixé
--   [ ] Premier build Firefox validé avec web-ext lint
+- [ ] Compte Firefox Add-ons créé
+- [ ] ID extension Firefox choisi et fixé
+- [ ] Premier build Firefox validé avec web-ext lint
 
 ---
 
@@ -549,31 +549,31 @@ Le projet supporte Chrome et Firefox depuis le même codebase.
 
 ### Documentation Officielle
 
--   **MDN - Build a cross-browser extension**
-    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Build_a_cross_browser_extension
+- **MDN - Build a cross-browser extension**
+  https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Build_a_cross_browser_extension
 
--   **MDN - Chrome incompatibilities**
-    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities
+- **MDN - Chrome incompatibilities**
+  https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities
 
--   **MDN - Browser compatibility for manifest.json**
-    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Browser_compatibility_for_manifest.json
+- **MDN - Browser compatibility for manifest.json**
+  https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Browser_compatibility_for_manifest.json
 
--   **MDN - Background scripts**
-    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background
+- **MDN - Background scripts**
+  https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background
 
--   **Chrome - Manifest V3 Migration**
-    https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3
+- **Chrome - Manifest V3 Migration**
+  https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3
 
 ### Outils
 
--   **webextension-polyfill** (Mozilla)
-    https://github.com/mozilla/webextension-polyfill
+- **webextension-polyfill** (Mozilla)
+  https://github.com/mozilla/webextension-polyfill
 
--   **web-ext CLI** (Mozilla)
-    https://github.com/mozilla/web-ext
+- **web-ext CLI** (Mozilla)
+  https://github.com/mozilla/web-ext
 
--   **Firefox Add-ons Developer Hub**
-    https://addons.mozilla.org/developers/
+- **Firefox Add-ons Developer Hub**
+  https://addons.mozilla.org/developers/
 
 ### Différences Chrome/Firefox MV3
 
