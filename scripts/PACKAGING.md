@@ -39,11 +39,11 @@ zip -r BabelFishAI-1.1.18.zip BabelFishAI \
 
 ## Checklist avant publication
 
--   [ ] Version mise à jour dans `manifest.json`
--   [ ] Traductions complètes (`./scripts/check-i18n.sh`)
--   [ ] Extension testée localement via `chrome://extensions/`
--   [ ] Pas de commentaires dans `manifest.json`
--   [ ] ZIP créé avec `manifest.json` à la racine
+- [ ] Version mise à jour dans `manifest.json`
+- [ ] Traductions complètes (`./scripts/check-i18n.sh`)
+- [ ] Extension testée localement via `chrome://extensions/`
+- [ ] Pas de commentaires dans `manifest.json`
+- [ ] ZIP créé avec `manifest.json` à la racine
 
 ## Limites du Chrome Web Store
 
@@ -65,8 +65,8 @@ zip -r BabelFishAI-1.1.18.zip BabelFishAI \
 
 ## Sources officielles
 
--   [Publish in the Chrome Web Store](https://developer.chrome.com/docs/webstore/publish)
--   [Prepare your extension](https://developer.chrome.com/docs/webstore/prepare)
--   [Manifest file format](https://developer.chrome.com/docs/extensions/reference/manifest)
--   [Chrome Web Store Best Practices](https://developer.chrome.com/docs/webstore/best-practices)
--   [Distribute your extension](https://developer.chrome.com/docs/extensions/how-to/distribute)
+- [Publish in the Chrome Web Store](https://developer.chrome.com/docs/webstore/publish)
+- [Prepare your extension](https://developer.chrome.com/docs/webstore/prepare)
+- [Manifest file format](https://developer.chrome.com/docs/extensions/reference/manifest)
+- [Chrome Web Store Best Practices](https://developer.chrome.com/docs/webstore/best-practices)
+- [Distribute your extension](https://developer.chrome.com/docs/extensions/how-to/distribute)

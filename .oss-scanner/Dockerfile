@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # puppeteer-core drives the two browsers above; it never downloads a browser of its own.
 WORKDIR /opt/browser-tools
 RUN npm init -y > /dev/null \
-    && npm install --no-audit --no-fund --ignore-scripts puppeteer-core@25.12.0
+    && npm install --no-audit --no-fund --ignore-scripts puppeteer-core@25.16.0
 ENV NODE_PATH=/opt/browser-tools/node_modules \
     CHROME_PATH=/usr/bin/chromium \
     FIREFOX_PATH=/usr/bin/firefox-esr
